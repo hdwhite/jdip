@@ -140,8 +140,12 @@ public class ViewControlBar extends ControlBar
 	/** Add control bar icons */
 	private void makeLayout()
 	{
+		// set Zoom scale factor -- BEFORE we get the resulting actions.
+		final XJSVGCanvas canvas = mapPanel.getXJSVGCanvas();
+		canvas.setZoomScaleFactor(mapPanel.getScaleFactor());
+		
 		// This is the be-all end-all of reset transforms. It accounts
-		// for everything, and should not fail.
+		// for everything, and will never fail (famous last words)
 		// 
 		fit = add(new AbstractAction()
 		{
@@ -171,63 +175,20 @@ public class ViewControlBar extends ControlBar
 				}
 			}
  		});
-
+		
+		fit.setIcon(Utils.getIcon(ICON_ZOOM_FIT));
+		fit.setToolTipText(Utils.getLocalString(I18N_FIT_TIP));
 		
 		addSeparator();
 		
- 		
-		// TODO: this should be the same as a JSVGCanvas.Scale action
-		zoomOut = add(new AbstractAction()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				AffineTransform rat = mapPanel.getJSVGCanvas().getRenderingTransform();
-				if(rat != null)
-				{
-					final float scaleFactor = mapPanel.getScaleFactor();
-					final float inverseScale = 1.0f / scaleFactor;
-					AffineTransform at = AffineTransform.getScaleInstance(inverseScale, inverseScale);
-					Dimension dim = mapPanel.getJSVGCanvas().getSize();
-					int x = dim.width / 2;
-					int y = dim.height / 2;
-					AffineTransform t = AffineTransform.getTranslateInstance(x, y);
-					t.concatenate(at);
-					t.translate(-x, -y);
-					t.concatenate(rat);
-					mapPanel.getJSVGCanvas().setRenderingTransform(t);
-				}
-			}
- 		});
-		
-		// TODO: this should be the same as a JSVGCanvas.Scale action
-		zoomIn = add(new AbstractAction()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				AffineTransform rat = mapPanel.getJSVGCanvas().getRenderingTransform();
-				if(rat != null)
-				{
-					final float scaleFactor = mapPanel.getScaleFactor();
-					AffineTransform at = AffineTransform.getScaleInstance(scaleFactor, scaleFactor);
-					Dimension dim = mapPanel.getJSVGCanvas().getSize();
-					int x = dim.width / 2;
-					int y = dim.height / 2;
-					
-					AffineTransform t = AffineTransform.getTranslateInstance(x, y);
-					t.concatenate(at);
-					t.translate(-x, -y);
-					t.concatenate(rat);
-					mapPanel.getJSVGCanvas().setRenderingTransform(t);
-				}
-			}
- 		});
-		
-		zoomIn.setIcon(Utils.getIcon(ICON_ZOOM_IN));
-		zoomIn.setToolTipText(Utils.getLocalString(I18N_ZOOMIN_TIP));
+		zoomOut = add(canvas.getActionMap().get(JSVGCanvas.ZOOM_OUT_ACTION));
 		zoomOut.setIcon(Utils.getIcon(ICON_ZOOM_OUT));
 		zoomOut.setToolTipText(Utils.getLocalString(I18N_ZOOMOUT_TIP));
-		fit.setIcon(Utils.getIcon(ICON_ZOOM_FIT));
-		fit.setToolTipText(Utils.getLocalString(I18N_FIT_TIP));
+		
+		zoomIn = add(canvas.getActionMap().get(JSVGCanvas.ZOOM_IN_ACTION));
+		zoomIn.setIcon(Utils.getIcon(ICON_ZOOM_IN));
+		zoomIn.setToolTipText(Utils.getLocalString(I18N_ZOOMIN_TIP));
+		
 	}// makeLayout()
 	
 }// class ViewControlBar

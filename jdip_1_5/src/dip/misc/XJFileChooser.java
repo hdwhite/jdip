@@ -359,6 +359,12 @@ public class XJFileChooser
 	*/
 	private class CheckedJFileChooser extends JFileChooser
 	{
+		public CheckedJFileChooser()
+		{
+			super((File) null);
+		}
+		
+		
 		/** Override to check for overwrite confirmation */
 		public void approveSelection() 
 		{

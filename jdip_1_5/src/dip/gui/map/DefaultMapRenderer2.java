@@ -960,6 +960,12 @@ public class DefaultMapRenderer2 extends MapRenderer2
 	*/
 	protected void unsyncUpdateProvince(Tracker tracker, Province province, boolean force)
 	{
+		if(tracker == null)
+		{
+			// avoid NPE when in mid-render and batik exits
+			return;
+		}
+		
 		Unit posUnit = position.getUnit(province);
 		if(tracker.getUnit() != posUnit || force)
 		{

@@ -289,12 +289,12 @@ public class MapPanel extends JPanel
 		statusBarUtils = new StatusBarUtils(this, clientFrame.getStatusBar());
 		
 		// setup JSVGCanvas
-		svgCanvas = new XJSVGCanvas(null, true, false);
+		svgCanvas = new XJSVGCanvas(this, statusBar, null, true, false);
 		svgCanvas.setValidating(clientFrame.getValidating());
 		svgCanvas.setDocumentState(JSVGCanvas.ALWAYS_DYNAMIC);
-//		svgCanvas.setRecenterOnResize(false);	// batik 1.5.1
+		svgCanvas.setRecenterOnResize(false);	// batik 1.5.1
 		svgCanvas.setDoubleBufferedRendering(true);
-		svgCanvas.setProgressivePaint(false);	// faster??
+		svgCanvas.setProgressivePaint(true);	// faster??
 		svgCanvas.setEnableImageZoomInteractor(true);
 		svgCanvas.setEnableResetTransformInteractor(true);
 		svgCanvas.setEnablePanInteractor(false);
@@ -302,7 +302,7 @@ public class MapPanel extends JPanel
 		svgCanvas.setParent(this);	// send all key events here
 		
 		// setup scroller
-		scroller = new XJSVGScroller(this, svgCanvas);
+		scroller = new XJSVGScroller(svgCanvas);
 		add(scroller, BorderLayout.CENTER);
 		
 		// setup DOMUIEventListener

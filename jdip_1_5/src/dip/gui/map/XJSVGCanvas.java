@@ -1,28 +1,31 @@
-//  
-//  @(#)XJSVGCanvas.java	1/2003
-//  
-//	NOTE: this is NOT a GPL license
-//	
-//  Copyright 2003 Zachary DelProposto, zsd@umich.edu All Rights Reserved.
-//  The source code and text in this module, JSVGScrollCanvas.java, 
-//  may be freely used and modified for any purpose. If you do use
-//  this code, I only require that you give me credit
 //
-//  THIS SOFTWARE IS PROVIDED AS-IS WITHOUT WARRANTY
-//  OF ANY KIND, NOT EVEN THE IMPLIED WARRANTY OF
-//  MERCHANTABILITY. THE AUTHOR OF THIS SOFTWARE,
-//  ASSUMES NO RESPONSIBILITY FOR ANY CONSEQUENCE
-//  RESULTING FROM THE USE, MODIFICATION, OR
-//  REDISTRIBUTION OF THIS SOFTWARE
-//  
-//  I would appreciate any changes or improvments to this code that increase
-//  functionality or eliminate bugs. It is not a requirement that you submit 
-//  changes to me or make your modifications public, but, it would be appreciated.
-//  
+//  @(#)XJSVGCanvas.java		2/2004
+//
+//  Copyright 2004 Zachary DelProposto. All rights reserved.
+//  Use is subject to license terms.
+//
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  Or from http://www.gnu.org/
 //
 package dip.gui.map;
 
+import dip.gui.StatusBar;
 import dip.gui.dialog.ErrorDialog;
+import dip.misc.Utils;
+
 
 import java.awt.Rectangle;
 import java.awt.Dimension;
@@ -35,23 +38,29 @@ import java.awt.Cursor;
 
 import java.awt.geom.AffineTransform;
 
-import javax.swing.Scrollable;
 import javax.swing.JFrame;
-import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
+import javax.swing.ActionMap;
 
 import org.apache.batik.swing.JSVGCanvas;
 import org.apache.batik.swing.svg.SVGUserAgent;
 import org.apache.batik.bridge.UserAgent;
 import org.apache.batik.bridge.BridgeContext;
 
-// test
-import java.awt.*;
-import java.awt.geom.*;
-import org.apache.batik.swing.*;
-import org.apache.batik.bridge.*;
-import org.apache.batik.gvt.CanvasGraphicsNode;
+
+
+import java.awt.geom.AffineTransform;
+import java.awt.event.ActionEvent;
+import java.awt.Dimension;
+import org.apache.batik.*;
+import org.apache.batik.dom.*;
+import org.apache.batik.util.*;
+import org.w3c.dom.svg.*;
 import org.w3c.dom.svg.SVGSVGElement;
+
+import org.apache.batik.swing.gvt.GVTTreeRendererListener;
+import org.apache.batik.swing.gvt.GVTTreeRendererEvent;
+import org.apache.batik.bridge.ViewBox;
+import org.apache.batik.gvt.CanvasGraphicsNode;
 
 
 /**
@@ -59,13 +68,15 @@ import org.w3c.dom.svg.SVGSVGElement;
 *	<p>
 *	Consists of a modified mouse/key listners and a special transform
 *	listener which allows the XSVGScroller to properly function.
-*
-*
-*
+*	<p>
+*	Furthermore, it modifies the JSVGCanvas.ZOOM_OUT_ACTION and 
+*	JSVGCanvas.ZOOM_IN_ACTION to reflect the scale factor, as set
+*	with setZoomScaleFactor().
 */
 public class XJSVGCanvas extends JSVGCanvas 
 {
 	// constants
+	private static final String I18N_ZOOM_FACTOR	= "XJSVGScroller.zoom.text";
 	private static final int	MIN_DRAG_DELTA = 5;		// min pixels to count as a drag
 	
 	// instance variables
@@ -80,7 +91,8 @@ public class XJSVGCanvas extends JSVGCanvas
 	
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private boolean isValidating = false;
-	
+	private double lsx,lsy;						// last scale x, y values
+	private final StatusBar statusBar;
 	
 	/**
     *	Creates a new XJSVGCanvas.
@@ -90,18 +102,45 @@ public class XJSVGCanvas extends JSVGCanvas
     *	key events.
     *	@param selectableText Whether the text should be selectable.
     */
-	public XJSVGCanvas(SVGUserAgent ua, boolean eventsEnabled, boolean selectableText)
+	public XJSVGCanvas(final MapPanel mapPanel, StatusBar statusBar, SVGUserAgent ua, boolean eventsEnabled, boolean selectableText)
 	{
 		super(ua, eventsEnabled, selectableText);
+		this.statusBar = statusBar;
 		setMaximumSize(screenSize);
+		
+		// fix for incorrect setting of initial SVG size by JSVGScrollPane
+		addGVTTreeRendererListener(new GVTTreeRendererListener()
+		{
+			public void gvtRenderingCompleted(GVTTreeRendererEvent e) 
+			{
+				AffineTransform iat = getInitialTransform();
+				SVGSVGElement elt = getSVGDocument().getRootElement();
+				if(iat != null || elt == null) // very very defensive... but iat null check is important
+				{
+					// rescale viewbox transform to reflect viewbox size
+					Dimension vbSize = mapPanel.getScrollerSize();	// size of the canvas' scrolling container (don't include scroll bars)
+					CanvasGraphicsNode cgn = getCanvasGraphicsNode(); 
+					
+					// ViewBox.getViewTransform is essential for calculating the correct transform,
+					// AND accounting for any viewBox attribute of the root SVG element, if present.
+					AffineTransform vt = ViewBox.getViewTransform
+						(getFragmentIdentifier(), elt, vbSize.width, vbSize.height);
+					cgn.setViewingTransform(vt);
+					
+					// set rendering transform to 'unscaled'
+					AffineTransform t = AffineTransform.getScaleInstance(1,1);
+					XJSVGCanvas.super.setRenderingTransform(t);
+				}
+			}// gvtRenderingCompleted()
+			
+			public void gvtRenderingCancelled(GVTTreeRendererEvent e) {}
+			public void gvtRenderingFailed(GVTTreeRendererEvent e) {}
+			public void gvtRenderingPrepare(GVTTreeRendererEvent e) {}
+			public void gvtRenderingStarted(GVTTreeRendererEvent e)  {}		
+		});
+		
 	}// XJSVGCanvas()
 	
-	
-	/** Creates a new XJSVGCanvas */
-	public XJSVGCanvas()
-	{
-		this(null, false, false);
-	}// XJSVGCanvas()
 	
 	
 	/** Sets if this is we should validate SVG or not */
@@ -256,19 +295,6 @@ public class XJSVGCanvas extends JSVGCanvas
 				parent = c;
 			}// setParent()
 			
-			
-			/**
-			*	Override to prevent default behavior of pack(), and instead, use
-			*	validate(), which uses the preferred size.
-			*
-			*/
-			public void setMySize(Dimension d)
-			{
-				//setPreferredSize(d);	// is this required?? seems to work w/o
-				//invalidate();			// is this required?? seems to work w/o
-				SwingUtilities.getWindowAncestor(XJSVGCanvas.this).validate(); 
-			}// setMySize()
-			
 	}// nested class XJSVGCanvasListener
 	
 	
@@ -353,6 +379,18 @@ public class XJSVGCanvas extends JSVGCanvas
 			return;		// reject transform
 		}
 		
+		if(!isEquivalent(lsx, at.getScaleX()))
+		{
+			statusBar.setText(Utils.getLocalString(I18N_ZOOM_FACTOR, new Double(at.getScaleX())));
+		}
+		else if(!isEquivalent(lsy, at.getScaleY()))
+		{
+			statusBar.setText(Utils.getLocalString(I18N_ZOOM_FACTOR, new Double(at.getScaleY())));
+		}
+		
+		lsx = at.getScaleX();
+		lsy = at.getScaleY();
+		
 		// proceed with setting the rendering transform...
 		super.setRenderingTransform(at);
 	}// setRenderingTransform()
@@ -371,58 +409,24 @@ public class XJSVGCanvas extends JSVGCanvas
 		maxScale = value;
 	}// setMaximumScale()
 	
-	
 	/**
-	*	Implements our new resizing behavior. This prevents 
-	*	scaling from changing all the time when the window size changes.
-	*	<p>
-	*  	Updates the value of the transform used for rendering.
-	* 	Return true if a repaint is required, otherwise false.
+	*	Sets the zoom in/out scale factor to that given. For example, if
+	*	set to 2.0, zoom in will be x2 and zoom out will be 0.5 (1/2).
 	*/
-    protected boolean updateRenderingTransform() 
+	public void setZoomScaleFactor(float scaleFactor)
 	{
-        if((svgDocument == null) || (gvtRoot == null))
-        {   
-			return false;
-		}
-		
-		// Code provided by Mark Claassen
-		try 
-		{
-			SVGSVGElement elt = svgDocument.getRootElement();
-			Dimension d;
-			if(false)
-			{
-				d = getSize();
-			}
-			else
-			{
-				Dimension2D d2 = getSVGDocumentSize();
-				d = new Dimension((int)d2.getWidth(),(int)d2.getHeight());
-			}
-			Dimension oldD = prevComponentSize;
-			if(oldD == null) { oldD = d; }
-			prevComponentSize = d;
-			
-			if(d.width  < 1) { d.width  = 1; }
-			if(d.height < 1) { d.height = 1; }
-			
-			AffineTransform at = ViewBox.getViewTransform(fragmentIdentifier, elt, d.width, d.height);
-			CanvasGraphicsNode cgn = getCanvasGraphicsNode();
-			AffineTransform vt = cgn.getViewingTransform();
-			if(at.equals(vt))
-			{
-				// No new transform
-				// Only repaint if size really changed.
-				return ((oldD.width != d.width) || (oldD.height != d.height));
-			}
-		} 
-		catch (BridgeException e) 
-		{
-            userAgent.displayError(e);
-        }
-        return true;
-    }// updateRenderingTransform()
+		final ActionMap actionMap = getActionMap();
+        actionMap.put(JSVGCanvas.ZOOM_IN_ACTION, new ZoomAction(scaleFactor));
+        actionMap.put(JSVGCanvas.ZOOM_OUT_ACTION, new ZoomAction(1.0 / scaleFactor));
+	}// setZoomScaleFactor()
+	
+	
+	/** Test for floating-point "equivalence" */
+	private boolean isEquivalent(double a, double b)
+	{
+		return(Math.abs(a-b) <= 0.0001);
+	}// isEquivalent()
+	
 	
 	
 }// class XJSVGCanvas
