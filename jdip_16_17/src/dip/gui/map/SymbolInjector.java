@@ -33,6 +33,7 @@ import dip.world.variant.data.Variant;
 import dip.world.variant.data.Symbol;
 import dip.world.variant.data.SymbolPack;
 import dip.world.variant.data.MapGraphic;
+import dip.misc.Log;
 
 import java.io.*;
 import java.net.*;
@@ -73,6 +74,8 @@ public class SymbolInjector
 	public SymbolInjector(ClientFrame cf, Variant variant, MapGraphic mg, SymbolPack sp)
 	throws IOException, SAXException, ParserConfigurationException
 	{
+		long startTime = System.currentTimeMillis();
+		
 		if(variant == null || mg == null || sp == null)
 		{
 			throw new IllegalArgumentException();
@@ -100,6 +103,8 @@ public class SymbolInjector
 			FastEntityResolver.attach(docBuilder);
 			
 			doc = docBuilder.parse(is);
+			
+			Log.printTimed(startTime, "SymbolInjector() constructor time ");
 		}
 		finally
 		{
@@ -120,6 +125,8 @@ public class SymbolInjector
 	public void inject()
 	throws IOException
 	{
+		long startTime = System.currentTimeMillis();
+		
 		// find <defs> element
 		Element root = doc.getDocumentElement();
 		Element defs = null;
@@ -186,6 +193,7 @@ public class SymbolInjector
 			}
 		}
 		
+		Log.printTimed(startTime, "SymbolInjector().inject() time ");
 	}// inject()
 	
 	

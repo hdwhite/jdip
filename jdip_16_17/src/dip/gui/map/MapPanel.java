@@ -737,9 +737,11 @@ public class MapPanel extends JPanel
 	private class MP_GVTRenderListener extends GVTTreeRendererAdapter
 	{
 		private boolean loaded = false;
+		private long renderTime = 0L;
 		
 		public void gvtRenderingStarted(GVTTreeRendererEvent e)
 		{
+			renderTime = System.currentTimeMillis();
 			Log.printTimed(startTime, "MapPanel() GVTRender start.");
 			if(!loaded)
 			{
@@ -750,7 +752,6 @@ public class MapPanel extends JPanel
 		
 		public void gvtRenderingCompleted(GVTTreeRendererEvent e)
 		{
-			Log.printTimed(startTime, "MapPanel() GVTRender completing...");
 			if(!loaded)
 			{
 				statusBar.incPBValue();
@@ -840,6 +841,8 @@ public class MapPanel extends JPanel
 				//svgCanvas.removeGVTTreeRendererListener(this);
 				statusBar.hidePB();
 				Log.printTimed(startTime, "MapPanel() GVTRender completed.");
+				Log.printTimed(renderTime, "     GVTRender time");
+				
 			}
 			loaded = true;
 		}// gvtRenderingCompleted()
@@ -884,7 +887,7 @@ public class MapPanel extends JPanel
 	{
 		public void gvtBuildStarted(GVTTreeBuilderEvent e)
 		{
-			Log.printTimed(startTime, "MapPanel() GVTTreeBuild completed.");
+			Log.printTimed(startTime, "MapPanel() GVTTreeBuild started.");
 			statusBar.incPBValue();
 			statusBar.setText(Utils.getLocalString(GVT_BUILD_STARTED));
 		}// documentLoadingStarted()
