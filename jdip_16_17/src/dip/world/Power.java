@@ -29,6 +29,10 @@ package dip.world;
 */
 public class Power implements Comparable
 {
+	/** An empty (zero-length) array of Powers */
+	public static final Power[] EMPTY_ARRAY = new Power[0];
+	
+	
 	// constants for name array; always stored in this order.
 	private static final int FULL_NAME	= 0;	// required
 

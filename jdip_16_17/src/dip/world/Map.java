@@ -205,8 +205,11 @@ public class Map
 	*/
 	public final Power[] getPowers()
 	{
-		Power[] arr = new Power[powers.length];
-		System.arraycopy(powers, 0, arr, 0, powers.length);
+		final Power[] arr = new Power[powers.length];
+		for(int i=0; i<powers.length; i++)
+		{
+			arr[i] = powers[i];
+		}
 		return arr;	
 	}// getPowers()
 	
@@ -214,12 +217,14 @@ public class Map
 	
 	/**
 	*	Returns a List of all Powers. The list is both unmodifiable and
-	*	guaranteed to implement RandomAccess.
+	*	guaranteed to implement RandomAccess. This method is the preferred 
+	*	way to iterate through Powers. 
 	*/
 	public final List getPowerList()
 	{
 		return uPowerList;
 	}// getPowers()
+	
 	
 	/**
 	*	Returns a List of all Provinces. The list is both unmodifiable and

@@ -756,7 +756,7 @@ public class DefaultMapRenderer2 extends MapRenderer2
 				}
 				
 				renderSettings.clear();
-				renderSettings.put(MapRenderer2.KEY_SHOW_ORDERS_FOR_POWERS, new Power[0]);
+				renderSettings.put(MapRenderer2.KEY_SHOW_ORDERS_FOR_POWERS, Power.EMPTY_ARRAY);
 			}
 			
 			// hide layers we don't want (units, orders, sc)

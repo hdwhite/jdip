@@ -168,8 +168,8 @@ public class ClientFrame extends JFrame
 	private MapMetadata mapMetadata = null;
 	
 	// power control instance variables
-	private Power[] orderablePowers = new Power[0];		// powers for which orders may be entered
-	private Power[] displayablePowers = new Power[0];	// powers for which orders may be displayed
+	private Power[] orderablePowers = Power.EMPTY_ARRAY;		// powers for which orders may be entered
+	private Power[] displayablePowers = Power.EMPTY_ARRAY;	// powers for which orders may be displayed
 	
 	// for testing
 	private final Object fireLock = new Object();
