@@ -184,6 +184,52 @@ POSTSTATE
 	England: A bud
 END
 
+# for both Munich and Bohemia:
+# 	<BORDER id="seasonFromS" description="no movement from sil in spring!" from="sil" season="spring"/>
+#	<BORDER id="seasonFromF" description="no movement from tyr in fall!" from="tyr" season="fall"/>
+#
+CASE Borders.13 Single-Province prohibited seasonal movement, Spring
+PRESTATE_SETPHASE Spring 1900, Movement
+PRESTATE
+	England: A sil
+	France:  A vie
+	England: A tyr
+	France:  A ruh
+ORDERS
+	England: A sil-boh	# fail
+	France:  A vie-boh	# ok
+	England: A tyr-mun	# ok
+	France:  A ruh H	# do nothing
+POSTSTATE
+	England: A sil
+	France:  A boh
+	England: A mun
+	France:  A ruh
+END
+
+# for both Munich and Bohemia:
+# 	<BORDER id="seasonFromS" description="no movement from sil in spring!" from="sil" season="spring"/>
+#	<BORDER id="seasonFromF" description="no movement from tyr in fall!" from="tyr" season="fall"/>
+#
+CASE Borders.14 Single-Province prohibited seasonal movement, Fall
+PRESTATE_SETPHASE Fall 1900, Movement
+PRESTATE
+	England: A sil
+	France:  A vie
+	England: A tyr
+	France:  A ruh
+ORDERS
+	England: A sil-boh	# ok
+	France:  A vie H	# do nothing
+	England: A tyr-mun	# fail
+	France:  A ruh-mun	# ok
+POSTSTATE
+	England: A boh
+	France:  A vie
+	England: A tyr
+	France:  A mun
+END
+
 
 
 #
