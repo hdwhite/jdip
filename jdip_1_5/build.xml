@@ -56,7 +56,7 @@
     <!-- build properties -->
 	<property name="build.compiler" value="modern"/>            <!-- package name of source -->
 	<property name="package" value="dip"/>						<!-- root package name -->
-	<property name="cpd.min.tok" value="100"/>					<!-- CPD: minimum token count parameter -->
+	<property name="cpd.min.tok" value="80"/>					<!-- CPD: minimum token count parameter -->
 	
 	
 	<!-- create the PMD class path -->
@@ -280,13 +280,13 @@
 		
 		<!-- check all main files (dip/*). Exclude test/demo code -->
 		<pmd rulesetfiles="${etc.dir}/pmd_rules.xml" failonerror="no">
-			<formatter type="net.sourceforge.pmd.renderers.HTMLRenderer" toFile="${base.dir}/pmd_out.html"/>
-			<fileset dir="${base.dir}">
+			<formatter type="net.sourceforge.pmd.renderers.HTMLRenderer" toFile="${test.results.dir}/pmd_out.html"/>
+			<fileset dir="${src.dir}">
 				<include name="dip/**/*.java"/>
 				<exclude name="AIDemo.java TestParser.java TestSuite.java Convert.java"/>
 			</fileset>
 		</pmd>
-		<echo message="PMD results written to ${base.dir}/pmd_out.html"/>
+		<echo message="PMD results written to ${test.results.dir}/pmd_out.html"/>
 	</target>
  	
 	<!-- run CPD checker -->
@@ -295,13 +295,13 @@
 		<taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" classpathref="pmd.classpath"/>
 		<echo message="Running CPD with a minimum token count of ${cpd.min.tok}"/>
 		<!-- check all main files (dip/*). Exclude test/demo code -->
-		<cpd minimumTokenCount="${cpd.min.tok}" outputFile="${base.dir}/cpd_out.html">
-			<fileset dir="${base.dir}">
+		<cpd minimumTokenCount="${cpd.min.tok}" outputFile="${test.results.dir}/cpd_out.html">
+			<fileset dir="${src.dir}">
 				<include name="dip/**/*.java"/>
 				<exclude name="AIDemo.java TestParser.java TestSuite.java Convert.java"/>
 			</fileset>
 		</cpd>
-		<echo message="CPD results written to ${base.dir}/cpd_out.html"/>
+		<echo message="CPD results written to ${test.results.dir}/cpd_out.html"/>
 	</target>
 	
 	
