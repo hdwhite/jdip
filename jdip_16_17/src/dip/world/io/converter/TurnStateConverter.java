@@ -63,6 +63,7 @@ public class TurnStateConverter implements Converter
 	public void marshal(java.lang.Object source, HierarchicalStreamWriter hsw, 
 		MarshallingContext context)
 	{
+		Log.println("TurnStateConverter().marshal()");
 		final XMLSerializer xs = XMLSerializer.get(context);
 		final TurnState ts = (TurnState) source;
 		final List results = new ArrayList(ts.getResultList());
@@ -80,6 +81,7 @@ public class TurnStateConverter implements Converter
 			ts.setWorld(xs.getWorld());
 		}
 		
+		Log.println("  -- setting attributes");
 		hsw.addAttribute("season", ts.getPhase().getSeasonType().toString());
 		hsw.addAttribute("phase",  ts.getPhase().getPhaseType().toString());
 		hsw.addAttribute("year",  ts.getPhase().getYearType().toString());
@@ -90,107 +92,116 @@ public class TurnStateConverter implements Converter
 			hsw.addAttribute("ended", String.valueOf(ts.isEnded()));
 		}
 			
-			// positions
-			xs.lookupAndWriteNode(ts.getPosition(), cm, hsw, context);
+		// positions
+		Log.println("  -- writing <positions>");
+		xs.lookupAndWriteNode(ts.getPosition(), cm, hsw, context);
+		
+		// adjustments
+		// (only in ADJUSTMENT phase)
+		if(Phase.PhaseType.ADJUSTMENT.equals(ts.getPhase().getPhaseType()))
+		{
+			Log.println("  -- writing <adjustments>");
+			AdjustmentInfoMap aim = Adjustment.getAdjustmentInfo(ts,
+				xs.getWorld().getRuleOptions(), powerList);
 			
-			// adjustments
-			// (only in ADJUSTMENT phase)
-			if(Phase.PhaseType.ADJUSTMENT.equals(ts.getPhase().getPhaseType()))
+			xs.lookupAndWriteNode(aim, cm, hsw, context);
+		}
+		else
+		{
+			// empty node, otherwise
+			Log.println("  -- writing <adjustments> (empty element)");
+			hsw.startNode("adjustments");
+			hsw.endNode();
+		}
+		
+		// orders
+		Log.println("  -- writing <orders>");
+		hsw.startNode("orders");
+		Iterator iter = powerList.iterator();
+		while(iter.hasNext())
+		{
+			final Power power = (Power) iter.next();
+			List orders = new ArrayList(ts.getOrders(power));
+			if(!orders.isEmpty())
 			{
-				AdjustmentInfoMap aim = Adjustment.getAdjustmentInfo(ts,
-					xs.getWorld().getRuleOptions(), powerList);
+				Log.println("  -- writing <orderSet> for: ", power);
+				hsw.startNode("orderSet");
+				hsw.addAttribute("power", xs.toString(power));
 				
-				xs.lookupAndWriteNode(aim, cm, hsw, context);
-			}
-			else
-			{
-				// empty node, otherwise
-				hsw.startNode("adjustments");
+				Iterator orderIter = orders.iterator();
+				while(orderIter.hasNext())
+				{
+					final Orderable order = (Orderable) orderIter.next();
+					xs.writeOrder(order, hsw, context);
+				}
+				
 				hsw.endNode();
 			}
-			
-			// orders
-			hsw.startNode("orders");
-			Iterator iter = powerList.iterator();
-			while(iter.hasNext());
-			{
-				final Power power = (Power) iter.next();
-				List orders = new ArrayList(ts.getOrders(power));
-				if(!orders.isEmpty())
-				{
-					hsw.startNode("orderSet");
-					hsw.addAttribute("power", xs.toString(power));
-					
-					Iterator orderIter = orders.iterator();
-					while(orderIter.hasNext())
-					{
-						final Orderable order = (Orderable) orderIter.next();
-						xs.writeOrder(order, hsw, context);
-					}
-					
-					hsw.endNode();
-				}
-			}
-			hsw.endNode();
-			
-			
-			// we MUST sort results, to ensure that SubstitutedResults always
-			// occur before all other results, since other OrderResults may
-			// reference orders first defined in a SubstitutedResult
-			hsw.startNode("results");
-			Collections.sort(results, comparator);
+		}
+		hsw.endNode();
+		
+		
+		// we MUST sort results, to ensure that SubstitutedResults always
+		// occur before all other results, since other OrderResults may
+		// reference orders first defined in a SubstitutedResult
+		Log.println("  -- writing <results>");
+		hsw.startNode("results");
+		Collections.sort(results, comparator);
+		iter = results.iterator();
+		while(iter.hasNext())
+		{
+			Result result = (Result) iter.next();
+			xs.lookupAndWriteNode(result, cm, hsw, context);
+		}
+		hsw.endNode();
+		
+		
+		Log.println("  -- writing <dislodgedUnits>");
+		hsw.startNode("dislodgedUnits");
+		if(Phase.PhaseType.MOVEMENT.equals(ts.getPhase().getPhaseType()))
+		{
 			iter = results.iterator();
 			while(iter.hasNext())
 			{
-				Result result = (Result) iter.next();
-				xs.lookupAndWriteNode(result, cm, hsw, context);
-			}
-			hsw.endNode();
-			
-			
-			hsw.startNode("dislodgedUnits");
-			if(Phase.PhaseType.MOVEMENT.equals(ts.getPhase().getPhaseType()))
-			{
-				iter = results.iterator();
-				while(iter.hasNext())
+				RetreatChecker rc = null;
+				
+				Object obj = iter.next();
+				if(obj instanceof OrderResult)
 				{
-					RetreatChecker rc = null;
-					
-					Object obj = iter.next();
-					if(obj instanceof OrderResult)
+					OrderResult ordRes = (OrderResult) obj;
+					if(OrderResult.ResultType.DISLODGED.equals(ordRes.getResultType()))
 					{
-						OrderResult ordRes = (OrderResult) obj;
-						if(OrderResult.ResultType.DISLODGED.equals(ordRes.getResultType()))
+						if(rc == null)
 						{
-							if(rc == null)
-							{
-								rc = new RetreatChecker(ts);
-							}
-							
-							final Location src = ordRes.getOrder().getSource();
-							final Location[] retreatLocs = rc.getValidLocations(src);
-							
-							hsw.startNode("dislodged");
-							hsw.addAttribute("location", 
-								xs.toString( src ) );
-							hsw.addAttribute("power",
-								xs.toString( ordRes.getOrder().getPower() ) );
-							hsw.addAttribute("unitType",
-								xs.toString( ordRes.getOrder().getSourceUnitType() ) );
-							hsw.addAttribute("retreats",
-								xs.toString( retreatLocs ) );
-							hsw.endNode();
+							rc = new RetreatChecker(ts);
 						}
+						
+						final Location src = ordRes.getOrder().getSource();
+						final Location[] retreatLocs = rc.getValidLocations(src);
+						
+						hsw.startNode("dislodged");
+						hsw.addAttribute("location", 
+							xs.toString( src ) );
+						hsw.addAttribute("power",
+							xs.toString( ordRes.getOrder().getPower() ) );
+						hsw.addAttribute("unitType",
+							xs.toString( ordRes.getOrder().getSourceUnitType() ) );
+						hsw.addAttribute("retreats",
+							xs.toString( retreatLocs ) );
+						hsw.endNode();
 					}
 				}
 			}
-			hsw.endNode();
-			
-			hsw.startNode("powerInfo");
-			addEliminatedPowers(ts, hsw, xs);
-			hsw.endNode();
+		}
+		hsw.endNode();
+		
+		Log.println("  -- writing <powerInfo>");
+		hsw.startNode("powerInfo");
+		addEliminatedPowers(ts, hsw, xs);
+		hsw.endNode();
 		
 		xs.incrementTurnNumber();
+		Log.println("TurnStateConverter().marshal() complete");
 	}// marshal()
 	
 	public boolean canConvert(Class type)

@@ -81,6 +81,7 @@ public class WorldConverter implements Converter
 	public void marshal(java.lang.Object source, HierarchicalStreamWriter hsw, 
 		MarshallingContext context)
 	{
+		Log.println("WorldConverter().marshal()");
 		final World world = (World) source;
 		final XMLSerializer xs = XMLSerializer.get(context);
 		
@@ -92,10 +93,12 @@ public class WorldConverter implements Converter
 		hsw.addAttribute("creatorVersion", creatorVersion);
 		hsw.addAttribute("specification", specification);
 		
+		Log.println("  - writing <variant>");
 		// <variant> element
 		xs.lookupAndWriteNode(world.getVariantInfo(), cm, hsw, context);
 		
 		// <info> element
+		Log.println("  - writing <info>");
 		hsw.startNode("info");
 		xs.lookupAndWriteNode(world.getGameMetadata(), cm, hsw, context);
 		
@@ -110,17 +113,22 @@ public class WorldConverter implements Converter
 		hsw.endNode();
 		
 		// <setup> element
+		Log.println("  - writing <setup>");
 		hsw.startNode("setup");
 		xs.lookupAndWriteNode(world.getGameSetup(), cm, hsw, context);
 		hsw.endNode();
 		
 		// <turn> element(s)
+		Log.println("  - writing <turn> elements");
 		iter = world.getAllTurnStates().iterator();
 		while(iter.hasNext())
 		{
 			final TurnState ts = (TurnState) iter.next();
+			Log.println("     <turn> : ", ts.getPhase());
 			xs.lookupAndWriteNode(ts, cm, hsw, context);
 		}
+		
+		Log.println("WorldConverter().marshal() complete");
 	}// marshal()
 	
 	public boolean canConvert(java.lang.Class type)

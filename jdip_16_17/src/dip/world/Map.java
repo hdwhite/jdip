@@ -1143,13 +1143,31 @@ public class Map
 	
 	
 	/** Inner class: a fast Immutable list */
-	private final class ImmutableList extends AbstractList implements RandomAccess
+	private final class ImmutableList extends AbstractList //implements RandomAccess
 	{
 		private final Object[] objects;
 		
 		public ImmutableList(Object[] objects)
 		{
 			this.objects = objects;
+		}// ImmutableList()
+		
+		public ImmutableList()
+		{
+			this.objects = new Object[0];
+		}// ImmutableList()
+		
+		public ImmutableList(Collection c)
+		{
+			objects = new Object[c.size()];
+			
+			Iterator iter = c.iterator();
+			int i = 0;
+			while(iter.hasNext())
+			{
+				objects[i] = iter.next();
+				i++;
+			}
 		}// ImmutableList()
 		
 		public int size()
@@ -1162,6 +1180,12 @@ public class Map
 			// no range checking
 			return objects[i];
 		}// get()
+		
+		public Iterator iterator()
+		{
+			Iterator iter = super.iterator();
+			return iter;
+		}
 	}// class ImmutableList
 	
 }// class Map

@@ -26,6 +26,8 @@ import dip.world.*;
 
 import dip.world.io.converter.*;
 
+import dip.misc.Log;
+
 import dip.order.Orderable;
 import dip.order.OrderFactory;
 import dip.order.result.Result;
@@ -111,11 +113,13 @@ public class XMLSerializer
 		String creatorName, String creatorVersion, String specification)
 	throws IOException
 	{
+		Log.println("toXML() (Writer) start");
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.NO_REFERENCES);
 		registerConverters(xstream, null, creatorName, creatorVersion, specification);
 		writeHeader(writer);
 		xstream.toXML(world, writer);
+		Log.println("toXML() (Writer) complete");
 	}// toXML()
 	
 	
