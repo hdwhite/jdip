@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<!DOCTYPE VARIANTS [
+	<!ELEMENT VARIANTS (DESCRIPTION, MAP_DEFINITION+, VARIANT+)>
+	
+	<!ELEMENT DESCRIPTION (#PCDATA)>
+	
+	<!ELEMENT MAP_DEFINITION (DESCRIPTION?)>
+	<!ATTLIST MAP_DEFINITION 
+		id ID #REQUIRED
+		title CDATA #REQUIRED
+		URI CDATA #REQUIRED
+		thumbURI CDATA #REQUIRED
+		preferredUnitStyle CDATA #IMPLIED
+		>
+	
+	<!ELEMENT VARIANT (DESCRIPTION, MAP, RULEOPTIONS?, POWER+, STARTINGTIME, VICTORYCONDITIONS, SUPPLYCENTER+, INITIALSTATE*)>
+	<!ATTLIST VARIANT
+			name CDATA #REQUIRED
+			default (true|false) "false"
+			version CDATA #REQUIRED
+			aliases CDATA #IMPLIED
+			>
+			
+	<!ELEMENT MAP (MAP_GRAPHIC*)>
+	<!ATTLIST MAP adjacencyURI CDATA #REQUIRED>
+	
+	<!ELEMENT MAP_GRAPHIC EMPTY>
+	<!ATTLIST MAP_GRAPHIC
+			ref IDREF #REQUIRED
+			default (true|false) "false"
+			preferredUnitStyle CDATA #IMPLIED
+			>
+	
+	<!ELEMENT RULEOPTIONS (RULEOPTION+)>
+	<!ELEMENT RULEOPTION EMPTY>
+	<!ATTLIST RULEOPTION	name CDATA #REQUIRED
+				value CDATA #REQUIRED>
+	
+	<!ELEMENT POWER EMPTY>
+	<!ATTLIST POWER name CDATA #REQUIRED
+			active (true|false) "true"
+			adjective CDATA #REQUIRED
+			altnames CDATA #IMPLIED
+			>
+	
+	<!ELEMENT STARTINGTIME EMPTY>
+	<!ATTLIST STARTINGTIME 	turn CDATA #REQUIRED
+				allowBCYears (true|false) "false"
+				>
+	
+	<!ELEMENT VICTORYCONDITIONS (WINNING_SUPPLY_CENTERS?, YEARS_WITHOUT_SC_CAPTURE?, GAME_LENGTH?)>
+	
+	<!ELEMENT WINNING_SUPPLY_CENTERS EMPTY>
+	<!ATTLIST WINNING_SUPPLY_CENTERS value CDATA #REQUIRED>
+	
+	<!ELEMENT YEARS_WITHOUT_SC_CAPTURE EMPTY>
+	<!ATTLIST YEARS_WITHOUT_SC_CAPTURE value CDATA #REQUIRED>
+	
+	<!ELEMENT GAME_LENGTH EMPTY>
+	<!ATTLIST GAME_LENGTH value CDATA #REQUIRED>
+	
+	<!ELEMENT SUPPLYCENTER EMPTY>
+	<!ATTLIST SUPPLYCENTER 	province CDATA #REQUIRED
+				homepower CDATA "none"
+				owner CDATA "none"
+				>
+				
+	<!ELEMENT INITIALSTATE EMPTY>
+	<!ATTLIST INITIALSTATE 	province CDATA #REQUIRED
+				power CDATA #REQUIRED
+				unit CDATA #REQUIRED
+				unitcoast CDATA #IMPLIED
+				>
+]>
+<!-- NOTE: it's very important that the name of the file will be variants.xml, in all lower case -->
+<!-- NOTE: for CDATA escapes, no space between tag and bracket!! -->
+<VARIANTS>
+	<DESCRIPTION><![CDATA[Chromatic variants.]]></DESCRIPTION> 
+	
+	<MAP_DEFINITION id="defaultMap" title="Chromatic" preferredUnitStyle="modern"
+		URI="chromatic.svg" thumbURI="chromatic.jpg">
+		<DESCRIPTION><![CDATA[
+			The Chromatic Map.
+		]]>
+		</DESCRIPTION> 
+	</MAP_DEFINITION>
+	
+	<VARIANT name="Chromatic" version="1.0">
+		<DESCRIPTION><![CDATA[
+		<p>
+			description
+		</p>
+		]]>
+		</DESCRIPTION> 
+		<MAP adjacencyURI="chromatic_adjacency.xml">
+			<MAP_GRAPHIC ref="defaultMap" default="true" />
+		</MAP>
+		
+		<!-- ruleoptions -->
+		<RULEOPTIONS>
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY"/>
+		</RULEOPTIONS>
+		
+		<!-- powers -->
+		<POWER name="Blue" active="true" adjective="Blue"/>
+		<POWER name="Dark" active="true" adjective="Dark"/>
+		<POWER name="Light" active="true" adjective="Light"/>
+		<POWER name="Red" active="true" adjective="Red"/>
+		<POWER name="Yellow" active="true" adjective="Yellow"/>
+
+		
+		<!-- starting time -->
+		<STARTINGTIME turn="Spring 1901 Movement" />
+
+		
+		<!-- victory conditions -->
+		<VICTORYCONDITIONS>
+			<WINNING_SUPPLY_CENTERS value="11" />
+		</VICTORYCONDITIONS>
+
+ 	 	
+		<!-- supply centers -->
+		<SUPPLYCENTER province="Gar"/>
+		<SUPPLYCENTER province="Sil"/>
+		<SUPPLYCENTER province="Ala" homepower="Light" owner="Light"/>
+		<SUPPLYCENTER province="Gho" homepower="Light" owner="Light"/>
+		<SUPPLYCENTER province="Ivo" homepower="Light" owner="Light"/>
+		<SUPPLYCENTER province="Bro"/>
+		<SUPPLYCENTER province="Obs" homepower="Dark" owner="Dark"/>
+		<SUPPLYCENTER province="Ebo" homepower="Dark" owner="Dark"/>
+		<SUPPLYCENTER province="Jet" homepower="Dark" owner="Dark"/>
+		<SUPPLYCENTER province="Cri" homepower="Red" owner="Red"/>
+		<SUPPLYCENTER province="Ver" homepower="Red" owner="Red"/>
+		<SUPPLYCENTER province="Rub" homepower="Red" owner="Red"/>
+		<SUPPLYCENTER province="Cry"/>
+		<SUPPLYCENTER province="Top"/>
+		<SUPPLYCENTER province="Gol"/>
+		<SUPPLYCENTER province="Sun"/>
+		<SUPPLYCENTER province="Cob" homepower="Blue" owner="Blue"/>
+		<SUPPLYCENTER province="Mal"/>
+		<SUPPLYCENTER province="Sap" homepower="Blue" owner="Blue"/>
+		<SUPPLYCENTER province="Roy" homepower="Blue" owner="Blue"/>
+		<SUPPLYCENTER province="Mag"/>
+
+		
+		<!-- unit placement -->
+		<INITIALSTATE province="cob" power="Blue" unit="army"/>
+		<INITIALSTATE province="roy" power="Blue" unit="army"/>
+		<INITIALSTATE province="sap" power="Blue" unit="fleet"/>
+		<INITIALSTATE province="obs" power="Dark" unit="fleet"/>
+		<INITIALSTATE province="ebo" power="Dark" unit="army"/>
+		<INITIALSTATE province="jet" power="Dark" unit="army"/>
+		<INITIALSTATE province="gho" power="Light" unit="army"/>
+		<INITIALSTATE province="ivo" power="Light" unit="army"/>
+		<INITIALSTATE province="ala" power="Light" unit="fleet"/>
+		<INITIALSTATE province="rub" power="Red" unit="army"/>
+		<INITIALSTATE province="cri" power="Red" unit="army"/>
+		<INITIALSTATE province="ver" power="Red" unit="fleet"/>
+		<INITIALSTATE province="sun" power="Yellow" unit="army"/>
+		<INITIALSTATE province="gol" power="Yellow" unit="army"/>
+		<INITIALSTATE province="top" power="Yellow" unit="fleet"/>
+
+	</VARIANT>
+</VARIANTS>
