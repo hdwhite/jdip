@@ -77,7 +77,6 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	
 	// instance fields
 	private JTabbedPane tabPane = null;
-    private List tabSelectionOrderList;
 	private JPanel main = null;
 	private JButton submit = null;
 	private JButton enterOrders = null;
@@ -154,7 +153,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 			{
 				entryState = null;
 				clientFrame.resolveOrders();
-    			}
+    		}
 			else
 			{
 				setPowersDisplayed(nextAvailable);
@@ -492,23 +491,18 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
      * This List is used to shuffle, so we can select the power
      * tabs in a random and efficient way.
      */
-    private void createTabSelectionOrderList() {
-        int tabCount = tabPane.getTabCount();
-
-        // if we have no tab order list yet, make one and fill it
-        if(tabSelectionOrderList == null) {
-            tabSelectionOrderList = new ArrayList(tabCount);
-
-            // skip 'All' tab, start at one
-            for(int i=1; i!= tabCount; i++)
-            {
-                tabSelectionOrderList.add(new Integer(i));
-            }
-        }
-        // else we shuffle the current list
-        else {
-            Collections.shuffle(tabSelectionOrderList);
-        }
+    private List createTabSelectionOrderList() {
+ 		final int tabCount = tabPane.getTabCount();
+		List tabSelectionOrderList = new ArrayList(tabCount);
+        
+       // skip 'All' tab, start at one
+	   for(int i=1; i<tabCount; i++)
+       {
+		   tabSelectionOrderList.add(new Integer(i));
+       }
+		
+	   Collections.shuffle(tabSelectionOrderList);
+	   return tabSelectionOrderList;
     }
 
     /**
@@ -518,9 +512,11 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
      * @return the index of the selected tab
      */
     private int selectNextRandomTab(JTabbedPane tabPane) {
-        int nextAvailable = -1;
+        List tabSelectionOrderList = createTabSelectionOrderList();
+		
+		int nextAvailable = -1;
         int currentTab;
-
+		
         for(int i=0; i<tabSelectionOrderList.size(); i++)
         {
             currentTab = ((Integer)tabSelectionOrderList.get(i)).intValue();
