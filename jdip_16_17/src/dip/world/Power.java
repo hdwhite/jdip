@@ -22,6 +22,7 @@
 //
 package dip.world;
 
+import java.util.List;
 
 /**
 *	A Power represents player in the game.
@@ -152,5 +153,10 @@ public class Power implements Comparable
 		return getName().compareTo(power.getName());
 	}// compareTo()
 	
+	/** Converts a List (of Powers) to an Array of Powers */
+	public static Power[] toArray(List list)
+	{
+		return (Power[]) list.toArray(new Power[list.size()]);
+	}// toArray()
 	
 }// class Power

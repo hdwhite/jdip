@@ -27,6 +27,7 @@ import dip.world.Location;
 import dip.misc.Utils;
 import dip.gui.ClientMenu;
 import dip.gui.order.GUIOrder;
+import dip.gui.PhaseSelector;
 
 import java.awt.geom.*;
 
@@ -38,6 +39,8 @@ import org.apache.batik.swing.*;
 import java.awt.geom.AffineTransform;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
+
+import org.jdesktop.swing.actions.*;
 
 import org.apache.batik.swing.JSVGCanvas; 
 import org.apache.batik.dom.events.DOMKeyEvent;
@@ -77,11 +80,6 @@ public class ViewControlBar extends ControlBar
 	private static final String ICON_ZOOM_IN 	= "resource/common/icons/24x24/stock_zoom_in_24.png";
 	private static final String ICON_ZOOM_OUT 	= "resource/common/icons/24x24/stock_zoom_out_24.png";
 	private static final String ICON_ZOOM_FIT	= "resource/common/icons/24x24/stock_zoom_fit_24.png";
-	private static final String ICON_PREV 	= "resource/common/icons/24x24/stock_left_arrow_24.png";
-	private static final String ICON_NEXT 	= "resource/common/icons/24x24/stock_right_arrow_24.png";
-	private static final String ICON_LAST 	= "resource/common/icons/24x24/stock_last_24.png";
-	private static final String ICON_FIRST 	= "resource/common/icons/24x24/stock_first_24.png";
-	
 	
 	
 	// instance variables
@@ -198,27 +196,21 @@ public class ViewControlBar extends ControlBar
 		// NEW ....
 		addSeparator();
 		
-		JButton b = null;
-		
-		b = new JButton(Utils.getIcon(ICON_FIRST));
-		//b.addActionListener(nptvl);
-		b.setToolTipText(ClientMenu.HISTORY_INITIAL.getName());
+		AbstractButton b = null;
+		ActionManager am = ActionManager.getInstance();
+		ActionContainerFactory acf = am.getFactory();
+		b = acf.createButton(am.getAction(PhaseSelector.ACTION_PHASE_FIRST));
 		add(b);
 		
-		b = new JButton(Utils.getIcon(ICON_PREV));
-		//b.addActionListener(nptvl);
-		b.setToolTipText(ClientMenu.HISTORY_PREVIOUS.getName());
+		b = acf.createButton(am.getAction(PhaseSelector.ACTION_PHASE_PREVIOUS));
 		add(b);
 		
-		b = new JButton(Utils.getIcon(ICON_NEXT));
-		//b.addActionListener(nptvl);
-		b.setToolTipText(ClientMenu.HISTORY_NEXT.getName());
+		b = acf.createButton(am.getAction(PhaseSelector.ACTION_PHASE_NEXT));
 		add(b);
 		
-		b = new JButton(Utils.getIcon(ICON_LAST));
-		//b.addActionListener(nptvl);
-		b.setToolTipText(ClientMenu.HISTORY_LAST.getName());
+		b = acf.createButton(am.getAction(PhaseSelector.ACTION_PHASE_LAST));
 		add(b);
+		
 		
 	}// makeLayout()
 	

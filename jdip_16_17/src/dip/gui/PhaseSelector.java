@@ -23,6 +23,11 @@
 
 package dip.gui;
 
+import dip.gui.swing.ActionMaker;
+import dip.gui.dialog.SelectPhaseDialog;
+
+import org.jdesktop.swing.actions.ActionManager;
+
 import dip.world.World;
 import dip.world.Phase;
 import dip.world.TurnState;
@@ -40,6 +45,17 @@ import java.util.Arrays;
 */
 public class PhaseSelector
 {
+	/** Action Command: First Phase */
+	public static final String ACTION_PHASE_FIRST = "phase-first";
+	/** Action Command: Last Phase */
+	public static final String ACTION_PHASE_LAST = "phase-last";
+	/** Action Command: Next Phase */
+	public static final String ACTION_PHASE_NEXT = "phase-next";
+	/** Action Command: Previous Phase */
+	public static final String ACTION_PHASE_PREVIOUS = "phase-previous";
+	/** Action Command: Select Phase (from a dialog) */
+	public static final String ACTION_PHASE_SELECT = "phase-previous";
+	
 	private World currentWorld = null;
 	private TurnState currentTS = null;
 	private int currentPos = 0;
@@ -56,6 +72,20 @@ public class PhaseSelector
 		this.menu = parent.getClientMenu();
 		this.pcl = new PhasePCL();
 		parent.addPropertyChangeListener(pcl);
+		
+		// create and register actions
+		ActionMaker.create(ACTION_PHASE_FIRST, ACTION_PHASE_FIRST, null, false);
+		ActionMaker.create(ACTION_PHASE_LAST, ACTION_PHASE_LAST, null, false);
+		ActionMaker.create(ACTION_PHASE_NEXT, ACTION_PHASE_NEXT, null, false);
+		ActionMaker.create(ACTION_PHASE_PREVIOUS, ACTION_PHASE_PREVIOUS, null, false);
+		ActionMaker.create(ACTION_PHASE_SELECT, ACTION_PHASE_SELECT, null, false);
+		
+		ActionManager actionManager = ActionManager.getInstance();
+		actionManager.registerCallback(ACTION_PHASE_FIRST, this, "first");
+		actionManager.registerCallback(ACTION_PHASE_LAST, this, "last");
+		actionManager.registerCallback(ACTION_PHASE_NEXT, this, "next");
+		actionManager.registerCallback(ACTION_PHASE_PREVIOUS, this, "previous");
+		actionManager.registerCallback(ACTION_PHASE_SELECT, this, "select");
 	}// PhaseSelector()
 	
 	/** Cleanup the PhaseSelector object */
@@ -96,6 +126,16 @@ public class PhaseSelector
 		parent.fireTurnstateChanged(currentTS);
 	}// previous()
 	
+	/** Select a Phase from a selection dialog */
+	public void select()
+	{
+		final Phase phase = SelectPhaseDialog.displayDialog(parent);
+		if(phase != null)
+		{
+			parent.fireTurnstateChanged(currentWorld.getTurnState(phase));
+		}
+	}// select()
+	
 	/** Get the total number of phases. */
 	public int getPhaseCount()
 	{
@@ -111,6 +151,8 @@ public class PhaseSelector
 	
 	private void setWorld(World newWorld)
 	{
+		ActionManager actionManager = ActionManager.getInstance();
+		
 		if(newWorld == null)
 		{
 			// disable menu options
@@ -119,6 +161,13 @@ public class PhaseSelector
 			menu.setEnabled(ClientMenu.HISTORY_INITIAL, false);
 			menu.setEnabled(ClientMenu.HISTORY_LAST, false);
 			menu.setEnabled(ClientMenu.HISTORY_SELECT, false);
+			
+			actionManager.setEnabled(ACTION_PHASE_FIRST, false);
+			actionManager.setEnabled(ACTION_PHASE_LAST, false);
+			actionManager.setEnabled(ACTION_PHASE_NEXT, false);
+			actionManager.setEnabled(ACTION_PHASE_PREVIOUS, false);
+			actionManager.setEnabled(ACTION_PHASE_SELECT, false);
+			
 			
 			// reset our data
 			currentWorld = null;
@@ -133,10 +182,14 @@ public class PhaseSelector
 			//
 			// always enable select
 			menu.setEnabled(ClientMenu.HISTORY_SELECT, true);
+			actionManager.setEnabled(ACTION_PHASE_SELECT, true);
 			
 			// always enable first and last
 			menu.setEnabled(ClientMenu.HISTORY_INITIAL, true);
 			menu.setEnabled(ClientMenu.HISTORY_LAST, true);
+			
+			actionManager.setEnabled(ACTION_PHASE_FIRST, true);
+			actionManager.setEnabled(ACTION_PHASE_LAST, true);
 			
 			// set our data
 			currentWorld = newWorld;
@@ -190,12 +243,17 @@ public class PhaseSelector
 	{
 		menu.setEnabled(ClientMenu.HISTORY_PREVIOUS, (currentPos > 0));
 		menu.setEnabled(ClientMenu.HISTORY_NEXT, (currentPos < maxPos));
+		
+		ActionManager actionManager = ActionManager.getInstance();
+		actionManager.setEnabled(ACTION_PHASE_PREVIOUS, (currentPos > 0));
+		actionManager.setEnabled(ACTION_PHASE_NEXT, (currentPos < maxPos));
 	}// updateNextPrevious()
 	
 	
 	/** Update the Reports | Result (current, previous) menu items */
 	private void updateResults()
 	{
+		ActionManager actionManager = ActionManager.getInstance();
 		if(currentTS == null)
 		{
 			// if currentTS is null, previous turn state must also be null
@@ -263,6 +321,7 @@ public class PhaseSelector
 		
 		public void actionModeChanged(String newMode)
 		{	
+			ActionManager actionManager = ActionManager.getInstance();
 			if( newMode == ClientFrame.MODE_NONE 
 				|| newMode == ClientFrame.MODE_EDIT )
 			{
@@ -272,6 +331,12 @@ public class PhaseSelector
 				menu.setEnabled(ClientMenu.HISTORY_INITIAL, false);
 				menu.setEnabled(ClientMenu.HISTORY_LAST, false);
 				menu.setEnabled(ClientMenu.HISTORY_SELECT, false);
+				
+				actionManager.setEnabled(ACTION_PHASE_FIRST, false);
+				actionManager.setEnabled(ACTION_PHASE_LAST, false);
+				actionManager.setEnabled(ACTION_PHASE_NEXT, false);
+				actionManager.setEnabled(ACTION_PHASE_PREVIOUS, false);
+				actionManager.setEnabled(ACTION_PHASE_SELECT, false);
 			}
 			else 
 			{
@@ -279,6 +344,11 @@ public class PhaseSelector
 				menu.setEnabled(ClientMenu.HISTORY_INITIAL, true);
 				menu.setEnabled(ClientMenu.HISTORY_LAST, true);
 				menu.setEnabled(ClientMenu.HISTORY_SELECT, true);
+				
+				actionManager.setEnabled(ACTION_PHASE_FIRST, true);
+				actionManager.setEnabled(ACTION_PHASE_LAST, true);
+				actionManager.setEnabled(ACTION_PHASE_SELECT, true);
+				
 				updateNextPrevious();
 			}
 			

@@ -37,6 +37,11 @@ import dip.order.result.OrderResult;
 
 import cz.autel.dmi.*;		// HIGLayout
 
+import dip.gui.swing.ActionMaker;
+import org.jdesktop.swing.actions.ActionManager;
+import org.jdesktop.swing.actions.AbstractActionExt;
+import org.jdesktop.swing.actions.ActionContainerFactory;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
@@ -84,6 +89,25 @@ import java.text.MessageFormat;
 */
 public class OrderDisplayPanel extends JPanel
 {
+	// action constants
+	/** Action: Sort ascending */
+	public static final String ACTION_ORDER_SORT_ASCENDING = "order-sort-ascending";
+	/** Action: Sort descending */
+	public static final String ACTION_ORDER_SORT_DESCENDING = "order-sort-descending";
+	/** Action: Delete selected */
+	public static final String ACTION_ORDER_DELETE = "order-delete-selected";
+	/** Action: Delete all (clear) orders */
+	public static final String ACTION_ORDER_DELETE_ALL = "order-delete-all";
+	/** Action: Select all */
+	public static final String ACTION_ORDER_SELECT_ALL = "order-select-all";
+	/** Action: Select none */
+	public static final String ACTION_ORDER_SELECT_NONE = "order-select-none";
+	
+	// ?? sort constants (action group) : probably should do it that way..
+	
+	
+	
+	
 	// sorting constants
 	/** Sort Orders by Power */
 	public static final String SORT_POWER = "SORT_POWER";
@@ -168,9 +192,53 @@ public class OrderDisplayPanel extends JPanel
 		propListener = createPropertyListener();
 		clientFrame.addPropertyChangeListener(propListener);
 		
+		
+		// register actions
+		ActionManager actionManager = ActionManager.getInstance();
+		
+		actionManager.registerCallback(ACTION_ORDER_DELETE, this, "removeSelected");
+		actionManager.registerCallback(ACTION_ORDER_DELETE_ALL, this, "removeAllOrders");
+		actionManager.registerCallback(ACTION_ORDER_SELECT_NONE, this, "selectNone");
+		actionManager.registerCallback(ACTION_ORDER_SELECT_ALL, this, "selectAll");
+		
+		actionManager.registerCallback(ACTION_ORDER_SORT_ASCENDING, this, "sortAscending");
+		actionManager.registerCallback(ACTION_ORDER_SORT_DESCENDING, this, "sortDescending");
+		
+		
 		// layout
 		makeLayout();
 	}// OrderDisplayPanel()
+	
+	
+	/** Sort the orders, ascending */
+	public void sortAscending(boolean b)
+	{
+		DOComparator comp = orderListModel.getSortComparator();
+		OrderDisplayPanel.this.setSorting(comp.getType(), false);
+	}// sortAscending()
+		
+	
+	/** Sort the orders, descending */
+	public void sortDescending(boolean b)
+	{
+		DOComparator comp = orderListModel.getSortComparator();
+		OrderDisplayPanel.this.setSorting(comp.getType(), true);
+	}// sortDescending()
+	
+	
+	/** Create actions */
+	public static void initActions()
+	{
+		ActionMaker.create(ACTION_ORDER_DELETE, ACTION_ORDER_DELETE, null, false);
+		ActionMaker.create(ACTION_ORDER_DELETE_ALL, ACTION_ORDER_DELETE_ALL, null, false);
+		ActionMaker.create(ACTION_ORDER_SELECT_ALL, ACTION_ORDER_SELECT_ALL, null, false);
+		ActionMaker.create(ACTION_ORDER_SELECT_NONE, ACTION_ORDER_SELECT_NONE, null, false);
+		
+		// grouped actions
+		final String sortGroup = "orderSortGroup";
+		ActionMaker.create(ACTION_ORDER_SORT_ASCENDING, ACTION_ORDER_SORT_ASCENDING, sortGroup, true);
+		ActionMaker.create(ACTION_ORDER_SORT_DESCENDING, ACTION_ORDER_SORT_DESCENDING, sortGroup, true);
+	}// initActions()
 	
 	
 	/**
@@ -580,6 +648,14 @@ public class OrderDisplayPanel extends JPanel
 	}// removeOrders()
 	
 	/**
+	*	Undoable removeAllOrders. Equivalent to removeAllOrders(true).
+	*/
+	public void removeAllOrders()
+	{
+		removeAllOrders(true);
+	}// removeAllOrders()
+	
+	/**
 	*	Removes all orders for all powers within the orderablePowers group
 	*	(see ClientFrame for more information).
 	*	
@@ -742,6 +818,8 @@ public class OrderDisplayPanel extends JPanel
 			throw new IllegalArgumentException();
 		}
 	}// setSorting()
+	
+	
 	
 	/**
 	*	Return a sort constant (identity) by parsing a sort-constant
@@ -991,7 +1069,7 @@ public class OrderDisplayPanel extends JPanel
 			if(turnState.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT)
 			{
 				adjMap = Adjustment.getAdjustmentInfo(turnState, 
-					world.getRuleOptions(), world.getMap().getPowers());
+					world.getRuleOptions(), world.getMap().getPowerList());
 			}
 			else
 			{
@@ -1088,6 +1166,14 @@ public class OrderDisplayPanel extends JPanel
 				this.comparator = comp;
 			}
 		}// setSortComparator()
+		
+		public DOComparator getSortComparator()
+		{
+			synchronized(this)
+			{
+				return this.comparator;
+			}
+		}// getSortComparator()
 		
 		/** 
 		*	Public, synchronized sort and update. This method 
@@ -1490,6 +1576,9 @@ public class OrderDisplayPanel extends JPanel
 		/** The method we need to make compare() work */
 		protected abstract int compareDisplayOrders(DisplayOrder do1, DisplayOrder do2);
 		
+		/** The type */
+		public abstract String getType();
+		
 		/** 
 		*	The compare method. This essentially returns the result of
 		*	compareDisplayOrders() unless the sort is reversed.
@@ -1536,12 +1625,16 @@ public class OrderDisplayPanel extends JPanel
 				next.setHighlighted(toHilite);
 			}
 		}// setHighlighting()
+		
 	}// inner abstract class DOComparator
 	
 	
 	/** Comparator that sorts DisplayOrder by Power */
 	private class DOSortPower extends DOComparator
 	{
+		/** Sort Type */
+		public String getType()	{ return SORT_POWER; }
+		
 		/** Determine if we are the same Comparator type */
 		public boolean equals(Object obj)
 		{
@@ -1570,6 +1663,9 @@ public class OrderDisplayPanel extends JPanel
 	/** Comparator that sorts DisplayOrder by Province */
 	private class DOSortProvince extends DOComparator
 	{
+		/** Sort Type */
+		public String getType()	{ return SORT_PROVINCE; }
+		
 		/** Determine if we are the same Comparator type */
 		public boolean equals(Object obj)
 		{
@@ -1596,6 +1692,9 @@ public class OrderDisplayPanel extends JPanel
 	/** Comparator that sorts DisplayOrder by Unit */
 	private class DOSortUnit extends DOComparator
 	{
+		/** Sort Type */
+		public String getType()	{ return SORT_UNIT; }
+		
 		/** Determine if we are the same Comparator type */
 		public boolean equals(Object obj)
 		{
@@ -1622,6 +1721,9 @@ public class OrderDisplayPanel extends JPanel
 	/** Comparator that sorts DisplayOrder by Order Type */
 	private class DOSortOrder extends DOComparator
 	{
+		/** Sort Type */
+		public String getType()	{ return SORT_ORDER; }
+		
 		/** Determine if we are the same Comparator type */
 		public boolean equals(Object obj)
 		{
@@ -1655,7 +1757,7 @@ public class OrderDisplayPanel extends JPanel
 	{
 		// start layout
 		int w1[] = { 0 };
-		int h1[] = { 0, 5, 0 };	// 3 pixels between scroll list & sort buttons
+		int h1[] = { 0, 5, 0, 5, 0 };	// 3 pixels between scroll list & sort buttons
 		
 		HIGLayout hl = new HIGLayout(w1, h1);
 		hl.setColumnWeight(1, 1);
@@ -1665,9 +1767,46 @@ public class OrderDisplayPanel extends JPanel
 		HIGConstraints c = new HIGConstraints();
 		
 		add(orderListScrollPane, c.rc(1,1,"lrtb"));
-		add(makeSortPanel(), c.rc(3,1));
+		add(makeToolbar(), c.rc(3,1));
+		add(makeSortPanel(), c.rc(5,1));
 	}// makeLayout()
 	
+	/** Make the toolbar */
+	protected JToolBar makeToolbar()
+	{
+		JToolBar jtb = new JToolBar();
+		jtb.setFloatable(false);
+		jtb.setRollover(true);
+		
+		jtb.add(makeToolbarButton(UndoRedoManager.ACTION_UNDO));
+		jtb.add(makeToolbarButton(UndoRedoManager.ACTION_REDO));
+		
+		jtb.add(Box.createHorizontalGlue());
+		
+		jtb.add(makeToolbarButton(ACTION_ORDER_SORT_ASCENDING));
+		jtb.add(makeToolbarButton(ACTION_ORDER_SORT_DESCENDING));
+		
+		jtb.add(Box.createHorizontalGlue());
+		
+		jtb.add(makeToolbarButton(ACTION_ORDER_DELETE));
+		
+		return jtb;
+	}// makeToolbar()
+	
+	
+	/** Create a Toolbar Button */
+	protected AbstractButton makeToolbarButton(String actionName)
+	{
+		final ActionManager am = ActionManager.getInstance();
+		final ActionContainerFactory acf = am.getFactory();
+		final AbstractButton b = acf.createButton(am.getAction(actionName));
+		b.putClientProperty("hideActionText", Boolean.TRUE);
+		if(Utils.isOSX())
+		{
+			b.putClientProperty("JButton.buttonType", "toolbar");
+		}
+		return b;
+	}// makeToolbarButton()
 	
 	/**
 	*	Makes the panel containing the sort buttons.

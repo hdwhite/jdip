@@ -155,11 +155,13 @@ public class StateWriter
 	{
 		assert(cf != null);
 		turnState = ts;
-		allPowers = ts.getWorld().getMap().getPowers();
+		List tmpList = ts.getWorld().getMap().getPowerList();
+		allPowers = Power.toArray(tmpList);
+		
 		displayablePowers = (cf == null) ? allPowers : cf.getDisplayablePowers();
 		powerMap = getUnitsByPower();
 		adjMap = Adjustment.getAdjustmentInfo(turnState, 
-				turnState.getWorld().getRuleOptions(), allPowers);
+				turnState.getWorld().getRuleOptions(), tmpList);
 		ofo = cf.getOFO();
 	}// StateWriter()
 	
@@ -597,10 +599,10 @@ public class StateWriter
 		}
 		
 		Position position = turnState.getPosition();
-		Province[] provinces = position.getProvinces();
-		for(int i=0; i<provinces.length; i++)
+		Iterator iter = position.getMap().getProvinceList().iterator();
+		while(iter.hasNext())
 		{
-			Province province = provinces[i];
+			final Province province = (Province) iter.next();
 			
 			if(position.hasUnit(province))
 			{

@@ -90,8 +90,9 @@ public class DefaultGUIGameSetup implements GUIGameSetup
 		cf.getUndoRedoManager().reconstitute();
 		
 		// set turnstate and powers
-		cf.fireDisplayablePowersChanged(cf.getDisplayablePowers(), world.getMap().getPowers());
-		cf.fireOrderablePowersChanged(cf.getOrderablePowers(), world.getMap().getPowers());
+		final Power[] powers = Power.toArray( world.getMap().getPowerList() );
+		cf.fireDisplayablePowersChanged(cf.getDisplayablePowers(), powers);
+		cf.fireOrderablePowersChanged(cf.getOrderablePowers(), powers);
 		cf.fireTurnstateChanged( world.getLastTurnState() );
 	}// setup()
 	

@@ -254,7 +254,6 @@ public class ClientMenu
 		
 		// create menus
 		JMenu menu = null;
-		
 		JMenu subMenu = null;
 		
 		// File

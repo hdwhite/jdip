@@ -65,9 +65,9 @@ public class TurnStateConverter implements Converter
 	{
 		final XMLSerializer xs = XMLSerializer.get(context);
 		final TurnState ts = (TurnState) source;
-		final Power[] powers = xs.getMap().getPowers();
 		final List results = new ArrayList(ts.getResultList());
-		
+		final List powerList =  ts.getWorld().getMap().getPowerList();
+
 		// clear order-map identities 
 		// (we shouldn't be holding order references beyond 1 turn)
 		xs.getMarshallingOrderMap().clear();
@@ -79,7 +79,6 @@ public class TurnStateConverter implements Converter
 		{
 			ts.setWorld(xs.getWorld());
 		}
-		
 		
 		hsw.addAttribute("season", ts.getPhase().getSeasonType().toString());
 		hsw.addAttribute("phase",  ts.getPhase().getPhaseType().toString());
@@ -99,7 +98,7 @@ public class TurnStateConverter implements Converter
 			if(Phase.PhaseType.ADJUSTMENT.equals(ts.getPhase().getPhaseType()))
 			{
 				AdjustmentInfoMap aim = Adjustment.getAdjustmentInfo(ts,
-					xs.getWorld().getRuleOptions(), powers);
+					xs.getWorld().getRuleOptions(), powerList);
 				
 				xs.lookupAndWriteNode(aim, cm, hsw, context);
 			}
@@ -112,18 +111,20 @@ public class TurnStateConverter implements Converter
 			
 			// orders
 			hsw.startNode("orders");
-			for(int i=0; i<powers.length; i++)
+			Iterator iter = powerList.iterator();
+			while(iter.hasNext());
 			{
-				List orders = new ArrayList(ts.getOrders(powers[i]));
+				final Power power = (Power) iter.next();
+				List orders = new ArrayList(ts.getOrders(power));
 				if(!orders.isEmpty())
 				{
 					hsw.startNode("orderSet");
-					hsw.addAttribute("power", xs.toString(powers[i]));
+					hsw.addAttribute("power", xs.toString(power));
 					
-					Iterator iter = orders.iterator();
-					while(iter.hasNext())
+					Iterator orderIter = orders.iterator();
+					while(orderIter.hasNext())
 					{
-						final Orderable order = (Orderable) iter.next();
+						final Orderable order = (Orderable) orderIter.next();
 						xs.writeOrder(order, hsw, context);
 					}
 					
@@ -138,7 +139,7 @@ public class TurnStateConverter implements Converter
 			// reference orders first defined in a SubstitutedResult
 			hsw.startNode("results");
 			Collections.sort(results, comparator);
-			Iterator iter = results.iterator();
+			iter = results.iterator();
 			while(iter.hasNext())
 			{
 				Result result = (Result) iter.next();
@@ -294,16 +295,17 @@ public class TurnStateConverter implements Converter
 		HierarchicalStreamWriter hsw, XMLSerializer xs)
 	{
 		StringBuffer sb = new StringBuffer(64);
-		final Power[] powers = xs.getMap().getPowers();
-		for(int i=0; i<powers.length; i++)
+		Iterator iter = xs.getMap().getPowerList().iterator();
+		while(iter.hasNext())
 		{
-			if(ts.getPosition().isEliminated(powers[i]))
+			final Power power = (Power) iter.next();
+			if(ts.getPosition().isEliminated(power))
 			{
 				if(sb.length() > 0)
 				{
 					sb.append(' ');	// not the first. separate with a space.
 				}
-				sb.append( xs.toString(powers[i]) );
+				sb.append( xs.toString(power) );
 			}
 		}
 		

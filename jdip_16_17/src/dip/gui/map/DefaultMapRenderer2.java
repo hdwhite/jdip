@@ -141,8 +141,6 @@ public class DefaultMapRenderer2 extends MapRenderer2
 	protected static final String LAYER_UNITS				= "UnitLayer";
 	/** Layer: Dislodged Units */
 	protected static final String LAYER_DISLODGED_UNITS	= "DislodgedUnitLayer";
-	/** Layer: region definitions for mouse */
-	protected static final String LAYER_MOUSE 			= "MouseLayer";
 	/** Label Layer: Abbreviated */
 	public static final String LABEL_LAYER_BRIEF		= "BriefLabelLayer";
 	/** Label Layer: Full */
@@ -154,7 +152,7 @@ public class DefaultMapRenderer2 extends MapRenderer2
 	/** All Layers */
 	protected static final String[] LAYERS = {	LAYER_MAP, LAYER_SC, LAYER_ORDERS, HIGHEST_ORDER_LAYER,
 												LAYER_UNITS, LAYER_DISLODGED_UNITS,
-												LABEL_LAYER_BRIEF, LABEL_LAYER_FULL, LAYER_MOUSE };
+												LABEL_LAYER_BRIEF, LABEL_LAYER_FULL };
 	
 	
 	// layers for Z-ordering
@@ -171,7 +169,6 @@ public class DefaultMapRenderer2 extends MapRenderer2
 	protected final Map trackerMap;			// for rendering units & dislodged units; keyed by Province
 	protected final HashMap layerMap;		// layers to which we render; keyed by LAYER; includes label layers
 	private final HashMap renderSettings;	// control rendering options.
-	private final HashMap locMap;			// maps multicoastal province ids -> Location objects for multicoastal provinces
 	private final HashMap[] powerOrderMap;
 	private HashMap oldRenderSettings;		// old render settings
 	
@@ -202,14 +199,17 @@ public class DefaultMapRenderer2 extends MapRenderer2
 		
 		// init variables
 		worldMap = mapPanel.getClientFrame().getWorld().getMap();
-		provinces = worldMap.getProvinces();
-		powers = mapPanel.getClientFrame().getWorld().getMap().getPowers();
+		
+		List tmpList = worldMap.getPowerList();
+		powers = (Power[]) tmpList.toArray(new Power[tmpList.size()]);
+		
+		tmpList = worldMap.getProvinceList();
+		provinces = (Province[]) tmpList.toArray(new Province[tmpList.size()]);
 		
 		// setup object maps
 		trackerMap = new HashMap(113);		
 		renderSettings = new HashMap(11);
 		layerMap = new HashMap(11);
-		locMap = new HashMap(17);
 		
 		// power order hashmap (now with z-axis) setup
 		powerOrderMap = new HashMap[Z_LAYER_NAMES.length];
@@ -235,14 +235,14 @@ public class DefaultMapRenderer2 extends MapRenderer2
 		mapPanel.getClientFrame().fireMMDReady(mapMeta);
 		
 		// get and check symbols & rendering layers
-		checkSymbols();
 		mapLayers();
+		checkProvinceSVG();
+		checkSymbols();
 		
 		// add mouse listeners to the MouseLayer
 		// add key listeners
 		domEventListener = mapPanel.getDOMUIEventListener();
 		domEventListener.setMapRenderer(this);
-		validateAndSetupMouseRegions();
 		
 		// Root SVG element listeners	
 		// one is for general key events, and the other, for 'null' locations 
@@ -251,8 +251,6 @@ public class DefaultMapRenderer2 extends MapRenderer2
 		doc.getRootElement().addEventListener(SVGConstants.SVG_EVENT_CLICK, domEventListener, true);
 		doc.getRootElement().addEventListener(SVGConstants.SVG_EVENT_MOUSEOUT, domEventListener, true);
 		doc.getRootElement().addEventListener(SVGConstants.SVG_EVENT_MOUSEOVER, domEventListener, true);
-		
-		// Dragging stuff
 		doc.getRootElement().addEventListener(SVGConstants.SVG_MOUSEDOWN_EVENT_TYPE, domEventListener, true);
 		doc.getRootElement().addEventListener(SVGConstants.SVG_MOUSEUP_EVENT_TYPE, domEventListener, true);
 		
@@ -326,21 +324,12 @@ public class DefaultMapRenderer2 extends MapRenderer2
 		super.close();
 		
 		// remove Root SVG element listeners	
-		doc.getRootElement().removeEventListener(SVGConstants.SVG_KEYPRESS_EVENT_TYPE, domEventListener, false); 
-		
-		// Remove other mouse/key listeners
-		SVGElement[] mouseElements = SVGUtils.idFinderSVG((SVGElement) layerMap.get(LAYER_MOUSE));
-		for(int i=0; i<mouseElements.length; i++)
-		{
-			if(mouseElements[i] instanceof EventTarget)
-			{
-				// add mouse listeners
-				EventTarget et = (EventTarget) mouseElements[i];
-				et.removeEventListener(SVGConstants.SVG_EVENT_CLICK, domEventListener, false); 
-				et.removeEventListener(SVGConstants.SVG_EVENT_MOUSEOUT, domEventListener, false); 
-				et.removeEventListener(SVGConstants.SVG_EVENT_MOUSEOVER, domEventListener, false);
-			}
-		}
+		doc.getRootElement().removeEventListener(SVGConstants.SVG_KEYPRESS_EVENT_TYPE, domEventListener, false);
+		doc.getRootElement().removeEventListener(SVGConstants.SVG_EVENT_CLICK, domEventListener, true);
+		doc.getRootElement().removeEventListener(SVGConstants.SVG_EVENT_MOUSEOUT, domEventListener, true);
+		doc.getRootElement().removeEventListener(SVGConstants.SVG_EVENT_MOUSEOVER, domEventListener, true);
+		doc.getRootElement().removeEventListener(SVGConstants.SVG_MOUSEDOWN_EVENT_TYPE, domEventListener, true);
+		doc.getRootElement().removeEventListener(SVGConstants.SVG_MOUSEUP_EVENT_TYPE, domEventListener, true);
 		
 		// clear maps
 		synchronized(trackerMap)
@@ -350,7 +339,6 @@ public class DefaultMapRenderer2 extends MapRenderer2
 		
 		layerMap.clear();
 		renderSettings.clear();
-		locMap.clear();
 		
 		// clear metadata
 		mapMeta.close();
@@ -541,13 +529,7 @@ public class DefaultMapRenderer2 extends MapRenderer2
 	/** Gets the location that corresponds to a given string id<br>Assumes ID is lowercase! */
 	public Location getLocation(String id)
 	{
-		Province province = worldMap.getProvince(id);
-		if(province != null)
-		{
-			return new Location(province, Coast.UNDEFINED);
-		}
-		
-		return (Location) locMap.get(id);
+		return worldMap.parseLocationStrict(id);
 	}// getLocation()
 	
 	
@@ -1285,91 +1267,94 @@ public class DefaultMapRenderer2 extends MapRenderer2
 	
 	
 	/** 
-	*	Ensure that a region exists for each province. Regions are elements that can be
-	*	assigned a mouse listeners [G, RECT, closed PATH, etc.].
+	*	Ensure that a province is defined in SVG for each province in the map.
+	*	Also ensures that coasts are defined.
 	*	<p>
-	*	This is critical! If this fails, GUI order input / region detection cannot work.
-	*	<p>
-	*	This also sets up a special lookup table for multicoastal provinces.
-	*
+	*	TODO: we don't ensure that all coasts are defined.
 	*/
-	private void validateAndSetupMouseRegions()
+	private void checkProvinceSVG()
 	throws MapException
 	{
-		SVGElement[] mouseElements = SVGUtils.idFinderSVG((SVGElement) layerMap.get(LAYER_MOUSE));
+		final SVGElement[] mouseElements = SVGUtils.idFinderSVG((SVGElement) layerMap.get(LAYER_MAP));
 		
+		// test targetability
 		for(int i=0; i<mouseElements.length; i++)
 		{
-			// get id, which must be a province with or without a coast
-			String id = mouseElements[i].getAttribute(SVGConstants.SVG_ID_ATTRIBUTE);
-			
-			// parse ID; determine if there is a coast.
-			String provinceID = Coast.getProvinceName(id);
-			Coast coast = Coast.parse(id);
-			Province province = worldMap.getProvince(provinceID);
-			
-			if(province == null)
+			if(!(mouseElements[i] instanceof EventTarget))
 			{
-				throw new MapException("Province \""+provinceID+"\" in "+LAYER_MOUSE+" is invalid.");
-			}
-			
-			// can we even target this element??
-			if(mouseElements[i] instanceof EventTarget)
-			{
-				// map the location, but only if the coast is defined.
-				if(coast != Coast.UNDEFINED)
-				{
-					locMap.put(id.toLowerCase(), new Location(province, coast));
-				}
-			}
-			else
-			{
-				throw new MapException(LAYER_MOUSE+"element: "+mouseElements[i]+" cannot be targetted by mouse events.");
+				throw new MapException(LAYER_MAP+"element: "+mouseElements[i]+" cannot be targetted by mouse events.");
 			}
 		}
-	}// validateAndSetupMouseRegions()
-	
+		
+		// check that all provinces are mapped, with appropriate coast maps, too
+		Iterator iter = worldMap.getProvinceList().iterator();
+		while(iter.hasNext())
+		{
+			final Province testProv = (Province) iter.next();
+			boolean matched = false;
+			for(int i=0; i<mouseElements.length; i++)
+			{
+				// get id, which must be a province with or without a coast
+				final String id = mouseElements[i].getAttribute(SVGConstants.SVG_ID_ATTRIBUTE);
+				
+				// parse ID; determine if there is a coast.
+				final String provinceID = Coast.getProvinceName(id);
+				final Coast coast = Coast.parse(id);
+				final Province province = worldMap.getProvince(provinceID);
+				
+				if(testProv.equals(province))
+				{
+					matched = true;
+					break;
+				}
+			}
+			
+			if(!matched)
+			{
+				throw new MapException("Province \""+testProv.getShortName()+
+					"\" is not identified (by an id attribute) in "+LAYER_MAP);
+			}
+		}
+	}// checkProvinceSVG()
+
 	
 	
 	
 	/**
-	*	Looks for groups with an ID prefaced by an underscore
-	*	If that which follows the underscore is a province ID, 
-	*	it is added to the tracker objects. 
+	*	Looks for ID attributes that correspond with a province short name,
+	*	and adds it to the corresponding tracker object.
 	*	<p>
-	*	All SVGElements with underscore-prefaced province IDs will
+	*	All SVGElements with will
 	*	be rendered using the region coloring CSS styles. If no province
-	*	element is found, it will not be so colored.
+	*	element is found, it will not have a fill color.
 	*
 	*/
 	private void addProvinceHilitesToTracker()
 	{
+System.out.println("addProvinceHilitesToTracker hilites");
 		// Make a list of all possible provinces with underscores
-		ArrayList uscoreProvList = new ArrayList(125);	// stores underscore-preceded names
-		ArrayList lookupProvList = new ArrayList(125);	// stores corresponding Province
+		ArrayList provNameList = new ArrayList(2*provinces.length);		// province short names
+		ArrayList lookupList = new ArrayList(2*provinces.length);		// province short names
 		for(int i=0; i<provinces.length; i++)
 		{
 			String[] shortNames = provinces[i].getShortNames();
 			for(int j=0; j<shortNames.length; j++)
 			{
-				uscoreProvList.add('_'+shortNames[j] );
-				lookupProvList.add(provinces[i]);
+				provNameList.add( shortNames[j] );
+				lookupList.add(provinces[i]);
 			}
 		}
 		
 		// try to find as many of the above names as possible
-		Map map = SVGUtils.tagFinderSVG(uscoreProvList, doc.getRootElement(), true);
-		
-		// safety check
-		assert (uscoreProvList.size() == lookupProvList.size());
+		Map map = SVGUtils.tagFinderSVG(provNameList, getLayer(LAYER_MAP), true);
 		
 		// go through the map and add non-null objects to the tracker.
-		for(int i=0; i<lookupProvList.size(); i++)
+		for(int i=0; i<provNameList.size(); i++)
 		{
-			SVGElement element = (SVGElement) map.get( uscoreProvList.get(i) );
+			SVGElement element = (SVGElement) map.get( provNameList.get(i) );
 			if(element != null)
 			{
-				Tracker tracker = (Tracker) trackerMap.get( (Province) lookupProvList.get(i) );
+				Tracker tracker = (Tracker) trackerMap.get( (Province) lookupList.get(i) );
 				tracker.setProvinceHiliteElement(element);
 			}
 		}
@@ -1469,12 +1454,10 @@ public class DefaultMapRenderer2 extends MapRenderer2
 		public SVGElement getUnitElement()				{ return elUnit; }
 		public SVGElement getDislodgedUnitElement()		{ return elDislodgedUnit; }
 		
-
 		public Unit getUnit()					{ return unit; }
 		public Unit getDislodgedUnit()			{ return dislodgedUnit; }
 		public void setUnit(Unit u)				{ unit = u; }
 		public void setDislodgedUnit(Unit u)	{ dislodgedUnit = u; }
-		
 		
 		public void setProvinceHiliteElement(SVGElement el)
 		{ 

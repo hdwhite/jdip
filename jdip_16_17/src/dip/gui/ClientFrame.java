@@ -319,6 +319,10 @@ public class ClientFrame extends JFrame
 		// set frame icon
 		setIconImage(Utils.getImageIcon(Utils.FRAME_ICON).getImage());
 		
+		// action setup
+		UndoRedoManager.initActions();
+		OrderDisplayPanel.initActions();
+		
 		// setup menu
 		clientMenu = new ClientMenu(this);
 		setJMenuBar(clientMenu.getJMenuBar());
@@ -813,6 +817,7 @@ public class ClientFrame extends JFrame
 		}
 	}// fireMultipleOrdersDeleted()
 	
+	
 	/** Fired when displayed orders have changed */
 	public final void fireDisplayablePowersChanged(Power[] oldPowers, final Power[] newPowers)
 	{
@@ -1259,7 +1264,7 @@ public class ClientFrame extends JFrame
 			clientMenu.setActionMethod(ClientMenu.HISTORY_NEXT, phaseSel, "next");
 			clientMenu.setActionMethod(ClientMenu.HISTORY_INITIAL, phaseSel, "first");
 			clientMenu.setActionMethod(ClientMenu.HISTORY_LAST, phaseSel, "last");
-			clientMenu.setActionMethod(ClientMenu.HISTORY_SELECT, this, "onHistorySelect");
+			clientMenu.setActionMethod(ClientMenu.HISTORY_SELECT, phaseSel, "select");
 			
 			// view
 			clientMenu.setActionMethod(ClientMenu.VIEW_NAMES_NONE, this, "onViewNamesNone");
@@ -1459,6 +1464,7 @@ public class ClientFrame extends JFrame
 		
 		// history
 		//
+		/*
 		public void onHistorySelect()
 		{
 			if(orderDisplayPanel != null)
@@ -1470,6 +1476,7 @@ public class ClientFrame extends JFrame
 				}
 			}
 		}
+		*/
 		
 		// view
 		//

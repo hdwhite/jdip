@@ -670,4 +670,11 @@ public class Province implements Comparable
 		return fullName.compareToIgnoreCase( ((Province) obj).fullName );
 	}// compareTo()
 	
+	
+	/** Converts a List (of provinces) to an Array of Provinces */
+	public static Province[] toArray(List list)
+	{
+		return (Province[]) list.toArray(new Province[list.size()]);
+	}// toArray()
+	
 }// class Province

@@ -431,7 +431,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		final List powerList = world.getMap().getPowerList();
 		
 		Adjustment.AdjustmentInfoMap f2fAdjMap = Adjustment.getAdjustmentInfo(turnState, 
-				world.getRuleOptions(), (Power[]) powerList.toArray(new Power[powerList.size()]));
+				world.getRuleOptions(), powerList);
 		
 		for(int i=0; i<powerList.size(); i++)
 		{

@@ -110,8 +110,9 @@ public class F2FGUIGameSetup implements GUIGameSetup
 		cf.getUndoRedoManager().reconstitute();
 		
 		// set turnstate and powers
-		cf.fireDisplayablePowersChanged(cf.getDisplayablePowers(), world.getMap().getPowers());
-		cf.fireOrderablePowersChanged(cf.getOrderablePowers(), world.getMap().getPowers());
+		final Power[] powers = Power.toArray( world.getMap().getPowerList() );
+		cf.fireDisplayablePowersChanged(cf.getDisplayablePowers(), powers);
+		cf.fireOrderablePowersChanged(cf.getOrderablePowers(), powers);
 		cf.fireTurnstateChanged( world.getLastTurnState() );
 	}// setup()
 	
@@ -156,7 +157,6 @@ public class F2FGUIGameSetup implements GUIGameSetup
 		{
 			final F2FGUIGameSetup ggs = (F2FGUIGameSetup) source;
 			final XMLSerializer xs = XMLSerializer.get(context);
-			final Power[] powers = xs.getWorld().getMap().getPowers();
 			final ClassMapper cm = getCM();
 			
 			xs.writeNVP("currentPower", xs.toString(ggs.getState().getCurrentPower()), cm, hsw, context);

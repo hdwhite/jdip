@@ -157,7 +157,6 @@ public class TextViewer extends HeaderDialog
 		// text pane
 		textPane = new XJEditorPane();
 		textPane.setEditable(true);
-		textPane.setBorder(new CompoundBorder(new EtchedBorder(), new EmptyBorder(5,5,5,5)));
 		textPane.setMargin(new Insets(TEXT_INSETS, TEXT_INSETS, TEXT_INSETS, TEXT_INSETS));
 		textPane.setFont(tvFont);
 		
@@ -373,24 +372,18 @@ public class TextViewer extends HeaderDialog
 		});
 		
 		// content pane setup
-		// BUG: top/bottom border of textPane disappears when scrolling. If we add a 
-		// lineborder to the viewport on the scroller, it doesn't look right. So, for
-		// now, we will do nothing.
 		jsp = new XJScrollPane(textPane);
+		
+		JPanel p = new JPanel(new BorderLayout());
+		p.add(BorderLayout.CENTER, jsp);
 		
 		if(showCommandBar)
 		{
-			JPanel p = new JPanel(new BorderLayout());
-			p.add(BorderLayout.CENTER, jsp);
 			p.add(BorderLayout.SOUTH, createCommandBar());
-			createDefaultContentBorder(p);
-			setContentPane(p);
 		}
-		else
-		{
-			createDefaultContentBorder(jsp);
-			setContentPane(jsp);
-		}
+		
+		createDefaultContentBorder(p);
+		setContentPane(p);
 	}// TextViewer()
 	
 	

@@ -117,6 +117,13 @@ public class Position implements Cloneable
 		return map.getProvinces();
 	}// getProvinces()
 	
+	/** 
+	*	Return the Map
+	*/
+	public final dip.world.Map getMap()
+	{
+		return map;
+	}// getMap()
 	
 	/** Returns true if this Power has been eliminated. False by default. */
 	public boolean isEliminated(Power power)

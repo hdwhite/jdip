@@ -82,7 +82,6 @@ public class WorldConverter implements Converter
 		MarshallingContext context)
 	{
 		final World world = (World) source;
-		final Power[] powers = world.getMap().getPowers();
 		final XMLSerializer xs = XMLSerializer.get(context);
 		
 		// set World and Map in XMLSerializer
@@ -100,9 +99,11 @@ public class WorldConverter implements Converter
 		hsw.startNode("info");
 		xs.lookupAndWriteNode(world.getGameMetadata(), cm, hsw, context);
 		
-		for(int i=0; i<powers.length; i++)
+		Iterator iter = world.getMap().getPowerList().iterator();
+		while(iter.hasNext())
 		{
-			final PlayerMetadata pmd = world.getPlayerMetadata(powers[i]);
+			final Power power = (Power) iter.next(); 
+			final PlayerMetadata pmd = world.getPlayerMetadata(power);
 			xs.lookupAndWriteNode(pmd, cm, hsw, context);
 		}
 		
@@ -114,7 +115,7 @@ public class WorldConverter implements Converter
 		hsw.endNode();
 		
 		// <turn> element(s)
-		Iterator iter = world.getAllTurnStates().iterator();
+		iter = world.getAllTurnStates().iterator();
 		while(iter.hasNext())
 		{
 			final TurnState ts = (TurnState) iter.next();

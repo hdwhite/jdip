@@ -30,6 +30,10 @@ import dip.misc.Log;
 import dip.order.Orderable;
 import dip.world.TurnState;
 
+import dip.gui.swing.ActionMaker;
+import org.jdesktop.swing.actions.ActionManager;
+import org.jdesktop.swing.actions.AbstractActionExt;
+
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
@@ -47,6 +51,13 @@ import java.util.*;
 */
 public class UndoRedoManager extends UndoManager
 {
+	// actions
+	/** Action: Undo */
+	public static final String ACTION_UNDO = "undo";
+	/** Action: Redo */
+	public static final String ACTION_REDO = "redo";
+	
+	
 	// the max number of undo/redo events we can hold
 	private static final int MAX_UNDOS = 250;
 	
@@ -70,7 +81,22 @@ public class UndoRedoManager extends UndoManager
 		this.orderDisplayPanel = orderDisplayPanel;
 		
 		super.setLimit(MAX_UNDOS);
+		
+		// register actions
+		ActionManager actionManager = ActionManager.getInstance();
+		actionManager.registerCallback(ACTION_UNDO, this, "undo");
+		actionManager.registerCallback(ACTION_REDO, this, "redo");
 	}// UndoRedoManager()
+	
+	
+	/**
+	*	Initialize the actions
+	*/
+	public static void initActions()
+	{
+		ActionMaker.create(ACTION_UNDO, ACTION_UNDO, null, false);
+		ActionMaker.create(ACTION_REDO, ACTION_REDO, null, false);
+	}// initActions()
 	
 	
 	/** Add an Edit (UndoableEdit) */
@@ -156,19 +182,30 @@ public class UndoRedoManager extends UndoManager
 	public void refreshMenu()
 	{
 		ClientMenu menu = clientFrame.getClientMenu();
+		ActionManager actionManager = ActionManager.getInstance();
+		
 		menu.setText(ClientMenu.EDIT_UNDO, getUndoPresentationName());
 		menu.setText(ClientMenu.EDIT_REDO, getRedoPresentationName());
+		
+		((AbstractActionExt) actionManager.getAction(ACTION_UNDO)).setName(getUndoPresentationName());
+		((AbstractActionExt) actionManager.getAction(ACTION_REDO)).setName(getRedoPresentationName());
 		
 		if( clientFrame.getMode() == ClientFrame.MODE_ORDER ||
 			clientFrame.getMode() == ClientFrame.MODE_EDIT )
 		{
 			menu.setEnabled(ClientMenu.EDIT_UNDO, canUndo());
 			menu.setEnabled(ClientMenu.EDIT_REDO, canRedo());
+			
+			actionManager.setEnabled(ACTION_UNDO, canUndo());
+			actionManager.setEnabled(ACTION_REDO, canRedo());
 		}
 		else
 		{
 			menu.setEnabled(ClientMenu.EDIT_UNDO, false);
 			menu.setEnabled(ClientMenu.EDIT_REDO, false);
+			
+			actionManager.setEnabled(ACTION_UNDO, false);
+			actionManager.setEnabled(ACTION_REDO, false);
 		}
 	}// refreshMenu()
 	

@@ -34,7 +34,8 @@ import org.w3c.dom.svg.SVGElement;
 
 // import for testing
 import org.w3c.dom.svg.*;
-
+import org.w3c.dom.*;
+import org.apache.batik.css.engine.*;
 
 /**
 *
@@ -88,17 +89,58 @@ public class DOMUIEventListener implements EventListener
 			return;
 		}
 		
-		// get ID for current element. If no ID is present, go up one level
-		// the the parent element (usually a <g> element).
+		
+		// get ID for current element. If no ID is present, recurse up to
+		// parent element with an ID. 
+		// ALSO, if element starts with an underscore, we will recurse upto
+		// the first non-underscore element. (See Chromatic implementation). 
+		// Otherwise, we will not get the <use> id, but the child *under* the
+		// <use> element
 		SVGElement element = (SVGElement) evt.getTarget();
-		String id = element.getAttribute(SVGConstants.SVG_ID_ATTRIBUTE);
-		if("".equals(id))
+		Node node = element;
+		String id = element.getId();
+		while(!isValidID(node, id))
 		{
-			id = ((SVGElement) element.getParentNode()).getAttribute(SVGConstants.SVG_ID_ATTRIBUTE);
+			node = node.getParentNode();
+			if(node instanceof SVGElement)
+			{
+				element = (SVGElement) node;
+				id = element.getId();
+			}
+			else if(node instanceof CSSImportedElementRoot)
+			{
+				CSSImportedElementRoot cssIE = (CSSImportedElementRoot) node;
+				if(cssIE.getCSSParentElement() instanceof SVGElement)
+				{
+					element = (SVGElement) cssIE.getCSSParentElement();
+					id = element.getId();
+				}
+			}
+			else
+			{
+				System.out.println("node: "+node.getClass().getName());
+				id = null;
+				element = null;
+			}
 		}
 		
+		/*
+		// debug
+		if(evt.getType() == SVGConstants.SVG_EVENT_CLICK)
+		{
+			System.out.println("\nEvent: ");
+			System.out.println("  bubbles: "+evt.getBubbles());
+			System.out.println("  type: "+evt.getType());
+			System.out.println("  phase: "+evt.getEventPhase());	// cap (1); attarget(2);  bubble(3)
+			System.out.println("  current target: "+evt.getCurrentTarget());	// event listener reg'd to here
+			System.out.println("  target: "+evt.getTarget());	// event generated from here
+			System.out.println("  id: "+id);		
+			System.out.println("  target class: "+evt.getTarget().getClass().getName());
+		}
+		*/
+		
 		// lookup Location (convert ID to Location); this may be null.
-		Location location = mapRenderer.getLocation(id);
+		final Location location = mapRenderer.getLocation(id);
 		
 		// dispatch events, as appropriate
 		if(evt instanceof MouseEvent)
@@ -141,4 +183,26 @@ public class DOMUIEventListener implements EventListener
 		
 	}// handleEvent()
 	
+	
+	private boolean isValidID(Node node, String id)
+	{
+		if(node == null || id == null)
+		{
+			return false;
+		}
+		
+		if("".equals(id))
+		{
+			return false;
+		}
+		
+		if(id.charAt(0) == '_')
+		{
+			return false;
+		}
+		
+		return true;
+	}// isValidID()
+	
+
 }// DOMUIEventListener()

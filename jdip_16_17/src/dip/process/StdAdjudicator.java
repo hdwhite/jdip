@@ -115,6 +115,9 @@ public class StdAdjudicator implements Adjudicator
 	private final Map osMap;
 	private final ArrayList substOrders;
 	
+	private final Power[] allPowers;
+	private final Province[] allProvinces;
+	
 	private OrderState[] orderStates = null;
 	private boolean isUnRezParadox = false;
 	private int paradoxBreakAttempt = 0;
@@ -138,6 +141,13 @@ public class StdAdjudicator implements Adjudicator
 		this.resultList = ts.getResultList();
 		this.osMap = new HashMap(119);
 		this.substOrders = new ArrayList(16);
+		
+		// create internal arrays used for iterating
+		List tmpList = world.getMap().getPowerList();
+		allPowers = (Power[]) tmpList.toArray(new Power[tmpList.size()]);
+		
+		tmpList = world.getMap().getProvinceList();
+		allProvinces = (Province[]) tmpList.toArray(new Province[tmpList.size()]);
 	}// StdAdjudicator()
 	
 	
@@ -321,11 +331,9 @@ public class StdAdjudicator implements Adjudicator
 	*/
 	private void checkOrders()
 	{
-		Power[] powers = world.getMap().getPowers();
-		
-		for(int i=0; i<powers.length; i++)
+		for(int i=0; i<allPowers.length; i++)
 		{
-			Power power = powers[i];
+			final Power power = allPowers[i];
 			Iterator iter = turnState.getOrders(power).iterator();
 			while(iter.hasNext())
 			{
@@ -753,7 +761,8 @@ public class StdAdjudicator implements Adjudicator
 		// Step 12b: 
 		// See if victory conditions have been met; if they have, there is no need
 		// for any additional phases, nor do we care about dislodged units.
-		Adjustment.AdjustmentInfoMap adjustmentMap = Adjustment.getAdjustmentInfo(nextTurnState, ruleOpts, world.getMap().getPowers());
+		Adjustment.AdjustmentInfoMap adjustmentMap = Adjustment.getAdjustmentInfo(nextTurnState, ruleOpts, 
+			world.getMap().getPowerList());
 		VictoryConditions vc = world.getVictoryConditions();
 		if( vc.evaluate(this, adjustmentMap) )
 		{
@@ -791,10 +800,9 @@ public class StdAdjudicator implements Adjudicator
 			RetreatChecker rc = new RetreatChecker(nextTurnState, resultList);
 			boolean areAllDestroyed = true;
 			
-			final Province[] provinces = nextPosition.getProvinces();
-			for(int i=0; i<provinces.length; i++)
+			for(int i=0; i<allProvinces.length; i++)
 			{
-				Province prov = provinces[i];
+				final Province prov = allProvinces[i];
 				Unit unit = nextPosition.getDislodgedUnit(prov);
 				if(unit != null)
 				{
@@ -1384,8 +1392,8 @@ public class StdAdjudicator implements Adjudicator
 	private void adjudicateAdjustment()
 	{
 		// Step 1: get adjustment information
-		Power[] powers = world.getMap().getPowers();
-		Adjustment.AdjustmentInfoMap adjustmentMap = Adjustment.getAdjustmentInfo(turnState, ruleOpts, powers);
+		Adjustment.AdjustmentInfoMap adjustmentMap = Adjustment.getAdjustmentInfo(turnState, ruleOpts, 
+			world.getMap().getPowerList());
 		
 		// Step 2:
 		// determine if any victory conditions have been met. If so, the adjustment phase
@@ -1423,9 +1431,9 @@ public class StdAdjudicator implements Adjudicator
 		
 		ArrayList osList = new ArrayList(32);
 		
-		for(int i=0; i<powers.length; i++)
+		for(int i=0; i<allPowers.length; i++)
 		{
-			Power power = powers[i];
+			final Power power = allPowers[i];
 			Adjustment.AdjustmentInfo ai = (Adjustment.AdjustmentInfo) adjustmentMap.get(power);
 			int orderCount = 0;
 			final int adjAmount = ai.getAdjustmentAmount();
@@ -1491,7 +1499,7 @@ public class StdAdjudicator implements Adjudicator
 			// a result indicating that some builds were unused is created
 			if(ai.getAdjustmentAmount() > 0 && orderCount < ai.getAdjustmentAmount())
 			{
-				addResult( 	new Result(powers[i],
+				addResult( 	new Result(power,
 							Utils.getLocalString(STDADJ_ADJ_BUILDS_UNUSED, new Integer(adjAmount - orderCount))) );
 			}
 			
@@ -1504,8 +1512,8 @@ public class StdAdjudicator implements Adjudicator
 			int ordersToMake = adjAmount + orderCount;
 			if(ordersToMake < 0)
 			{
-				addResult(new Result(powers[i], Utils.getLocalString(STDADJ_ADJ_TOO_FEW_DISBANDS)));
-				createRemoveOrders(osList, powers[i], Math.abs(ordersToMake));
+				addResult(new Result(power, Utils.getLocalString(STDADJ_ADJ_TOO_FEW_DISBANDS)));
+				createRemoveOrders(osList, power, Math.abs(ordersToMake));
 			}
 		}// for(power)
 		
@@ -1629,17 +1637,17 @@ public class StdAdjudicator implements Adjudicator
 		// NOTE: if a power is eliminated, supplyCentersOwned == 0. We can use
 		// the AdjustmentInfo obtained from the beginning, since that will not
 		// have changed since step 1.
-		powers = world.getMap().getPowers();
-		for(int i=0; i<powers.length; i++)
+		for(int i=0; i<allPowers.length; i++)
 		{
+			final Power power = allPowers[i];
 			// get adjustment information
-			Adjustment.AdjustmentInfo ai = (Adjustment.AdjustmentInfo) adjustmentMap.get(powers[i]);
+			Adjustment.AdjustmentInfo ai = (Adjustment.AdjustmentInfo) adjustmentMap.get(power);
 			
 			// check for player elimination
 			if(ai.getSupplyCenterCount() == 0)
 			{
-				nextPosition.setEliminated(powers[i], true);
-				addResult(new Result(powers[i], Utils.getLocalString(STDADJ_ADJ_ELIMINATED, powers[i].getName())));
+				nextPosition.setEliminated(power, true);
+				addResult(new Result(power, Utils.getLocalString(STDADJ_ADJ_ELIMINATED, power.getName())));
 			}
 		}
 		
@@ -1700,10 +1708,9 @@ public class StdAdjudicator implements Adjudicator
 			LinkedList ties = new LinkedList();
 			int maxDist = 0;
 			
-			Province[] provinces = position.getProvinces();
-			for(int provIdx=0; provIdx<provinces.length; provIdx++)
+			for(int provIdx=0; provIdx<allProvinces.length; provIdx++)
 			{
-				Province province = provinces[provIdx];
+				final Province province = allProvinces[provIdx];
 				Unit unit = position.getUnit(province);
 				
 				if(unit != null)
@@ -1805,10 +1812,9 @@ public class StdAdjudicator implements Adjudicator
 	{
 		// remember, we're using the adjudicated position!
 		Position nextPosition = nextTurnState.getPosition();
-		Province[] provinces = nextPosition.getProvinces();
-		for(int i=0; i<provinces.length; i++)
+		for(int i=0; i<allProvinces.length; i++)
 		{
-			Province province = provinces[i];
+			final Province province = allProvinces[i];
 			
 			if(province != null && province.hasSupplyCenter())
 			{
@@ -1848,10 +1854,10 @@ public class StdAdjudicator implements Adjudicator
 			boolean canSkipAdjustment = true;
 			Object[] args = new Object[1];
 			
-			Power[] powers = world.getMap().getPowers();
-			for(int i=0; i<powers.length; i++)
+			for(int i=0; i<allPowers.length; i++)
 			{
-				Adjustment.AdjustmentInfo ai = Adjustment.getAdjustmentInfo(nextTurnState, ruleOpts, powers[i]);
+				final Power power = allPowers[i];
+				Adjustment.AdjustmentInfo ai = Adjustment.getAdjustmentInfo(nextTurnState, ruleOpts, power);
 				final int adjAmount = ai.getAdjustmentAmount();
 				if( adjAmount != 0 )
 				{
@@ -1868,16 +1874,16 @@ public class StdAdjudicator implements Adjudicator
 					if( adjAmount < 0 )
 					{
 						args[0] = String.valueOf( -adjAmount );	// 'abs'
-						addResult(	new Result(powers[i], MFRemove.format(args)) );
+						addResult(	new Result(power, MFRemove.format(args)) );
 					}
 					else if( adjAmount > 0 )
 					{
 						args[0] = String.valueOf(adjAmount);
-						addResult(	new Result(powers[i], MFBuild.format(args)) );
+						addResult(	new Result(power, MFBuild.format(args)) );
 					}
 					else
 					{
-						addResult( new Result(powers[i], Utils.getLocalString(STDADJ_PREADJ_TONEITHER)) );
+						addResult( new Result(power, Utils.getLocalString(STDADJ_PREADJ_TONEITHER)) );
 					}
 				}
 			}

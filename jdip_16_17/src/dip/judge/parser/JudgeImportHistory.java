@@ -104,6 +104,8 @@ final class JudgeImportHistory
 	private final ValidationOptions valOpts;
 	private HSCInfo[] homeSCInfo = null;
 	private boolean finalTurn = false;
+	private final Province[] allProvinces;
+	private final Power[] allPowers;
 	
 	/** Create a JudgeImportHistory */
 	protected JudgeImportHistory(OrderFactory orderFactory, World world, JudgeParser jp, Position oldPosition)
@@ -114,6 +116,14 @@ final class JudgeImportHistory
 		this.jp = jp;
 		this.oldPosition = oldPosition;
 		this.map = world.getMap();
+		
+		// create arrays for iterating over provinces & powers
+		List tmpList = map.getPowerList();
+		allPowers = (Power[]) tmpList.toArray(new Power[tmpList.size()]);
+		
+		tmpList = map.getProvinceList();
+		allProvinces = (Province[]) tmpList.toArray(new Province[tmpList.size()]);
+		
 		
 		// create a very strict validation object, loose seems to have some weird problems when importing.
 		valOpts = new ValidationOptions();
@@ -131,6 +141,13 @@ final class JudgeImportHistory
 		this.jp = jp;
 		this.oldPosition = world.getLastTurnState().getPosition();
 		this.map = world.getMap();
+		
+		// create arrays for iterating over provinces & powers
+		List tmpList = map.getPowerList();
+		allPowers = (Power[]) tmpList.toArray(new Power[tmpList.size()]);
+		
+		tmpList = map.getProvinceList();
+		allProvinces = (Province[]) tmpList.toArray(new Province[tmpList.size()]);
 		
 		// create a very strict validation object, loose seems to have some weird problems when importing.
 		valOpts = new ValidationOptions();
@@ -191,13 +208,12 @@ final class JudgeImportHistory
 		// and store it in HSCInfo object array, so that it can be set during each successive 
 		// turn.
 		ArrayList hscList = new ArrayList(50);
-		Province[] provinces = map.getProvinces();
-		for(int i=0; i<provinces.length; i++)
+		for(int i=0; i<allProvinces.length; i++)
 		{
-			Power power = oldPosition.getSupplyCenterHomePower(provinces[i]);
+			Power power = oldPosition.getSupplyCenterHomePower(allProvinces[i]);
 			if(power != null)
 			{
-				hscList.add(new HSCInfo(provinces[i], power));
+				hscList.add(new HSCInfo(allProvinces[i], power));
 			}
 		}
 		homeSCInfo = (HSCInfo[]) hscList.toArray(new HSCInfo[hscList.size()]);
@@ -247,7 +263,7 @@ final class JudgeImportHistory
 			TurnState ts = world.getTurnState(turns[turns.length-1].getPhase());
 			VictoryConditions vc = world.getVictoryConditions();
 			RuleOptions ruleOpts = world.getRuleOptions();
-			Adjustment.AdjustmentInfoMap adjMap = Adjustment.getAdjustmentInfo(ts, ruleOpts, world.getMap().getPowers());
+			Adjustment.AdjustmentInfoMap adjMap = Adjustment.getAdjustmentInfo(ts, ruleOpts, map.getPowerList());
 			vc.evaluate(ts,adjMap);
 			List evalResults = ts.getResultList();
 			evalResults.addAll(vc.getEvaluationResults());
@@ -271,13 +287,12 @@ final class JudgeImportHistory
 		// and store it in HSCInfo object array, so that it can be set during each successive 
 		// turn.
 		ArrayList hscList = new ArrayList(50);
-		Province[] provinces = map.getProvinces();
-		for(int i=0; i<provinces.length; i++)
+		for(int i=0; i<allProvinces.length; i++)
 		{
-			Power power = oldPosition.getSupplyCenterHomePower(provinces[i]);
+			Power power = oldPosition.getSupplyCenterHomePower(allProvinces[i]);
 			if(power != null)
 			{
-				hscList.add(new HSCInfo(provinces[i], power));
+				hscList.add(new HSCInfo(allProvinces[i], power));
 			}
 		}
 		homeSCInfo = (HSCInfo[]) hscList.toArray(new HSCInfo[hscList.size()]);
@@ -498,14 +513,12 @@ final class JudgeImportHistory
 		//
 		{	
 			// create orderMap, which maps powers to their respective order list
-			Power[] powers = map.getPowers();
-			
 			Log.println("JIH::procMove():CREATING POWER->ORDER MAP");
 			
-			HashMap orderMap = new HashMap(powers.length);
-			for(int i=0; i<powers.length; i++)
+			HashMap orderMap = new HashMap(allPowers.length);
+			for(int i=0; i<allPowers.length; i++)
 			{
-				orderMap.put(powers[i], new LinkedList());
+				orderMap.put(allPowers[i], new LinkedList());
 			}
 			
 			// process all orders
@@ -643,9 +656,9 @@ final class JudgeImportHistory
 			}
 			
 			// set orders in turnstate
-			for(int i=0; i<powers.length; i++)
+			for(int i=0; i<allPowers.length; i++)
 			{
-				ts.setOrders(powers[i], (LinkedList) orderMap.get(powers[i]));
+				ts.setOrders(allPowers[i], (LinkedList) orderMap.get(allPowers[i]));
 			}
 		}
 		
@@ -669,7 +682,7 @@ final class JudgeImportHistory
 		procAdjustmentBlock(adjParser.getOwnership(), ts, position);
 		
 		// check for elimination
-		position.setEliminationStatus(map.getPowers());
+		position.setEliminationStatus(allPowers);
 		
 		// set adjudicated flag
 		ts.setResolved(true);
@@ -706,11 +719,10 @@ final class JudgeImportHistory
 		// create units for all successfull move (retreat) orders in destination province
 		{	
 			// create orderMap, which maps powers to their respective order list
-			Power[] powers = map.getPowers();
-			HashMap orderMap = new HashMap(powers.length);
-			for(int i=0; i<powers.length; i++)
+			HashMap orderMap = new HashMap(allPowers.length);
+			for(int i=0; i<allPowers.length; i++)
 			{
-				orderMap.put(powers[i], new LinkedList());
+				orderMap.put(allPowers[i], new LinkedList());
 			}
 			
 			// validate all parsed orders
@@ -801,9 +813,9 @@ final class JudgeImportHistory
 			}
 			
 			// set orders in turnstate
-			for(int i=0; i<powers.length; i++)
+			for(int i=0; i<allPowers.length; i++)
 			{
-				ts.setOrders(powers[i], (LinkedList) orderMap.get(powers[i]));
+				ts.setOrders(allPowers[i], (LinkedList) orderMap.get(allPowers[i]));
 			}
 		}
 		
@@ -812,7 +824,7 @@ final class JudgeImportHistory
 		procAdjustmentBlock(adjParser.getOwnership(), ts, position);
 		
 		// check for elimination
-		ts.getPosition().setEliminationStatus(map.getPowers());
+		ts.getPosition().setEliminationStatus(allPowers);
 		
 		// set adjudicated flag
 		ts.setResolved(true);
@@ -849,16 +861,6 @@ final class JudgeImportHistory
 		// Copy previous SC info (we need proper ownership info before parsing orders)
 		copyPreviousSCInfo(ts);
 		
-		// DEBUG: use Adjustment to check out WTF is going on
-		/*
-		System.out.println("dip.process.Adjustment.getAdjustmentInfo()");
-		for(int i=0; i<map.getPowers().length; i++)
-		{
-			Power power = map.getPowers()[i];
-			System.out.println("   for power: "+power+"; "+dip.process.Adjustment.getAdjustmentInfo(ts, power));
-		}
-		*/
-		
 		// process adjustment orders (either builds or removes)
 		// create a unit, unless order failed
 		{	
@@ -866,11 +868,10 @@ final class JudgeImportHistory
 			final Position position = ts.getPosition();
 			
 			// create orderMap, which maps powers to their respective order list
-			Power[] powers = map.getPowers();
-			HashMap orderMap = new HashMap(powers.length);
-			for(int i=0; i<powers.length; i++)
+			HashMap orderMap = new HashMap(allPowers.length);
+			for(int i=0; i<allPowers.length; i++)
 			{
-				orderMap.put(powers[i], new LinkedList());
+				orderMap.put(allPowers[i], new LinkedList());
 			}
 			
 			// parse all orders
@@ -971,15 +972,15 @@ final class JudgeImportHistory
 			}
 			
 			// set orders in turnstate
-			for(int i=0; i<powers.length; i++)
+			for(int i=0; i<allPowers.length; i++)
 			{
-				ts.setOrders(powers[i], (LinkedList) orderMap.get(powers[i]));
+				ts.setOrders(allPowers[i], (LinkedList) orderMap.get(allPowers[i]));
 			}
 		}
 		
 		
 		// check for elimination
-		ts.getPosition().setEliminationStatus(map.getPowers());
+		ts.getPosition().setEliminationStatus(allPowers);
 		
 		// set adjudicated flag
 		ts.setResolved(true);
@@ -994,11 +995,10 @@ final class JudgeImportHistory
 			//System.out.println(previousTS.getPhase());
 			Position oldPosition = previousTS.getPosition();
 			Position position = ts.getPosition();
-			Province[] provinces = position.getProvinces();
-			for(int i=0; i<provinces.length; i++)
+			for(int i=0; i<allProvinces.length; i++)
 			{
-			 Province province = provinces[i];
-						 if(province != null && province.hasSupplyCenter())
+				final Province province = allProvinces[i];
+				if(province != null && province.hasSupplyCenter())
 			 {
 				 Unit unit = position.getUnit(province);
 				 if(unit != null)
@@ -1052,10 +1052,9 @@ final class JudgeImportHistory
 		Log.println("copyPreviousPositions() from: ", oldPos);
 		
 		// clone!
-		final Province[] provinces = map.getProvinces();
-		for(int i=0; i<provinces.length; i++)
+		for(int i=0; i<allProvinces.length; i++)
 		{
-			final Province p = provinces[i];
+			final Province p = allProvinces[i];
 			Unit unit = oldPos.getUnit(p);
 			if(unit != null)
 			{
@@ -1113,21 +1112,21 @@ final class JudgeImportHistory
 		Position currentPos = current.getPosition();
 		
 		// copy!
-		Province[] provinces = map.getProvinces();
-		for(int i=0; i<provinces.length; i++)
+		for(int i=0; i<allProvinces.length; i++)
 		{
-			Power power = prevPos.getSupplyCenterOwner(provinces[i]);
+			final Province prov = allProvinces[i];
+			Power power = prevPos.getSupplyCenterOwner(prov);
 			if(power != null)
 			{
-				//System.out.println("  SC @ "+provinces[i]+", owned by "+power);
-				currentPos.setSupplyCenterOwner(provinces[i], power);
-				Log.println("  set SC: ", provinces[i], " owned by ", power);
+				//System.out.println("  SC @ "+prov+", owned by "+power);
+				currentPos.setSupplyCenterOwner(prov, power);
+				Log.println("  set SC: ", prov, " owned by ", power);
 			}
-			power = prevPos.getSupplyCenterHomePower(provinces[i]);
+			power = prevPos.getSupplyCenterHomePower(prov);
 			if(power != null)
 			{
-				currentPos.setSupplyCenterHomePower(provinces[i], power);
-				Log.println("  set HSC: ", provinces[i], " owned by ", power);
+				currentPos.setSupplyCenterHomePower(prov, power);
+				Log.println("  set HSC: ", prov, " owned by ", power);
 			}
 		}
 	}// copyPreviousSCInfo()
@@ -1142,10 +1141,9 @@ final class JudgeImportHistory
 		Position newPos = current.getPosition();
 		Position oldPos = (previousTS == null) ? oldPosition : previousTS.getPosition();
 		
-		final Province[] provinces = map.getProvinces();
-		for(int i=0; i<provinces.length; i++)
+		for(int i=0; i<allProvinces.length; i++)
 		{
-			final Province p = provinces[i];
+			final Province p = allProvinces[i];
 			
 			// clone any lastOccupied info as well.
 			newPos.setLastOccupier(p, oldPos.getLastOccupier(p));
@@ -1340,7 +1338,7 @@ final class JudgeImportHistory
 		copyPreviousSCInfo(ts);
 		
 		// check for elimination
-		ts.getPosition().setEliminationStatus(map.getPowers());
+		ts.getPosition().setEliminationStatus(allPowers);
 			
 		// add to World
 		world.setTurnState(ts);
@@ -1396,7 +1394,7 @@ final class JudgeImportHistory
 		copyPreviousSCInfo(ts);
 		
 		// check for elimination
-		ts.getPosition().setEliminationStatus(map.getPowers());
+		ts.getPosition().setEliminationStatus(allPowers);
 			
 		// add to World
 		world.setTurnState(ts);

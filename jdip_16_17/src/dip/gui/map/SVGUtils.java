@@ -344,7 +344,8 @@ public class SVGUtils
 	{
 		if( node.getNodeType() == Node.ELEMENT_NODE 
 			&& ((anySVGElement && node instanceof org.w3c.dom.svg.SVGElement)
-				|| (node.getNodeName() == SVGConstants.SVG_G_TAG || node.getNodeName() == SVGConstants.SVG_SYMBOL_TAG)) )
+				|| (node.getNodeName() == SVGConstants.SVG_G_TAG 
+					|| node.getNodeName() == SVGConstants.SVG_SYMBOL_TAG)) )
 		{
             // check if the element has an ID attribute
 			if(node.hasAttributes()) 
