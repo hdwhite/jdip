@@ -60,7 +60,7 @@ import java.io.*;
  *
  *
  */
-public abstract class Order extends Object implements Orderable, java.io.Serializable
+public abstract class Order extends Object implements Orderable
 {
 	// resource keys
 	private static final String ORD_VAL_NOUNIT = "ORD_VAL_NOUNIT";

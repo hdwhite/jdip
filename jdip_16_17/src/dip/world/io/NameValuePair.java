@@ -75,6 +75,18 @@ public class NameValuePair implements Comparable
 	}// compareTo()
 	
 	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append(getClass().getName());
+		sb.append("[name=");
+		sb.append(name);
+		sb.append(",value=");
+		sb.append(value);
+		return sb.toString();
+	}// toString()
+	
+	
 	/**
 	*	XStream Converter
 	*/
@@ -105,7 +117,11 @@ public class NameValuePair implements Comparable
 		
 		public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 		{
-			return null;
+			final XMLSerializer xs = XMLSerializer.get(context);
+			
+			return new NameValuePair(
+				xs.getString(reader.getAttribute("name")),
+				xs.getString(reader.getAttribute("value")) );
 		}// unmarshal()		
 	}// class NameValuePairConverter
 

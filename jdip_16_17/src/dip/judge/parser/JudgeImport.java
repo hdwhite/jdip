@@ -188,7 +188,8 @@ public class JudgeImport
 			}
 			else if(pPowerNames[i].equalsIgnoreCase("master"))
 			{
-				gmd.setModeratorEmail(pPowerEmail[i]);
+				ParticipantMetadata pmd = world.getModeratorMetadata();
+				pmd.setEmailAddresses(new String[]{ pPowerEmail[i] });
 			}
 		}
 		

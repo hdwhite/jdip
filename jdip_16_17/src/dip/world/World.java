@@ -22,23 +22,19 @@
 //
 package dip.world;
 
+import dip.world.metadata.ParticipantMetadata;
 import dip.world.metadata.PlayerMetadata;
 import dip.world.metadata.GameMetadata;
 import dip.gui.undo.UndoRedoManager;
 
 import dip.world.io.XMLSerializer;
 
-import dip.net.message.PressStore;
-import dip.net.message.DefaultPressStore;
-
-import java.io.*;
 import java.util.*;
 import java.util.Map;
 
 import java.net.*;
 import java.util.zip.*;
 
-import JSX.*;
 
 /**
 *	The entire game World. This contains the state of an entire game.
@@ -47,125 +43,22 @@ import JSX.*;
 *	<ol>
 *		<li>Map (dip.world.Map) object [constant]
 *		<li>TurnState objects [in a linked hash map]
-*		<li>HashMap of per-power and global state information (used to set various data)
 *	</ol>
 *
 *
 */
-public class World implements Serializable
+public class World
 {
 	// constants for non-turn-data lookup
-	private static final String KEY_GLOBAL_DATA = "_global_data_";
-	private static final String KEY_VICTORY_CONDITIONS = "_victory_conditions_";
-	
+	private static final String KEY_MODERATOR_METADATA = "_moderator_metadata_";
 	private static final String KEY_WORLD_METADATA = "_world_metadata_";
-	private static final String KEY_UNDOREDOMANAGER = "_undo_redo_manager_";
 	private static final String KEY_GAME_SETUP = "_game_setup_";
-	private static final String KEY_PRESS_STORE = "_press_store_";
 	private static final String KEY_VARIANT_INFO = "_variant_info_";
 	
 	// instance variables
-	private SortedMap 				turnStates = null;			// turn data
-	private Map 					nonTurnData = null;			// non-turn data (misc data & per-player data)
-	private final dip.world.Map		map;						// the actual map (constant)
-	
-	
-	/**
-	*	Reads a World object from a file.
-	*/
-	public static World open(File file)
-	throws IOException
-	{
-		JSX.ObjectReader in = null;
-		
-		try
-		{
-			GZIPInputStream gzi = new GZIPInputStream(new BufferedInputStream(new FileInputStream(file), 4096));
-			in =  new JSX.ObjectReader(gzi);
-			World w = (World) in.readObject();
-			return (World) w;
-		}
-		catch(IOException ioe)
-		{
-			throw ioe;
-		}
-		catch(Exception e)
-		{
-			// rethrow all non-IOExceptions as IOExceptions
-			IOException ioe = new IOException(e.getMessage());
-			ioe.initCause(e);
-			throw ioe;
-		}
-		finally
-		{
-			if(in != null)
-			{
-				in.close();
-			}	
-		}
-	}// open()
-	
-	
-	/**
-	*	Saves a World object to a file.
-	*/
-	// TODO: eliminate from world!!
-	public static void save(File file, World world)
-	throws IOException
-	{
-		GZIPOutputStream gzos = null;
-		
-		try
-		{
-			gzos = new GZIPOutputStream(new FileOutputStream(file), 2048);
-			JSX.ObjectWriter out = new JSX.ObjectWriter(gzos);
-			out.setPrettyPrint(false);
-			out.writeObject(world);
-			out.close();
-			gzos.finish(); // this is key. otherwise data is not written.
-		}
-		catch(IOException ioe)
-		{
-			throw ioe;
-		}
-		catch(Exception e)
-		{
-			// rethrow all non-IOExceptions as IOExceptions
-			IOException ioe = new IOException(e.getMessage());
-			ioe.initCause(e);
-			throw ioe;
-		}
-		finally
-		{
-			if(gzos != null)
-			{
-				gzos.close();
-			}	
-		}
-		
-		// very temp
-		System.out.println("XStream test: start (initial position only saved)");
-		dip.world.io.XMLSerializer.toXML(world,
-			new File(file.toString()+"_new.xml"), false,
-			"jdip",
-			"1.7.0",
-			dip.world.io.XMLSerializer.SPECIFICATION_FORMAT_1_0
-		);
-		System.out.println("XStream test: end");
-		
-		System.out.println("XStream test WITH compression");
-		dip.world.io.XMLSerializer.toXML(world,
-			new File(file.toString()+"_new.gz"), true, 
-			"jdip",
-			"1.7.0",
-			dip.world.io.XMLSerializer.SPECIFICATION_FORMAT_1_0
-		);
-		System.out.println("end");
-	}// save()			
-	
-	
-	
-	
+	protected SortedMap 			turnStates = null;			// turn data
+	protected Map 					nonTurnData = null;			// non-turn data (misc data & per-player data)
+	protected final dip.world.Map	map;						// the actual map (constant)
 	
 	
 	/**
@@ -174,7 +67,7 @@ public class World implements Serializable
 	protected World(dip.world.Map map)
 	{
 		this.map = map;
-		turnStates = Collections.synchronizedSortedMap(new TreeMap());	// synchronize on TreeMap
+		turnStates = Collections.synchronizedSortedMap(new TreeMap());
 		nonTurnData = new HashMap(17);
 	}// World()
 	
@@ -186,48 +79,17 @@ public class World implements Serializable
 	}// getMap()
 	
 	
-	/** 
-	*	Sets any special per-power state information that is not associated with
-	*	a particular TurnState. This may be set to null.
-	*/
-	public void setPowerState(Power power, Object state)
-	{
-		nonTurnData.put(power, state);
-	}// setPowerState()
-	
-	/** 
-	*	Gets any special per-power state information that is not associated with
-	*	a particular TurnState. This may return null.
-	*/
-	public Object getPowerState(Power power)
-	{
-		return nonTurnData.get(power);
-	}// getPowerState()
-	
-	
-	/** Set the Global state object. This may be set to null. */
-	public void setGlobalState(Object state)
-	{
-		nonTurnData.put(KEY_GLOBAL_DATA, state);
-	}// setGlobalState()
-	
-	/** Get the Global state object. This may return null. */
-	public Object getGlobalState()
-	{
-		return nonTurnData.get(KEY_GLOBAL_DATA);
-	}// getGlobalState()	
-	
-	
-	/** Set the Victory Conditions */
+	/** Convenience method: sets VictoryConditions from VariantInfo object. */
 	public void setVictoryConditions(VictoryConditions value)
 	{
-		nonTurnData.put(KEY_VICTORY_CONDITIONS, value);
+		getVariantInfo().setVictoryConditions(value);
 	}// setVictoryConditions()
 	
-	/** Get the Victory Conditions */
+	
+	/** Convenience method: gets VictoryConditions from VariantInfo object. */
 	public VictoryConditions getVictoryConditions()
 	{
-		return (VictoryConditions) nonTurnData.get(KEY_VICTORY_CONDITIONS);
+		return getVariantInfo().getVictoryConditions();
 	}// getVictoryConditions()	
 	
 	
@@ -481,8 +343,15 @@ public class World implements Serializable
 	{
 		if(power == null || pmd == null)
 		{
-			throw new IllegalArgumentException("null power or metadata");
+			throw new IllegalArgumentException();
 		}
+		
+		// simple check
+		if(!power.equals(pmd.getPower()))
+		{
+			throw new IllegalStateException("PlayerMetadata power != power argument");
+		}
+		
 		nonTurnData.put(power, pmd);
 	}// setPlayerMetadata()
 	
@@ -491,7 +360,7 @@ public class World implements Serializable
 	{
 		if(power == null)
 		{
-			throw new IllegalArgumentException("null power");
+			throw new IllegalArgumentException();
 		}
 		
 		PlayerMetadata pmd = (PlayerMetadata) nonTurnData.get(power);
@@ -503,48 +372,41 @@ public class World implements Serializable
 		return pmd;
 	}// getPlayerMetadata()
 	
-	
-	/** Sets the UndoRedo manager to be saved. This may be set to null. */
-	public void setUndoRedoManager(UndoRedoManager urm)
+	/** Sets the metadata for a player, referenced by Power */
+	public void setModeratorMetadata(ParticipantMetadata pmd)
 	{
-		nonTurnData.put(KEY_UNDOREDOMANAGER, urm);
-	}// setGlobalState()
+		if(pmd == null)
+		{
+			throw new IllegalArgumentException();
+		}
+		nonTurnData.put(KEY_MODERATOR_METADATA, pmd);
+	}// setPlayerMetadata()
 	
-	
-	/** Gets the UndoRedo manager that was saved. Null if none was saved. */
-	public UndoRedoManager getUndoRedoManager()
+	/** Gets the metadata for a power. Never returns null. Does not return a copy. */
+	public ParticipantMetadata getModeratorMetadata()
 	{
-		return (UndoRedoManager) nonTurnData.get(KEY_UNDOREDOMANAGER);
-	}// getUndoRedoManager()
+		ParticipantMetadata pmd = (ParticipantMetadata) nonTurnData.get(KEY_MODERATOR_METADATA);
+		if(pmd == null)
+		{
+			pmd = new ParticipantMetadata();
+			pmd.setRole(ParticipantMetadata.ROLE_MODERATOR);
+			setModeratorMetadata(pmd);
+		}
+		return pmd;
+	}// getPlayerMetadata()
 	
-	
-	/** Sets the GameSetup object */
+	/** Sets the GameSetup object. May be set to null. */
 	public void setGameSetup(GameSetup gs)
 	{
-		if(gs == null) { throw new IllegalArgumentException(); }
 		nonTurnData.put(KEY_GAME_SETUP, gs);
 	}// setGameSetup()
 	
 	
-	/** Returns the GameSetup object */
+	/** Returns the GameSetup object. May return null. */
 	public GameSetup getGameSetup()
 	{
 		return (GameSetup) nonTurnData.get(KEY_GAME_SETUP);
 	}// getGameSetup()
-	
-	
-	/** Get the PressStore object, which stores and retreives Press messages. */
-	public synchronized PressStore getPressStore()
-	{
-		// create on demand
-		if(nonTurnData.get(KEY_PRESS_STORE) == null)
-		{
-			nonTurnData.put(KEY_PRESS_STORE, new DefaultPressStore());
-		}
-		
-		return (PressStore) nonTurnData.get(KEY_PRESS_STORE);
-	}// getPressStore()
-	
 	
 	
 	/** Get the Variant Info object. This returns a Reference to the Variant information. */
@@ -594,6 +456,7 @@ public class World implements Serializable
 		private float variantVersion;
 		private float symbolsVersion;
 		private RuleOptions ruleOptions;
+		private VictoryConditions victoryConditions;
 		
 		/** Create a VariantInfo object */
 		public VariantInfo() {}
@@ -616,9 +479,20 @@ public class World implements Serializable
 			checkVersion(value); 
 			this.symbolsVersion = value; 
 		}
-		/** <b>Replaces</b> the current RuleOptions with the given RuleOptions */
-		public void setRuleOptions(RuleOptions value)	{ this.ruleOptions = value; }
 		
+		/** <b>Replaces</b> the current RuleOptions with the given RuleOptions */
+		public void setRuleOptions(RuleOptions value)	
+		{ 	
+			if(value == null) { throw new IllegalArgumentException(); }
+			ruleOptions = value; 
+		}// setRuleOptions()
+		
+		/** <b>Replaces</b> the current VictoryConditions with the given VictoryConditions */
+		public void setVictoryConditions(VictoryConditions value)
+		{ 
+			if(value == null) { throw new IllegalArgumentException(); }
+			this.victoryConditions = value; 
+		}// setVictoryConditions()
 		
 		/** Get the Variant name. */
 		public String getVariantName() 		{ return this.variantName; }
@@ -642,6 +516,11 @@ public class World implements Serializable
 			return ruleOptions;
 		}// getRuleOptions()
 		
+		/** Get the VictoryConditions */
+		public VictoryConditions getVictoryConditions()
+		{
+			return victoryConditions;
+		}// getVictoryConcitions()
 		
 		/** ensures Version is a value &gt;0.0f */
 		private void checkVersion(float v)

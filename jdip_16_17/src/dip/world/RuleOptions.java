@@ -25,7 +25,7 @@ package dip.world;
 import dip.misc.Utils;
 import dip.world.variant.data.Variant;
 
-import java.io.Serializable;
+
 import java.io.ObjectStreamException;
 import java.io.InvalidObjectException;
 import java.util.HashMap;
@@ -56,7 +56,7 @@ import java.lang.reflect.*;
 *
 *
 */
-public class RuleOptions implements Serializable
+public class RuleOptions
 {
 	// internal constnats
 	private static final String DESCRIPTION = "_description";
@@ -133,7 +133,7 @@ public class RuleOptions implements Serializable
 	*
 	*
 	*/
-	public static class Option implements Serializable
+	public static class Option
 	{
 		// instance variables
 		protected final String name;
@@ -207,21 +207,6 @@ public class RuleOptions implements Serializable
 		}// hashCode()
 		
 		
-		protected Object readResolve()
-		throws java.io.ObjectStreamException
-		{
-			// slow but easy
-			for(int i=0; i<ALL_OPTIONS.length; i++)
-			{
-				if( name.equals(ALL_OPTIONS[i].name) )
-				{
-					return ALL_OPTIONS[i];
-				}
-			}
-			
-			throw new InvalidObjectException("RuleOptions: ALL_OPTIONS internal error");
-		}// readResolve()
-		
 		/** Parse the given OptionValue. Null if not found. */
 		public static Option parse(String in)
 		{
@@ -249,7 +234,7 @@ public class RuleOptions implements Serializable
 	*	OptionValue names need not be unique, and may be shared between 
 	*	options.
 	*/
-	public static class OptionValue implements Serializable
+	public static class OptionValue
 	{
 		// instance variables
 		final String name;
@@ -287,21 +272,6 @@ public class RuleOptions implements Serializable
 			return name.hashCode();
 		}// hashCode()
 		
-		
-		protected Object readResolve()
-		throws java.io.ObjectStreamException
-		{
-			// slow but easy
-			for(int i=0; i<ALL_OPTIONVALUES.length; i++)
-			{
-				if( name.equals(ALL_OPTIONVALUES[i].name) )
-				{
-					return ALL_OPTIONVALUES[i];
-				}
-			}
-			
-			throw new InvalidObjectException("RuleOptions: ALL_OPTIONVALUES internal error");
-		}// readResolve()
 		
 		/** Parse the given OptionValue. Null if not found. */
 		public static OptionValue parse(String in)

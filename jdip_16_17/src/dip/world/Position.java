@@ -61,7 +61,7 @@ import com.thoughtworks.xstream.alias.ClassMapper;
 *	to assist in cloning rather than call super.clone(). This is done for 
 *	performance reasons.
 */
-public class Position implements java.io.Serializable, Cloneable
+public class Position implements Cloneable
 {
 	// size constants; these should be prime
 	private static final int POWER_SIZE = 17;
@@ -702,6 +702,37 @@ public class Position implements java.io.Serializable, Cloneable
 	}// getDislodgedUnitProvinces()
 	
 	
+	/**
+	*	Checks the current position with another position 
+	*	(NOTE: both positions must be from the same World!)
+	*	for a change in Supply Center ownership. Returns 
+	*	true if a ownership change was detected.
+	*/
+	public boolean isSCChanged(Position p)
+	{
+		// sanity check
+		if( (p.provArray.length != provArray.length)
+			|| (p.map != map) )
+		{
+			throw new IllegalArgumentException();
+		}
+		
+		for(int i=0; i<provArray.length; i++)
+		{
+			ProvinceData this_pd = provArray[i];
+			ProvinceData p_pd = p.provArray[i];
+			
+			Power thisPower = (this_pd == null) ? null : this_pd.getSCOwner();
+			Power pPower = (p_pd == null) ? null : p_pd.getSCOwner();
+			
+			if(thisPower != pPower)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}// isSCChanged()
 	
 	
 	/**
@@ -736,7 +767,7 @@ public class Position implements java.io.Serializable, Cloneable
 	
 	
 	/** All mutable Province data is kept here */
-	private static class ProvinceData implements java.io.Serializable
+	private static class ProvinceData
 	{
 		// instance variables
 		private Unit 	unit = null;
@@ -866,7 +897,7 @@ public class Position implements java.io.Serializable, Cloneable
 	
 	
 	/** All mutable Power data is kept here */
-	private static class PowerData implements java.io.Serializable
+	private static class PowerData
 	{
 		// instance variables
 		private boolean isEliminated = false;

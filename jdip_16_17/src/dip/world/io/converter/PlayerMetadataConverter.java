@@ -25,6 +25,7 @@ package dip.world.io.converter;
 import dip.world.io.XMLSerializer;  
 import dip.world.io.NameValuePair; 
 
+import dip.world.metadata.ParticipantMetadata;
 import dip.world.metadata.PlayerMetadata;
 
 import java.util.*;
@@ -40,15 +41,16 @@ import com.thoughtworks.xstream.alias.ClassMapper;
 /**
 *	XStream Converter
 */
-public class PlayerMetadataConverter implements Converter
+public class PlayerMetadataConverter extends ParticipantMetadataConverter
 {
-	private final ClassMapper cm;
+	
 	
 	public PlayerMetadataConverter(ClassMapper cm)
 	{
-		this.cm = cm;
+		super(cm);
 		cm.alias("player", PlayerMetadata.class, PlayerMetadata.class);
-	}// PlayerMetadataConverter()
+	}// ParticipantMetadataConverter()
+	
 	
 	public void marshal(java.lang.Object source, HierarchicalStreamWriter hsw, 
 		MarshallingContext context)
@@ -57,22 +59,8 @@ public class PlayerMetadataConverter implements Converter
 		final XMLSerializer xs = XMLSerializer.get(context);
 		
 		hsw.addAttribute("power", xs.toString(pmd.getPower()));
-		hsw.addAttribute("type", xs.toString(pmd.getType()));
 		
-		xs.writeNVP("name", pmd.getName(), cm, hsw, context);
-		xs.writeNVP("nick", pmd.getNickname(), cm, hsw, context);
-		xs.writeNVP("uri", xs.toString(pmd.getURI()), cm, hsw, context);
-		
-		final String[] emails = pmd.getEmailAddresses();
-		for(int i=0; i<emails.length; i++)
-		{
-			final String name = (i == 0) ? "email" : "email"+String.valueOf(i);
-			xs.writeNVP(name, emails[i], cm, hsw, context);
-		}
-		
-		hsw.startNode("notes");
-		hsw.setValue(pmd.getNotes());
-		hsw.endNode();
+		write(pmd, xs, hsw, context);
 	}// marshal()
 	
 	
@@ -81,71 +69,14 @@ public class PlayerMetadataConverter implements Converter
 		return type.equals(PlayerMetadata.class);
 	}// canConvert()
 	
+	
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 	{
 		final XMLSerializer xs = XMLSerializer.get(context);
-		
 		final PlayerMetadata pmd = new PlayerMetadata(
 			xs.getPower( reader.getAttribute("power") ));
-		pmd.setType( PlayerMetadata.parseType(reader.getAttribute("type")) );
-		
-		while(reader.hasMoreChildren())
-		{
-			reader.moveDown();
 			
-			final String nodeName = reader.getNodeName();
-			if("notes".equals(nodeName))
-			{
-				pmd.setNotes(reader.getValue());
-			}
-			else
-			{
-				Object obj = xs.lookupAndReadNode(cm, reader, context);
-				if(obj instanceof NameValuePair)
-				{
-					processNVP(pmd, xs, (NameValuePair) obj);
-				}
-			}
-			
-			reader.moveUp();
-		}
-		
-		return pmd;
+		return read(pmd, xs, reader, context);
 	}// unmarshal()
-	
-	
-	private void processNVP(PlayerMetadata pmd, XMLSerializer xs, NameValuePair nvp)
-	{
-		final String name = nvp.getName();
-		
-		List emails = null;
-		
-		if("name".equals(name))
-		{
-			pmd.setName( xs.getString(nvp.getValue()) );
-		}
-		else if("nick".equals(name))
-		{
-			pmd.setNickname( xs.getString(nvp.getValue()) );
-		}
-		else if("uri".equals(name))
-		{
-			pmd.setURI( xs.getURI(nvp.getValue()) );
-		}
-		else if(name.startsWith("email"))
-		{
-			if(emails == null)
-			{
-				emails = new ArrayList(4);
-			}
-			emails.add( xs.getString(nvp.getValue()) );
-		}
-		
-		if(emails != null)
-		{
-			pmd.setEmailAddresses((String[]) emails.toArray(new String[emails.size()]));
-		}
-	}// processNVP()
-	
 	
 }// PlayerMetadataConverter

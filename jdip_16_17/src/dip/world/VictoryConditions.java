@@ -42,7 +42,7 @@ import java.util.ArrayList;
 *	methods to evaluate if these condtions are met during adjudication.
 *	<p>
 */
-public class VictoryConditions implements java.io.Serializable
+public class VictoryConditions
 {
 	// il8n
 	private static final String VC_MAX_GAME_TIME = "VC_MAX_GAME_TIME";

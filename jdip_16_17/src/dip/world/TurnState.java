@@ -22,7 +22,7 @@
 //
 package dip.world;
 
-import java.io.Serializable;
+
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -76,7 +76,7 @@ import com.thoughtworks.xstream.converters.ConversionException;
 *	non-power orders 'snuck in' for a given power)
 *
 */
-public class TurnState implements Serializable
+public class TurnState
 {
 	// instance variables (we serialize all of this)
 	private Phase 		phase = null;				

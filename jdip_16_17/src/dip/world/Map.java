@@ -40,7 +40,7 @@ import javax.xml.parsers.*;
 *	
 *
 */
-public class Map implements Serializable
+public class Map
 {
 	// constants
 	private static final int MAP_SIZE = 211; 	// should be prime

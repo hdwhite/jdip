@@ -27,13 +27,19 @@ import dip.world.TurnState;
 import dip.world.World;
 import dip.world.Power;
 import dip.world.io.XMLSerializer;
+import dip.world.io.NameValuePair;
 import dip.world.io.converter.AbstractConverter;
 
+import dip.gui.F2FOrderDisplayPanel;
+import dip.gui.F2FOrderDisplayPanel.F2FState;
 import dip.gui.map.*;
 import dip.gui.undo.UndoRedoManager;
 
-import java.awt.*;
+import dip.misc.Log;
 
+import java.awt.*;
+import java.util.Iterator;
+import java.util.Map;
 import javax.swing.*;
 
 import com.thoughtworks.xstream.converters.ConversionException;
@@ -57,9 +63,17 @@ public class F2FGUIGameSetup implements GUIGameSetup
 		XMLSerializer.registerConverter(new F2FGUIGameSetupConverter());
 	}
 	
-	// serialized data
-	private boolean[] enabledTabs = null;	// only null if never saved
-	private Power selectedPower = null;		// may be null
+	/* instance fields */
+	private F2FState state;
+	
+	
+	/** Create a F2FGUIGameSetup */
+	public F2FGUIGameSetup()
+	{
+		// set default state
+		state = new F2FOrderDisplayPanel.F2FState();
+	}// F2FGUIGameSetup()
+	
 	
 	/** Setup the game. */
 	public void setup(ClientFrame cf, World world)
@@ -72,14 +86,7 @@ public class F2FGUIGameSetup implements GUIGameSetup
 		cf.setOrderStatusPanel( osp );
 		
 		// restore as appropriate
-		if(enabledTabs != null)
-		{
-			F2FOrderDisplayPanel.F2FState state = new F2FOrderDisplayPanel.F2FState(
-				selectedPower,
-				enabledTabs );
-			
-			odp.restoreState(state);
-		}
+		odp.restoreState(getState());
 		
 		// right-panel layout
 		JPanel rightPanel = new JPanel(new BorderLayout());
@@ -93,20 +100,8 @@ public class F2FGUIGameSetup implements GUIGameSetup
 		cf.setMapPanel( mp );
 		cf.getJSplitPane().setLeftComponent( mp );
 		
-		// restore or create the undo/redo manager
-		UndoRedoManager urm = world.getUndoRedoManager();
-		if(urm == null)
-		{
-			urm = new UndoRedoManager(cf, odp);
-			world.setUndoRedoManager(urm);
-		}
-		else
-		{
-			urm.setClientFrame(cf);
-			urm.setOrderDisplayPanel(odp);
-		}
-		
-		cf.setUndoRedoManager(urm);
+		// create the undo/redo manager
+		cf.setUndoRedoManager(new UndoRedoManager(cf, odp));
 		
 		cf.getJSplitPane().setVisible(true);
 		
@@ -124,10 +119,21 @@ public class F2FGUIGameSetup implements GUIGameSetup
 	public void save(ClientFrame cf)
 	{
 		F2FOrderDisplayPanel fodp = (F2FOrderDisplayPanel) cf.getOrderDisplayPanel();
-		F2FOrderDisplayPanel.F2FState state = fodp.getState();
-		this.selectedPower = state.getCurrentPower();
-		this.enabledTabs = state.getTabState();
+		setState( fodp.getState() );
 	}// save()
+	
+	/** Safe Set */
+	private synchronized void setState(F2FState value)
+	{
+		this.state = value;
+	}// setState()
+	
+	/** Safe Get : NOTE: does not copy */
+	private synchronized F2FState getState()
+	{
+		return state;
+	}// getState()
+	
 	
 	/** For XStream serialization */
 	private static class F2FGUIGameSetupConverter extends AbstractConverter
@@ -151,15 +157,18 @@ public class F2FGUIGameSetup implements GUIGameSetup
 			final XMLSerializer xs = XMLSerializer.get(context);
 			final Power[] powers = xs.getWorld().getMap().getPowers();
 			final ClassMapper cm = getCM();
+			final F2FState state = new F2FState(ggs.getState());
 			
-			xs.writeNVP("selectedPower", xs.toString(ggs.selectedPower), cm, hsw, context);
+			xs.writeNVP("currentPower", xs.toString(state.getCurrentPower()), cm, hsw, context);
 			
 			hsw.startNode("submittedOrders");
-			
-			for(int i=1; i<ggs.enabledTabs.length; i++)
+			Iterator iter = state.iterator();
+			while(iter.hasNext())
 			{
-				xs.writeNVP(xs.toString(powers[i-1]), 
-					String.valueOf(!ggs.enabledTabs[i]), 
+				Map.Entry entry = (Map.Entry) iter.next();
+				xs.writeNVP(
+					xs.toString((Power) entry.getKey()), 
+					String.valueOf(entry.getValue()), 
 					cm, hsw, context);
 			}
 			hsw.endNode();
@@ -168,7 +177,46 @@ public class F2FGUIGameSetup implements GUIGameSetup
 		public Object unmarshal(HierarchicalStreamReader reader, 
 			UnmarshallingContext context)
 		{
-			return null;
+			final XMLSerializer xs = XMLSerializer.get(context);
+			final F2FGUIGameSetup setup = new F2FGUIGameSetup();
+			final F2FState state = new F2FState();
+			
+			while(reader.hasMoreChildren())
+			{
+				reader.moveDown();
+				
+				final String nodeName = reader.getNodeName();
+				if("submittedOrders".equals(nodeName))
+				{
+					while(reader.hasMoreChildren())
+					{
+						reader.moveDown();
+						NameValuePair nvp = (NameValuePair) xs.lookupAndReadNode(getCM(), reader, context);
+						state.setSubmitted(
+							xs.getPower(nvp.getName()),
+							Boolean.getBoolean(nvp.getValue())
+						);
+						reader.moveUp();
+					}
+				}
+				else
+				{
+					NameValuePair nvp = (NameValuePair) xs.lookupAndReadNode(getCM(), reader, context);
+					if("currentPower".equals(nvp.getName()))
+					{
+						state.setCurrentPower(xs.getPower(nvp.getValue()));
+					}
+					else
+					{
+						Log.println("<setup-f2f> ignored unrecognized NVP: ", nvp.getName());
+					}
+				}
+				
+				reader.moveUp();
+			}
+			
+			setup.setState(state);
+			return setup;
 		}// unmarshal()
 			
 	}// inner class F2FGUIGameSetupConverter

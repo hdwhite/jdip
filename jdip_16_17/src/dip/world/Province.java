@@ -65,7 +65,7 @@ import java.util.*;
 *	be handled as a separate object within the Province.
 *
 */
-public class Province implements java.io.Serializable, Comparable
+public class Province implements Comparable
 {
 	
 	// immutable persistent fields
@@ -88,7 +88,7 @@ public class Province implements java.io.Serializable, Comparable
 	/**
 	* Adjacency maintains the connectivity graph between provinces.
 	*/
-	protected static class Adjacency implements java.io.Serializable
+	protected static class Adjacency
 	{
 		private final HashMap adjLoc;
 		

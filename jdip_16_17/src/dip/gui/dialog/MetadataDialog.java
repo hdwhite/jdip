@@ -30,11 +30,18 @@ import dip.gui.AbstractCFPListener;
 import dip.gui.swing.XJTextPane;
 import dip.gui.swing.XJScrollPane;
 import dip.gui.swing.ColorRectIcon;
+import dip.gui.swing.GradientJLabel;
+import dip.gui.swing.GUIUtils;
+import dip.gui.swing.FixedSizeDocFilter;
+
 import dip.gui.map.SVGColorParser;
 import dip.gui.map.MapMetadata;
 import dip.world.metadata.GameMetadata;
 import dip.world.metadata.PlayerMetadata;
+import dip.world.metadata.ParticipantMetadata;
 import dip.misc.Utils;
+
+
 
 // HIGLayout
 import cz.autel.dmi.HIGConstraints;
@@ -47,6 +54,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -57,11 +65,8 @@ import java.awt.*;
 *	Metadata Editing/Viewing dialog
 *	<p>
 *	Although the PlayerMetadata object supports multiple email addresses per player, the
-*	editor currently only supports upto 4.
-	<p>
-	TODO: make non-modal; but if game is destroyed, dialog must too be destroyed; if new dialog
-		selected, and one already exists, it must pop to the top.
-*
+*	editor currently only supports upto 3.
+*	<p>
 */
 public class MetadataDialog extends HeaderDialog
 {
@@ -69,29 +74,33 @@ public class MetadataDialog extends HeaderDialog
 	private static final String TITLE = "MetadataDialog.title";
 	private static final String HEADER_LOCATION = "MetadataDialog.location.header";
 	private static final String TAB_GAME_PANEL = "MetadataDialog.tabname.game";
+	private static final String TAB_MODERATOR_PANEL = "MetadataDialog.tabname.moderator";
 	
 	// il8n constants: game data field names (notes: GDF = Game Data Field)
 	private static final String GDF_NOTES = "MetadataDialog.field.game.notes";
 	private static final String GDF_COMMENT = "MetadataDialog.field.game.comment";
 	private static final String GDF_GAME_NAME = "MetadataDialog.field.game.gamename";
-	private static final String GDF_MOD_NAME = "MetadataDialog.field.game.modname";
-	private static final String GDF_MOD_EMAIL = "MetadataDialog.field.game.modemail";
-	private static final String GDF_MOD_URI = "MetadataDialog.field.game.moduri";
 	private static final String GDF_JUDGE_NAME = "MetadataDialog.field.game.judgename";
 	private static final String GDF_GAME_URI = "MetadataDialog.field.game.gameuri";
 	private static final String GDF_GAME_ID = "MetadataDialog.field.game.gameid";
+	private static final String GDF_PANEL_HEADER = "MetadataDialog.game.panel.header";
 	
 	// il8n constants: player data field names
 	private static final String PDF_NOTES = "MetadataDialog.field.player.notes";
 	private static final String PDF_NAME = "MetadataDialog.field.player.name";
+	private static final String PDF_NICK = "MetadataDialog.field.player.nickname";
 	private static final String PDF_EMAIL = "MetadataDialog.field.player.email";
 	private static final String PDF_URI = "MetadataDialog.field.player.uri";
 	
+	// text color choices
+	private static final Color[] TEXT_COLORS = {Color.WHITE, Color.BLACK};
 	
 	// misc constants
+	private static final int COMMENT_LENGTH = 80;	// we want to keep comments brief
+	private static final int NOTE_LENGTH = 32767;	// arbitrary
 	private static final int BORDER = 10;
-	private static final int COLUMNS = 20;
-	private static final int COLUMNS_LONG = 40;
+	private static final int COLUMNS = 25;
+	private static final int COLUMNS_LONG = 30;
 	
 	
 	// instance variables
@@ -120,7 +129,7 @@ public class MetadataDialog extends HeaderDialog
 	/** Creates the dialog */
 	private MetadataDialog(ClientFrame parent)
 	{
-		super(parent, Utils.getLocalString(TITLE), true);
+		super(parent, Utils.getLocalString(TITLE), false);
 		this.clientFrame = parent;
 		
 		mmd = clientFrame.getMapMetadata();
@@ -156,8 +165,8 @@ public class MetadataDialog extends HeaderDialog
 			gp.write(gmd);
 			world.setGameMetadata(gmd);
 			
-			// assume panels 1-n are all player panels
-			for(int i=1; i<tabPane.getTabCount(); i++)
+			// assume panels 1 to n-1 are all player panels
+			for(int i=1; i<(tabPane.getTabCount()-1); i++)
 			{
 				PlayerPanel pp = (PlayerPanel) tabPane.getComponentAt(i);
 				PlayerMetadata pmd = new PlayerMetadata(pp.getPower());
@@ -193,6 +202,9 @@ public class MetadataDialog extends HeaderDialog
 			tabPane.add( powers[i].getName(),
 						 makePlayerPanel(powers[i], world.getPlayerMetadata(powers[i])) );
 		}
+		
+		// last tab is Moderator
+		tabPane.add( Utils.getLocalString(TAB_MODERATOR_PANEL), makeParticipantPanel(world.getModeratorMetadata()) );
 	}// makeTabPanel()
 	
 	/** Make a GameMetadata display */
@@ -214,6 +226,17 @@ public class MetadataDialog extends HeaderDialog
 		return panel;
 	}// makePlayerPanel()
 	
+	/** Make a ParticipantMetadata display */
+	private JPanel makeParticipantPanel(ParticipantMetadata pmd)
+	{
+		// note: at the moment, this always creates it with the text
+		// 'moderator'
+		ParticipantPanel panel = new ParticipantPanel(Utils.getLocalString(TAB_MODERATOR_PANEL), null);
+		panel.read(pmd);
+		panel.revalidate();
+		return panel;
+	}// makeParticipantPanel()
+	
 	
 	/** n2e = null-to-empty; If field may be null, allow field to be empty. 
 		Converts all objects to strings. 
@@ -232,58 +255,53 @@ public class MetadataDialog extends HeaderDialog
 	private class GamePanel extends JPanel
 	{
 		private JTextPane notes = new JTextPane();
-		private JTextField comment = new JTextField(COLUMNS_LONG);
-		private JTextField gameName = new JTextField(COLUMNS_LONG);
-		private JTextField modName = new JTextField(COLUMNS_LONG);
-		private JTextField modEmail = Utils.createEmailTextField(COLUMNS_LONG);
-		private JTextField modURI = Utils.createURITextField(COLUMNS_LONG);
+		private JTextPane comment = new JTextPane();
+		private JTextField gameName = new JTextField(COLUMNS);
 		private JTextField judgeName = new JTextField(COLUMNS);
-		private JTextField gameURI = Utils.createURITextField(COLUMNS_LONG);
+		private JTextField gameURI = Utils.createURITextField(COLUMNS);
 		private JTextField gameID = new JTextField(COLUMNS);
+		private GradientJLabel header = new GradientJLabel("<html><b>"+
+					Utils.getLocalString(GDF_PANEL_HEADER));
 		
 		
 		public GamePanel()
 		{
-			notes.setBorder(new EtchedBorder());
-			
 			// layout
-			int w1[] = { BORDER, 10, 0, 5, 0, 10, 5, 0, BORDER };
-			int h1[] = { BORDER, 0, 20, 0, 5, 0,10, 0,10, 0,10, 0,30, 0,10, 0,10, 0, BORDER };
+			int w1[] = { BORDER, 35, 0, 5, 0, 20, 0, 5, 0, BORDER };
+			int h1[] = { BORDER, 0,10,  0,5,  0,5,  0,10,  0,5, 0, BORDER };
 			
 			HIGLayout layout = new HIGLayout(w1, h1);
-			layout.setColumnWeight(8,1);
+			layout.setColumnWeight(6,1);
+			layout.setRowWeight(12,1);
 			this.setLayout(layout);
+			
 			
 			HIGConstraints c = new HIGConstraints();
 			
-			this.add(new JLabel(Utils.getLocalString(GDF_GAME_NAME)), c.rcwh(2,3,1,1,"r"));
-			this.add(gameName, c.rcwh(2,5,1,1,"lr"));
+			this.add(header, c.rcwh(2,2,8,1,"rl"));
 			
+			// left column
+			this.add(new JLabel(Utils.getLocalString(GDF_GAME_NAME)), c.rcwh(4,3,1,1,"r"));
+			this.add(gameName, c.rcwh(4,5,1,1,"l"));
 			
-			this.add(new JLabel(Utils.getLocalString(GDF_NOTES)), c.rcwh(4,8,1,1,"l"));
-			this.add(makeScrollPane(notes), c.rcwh(6,8,1,14,"lrtb"));
-						
-			this.add(new JLabel(Utils.getLocalString(GDF_COMMENT)), c.rcwh(6,3,1,1,"r"));
-			this.add(comment, c.rcwh(6,5,1,1,"lr"));
+			this.add(new JLabel(Utils.getLocalString(GDF_GAME_ID)), c.rcwh(6,3,1,1,"r"));
+			this.add(gameID, c.rcwh(6,5,1,1,"l"));
 			
 			this.add(new JLabel(Utils.getLocalString(GDF_GAME_URI)), c.rcwh(8,3,1,1,"r"));
-			this.add(gameURI, c.rcwh(8,5,1,1,"lr"));
+			this.add(gameURI, c.rcwh(8,5,1,1,"l"));
 			
-			this.add(new JLabel(Utils.getLocalString(GDF_GAME_ID)), c.rcwh(10,3,1,1,"r"));
-			this.add(gameID, c.rcwh(10,5,1,1,"lr"));
+			// right column
+			this.add(new JLabel(Utils.getLocalString(GDF_JUDGE_NAME)), c.rcwh(4,7,1,1,"r"));
+			this.add(judgeName, c.rcwh(4,9,1,1,"l"));
 			
-			this.add(new JLabel(Utils.getLocalString(GDF_JUDGE_NAME)), c.rcwh(12,3,1,1,"r"));
-			this.add(judgeName, c.rcwh(12,5,1,1,"lr"));
+			FixedSizeDocFilter.setFilter(comment, COMMENT_LENGTH);
+			this.add(new JLabel(Utils.getLocalString(GDF_COMMENT)), c.rcwh(6,7,1,1,"r"));
+			this.add(makeScrollPane(comment), c.rcwh(6,9,1,3,"rltb"));	// takes up 2 rows vertically (+ spacer)
 			
-			
-			this.add(new JLabel(Utils.getLocalString(GDF_MOD_NAME)), c.rcwh(14,3,1,1,"r"));
-			this.add(modName, c.rcwh(14,5,1,1,"lr"));
-			
-			this.add(new JLabel(Utils.getLocalString(GDF_MOD_EMAIL)), c.rcwh(16,3,1,1,"r"));
-			this.add(modEmail, c.rcwh(16,5,1,1,"lr"));
-			
-			this.add(new JLabel(Utils.getLocalString(GDF_MOD_URI)), c.rcwh(18,3,1,1,"r"));
-			this.add(modURI, c.rcwh(18,5,1,1,"lr"));
+			// both columns
+			FixedSizeDocFilter.setFilter(notes, NOTE_LENGTH);
+			this.add(new JLabel(Utils.getLocalString(PDF_NOTES)), c.rcwh(10,3,1,1,"l"));
+			this.add(makeScrollPane(notes), c.rcwh(12,3,7,1,"lrtb"));
 		}// GamePanel()
 		
 		/** Get the panel values from the given GameMetadata object. */
@@ -292,9 +310,6 @@ public class MetadataDialog extends HeaderDialog
 			notes.setText(gmd.getNotes());
 			comment.setText(gmd.getComment());
 			gameName.setText(gmd.getGameName());
-			modName.setText(n2e(gmd.getModeratorName()));
-			modEmail.setText(n2e(gmd.getModeratorEmail()));
-			modURI.setText(n2e(gmd.getModeratorURI()));
 			judgeName.setText(n2e(gmd.getJudgeName()));
 			gameURI.setText(n2e(gmd.getGameURI()));
 			gameID.setText(gmd.getGameID());
@@ -311,59 +326,18 @@ public class MetadataDialog extends HeaderDialog
 			gmd.setGameURI( convertURI(gameURI.getText()) );
 			
 			gmd.setJudgeName( (judgeName.getText().length() == 0) ? null : judgeName.getText() );
-			
-			gmd.setModeratorName( (modName.getText().length() == 0) ? null : modName.getText() );
-			gmd.setModeratorEmail( (modEmail.getText().length() == 0) ? null : modEmail.getText() );
-			gmd.setModeratorURI( convertURI(modURI.getText()) );
 		}// write()
 	}// inner class GamePanel
 	
 	
-	private class PlayerPanel extends JPanel
+	private class PlayerPanel extends ParticipantPanel
 	{
-		private JTextPane notes = new JTextPane();
-		private JTextField name = new JTextField(COLUMNS);
-		private JTextField uri = Utils.createURITextField(COLUMNS);
-		private JTextField[] email = new JTextField[4];
 		private Power power = null;
 		
 		public PlayerPanel(Power power)
 		{
-			this.power = power;	
-			
-			notes.setBorder(new EtchedBorder());
-			
-			for(int i=0; i<email.length; i++)
-			{
-				email[i] = Utils.createEmailTextField(COLUMNS);
-			}
-			
-			// layout
-			int w1[] = { BORDER, 0, 5, 0, 15, 0, 5, 0, BORDER };
-			int h1[] = { BORDER, 0,5, 0,5, 0,5, 0,5, 0,5, 10, 0,5, 0, BORDER };
-			
-			HIGLayout layout = new HIGLayout(w1, h1);
-			layout.setColumnWeight(5,1);
-			layout.setRowWeight(12, 1);
-			this.setLayout(layout);
-			
-			HIGConstraints c = new HIGConstraints();
-			
-			this.add(new JLabel(Utils.getLocalString(PDF_NAME)), c.rcwh(2,2,1,1,"r"));
-			this.add(name, c.rcwh(2,4,1,1,"l"));
-			
-			this.add(new JLabel(Utils.getLocalString(PDF_URI)), c.rcwh(4,2,1,1,"r"));
-			this.add(uri, c.rcwh(4,4,1,1,"l"));
-			
-			this.add(new JLabel(Utils.getLocalString(PDF_NOTES)), c.rcwh(10,2,1,1,"l"));
-			this.add(makeScrollPane(notes), c.rcwh(12,2,7,1,"lrtb"));
-			
-			for(int i=0; i<email.length; i++)
-			{
-				int row = 2 + (i*2);
-				this.add(new JLabel(Utils.getLocalString(PDF_EMAIL)+" "+String.valueOf(i+1)), c.rcwh(row,6,1,1,"r"));
-				this.add(email[i], c.rcwh(row,8,1,1,"l"));
-			}
+			super(power.getName(), Color.WHITE);
+			this.power = power;
 		}// PlayerPanel()
 		
 		/** Returns the Power associated with this PlayerPanel */
@@ -371,10 +345,75 @@ public class MetadataDialog extends HeaderDialog
 		{
 			return power;
 		}// getPower()
+	}// inner class PlayerPanel
+	
+	private class ParticipantPanel extends JPanel
+	{
+		private JTextPane notes = new JTextPane();
+		private JTextField name = new JTextField(COLUMNS);
+		private JTextField nickName = new JTextField(COLUMNS);
+		private JTextField uri = Utils.createURITextField(COLUMNS);
+		private JTextField[] email = new JTextField[3];
+		private GradientJLabel gjl = null;
 		
+		public ParticipantPanel(String panelName, Color textColor)
+		{
+			for(int i=0; i<email.length; i++)
+			{
+				email[i] = Utils.createEmailTextField(COLUMNS);
+			}
+			
+			gjl = new GradientJLabel("<html><b>"+panelName, SwingConstants.LEFT,
+				textColor, null);
+			
+			// layout
+			int w1[] = { BORDER, 35, 0, 5, 0, 20, 0, 5, 0, BORDER };
+			int h1[] = { BORDER, 0,10,  0,5,  0,5,  0,10,  0,5, 0, BORDER };
+			
+			HIGLayout layout = new HIGLayout(w1, h1);
+			layout.setColumnWeight(6,1);
+			layout.setRowWeight(12,1);
+			this.setLayout(layout);
+			
+			
+			HIGConstraints c = new HIGConstraints();
+			
+			this.add(gjl, c.rcwh(2,2,8,1,"rl"));
+			
+			this.add(new JLabel(Utils.getLocalString(PDF_NAME)), c.rcwh(4,3,1,1,"r"));
+			this.add(name, c.rcwh(4,5,1,1,"l"));
+			
+			this.add(new JLabel(Utils.getLocalString(PDF_NICK)), c.rcwh(6,3,1,1,"r"));
+			this.add(nickName, c.rcwh(6,5,1,1,"l"));
+			
+			this.add(new JLabel(Utils.getLocalString(PDF_URI)), c.rcwh(8,3,1,1,"r"));
+			this.add(uri, c.rcwh(8,5,1,1,"l"));
+			
+			
+			FixedSizeDocFilter.setFilter(notes, NOTE_LENGTH);
+			this.add(new JLabel(Utils.getLocalString(PDF_NOTES)), c.rcwh(10,3,1,1,"l"));
+			this.add(makeScrollPane(notes), c.rcwh(12,3,7,1,"lrtb"));
+			
+			for(int i=0; i<email.length; i++)
+			{
+				int row = 4 + (i*2);
+				this.add(new JLabel(Utils.getLocalString(PDF_EMAIL)+" "+String.valueOf(i+1)), c.rcwh(row,7,1,1,"r"));
+				this.add(email[i], c.rcwh(row,9,1,1,"l"));
+			}
+		}// ParticipantPanel()
 		
-		/** Get the panel values from the given PlayerMetadata object. */
-		public void read(PlayerMetadata pmd)
+		public void setColor(Color color)
+		{
+			gjl.setGradientColor(color);
+		}// setColor()
+		
+		public void setTextColor(Color color)
+		{
+			gjl.setTextColor(color);
+		}// setTextColor()
+		
+		/** Get the panel values from the given ParticipantMetadata object. */
+		public void read(ParticipantMetadata pmd)
 		{
 			notes.setText(pmd.getNotes());
 			name.setText(pmd.getName());
@@ -395,7 +434,7 @@ public class MetadataDialog extends HeaderDialog
 		}// read()
 		
 		/** Write the panel values to the given PlayerMetadata object. */
-		public void write(PlayerMetadata pmd)
+		public void write(ParticipantMetadata pmd)
 		{
 			pmd.setName( name.getText() );
 			pmd.setURI( convertURI(uri.getText()) );
@@ -409,7 +448,7 @@ public class MetadataDialog extends HeaderDialog
 			
 			pmd.setEmailAddresses(tmpEmail);
 		}// write()
-	}// inner class PlayerPanel
+	}// inner class ParticipantPanel
 	
 	
 	/** If can convert to URI, do it; otherwise returns null */
@@ -454,16 +493,24 @@ public class MetadataDialog extends HeaderDialog
 		{
 			final World world = clientFrame.getWorld();
 			final int tabCount = tabPane.getTabCount();
-		   	for(int i=1; i<tabCount; i++)	// no icon for 'game' info
+		   	for(int i=1; i<tabCount; i++)
             {
 				Power power = world.getMap().getPower( tabPane.getTitleAt(i) );
-				assert(power != null);
-				String colorName = mmd.getPowerColor(power);
-				Color color = SVGColorParser.parseColor(colorName);
-				tabPane.setIconAt( i, new ColorRectIcon(12,12, color) );
-           }
+				if(power != null)
+				{
+					String colorName = mmd.getPowerColor(power);
+					Color color = SVGColorParser.parseColor(colorName);
+					tabPane.setIconAt( i, new ColorRectIcon(12,12, color) );
+					
+					// figure out what is more readable: black or white text
+					ParticipantPanel pp = (ParticipantPanel) tabPane.getComponentAt(i);
+					pp.setColor(color);
+					pp.setTextColor(GUIUtils.findBestBright(color, TEXT_COLORS));
+				}
+			}
 		}
 	}// setTabIcons()
+	
 	
 }// class MetadataDialog
 

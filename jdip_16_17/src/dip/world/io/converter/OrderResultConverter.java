@@ -68,7 +68,7 @@ public class OrderResultConverter implements Converter
 		final Class type = source.getClass();
 		
 		hsw.addAttribute("power", xs.toString(orderResult.getPower()));
-		hsw.addAttribute("type", orderResult.getResultType().toString());
+		hsw.addAttribute("category", orderResult.getResultType().toString());
 		
 		// orderID can be null for substituted orders, if a power didn't 
 		// submit an order.
@@ -104,7 +104,7 @@ public class OrderResultConverter implements Converter
 		
 		final Power power = xs.getPower( reader.getAttribute("power") );
 		final OrderResult.ResultType type = OrderResult.ResultType.parse( 
-			xs.getString( reader.getAttribute("type") ));
+			xs.getString( reader.getAttribute("category") ));
 		final Orderable order = xs.getOrder( reader.getAttribute("order") );
 		
 		if(type == null)

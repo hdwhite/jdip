@@ -34,7 +34,7 @@ import javax.swing.undo.*;
 *	it provides base functionality and ensures serialization goes smoothly.
 *	
 */	
-public abstract class XAbstractUndoableEdit extends AbstractUndoableEdit implements java.io.Serializable
+public abstract class XAbstractUndoableEdit extends AbstractUndoableEdit
 {
 	protected UndoRedoManager undoRedoManager = null;
 	

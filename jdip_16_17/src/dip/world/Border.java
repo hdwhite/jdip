@@ -25,7 +25,7 @@ package dip.world;
 import dip.order.Order;
 import dip.misc.Utils;
 
-import java.io.Serializable;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -99,7 +99,7 @@ import java.util.Arrays;
 *	</ul>
 
 */
-public class Border implements Serializable
+public class Border
 {
 	/** Constant indicating year was omitted */
 	private static final int YEAR_NOT_SPECIFIED	= 0;

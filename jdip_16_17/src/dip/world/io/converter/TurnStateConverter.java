@@ -85,7 +85,11 @@ public class TurnStateConverter implements Converter
 		hsw.addAttribute("phase",  ts.getPhase().getPhaseType().toString());
 		hsw.addAttribute("year",  ts.getPhase().getYearType().toString());
 		hsw.addAttribute("resolved", String.valueOf(ts.isResolved()));
-			
+		
+		if(ts.isEnded())
+		{
+			hsw.addAttribute("ended", String.valueOf(ts.isEnded()));
+		}
 			
 			// positions
 			xs.lookupAndWriteNode(ts.getPosition(), cm, hsw, context);
@@ -208,6 +212,7 @@ public class TurnStateConverter implements Converter
 			
 		final TurnState ts = new TurnState(tsPhase);
 		ts.setResolved(Boolean.getBoolean(reader.getAttribute("resolved")));
+		ts.setEnded(Boolean.getBoolean(reader.getAttribute("ended")));
 		ts.setWorld(xs.getWorld());
 		xs.setCurrentTurnState(ts);
 		
@@ -276,10 +281,7 @@ public class TurnStateConverter implements Converter
 			reader.moveUp();
 		}
 		
-		// TODO: make sure all TurnState flags are apporpriately set
-		// (ended, scchanged) 
-		System.out.println("--todo: check turn flags");
-		
+		// so that we throw an NPE if something is using this when it shouldn't be
 		xs.setCurrentTurnState(null);
 		
 		return ts;

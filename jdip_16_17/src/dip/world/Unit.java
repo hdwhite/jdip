@@ -35,7 +35,7 @@ import dip.misc.Utils;
 *	<b>This object is not immutable!</b>
 */
 
-public class Unit implements java.io.Serializable, Cloneable
+public class Unit implements Cloneable
 {
 	// instance variables
 	protected final Unit.Type type;
@@ -145,7 +145,7 @@ public class Unit implements java.io.Serializable, Cloneable
 	*	unless the game concepts are being extended.
 	*
 	*/
-	public static class Type extends Object implements java.io.Serializable
+	public static class Type extends Object
 	{
 		// internal i18n key constants
 		private static final String UNIT_TYPE_PREFIX			= "unit.type.";
@@ -289,36 +289,6 @@ public class Unit implements java.io.Serializable, Cloneable
 			
 			return null;
 		}// parse()
-		
-		/** Assigns serialized objects to a single constant reference */
-		protected Object readResolve()
-		throws java.io.ObjectStreamException
-		{
-			Type type = null;
-	  		
-			if(internalName.equals(NAME_ARMY))
-			{
-				type = ARMY;
-			}
-			else if(internalName.equals(NAME_FLEET))
-			{
-				type = FLEET;
-			}
-			else if(internalName.equals(NAME_WING))
-			{
-				type = WING;
-			}
-			else if(internalName.equals(NAME_UNDEFINED))
-			{
-				type = UNDEFINED;
-			}
-			else
-			{
-				throw new java.io.InvalidObjectException("Unknown Unit.Type: "+internalName);
-			}
-			
-			return type;
-		}// readResolve()
 		
 	}// inner class Type
 	

@@ -24,10 +24,12 @@ package dip.world.io.converter;
 
 import dip.world.io.XMLSerializer;  
 
+import dip.world.Phase;
 import dip.world.Power;
 import dip.world.InvalidWorldException;
 import dip.world.TurnState;
 import dip.world.VictoryConditions;
+import dip.world.GameSetup;
 import dip.world.World;
 import dip.world.World.VariantInfo;
 import dip.world.WorldFactory;
@@ -185,16 +187,33 @@ public class WorldConverter implements Converter
 						GameMetadata gmd = (GameMetadata) obj;
 						xs.getWorld().setGameMetadata(gmd);
 					}
+					else
+					{
+						Log.println("<info> ignored unknown node: ", nodeName);
+					}
 					
 					reader.moveUp();
 				}
 			}
 			else if("setup".equals(nodeName))
 			{
-				System.out.println("---> TODO: <setup> processing");
-				
-				// read in SETUP data (f2f, default, etc.)
-				
+				// if no children, do not set.
+				while(reader.hasMoreChildren())
+				{
+					reader.moveDown();
+					
+					Object obj = xs.lookupAndReadNode(cm, reader, context);
+					if(obj instanceof GameSetup)
+					{
+						xs.getWorld().setGameSetup((GameSetup) obj);
+					}
+					else
+					{
+						Log.println("<setup> ignored unknown node: ", nodeName);
+					}
+					
+					reader.moveUp();
+				}
 			}
 			else
 			{
@@ -207,7 +226,7 @@ public class WorldConverter implements Converter
 				}
 				catch(CannotResolveClassException e)
 				{
-					Log.println("WorldConverter: skipping unknown node: ", nodeName);
+					Log.println("<turn> expected. Ignored unresolvable node: ", nodeName);
 				}
 					
 				if(cls != null)
@@ -223,25 +242,31 @@ public class WorldConverter implements Converter
 						// using phase from first turn, set the VictoryConditions
 						if(!victoryConditionsSet)
 						{
-							VictoryConditions tmpVC = (VictoryConditions) 
-								context.get(VariantInfoConverter.CONTEXT_KEY_VC);
+							VictoryConditions tmpVC = xs.getWorld().getVictoryConditions();
 							
 							VictoryConditions vc = new VictoryConditions(
 								tmpVC.getSCsRequiredForVictory(), 
 								tmpVC.getYearsWithoutSCChange(),
 								tmpVC.getMaxGameDurationYears(), 
-								ts.getPhase()
+								ts.getPhase()	/* This is what we are fixing */
 							);
 							
 							xs.getWorld().setVictoryConditions(vc);
 							victoryConditionsSet = true;
 						}
 					}
+					else
+					{
+						Log.println("<turn> expected. Ignored resolved node: ", nodeName);
+					}
 				}
 			}
 			
 			reader.moveUp();
 		}// while()
+		
+		// set turn flags
+		setSCChanged(xs.getWorld());
 		
 		return xs.getWorld();
 	}// unmarshal()
@@ -296,6 +321,57 @@ public class WorldConverter implements Converter
 		xs.setMap(world.getMap());
 	}// createWorld()
 	
+	
+	/** 
+	*	Set SC changed flag on TurnState objects, after all TurnState objects
+	*	have been loaded.
+	*/
+	private void setSCChanged(World w)
+	{
+		/*
+			Algorithm: 
+				Iterate through each FALL turnstate.
+				1) set flag to 'true' if there is an ADJUSTMENT phase.
+					that is sufficient for that year.
+				
+				2) if there is no ADJUSTMENT phase, there may have been
+					a zero-sum change of supply centers, or none at all.
+					We then have to compare the turnstate with the previous
+					FALL turnstate.
+		
+		*/
+		TurnState lastFallTS = null;
+		TurnState currentFallTS = null;
+		
+		Iterator iter = w.getAllTurnStates().iterator();
+		while(iter.hasNext())
+		{
+			final TurnState ts = (TurnState) iter.next();
+			boolean hasAdjustmentPhase = false;
+			if(Phase.SeasonType.FALL.equals(ts.getPhase().getSeasonType()))
+			{
+				currentFallTS = ts;
+				hasAdjustmentPhase = Phase.PhaseType.ADJUSTMENT.equals(ts.getPhase().getPhaseType());
+			}
+			
+			if(hasAdjustmentPhase)
+			{
+				currentFallTS.setSCOwnerChanged(true);
+			}
+			else
+			{
+				// more complex. We need to compare to prior.
+				if(lastFallTS != null)
+				{
+					currentFallTS.setSCOwnerChanged(
+						currentFallTS.getPosition().isSCChanged(
+							lastFallTS.getPosition()) );
+				}
+			}
+			
+			lastFallTS = currentFallTS;
+		}
+	}// setSCChanged()
 	
 }// WorldConverter()		
 

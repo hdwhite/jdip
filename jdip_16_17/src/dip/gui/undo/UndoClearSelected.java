@@ -39,7 +39,7 @@ import javax.swing.UIManager;
 *
 */
 
-public class UndoClearSelected extends CompoundEdit implements java.io.Serializable
+public class UndoClearSelected extends CompoundEdit
 {
 	private final static String PRESENTATION_NAME = "Undo.order.clearselected";
 	

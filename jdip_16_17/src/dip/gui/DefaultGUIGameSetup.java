@@ -80,20 +80,8 @@ public class DefaultGUIGameSetup implements GUIGameSetup
 		cf.setMapPanel( mp );
 		cf.getJSplitPane().setLeftComponent( mp );
 		
-		// restore or create the undo/redo manager
-		UndoRedoManager urm = world.getUndoRedoManager();
-		if(urm == null)
-		{
-			urm = new UndoRedoManager(cf, odp);
-			world.setUndoRedoManager(urm);
-		}
-		else
-		{
-			urm.setClientFrame(cf);
-			urm.setOrderDisplayPanel(odp);
-		}
-		
-		cf.setUndoRedoManager(urm);
+		// create the undo/redo manager
+		cf.setUndoRedoManager(new UndoRedoManager(cf, odp));
 		
 		cf.getJSplitPane().setVisible(true);
 		

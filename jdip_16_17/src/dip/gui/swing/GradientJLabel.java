@@ -33,22 +33,33 @@ import javax.swing.*;
 public class GradientJLabel extends JPanel
 {
 	final JLabel label;
+	Color gradColor;
 	
 	/** Create a GradientJLabel */
 	public GradientJLabel(String text)
 	{
-		this(text, SwingConstants.LEFT);
+		this(text, SwingConstants.LEFT, null, null);
 	}// GradientJLabel()
-
+	
+	
 	/** Create a GradientXJEditorPane */
-	public GradientJLabel(String text, int horizontalAlignment)
+	public GradientJLabel(String text, int horizontalAlignment, Color textColor, Color gradColor)
 	{
 		super(new FlowLayout(FlowLayout.LEFT, 0, 3));
+		
+		this.gradColor = gradColor;
+		
 		label = new JLabel(text, horizontalAlignment)
 		{
 			public boolean isOpaque()	{ return false; }
 			public boolean isFocusable()	{ return false; }
 		};
+		
+		if(textColor != null)
+		{
+			label.setForeground(textColor);
+		}
+		
 		setOpaque(false);
 		label.setOpaque(false);
 		
@@ -63,6 +74,24 @@ public class GradientJLabel extends JPanel
 		label.setText(text);
 	}// setText()
 	
+	/** Set gradient color. If null, uses default. */
+	public void setGradientColor(Color color)
+	{
+		gradColor = color;
+	}// setGradientColor()
+	
+	/** Set text color. If null, uses default. */
+	public void setTextColor(Color color)
+	{
+		if(color != null)
+		{
+			label.setForeground(color);
+		}
+		else
+		{
+			label.setForeground(UIManager.getColor("Label.foreground"));
+		}
+	}// setTextColor()
 	
 	/** We are not opaque; we will paint the background. */
 	public boolean isOpaque()	{ return false; }
@@ -78,12 +107,14 @@ public class GradientJLabel extends JPanel
 		
 		Graphics2D g2d = (Graphics2D) g;
 		
+		// get bgColor
+		Color bg = (gradColor == null) ? UIManager.getColor("TextField.highlight") : gradColor;
+		
 		// save old paint.
 		Paint oldPaint = g2d.getPaint();
-		
 		// paint the gradient.
 		g2d.setPaint(new GradientPaint(0, 0, 
-			UIManager.getColor("TextField.highlight"), 
+			bg, 
 			width, height, 
 			UIManager.getColor("Label.background"), false));
 		g2d.fillRect(0, 0, width, height);

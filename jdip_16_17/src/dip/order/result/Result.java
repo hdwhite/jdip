@@ -25,7 +25,7 @@ import dip.order.OrderFormat;
 import dip.order.OrderFormatOptions;
 import dip.world.Power;
 
-import java.io.Serializable;
+
 
 /**
 *		A Result is a message that is sent from the adjudicator back to a power
@@ -35,7 +35,7 @@ import java.io.Serializable;
 *		for debugging. To obtain a properly-formatted localized message, use
 *		getMessage().
 */
-public class Result extends Object implements Serializable, Comparable
+public class Result extends Object implements Comparable
 {
 	// constants
 	private static final OrderFormatOptions DEFAULT_OFO = OrderFormatOptions.createDefault();

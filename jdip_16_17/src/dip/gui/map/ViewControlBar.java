@@ -25,6 +25,7 @@ package dip.gui.map;
 import dip.world.Location;
 
 import dip.misc.Utils;
+import dip.gui.ClientMenu;
 import dip.gui.order.GUIOrder;
 
 import java.awt.geom.*;
@@ -76,6 +77,10 @@ public class ViewControlBar extends ControlBar
 	private static final String ICON_ZOOM_IN 	= "resource/common/icons/24x24/stock_zoom_in_24.png";
 	private static final String ICON_ZOOM_OUT 	= "resource/common/icons/24x24/stock_zoom_out_24.png";
 	private static final String ICON_ZOOM_FIT	= "resource/common/icons/24x24/stock_zoom_fit_24.png";
+	private static final String ICON_PREV 	= "resource/common/icons/24x24/stock_left_arrow_24.png";
+	private static final String ICON_NEXT 	= "resource/common/icons/24x24/stock_right_arrow_24.png";
+	private static final String ICON_LAST 	= "resource/common/icons/24x24/stock_last_24.png";
+	private static final String ICON_FIRST 	= "resource/common/icons/24x24/stock_first_24.png";
 	
 	
 	
@@ -188,6 +193,32 @@ public class ViewControlBar extends ControlBar
 		zoomIn = add(canvas.getActionMap().get(JSVGCanvas.ZOOM_IN_ACTION));
 		zoomIn.setIcon(Utils.getIcon(ICON_ZOOM_IN));
 		zoomIn.setToolTipText(Utils.getLocalString(I18N_ZOOMIN_TIP));
+		
+		
+		// NEW ....
+		addSeparator();
+		
+		JButton b = null;
+		
+		b = new JButton(Utils.getIcon(ICON_FIRST));
+		//b.addActionListener(nptvl);
+		b.setToolTipText(ClientMenu.HISTORY_INITIAL.getName());
+		add(b);
+		
+		b = new JButton(Utils.getIcon(ICON_PREV));
+		//b.addActionListener(nptvl);
+		b.setToolTipText(ClientMenu.HISTORY_PREVIOUS.getName());
+		add(b);
+		
+		b = new JButton(Utils.getIcon(ICON_NEXT));
+		//b.addActionListener(nptvl);
+		b.setToolTipText(ClientMenu.HISTORY_NEXT.getName());
+		add(b);
+		
+		b = new JButton(Utils.getIcon(ICON_LAST));
+		//b.addActionListener(nptvl);
+		b.setToolTipText(ClientMenu.HISTORY_LAST.getName());
+		add(b);
 		
 	}// makeLayout()
 	

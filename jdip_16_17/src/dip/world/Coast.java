@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
 *
 */
 
-public final class Coast implements java.io.Serializable
+public final class Coast
 {
 	// transient data
 	transient static private Pattern[] patterns = null;
@@ -468,51 +468,4 @@ public final class Coast implements java.io.Serializable
 		
 	*/
 	
-	
-	/** Assigns serialized objects to a single constant reference */
-	protected Object readResolve()
-	throws java.io.ObjectStreamException
-	{
-		Coast coast = null;
-		
-		if(name.equals(NORTH_FULL))
-		{
-			coast = NORTH;
-		}
-		else if(name.equals(SOUTH_FULL))
-		{
-			coast = SOUTH;
-		}
-		else if(name.equals(WEST_FULL))
-		{
-			coast = WEST;
-		}
-		else if(name.equals(EAST_FULL))
-		{
-			coast = EAST;
-		}
-		else if(name.equals(NONE_FULL))
-		{
-			coast = NONE;
-		}
-		else if(name.equals(SINGLE_FULL))
-		{
-			coast = SINGLE;
-		}
-		else if(name.equals(WING_FULL))
-		{
-			coast = WING;
-		}
-		else if(name.equals(UNDEFINED_FULL))
-		{
-			coast = UNDEFINED;
-		}
-		else
-		{
-			throw new InvalidObjectException("Unknown coast type: "+name);
-		}
-		
-		return coast;
-	}// readResolve()
-		
 }// class Coast()

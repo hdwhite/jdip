@@ -24,7 +24,7 @@ package dip.world;
 
 import dip.misc.Utils;
 
-import java.io.Serializable;
+
 import java.io.Externalizable;
 import java.io.IOException;
 import java.util.StringTokenizer;
@@ -44,7 +44,7 @@ import java.util.Iterator;
 *	(For example, "Phase.getSeasonType() == SeasonType.SPRING")
 *
 */
-public class Phase implements java.io.Serializable, Comparable
+public class Phase implements Comparable
 {
 	// internal constants: describes ordering of phases
 	// Setup is independent of this ordering.
@@ -65,7 +65,7 @@ public class Phase implements java.io.Serializable, Comparable
 	protected final SeasonType seasonType;
 	protected final YearType yearType;
 	protected final PhaseType phaseType;
-	private transient int orderIdx;				// set by readResolve() when object de-serialized
+	private transient int orderIdx;
 	
 	
 	/**
@@ -367,34 +367,13 @@ public class Phase implements java.io.Serializable, Comparable
 	}// getAllSeasonPhaseCombos()
 	
 	
-	
-	
-	/** Reconstitute a Phase object */
-	protected Object readResolve()
-	throws java.io.ObjectStreamException
-	{
-		this.orderIdx = deriveOrderIdx(this.seasonType, this.phaseType);
-		return this;
-	}// readResolve()
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	*	Represents seasons
 	*	<p>
 	*	SeasonType constants should be used, rather than creating new SeasonType objects.
 	*	
 	*/
-	public static class SeasonType implements Serializable, Comparable
+	public static class SeasonType implements Comparable
 	{
 		// always-accepted english constants for SeasonTypes
 		protected static final String CONST_SPRING 	= "SPRING";
@@ -579,28 +558,6 @@ public class Phase implements java.io.Serializable, Comparable
 		}// parse()
 		
 		
-		
-		
-		/** Resolves the serialized reference into a constant */
-		protected Object readResolve()
-		throws java.io.ObjectStreamException
-		{
-			SeasonType st = null;
-			
-			if(position == POS_SPRING)
-			{
-				st = SPRING;
-				st.setDisplayName(IL8N_SPRING);
-			}
-			else if(position == POS_FALL)
-			{
-				st = FALL;
-				st.setDisplayName(IL8N_FALL);
-			}
-			
-			return st;
-		}// readResolve()
-		
 		/** Sets the internationalized name */
 		private void setDisplayName(String key)
 		{
@@ -616,7 +573,7 @@ public class Phase implements java.io.Serializable, Comparable
 	*	PhaseType constants should be used instead of creating new PhaseType objects.
 	*
 	*/
-	public static class PhaseType implements Serializable, Comparable
+	public static class PhaseType implements Comparable
 	{
 		// always-accepted english constants for phase types
 		// these MUST be in lower case
@@ -821,31 +778,6 @@ public class Phase implements java.io.Serializable, Comparable
 		}// parse()
 		
 		
-		/** Resolves a serialized Phase object into a constant reference */
-		protected Object readResolve()
-		throws java.io.ObjectStreamException
-		{
-			PhaseType pt = null;
-			
-			if(constName.equalsIgnoreCase(CONST_ADJUSTMENT))
-			{
-				pt = ADJUSTMENT;
-				pt.displayName = Utils.getLocalString(IL8N_ADJUSTMENT);
-			}
-			else if(constName.equalsIgnoreCase(CONST_MOVEMENT))
-			{
-				pt = MOVEMENT;
-				pt.displayName = Utils.getLocalString(IL8N_MOVEMENT);
-			}
-			else if(constName.equalsIgnoreCase(CONST_RETREAT))
-			{
-				pt = RETREAT;
-				pt.displayName = Utils.getLocalString(IL8N_RETREAT);
-			}
-			
-			return pt;
-		}// readResolve()
-		
 	}// nested class PhaseType
 	
 	
@@ -857,7 +789,7 @@ public class Phase implements java.io.Serializable, Comparable
 	*	<p>
 	*	A YearType is an immutable object.
 	*/
-	public static class YearType implements Serializable, Comparable
+	public static class YearType implements Comparable
 	{
 		// instance fields
 		protected final int year;

@@ -32,6 +32,7 @@ import dip.gui.report.ResultWriter;
 import dip.world.World;
 import dip.world.Phase;
 import dip.world.TurnState;
+import dip.world.io.XMLSerializer;
 import dip.world.variant.VariantManager;
 import dip.world.variant.data.Variant;
 
@@ -428,7 +429,13 @@ public class PersistenceManager
 				
 				try
 				{
-					World.save(saveToFile, clientFrame.getWorld());
+					XMLSerializer.toXML( clientFrame.getWorld(), 
+						saveToFile,
+						true, /* compression */
+						clientFrame.getProgramName(),
+						clientFrame.getVersion(),
+						XMLSerializer.SPECIFICATION_FORMAT_1_0 );
+					
 					// DO NOT clear changed flag, though. 
 					// Update recent file name list
 					GeneralPreferencePanel.setRecentFileName(saveToFile);
@@ -621,7 +628,9 @@ public class PersistenceManager
 	private World readGameFile(File file)
 	throws Exception
 	{
-		World w = World.open(file);
+		World w = XMLSerializer.fromXML(file, 
+			clientFrame.getGUIOrderFactory(),
+			XMLSerializer.SPECIFICATION_FORMAT_1_0);
 		
 		// check if variant is available; if not, inform user.
 		World.VariantInfo vi = w.getVariantInfo();
@@ -667,7 +676,13 @@ public class PersistenceManager
 			
 			// save data, update saved flags
 			Log.println("PM::writeGameFile(): saving world....");
-			World.save(fileName, w);
+			XMLSerializer.toXML(
+				w,
+				fileName,
+				true, /* compression */
+				clientFrame.getProgramName(),
+				clientFrame.getVersion(),
+				XMLSerializer.SPECIFICATION_FORMAT_1_0 );
 			
 			Log.println("PM::writeGameFile(): world saved ok.");
 			setChanged(false);

@@ -24,7 +24,7 @@ package dip.order;
 import dip.misc.Utils;
 
 import java.util.*;
-import java.io.Serializable;
+
 
 /**
 *
@@ -39,7 +39,7 @@ import java.io.Serializable;
 *
 */
 
-public class ValidationOptions implements Serializable, Cloneable
+public class ValidationOptions implements Cloneable
 {
 	// Contants: never internationalized.
 	

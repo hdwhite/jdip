@@ -254,10 +254,7 @@ public class XMLSerializer
 		}
 		catch(Exception e)
 		{
-			
-System.out.println(e);			
-			
-			// wrap non-IOExceptions in an IOException, since we are doing IO
+			// wrap non-IOExceptions in an IOException... since we are doing I/O
 			IOException ioe = new IOException(e.getMessage());
 			ioe.initCause(e);
 			throw ioe;
@@ -672,14 +669,20 @@ System.out.println(e);
 	*		context.convertAnother(object);<br>
 	*		hsw.endNode();<br>
 	*	</code>
+	*	<p>
+	*	If the passed Object is null, nothing is written, and no
+	*	exception is thrown.
 	*/
 	public void lookupAndWriteNode(final Object obj, 
 		final ClassMapper cm, final HierarchicalStreamWriter hsw, 
 		final MarshallingContext context)
 	{
-		hsw.startNode(cm.lookupName(obj.getClass()));
-		context.convertAnother( obj );
-		hsw.endNode();
+		if(obj != null)
+		{
+			hsw.startNode(cm.lookupName(obj.getClass()));
+			context.convertAnother( obj );
+			hsw.endNode();
+		}
 	}// lookupAndWriteNode()
 	
 	
@@ -962,6 +965,7 @@ System.out.println(e);
 		
 		// metadata
 		xstream.registerConverter(new GameMetadataConverter(cm));
+		xstream.registerConverter(new ParticipantMetadataConverter(cm));
 		xstream.registerConverter(new PlayerMetadataConverter(cm));
 		
 		// registered converters

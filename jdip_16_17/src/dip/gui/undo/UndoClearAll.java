@@ -34,7 +34,7 @@ import javax.swing.UIManager;
 *	<p>
 *	Just a fancy name for a compound edit.
 */
-public class UndoClearAll extends CompoundEdit implements java.io.Serializable
+public class UndoClearAll extends CompoundEdit
 {
 	private final static String PRESENTATION_NAME = "Undo.order.clearall";
 	

@@ -24,32 +24,34 @@
 package dip.process;
 
 /**
-*
-*	Trinary state object. Immutable.
-*	<p>
-*	This class is not serializable; if this is required, 
-*	readResolve() must be implemented to preserve the integrity
-*	of referential equality.
-*
+*	Immutable trinary state object.
 */
 final public class Tristate
 {
 	// constants
+	/** Trinary State: TRUE */
 	public static final Tristate TRUE		= new Tristate("True");
+	/** Trinary State: FALSE */
 	public static final Tristate FALSE		= new Tristate("False");
+	/** Trinary State: UNCERTAIN */
 	public static final Tristate UNCERTAIN	= new Tristate("Uncertain");
 	
 	// alternate set of constants, fully equivalent and interchangeable with above
 	// constants.
+	/** Equivalent to UNCERTAIN */
 	public static final Tristate MAYBE 		= UNCERTAIN;
+	/** Equivalent to TRUE */
 	public static final Tristate YES 		= TRUE;
+	/** Equivalent to FALSE */
 	public static final Tristate NO 		= FALSE;
+	/** Equivalent to TRUE */
 	public static final Tristate SUCCESS	= TRUE;
+	/** Equivalent to FALSE */
 	public static final Tristate FAILURE	= FALSE;
 	
 	
 	// instance variables
-	private transient String text = null;
+	private final transient String text;
 	
 	
 	/** Create a TriState object */

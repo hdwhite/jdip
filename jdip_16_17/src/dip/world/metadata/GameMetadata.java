@@ -1,5 +1,5 @@
 //
-//  @(#)GameMetadata.java	1.00	6/2002
+//  @(#)GameMetadata.java		6/2002
 //
 //  Copyright 2002 Zachary DelProposto. All rights reserved.
 //  Use is subject to license terms.
@@ -22,7 +22,7 @@
 //
 package dip.world.metadata;
 
-import java.io.Serializable;
+
 import java.net.URI;
 /**
 *	Contains MetaData about the entire game.
@@ -33,7 +33,7 @@ import java.net.URI;
 *	
 *	
 */
-public class GameMetadata implements Serializable
+public class GameMetadata
 {
 	// constants
 	private static final String EMPTY = "";
@@ -41,9 +41,6 @@ public class GameMetadata implements Serializable
 	// MetaData
 	private String comment = EMPTY;
 	private String gameName = EMPTY;
-	private String moderator = null;
-	private String moderatorEmail = null;
-	private URI moderatorURI = null;
 	private String judgeName = null;
 	private URI gameURI = null;
 	private String notes = EMPTY;
@@ -60,15 +57,6 @@ public class GameMetadata implements Serializable
 	
 	/** Gets game name. Never null, may be empty. */
 	public String getGameName()						{ return gameName; }
-	
-	/** Gets moderator name; may be null. */
-	public String getModeratorName()				{ return moderator; }
-		
-	/** Gets moderator email address; may be null. */
-	public String getModeratorEmail()				{ return moderatorEmail; }
-	
-	/** Gets moderator URI; may be null. */
-	public URI getModeratorURI()					{ return moderatorURI; }
 	
 	/** Gets textual notes. Never null, but may be empty. */
 	public String getNotes()						{ return notes; }
@@ -90,15 +78,6 @@ public class GameMetadata implements Serializable
 	
 	/** Sets game name. Never null, may be empty. */
 	public void setGameName(String value)			{ gameName = (value == null) ? EMPTY : value; }
-	
-	/** Sets moderator name; may be null. */
-	public void setModeratorName(String value)		{ moderator = value; }
-		
-	/** Sets moderator email address; may be null. */
-	public void setModeratorEmail(String value)		{ moderatorEmail = value; }
-	
-	/** Sets moderator URI; may be null. */
-	public void setModeratorURI(URI value)			{ moderatorURI = value; }
 	
 	/** Sets textual notes. Never null, but may be empty. */
 	public void setNotes(String value)				{ notes = (value == null) ? EMPTY : value; }

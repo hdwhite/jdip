@@ -23,7 +23,7 @@ package dip.order.result;
 
 import dip.order.Orderable;
 
-import java.io.Serializable;
+
 import java.util.Comparator;
 
 /**
@@ -190,7 +190,7 @@ public class OrderResult extends Result
 	*	
 	*	
 	*/
-	public static class ResultType implements Serializable, Comparable
+	public static class ResultType implements Comparable
 	{
 		// key constants
 		private static final String KEY_VALIDATION_FAILURE = "VALIDATION_FAILURE";
@@ -291,47 +291,6 @@ public class OrderResult extends Result
 			return rt;
 		}// parse()
 		
-		/** Assigns serialized objects to a single constant reference */
-		protected Object readResolve()
-		throws java.io.ObjectStreamException
-		{
-			ResultType rt = null;
-			
-			if(key.equals(KEY_VALIDATION_FAILURE))
-			{
-				rt = VALIDATION_FAILURE;
-			}
-			else if(key.equals(KEY_SUCCESS))
-			{
-				rt = SUCCESS;
-			}
-			else if(key.equals(KEY_FAILURE))
-			{
-				rt = FAILURE;
-			}
-			else if(key.equals(KEY_DISLODGED))
-			{
-				rt = DISLODGED;
-			}
-			else if(key.equals(KEY_CONVOY_PATH_TAKEN))
-			{
-				rt = CONVOY_PATH_TAKEN;
-			}
-			else if(key.equals(KEY_TEXT))
-			{
-				rt = TEXT;
-			}
-			else if(key.equals(KEY_SUBSTITUTED))
-			{
-				rt = SUBSTITUTED;
-			}
-			else
-			{
-				throw new java.io.InvalidObjectException("Unknown ResultType: "+key);
-			}
-			
-			return rt;
-		}// readResolve()
 	}// nested class ResultType
 	
 	

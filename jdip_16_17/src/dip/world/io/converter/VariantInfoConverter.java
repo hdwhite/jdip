@@ -44,9 +44,6 @@ import com.thoughtworks.xstream.alias.ClassMapper;
 */
 public class VariantInfoConverter implements Converter
 {
-	/** Context: Temporary VictoryConditions Object Key */
-	public static final String CONTEXT_KEY_VC = "_temporary-victoryconditions_";
-	
 	private final ClassMapper cm;
 	
 	public VariantInfoConverter(ClassMapper cm)
@@ -78,12 +75,8 @@ public class VariantInfoConverter implements Converter
 		hsw.addAttribute("name", xs.toString(vi.getMapName()));
 		hsw.endNode();
 		
-		// victory conditions
-		// (this is sort of a hack)
-		// since it's not really part of this object....
-		xs.lookupAndWriteNode(xs.getWorld().getVictoryConditions(), cm, hsw, context);
+		xs.lookupAndWriteNode(vi.getVictoryConditions(), cm, hsw, context);
 		
-		// rule options
 		xs.lookupAndWriteNode(vi.getRuleOptions(), cm, hsw, context);
 	}// marshal()
 	
@@ -127,8 +120,11 @@ public class VariantInfoConverter implements Converter
 				}
 				else if(obj instanceof VictoryConditions)
 				{
-					// temporarily store the VictoryConditions object
-					context.put(CONTEXT_KEY_VC, obj);
+					// NOTE: we need to fix the victoryconditions object,
+					// since we haven't defined the initial-year yet.
+					// This can only be done after we read the first Turn,
+					// which contains the initial year for the game.
+					vi.setVictoryConditions((VictoryConditions) obj);
 				}
 			}
 			
