@@ -70,8 +70,8 @@
     </panels>
     
 	<packs>
-        <pack name="Core" required="yes">
-            <description>jDip program files and Standard variants (required).</description>
+        <pack name="Core" required="yes" override="true">
+            <description>The core jDip program files, the standard map, and variants based on the standard map. This is a required install. Standard-based variants include 1898, Britain, Crowded, Crowded 1898, Fleet Rome, Shift Around, Shift Left, and Shift Right.</description>
 			
 			<file targetdir="$INSTALL_PATH" src="lib"/>
             <file targetdir="$INSTALL_PATH" src="jdip.ico"/>
@@ -86,6 +86,7 @@
 			<file targetdir="$INSTALL_PATH/variants" src="variants/modernSymbols.zip"/>
             <file targetdir="$INSTALL_PATH/variants" src="variants/periodSymbols.zip"/>
             <file targetdir="$INSTALL_PATH/variants" src="variants/simpleSymbols.zip"/>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/imperiumSymbols.zip"/>
 			
             <file os="windows" targetdir="$INSTALL_PATH" src="jdip.bat"/>
             <file os="unix" targetdir="$INSTALL_PATH" src="jdip.sh" keep="true"/>
@@ -96,52 +97,52 @@
 			<executable os="mac" targetfile="$INSTALL_PATH/jdip.sh" stage="never" failure="warn" type="bin"/>
          </pack>
 		
-		<pack name="Asia variant" required="no" override="true">
-			<description>Youngstown variant</description>
+		<pack name="Asia" required="no" override="true">
+			<description>The Asia variant.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/AsiaVariants.zip"/>
 		</pack>
-		<pack name="Chaos variant (nJudge compatible)" required="no" override="true">
-			<description>Youngstown variant</description>
+		<pack name="Chaos (nJudge compatible)" required="no" override="true">
+			<description>The Chaos variant, suitable for use with nJudge-based judges.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/ChaosNJudgeVariant.zip"/>
 		</pack>
-		<pack name="Chaos variant (DPJudge compatible)" required="no" override="true">
-			<description>Youngstown variant</description>
+		<pack name="Chaos (DPJudge compatible)" required="no" override="true">
+			<description>The Chaos variant, suitable for use with DPJudge-based judges, such as USDP and UKDP.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/ChaosDPJudgeVariant.zip"/>
 		</pack>
-		<pack name="Hundred variants" required="no" override="true">
-			<description>Hundred3.1 and Hundred3.2 3-player variants.</description>
+		<pack name="Hundred" required="no" override="true">
+			<description>The Hundred3.1 and Hundred3.2 3-player variants.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/hundredVariants.zip"/>
 		</pack>
- 		<pack name="Imperium variant" required="no" override="true">
-			<description>Youngstown variant</description>
+ 		<pack name="Imperium" required="no" override="true">
+			<description>The Imperium variant.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/ImperiumVariants.zip"/>
 		</pack>
-		<pack name="Loeb9 variant" required="no" override="true">
-			<description>Loeb9 variant</description>
+		<pack name="Loeb9" required="no" override="true">
+			<description>Loeb9 variant.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/loeb9Variants.zip"/>
 		</pack>
-		<pack name="Milan variants" required="no" override="true">
-			<description>Milan variants</description>
+		<pack name="Milan" required="no" override="true">
+			<description>The Milan variant.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/milanVariants.zip"/>
 		</pack>
-		<pack name="Octarine variant" required="no" override="true">
-			<description>Youngstown variant</description>
+		<pack name="Octarine" required="no" override="true">
+			<description>The Octarine variant.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/OctarineVariants.zip"/>
 		</pack>
-		<pack name="Pure variant" required="no" override="true">
+		<pack name="Pure" required="no" override="true">
 			<description>The Pure variant.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/pureVariants.zip"/>
 		</pack>
-		<pack name="Root Z variants" required="no" override="true">
-			<description>Root Z variant</description>
+		<pack name="Root Z" required="no" override="true">
+			<description>The Root Z variant.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/rootzVariants.zip"/>
 		</pack>
-		<pack name="Sail Ho! variants" required="no" override="true">
-			<description>Sail Ho! variants (including Sail Ho! Crowded)</description>
+		<pack name="Sail Ho!" required="no" override="true">
+			<description>Includes both Sail Ho! and Sail Ho! Crowded variants.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/sailhoVariants.zip"/>
 		</pack>
-		<pack name="Youngstown variant" required="no" override="true">
-			<description>Youngstown variant</description>
+		<pack name="Youngstown" required="no" override="true">
+			<description>The Youngstown variant.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/youngstownVariants.zip"/>
 		</pack>
    </packs>
