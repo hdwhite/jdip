@@ -186,7 +186,7 @@ public class ResultWriter
 		while(iter.hasNext())
 		{
 			Result r = (Result) iter.next();
-			sb.append( r.getMessage() );
+			sb.append( r.getMessage(ofo) );
 			sb.append("<br>\n");
 		}
 		
@@ -267,7 +267,7 @@ public class ResultWriter
 			Result result = (Result) iter.next();
 			if(power.equals(result.getPower()))
 			{
-				text.append( result.getMessage() );
+				text.append( result.getMessage(ofo) );
 				text.append("<br>\n");
 				foundAnOtherResult = true;
 			}
@@ -350,7 +350,7 @@ public class ResultWriter
 			}
 			
 			sb.append(" <i>");
-			sb.append(or.getMessage());
+			sb.append(or.getMessage(ofo));
 			sb.append("</i>");
 			sb.append("<br>\n");
 		}
@@ -410,7 +410,7 @@ public class ResultWriter
 			while(it.hasNext())
 			{
 				OrderResult or = (OrderResult) it.next();
-				final String msg = or.getMessage();
+				final String msg = or.getMessage(ofo);
 				if(msg.length() > 0)
 				{
 					nonEmptyList.add(msg);
