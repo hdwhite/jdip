@@ -138,13 +138,13 @@ public class JudgeParser
 		// regex is case-insensitive
 		// capture groups are in order
 		// double () on last capture group because of buggy behavior!? WTF?
-		Pattern pattern = Pattern.compile("judge\\W*(\\S*)\\W*game\\W*(\\S*)\\W*variant\\W*((\\S*))", Pattern.CASE_INSENSITIVE);
+		Pattern pattern = Pattern.compile("\\W*judge\\W*(\\S*)\\W*game\\W*(\\S*)\\W*variant\\W*((\\S*))", Pattern.CASE_INSENSITIVE);
 		
 		// find :: line
 		String line = reader.readLine();
 		while(line != null)
 		{
-			if(line.indexOf("::") >= 0)
+			if(line.trim().indexOf("::") >= 0)
 			{
 				// attempt to parse via regex. If it fails, read another line.
 				Matcher m = pattern.matcher(line);
@@ -306,7 +306,6 @@ public class JudgeParser
 		}
 		
 		
-		
 		// we are not a history. 
 		// Next we try to find a result header.
 		Pattern hm = Pattern.compile(JudgeOrderParser.MOVE_ORDER_HEADER);
@@ -319,6 +318,7 @@ public class JudgeParser
 		while(line != null && count < READ_AHEAD_LENGTH)
 		{
 			count += line.length();
+			line = line.trim();	// needed for Patterns to work properly
 			Matcher m_hm = hm.matcher(line);
 			Matcher m_hr = hr.matcher(line);
 			Matcher m_ha = ha.matcher(line);
