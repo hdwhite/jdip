@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<project name="jDip_tools" default="build" basedir=".">
+<!-- ANT Build File for jDip Tools-->
+<!-- 
+ Note: JAVA_HOME and ANT_HOME environment vars must NOT have a trailing (back)slash
+-->
+
+	<!-- build properties -->
+	<property name="javadoc.dir" value="${basedir}/javadoc"/>		<!-- documentation for all tools goes here -->
+	<property name="build.dir" value="${basedir}/build"/>			<!-- executable .jar files -->
+	<property name="dist.dir" value="${build.dir}/dist"/>			<!-- where distributable packages go -->
+	<property name="class.dir" value="${build.dir}/classes"/>		<!-- where build classes go -->
+	
+	<!-- build properties -->
+	<property name="build.compiler" value="modern"/>            
+	
+    <!-- all jars, also those in subdirs -->
+	<patternset id="jars_recursive">
+		<include name="**/*.jar"/>
+	</patternset>
+	
+	<path id="compile.class.path">
+		<fileset dir="${basedir}/">
+			<patternset refid="jars_recursive"/>
+		</fileset>
+	</path>
+	
+	<!-- cleans the build directory (but not javadocs) -->
+	<target name="clean" description="Delete build/ directory">
+		<delete dir="${build.dir}"/>
+	</target>
+	
+	<!-- init -->
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+		<mkdir dir="${javadoc.dir}"/>
+	</target>
+	
+	<target name="help">
+		<echo message="To see all targets, please use the command: ant -projecthelp"/>
+	</target>
+	
+	
+	<!-- package all -->
+	<target name="dist" depends="build" description="create all complete tool distribution packages">
+		<antcall target="conversion_dist"/>
+	</target>
+	
+	
+    <!-- build all -->
+	<target name="build" depends="init" description="builds all tools">
+		<antcall target="conversion"/>
+	</target>
+	
+	
+	<!-- docs for all -->
+	<target name="docs" depends="init" description="builds all tool documentation">
+		<antcall target="conversion_docs"/>
+	</target>
+	
+	
+	
+	
+	<!-- create the conversion tools (jar files only) and documentation -->
+	<target name="conversion" depends="init" description="Create Conversion tools (jar files)">
+		
+		<!-- delete old tool .jar files -->
+		<delete file="${build.dir}/rpconvert.jar"/>
+		<delete file="${build.dir}/judgeconvert.jar"/>
+		
+		<property name="conversion.dir" value="${basedir}/conversion"/>
+		<mkdir dir="${class.dir}/conversion"/>
+		
+		<!-- compile everything -->
+		<javac srcdir="${conversion.dir}/src" destdir="${class.dir}/conversion" includes="**/*.java" source="1.4" debug="true">
+			<classpath refid="compile.class.path"/>
+		</javac>
+		
+		<!-- copy resource files -->
+		<copy todir="${class.dir}/conversion/">
+			<fileset dir="${conversion.dir}/src/">
+				<include name="**/*.txt"/>
+				<include name="**/*.xml"/>
+				<include name="**/*.properties"/>
+			</fileset>
+		</copy>
+		
+		<!-- create jar: judgeconvert -->
+		<jar jarfile="${build.dir}/judgeconvert.jar" basedir="${class.dir}/conversion"
+				includes="jdip/conversion/**/*"
+				manifest="${conversion.dir}/etc/judgeconvert_manifest.txt"/>
+		
+		<!-- create jar: rpconvert -->
+		<jar jarfile="${build.dir}/rpconvert.jar" basedir="${class.dir}/conversion"
+				includes="jdip/conversion/**/*"
+				manifest="${conversion.dir}/etc/rpconvert_manifest.txt"/>
+	</target>
+	
+	
+	<!-- create the conversion tool distribution package -->
+	<target name="conversion_dist" depends="conversion" description="Create Conversion tools distribution">
+		<property name="conversion.etc.dir" value="${basedir}/conversion/etc"/>
+		<property name="conversion.dist.file.name" value="${dist.dir}/conversion-tools.zip"/>
+		<property name="conversion.prefix" value="conversion"/>
+		
+		<delete file="${conversion.dist.file.name}"/>
+		
+		<zip destfile="${conversion.dist.file.name}" duplicate="fail">
+			<zipfileset dir="${build.dir}" includes="judgeconvert.jar" prefix="${conversion.prefix}"/>
+			<zipfileset dir="${build.dir}" includes="rpconvert.jar" prefix="${conversion.prefix}"/>
+			
+			<zipfileset dir="${conversion.etc.dir}" includes="*.txt *.TXT" excludes="*manifest*" prefix="${conversion.prefix}"/>
+			<zipfileset dir="${conversion.etc.dir}" includes="*.bat" prefix="${conversion.prefix}"/>
+			
+			<zipfileset dir="${conversion.etc.dir}/docs" includes="**/*" prefix="${conversion.prefix}/docs"/>
+		</zip>
+		
+		<!-- 
+			this 
+			
+			includes the .jar file(s)
+			license
+			readme
+			usage instructions
+				preferably as HTML
+				
+			batch files
+				at least for windows...
+				
+				
+				
+			etc.
+			
+			all that is created in a .zip.
+		
+		-->
+	</target>
+	
+	<!-- create the conversion tool docs -->
+	<target name="conversion_docs" depends="init" description="Create Conversion tools documentation">
+		<property name="conversion.dir" value="${basedir}/conversion"/>
+		<!-- create javadocs -->
+		<mkdir dir="${javadoc.dir}/conversion"/>
+		<javadoc
+				sourcepath="${conversion.dir}/src" destdir="${javadoc.dir}/conversion" 
+				packagenames="jdip.conversion.*"
+				author="true" version="true" use="true"
+				windowtitle="jDip Tool Documentation" doctitle="jDip"
+				bottom="Copyright 2004 Zachary DelProposto. All Rights Reserved."
+				source="1.4"
+				splitindex="true"
+				classpathref="compile.class.path"
+				additionalparam="-breakiterator -quiet">
+			
+			<fileset dir="${conversion.dir}/src" defaultexcludes="yes">
+				<include name="**/*.java" />
+			</fileset>
+		</javadoc>
+	</target>	
+	
+	
+	
+	
+	
+		
+</project>
