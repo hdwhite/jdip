@@ -52,8 +52,8 @@ public class Map
 	private final Power[] 		powers;
 	private final Province[]	provinces;
 	
-	private final List uPowerList;
-	private final List uProvinceList;
+	private final ImmutableList uPowerList;
+	private final ImmutableList uProvinceList;
 	
 	// None of the data below here is serialized; it can be derived from
 	// the above (serialized) data.
@@ -82,23 +82,9 @@ public class Map
 		powers = powerArray;
 		provinces = provinceArray;
 		
-		// unmodifiable power list
-		ArrayList list = new ArrayList(powers.length);
-		for(int i=0; i<powers.length; i++)
-		{
-			list.add(powers[i]);
-		}
-	
-		uPowerList = Collections.unmodifiableList(list);
-		
-		// unmodifiable province list
-		list = new ArrayList(provinces.length);
-		for(int i=0; i<provinces.length; i++)
-		{
-			list.add(provinces[i]);
-		}
-	
-		uProvinceList = Collections.unmodifiableList(list);
+		// create ImmutableLists
+		uPowerList = new ImmutableList(powers);
+		uProvinceList = new ImmutableList(provinces);
 		
 		
 		// check provinceArray: index must be >= 0 and < provinceArray.length
@@ -186,6 +172,20 @@ public class Map
 		// create names array from ArrayList
 		names = (String[]) namesAL.toArray(new String[namesAL.size()]);
 	}// createMappings()
+	
+	
+	/** Get the total number of provinces. */
+	public int getProvinceCount()
+	{
+		return provinces.length;
+	}// getProvinceCount()
+	
+	/** Get the total number of powers. */
+	public int getPowerCount()
+	{
+		return powers.length;
+	}// getProvinceCount()
+	
 	
 	
 	/**
@@ -1137,17 +1137,26 @@ public class Map
 	}// inner class Distance
 	
 	
-	
-	// reserialization: re-create mappings
-	private void readObject(java.io.ObjectInputStream in)
-	throws IOException, ClassNotFoundException
+	/** Inner class: a fast Immutable list */
+	private final class ImmutableList extends AbstractList implements RandomAccess
 	{
-		in.defaultReadObject();
+		private final Object[] objects;
 		
-		// re-create transient data.
-		createMappings();
-	}// readObject()
-	
+		public ImmutableList(Object[] objects)
+		{
+			this.objects = objects;
+		}// ImmutableList()
+		
+		public int size()
+		{
+			return objects.length;
+		}// size()
+		
+		public Object get(int i)
+		{
+			// no range checking
+			return objects[i];
+		}// get()
+	}// class ImmutableList
 	
 }// class Map
-///////

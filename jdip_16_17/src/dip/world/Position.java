@@ -63,20 +63,38 @@ import com.thoughtworks.xstream.alias.ClassMapper;
 */
 public class Position implements Cloneable
 {
-	// size constants; these should be prime
-	private static final int POWER_SIZE = 17;
+	/*
+		Implementation note when a tmpProvArray is used:
+		
+		Copying references into a large temporary array, then creating an array
+		(that is the correct size) and copying the temp array into the correctly-sized 
+		array via System.arraycopy() is about twice as fast as using an ArrayList, and 
+		almost twice as fast as double-iterating (one to gauge the array size,
+		and one to copy data).
+		
+		This method creates a sufficiently large array to hold temporary data.
+	
+	*/
+	
+	
+	
 	
 	// instance variables
-	protected final Map powerMap = new HashMap(POWER_SIZE);
 	protected final ProvinceData[] provArray;
+	protected final PowerData[] powerArray;
 	protected final dip.world.Map map;
-	private transient Province[] tmpProvArray = null;
 	
 	
 	public Position(dip.world.Map map)
 	{
+		if(map == null)
+		{
+			throw new IllegalArgumentException();
+		}
+		
 		this.map = map;
-		this.provArray = new ProvinceData[map.getProvinces().length];
+		this.provArray = new ProvinceData[map.getProvinceCount()];
+		this.powerArray = new PowerData[map.getPowerCount()];
 	}// Position()
 	
 	
@@ -89,7 +107,11 @@ public class Position implements Cloneable
 	}// size()
 	
 	
-	/** Convenience method: Returns an array of Provinces */
+	/** 
+	*	Convenience method: Returns an array of Provinces 
+	*	*potentially unsafe*
+	*	@deprecated 		use Map.getProvinceList() instead
+	*/
 	public final Province[] getProvinces()
 	{
 		return map.getProvinces();
@@ -99,20 +121,27 @@ public class Position implements Cloneable
 	/** Returns true if this Power has been eliminated. False by default. */
 	public boolean isEliminated(Power power)
 	{
-		PowerData pd = (PowerData) powerMap.get(power);
-		if(pd != null)
+		synchronized(powerArray)
 		{
-			return pd.isEliminated();
+			PowerData pd = powerArray[power.getIndex()];
+			if(pd != null)
+			{
+				return pd.isEliminated();
+			}
+			
+			return false;
 		}
-		return false;
 	}// isEliminated()
 	
 	
 	/** Set whether this Power has been eliminated. */
 	public void setEliminated(Power power, boolean value)
 	{
-		PowerData pd = getPowerData(power);
-		pd.setEliminated(value);
+		synchronized(powerArray)
+		{
+			PowerData pd = getPowerData(power);
+			pd.setEliminated(value);
+		}
 	}// setEliminated()
 	
 	
@@ -122,127 +151,131 @@ public class Position implements Cloneable
 	*/
 	public void setEliminationStatus(final Power[] powers)
 	{
-		HashMap pmap = new HashMap(19);
-		for(int i=0; i<powers.length; i++)
-		{
-			pmap.put(powers[i], null);
-		}
+		// value array; indexed by power.getIndex();
+		// if value == 0, no SC, unit, or dislodged unit for that power.
+		final int[] counts = new int[powers.length];
 		
-		for(int i=0; i<provArray.length; i++)
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			Power power = null;
-			
-			if(pd != null)
+			for(int i=0; i<provArray.length; i++)
 			{
-				Unit unit = pd.getUnit();
-				if(unit != null)		// first check non-dislodged units
-				{
-					power = unit.getPower();
-					if(pmap.get(power) == null)
-					{
-						pmap.put(power, new Object());
-					}
-				}
+				final ProvinceData pd = provArray[i];
 				
-				// then see if there's a dislodged unit
-				unit = pd.getDislodgedUnit();
-				if(unit != null)
+				if(pd != null)
 				{
-					power = unit.getPower();
-					if(pmap.get(power) == null)
+					Unit unit = pd.getUnit();
+					if(unit != null)		// first check non-dislodged units
 					{
-						pmap.put(power, new Object());
+						counts[unit.getPower().getIndex()]++;
 					}
-				}
-				
-				// finally, see if we own a supply center
-				power = pd.getSCOwner();
-				if(power != null)
-				{
-					if(pmap.get(power) == null)
+					
+					// then see if there's a dislodged unit
+					unit = pd.getDislodgedUnit();
+					if(unit != null)
 					{
-						pmap.put(power, new Object());
+						counts[unit.getPower().getIndex()]++;
+					}
+					
+					// finally, see if we own a supply center
+					Power power = pd.getSCOwner();
+					if(power != null)
+					{
+						counts[power.getIndex()]++;
 					}
 				}
 			}
 		}
 		
-		for(int i=0; i<powers.length; i++)
+		synchronized(powerArray)
 		{
-			if(pmap.get(powers[i]) == null)
+			for(int i=0; i<powers.length; i++)
 			{
-				setEliminated(powers[i], true);
+				PowerData pd = getPowerData(powers[i]);
+				pd.setEliminated( (counts[powers[i].getIndex()] == 0) );
 			}
-			else
-			{
-				setEliminated(powers[i], false);
-			}
-		}		
+		}
 	}// setEliminationStatus()
 	
 	
 	/** Set the owner of the supply center. */
 	public void setSupplyCenterOwner(Province province, Power power)	 		
 	{
-		ProvinceData pd = getProvinceData(province);
-		pd.setSCOwner(power);
+		synchronized(provArray)
+		{
+			ProvinceData pd = getProvinceData(province);
+			pd.setSCOwner(power);
+		}
 	}// setSupplyCenterOwner()
 	
 	
 	/** Set the owner of a home supply center. */
 	public void setSupplyCenterHomePower(Province province, Power power)	 		
 	{
-		ProvinceData pd = getProvinceData(province);
-		pd.setSCHomePower(power);
+		synchronized(provArray)
+		{
+			ProvinceData pd = getProvinceData(province);
+			pd.setSCHomePower(power);
+		}
 	}// setSupplyCenterHomePower()
 	
 	
 	/** Determine if this Province contains a supply center */
 	public boolean hasSupplyCenterOwner(Province province)
 	{
-		ProvinceData pd = provArray[province.getIndex()];
-		if(pd != null)
+		synchronized(provArray)
 		{
-			return pd.isSCOwned();
+			ProvinceData pd = provArray[province.getIndex()];
+			if(pd != null)
+			{
+				return pd.isSCOwned();
+			}
+			return false;
 		}
-		return false;
 	}// hasSupplyCenterOwner()
 	
 	
 	/** Determine if this Province contains a Home supply center */
 	public boolean isSupplyCenterAHome(Province province)
 	{
-		ProvinceData pd = provArray[province.getIndex()];
-		if(pd != null)
+		synchronized(provArray)
 		{
-			return pd.isSCAHome();
+			ProvinceData pd = provArray[province.getIndex()];
+			if(pd != null)
+			{
+				return pd.isSCAHome();
+			}
+			return false;
 		}
-		return false;
 	}// isSupplyCenterAHome()
 	
 	
 	/** Get the home power of the supply center; null if no supply center or home power */
 	public Power getSupplyCenterHomePower(Province province)
 	{
-		ProvinceData pd = provArray[province.getIndex()];
-		if(pd != null)
+		synchronized(provArray)
 		{
-			return pd.getSCHomePower();
+			ProvinceData pd = provArray[province.getIndex()];
+			if(pd != null)
+			{
+				return pd.getSCHomePower();
+			}
+			return null;
 		}
-		return null;
 	}// getSupplyCenterHomePower()
 	
 	
 	/** Get the owner of the supply center; null if no owner or no supply center. */
 	public Power getSupplyCenterOwner(Province province)	
 	{
-		ProvinceData pd = provArray[province.getIndex()];
-		if(pd != null)
+		synchronized(provArray)
 		{
-			return pd.getSCOwner();
+			ProvinceData pd = provArray[province.getIndex()];
+			if(pd != null)
+			{
+				return pd.getSCOwner();
+			}
+			return null;
 		}
-		return null;
 	}// getSupplyCenterOwner()
 	
 	
@@ -252,53 +285,68 @@ public class Position implements Cloneable
 	/** Set the unit contained in this province; null to eliminate an existing unit. */
 	public void setUnit(Province province, Unit unit)
 	{
-		ProvinceData pd = getProvinceData(province);
-		pd.setUnit(unit);
+		synchronized(provArray)
+		{
+			ProvinceData pd = getProvinceData(province);
+			pd.setUnit(unit);
+		}
 	}// setUnit()
 	
 	/** Determines if there is a unit present in this province. */
 	public boolean hasUnit(Province province)
 	{
-		ProvinceData pd = provArray[province.getIndex()];
-		if(pd != null)
+		synchronized(provArray)
 		{
-			return pd.hasUnit();
+			ProvinceData pd = provArray[province.getIndex()];
+			if(pd != null)
+			{
+				return pd.hasUnit();
+			}
+			return false;
 		}
-		return false;
 	}// hasUnit()
 	
 	/** Get the unit contained in this Province. Returns null if no unit exists. */
 	public Unit getUnit(Province province)
 	{
-		ProvinceData pd = provArray[province.getIndex()];
-		if(pd != null)
+		synchronized(provArray)
 		{
-			return pd.getUnit();
+			ProvinceData pd = provArray[province.getIndex()];
+			if(pd != null)
+			{
+				return pd.getUnit();
+			}
+			return null;
 		}
-		return null;
 	}// getUnit()
 	
 	
 	/** Test if the given type of unit is contained in this Province. */
 	public boolean hasUnit(Province province, Unit.Type unitType)
 	{
-		Unit unit = getUnit(province);
-		if(unit != null)
+		synchronized(provArray)
 		{
-			return(unit.getType().equals(unitType));
+			Unit unit = getUnit(province);
+			if(unit != null)
+			{
+				return(unit.getType().equals(unitType));
+			}
+			return false;
 		}
-		return false;
 	}// hasUnit()
 	
 	/** Test if the given type of unit is contained in this Province. */
 	public boolean hasDislodgedUnit(Province province, Unit.Type unitType)
 	{
-		Unit unit = getDislodgedUnit(province);
-		if(unit != null)
+		synchronized(provArray)
 		{
-			return(unit.getType().equals(unitType));
+			Unit unit = getDislodgedUnit(province);
+			if(unit != null)
+			{
+				return(unit.getType().equals(unitType));
+			}
+			return false;
 		}
-		return false;
 	}// hasDislodgedUnit()
 	
 	
@@ -308,20 +356,26 @@ public class Position implements Cloneable
 	/** Set the dislodged unit contained in this province; null to eliminate an existing unit. */
 	public void setDislodgedUnit(Province province, Unit unit)
 	{
-		ProvinceData pd = getProvinceData(province);
-		pd.setDislodgedUnit(unit);
+		synchronized(provArray)
+		{
+			ProvinceData pd = getProvinceData(province);
+			pd.setDislodgedUnit(unit);
+		}
 	}// setDislodgedUnit()
 	
 	
 	/** Get the dislodged unit in this Province. Returns null if no dislodged unit exists. */
 	public Unit getDislodgedUnit(Province province)
 	{
-		ProvinceData pd = provArray[province.getIndex()];
-		if(pd != null)
+		synchronized(provArray)
 		{
-			return pd.getDislodgedUnit();
+			ProvinceData pd = provArray[province.getIndex()];
+			if(pd != null)
+			{
+				return pd.getDislodgedUnit();
+			}
+			return null;
 		}
-		return null;
 	}// getDislodgedUnit()
 	
 	
@@ -333,8 +387,11 @@ public class Position implements Cloneable
 	*/
 	public void setLastOccupier(Province province, Power power)
 	{
-		ProvinceData pd = getProvinceData(province);
-		pd.setLastOccupier(power);
+		synchronized(provArray)
+		{
+			ProvinceData pd = getProvinceData(province);
+			pd.setLastOccupier(power);
+		}
 	}// setLastOccupier()
 	
 	
@@ -345,24 +402,30 @@ public class Position implements Cloneable
 	*/
 	public Power getLastOccupier(Province province)
 	{
-		ProvinceData pd = provArray[province.getIndex()];
-		if(pd != null)
+		synchronized(provArray)
 		{
-			return pd.getLastOccupier();
+			ProvinceData pd = provArray[province.getIndex()];
+			if(pd != null)
+			{
+				return pd.getLastOccupier();
+			}
+			return null;
 		}
-		return null;
 	}// getLastOccupier()	
 	
 	
 	/** Determines if there is a dislodged unit present in this province. */
 	public boolean hasDislodgedUnit(Province province)
 	{
-		ProvinceData pd = provArray[province.getIndex()];
-		if(pd != null)
+		synchronized(provArray)
 		{
-			return pd.hasDislodgedUnit();
+			ProvinceData pd = provArray[province.getIndex()];
+			if(pd != null)
+			{
+				return pd.hasDislodgedUnit();
+			}
+			return false;
 		}
-		return false;
 	}// hasDislodgedUnit()
 	
 	
@@ -371,16 +434,19 @@ public class Position implements Cloneable
 	/** Returns an array of provinces with non-dislodged units */
 	public Province[] getUnitProvinces()
 	{
-		makeTmpProvArray();
-		
+		final Province[] tmpProvArray = new Province[provArray.length];
 		int arrSize = 0;
-		for(int i=0; i<provArray.length; i++)
+		
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			if(pd != null && pd.hasUnit())
+			for(int i=0; i<provArray.length; i++)
 			{
-				tmpProvArray[arrSize] = map.reverseIndex(i);
-				arrSize++;
+				ProvinceData pd = provArray[i];
+				if(pd != null && pd.hasUnit())
+				{
+					tmpProvArray[arrSize] = map.getProvince(i);
+					arrSize++;
+				}
 			}
 		}
 		
@@ -394,16 +460,19 @@ public class Position implements Cloneable
 	/** Returns an array of provinces with dislodged units */
 	public Province[] getDislodgedUnitProvinces()
 	{
-		makeTmpProvArray();
-		
+		final Province[] tmpProvArray = new Province[provArray.length];
 		int arrSize = 0;
-		for(int i=0; i<provArray.length; i++)
+		
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			if(pd != null && pd.hasDislodgedUnit())
+			for(int i=0; i<provArray.length; i++)
 			{
-				tmpProvArray[arrSize] = map.reverseIndex(i);
-				arrSize++;
+				ProvinceData pd = provArray[i];
+				if(pd != null && pd.hasDislodgedUnit())
+				{
+					tmpProvArray[arrSize] = map.getProvince(i);
+					arrSize++;
+				}
 			}
 		}
 		
@@ -417,15 +486,18 @@ public class Position implements Cloneable
 	public int getUnitCount()
 	{
 		int count = 0;		
-		for(int i=0; i<provArray.length; i++)
+		
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			if(pd != null && pd.hasUnit())
+			for(int i=0; i<provArray.length; i++)
 			{
-				count++;
+				ProvinceData pd = provArray[i];
+				if(pd != null && pd.hasUnit())
+				{
+					count++;
+				}
 			}
 		}
-		
 		return count;
 	}// getUnitCount()
 	
@@ -434,15 +506,18 @@ public class Position implements Cloneable
 	public int getDislodgedUnitCount()
 	{
 		int count = 0;		
-		for(int i=0; i<provArray.length; i++)
+		
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			if(pd != null && pd.hasDislodgedUnit())
+			for(int i=0; i<provArray.length; i++)
 			{
-				count++;
+				ProvinceData pd = provArray[i];
+				if(pd != null && pd.hasDislodgedUnit())
+				{
+					count++;
+				}
 			}
 		}
-		
 		return count;
 	}// getDislodgedUnitCount()
 	
@@ -450,16 +525,19 @@ public class Position implements Cloneable
 	/** Returns an array of provinces with home supply centers */
 	public Province[] getHomeSupplyCenters()
 	{
-		makeTmpProvArray();
-		
+		final Province[] tmpProvArray = new Province[provArray.length];
 		int arrSize = 0;
-		for(int i=0; i<provArray.length; i++)
+		
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			if(pd != null && pd.isSCAHome())
+			for(int i=0; i<provArray.length; i++)
 			{
-				tmpProvArray[arrSize] = map.reverseIndex(i);
-				arrSize++;
+				ProvinceData pd = provArray[i];
+				if(pd != null && pd.isSCAHome())
+				{
+					tmpProvArray[arrSize] = map.getProvince(i);
+					arrSize++;
+				}
 			}
 		}
 		
@@ -472,7 +550,7 @@ public class Position implements Cloneable
 	/** Returns an Array of the Home Supply Centers for a given power (whether or not they are owned by that power) */
 	public Province[] getHomeSupplyCenters(Power power)
 	{
-		makeTmpProvArray();
+		final Province[] tmpProvArray = new Province[provArray.length];
 		
 		int arrSize = 0;
 		for(int i=0; i<provArray.length; i++)
@@ -480,7 +558,7 @@ public class Position implements Cloneable
 			ProvinceData pd = provArray[i];
 			if(pd != null && pd.getSCHomePower() == power)
 			{
-				tmpProvArray[arrSize] = map.reverseIndex(i);
+				tmpProvArray[arrSize] = map.getProvince(i);
 				arrSize++;
 			}
 		}
@@ -498,32 +576,38 @@ public class Position implements Cloneable
 	*/
 	public boolean hasAnOwnedHomeSC(Power power)
 	{
-		for(int i=0; i<provArray.length; i++)
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			if(pd != null && pd.getSCHomePower() == power && pd.getSCOwner() == power)
+			for(int i=0; i<provArray.length; i++)
 			{
-				return true;
+				ProvinceData pd = provArray[i];
+				if(pd != null && pd.getSCHomePower() == power && pd.getSCOwner() == power)
+				{
+					return true;
+				}
 			}
+			
+			return false;
 		}
-		
-		return false;
 	}// hasAnOwnedHomeSC()
 	
 	
 	/** Returns an Array of the owned Supply Centers for a given Power (whether or not they are home supply centers) */
 	public Province[] getOwnedSupplyCenters(Power power)
 	{
-		makeTmpProvArray();
-		
+		final Province[] tmpProvArray = new Province[provArray.length];
 		int arrSize = 0;
-		for(int i=0; i<provArray.length; i++)
+		
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			if(pd != null && pd.getSCOwner() == power)
+			for(int i=0; i<provArray.length; i++)
 			{
-				tmpProvArray[arrSize] = map.reverseIndex(i);
-				arrSize++;
+				ProvinceData pd = provArray[i];
+				if(pd != null && pd.getSCOwner() == power)
+				{
+					tmpProvArray[arrSize] = map.getProvince(i);
+					arrSize++;
+				}
 			}
 		}
 		
@@ -536,16 +620,19 @@ public class Position implements Cloneable
 	/** Returns an array of provinces with owned supply centers */
 	public Province[] getOwnedSupplyCenters()
 	{
-		makeTmpProvArray();
-		
+		final Province[] tmpProvArray = new Province[provArray.length];
 		int arrSize = 0;
-		for(int i=0; i<provArray.length; i++)
+		
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			if(pd != null && pd.isSCOwned())
+			for(int i=0; i<provArray.length; i++)
 			{
-				tmpProvArray[arrSize] = map.reverseIndex(i);
-				arrSize++;
+				ProvinceData pd = provArray[i];
+				if(pd != null && pd.isSCOwned())
+				{
+					tmpProvArray[arrSize] = map.getProvince(i);
+					arrSize++;
+				}
 			}
 		}
 		
@@ -561,25 +648,31 @@ public class Position implements Cloneable
 	*/
 	public Object clone()
 	{
-		Position pos = new Position(map);
+		final Position pos = new Position(map);
 		
-		for(int i=0; i<provArray.length; i++)
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			
-			if(pd != null)
+			for(int i=0; i<provArray.length; i++)
 			{
-				pos.provArray[i] = pd.normClone();
+				ProvinceData pd = provArray[i];
+				
+				if(pd != null)
+				{
+					pos.provArray[i] = pd.normClone();
+				}
 			}
 		}
 		
-		Iterator iter = powerMap.keySet().iterator();
-		while(iter.hasNext())
+		synchronized(powerArray)
 		{
-			Power key = (Power) iter.next();
-			PowerData pd = (PowerData) powerMap.get(key);
-			
-			pos.powerMap.put(key, pd.normClone());
+			for(int i=0; i<powerArray.length; i++)
+			{
+				PowerData pd = powerArray[i];
+				if(pd != null)
+				{
+					pos.powerArray[i] = pd.normClone();
+				}
+			}
 		}
 		
 		return pos;
@@ -591,25 +684,31 @@ public class Position implements Cloneable
 	*/
 	public Position cloneExceptUnits()
 	{
-		Position pos = new Position(map);
+		final Position pos = new Position(map);
 		
-		for(int i=0; i<provArray.length; i++)
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			
-			if(pd != null)
+			for(int i=0; i<provArray.length; i++)
 			{
-				pos.provArray[i] = pd.cloneExceptUnits();
+				ProvinceData pd = provArray[i];
+				
+				if(pd != null)
+				{
+					pos.provArray[i] = pd.cloneExceptUnits();
+				}
 			}
 		}
 		
-		Iterator iter = powerMap.keySet().iterator();
-		while(iter.hasNext())
+		synchronized(powerArray)
 		{
-			Power key = (Power) iter.next();
-			PowerData pd = (PowerData) powerMap.get(key);
-			
-			pos.powerMap.put(key, pd.normClone());
+			for(int i=0; i<powerArray.length; i++)
+			{
+				PowerData pd = powerArray[i];
+				if(pd != null)
+				{
+					pos.powerArray[i] = pd.normClone();
+				}
+			}
 		}
 		
 		return pos;
@@ -619,24 +718,31 @@ public class Position implements Cloneable
 	/** Deep clone of everything <b>except</b> dislodged units. */
 	public Position cloneExceptDislodged()
 	{
-		Position pos = new Position(map);
+		final Position pos = new Position(map);
 		
-		for(int i=0; i<provArray.length; i++)
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			if(pd != null)
+			for(int i=0; i<provArray.length; i++)
 			{
-				pos.provArray[i] = pd.cloneExceptDislodged();
+				ProvinceData pd = provArray[i];
+				
+				if(pd != null)
+				{
+					pos.provArray[i] = pd.cloneExceptDislodged();
+				}
 			}
 		}
 		
-		Iterator iter = powerMap.keySet().iterator();
-		while(iter.hasNext())
+		synchronized(powerArray)
 		{
-			Power key = (Power) iter.next();
-			PowerData pd = (PowerData) powerMap.get(key);
-			
-			pos.powerMap.put(key, pd.normClone());
+			for(int i=0; i<powerArray.length; i++)
+			{
+				PowerData pd = powerArray[i];
+				if(pd != null)
+				{
+					pos.powerArray[i] = pd.normClone();
+				}
+			}
 		}
 		
 		return pos;
@@ -650,19 +756,22 @@ public class Position implements Cloneable
 	*/
 	public Province[] getUnitProvinces(Power power)
 	{
-		makeTmpProvArray();
-		
+		final Province[] tmpProvArray = new Province[provArray.length];
 		int arrSize = 0;
-		for(int i=0; i<provArray.length; i++)
+		
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			if(pd != null)
+			for(int i=0; i<provArray.length; i++)
 			{
-				Unit unit = pd.getUnit();
-				if(unit != null && unit.getPower() == power)
+				ProvinceData pd = provArray[i];
+				if(pd != null)
 				{
-					tmpProvArray[arrSize] = map.reverseIndex(i);
-					arrSize++;
+					Unit unit = pd.getUnit();
+					if(unit != null && unit.getPower() == power)
+					{
+						tmpProvArray[arrSize] = map.getProvince(i);
+						arrSize++;
+					}
 				}
 			}
 		}
@@ -679,19 +788,22 @@ public class Position implements Cloneable
 	*/
 	public Province[] getDislodgedUnitProvinces(Power power)
 	{
-		makeTmpProvArray();
-		
+		final Province[] tmpProvArray = new Province[provArray.length];
 		int arrSize = 0;
-		for(int i=0; i<provArray.length; i++)
+		
+		synchronized(provArray)
 		{
-			ProvinceData pd = provArray[i];
-			if(pd != null)
+			for(int i=0; i<provArray.length; i++)
 			{
-				Unit unit = pd.getDislodgedUnit();
-				if(unit != null && unit.getPower() == power)
+				ProvinceData pd = provArray[i];
+				if(pd != null)
 				{
-					tmpProvArray[arrSize] = map.reverseIndex(i);
-					arrSize++;
+					Unit unit = pd.getDislodgedUnit();
+					if(unit != null && unit.getPower() == power)
+					{
+						tmpProvArray[arrSize] = map.getProvince(i);
+						arrSize++;
+					}
 				}
 			}
 		}
@@ -717,32 +829,36 @@ public class Position implements Cloneable
 			throw new IllegalArgumentException();
 		}
 		
-		for(int i=0; i<provArray.length; i++)
+		synchronized(provArray)
 		{
-			ProvinceData this_pd = provArray[i];
-			ProvinceData p_pd = p.provArray[i];
-			
-			Power thisPower = (this_pd == null) ? null : this_pd.getSCOwner();
-			Power pPower = (p_pd == null) ? null : p_pd.getSCOwner();
-			
-			if(thisPower != pPower)
+			for(int i=0; i<provArray.length; i++)
 			{
-				return true;
+				ProvinceData this_pd = provArray[i];
+				ProvinceData p_pd = p.provArray[i];
+				
+				Power thisPower = (this_pd == null) ? null : this_pd.getSCOwner();
+				Power pPower = (p_pd == null) ? null : p_pd.getSCOwner();
+				
+				if(thisPower != pPower)
+				{
+					return true;
+				}
 			}
+			
+			return false;
 		}
-		
-		return false;
 	}// isSCChanged()
 	
 	
 	/**
 	*	Call this method FIRST before any set(); thus if ProvinceData
 	*	does not exist, we will add one to the map.
-	*
+	*	<p>
+	*	*unsynchronized*
 	*/
 	private ProvinceData getProvinceData(Province province)
 	{
-		int idx = province.getIndex();
+		final int idx = province.getIndex();
 		ProvinceData pd = provArray[idx];
 		if(pd == null)
 		{
@@ -756,12 +872,14 @@ public class Position implements Cloneable
 	/** Same type of functionality as getProvinceData() but for PowerData objects */
 	private PowerData getPowerData(Power power)
 	{
-		PowerData pd = (PowerData) powerMap.get(power);
+		final int idx = power.getIndex();
+		PowerData pd = powerArray[idx];
 		if(pd == null)
 		{
-			pd = new PowerData();
-			powerMap.put(power, pd);
+			pd = new PowerData(idx);
+			powerArray[idx] = pd;
 		}
+		
 		return pd;
 	}// getPowerData()
 	
@@ -775,7 +893,7 @@ public class Position implements Cloneable
 		private Power 	SCOwner = null;
 		private Power	SCHomePower = null;
 		private Power	lastOccupier = null;
-		transient private int provIdx = -1;			// TODO: make final
+		private final int provIdx;
 		
 		
 		public ProvinceData(int provIdx)
@@ -901,45 +1019,29 @@ public class Position implements Cloneable
 	{
 		// instance variables
 		private boolean isEliminated = false;
+		private final int index;
 		
-		
-		public PowerData()
+		public PowerData(int index)
 		{
+			this.index = index;
 		}// PowerData()
 		
-		public boolean isEliminated() 					{ return isEliminated; }
-		public void setEliminated(boolean value)		{ isEliminated = value; }
+		public int getIndex()						{ return index; }
+		public boolean isEliminated() 				{ return isEliminated; }
+		public void setEliminated(boolean value)	{ isEliminated = value; }
 		
 		public PowerData normClone()
 		{
-			PowerData pd = new PowerData();
+			PowerData pd = new PowerData(this.index);
 			pd.isEliminated = this.isEliminated;
 			return pd;
 		}// normClone()
 	}// inner class PowerData
 	
 	
+	
 	/**
-	*	Copying references into a large temporary array, then creating an array
-	*	and copying the temp array into the correctly-sized array via 
-	*	System.arraycopy() is about twice as fast as using an ArrayList, and 
-	*	almost twice as fast as double-iterating (one to gauge the array size,
-	*	and one to copy data).
-	*	<p>
-	*	This method creates a sufficiently large array to hold temporary data.
-	*/
-	private final void makeTmpProvArray()
-	{
-		if(tmpProvArray == null)
-		{
-			tmpProvArray = new Province[provArray.length];
-		}
-	}// makeTmpProvArray()
-	
-	
-	/*
-	*
-	*
+	*	XStream serialization
 	*/
 	public static class ProvinceDataConverter implements Converter
 	{
@@ -956,7 +1058,7 @@ public class Position implements Cloneable
 			final ProvinceData pd = (ProvinceData) source;
 			
 			hsw.addAttribute( "province", 
-				xs.toString( xs.getMap().reverseIndex(pd.getIdx()) ) );
+				xs.toString( xs.getMap().getProvince(pd.getIdx()) ) );
 			
 			if(pd.getLastOccupier() != null)
 			{
@@ -1083,6 +1185,9 @@ public class Position implements Cloneable
 			
 	}// ProvinceDataConverter()
 	
+	/**
+	*	XStream serialization
+	*/
 	public static class PositionConverter implements Converter
 	{
 		private final ClassMapper cm;

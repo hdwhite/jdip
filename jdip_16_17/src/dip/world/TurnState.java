@@ -149,14 +149,14 @@ public class TurnState
 	
 	
 	/** Gets the Position data for this TurnState */
-	public Position getPosition()
+	public synchronized Position getPosition()
 	{
 		return position;
 	}// getPosition()
 	
 	
 	/** Sets the Position data for this TurnState */
-	public void setPosition(Position position)
+	public synchronized void setPosition(Position position)
 	{
 		if(position == null)
 		{
@@ -218,6 +218,7 @@ public class TurnState
 	{
 		List list = new ArrayList(75);
 		
+		// TODO: sync on orderMap
 		Iterator esIter = orderMap.entrySet().iterator();
 		while(esIter.hasNext())
 		{
@@ -294,6 +295,9 @@ public class TurnState
 	*	Returns if an order has failed, based on results. Note that
 	*	this only applies once the turnstate has been resolved. If 
 	*	the TurnState is not resolved, this will always return true.
+	*	<p>
+	*	Note that <b>all</b> results must be present for this to 
+	*	work properly.
 	*/
 	public boolean isOrderSuccessful(Orderable o)
 	{
@@ -328,6 +332,6 @@ public class TurnState
 		}
 		
 		return false;
-	}// isFailedOrder()
+	}// isOrderSuccessful()
 	
 }// class TurnState

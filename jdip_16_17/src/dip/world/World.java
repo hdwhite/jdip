@@ -68,7 +68,7 @@ public class World
 	{
 		this.map = map;
 		turnStates = Collections.synchronizedSortedMap(new TreeMap());
-		nonTurnData = new HashMap(17);
+		nonTurnData = Collections.synchronizedMap(new HashMap(17));
 	}// World()
 	
 	
@@ -462,51 +462,51 @@ public class World
 		public VariantInfo() {}
 		
 		/** Set the Variant name. */
-		public void setVariantName(String value) 	{ this.variantName = value; }
+		public synchronized void setVariantName(String value) 	{ this.variantName = value; }
 		/** Set the Map name. */
-		public void setMapName(String value) 		{ this.mapName = value; }
+		public synchronized void setMapName(String value) 		{ this.mapName = value; }
 		/** Set the Symbol pack name. */
-		public void setSymbolPackName(String value) 	{ this.symbolsName = value; }
+		public synchronized void setSymbolPackName(String value) 	{ this.symbolsName = value; }
 		/** Set the Variant version. */
-		public void setVariantVersion(float value) 	
+		public synchronized void setVariantVersion(float value) 	
 		{ 
 			checkVersion(value); 
 			this.variantVersion = value; 
 		}
 		/** Set the Symbol pack version. */
-		public void setSymbolPackVersion(float value)
+		public synchronized void setSymbolPackVersion(float value)
 		{ 
 			checkVersion(value); 
 			this.symbolsVersion = value; 
 		}
 		
 		/** <b>Replaces</b> the current RuleOptions with the given RuleOptions */
-		public void setRuleOptions(RuleOptions value)	
+		public synchronized void setRuleOptions(RuleOptions value)	
 		{ 	
 			if(value == null) { throw new IllegalArgumentException(); }
 			ruleOptions = value; 
 		}// setRuleOptions()
 		
 		/** <b>Replaces</b> the current VictoryConditions with the given VictoryConditions */
-		public void setVictoryConditions(VictoryConditions value)
+		public synchronized void setVictoryConditions(VictoryConditions value)
 		{ 
 			if(value == null) { throw new IllegalArgumentException(); }
 			this.victoryConditions = value; 
 		}// setVictoryConditions()
 		
 		/** Get the Variant name. */
-		public String getVariantName() 		{ return this.variantName; }
+		public synchronized String getVariantName() 		{ return this.variantName; }
 		/** Get the Map name. */
-		public String getMapName() 			{ return this.mapName; }
+		public synchronized String getMapName() 			{ return this.mapName; }
 		/** Get the Symbol pack name. */
-		public String getSymbolPackName() 		{ return this.symbolsName; }
+		public synchronized String getSymbolPackName() 		{ return this.symbolsName; }
 		/** Get the Variant version. */
-		public float getVariantVersion() 	{ return this.variantVersion; }
+		public synchronized float getVariantVersion() 	{ return this.variantVersion; }
 		/** Get the Symbol pack version. */
-		public float getSymbolPackVersion() 	{ return this.symbolsVersion; }
+		public synchronized float getSymbolPackVersion() 	{ return this.symbolsVersion; }
 		
 		/** Gets the RuleOptions */
-		public RuleOptions getRuleOptions()
+		public synchronized RuleOptions getRuleOptions()
 		{
 			if(ruleOptions == null)
 			{
@@ -517,7 +517,7 @@ public class World
 		}// getRuleOptions()
 		
 		/** Get the VictoryConditions */
-		public VictoryConditions getVictoryConditions()
+		public synchronized VictoryConditions getVictoryConditions()
 		{
 			return victoryConditions;
 		}// getVictoryConcitions()
