@@ -319,7 +319,6 @@ public class GUIMove extends Move implements GUIOrder
 
 	/**
 	*	Get optional Move parameters.
-	*
 	*/
 	public Object getParam(Parameter param)
 	{
@@ -464,6 +463,18 @@ public class GUIMove extends Move implements GUIOrder
 		{
 			Unit.Type destUnitType = position.getUnit(dest.getProvince()).getType();
 			r = mmd.getOrderRadius(MapMetadata.EL_MOVE, mapInfo.getSymbolName(destUnitType));
+			
+			// TODO: radius should depend upon order (none, hold, support, etc.)
+			// we should have each GUIOrder type return its radius via 
+			// a method. Then as long as it's not null, we can just get() the radius.
+			// OR, perhaps, each GUIOrder type should return it's metadata.
+			// this would make things easy.... and object oriented.
+			//
+			// e.g.: 
+			//		getOrder().getMetadata().getOrderRadius()
+			// or something like that.
+			// GUIOrder could define the OrderMetadata class.
+			//
 		}
 		else
 		{
