@@ -347,6 +347,12 @@ public final class Coast implements java.io.Serializable
 			{
 				if(m.groupCount() == 2)
 				{
+					// catch empty group "()"
+					if(m.group(1).length() == 0)
+					{
+						throw new OrderException("()");
+					}
+					
 					final char c1 = m.group(1).charAt(0);
 					final char c2 = m.group(2).charAt(0);
 					
