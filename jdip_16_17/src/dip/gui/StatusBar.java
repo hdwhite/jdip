@@ -61,6 +61,7 @@ public class StatusBar extends JPanel
 		text.setEditable(false);
 		text.setBorder(new EmptyBorder(3,3,3,3));
 		text.setHighlighter(null);
+		text.setBackground(super.getBackground());
 		add(text, BorderLayout.CENTER);
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED));
 		
@@ -78,6 +79,7 @@ public class StatusBar extends JPanel
 		mode.setBorder(new EmptyBorder(3,3,3,3));
 		mode.setMinimumSize(new Dimension(45, (int)text.getPreferredSize().getHeight()));
 		mode.setMaximumSize(mode.getMinimumSize());
+		mode.setBackground(super.getBackground());
 		add(mode, BorderLayout.EAST);
 	}// StatusBar()
 	

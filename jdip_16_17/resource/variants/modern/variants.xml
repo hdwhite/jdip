@@ -1,79 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE VARIANTS [
-	<!ELEMENT VARIANTS (DESCRIPTION, MAP_DEFINITION+, VARIANT+)>
-	
-	<!ELEMENT DESCRIPTION (#PCDATA)>
-	
-	<!ELEMENT MAP_DEFINITION (DESCRIPTION?)>
-	<!ATTLIST MAP_DEFINITION 
-		id ID #REQUIRED
-		title CDATA #REQUIRED
-		URI CDATA #REQUIRED
-		thumbURI CDATA #REQUIRED
-		preferredUnitStyle CDATA #IMPLIED
-		>
-	
-	<!ELEMENT VARIANT (DESCRIPTION, MAP, RULEOPTIONS?, POWER+, STARTINGTIME, VICTORYCONDITIONS, SUPPLYCENTER+, INITIALSTATE*)>
-	<!ATTLIST VARIANT
-			name CDATA #REQUIRED
-			default (true|false) "false"
-			version CDATA #REQUIRED
-			aliases CDATA #IMPLIED
-			>
-			
-	<!ELEMENT MAP (MAP_GRAPHIC*)>
-	<!ATTLIST MAP adjacencyURI CDATA #REQUIRED>
-	
-	<!ELEMENT MAP_GRAPHIC EMPTY>
-	<!ATTLIST MAP_GRAPHIC
-			ref IDREF #REQUIRED
-			default (true|false) "false"
-			preferredUnitStyle CDATA #IMPLIED
-			>
-	
-	<!ELEMENT RULEOPTIONS (RULEOPTION+)>
-	<!ELEMENT RULEOPTION EMPTY>
-	<!ATTLIST RULEOPTION	name CDATA #REQUIRED
-				value CDATA #REQUIRED>
-	
-	<!ELEMENT POWER EMPTY>
-	<!ATTLIST POWER name CDATA #REQUIRED
-			active (true|false) "true"
-			adjective CDATA #REQUIRED
-			altnames CDATA #IMPLIED
-			>
-	
-	<!ELEMENT STARTINGTIME EMPTY>
-	<!ATTLIST STARTINGTIME 	turn CDATA #REQUIRED
-				allowBCYears (true|false) "false"
-				>
-	
-	<!ELEMENT VICTORYCONDITIONS (WINNING_SUPPLY_CENTERS?, YEARS_WITHOUT_SC_CAPTURE?, GAME_LENGTH?)>
-	
-	<!ELEMENT WINNING_SUPPLY_CENTERS EMPTY>
-	<!ATTLIST WINNING_SUPPLY_CENTERS value CDATA #REQUIRED>
-	
-	<!ELEMENT YEARS_WITHOUT_SC_CAPTURE EMPTY>
-	<!ATTLIST YEARS_WITHOUT_SC_CAPTURE value CDATA #REQUIRED>
-	
-	<!ELEMENT GAME_LENGTH EMPTY>
-	<!ATTLIST GAME_LENGTH value CDATA #REQUIRED>
-	
-	<!ELEMENT SUPPLYCENTER EMPTY>
-	<!ATTLIST SUPPLYCENTER 	province CDATA #REQUIRED
-				homepower CDATA "none"
-				owner CDATA "none"
-				>
-				
-	<!ELEMENT INITIALSTATE EMPTY>
-	<!ATTLIST INITIALSTATE 	province CDATA #REQUIRED
-				power CDATA #REQUIRED
-				unit CDATA #REQUIRED
-				unitcoast CDATA #IMPLIED
-				>
-]>
-<!-- NOTE: it's very important that the name of the file will be variants.xml, in all lower case -->
-<!-- NOTE: for CDATA escapes, no space between tag and bracket!! -->
+<!DOCTYPE VARIANTS PUBLIC "-//JDIP//VARIANTS DTD//1.0//DEFAULT" "http://jdip.sourceforge.net/dtd/variants.dtd">
 <VARIANTS>
 	<DESCRIPTION><![CDATA[Modern variants.]]></DESCRIPTION> 
 	
@@ -141,12 +67,10 @@
 			<MAP_GRAPHIC ref="defaultMap" default="true" />
 		</MAP>
 		
-		<!-- ruleoptions -->
 		<RULEOPTIONS>
 			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY"/>
 		</RULEOPTIONS>
 		
-		<!-- powers -->
 		<POWER name="Britain" active="true" adjective="British"/>
 		<POWER name="Egypt" active="true" adjective="Egyptian"/>
 		<POWER name="France" active="true" adjective="French"/>
@@ -158,15 +82,12 @@
 		<POWER name="Turkey" active="true" adjective="Turkish"/>
 		<POWER name="Ukraine" active="true" adjective="Ukranian"/>
 		
-		<!-- starting time -->
 		<STARTINGTIME turn="Spring 1994 Movement" />
 		
-		<!-- victory conditions -->
 		<VICTORYCONDITIONS>
 			<WINNING_SUPPLY_CENTERS value="33" />
 		</VICTORYCONDITIONS>
  	 	
-		<!-- supply centers -->
 		<SUPPLYCENTER province="ada" homepower="Turkey" owner="Turkey"/>
 		<SUPPLYCENTER province="ale" homepower="Egypt" owner="Egypt"/>
 		<SUPPLYCENTER province="ank" homepower="Turkey" owner="Turkey"/>
@@ -232,8 +153,6 @@
 		<SUPPLYCENTER province="ven" homepower="Italy" owner="Italy"/>
 		<SUPPLYCENTER province="war" homepower="Poland" owner="Poland"/>
 
-		
-		<!-- unit placement -->
 		<INITIALSTATE province="edi" power="Britain" unit="fleet"/>
 		<INITIALSTATE province="gib" power="Britain" unit="fleet"/>
 		<INITIALSTATE province="liv" power="Britain" unit="fleet"/>
@@ -362,13 +281,11 @@
 			<MAP_GRAPHIC ref="defaultMap" default="true" />
 		</MAP>
 		
-		<!-- ruleoptions -->
 		<RULEOPTIONS>
 			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY"/>
 			<RULEOPTION name="OPTION_WINGS" value="VALUE_WINGS_ENABLED"/>
 		</RULEOPTIONS>
 		
-		<!-- powers -->
 		<POWER name="Britain" active="true" adjective="British"/>
 		<POWER name="Egypt" active="true" adjective="Egyptian"/>
 		<POWER name="France" active="true" adjective="French"/>
@@ -380,18 +297,13 @@
 		<POWER name="Turkey" active="true" adjective="Turkish"/>
 		<POWER name="Ukraine" active="true" adjective="Ukranian"/>
 
-		
-		<!-- starting time -->
 		<STARTINGTIME turn="Spring 1994 Movement" />
 
-		
-		<!-- victory conditions -->
 		<VICTORYCONDITIONS>
 			<WINNING_SUPPLY_CENTERS value="33" />
 		</VICTORYCONDITIONS>
 
  	 	
-		<!-- supply centers -->
 		<SUPPLYCENTER province="ada" homepower="Turkey" owner="Turkey"/>
 		<SUPPLYCENTER province="ale" homepower="Egypt" owner="Egypt"/>
 		<SUPPLYCENTER province="ank" homepower="Turkey" owner="Turkey"/>
@@ -457,8 +369,6 @@
 		<SUPPLYCENTER province="ven" homepower="Italy" owner="Italy"/>
 		<SUPPLYCENTER province="war" homepower="Poland" owner="Poland"/>
 
-		
-		<!-- unit placement -->
 		<INITIALSTATE province="edi" power="Britain" unit="fleet"/>
 		<INITIALSTATE province="gib" power="Britain" unit="fleet"/>
 		<INITIALSTATE province="liv" power="Britain" unit="fleet"/>
@@ -527,12 +437,10 @@
 			<MAP_GRAPHIC ref="defaultMap" default="true" />
 		</MAP>
 		
-		<!-- ruleoptions -->
 		<RULEOPTIONS>
 			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY"/>
 		</RULEOPTIONS>
 		
-		<!-- powers -->
 		<POWER name="Britain" active="true" adjective="British"/>
 		<POWER name="Egypt" active="true" adjective="Egyptian"/>
 		<POWER name="France" active="true" adjective="French"/>
@@ -544,18 +452,12 @@
 		<POWER name="Turkey" active="true" adjective="Turkish"/>
 		<POWER name="Ukraine" active="true" adjective="Ukranian"/>
 
-		
-		<!-- starting time -->
 		<STARTINGTIME turn="Spring 1994 Movement" />
 
-		
-		<!-- victory conditions -->
 		<VICTORYCONDITIONS>
 			<WINNING_SUPPLY_CENTERS value="33" />
 		</VICTORYCONDITIONS>
 
- 	 	
-		<!-- supply centers -->
 		<SUPPLYCENTER province="ada" homepower="Turkey" owner="Turkey"/>
 		<SUPPLYCENTER province="ale" homepower="Egypt" owner="Egypt"/>
 		<SUPPLYCENTER province="ank" homepower="Turkey" owner="Turkey"/>
@@ -621,8 +523,6 @@
 		<SUPPLYCENTER province="ven" homepower="Italy" owner="Italy"/>
 		<SUPPLYCENTER province="war" homepower="Poland" owner="Poland"/>
 
-		
-		<!-- unit placement -->
 		<INITIALSTATE province="edi" power="Ukraine" unit="fleet"/>
 		<INITIALSTATE province="gib" power="Ukraine" unit="fleet"/>
 		<INITIALSTATE province="liv" power="Ukraine" unit="fleet"/>

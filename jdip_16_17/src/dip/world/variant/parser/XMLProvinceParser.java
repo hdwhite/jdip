@@ -25,6 +25,7 @@ package dip.world.variant.parser;
 import dip.world.variant.data.ProvinceData;
 import dip.world.variant.data.BorderData;
 import dip.misc.Log;
+import dip.misc.XMLUtils;
 
 import java.io.*;
 import java.net.*;
@@ -75,8 +76,8 @@ public class XMLProvinceParser implements ProvinceParser
 	// instance variables
 	private Document doc = null;
 	private DocumentBuilder docBuilder = null;
-	private List provinceList = null;
-	private List borderList = null;
+	private final List provinceList;
+	private final List borderList;
 	
 	
 	/** Create an XMLProvinceParser */
@@ -96,13 +97,10 @@ public class XMLProvinceParser implements ProvinceParser
 	public void parse(InputStream is)
 	throws IOException, SAXException
 	{
-		long time = System.currentTimeMillis();
 		provinceList.clear();
 		borderList.clear();
-		
 		doc = docBuilder.parse(is);
 		procProvinceData();
-		Log.printTimed(time, "   province parse time: ");
 	}// parse()
 	
 	
@@ -134,35 +132,44 @@ public class XMLProvinceParser implements ProvinceParser
 	{
 		// find root element
 		Element root = doc.getDocumentElement();
-	
-		// find all BORDER elements. We will use these later, via the borderMap
-		NodeList borderNodes = root.getElementsByTagName(EL_BORDER);
-		for(int i=0; i<borderNodes.getLength(); i++)
+		
+		final Element borderDefs =  XMLUtils.findFirstChild(root, EL_BORDER_DEFINITIONS);
+		if(borderDefs != null)
 		{
-			Element border = (Element) borderNodes.item(i);
-			BorderData bd = new BorderData();
-			bd.setID( border.getAttribute(ATT_ID) );
-			bd.setDescription( border.getAttribute(ATT_DESCRIPTION) );
-			bd.setUnitTypes( border.getAttribute(ATT_UNIT_TYPES) );
-			bd.setFrom( border.getAttribute(ATT_FROM) );
-			bd.setOrderTypes( border.getAttribute(ATT_ORDER_TYPES) );
-			bd.setBaseMoveModifier( border.getAttribute(ATT_BASE_MOVE_MODIFIER) );
-			bd.setYear( border.getAttribute(ATT_YEAR) );
-			bd.setSeason( border.getAttribute(ATT_SEASON) );
-			bd.setPhase( border.getAttribute(ATT_PHASE) );
-			
-			borderList.add(bd);
+			Element border = XMLUtils.getFirstChildElement(borderDefs);
+			while(border != null)
+			{
+				BorderData bd = new BorderData();
+				
+				bd.setID( border.getAttribute(ATT_ID) );
+				bd.setDescription( border.getAttribute(ATT_DESCRIPTION) );
+				bd.setUnitTypes( border.getAttribute(ATT_UNIT_TYPES) );
+				bd.setFrom( border.getAttribute(ATT_FROM) );
+				bd.setOrderTypes( border.getAttribute(ATT_ORDER_TYPES) );
+				bd.setBaseMoveModifier( border.getAttribute(ATT_BASE_MOVE_MODIFIER) );
+				bd.setYear( border.getAttribute(ATT_YEAR) );
+				bd.setSeason( border.getAttribute(ATT_SEASON) );
+				bd.setPhase( border.getAttribute(ATT_PHASE) );
+				borderList.add(bd);
+				
+				border =  XMLUtils.getNextSiblingElement(border);
+			}
 		}
 		
+		ArrayList nameList = new ArrayList(10);
+		ArrayList adjTypeList = new ArrayList(5);
+		ArrayList adjRefList = new ArrayList(5);
+		
 		// find all PROVINCE elements
-		NodeList provinceNodes = root.getElementsByTagName(EL_PROVINCE);
-		for(int i=0; i<provinceNodes.getLength(); i++)
+		Element elProvince = XMLUtils.findFirstChild(root, EL_PROVINCE);
+		while(elProvince != null)
 		{
-			Element elProvince = (Element) provinceNodes.item(i);
 			ProvinceData provinceData = new ProvinceData();
 			
-			// create short/unique name list
-			List nameList = new LinkedList();
+			// clear short / unique name list
+			nameList.clear();
+			adjTypeList.clear();
+			adjRefList.clear();
 			
 			// region attributes
 			provinceData.setFullName( elProvince.getAttribute(ATT_FULLNAME) );
@@ -173,43 +180,50 @@ public class XMLProvinceParser implements ProvinceParser
 			
 			// borders data (optional); a list of references, seperated by commas/spaces
 			String borders = elProvince.getAttribute(ATT_BORDERS).trim();
-			List borderList = new ArrayList();
+			List provBorders = new ArrayList();
 			StringTokenizer st = new StringTokenizer(borders, ", ");
 			
 			while(st.hasMoreTokens())
 			{
-				borderList.add(st.nextToken());
+				provBorders.add(st.nextToken());
 			}
 			
-			provinceData.setBorders(borderList);
+			provinceData.setBorders(provBorders);
 			
-			
-			// adjacency data
-			NodeList adjNodes = elProvince.getElementsByTagName(EL_ADJACENCY);
-			String[] adjTypeNames = new String[adjNodes.getLength()];
-			String[] adjProvinceNames = new String[adjNodes.getLength()];
-			for(int j=0; j<adjNodes.getLength(); j++)
+			// get unique names and adjacency data
+			// (EL_ADJACENCY, EL_UNIQUENAME)
+			Element element = XMLUtils.getFirstChildElement(elProvince);
+			while(element != null)
 			{
-				Element element = (Element) adjNodes.item(j);
-				adjTypeNames[j] = element.getAttribute(ATT_TYPE);
-				adjProvinceNames[j] = element.getAttribute(ATT_REFS);
+				final String name = element.getNodeName();
+				
+				if(EL_UNIQUENAME.equals(name))
+				{
+					nameList.add( element.getAttribute(ATT_NAME) );
+				}
+				else if(EL_ADJACENCY.equals(name))
+				{
+					adjTypeList.add(element.getAttribute(ATT_TYPE));
+					adjRefList.add(element.getAttribute(ATT_REFS));
+				}
+				
+				element =  XMLUtils.getNextSiblingElement(element);
 			}
-			provinceData.setAdjacentProvinceTypes(adjTypeNames);
-			provinceData.setAdjacentProvinceNames(adjProvinceNames);
 			
-			// unique name(s) (if any)
-			adjNodes = elProvince.getElementsByTagName(EL_UNIQUENAME);
-			for(int j=0; j<adjNodes.getLength(); j++)
-			{
-				Element element = (Element) adjNodes.item(j);
-				nameList.add( element.getAttribute(ATT_NAME) );
-			}
+			// set adjacency data
+			assert(adjRefList.size() == adjTypeList.size());
+			provinceData.setAdjacentProvinceTypes((String[]) adjTypeList.toArray(new String[adjTypeList.size()]));
+			provinceData.setAdjacentProvinceNames((String[]) adjRefList.toArray(new String[adjRefList.size()]));
 			
 			// set all short & unique names
+			// (this method copies the list)
 			provinceData.setShortNames(nameList);
 			
 			// add to list
 			provinceList.add(provinceData);
+			
+			// get next element sibling
+			elProvince =  XMLUtils.getNextSiblingElement(elProvince);
 		}
 	}// procProvinceData()
 	

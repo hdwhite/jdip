@@ -168,7 +168,7 @@
 		</javac>
 		
 		<!-- Compile the java code from ${src} into ${build} -->
-		<javac srcdir="${src.dir}" destdir="${build.dir}" includes="dip/**/*.java" excludes="dip/gui/splash.java" source="1.4" debug="true">
+		<javac srcdir="${src.dir}" destdir="${build.dir}" includes="dip/**/*.java" deprecation="on" excludes="dip/gui/splash.java" source="1.4" debug="true">
 			<classpath refid="compile.class.path"/>
 		</javac>
 		

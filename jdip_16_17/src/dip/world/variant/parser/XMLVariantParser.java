@@ -1,4 +1,4 @@
-//t
+//
 //  @(#)XMLVariantParser.java		7/2002
 //
 //  Copyright 2002 Zachary DelProposto. All rights reserved.
@@ -39,6 +39,7 @@ import dip.world.Coast;
 import dip.misc.LRUCache;
 import dip.misc.Utils;
 import dip.misc.Log;
+import dip.misc.XMLUtils;
 
 import java.io.*;
 import java.net.*;
@@ -115,26 +116,6 @@ public class XMLVariantParser implements VariantParser
 	
 	
 	/** Create an XMLVariantParser */
-	/*
-	public XMLVariantParser(boolean isValidating)
-	throws ParserConfigurationException
-	{
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setValidating(isValidating);
-		dbf.setCoalescing(false);
-		dbf.setIgnoringComments(true);
-		
-		docBuilder = dbf.newDocumentBuilder();
-		docBuilder.setErrorHandler(new XMLErrorHandler());
-		
-		provinceParser = new XMLProvinceParser(dbf);
-		
-		variantList = new LinkedList();
-		AdjCache.init(provinceParser);
-	}// XMLVariantParser()
-	*/
-	
-	/** Create an XMLVariantParser */
 	public XMLVariantParser(final DocumentBuilderFactory dbf)
 	throws ParserConfigurationException
 	{
@@ -157,7 +138,8 @@ public class XMLVariantParser implements VariantParser
 	public void parse(InputStream is, URL variantPackageURL)
 	throws IOException, SAXException
 	{
-		Log.println("XMLVariantParser: Parsing: ", variantPackageURL);
+		Log.println("XMLVariantParser().parse(): ", variantPackageURL);
+		
 		long time = System.currentTimeMillis();
 		
 		// cleanup cache (very important to remove references!)
@@ -171,6 +153,7 @@ public class XMLVariantParser implements VariantParser
 		
 		AdjCache.setVariantPackageURL(variantPackageURL);
 		doc = docBuilder.parse(is);
+		
 		procVariants();
 		Log.printTimed(time, "   time: ");
 	}// parse()
@@ -199,13 +182,191 @@ public class XMLVariantParser implements VariantParser
 	
 	
 	
-	
+				
+	/** processes each VARIANT element node */
+	private void procVariantElement(final Element elVariant, final HashMap mapDefTbl)
+	throws IOException, SAXException
+	{
+		Variant variant = new Variant();
+					
+		// VARIANT attributes
+		variant.setName( elVariant.getAttribute(ATT_NAME) );
+		variant.setDefault( Boolean.valueOf(elVariant.getAttribute(ATT_DEFAULT)).booleanValue() );
+		variant.setVersion( parseFloat(elVariant.getAttribute(ATT_VERSION)) ); 
+		variant.setAliases( Utils.parseCSV(elVariant.getAttribute(ATT_ALIASES)) );
+		
+		// description
+		Element element = XMLUtils.findFirstChild(elVariant, EL_DESCRIPTION);
+		checkElement(element, EL_DESCRIPTION, variant.getName());
+		Node text = element.getFirstChild();
+		variant.setDescription( text.getNodeValue() );
+		
+		// starting time
+		element = XMLUtils.findFirstChild(elVariant, EL_STARTINGTIME);
+		checkElement(element, EL_STARTINGTIME, variant.getName());
+		variant.setStartingPhase( Phase.parse(element.getAttribute(ATT_TURN)) );
+		variant.setBCYearsAllowed( Boolean.valueOf(element.getAttribute(ATT_ALLOW_BC_YEARS)).booleanValue() );
+			
+		// if start is BC, and BC years are not allowed, then BC years ARE allowed.
+		if(variant.getStartingPhase().getYear() < 0)
+		{
+			Log.println("WARNING: BC years are used, though not explicitly enabled in variant: ", variant.getName());
+			variant.setBCYearsAllowed(true);
+		}
+		
+		// victory conditions (single, with single subitems)
+		element = XMLUtils.findFirstChild(elVariant, EL_VICTORYCONDITIONS);
+		checkElement(element, EL_VICTORYCONDITIONS, variant.getName());
+		Element vcSubElement = XMLUtils.findFirstChild(element, EL_WINNING_SUPPLY_CENTERS);
+		if(vcSubElement != null)
+		{
+			variant.setNumSCForVictory( parseInt(vcSubElement.getAttribute(ATT_VALUE)) );
+		}
+		
+		vcSubElement = XMLUtils.findFirstChild(element, EL_YEARS_WITHOUT_SC_CAPTURE);
+		if(vcSubElement != null)
+		{
+			variant.setMaxYearsNoSCChange( parseInt(vcSubElement.getAttribute(ATT_VALUE)) );
+		}
+			
+		vcSubElement = XMLUtils.findFirstChild(element, EL_GAME_LENGTH);
+		if(vcSubElement != null)
+		{
+			variant.setMaxGameTimeYears( parseInt(vcSubElement.getAttribute(ATT_VALUE)) );
+		}
+		
+		// powers (multiple)
+		int idx = 0;
+		element = XMLUtils.findFirstChild(elVariant, EL_POWER);
+		List tmpList = new ArrayList(16);
+		while(element != null)
+		{
+			final String name = element.getAttribute(ATT_NAME);
+			final boolean isActive =  Boolean.valueOf( element.getAttribute(ATT_ACTIVE) ).booleanValue();
+			final String adjective = element.getAttribute(ATT_ADJECTIVE);
+			final String[] altNames = Utils.parseCSVXE( element.getAttribute(ATT_ALTNAMES) );
+			final String[] names = new String[altNames.length + 1];
+			names[0] = name;
+			System.arraycopy(altNames, 0, names, 1, altNames.length);
+			
+			Power power = new Power(names, adjective, idx, isActive);
+			tmpList.add(power);
+			
+			element = XMLUtils.findNextSiblingElement(element, EL_POWER);
+			idx++;
+		}
+		variant.setPowers(tmpList);
+		
+		// supply centers
+		element = XMLUtils.findFirstChild(elVariant, EL_SUPPLYCENTER);
+		tmpList = new ArrayList(64);
+		while(element != null)
+		{
+			SupplyCenter supplyCenter = new SupplyCenter();
+			supplyCenter.setProvinceName( element.getAttribute(ATT_PROVINCE) );
+			supplyCenter.setHomePowerName( element.getAttribute(ATT_HOMEPOWER) );
+			supplyCenter.setOwnerName( element.getAttribute(ATT_OWNER) );
+			tmpList.add(supplyCenter);
+			element = XMLUtils.findNextSiblingElement(element, EL_SUPPLYCENTER);
+		}
+		variant.setSupplyCenters(tmpList);
+		
+		// initial state (multiple)
+		element = XMLUtils.findFirstChild(elVariant, EL_INITIALSTATE);
+		tmpList = new ArrayList(64);
+		while(element != null)
+		{
+			InitialState initialState = new InitialState();
+			initialState.setProvinceName( element.getAttribute(ATT_PROVINCE) );
+			initialState.setPowerName( element.getAttribute(ATT_POWER) );
+			initialState.setUnitType( Unit.Type.parse(element.getAttribute(ATT_UNIT)) );
+			initialState.setCoast( Coast.parse(element.getAttribute(ATT_UNITCOAST)) );
+			tmpList.add(initialState);
+			element = XMLUtils.findNextSiblingElement(element, EL_INITIALSTATE);
+		}
+		variant.setInitialStates(tmpList);
+		
+		// MAP element
+		final Element mapElement = XMLUtils.findFirstChild(elVariant, EL_MAP);
+		
+		// MAP adjacency URI; process it using ProvinceData parser
+		try
+		{
+			//long time = System.currentTimeMillis();
+			URI adjacencyURI = new URI(mapElement.getAttribute(ATT_ADJACENCYURI));
+			variant.setProvinceData( AdjCache.getProvinceData(adjacencyURI) );
+			variant.setBorderData( AdjCache.getBorderData(adjacencyURI) );
+			//Log.printTimed(time, "    Includes province acquisition time: ");
+		}
+		catch(URISyntaxException e)
+		{
+			throw new IOException(e.getMessage());
+		}
+		
+		// MAP::MAP_GRAPHIC element (multiple)
+		element = XMLUtils.findFirstChild(mapElement, EL_MAP_GRAPHIC);
+		tmpList = new ArrayList(8);
+		while(element != null)
+		{
+			final String refID = element.getAttribute(ATT_REF);
+			final boolean isDefault = Boolean.valueOf(element.getAttribute(ATT_DEFAULT)).booleanValue();
+			final String preferredUnitStyle = element.getAttribute(ATT_PREFERRED_UNIT_STYLE);
+			
+			// lookup; if we didn't find it, throw an exception
+			MapDef md = (MapDef) mapDefTbl.get(refID);
+			if(md == null)
+			{
+				throw new IOException("MAP_GRAPHIC refers to unknown ID: \""+refID+"\"");						
+			}
+			
+			// create the MapGraphic object
+			MapGraphic mapGraphic = new MapGraphic(
+				md.getMapURI(),
+				isDefault,
+				md.getTitle(),
+				md.getDescription(),
+				md.getThumbURI(),
+				("".equals(preferredUnitStyle)) ? md.getPrefUnitStyle() : preferredUnitStyle );
+			
+			tmpList.add(mapGraphic);
+			
+			element = XMLUtils.findNextSiblingElement(element, EL_MAP_GRAPHIC);
+		}
+		variant.setMapGraphics(tmpList);
+		
+		
+		// rule options (if any have been set)
+		// this element is optional.
+		element = XMLUtils.findFirstChild(elVariant, EL_RULEOPTIONS);
+		tmpList = new ArrayList(8);
+		if(element != null)
+		{
+			
+			// all subElements are always RULEOPTION elements
+			Element child =  XMLUtils.getFirstChildElement(element);
+			while(child != null)
+			{
+				Variant.NameValuePair nvp = new Variant.NameValuePair(
+												child.getAttribute(ATT_NAME),
+												child.getAttribute(ATT_VALUE)
+											);
+				tmpList.add(nvp);
+				child =  XMLUtils.getNextSiblingElement(child);
+			}
+		}
+		variant.setRuleOptionNVPs(tmpList);
+		
+		// add variant to list of variants
+		variantList.add(variant);
+	}// procVariantElement
 	
 	
 	/** Process the Variant list description file */
 	private void procVariants()
 	throws IOException, SAXException
 	{
+		//long time = System.currentTimeMillis();
+		
 		// setup map definition ID hashmap
 		HashMap mapDefTable = new HashMap(7);	// maps String ID -> MapDef
 		
@@ -213,236 +374,65 @@ public class XMLVariantParser implements VariantParser
 		// find the root element (VARIANTS), and all VARIANT elements underneath.
 		Element root = doc.getDocumentElement();
 		
-		// get map definitions (at least one, under VARIANT)
-		NodeList mapDefEls = root.getElementsByTagName(EL_MAP_DEFINITION);
-		for(int i=0; i<mapDefEls.getLength(); i++)
+		// process children (these are only MAP_DEFINITION and VARIANT elements)
+		Element rootChild =  XMLUtils.getFirstChildElement(root);
+		while(rootChild != null)
 		{
-			Element elMapDef = (Element) mapDefEls.item(i);
+			final String name = rootChild.getNodeName();
 			
-			// get description
-			String description = null;
-			Element element = getSingleElementByName(elMapDef, EL_DESCRIPTION);
-			if(element != null)
+			if(EL_VARIANT.equals(name))
 			{
-				Node text = element.getFirstChild();
-				description = text.getNodeValue();
+				procVariantElement(rootChild, mapDefTable);
+			}
+			else if(EL_MAP_DEFINITION.equals(name))
+			{
+				// remember, MAP_DEFINITION elements should come first
+				
+				// get description, if present
+				String description = null;
+				Element el =  XMLUtils.getFirstChildElement(rootChild);
+				if(EL_DESCRIPTION.equals(el.getNodeName()))
+				{
+					Node text = el.getFirstChild();
+					description = text.getNodeValue();
+				}
+				
+				// create MapDef
+				MapDef md = new MapDef( 
+					rootChild.getAttribute(ATT_ID),
+					rootChild.getAttribute(ATT_TITLE),
+					rootChild.getAttribute(ATT_URI),
+					rootChild.getAttribute(ATT_THUMBURI),
+					rootChild.getAttribute(ATT_PREFERRED_UNIT_STYLE),
+					description );
+				
+				// if no title, error!
+				if("".equals(md.getTitle()))
+				{
+					throw new IOException("map id="+md.getID()+" missing a title (name)");
+				}
+				
+				// map it.
+				mapDefTable.put(md.getID(), md);
 			}
 			
-			// create MapDef
-			MapDef md = new MapDef( 
-				elMapDef.getAttribute(ATT_ID),
-				elMapDef.getAttribute(ATT_TITLE),
-				elMapDef.getAttribute(ATT_URI),
-				elMapDef.getAttribute(ATT_THUMBURI),
-				elMapDef.getAttribute(ATT_PREFERRED_UNIT_STYLE),
-				description );
-			
-			// if no title, error!
-			if("".equals(md.getTitle()))
-			{
-				throw new IOException("map id="+md.getID()+" missing a title (name)");
-			}
-			
-			// map it.
-			mapDefTable.put(md.getID(), md);
+			rootChild =  XMLUtils.getNextSiblingElement(rootChild); 
 		}
 		
-		// search for variant data
-		NodeList variantElements = root.getElementsByTagName(EL_VARIANT);
-		for(int i=0; i<variantElements.getLength(); i++)
-		{
-			Variant variant = new Variant();
-			Element elVariant = (Element) variantElements.item(i);
-			
-			// VARIANT attributes
-			variant.setName( elVariant.getAttribute(ATT_NAME) );
-			variant.setDefault( Boolean.valueOf(elVariant.getAttribute(ATT_DEFAULT)).booleanValue() );
-			variant.setVersion( parseFloat(elVariant.getAttribute(ATT_VERSION)) ); 
-			variant.setAliases( Utils.parseCSV(elVariant.getAttribute(ATT_ALIASES)) );
-			
-			// description
-			Element element = getSingleElementByName(elVariant, EL_DESCRIPTION);
-			checkElement(element, EL_DESCRIPTION);
-			Node text = element.getFirstChild();
-			variant.setDescription( text.getNodeValue() );
-			
-			// starting time
-			element = getSingleElementByName(elVariant, EL_STARTINGTIME);
-			checkElement(element, EL_STARTINGTIME);
-			variant.setStartingPhase( Phase.parse(element.getAttribute(ATT_TURN)) );
-			variant.setBCYearsAllowed( Boolean.valueOf(element.getAttribute(ATT_ALLOW_BC_YEARS)).booleanValue() );
-			
-			// if start is BC, and BC years are not allowed, then BC years ARE allowed.
-			if(variant.getStartingPhase().getYear() < 0)
-			{
-				variant.setBCYearsAllowed(true);
-			}
-			
-			// victory conditions (single, with single subitems)
-			element = getSingleElementByName(elVariant, EL_VICTORYCONDITIONS);
-			checkElement(element, EL_VICTORYCONDITIONS);
-			Element vcSubElement = getSingleElementByName(element, EL_WINNING_SUPPLY_CENTERS);
-			if(vcSubElement != null)
-			{
-				variant.setNumSCForVictory( parseInt(vcSubElement.getAttribute(ATT_VALUE)) );
-			}
-			
-			vcSubElement = getSingleElementByName(element, EL_YEARS_WITHOUT_SC_CAPTURE);
-			if(vcSubElement != null)
-			{
-				variant.setMaxYearsNoSCChange( parseInt(vcSubElement.getAttribute(ATT_VALUE)) );
-			}
-			
-			vcSubElement = getSingleElementByName(element, EL_GAME_LENGTH);
-			if(vcSubElement != null)
-			{
-				variant.setMaxGameTimeYears( parseInt(vcSubElement.getAttribute(ATT_VALUE)) );
-			}
-			
-			
-			// powers (multiple)
-			NodeList nodes = elVariant.getElementsByTagName(EL_POWER);
-			final int nodeListLen = nodes.getLength();
-			List powerList = new ArrayList(nodeListLen);
-			for(int j=0; j<nodeListLen; j++)
-			{
-				element = (Element) nodes.item(j);
-				String name = element.getAttribute(ATT_NAME);
-				final boolean isActive =  Boolean.valueOf( element.getAttribute(ATT_ACTIVE) ).booleanValue();
-				String adjective = element.getAttribute(ATT_ADJECTIVE);
-				String[] altNames = Utils.parseCSVXE( element.getAttribute(ATT_ALTNAMES) );
-				
-				String[] names = new String[altNames.length + 1];
-				names[0] = name;
-				System.arraycopy(altNames, 0, names, 1, altNames.length);
-				
-				Power power = new Power(names, adjective, j, isActive);
-				powerList.add(power);
-			}
-			
-			variant.setPowers(powerList);
-			
-			
-			// supply centers (multiple)
-			nodes = elVariant.getElementsByTagName(EL_SUPPLYCENTER);
-			List supplyCenterList = new ArrayList(nodes.getLength());
-			for(int j=0; j<nodes.getLength(); j++)
-			{
-				element = (Element) nodes.item(j);
-				SupplyCenter supplyCenter = new SupplyCenter();
-				supplyCenter.setProvinceName( element.getAttribute(ATT_PROVINCE) );
-				supplyCenter.setHomePowerName( element.getAttribute(ATT_HOMEPOWER) );
-				supplyCenter.setOwnerName( element.getAttribute(ATT_OWNER) );
-				supplyCenterList.add(supplyCenter);
-			}
-			variant.setSupplyCenters(supplyCenterList);
-			
-			// initial state (multiple)
-			nodes = elVariant.getElementsByTagName(EL_INITIALSTATE);
-			List stateList = new ArrayList(nodes.getLength());
-			for(int j=0; j<nodes.getLength(); j++)
-			{
-				element = (Element) nodes.item(j);
-				InitialState initialState = new InitialState();
-				initialState.setProvinceName( element.getAttribute(ATT_PROVINCE) );
-				initialState.setPowerName( element.getAttribute(ATT_POWER) );
-				initialState.setUnitType( Unit.Type.parse(element.getAttribute(ATT_UNIT)) );
-				initialState.setCoast( Coast.parse(element.getAttribute(ATT_UNITCOAST)) );
-				stateList.add(initialState);
-			}
-			variant.setInitialStates(stateList);
-			
-			// MAP element and children
-			element = getSingleElementByName(elVariant, EL_MAP);
-			
-			// MAP adjacency URI; process it using ProvinceData parser
-			try
-			{
-				URI adjacencyURI = new URI(element.getAttribute(ATT_ADJACENCYURI));
-				variant.setProvinceData( AdjCache.getProvinceData(adjacencyURI) );
-				variant.setBorderData( AdjCache.getBorderData(adjacencyURI) );
-			}
-			catch(URISyntaxException e)
-			{
-				throw new IOException(e.getMessage());
-			}
-			
-			
-			// MAP_GRAPHIC element (multiple)
-			nodes = element.getElementsByTagName(EL_MAP_GRAPHIC);
-			List graphicList = new ArrayList(nodes.getLength());
-			for(int j=0; j<nodes.getLength(); j++)
-			{
-				Element mgElement = (Element) nodes.item(j);
-				final String refID = mgElement.getAttribute(ATT_REF);
-				final boolean isDefault = Boolean.valueOf(mgElement.getAttribute(ATT_DEFAULT)).booleanValue();
-				final String preferredUnitStyle = mgElement.getAttribute(ATT_PREFERRED_UNIT_STYLE);
-				
-				// lookup; if we didn't find it, throw an exception
-				MapDef md = (MapDef) mapDefTable.get(refID);
-				if(md == null)
-				{
-					throw new IOException("MAP_GRAPHIC refers to unknown ID: \""+refID+"\"");						
-				}
-				
-				// create the MapGraphic object
-				MapGraphic mapGraphic = new MapGraphic(
-					md.getMapURI(),
-					isDefault,
-					md.getTitle(),
-					md.getDescription(),
-					md.getThumbURI(),
-					("".equals(preferredUnitStyle)) ? md.getPrefUnitStyle() : preferredUnitStyle );
-				
-				graphicList.add(mapGraphic);
-			}
-			variant.setMapGraphics( graphicList );
-			
-			// rule options (if any have been set)
-			// this element is optional.
-			element = getSingleElementByName(elVariant, EL_RULEOPTIONS);
-			if(element != null)
-			{
-				nodes = element.getElementsByTagName(EL_RULEOPTION);
-				List ruleNVPList = new ArrayList(nodes.getLength());
-				for(int j=0; j<nodes.getLength(); j++)
-				{
-					Element rElement = (Element) nodes.item(j);
-					Variant.NameValuePair nvp = new Variant.NameValuePair(
-													rElement.getAttribute(ATT_NAME),
-													rElement.getAttribute(ATT_VALUE)
-												);
-					ruleNVPList.add(nvp);
-				}
-				variant.setRuleOptionNVPs( ruleNVPList );
-			}
-			else
-			{
-				variant.setRuleOptionNVPs( new ArrayList(0) );
-			}
-			
-			// add variant to list of variants
-			variantList.add(variant);
-		}// for(i)
+		//Log.printTimed(time, "   procVariants() time: ");
 	}// procVariants()
 	
 	
 	/** Checks that an element is present */
-	private void checkElement(Element element, String name)
+	private void checkElement(Element element, String name, String variant)
 	throws SAXException
 	{
 		if(element == null)
 		{
-			throw new SAXException(Utils.getLocalString(ERR_NO_ELEMENT, name));
+			throw new SAXException(Utils.getLocalString(ERR_NO_ELEMENT, name, variant));
 		}
 	}// checkElement()
 	
-	/** Get an Element by name; only returns a single element. */
-	private Element getSingleElementByName(Element parent, String name)
-	{
-		NodeList nodes = parent.getElementsByTagName(name);
-		return (Element) nodes.item(0);
-	}// getSingleElementByName()
 	
 	
 	/** Integer parser; throws an exception if number cannot be parsed. */
@@ -495,7 +485,7 @@ public class XMLVariantParser implements VariantParser
 	*	same adjacency data).
 	*	<p>
 	*	NOTE: this depends on the XMLVariantParser variable "adjCache", since inner classes
-	*	cannot have statics (unless they inner class is static, which just creates more problems;
+	*	cannot have statics (unless the inner class is static, which just creates more problems;
 	*	this is a simpler solution)
 	*
 	*/
@@ -560,7 +550,6 @@ public class XMLVariantParser implements VariantParser
 			// see if we already have the URI data cached.
 			if(adjCache.get(adjacencyURI) != null)
 			{
-				//Log.println("  AdjCache: using cached adjacency data: ", adjacencyURI);
 				return (AdjCache) adjCache.get(adjacencyURI);
 			}
 			
@@ -572,7 +561,7 @@ public class XMLVariantParser implements VariantParser
 			}
 			
 			// parse resolved URI
-			//Log.println("  AdjCache: not in cache: ", adjacencyURI);
+			//Log.println("  AdjCache: adding to cache...: ", adjacencyURI);
 			InputStream is = null;
 			try
 			{

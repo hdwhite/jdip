@@ -72,6 +72,70 @@ public class XMLUtils
 		return null;
 	}// findChildMatching()
 	
+	/** Finds the first child under the root with the given element name */
+	public static Element findFirstChild(Node root, String name)
+	{
+		Node node = root.getFirstChild();
+		while(node != null)
+		{
+			if( node.getNodeType() == Node.ELEMENT_NODE
+				&& name.equals(node.getNodeName()) )
+			{
+				return (Element) node;
+			}
+			
+			node = node.getNextSibling();
+		}
+		
+		return null;
+	}// findFirstChild()
+	
+	
+	/** Finds the next matching sibling element */
+	public static Element findNextSiblingElement(Node node, String name)
+	{
+		Node sib = node.getNextSibling();
+		while(sib != null)
+		{
+			if( sib.getNodeType() == Node.ELEMENT_NODE
+				&& name.equals(sib.getNodeName()) )
+			{
+				return (Element) sib;
+			}
+			
+			sib = sib.getNextSibling();
+		}
+		return null;
+	}// findNextSiblingElement()
+	
+	
+	/** Get the first child element */
+	public static Element getFirstChildElement(Node root)
+	{
+		Node node = root.getFirstChild();
+		while(node != null)
+		{
+			if(node.getNodeType() == Node.ELEMENT_NODE)
+			{
+				return (Element) node;
+			}
+			
+			node = node.getNextSibling();
+		}
+		
+		return null;
+	}// getFirstChildElement()	
+	
+	/** Get the next sibling element */
+	public static Element getNextSiblingElement(Node node)
+	{
+		Node sib = node.getNextSibling();
+		if(sib != null && sib.getNodeType() == Node.ELEMENT_NODE)
+		{
+			return (Element) sib;
+		}
+		return null;
+	}// getNextSiblingElement()	
 	
 	
 }// class XMLUtils

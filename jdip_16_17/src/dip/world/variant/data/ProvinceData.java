@@ -60,7 +60,7 @@ public class ProvinceData
 	/** Set all adjacent province types. */
 	public void setAdjacentProvinceTypes(String[] values) 	{ adj_types = values; }
 	
-	/** Set all short (abbreviated) names, from a List. */
+	/** Set all short (abbreviated) names, from a List. The list is copied. */
 	public void setShortNames(List list) 				
 	{ 
 		shortNames = (String[]) list.toArray(new String[list.size()]); 

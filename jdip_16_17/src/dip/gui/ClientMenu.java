@@ -30,6 +30,7 @@ import dip.world.World;
 import dip.tool.ToolManager;
 import dip.tool.Tool;
 import dip.gui.map.MapRenderer2;
+import dip.misc.Log;
 
 import java.io.File;
 import java.util.HashMap;
@@ -1126,7 +1127,6 @@ public class ClientMenu
 		{
 			throw new IllegalArgumentException("NoSuchMethodException: "+methodName);
 		}
-		
 		
 		// remove any existing listeners
 		ActionListener[] listeners = menuItem.getActionListeners();

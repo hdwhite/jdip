@@ -22,6 +22,7 @@
 //
 package dip.misc;
 
+import dip.gui.ClientMenu;
 import dip.gui.dialog.ErrorDialog;
 import dip.gui.swing.SwingWorker;
 
@@ -65,8 +66,13 @@ public class Help
 	*	for the given Locale. If a Help file cannot be found, an
 	*	error message is displayed, and help will be unavailable.
 	*/
-	public synchronized static void init()
+	public synchronized static void init(final ClientMenu cm)
 	{
+		if(cm == null)
+		{
+			throw new IllegalArgumentException();
+		}
+		
 		loaderThread = new SwingWorker()
 		{
 			public Object construct()
@@ -91,6 +97,12 @@ public class Help
 				
 				keeper.helpBroker = keeper.helpSet.createHelpBroker("main_help_window");
 				keeper.helpBroker.initPresentation();
+				
+				// enable menu help
+				keeper.helpBroker.enableHelpOnButton(
+					cm.getMenuItem(ClientMenu.HELP_CONTENTS), 
+					Help.HelpID.Contents.toString(), null);
+				
 				Log.printTimed(time, "Help construct() complete: ");
 				return keeper;
 			}// construct()

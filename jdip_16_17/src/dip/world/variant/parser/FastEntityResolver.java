@@ -23,10 +23,14 @@
 package dip.world.variant.parser;
 
 import dip.misc.Log;
+import dip.misc.Utils;
+import dip.misc.LRUCache;
 
 import java.io.StringReader;
+import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import org.xml.sax.EntityResolver;
+import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 /**
 *	Resolves Entity definitions to an empty InputSource, unless validation
@@ -38,6 +42,16 @@ public class FastEntityResolver implements EntityResolver
 {
 	private final boolean isValidating;
 	
+	private static final String[] SUPPORTED_DTDS = {
+		"-//JDIP//VARIANTS DTD//1.0//DEFAULT",
+		"-//JDIP//PROVINCES DTD//1.0//DEFAULT"
+	};
+	
+	private static final String[] SUPPORTED_DTD_LOCATIONS = 
+	{
+		"resource/common/dtd/variants.dtd",
+		"resource/common/dtd/provinces.dtd"
+	};
 	
 	
 	/** Construct a FastEntityResolver */
@@ -59,25 +73,48 @@ public class FastEntityResolver implements EntityResolver
 	
 	/** Resolve the Entity */
 	public InputSource resolveEntity(String publicID, String systemID)
+	throws SAXException, IOException	
 	{
-		if(!isValidating)
+		InputSource is = loadDTD(publicID, systemID);
+		
+		if(is == null && !isValidating)
 		{
 			// log the request
 			Log.println("XML:Entity resolution ignored: ", publicID, "; ", systemID);
 		
 			// return an empty InputSource
-			InputSource is = new InputSource(new StringReader(""));
+			is = new InputSource(new StringReader(""));
 			is.setPublicId(publicID);
 			is.setSystemId(systemID);
 			return is;
 		}
 		
-		return null;	// default entity handling
+		// by default, return null, or the loaded DTD
+		return is;
 	}// resolveEntity()
 	
 	
-	
-	
+	// TODO: implement caching. 
+	private static InputSource loadDTD(String publicID, String systemID)
+	throws IOException
+	{
+		InputSource is = null;
+		
+		for(int i=0; i<SUPPORTED_DTDS.length; i++)
+		{
+			if(publicID.equals(SUPPORTED_DTDS[i]))
+			{
+				is = new InputSource(
+					Utils.getInputStreamReader(SUPPORTED_DTD_LOCATIONS[i])
+				);
+				is.setPublicId(publicID);
+				is.setSystemId(systemID);
+				return is;
+			}
+		}
+		
+		return null;
+	}// loadDTD()
 	
 	
 }// class FastEntityResolver

@@ -135,20 +135,19 @@ public class XMLSymbolParser implements SymbolParser
 		symbolPack = new SymbolPack();
 		
 		// find root element
-		Element root = doc.getDocumentElement();	// root: EL_SYMBOLS
+		final Element root = doc.getDocumentElement();	// root: EL_SYMBOLS
 		symbolPack.setName( root.getAttribute(ATT_NAME).trim() );
 		symbolPack.setVersion( parseFloat(root, ATT_VERSION) );
 		symbolPack.setThumbnailURI( root.getAttribute(ATT_THUMBURI).trim() );
 		symbolPack.setSVGURI( root.getAttribute(ATT_SVGURI).trim() );
 		
 		// parse description
-		Element element = getSingleElementByName(root, EL_DESCRIPTION);
+		Element element = XMLUtils.findFirstChild(root, EL_DESCRIPTION);
 		if(element != null)
 		{
 			Node text = element.getFirstChild();
 			symbolPack.setDescription( text.getNodeValue() );
 		}
-		
 		
 		// setup a hashmap: maps symbol names (case-preserved) to 
 		// scale factors (Float). If hashmap is empty, we have no
@@ -156,18 +155,15 @@ public class XMLSymbolParser implements SymbolParser
 		HashMap scaleMap = new HashMap();
 		
 		// is SCALING element present? if so, parse it.
-		NodeList scalingNodes = root.getElementsByTagName(EL_SCALING);
-		if(scalingNodes.getLength() == 1)
+		element = XMLUtils.findFirstChild(root, EL_SCALING);
+		if(element != null)
 		{
-			NodeList scNodes = ((Element) scalingNodes.item(0)).getElementsByTagName(EL_SCALE);
-			for(int i=0; i<scNodes.getLength(); i++)
-			{
-				Element elScale = (Element) scNodes.item(i);
-				scaleMap.put(
-					elScale.getAttribute(ATT_NAME).trim(),
-					parseScaleFactor(elScale, ATT_VALUE)
-				);
-			}
+			// only SCALE elements underneath.
+			Element child = XMLUtils.getFirstChildElement(element);
+			scaleMap.put(
+				child.getAttribute(ATT_NAME).trim(),
+				parseScaleFactor(child, ATT_VALUE)
+			);
 		}
 		
 		// extract symbol SVG into symbols
@@ -308,14 +304,6 @@ public class XMLSymbolParser implements SymbolParser
 	}// parseScaleFactor()
 	
 	
-	/** Get an Element by name; only returns a single element. */
-	private Element getSingleElementByName(Element parent, String name)
-	{
-		NodeList nodes = parent.getElementsByTagName(name);
-		return (Element) nodes.item(0);
-	}// getSingleElementByName()
-	
-	
 	/**
 	*	Searches an XML document for Elements that have a given non-empty attribute.
 	*	The Elements are then put into a HashMap, which is indexed by the attribute 
@@ -365,13 +353,11 @@ public class XMLSymbolParser implements SymbolParser
 		
 		// check if current node has any children
 		// if so, iterate through & recursively call this method
-		NodeList children = node.getChildNodes();
-		if(children != null)
+		Node child = node.getFirstChild();
+		while(child != null)
 		{
-			for(int i=0; i<children.getLength(); i++)
-			{
-				elementMapperWalker(map, children.item(i), attrName);
-			}
+			elementMapperWalker(map, child, attrName);
+			child = child.getNextSibling();
 		}
 	}// elementMapperWalker()
 	

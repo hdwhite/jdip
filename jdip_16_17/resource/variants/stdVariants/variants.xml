@@ -1,77 +1,5 @@
-<?xml version="1.0" standalone="yes"?>
-<!DOCTYPE VARIANTS [
-	<!ELEMENT VARIANTS (DESCRIPTION, MAP_DEFINITION+, VARIANT+)>
-	
-	<!ELEMENT DESCRIPTION (#PCDATA)>
-	
-	<!ELEMENT MAP_DEFINITION (DESCRIPTION?)>
-	<!ATTLIST MAP_DEFINITION 
-		id ID #REQUIRED
-		title CDATA #REQUIRED
-		URI CDATA #REQUIRED
-		thumbURI CDATA #REQUIRED
-		preferredUnitStyle CDATA #IMPLIED
-		>
-	
-	<!ELEMENT VARIANT (DESCRIPTION, MAP, RULEOPTIONS?, POWER+, STARTINGTIME, VICTORYCONDITIONS, SUPPLYCENTER+, INITIALSTATE*)>
-	<!ATTLIST VARIANT
-			name CDATA #REQUIRED
-			default (true|false) "false"
-			version CDATA #REQUIRED
-			aliases CDATA #IMPLIED
-			>
-			
-	<!ELEMENT MAP (MAP_GRAPHIC*)>
-	<!ATTLIST MAP adjacencyURI CDATA #REQUIRED>
-	
-	<!ELEMENT MAP_GRAPHIC EMPTY>
-	<!ATTLIST MAP_GRAPHIC
-			ref IDREF #REQUIRED
-			default (true|false) "false"
-			preferredUnitStyle CDATA #IMPLIED
-			>
-	
-	<!ELEMENT RULEOPTIONS (RULEOPTION+)>
-	<!ELEMENT RULEOPTION EMPTY>
-	<!ATTLIST RULEOPTION	name CDATA #REQUIRED
-				value CDATA #REQUIRED>
-	
-	<!ELEMENT POWER EMPTY>
-	<!ATTLIST POWER name CDATA #REQUIRED
-			active (true|false) "true"
-			adjective CDATA #REQUIRED
-			altnames CDATA #IMPLIED
-			>
-	
-	<!ELEMENT STARTINGTIME EMPTY>
-	<!ATTLIST STARTINGTIME 	turn CDATA #REQUIRED
-				allowBCYears (true|false) "false"
-				>
-	
-	<!ELEMENT VICTORYCONDITIONS (WINNING_SUPPLY_CENTERS?, YEARS_WITHOUT_SC_CAPTURE?, GAME_LENGTH?)>
-	
-	<!ELEMENT WINNING_SUPPLY_CENTERS EMPTY>
-	<!ATTLIST WINNING_SUPPLY_CENTERS value CDATA #REQUIRED>
-	
-	<!ELEMENT YEARS_WITHOUT_SC_CAPTURE EMPTY>
-	<!ATTLIST YEARS_WITHOUT_SC_CAPTURE value CDATA #REQUIRED>
-	
-	<!ELEMENT GAME_LENGTH EMPTY>
-	<!ATTLIST GAME_LENGTH value CDATA #REQUIRED>
-	
-	<!ELEMENT SUPPLYCENTER EMPTY>
-	<!ATTLIST SUPPLYCENTER 	province CDATA #REQUIRED
-				homepower CDATA "none"
-				owner CDATA "none"
-				>
-				
-	<!ELEMENT INITIALSTATE EMPTY>
-	<!ATTLIST INITIALSTATE 	province CDATA #REQUIRED
-				power CDATA #REQUIRED
-				unit CDATA #REQUIRED
-				unitcoast CDATA #IMPLIED
-				>
-]>
+<?xml version="1.0"?>
+<!DOCTYPE VARIANTS PUBLIC "-//JDIP//VARIANTS DTD//1.0//DEFAULT" "http://jdip.sourceforge.net/dtd/variants.dtd">
 <VARIANTS>
 	<DESCRIPTION><![CDATA[The main variant list for jDip]]></DESCRIPTION> 
 	
@@ -113,10 +41,11 @@
 			<MAP_GRAPHIC ref="simple" />
 			<MAP_GRAPHIC ref="topo" />
 		</MAP>
-		<!-- this is the default, but it's here just as an example -->
+
 		<RULEOPTIONS>
 			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
 		</RULEOPTIONS>
+
 		<POWER name="France" active="true" adjective="French" /> 
 		<POWER name="Austria" active="true" adjective="Austrian" /> 
 		<POWER name="Turkey" active="true" adjective="Turkish" /> 
@@ -130,7 +59,7 @@
 			<YEARS_WITHOUT_SC_CAPTURE value="7" />
 			<GAME_LENGTH value="35" />
 		</VICTORYCONDITIONS>
- 	 	<!-- supply centers -->
+
 		<SUPPLYCENTER province="ank" homepower="turkey" owner="turkey"/>
 		<SUPPLYCENTER province="bel" />
 		<SUPPLYCENTER province="ber" homepower="germany" owner="germany"/>
@@ -165,7 +94,7 @@
 	 	<SUPPLYCENTER province="ven" homepower="italy" owner="italy"/>
 		<SUPPLYCENTER province="vie" homepower="austria" owner="austria"/>
 	 	<SUPPLYCENTER province="war" homepower="russia" owner="russia"/>
-		<!-- unit placement -->
+
 		<INITIALSTATE province="ank" power="turkey" unit="fleet" />
 		<INITIALSTATE province="ber" power="germany" unit="army" />
 		<INITIALSTATE province="bre" power="france" unit="fleet" />
@@ -271,7 +200,7 @@
 			<YEARS_WITHOUT_SC_CAPTURE value="7" />
 			<GAME_LENGTH value="35" />
 		</VICTORYCONDITIONS>
-		<!-- supply centers -->
+
 		<SUPPLYCENTER province="ank" homepower="turkey" owner="turkey"/>
 		<SUPPLYCENTER province="bel" />
 		<SUPPLYCENTER province="ber" homepower="germany" owner="germany"/>
@@ -306,7 +235,7 @@
 	 	<SUPPLYCENTER province="ven" homepower="italy" owner="italy"/>
 		<SUPPLYCENTER province="vie" homepower="austria" owner="austria"/>
 	 	<SUPPLYCENTER province="war" homepower="russia" owner="russia"/>
-  		<!-- units -->
+
 		<INITIALSTATE province="ank" power="turkey" unit="fleet" />
 		<INITIALSTATE province="ber" power="germany" unit="army" />
 		<INITIALSTATE province="bre" power="france" unit="fleet" />
@@ -353,7 +282,7 @@
 			<YEARS_WITHOUT_SC_CAPTURE value="7" />
 			<GAME_LENGTH value="35" />
 		</VICTORYCONDITIONS>
-		<!-- supply centers -->
+
 		<SUPPLYCENTER province="ank" homepower="turkey" owner="turkey"/>
 		<SUPPLYCENTER province="bel" />
 		<SUPPLYCENTER province="ber" homepower="germany" owner="germany"/>
@@ -388,7 +317,7 @@
 	 	<SUPPLYCENTER province="ven" homepower="italy" owner="italy"/>
 		<SUPPLYCENTER province="vie" homepower="austria" owner="austria"/>
 	 	<SUPPLYCENTER province="war" homepower="russia" owner="russia"/>
-  		<!-- unit placement -->
+
 		<INITIALSTATE province="ank" power="turkey" unit="fleet" />
 		<INITIALSTATE province="ber" power="germany" unit="army" />
 		<INITIALSTATE province="bre" power="france" unit="fleet" />
@@ -446,7 +375,7 @@
 			<YEARS_WITHOUT_SC_CAPTURE value="7" />
 			<GAME_LENGTH value="35" />
 		</VICTORYCONDITIONS>
-		<!-- supply centers -->
+
 		<SUPPLYCENTER province="ank" homepower="turkey" />
 		<SUPPLYCENTER province="bel" />
 		<SUPPLYCENTER province="ber" homepower="germany" /> 
@@ -481,7 +410,7 @@
 	 	<SUPPLYCENTER province="ven" homepower="italy" />
 		<SUPPLYCENTER province="vie" homepower="austria" />
 	 	<SUPPLYCENTER province="war" homepower="russia" /> 
-		<!-- unit placement -->
+
 		<INITIALSTATE province="bre" power="france" unit="army" />
 		<INITIALSTATE province="edi" power="britain" unit="fleet" />
 		<INITIALSTATE province="kie" power="germany" unit="army" />
@@ -516,7 +445,7 @@
 		<VICTORYCONDITIONS>
 			<WINNING_SUPPLY_CENTERS value="19" />
 		</VICTORYCONDITIONS>
-		<!-- supply centers -->
+
 		<SUPPLYCENTER province="ank" homepower="turkey" owner="turkey"/>
 		<SUPPLYCENTER province="bel" />
 		<SUPPLYCENTER province="ber" homepower="germany" owner="germany"/>
@@ -551,10 +480,10 @@
 	 	<SUPPLYCENTER province="ven" homepower="italy" owner="italy"/>
 		<SUPPLYCENTER province="vie" homepower="austria" owner="austria"/>
 	 	<SUPPLYCENTER province="war" homepower="russia" owner="russia"/>
-	 	<SUPPLYCENTER province="cly" homepower="britain" owner="britain"/> 	<!-- variant: added -->
-		<SUPPLYCENTER province="wal" homepower="britain" owner="britain"/>	<!-- variant: added -->
-		<SUPPLYCENTER province="yor" homepower="britain" owner="britain"/>	<!-- variant: added -->
-		<!-- unit placement -->
+	 	<SUPPLYCENTER province="cly" homepower="britain" owner="britain"/> 	
+		<SUPPLYCENTER province="wal" homepower="britain" owner="britain"/>	
+		<SUPPLYCENTER province="yor" homepower="britain" owner="britain"/>	
+
  		<INITIALSTATE province="ank" power="turkey" unit="fleet" />
 		<INITIALSTATE province="ber" power="germany" unit="army" />
 		<INITIALSTATE province="bre" power="france" unit="fleet" />
@@ -577,9 +506,9 @@
 		<INITIALSTATE province="ven" power="italy" unit="army" />
 		<INITIALSTATE province="vie" power="austria" unit="army" />
 		<INITIALSTATE province="war" power="russia" unit="army" />
-		<INITIALSTATE province="cly" power="britain" unit="army" />	<!-- variant: added -->
- 		<INITIALSTATE province="yor" power="britain" unit="army" />	<!-- variant: added -->
- 		<INITIALSTATE province="wal" power="britain" unit="army" />	<!-- variant: added -->
+		<INITIALSTATE province="cly" power="britain" unit="army" />	
+ 		<INITIALSTATE province="yor" power="britain" unit="army" />	
+ 		<INITIALSTATE province="wal" power="britain" unit="army" />	
 	</VARIANT>
 	
 	<VARIANT name="Crowded" version="1.0">
@@ -622,7 +551,7 @@
 			<YEARS_WITHOUT_SC_CAPTURE value="7" />
 			<GAME_LENGTH value="35" />
 		</VICTORYCONDITIONS>
- 		<!-- supply centers -->
+
 		<SUPPLYCENTER province="ank" homepower="turkey" owner="turkey"/>
 		<SUPPLYCENTER province="bel" homepower="lowland" owner="lowland"/>
 		<SUPPLYCENTER province="ber" homepower="germany" owner="germany"/>
@@ -658,7 +587,7 @@
 	 	<SUPPLYCENTER province="ven" homepower="italy" owner="italy"/>
 		<SUPPLYCENTER province="vie" homepower="austria" owner="austria"/>
 	 	<SUPPLYCENTER province="war" homepower="russia" owner="russia"/>
-		<!-- unit placement -->
+
 		<INITIALSTATE province="ank" power="turkey" unit="fleet" />
 		<INITIALSTATE province="ber" power="germany" unit="army" />
 		<INITIALSTATE province="bre" power="france" unit="fleet" />
@@ -681,7 +610,7 @@
 		<INITIALSTATE province="ven" power="italy" unit="army" />
 		<INITIALSTATE province="vie" power="austria" unit="army" />
 		<INITIALSTATE province="war" power="russia" unit="army" />
-		<!-- crowded: units -->
+
 		<INITIALSTATE province="gre" power="balkan" unit="fleet" />
 		<INITIALSTATE province="rum" power="balkan" unit="fleet" />
 		<INITIALSTATE province="ser" power="balkan" unit="army" />
@@ -728,7 +657,7 @@
 			<YEARS_WITHOUT_SC_CAPTURE value="7" />
 			<GAME_LENGTH value="35" />
 		</VICTORYCONDITIONS>
- 		<!-- supply centers -->
+
 		<SUPPLYCENTER province="ank" homepower="turkey" owner="turkey"/>
 		<SUPPLYCENTER province="bel" homepower="lowland" owner="lowland"/>
 		<SUPPLYCENTER province="ber" homepower="germany" owner="germany"/>
@@ -764,7 +693,7 @@
 	 	<SUPPLYCENTER province="ven" homepower="italy" owner="italy"/>
 		<SUPPLYCENTER province="vie" homepower="austria" owner="austria"/>
 	 	<SUPPLYCENTER province="war" homepower="russia" owner="russia"/>
-		<!-- unit placement -->
+
 		<INITIALSTATE province="tri" power="austria" unit="army" />
 		<INITIALSTATE province="ser" power="balkan"  unit="army" />
 		<INITIALSTATE province="edi" power="england" unit="fleet" />
@@ -802,7 +731,7 @@
 			<YEARS_WITHOUT_SC_CAPTURE value="7" />
 			<GAME_LENGTH value="35" />
 		</VICTORYCONDITIONS>
- 		<!-- supply centers -->
+
 		<SUPPLYCENTER province="ank" homepower="turkey" owner="turkey"/>
 		<SUPPLYCENTER province="bel" />
 		<SUPPLYCENTER province="ber" homepower="germany" owner="germany"/>
@@ -837,7 +766,7 @@
 	 	<SUPPLYCENTER province="ven" homepower="italy" owner="italy"/>
 		<SUPPLYCENTER province="vie" homepower="austria" owner="austria"/>
 	 	<SUPPLYCENTER province="war" homepower="russia" owner="russia"/>
-		<!-- unit placement -->
+
 		<INITIALSTATE province="ank" power="turkey" unit="fleet" />
 		<INITIALSTATE province="ber" power="germany" unit="army" />
 		<INITIALSTATE province="bre" power="france" unit="fleet" />
@@ -852,7 +781,7 @@
 		<INITIALSTATE province="mun" power="germany" unit="army" />
 		<INITIALSTATE province="nap" power="italy" unit="fleet" />
 		<INITIALSTATE province="par" power="france" unit="army" />
-		<INITIALSTATE province="rom" power="italy" unit="fleet" /> 	<!-- variant: changed -->
+		<INITIALSTATE province="rom" power="italy" unit="fleet" /> 
 		<INITIALSTATE province="sev" power="russia" unit="fleet" />
 		<INITIALSTATE province="smy" power="turkey" unit="army" />
 		<INITIALSTATE province="stp" power="russia" unit="fleet" unitcoast="sc" />
@@ -899,7 +828,7 @@
 		<VICTORYCONDITIONS>
 			<WINNING_SUPPLY_CENTERS value="18" />
 		</VICTORYCONDITIONS>
-		<!-- supply centers -->
+
 		<SUPPLYCENTER province="ank" homepower="turkey" />
 		<SUPPLYCENTER province="bel" />
 		<SUPPLYCENTER province="ber" homepower="germany" />
@@ -934,7 +863,7 @@
 	 	<SUPPLYCENTER province="ven" homepower="italy" />
 		<SUPPLYCENTER province="vie" homepower="austria" />
 	 	<SUPPLYCENTER province="war" homepower="russia" />	
-		<!-- unit placement -->
+
 		<INITIALSTATE province="ank" power="germany" unit="fleet" />
 		<INITIALSTATE province="ber" power="turkey" unit="army" />
 		<INITIALSTATE province="bre" power="austria" unit="fleet" />
@@ -996,7 +925,7 @@
 		<VICTORYCONDITIONS>
 			<WINNING_SUPPLY_CENTERS value="18" />
 		</VICTORYCONDITIONS>
-		<!-- supply centers -->
+
 		<SUPPLYCENTER province="ank" homepower="turkey" />
 		<SUPPLYCENTER province="bel" />
 		<SUPPLYCENTER province="ber" homepower="germany" />
@@ -1031,7 +960,7 @@
 	 	<SUPPLYCENTER province="ven" homepower="italy" />
 		<SUPPLYCENTER province="vie" homepower="austria" />
 	 	<SUPPLYCENTER province="war" homepower="russia" />
-		<!-- unit placement -->
+
 		<INITIALSTATE province="ank" power="germany" unit="fleet" />
 		<INITIALSTATE province="ber" power="turkey" unit="army" />
 		<INITIALSTATE province="bre" power="austria" unit="fleet" />
@@ -1096,7 +1025,7 @@
 		<VICTORYCONDITIONS>
 			<WINNING_SUPPLY_CENTERS value="18" />
 		</VICTORYCONDITIONS>
-		<!-- supply centers -->
+
 		<SUPPLYCENTER province="ank" homepower="turkey" />
 		<SUPPLYCENTER province="bel" />
 		<SUPPLYCENTER province="ber" homepower="germany" />
@@ -1131,7 +1060,7 @@
 	 	<SUPPLYCENTER province="ven" homepower="italy" />
 		<SUPPLYCENTER province="vie" homepower="austria" />
 	 	<SUPPLYCENTER province="war" homepower="russia" />
-		<!-- unit placement -->
+
 		<INITIALSTATE province="ank" power="germany" unit="fleet" />
 		<INITIALSTATE province="ber" power="turkey" unit="army" />
 		<INITIALSTATE province="bre" power="austria" unit="fleet" />

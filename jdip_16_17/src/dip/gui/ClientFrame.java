@@ -187,8 +187,8 @@ public class ClientFrame extends JFrame
 	public ClientFrame(String args[])
 	{
 		super();
-		long ttime = System.currentTimeMillis();		// total time
-		long dtime = ttime;								// delta time
+		final long ttime = System.currentTimeMillis();		// total time
+		long dtime = ttime;									// delta time
 		
 		// parse command-line args
 		parseCmdLine(args);
@@ -267,10 +267,11 @@ public class ClientFrame extends JFrame
 			Log.println(e);
 		}
 		
-		dtime = Log.printDelta(dtime, "CF: LAF setup time: ");
 		
 		// set exception handler
 		GUIExceptionHandler.registerHandler();
+		
+		dtime = Log.printDelta(dtime, "CF: LAF setup time: ");
 		
 		// get the variant and tool directories. 
 		// do not change the variantDirPath if it was set
@@ -302,7 +303,7 @@ public class ClientFrame extends JFrame
 			ErrorDialog.displayFatal(this, e);
 		}
 		
-		dtime = Log.printDelta(dtime, "CF: variant setup time: ");
+		dtime = Log.printDelta(dtime, "CF: variant and symbol setup time: ");
 		
 		// init Tools
 		ToolManager.init(new File[]{toolDirPath});
@@ -318,14 +319,14 @@ public class ClientFrame extends JFrame
 		// set frame icon
 		setIconImage(Utils.getImageIcon(Utils.FRAME_ICON).getImage());
 		
-		// init help system
-		Help.init();
-		dtime = Log.printDelta(dtime, "CF: help init time: ");
-		
 		// setup menu
 		clientMenu = new ClientMenu(this);
 		setJMenuBar(clientMenu.getJMenuBar());
 		dtime = Log.printDelta(dtime, "CF: menu setup time: ");
+		
+		// init help system -- must be done after menu created
+		Help.init(clientMenu);
+		dtime = Log.printDelta(dtime, "CF: help init time: ");
 		
 		// init special filedialog class
 		// 
@@ -341,7 +342,7 @@ public class ClientFrame extends JFrame
 		
 		// persistence (must come after menus are defined)
 		persistMan = new PersistenceManager(this);
-		dtime = Log.printDelta(dtime, "CF: PersistenceManager setup time: ");
+		dtime = Log.printDelta(dtime, "CF: dialog and PM setup time: ");
 		
 		// frame listener, handles JFrame close events
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -354,12 +355,12 @@ public class ClientFrame extends JFrame
 		});
 		
 		// default GUIOrderFactory
-		// [in the future, variants may alter this]
+		// this may be better in GameSetup
 		guiOrderFactory = new GUIOrderFactory();
 		
 		// setup drag-and-drop support
 		new DropTarget(this, new CFDropTargetListener());
-		dtime = Log.printDelta(dtime, "CF: point A: ");
+		dtime = Log.printDelta(dtime, "CF: misc setup time: ");
 		
 		// create default split pane
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false);
@@ -367,31 +368,32 @@ public class ClientFrame extends JFrame
 		splitPane.setVisible(false);
 		splitPane.setDividerSize(10);
 		splitPane.setResizeWeight(1);
-		dtime = Log.printDelta(dtime, "CF: point B: ");
 		
 		// create statusbar
 		statusBar = new StatusBar();
 		statusBar.setText(ClientFrame.PROGRAM_NAME + " " + getVersion());
-		dtime = Log.printDelta(dtime, "CF: point c: ");
 		
 		// PhaseSelector
 		phaseSel = new PhaseSelector(this);
-		dtime = Log.printDelta(dtime, "CF: point d: ");
 		
 		// add mode listener for this object
 		addPropertyChangeListener(new ModeListener());
 		
 		// set initial mode
 		fireChangeMode(MODE_NONE);
-		dtime = Log.printDelta(dtime, "CF: point e: ");
 		
 		// register menu listeners
+		dtime = Log.printDelta(dtime, "CF: property set, mode set, PhaseSel: ");
+		
 		MenuHandler mh = new MenuHandler();
+		dtime = Log.printDelta(dtime, "CF: MenuHandler creation: ");
+		
 		mh.registerMenuItems();
+		dtime = Log.printDelta(dtime, "CF: MenuHandler register: ");
 		
 		// get default order formatting options
 		orderFormatOptions = DisplayPreferencePanel.getOrderFormatOptions();
-		dtime = Log.printDelta(dtime, "CF: point f: ");
+		dtime = Log.printDelta(dtime, "CF: DPP getOFO(): ");
 		
 		// setup layout
 		getContentPane().setLayout(new BorderLayout());
@@ -403,9 +405,8 @@ public class ClientFrame extends JFrame
 		fireChangeMode(MODE_NONE);
 		toFront();
 		splash.destroy();
-		dtime = Log.printDelta(dtime, "CF: frame setup time: ");
-		
-		Log.printTimed(ttime, "ClientFrame() startup time: ");
+		dtime = Log.printDelta(dtime, "CF: layout setup time: ");
+		Log.printTimed(ttime, "ClientFrame() total setup time: ");
 	}// ClientFrame()
 	
 	
@@ -1282,9 +1283,13 @@ public class ClientFrame extends JFrame
 			clientMenu.setActionMethod(ClientMenu.REPORTS_ORDER_STATS, this, "onReportsOrderStats");
 			clientMenu.setActionMethod(ClientMenu.REPORTS_MAP_INFO, this, "onReportsMapInfo");
 			
+			
 			// help
 			clientMenu.setActionMethod(ClientMenu.HELP_ABOUT, this, "onHelpAbout");
-			Help.enableHelpOnButton(clientMenu.getMenuItem(ClientMenu.HELP_CONTENTS), Help.HelpID.Contents);
+			
+			// Help Contents: registered by Help.init() when construction is complete
+			// this shortens startup, since it is constructed in a lower-priority
+			// thread
 		}// registerMenuItems()
 		
 		// file
