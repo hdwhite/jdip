@@ -106,6 +106,7 @@ public class NGDVariantSelect extends JPanel implements NewGameDialog.NGDTabPane
 		makeVariantList();
 		variantList = new JList(listModel);
 		variantList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		variantList.setPrototypeCellValue("MMMMMMMMMMMMMM");
 		variantList.addListSelectionListener(new ListSelectionListener() 
 		{
 			public void valueChanged(ListSelectionEvent e)
