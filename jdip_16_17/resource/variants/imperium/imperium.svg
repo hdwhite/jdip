@@ -519,23 +519,16 @@
 		</g>
 	</g>
 	
-	<!-- drawing layer: supply centers -->
-	<g id="SupplyCenterLayer"/>
-
-	<!-- drawing layer: orders -->
-	<g id="OrderLayer"/>
-	
-	<!-- drawing layer: units -->
-	<g id="UnitLayer"/>
-	
-	<!-- drawing layer: dislodged units -->
-	<g id="DislodgedUnitLayer"/>
-	
-	<!-- above-the-unit drawing layer -->
-	<g id="HighestOrderLayer"/>
+	<g pointer-events="none">
+		<g id="SupplyCenterLayer"/>
+		<g id="OrderLayer"/>
+		<g id="UnitLayer"/>
+		<g id="DislodgedUnitLayer"/>
+		<g id="HighestOrderLayer"/>
+	</g>
 	
 	<!-- province abbreviations -->
-	<g id="BriefLabelLayer" transform="translate(-7,12)" visibility="hidden">
+	<g id="BriefLabelLayer" transform="translate(-7,12)" visibility="hidden" pointer-events="none">
 		<text x="408" y="303">ADR</text>
 		<text x="542" y="404">AEG</text>
 		<text x="300" y="229">Aem</text>
@@ -630,7 +623,7 @@
 	</g>
 	
 	
-	<g id="FullLabelLayer" class="centertext" transform="translate(-7,12)" visibility="hidden">
+	<g id="FullLabelLayer" class="centertext" transform="translate(-7,12)" visibility="hidden" pointer-events="none">
 		<text x="408" y="303">Mare Adriaticum       </text>
 		<text x="542" y="404">Aegaeis               </text>
 		<text x="300" y="229">Aemilia               </text>

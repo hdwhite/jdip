@@ -871,22 +871,15 @@
 		<!-- END Sea Provinces -->
 	</g>
 	
-	<!-- drawing layer: supply centers -->
-	<g id="SupplyCenterLayer"/>
-
-	<!-- drawing layer: orders -->
-	<g id="OrderLayer"/>
+	<g pointer-events="none">
+		<g id="SupplyCenterLayer"/>
+		<g id="OrderLayer"/>
+		<g id="UnitLayer"/>
+		<g id="DislodgedUnitLayer"/>
+		<g id="HighestOrderLayer"/>
+	</g>
 	
-	<!-- drawing layer: units -->
-	<g id="UnitLayer"/>
-	
-	<!-- drawing layer: dislodged units -->
-	<g id="DislodgedUnitLayer"/>
-	
-	<!-- above-the-unit drawing layer -->
-	<g id="HighestOrderLayer"/>
-	
-	<g id="FullLabelLayer" class="fulllabeltext" visibility="hidden" transform="translate(-195, -170)">
+	<g id="FullLabelLayer" class="fulllabeltext" visibility="hidden" transform="translate(-195, -170)" pointer-events="none">
 		<text x="1465" y="1290">Ankara</text>
 		<text x="1685" y="1305">Armenia</text>
 		<text x="1300" y="1346" style="font-size:18;">Constantinople</text>
@@ -965,7 +958,7 @@
 		<text x="1400" y="1200">Black Sea</text>
 	</g>
 	
-	<g id="BriefLabelLayer" class="labeltext24" visibility="hidden">
+	<g id="BriefLabelLayer" class="labeltext24" visibility="hidden" pointer-events="none">
 		<text id="brf_swi" x="649.4" y="924.2">swi</text>
 		<text id="brf_adr" x="849.4" y="1100.6" class="labeltext18">adr</text>
 		<text id="brf_aeg" x="1085.7" y="1296.4">aeg</text>

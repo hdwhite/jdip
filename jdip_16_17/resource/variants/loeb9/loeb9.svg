@@ -716,17 +716,15 @@
 		<path id="_arc" class="water" d="M3,3h693.3l1.5,3.2l1.7,1.8l1,2l0.1,2l-0.4,2.9l1.1,3.3v1.1l-0.5,0.6l-1.2,0.4l-1.5-1.6L697,18l-1.1-1.8l-1.8-1.8L679,20.5l-2,1L651.8,23l-72.6-3.8l-3.9-0.1L528.9,20l-29.3,0.5l-9,2.5l-50.2-3.2L390,21.5l-44,1.4l-64.2,2L262,25.3L217.5,23l-34.8-1.4L158,23.8l-31.8,0.8l-36.5,0.8L3.3,29.5L3,16.5V3z"/>
 	</g>
 	
-	<g id="SupplyCenterLayer"/>
+	<g pointer-events="none">
+		<g id="SupplyCenterLayer"/>
+		<g id="OrderLayer"/>
+		<g id="UnitLayer"/>
+		<g id="DislodgedUnitLayer"/>
+		<g id="HighestOrderLayer"/>
+	</g>
 	
-	<g id="OrderLayer"/>
-	
-	<g id="UnitLayer"/>
-	
-	<g id="DislodgedUnitLayer"/>
-	
-	<g id="HighestOrderLayer"/>
-	
-	<g id="FullLabelLayer" class="labeltext12" visibility="hidden">
+	<g id="FullLabelLayer" class="labeltext12" visibility="hidden" pointer-events="none">
 		<text id="ful_arc" x="289.7" y="17.5" class="labeltext18">Arctic Ocean</text>
 		<text id="ful_cat" x="207.5" y="528.1" class="labeltext12">Catalonia</text>
 		<text id="ful_cor" transform="translate(114.5,578), rotate(15)" x="0" y="0" class="labeltext12">Cordoba</text>
@@ -816,7 +814,7 @@
 		<text id="ful_yor" transform="translate(247.8,318.7), rotate(-90)" x="0" y="0" class="labeltext10" style="font-size:8;">Yorkshire</text>
 	</g>
 	
-	<g id="BriefLabelLayer" class="labeltext12" visibility="hidden">
+	<g id="BriefLabelLayer" class="labeltext12" visibility="hidden" pointer-events="none">
 		<text id="brf_arc" x="300.4" y="18.9" class="labeltext20">arc</text>
 		<text id="brf_cat" x="196.7" y="524.1" class="labeltext16">cat</text>
 		<text id="brf_cor" x="111.8" y="578" class="labeltext16">cor</text>

@@ -729,27 +729,19 @@ Feel free to use and change this template, but don't delete the copyright
 		<text x="5" y="520" class="credits">Diplomacy is a trademark of Hasbro</text>
 	</g>
 	
-	<!-- drawing layer: supply centers -->
-	<g id="SupplyCenterLayer"/>
-
-	<!-- drawing layer: orders -->
-	<g id="OrderLayer"/>
-	
-	<!-- drawing layer: units -->
-	<g id="UnitLayer"/>
-	
-	<!-- drawing layer: dislodged units -->
-	<g id="DislodgedUnitLayer"/>
-	
-	<!-- above-the-unit drawing layer -->
-	<g id="HighestOrderLayer"/>
-	
-	<!-- full province names -->
-	<g id="FullLabelLayer" class="text14" visibility="hidden">
+	<g pointer-events="none">
+		<g id="SupplyCenterLayer"/>
+		<g id="OrderLayer"/>
+		<g id="UnitLayer"/>
+		<g id="DislodgedUnitLayer"/>
+		<g id="HighestOrderLayer"/>
 	</g>
 	
+	<!-- full province names -->
+	<g id="FullLabelLayer" class="text14" visibility="hidden" pointer-events="none"/>
+	
 	<!-- province abbreviations -->
-	<g id="BriefLabelLayer" class="text14" visibility="hidden">
+	<g id="BriefLabelLayer" class="text14" visibility="hidden" pointer-events="none">
 	   <text id="brf_swi" x="391.5" y="272.2" class="text10">swi</text>
 	   <text id="brf_adr1" transform="translate(360.7,159.6), rotate(80)" x="0" y="0" class="text12">adr1</text>
 	   <text id="brf_aeg1" x="296.8" y="27.2" class="text10">aeg1</text>

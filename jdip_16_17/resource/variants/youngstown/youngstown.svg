@@ -735,7 +735,7 @@
 		<text x="5" y="560" class="credits">Diplomacy is a trademark of Hasbro</text>
 	</g>
 	
-	<g id="BriefLabelLayer" class="label12" visibility="hidden">
+	<g id="BriefLabelLayer" class="label12" visibility="hidden" pointer-events="none">
 		<text x="171" y="259" class="label08">swi</text>
 		<text x="614" y="312" class="label12">him</text>
 		<text x="418" y="392" class="label10">nej</text>
@@ -923,16 +923,16 @@
 		</g>
 	</g>
 	
-	<g id="FullLabelLayer" class="labeltext" visibility="hidden">
-		<!-- not yet implemented -->
-	</g>
+	<g id="FullLabelLayer" class="labeltext" visibility="hidden" pointer-events="none"/>
 	
 	<!-- jDip rendering layers. -->
-	<g id="SupplyCenterLayer"/>
-	<g id="OrderLayer"/>
-	<g id="UnitLayer"/>
-	<g id="DislodgedUnitLayer"/>
-	<g id="HighestOrderLayer"/>
+	<g pointer-events="none">
+		<g id="SupplyCenterLayer"/>
+		<g id="OrderLayer"/>
+		<g id="UnitLayer"/>
+		<g id="DislodgedUnitLayer"/>
+		<g id="HighestOrderLayer"/>
+	</g>
 	
 	<!-- invisible topmost layer for intercepting mouse events -->
 	<g id="MouseLayer" class="invisible"  transform="translate(10,10)">

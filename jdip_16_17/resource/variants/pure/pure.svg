@@ -388,113 +388,49 @@
 		</g>
 		<g>
 			<g transform="translate(-2.38095 -21.4286)">
-				<line fill="none" stroke="black" stroke-width="6" x1="223" y1="738"
-					x2="346" y2="198"/>
-				<line fill="none" stroke="black" stroke-width="6" x1="223" y1="738"
-					x2="653" y2="198"/>
-				<line fill="none" stroke="black" stroke-width="6" x1="223" y1="738"
-					x2="845" y2="438"/>
-				<line fill="none" stroke="black" stroke-width="6" x1="223" y1="738"
-					x2="776" y2="737"/>
+				<line fill="none" stroke="black" stroke-width="6" x1="223" y1="738" x2="346" y2="198"/>
+				<line fill="none" stroke="black" stroke-width="6" x1="223" y1="738" x2="653" y2="198"/>
+				<line fill="none" stroke="black" stroke-width="6" x1="223" y1="738" x2="845" y2="438"/>
+				<line fill="none" stroke="black" stroke-width="6" x1="223" y1="738" x2="776" y2="737"/>
 			</g>
 		</g>
-		<g transform="translate(-2.38095 -21.4286)">
-			<line fill="none" stroke="black" stroke-width="6" x1="155" y1="438"
-				x2="653" y2="198"/>
-			<line fill="none" stroke="black" stroke-width="6" x1="155" y1="438"
-				x2="845" y2="438"/>
-			<line fill="none" stroke="black" stroke-width="6" x1="155" y1="438"
-				x2="776" y2="737"/>
-			<line fill="none" stroke="black" stroke-width="6" x1="155" y1="438"
-				x2="500" y2="871"/>
+		<g transform="translate(-2.4 -21.4)">
+			<line fill="none" stroke="black" stroke-width="6" x1="155" y1="438" x2="653" y2="198"/>
+			<line fill="none" stroke="black" stroke-width="6" x1="155" y1="438" x2="845" y2="438"/>
+			<line fill="none" stroke="black" stroke-width="6" x1="155" y1="438" x2="776" y2="737"/>
+			<line fill="none" stroke="black" stroke-width="6" x1="155" y1="438" x2="500" y2="871"/>
 		</g>
-		<text fill="black" x="-278px" y="138px" font-family="sansserif" font-size="36"
-			transform="translate(-123.913 110.87) translate(1263.04 589.13) translate(-32.6087 2.17391) rotate(309.832 -221.264 125.31) translate(-7.1597 -41.6087) translate(14.9305 -15.5542)"
-			>Paris</text>
-		<text fill="black" font-size="36" font-family="sansserif" x="-287px" y="205px"
-			transform="translate(-119.565 -19.5652) translate(1354.35 219.565) translate(-64.1975 1.23457) rotate(75.7072 -220.85 195.892) translate(26.8838 14.493) translate(-21.3531 -2.98297) translate(0.45683 6.30804)"
-			>London</text>
-		<text fill="black" font-size="36" font-family="sansserif" x="-274px" y="308px"
-			transform="translate(-132.609 -197.826) translate(2.17391 6.52174) translate(1069.57 -10.8696) rotate(29.8179 -218.768 295.31) translate(10.2944 29.5644) rotate(358.562 -220.214 298.775) rotate(359.007 -220.285 298.603) rotate(357.849 -220.329 298.482) translate(0.720196 6.03851) translate(-8.46365 -1.53838) translate(-11.2897 -18.3683)"
-			>Vienna</text>
-		<text fill="black" font-size="36" font-family="sansserif"
-			x="-313px" y="390px"
-			transform="translate(-93.4783 -84.7826) translate(839.13 676.087) translate(-8.69565 -2.17391) translate(0 2.17391) translate(-2.38095 -21.4286) translate(0 5.76923) translate(23 -2) translate(7 0)"
-			>Berlin</text>
-		<text fill="black" font-size="36" font-family="sansserif"
-			x="-333px" y="475px"
-			transform="translate(-60.8696 0) translate(586.957 -369.565) translate(32.6923 23.0769) rotate(335.957 -277.737 465.894) translate(17.1839 -0.756818) translate(-1.37782 7.80842) translate(0.972716 2.53974) translate(6.55609 -20.5395) rotate(358.255 -213.197 464.84) translate(-50.1197 -2.00399) translate(-10.8147 -1.39563) translate(-2.30251 0.802347) translate(2.35477 3.05259)"
-			>Constantinople</text>
-		<text fill="black" font-size="36" font-family="sansserif"
-			x="-322px" y="551px"
-			transform="translate(-71.7391 -130.435) translate(6.52174 0) translate(6.52174 2.17391) translate(330.435 6.52174) translate(1.92308 0) translate(50 0) translate(-7.69231 0) rotate(285.776 -266.269 538.335) translate(1.28651 11.6267) rotate(357.124 -268.227 538.669) translate(20.3562 -7.10479)"
-			>Moscow</text>
-		<text fill="black" font-size="36" font-family="sansserif"
-			x="-315px" y="601px"
-			transform="translate(-82.6087 -241.304) translate(476.087 471.739) translate(5.76923 -9.61538) rotate(49.7338 -280.476 591.894) translate(3.62518 -22.1318) translate(-17.89 -12.0334)"
-			>Rome</text>
+		<g fill="black" font-family="sansserif" font-size="36">
+			<text x="-278px" y="138px" transform="translate(-123.913 110.87) translate(1263.04 589.13) translate(-32.6087 2.17391) rotate(309.832 -221.264 125.31) translate(-7.1597 -41.6087) translate(14.9305 -15.5542)">Paris</text>
+			<text x="-287px" y="205px" transform="translate(-119.565 -19.5652) translate(1354.35 219.565) translate(-64.1975 1.23457) rotate(75.7072 -220.85 195.892) translate(26.8838 14.493) translate(-21.3531 -2.98297) translate(0.45683 6.30804)">London</text>
+			<text x="-274px" y="308px" transform="translate(-132.609 -197.826) translate(2.17391 6.52174) translate(1069.57 -10.8696) rotate(29.8179 -218.768 295.31) translate(10.2944 29.5644) rotate(358.562 -220.214 298.775) rotate(359.007 -220.285 298.603) rotate(357.849 -220.329 298.482) translate(0.720196 6.03851) translate(-8.46365 -1.53838) translate(-11.2897 -18.3683)">Vienna</text>
+			<text x="-313px" y="390px" transform="translate(-93.4783 -84.7826) translate(839.13 676.087) translate(-8.69565 -2.17391) translate(0 2.17391) translate(-2.38095 -21.4286) translate(0 5.76923) translate(23 -2) translate(7 0)">Berlin</text>
+			<text x="-333px" y="475px" transform="translate(-60.8696 0) translate(586.957 -369.565) translate(32.6923 23.0769) rotate(335.957 -277.737 465.894) translate(17.1839 -0.756818) translate(-1.37782 7.80842) translate(0.972716 2.53974) translate(6.55609 -20.5395) rotate(358.255 -213.197 464.84) translate(-50.1197 -2.00399) translate(-10.8147 -1.39563) translate(-2.30251 0.802347) translate(2.35477 3.05259)">Constantinople</text>
+			<text x="-322px" y="551px" transform="translate(-71.7391 -130.435) translate(6.52174 0) translate(6.52174 2.17391) translate(330.435 6.52174) translate(1.92308 0) translate(50 0) translate(-7.69231 0) rotate(285.776 -266.269 538.335) translate(1.28651 11.6267) rotate(357.124 -268.227 538.669) translate(20.3562 -7.10479)">Moscow</text>
+			<text x="-315px" y="601px" transform="translate(-82.6087 -241.304) translate(476.087 471.739) translate(5.76923 -9.61538) rotate(49.7338 -280.476 591.894) translate(3.62518 -22.1318) translate(-17.89 -12.0334)">Rome</text>
+		</g>
 		
-		<path id="_vie" class="nopower"
-			d="M497.619 142.283 L650.619 176.571 L774.287 275.519 L866.51 207.835 L497.619 30.1868
-				z"/>
-		<path id="_lon" class="nopower"
-			d="M774.287 275.519 L842.619 416.571 L842.619 574.899 L957.619 607.008 L866.51 207.835
-				z"/>
-		<path id="_par" class="nopower"
-			d="M842.619 574.899 L773.619 715.571 L651.158 814.983 L702.338 927.12 L957.619 607.008
-				z"/>
-		<path id="_ber" class="nopower"
-			d="M651.158 814.983 L497.619 849.571 L344.08 814.983 L292.9 927.12 L702.338 927.12 z"
-			/>
-		<path id="_rom" class="nopower"
-			d="M344.08 814.983 L220.619 716.571 L152.619 574.899 L37.6191 607.008 L292.9 927.12
-				z"/>
-		<path id="_mos" class="nopower"
-			d="M152.619 574.899 L152.619 416.571 L220.951 275.519 L128.728 207.835 L37.6191 607.008
-				z"/>
-		<path id="_con" class="nopower"
-			d="M220.951 275.519 L343.619 176.571 L497.619 142.283 L497.619 30.1868 L128.728 207.835
-				z"/>	
+		<path id="vie" class="nopower" d="M497.6 142.2 L650.6 176.5 L774.2 275.5 L866.5 207.8 L497.6 30.1 z"/>
+		<path id="lon" class="nopower" d="M774.2 275.5 L842.6 416.5 L842.6 574.8 L957.6 607.0 L866.5 207.8 z"/>
+		<path id="par" class="nopower" d="M842.6 574.8 L773.6 715.5 L651.1 814.9 L702.3 927.1 L957.6 607.0 z"/>
+		<path id="ber" class="nopower" d="M651.1 814.9 L497.6 849.5 L344.0 814.9 L292.9 927.1 L702.3 927.1 z"/>
+		<path id="rom" class="nopower" d="M344.1 814.9 L220.6 716.5 L152.6 574.8 L37.6  607.0 L292.9 927.1 z"/>
+		<path id="mos" class="nopower" d="M152.6 574.8 L152.6 416.5 L220.9 275.5 L128.7 207.8 L37.6  607.0 z"/>
+		<path id="con" class="nopower" d="M220.9 275.5 L343.6 176.5 L497.6 142.2 L497.6 30.1  L128.7 207.8 z"/>	
 	</g>
 	
 	
-	<!-- drawing layer: supply centers -->
-	<g id="SupplyCenterLayer"/>
- 	<!-- drawing layer: orders -->
-	<g id="OrderLayer"/>
-	<!-- drawing layer: units -->
-	<g id="UnitLayer"/>
-	<!-- drawing layer: dislodged units -->
-	<g id="DislodgedUnitLayer"/>
-	<!-- drawing layer -->
-	<g id="HighestOrderLayer"/>
+	<g pointer-events="none">
+		<g id="SupplyCenterLayer"/>
+		<g id="OrderLayer"/>
+		<g id="UnitLayer"/>
+		<g id="DislodgedUnitLayer"/>
+		<g id="HighestOrderLayer"/>
+	</g>
+	
 	<!-- abbreviated name layer (not used) -->
-	<g id="BriefLabelLayer" class="labeltext" visibility="hidden"/>
+	<g id="BriefLabelLayer" class="labeltext" visibility="hidden" pointer-events="none"/>
 	<!-- full name layer (not used) -->
-	<g id="FullLabelLayer" class="labeltext" visibility="hidden"/>
-	
-	<!-- Invisible shapes for click detection -->
-	<g id="MouseLayer" class="invisible">
-		<path id="vie" 
-			d="M497.619 142.283 L650.619 176.571 L774.287 275.519 L866.51 207.835 L497.619 30.1868
-				z"/>
-		<path id="lon" 
-			d="M774.287 275.519 L842.619 416.571 L842.619 574.899 L957.619 607.008 L866.51 207.835
-				z"/>
-		<path id="par" 
-			d="M842.619 574.899 L773.619 715.571 L651.158 814.983 L702.338 927.12 L957.619 607.008
-				z"/>
-		<path id="ber" 
-			d="M651.158 814.983 L497.619 849.571 L344.08 814.983 L292.9 927.12 L702.338 927.12 z"
-			/>
-		<path id="rom" 
-			d="M344.08 814.983 L220.619 716.571 L152.619 574.899 L37.6191 607.008 L292.9 927.12
-				z"/>
-		<path id="mos" 
-			d="M152.619 574.899 L152.619 416.571 L220.951 275.519 L128.728 207.835 L37.6191 607.008
-				z"/>
-		<path id="con" 
-			d="M220.951 275.519 L343.619 176.571 L497.619 142.283 L497.619 30.1868 L128.728 207.835
-				z"/>	
-	</g>
+	<g id="FullLabelLayer" class="labeltext" visibility="hidden" pointer-events="none"/>
+
 </svg>

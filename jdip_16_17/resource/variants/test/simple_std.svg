@@ -677,21 +677,17 @@
 		</g>
 	</g>
 	
-	<!-- drawing layer: supply centers -->
-	<g id="SupplyCenterLayer"/>
- 	<!-- drawing layer: orders -->
-	<g id="OrderLayer"/>
-	<!-- drawing layer: units -->
-	<g id="UnitLayer"/>
-	<!-- drawing layer: dislodged units -->
-	<g id="DislodgedUnitLayer"/>
-	
-	<!-- drawing layer -->
-	<g id="HighestOrderLayer"/>
+	<g pointer-events="none">
+		<g id="SupplyCenterLayer"/>
+		<g id="OrderLayer"/>
+		<g id="UnitLayer"/>
+		<g id="DislodgedUnitLayer"/>
+		<g id="HighestOrderLayer"/>
+	</g>
 	
 	
 	<!-- abbreviated name layer  -->
-	<g id="BriefLabelLayer" class="labeltext" visibility="hidden">
+	<g id="BriefLabelLayer" class="labeltext" visibility="hidden" pointer-events="none">
 	   <text id="brf_swi" x="174" y="323.8">swi</text>
 	   <text id="brf_adr" x="280.3" y="491.9">adr</text>
 	   <text id="brf_aeg" x="397.9" y="525.7">aeg</text>
@@ -771,7 +767,7 @@
 	</g>
 	
 	<!-- full name layer: NOT SUPPORTED -->
-	<g id="FullLabelLayer" class="labeltext" visibility="hidden"/>
+	<g id="FullLabelLayer" class="labeltext" visibility="hidden" pointer-events="none"/>
 	
 	<!-- Invisible shapes for click detection -->
 	<g id="MouseLayer" class="invisible">

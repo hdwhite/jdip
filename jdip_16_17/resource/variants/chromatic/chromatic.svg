@@ -417,7 +417,7 @@
 		<g id="HighestOrderLayer"/>
 	</g>
 	
-	<g id="FullLabelLayer" visibility="hidden" pointer-events="none"/>
+	<g id="FullLabelLayer" visibility="hidden" pointer-events="none" pointer-events="none"/>
 	
 	<g id="BriefLabelLayer" visibility="hidden" class="labels" transform="translate(0,12)" pointer-events="none">
 		<text transform="translate(&_gar;)">Gar</text>

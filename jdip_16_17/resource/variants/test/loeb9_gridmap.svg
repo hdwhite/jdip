@@ -638,26 +638,19 @@
 		</g>
 	</g>
 	
-	<!-- drawing layer: supply centers -->
-	<g id="SupplyCenterLayer"/>
-	
-	<!-- drawing layer: orders -->
-	<g id="OrderLayer"/>
-	
-	<!-- drawing layer: units -->
-	<g id="UnitLayer"/>
-	
-	<!-- drawing layer: dislodged units -->
-	<g id="DislodgedUnitLayer"/>
-	
-	<!-- drawing layer -->
-	<g id="HighestOrderLayer"/>
+	<g pointer-events="none">
+		<g id="SupplyCenterLayer"/>
+		<g id="OrderLayer"/>
+		<g id="UnitLayer"/>
+		<g id="DislodgedUnitLayer"/>
+		<g id="HighestOrderLayer"/>
+	</g>
 	
 
-	<g id="FullLabelLayer" class="labeltext" visibility="hidden"/>
+	<g id="FullLabelLayer" class="labeltext" visibility="hidden" pointer-events="none"/>
 	
 	
-	<g id="BriefLabelLayer" class="labeltext" visibility="hidden" />
+	<g id="BriefLabelLayer" class="labeltext" visibility="hidden"  pointer-events="none"/>
 	
 	<g id="MouseLayer" class="invisible">
 		<!-- These can be copied from above, but the 'class' attribute!!! must be removed! -->
