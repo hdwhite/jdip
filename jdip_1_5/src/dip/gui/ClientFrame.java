@@ -959,7 +959,8 @@ public class ClientFrame extends JFrame
 							// it can be commented out, if it doesn't compile
 							// it just converts Windows .LNK (shortcuts) to 
 							// a 'real' file.
-							if(selectedFile.getPath().toLowerCase().endsWith(".lnk")) 
+							if( Utils.isWindows() &&
+								selectedFile.getPath().toLowerCase().endsWith(".lnk") ) 
 							{
 								try
 								{
