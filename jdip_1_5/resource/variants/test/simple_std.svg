@@ -432,7 +432,7 @@
 		<g id="_lon" class="nopower">
 			<path d="M 100,120 L 160,120 L 160,140 L 140,160 L 100,160 z"/>
 		</g>
-		<g id="_nor" class="nopower">
+		<g id="_nwy" class="nopower">
 			<path d="M 200,040 L 300,040 L 300,080 L 200,080 z"/>
 		</g>
 		<g id="_swe" class="nopower">
@@ -737,7 +737,7 @@
 	   <text id="brf_nap" x="173.1" y="484.5">nap</text>
 	   <text id="brf_nao" x="18.7" y="75.4">nao</text>
 	   <text id="brf_nth" x="177.7" y="150.3">nth</text>
-	   <text id="brf_nor" x="220.6" y="63.5">nor</text>
+	   <text id="brf_nwy" x="220.6" y="63.5">nwy</text>
 	   <text id="brf_nwg" x="183.1" y="21.5">nwg</text>
 	   <text id="brf_par" x="72.6" y="265.3">par</text>
 	   <text id="brf_pic" x="78.1" y="226.1">pic</text>
@@ -781,7 +781,7 @@
 		<path id="edi" d="M 100,040 L 160,040 L 160,080 L 100,080 z"/>
 		<path id="yor" d="M 100,080 L 160,080 L 160,120 L 100,120 z"/>
 		<path id="lon" d="M 100,120 L 160,120 L 160,140 L 140,160 L 100,160 z"/>
-		<path id="nor" d="M 200,040 L 300,040 L 300,080 L 200,080 z"/>
+		<path id="nwy" d="M 200,040 L 300,040 L 300,080 L 200,080 z"/>
 		<path id="swe" d="M 260,080 L 320,080 L 320,120 L 260,120 z"/>
 		<path id="fin" d="M 300,040 L 340,040 L 360,060 L 360,080 L 300,080 z"/>
 		<path id="stp" d="M 280,000 L 380,000 L 400,020 L 400,140 L 360,140 L 360,060 L 360,060 L 340,040 L 280,040 z"/>

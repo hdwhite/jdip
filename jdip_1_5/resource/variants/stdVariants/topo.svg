@@ -268,7 +268,7 @@
 		<jdipNS:PROVINCE name="nap"><jdipNS:UNIT x="235" y="585"/><jdipNS:SUPPLY_CENTER x="255" y="585"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="nao"><jdipNS:UNIT x="30 " y="60 "/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="nth"><jdipNS:UNIT x="205" y="100"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nor"><jdipNS:UNIT x="405" y="105"/><jdipNS:SUPPLY_CENTER x="435" y="105"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nwy"><jdipNS:UNIT x="405" y="105"/><jdipNS:SUPPLY_CENTER x="435" y="105"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="nwg"><jdipNS:UNIT x="300" y="45 "/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="par"><jdipNS:UNIT x="75 " y="285"/><jdipNS:SUPPLY_CENTER x="90" y="285"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="pic"><jdipNS:UNIT x="85 " y="255"/><jdipNS:SUPPLY_CENTER x="105" y="255"/></jdipNS:PROVINCE>
@@ -443,7 +443,7 @@
 		</g>
 		
 		
-		<g id="_nor" class="nopower">
+		<g id="_nwy" class="nopower">
 			<rect x="270" y="90" width="330" height="30"/>
 		</g>
 		<g id="_swe" class="nopower">
@@ -740,7 +740,7 @@
 		<text x="135" y="45">edi</text>
 		<text x="135" y="105">yor</text>
 		<text x="150" y="165">lon</text>
-		<text x="445" y="105">nor</text>
+		<text x="445" y="105">nwy</text>
 		<text x="390" y="135">swe</text>
 		<text x="540" y="135">fin</text>
 		<text x="615" y="150">stp</text>
@@ -913,7 +913,7 @@
      	<rect id="edi" x="120" y="30" width="30" height="60"/>
      	<rect id="yor" x="120" y="90" width="30" height="60"/>
       	<rect id="lon" x="120" y="150" width="60" height="30"/>
-     	<rect id="nor" x="270" y="90" width="330" height="30"/>
+     	<rect id="nwy" x="270" y="90" width="330" height="30"/>
      	<rect id="swe" x="300" y="120" width="180" height="60"/>
      	<rect id="fin" x="480" y="120" width="120" height="60"/>
      	<rect id="stp" x="600" y="90" width="30" height="180"/>

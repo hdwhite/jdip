@@ -223,8 +223,8 @@
 			<UNIQUENAME name="nrd" />
 			<ADJACENCY type="xc" refs="yor edi nwg nor ska den hel hol bel eng lon" />
 		</PROVINCE>
-		<PROVINCE shortname="nor" fullname="Norway">
-			<UNIQUENAME name="nwy" />
+		<PROVINCE shortname="nwy" fullname="Norway">
+			<UNIQUENAME name="nor" />
 			<UNIQUENAME name="nge" />
 			<ADJACENCY type="mv" refs="fin stp swe" />
 			<ADJACENCY type="xc" refs="ska nth nwg bar stp-nc swe" />

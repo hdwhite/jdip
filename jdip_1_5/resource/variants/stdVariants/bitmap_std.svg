@@ -265,7 +265,7 @@
 		<jdipNS:PROVINCE name="nap"><jdipNS:UNIT x="566" y="804"/><jdipNS:DISLODGED_UNIT x="587" y="866"/><jdipNS:SUPPLY_CENTER x="601" y="850"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="nao"><jdipNS:UNIT x="141" y="273"/><jdipNS:DISLODGED_UNIT x="175" y="251"/><jdipNS:SUPPLY_CENTER x="0 " y="0 "/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="nth"><jdipNS:UNIT x="434" y="340"/><jdipNS:DISLODGED_UNIT x="445" y="314"/><jdipNS:SUPPLY_CENTER x="0 " y="0 "/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nor"><jdipNS:UNIT x="549" y="254"/><jdipNS:DISLODGED_UNIT x="561" y="231"/><jdipNS:SUPPLY_CENTER x="545" y="297"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nwy"><jdipNS:UNIT x="549" y="254"/><jdipNS:DISLODGED_UNIT x="561" y="231"/><jdipNS:SUPPLY_CENTER x="545" y="297"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="nwg"><jdipNS:UNIT x="475" y="97"/> <jdipNS:DISLODGED_UNIT x="507" y="77"/><jdipNS:SUPPLY_CENTER x="0 " y="0 "/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="par"><jdipNS:UNIT x="347" y="605"/><jdipNS:DISLODGED_UNIT x="342" y="573"/><jdipNS:SUPPLY_CENTER x="368" y="574"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="pic"><jdipNS:UNIT x="368" y="536"/><jdipNS:DISLODGED_UNIT x="381" y="531"/><jdipNS:SUPPLY_CENTER x="344" y="555"/></jdipNS:PROVINCE>

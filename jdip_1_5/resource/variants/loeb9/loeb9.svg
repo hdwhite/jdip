@@ -408,7 +408,7 @@
 		<jdipNS:PROVINCE name="nth">
 			<jdipNS:UNIT x="291" y="273.5"/>
 		</jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nor">
+		<jdipNS:PROVINCE name="nwy">
 			<jdipNS:UNIT x="366.5" y="222.3"/>
 			<jdipNS:SUPPLY_CENTER x="348.9" y="246.6"/>
 		</jdipNS:PROVINCE>
@@ -784,7 +784,7 @@
 		<text id="ful_nap" transform="translate(411.3,597.5), rotate(55)" x="0" y="0" class="labeltext10" style="font-size:8;">Naples</text>
 		<text id="ful_nao" x="106.4" y="144.2" class="labeltext20">North Atlantic Ocean</text>
 		<text id="ful_nth" x="293.7" y="277.5" class="labeltext14">North Sea</text>
-		<text id="ful_nor" transform="translate(384,215.6), rotate(-75)" x="0" y="0" class="labeltext18">Norway</text>
+		<text id="ful_nwy" transform="translate(384,215.6), rotate(-75)" x="0" y="0" class="labeltext18">Norway</text>
 		<text id="ful_nwg" x="335.5" y="74.1" class="labeltext20">Norwegian Sea</text>
 		<text id="ful_par" x="249.2" y="429.8">Paris</text>
 		<text id="ful_pic" transform="translate(266.8,398.8), rotate(20)" x="0" y="0" class="labeltext10">Picardy</text>
@@ -874,7 +874,7 @@
 		<text id="brf_nap" transform="translate(414.1,600), rotate(45)" x="0" y="0" class="labeltext10">nap</text>
 		<text id="brf_nao" x="78.1" y="103.7" class="labeltext20">nao</text>
 		<text id="brf_nth" x="296.4" y="238.5" class="labeltext18">nth</text>
-		<text id="brf_nor" x="370.5" y="202.1" class="labeltext18">nor</text>
+		<text id="brf_nwy" x="370.5" y="202.1" class="labeltext18">nwy</text>
 		<text id="brf_nwg" x="327.4" y="79.5" class="labeltext20">nwg</text>
 		<text id="brf_par" x="245.2" y="424.4" class="labeltext14">par</text>
 		<text id="brf_pic" x="258.4" y="396.7" class="labeltext12">pic</text>

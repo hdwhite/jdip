@@ -277,7 +277,7 @@
 		<jdipNS:PROVINCE name="nao"><jdipNS:UNIT x="75"  y="275"/><jdipNS:DISLODGED_UNIT  x="90" y="275"/><jdipNS:SUPPLY_CENTER x="75"  y="290"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="nap"><jdipNS:UNIT x="125" y="275"/><jdipNS:DISLODGED_UNIT x="140" y="275"/><jdipNS:SUPPLY_CENTER x="125" y="290"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="nav"><jdipNS:UNIT x="175" y="275"/><jdipNS:DISLODGED_UNIT x="190" y="275"/><jdipNS:SUPPLY_CENTER x="175" y="290"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nor"><jdipNS:UNIT x="225" y="275"/><jdipNS:DISLODGED_UNIT x="240" y="275"/><jdipNS:SUPPLY_CENTER x="225" y="290"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nwy"><jdipNS:UNIT x="225" y="275"/><jdipNS:DISLODGED_UNIT x="240" y="275"/><jdipNS:SUPPLY_CENTER x="225" y="290"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="nth"><jdipNS:UNIT x="275" y="275"/><jdipNS:DISLODGED_UNIT x="290" y="275"/><jdipNS:SUPPLY_CENTER x="275" y="290"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="nwg"><jdipNS:UNIT x="325" y="275"/><jdipNS:DISLODGED_UNIT x="340" y="275"/><jdipNS:SUPPLY_CENTER x="325" y="290"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="par"><jdipNS:UNIT x="375" y="275"/><jdipNS:DISLODGED_UNIT x="390" y="275"/><jdipNS:SUPPLY_CENTER x="375" y="290"/></jdipNS:PROVINCE>
@@ -488,7 +488,7 @@
 		<rect id="_nao" class="water" 	x="51" 	y="251" 	width="48" height="48" />
 		<rect id="_nap" class="nopower" 	x="101" y="251" 	width="48" height="48" />
 		<rect id="_nav" class="nopower" 	x="151" y="251" 	width="48" height="48" />
-		<rect id="_nor" class="nopower" 	x="201" y="251" 	width="48" height="48" />
+		<rect id="_nwy" class="nopower" 	x="201" y="251" 	width="48" height="48" />
 		<rect id="_nth" class="water" 	x="251" y="251" 	width="48" height="48" />
 		<rect id="_nwg" class="water" 	x="301" y="251" 	width="48" height="48" />
 		<rect id="_par" class="nopower" 	x="351" y="251" 	width="48" height="48" />
@@ -596,7 +596,7 @@
 			<text x="75"   y="265">nao</text>
 			<text x="125"  y="265">nap</text>
 			<text x="175"  y="265">nav</text>
-			<text x="225"  y="265">nor</text>
+			<text x="225"  y="265">nwy</text>
 			<text x="275"  y="265">nth</text>
 			<text x="325"  y="265">nwg</text>
 			<text x="375"  y="265">par</text>
@@ -721,7 +721,7 @@
 		<rect id="nao"  	x="51" 	y="251" 	width="48" height="48" />
 		<rect id="nap"  	x="101" y="251" 	width="48" height="48" />
 		<rect id="nav"  	x="151" y="251" 	width="48" height="48" />
-		<rect id="nor"  	x="201" y="251" 	width="48" height="48" />
+		<rect id="nwy"  	x="201" y="251" 	width="48" height="48" />
 		<rect id="nth"  	x="251" y="251" 	width="48" height="48" />
 		<rect id="nwg"  	x="301" y="251" 	width="48" height="48" />
 		<rect id="par"  	x="351" y="251" 	width="48" height="48" />

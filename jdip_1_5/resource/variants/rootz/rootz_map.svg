@@ -795,7 +795,7 @@ Feel free to use and change this template, but don't delete the copyright
 	   <text id="brf_nao1" x="56.3" y="360.7">nao1</text>
 	   <text id="brf_naf1" x="489.4" y="10.7" class="text10">naf1</text>
 	   <text id="brf_nth1" x="174.3" y="295">nth1</text>
-	   <text id="brf_nor1" x="131.4" y="264.2" class="text10">nor1</text>
+	   <text id="brf_nwy1" x="131.4" y="264.2" class="text10">nwy1</text>
 	   <text id="brf_nwg1" x="26.8" y="319.1">nwg1</text>
 	   <text id="brf_par1" x="293.7" y="340.6" class="text10">par1</text>
 	   <text id="brf_pic1" x="280.2" y="316.5" class="text12">pic1</text>
@@ -870,7 +870,7 @@ Feel free to use and change this template, but don't delete the copyright
 	   <text id="brf_nao2" x="733.5" y="120.7">nao2</text>
 	   <text id="brf_naf2" x="301.7" y="518.9" class="text10">naf2</text>
 	   <text id="brf_nth2" x="623.5" y="240">nth2</text>
-	   <text id="brf_nor2" x="653" y="265.5" class="text10">nor2</text>
+	   <text id="brf_nwy2" x="653" y="265.5" class="text10">nwy2</text>
 	   <text id="brf_nwg2" x="749.6" y="219.9">nwg2</text>
 	   <text id="brf_par2" x="493.4" y="186.2" class="text10">par2</text>
 	   <text id="brf_pic2" x="493.4" y="219.2" class="text10">pic2</text>
