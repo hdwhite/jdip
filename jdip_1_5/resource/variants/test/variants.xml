@@ -743,7 +743,7 @@
 		<INITIALSTATE province="war" power="russia" unit="army" />
 	</VARIANT>
 	
-		<VARIANT name="DATC_Loeb9_tc14specialg" version="1.0" default="false">
+	<VARIANT name="DATC_Loeb9_tc14specialg" version="1.0" default="false">
 		<DESCRIPTION><![CDATA[<div style="font-family:arial,helvetica;color:red;">
 		<b>NOTE: This map is for DATC and Regression Testing, and is not recommended for general game play. NOTE: Test Case 14.D</b>
 		</div>
@@ -842,6 +842,87 @@
 		<INITIALSTATE province="ven" power="italy" unit="army" />
 		<INITIALSTATE province="vie" power="austria" unit="army" />
 		<INITIALSTATE province="war" power="russia" unit="army" />
+	</VARIANT>
+	
+	
+	<VARIANT name="TEST_Borders" version="1.0" default="false">
+		<DESCRIPTION><![CDATA[<div style="font-family:arial,helvetica;color:red;">
+		<b>NOTE: This map is for Regression Testing, and is not recommended for general game play.</b>
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:10px;">
+		This map is a modified version of the standard map, with various borders
+		added, for testing of borders.
+		<ul>
+			<li>Spain : seasonBorder</li>
+			<li>Piedmont : phaseBorder</li>
+			<li>PICARDY : unitBorder</li>
+			<li>KIEL : orderBorder</li>
+			<li>SMYRNA : multiple</li>
+			<li>TYROLIA : yearSingle</li>
+			<li>VIENNA : yearFuture</li>
+			<li>Budapest : yearPast</li>
+			<li>Rumania : yearOdd</li>
+			<li>Bulgaria : yearEven</li>
+		</ul>
+		No units have been placed (and are not needed; the test cases
+		place and check units).
+		</div>]]></DESCRIPTION>
+		<MAP adjacencyURI="std_borders.xml">
+			<MAP_GRAPHIC ref="standard" default="true"/>
+		</MAP>
+		<RULEOPTIONS>
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+			<RULEOPTION name="OPTION_WINGS" value="VALUE_WINGS_ENABLED" />
+		</RULEOPTIONS>
+		<POWER name="France" active="true" adjective="French" /> 
+		<POWER name="Austria" active="true" adjective="Austrian" /> 
+		<POWER name="Turkey" active="true" adjective="Turkish" /> 
+		<POWER name="Russia" active="true" adjective="Russian" /> 
+		<POWER name="England" active="true" adjective="English" altnames="Britain" /> 
+		<POWER name="Germany" active="true" adjective="German" /> 
+		<POWER name="Italy" active="true" adjective="Italian" />
+		<STARTINGTIME turn="Spring, 1914, Movement" allowBCYears="true"/>
+		<VICTORYCONDITIONS>
+			<WINNING_SUPPLY_CENTERS value="18" />
+			<YEARS_WITHOUT_SC_CAPTURE value="7" />
+			<GAME_LENGTH value="35" />
+		</VICTORYCONDITIONS>
+ 	 	<!-- supply centers -->
+		<SUPPLYCENTER province="ank" homepower="turkey" owner="turkey"/>
+		<SUPPLYCENTER province="bel" />
+		<SUPPLYCENTER province="ber" homepower="germany" owner="germany"/>
+	 	<SUPPLYCENTER province="bre" homepower="france" owner="france"/>
+		<SUPPLYCENTER province="bud" homepower="austria" owner="austria"/>
+		<SUPPLYCENTER province="bul" />
+	 	<SUPPLYCENTER province="con" homepower="turkey" owner="turkey"/>
+		<SUPPLYCENTER province="den" />
+		<SUPPLYCENTER province="edi" homepower="britain" owner="britain"/>
+		<SUPPLYCENTER province="gre" />
+		<SUPPLYCENTER province="hol" />
+		<SUPPLYCENTER province="kie" homepower="germany" owner="germany"/>
+		<SUPPLYCENTER province="lvp" homepower="britain" owner="britain"/>
+		<SUPPLYCENTER province="lon" homepower="britain" owner="britain"/>
+	 	<SUPPLYCENTER province="mar" homepower="france" owner="france"/>
+	 	<SUPPLYCENTER province="mos" homepower="russia" owner="russia"/>
+		<SUPPLYCENTER province="mun" homepower="germany" owner="germany"/>
+	 	<SUPPLYCENTER province="nap" homepower="italy" owner="italy"/>
+		<SUPPLYCENTER province="nor" />
+	 	<SUPPLYCENTER province="par" homepower="france" owner="france"/>
+		<SUPPLYCENTER province="por" />
+	 	<SUPPLYCENTER province="rom" homepower="italy" owner="italy"/>
+		<SUPPLYCENTER province="rum" />
+		<SUPPLYCENTER province="ser" />
+	 	<SUPPLYCENTER province="sev" homepower="russia" owner="russia"/>
+	 	<SUPPLYCENTER province="smy" homepower="turkey" owner="turkey"/>
+		<SUPPLYCENTER province="spa" />
+	 	<SUPPLYCENTER province="stp" homepower="russia" owner="russia"/>
+		<SUPPLYCENTER province="swe" />
+		<SUPPLYCENTER province="tri" homepower="austria" owner="austria"/>
+		<SUPPLYCENTER province="tun" />
+	 	<SUPPLYCENTER province="ven" homepower="italy" owner="italy"/>
+		<SUPPLYCENTER province="vie" homepower="austria" owner="austria"/>
+	 	<SUPPLYCENTER province="war" homepower="russia" owner="russia"/>
+		<!-- unit placement -->
 	</VARIANT>
 	
 </VARIANTS>

@@ -9,11 +9,13 @@
 	<!ATTLIST BORDER	
 				id ID #REQUIRED
 				description CDATA #REQUIRED
-				unitTypes CDATA #IMPLIED
 				from CDATA #IMPLIED
+				unitTypes CDATA #IMPLIED
 				orderTypes CDATA #IMPLIED
+				year CDATA #IMPLIED
+				season CDATA #IMPLIED
+				phase CDATA #IMPLIED
 				baseMoveModifier CDATA #IMPLIED
-				prohibited CDATA #REQUIRED
 				>
 				
 	<!-- ===================================================================== -->
@@ -38,9 +40,9 @@
 <PROVINCES>
 		<!-- this sets the 'ice' borders and support-borders -->
 		<BORDER_DEFINITIONS>
-     		<BORDER id="ice" description="Ice prevents all orders in the Fall." prohibited="fall" />
-			<BORDER id="mv_sic2tun" from="sic" description="" baseMoveModifier="-1" prohibited="" />
-			<BORDER id="mv_tun2sic" from="tun" description="" baseMoveModifier="-1" prohibited="" />
+     		<BORDER id="ice" description="Ice prevents all orders in the Fall." season="fall" />
+			<BORDER id="mv_sic2tun" from="sic" description="" baseMoveModifier="-1" />
+			<BORDER id="mv_tun2sic" from="tun" description="" baseMoveModifier="-1" />
 		</BORDER_DEFINITIONS>
 		<!-- name, abbreviation, and adjacency data for all provinces -->
 		<!-- virtually identical to Judge format -->

@@ -1170,6 +1170,11 @@
 	
 	<VARIANT name="Chaos" version="1.0" default="false">
 		<DESCRIPTION><![CDATA[ 
+		<p style="color:blue;">
+			This version of Chaos is compatible with nJudge and other KL-based judges.
+			It is not compatible with DPJudge (USDP and UKDP). The DPJudge-compatible version of
+			Chaos must be installed separately, and will replace this version.
+		</p>
 		<p>
 			The chaos variant is played by 34 players, each owning a single supply
 			center on the standard map.  The game starts in Winter of
@@ -1198,40 +1203,87 @@
 		<RULEOPTIONS>
 			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_ANY_OWNED" />
 		</RULEOPTIONS>
-		<POWER name="A-Ank" altnames="Ankara" active="true" adjective="Ankaran" /> 
-		<POWER name="B-Bel" altnames="Belgium" active="true" adjective="Belgian" /> 
-		<POWER name="C-Ber" altnames="Berlin" active="true" adjective="Berliner" /> 
-		<POWER name="D-Bre" altnames="Brest" active="true" adjective="Brestian" /> 
-		<POWER name="E-Bud" altnames="Budapest" active="true" adjective="Austrian" /> 
-		<POWER name="F-Bul" altnames="Bulgaria" active="true" adjective="Bulgarian" /> 
-		<POWER name="G-Con" altnames="Constantinople" active="true" adjective="Byzantine" /> 
-		<POWER name="H-Den" altnames="Denmark" active="true" adjective="Danish" /> 
-		<POWER name="I-Edi" altnames="Edinburgh" active="true" adjective="Scottish" /> 
-		<POWER name="J-Gre" altnames="Greece" active="true" adjective="Greek" /> 
-		<POWER name="K-Hol" altnames="Holland" active="true" adjective="Dutch" /> 
-		<POWER name="L-Kie" altnames="Kiel" active="true" adjective="Kiellian" /> 
-		<POWER name="N-Lvp" altnames="Liverpool" active="true" adjective="Lilliputians" /> 
-		<POWER name="P-Lon" altnames="London" active="true" adjective="English" /> 
-		<POWER name="Q-Mar" altnames="Marseilles" active="true" adjective="Marsellais" /> 
-		<POWER name="R-Mos" altnames="Moscow" active="true" adjective="Muscovite" /> 
-		<POWER name="S-Mun" altnames="Munich" active="true" adjective="Bavarian" /> 
-		<POWER name="T-Nap" altnames="Naples" active="true" adjective="Napoli" /> 
-		<POWER name="U-Nor" altnames="Norway" active="true" adjective="Norwegian" /> 
-		<POWER name="V-Par" altnames="Paris" active="true" adjective="Parisian" /> 
-		<POWER name="W-Por" altnames="Portugal" active="true" adjective="Portuguese" /> 
-		<POWER name="X-Rom" altnames="Rome" active="true" adjective="Roman" /> 
-		<POWER name="Y-Rum" altnames="Rumania" active="true" adjective="Rumanian" /> 
-		<POWER name="Z-Ser" altnames="Serbia" active="true" adjective="Serbian" /> 
-		<POWER name="0-Sev" altnames="Sevastopol" active="true" adjective="Sevastopolish" /> 
-		<POWER name="1-Smy" altnames="Smyrna" active="true" adjective="Smyrnan" /> 
-		<POWER name="2-Spa" altnames="Spain" active="true" adjective="Spanish" /> 
-		<POWER name="3-StP" altnames="StPetersburg" active="true" adjective="Petersburgian" /> 
-		<POWER name="4-Swe" altnames="Sweden" active="true" adjective="Swedish" /> 
-		<POWER name="5-Tri" altnames="Trieste" active="true" adjective="Carinthian" /> 
-		<POWER name="6-Tun" altnames="Tunis" active="true" adjective="Tunisian" /> 
-		<POWER name="7-Ven" altnames="Venice" active="true" adjective="Venecian" /> 
-		<POWER name="8-Vie" altnames="Vienna" active="true" adjective="Viennese" /> 
-		<POWER name="9-War" altnames="Warsaw" active="true" adjective="Polish" /> 
+		<!-- 
+			note: DPJudge uses a different set of names and (perhaps? 
+			adjectives). This is not public, as DPJudge source is not public..
+			
+			Also, issues arise if powers have the same names as provinces,
+			because order parsing won't work correctly in some cases.
+			
+			so no DPJudge support for now.
+			
+			This is the partial DPJudge support.
+			===========
+			<POWER name="A-Ank" altnames="Ankara" active="true" adjective="Ankaran" /> 
+			<POWER name="B-Bel" altnames="Belgium" active="true" adjective="Belgian" /> 
+			<POWER name="C-Ber" altnames="Berlin" active="true" adjective="Berliner" /> 
+			<POWER name="D-Bre" altnames="Brest" active="true" adjective="Brestian" /> 
+			<POWER name="E-Bud" altnames="Budapest" active="true" adjective="Austrian" /> 
+			<POWER name="F-Bul" altnames="Bulgaria" active="true" adjective="Bulgarian" /> 
+			<POWER name="G-Con" altnames="Constantinople" active="true" adjective="Byzantine" /> 
+			<POWER name="H-Den" altnames="Denmark" active="true" adjective="Danish" /> 
+			<POWER name="I-Edi" altnames="Edinburgh" active="true" adjective="Scottish" /> 
+			<POWER name="J-Gre" altnames="Greece" active="true" adjective="Greek" /> 
+			<POWER name="K-Hol" altnames="Holland" active="true" adjective="Dutch" /> 
+			<POWER name="L-Kie" altnames="Kiel" active="true" adjective="Kiellian" /> 
+			<POWER name="N-Lvp" altnames="Liverpool" active="true" adjective="Lilliputian" /> 
+			<POWER name="P-Lon" altnames="London" active="true" adjective="English" /> 
+			<POWER name="Q-Mar" altnames="Marseilles" active="true" adjective="Marsellais" /> 
+			<POWER name="R-Mos" altnames="Moscow" active="true" adjective="Muscovite" /> 
+			<POWER name="S-Mun" altnames="Munich" active="true" adjective="Bavarian" /> 
+			<POWER name="T-Nap" altnames="Naples" active="true" adjective="Napoli" /> 
+			<POWER name="U-Nor" altnames="Norway" active="true" adjective="Norwegian" /> 
+			<POWER name="V-Par" altnames="Paris" active="true" adjective="Parisian" /> 
+			<POWER name="W-Por" altnames="Portugal" active="true" adjective="Portuguese" /> 
+			<POWER name="X-Rom" altnames="Rome" active="true" adjective="Roman" /> 
+			<POWER name="Y-Rum" altnames="Rumania" active="true" adjective="Rumanian" /> 
+			<POWER name="Z-Ser" altnames="Serbia" active="true" adjective="Serbian" /> 
+			<POWER name="0-Sev" altnames="Sevastopol" active="true" adjective="Sevastopolish" /> 
+			<POWER name="1-Smy" altnames="Smyrna" active="true" adjective="Smyrnan" /> 
+			<POWER name="2-Spa" altnames="Spain" active="true" adjective="Spanish" /> 
+			<POWER name="3-StP" altnames="StPetersburg" active="true" adjective="St Petersburger" /> 
+			<POWER name="4-Swe" altnames="Sweden" active="true" adjective="Swedish" /> 
+			<POWER name="5-Tri" altnames="Trieste" active="true" adjective="Carinthian" /> 
+			<POWER name="6-Tun" altnames="Tunis" active="true" adjective="Tunisian" /> 
+			<POWER name="7-Ven" altnames="Venice" active="true" adjective="Venetian" /> 
+			<POWER name="8-Vie" altnames="Vienna" active="true" adjective="Viennese" /> 
+			<POWER name="9-War" altnames="Warsaw" active="true" adjective="Polish" /> 
+		
+		-->
+		<POWER name="A-Ank"  active="true" adjective="A-Ank"/>
+		<POWER name="B-Bel"  active="true" adjective="B-Bel"/>
+		<POWER name="C-Ber"  active="true" adjective="C-Ber"/>
+		<POWER name="D-Bre"  active="true" adjective="D-Bre"/>
+		<POWER name="E-Bud"  active="true" adjective="E-Bud"/>
+		<POWER name="F-Bul"  active="true" adjective="F-Bul"/>
+		<POWER name="G-Con"  active="true" adjective="G-Con"/>
+		<POWER name="H-Den"  active="true" adjective="H-Den"/>
+		<POWER name="I-Edi"  active="true" adjective="I-Edi"/>
+		<POWER name="J-Gre"  active="true" adjective="J-Gre"/>
+		<POWER name="K-Hol"  active="true" adjective="K-Hol"/>
+		<POWER name="L-Kie"  active="true" adjective="L-Kie"/>
+		<POWER name="N-Lvp"  active="true" adjective="N-Lvp"/>
+		<POWER name="P-Lon"  active="true" adjective="P-Lon"/>
+		<POWER name="Q-Mar"  active="true" adjective="Q-Mar"/>
+		<POWER name="R-Mos"  active="true" adjective="R-Mos"/>
+		<POWER name="S-Mun"  active="true" adjective="S-Mun"/>
+		<POWER name="T-Nap"  active="true" adjective="T-Nap"/>
+		<POWER name="U-Nor"  active="true" adjective="U-Nor"/>
+		<POWER name="V-Par"  active="true" adjective="V-Par"/>
+		<POWER name="W-Por"  active="true" adjective="W-Por"/>
+		<POWER name="X-Rom"  active="true" adjective="X-Rom"/>
+		<POWER name="Y-Rum"  active="true" adjective="Y-Rum"/>
+		<POWER name="Z-Ser"  active="true" adjective="Z-Ser"/>
+		<POWER name="0-Sev"  active="true" adjective="0-Sev"/>
+		<POWER name="1-Smy"  active="true" adjective="1-Smy"/>
+		<POWER name="2-Spa"  active="true" adjective="2-Spa"/>
+		<POWER name="3-StP"  active="true" adjective="3-StP"/>
+		<POWER name="4-Swe"  active="true" adjective="4-Swe"/>
+		<POWER name="5-Tri"  active="true" adjective="5-Tri"/>
+		<POWER name="6-Tun"  active="true" adjective="6-Tun"/>
+		<POWER name="7-Ven"  active="true" adjective="7-Ven"/>
+		<POWER name="8-Vie"  active="true" adjective="8-Vie"/>
+		<POWER name="9-War"  active="true" adjective="9-War"/>
 		<STARTINGTIME turn="Fall, 1900, Adjustment" />
 		<VICTORYCONDITIONS>
 			<WINNING_SUPPLY_CENTERS value="18" />

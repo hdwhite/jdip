@@ -382,6 +382,13 @@
 	<!-- draw background -->
 	<g id="MapLayer">
 		<image x="0" y="0" width="1152" height="965" xlink:href="std_bit.png"/>
+		
+		<!--
+		interestingly, an absolute path works consistently; 
+		the relative path (jar:) doesn't. hmmmmm
+		
+		<image x="0" y="0" width="1152" height="965" xlink:href="file:/D:/std_bit.png"/>
+		-->
 	</g>
 	
 	

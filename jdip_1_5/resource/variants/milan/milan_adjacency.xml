@@ -9,11 +9,13 @@
 	<!ATTLIST BORDER	
 				id ID #REQUIRED
 				description CDATA #REQUIRED
-				unitTypes CDATA #IMPLIED
 				from CDATA #IMPLIED
+				unitTypes CDATA #IMPLIED
 				orderTypes CDATA #IMPLIED
+				year CDATA #IMPLIED
+				season CDATA #IMPLIED
+				phase CDATA #IMPLIED
 				baseMoveModifier CDATA #IMPLIED
-				prohibited CDATA #REQUIRED
 				>
 				
 	<!-- ===================================================================== -->
