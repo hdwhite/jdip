@@ -678,12 +678,22 @@ public class TextViewer extends HeaderDialog
 		public void actionPerformed(ActionEvent e)
 		{
 			final String action = e.getActionCommand();
-			Action a = textComponent.getActionMap().get(action);
+			final Action a = textComponent.getActionMap().get(action);
+			
 			if(a != null)
 			{
 				a.actionPerformed(new ActionEvent(textComponent,
-												  ActionEvent.ACTION_PERFORMED,
-												  null));
+					ActionEvent.ACTION_PERFORMED, null));
+				
+				if(action.equals(DefaultEditorKit.selectAllAction))
+				{
+					// bug workaround: DefaultEditorKit.selectAllAction does
+					// NOT highlight the selected text. control-A will. I'm 
+					// not sure why this occurs. We will override the default
+					// behavior here.
+					//
+					textComponent.getCaret().setSelectionVisible(true);
+				}
 			}
 			else
 			{
@@ -818,14 +828,16 @@ public class TextViewer extends HeaderDialog
 		final JTextComponentActionListener actionListener = new JTextComponentActionListener(textPane);
 		
 		// add default components
-		return setupCommandBar(jtb, actionListener);
+		setupCommandBar(jtb, actionListener);
+		
+		return jtb;
 	}// createCommandBar()
 	
 	/**
 	*	Adds buttons to the command bar. This is not called if no command bar is
 	*	enabled for the dialog.
 	*/
-	protected JToolBar setupCommandBar(JToolBar jtb, JTextComponentActionListener listener)
+	protected void setupCommandBar(JToolBar jtb, JTextComponentActionListener listener)
 	{
 		// file
 		JButton b = new JButton(Utils.getLocalString(TEXT_SAVEAS), Utils.getIcon(ICON_SAVEAS));
@@ -863,8 +875,6 @@ public class TextViewer extends HeaderDialog
 		b.setActionCommand(DefaultEditorKit.selectAllAction);
 		b.addActionListener(listener);
 		jtb.add(b);
-		
-		return jtb;
 	}// setupCommandBar()
 	
 }// class TextViewer

@@ -197,70 +197,9 @@ public class ClientFrame extends JFrame
 		
 		/*
 		// Batik setup. org.apache.crimson.parser.XMLReaderImpl is the built-in JDK 1.4 parser
-		XMLResourceDescriptor.setXMLParserClassName("org.apache.crimson.parser.XMLReaderImpl");	// doesn't work correctly...
-		XMLResourceDescriptor.setXMLParserClassName("org.apache.crimson.parser.XMLReaderImpl");	// doesn't work correctly...
+		XMLResourceDescriptor.setXMLParserClassName("org.apache.crimson.parser.XMLReaderImpl");	
+			// NOTE: the above will not work in 1.5
 		*/
-		//XMLResourceDescriptor.setXMLParserClassName("com.bluecast.xml.Piccolo");
-		// DEFAULT: JDK 1.4 reader
-		// what happens if we run on 1.5?
-		/*
-			http://java.sun.com/j2se/1.5.0/docs/guide/xml/jaxp/JAXP-Compatibility_150.html
-			
-			the following WILL NOT WORK on 1.5!!!
-		*/
-		XMLResourceDescriptor.setXMLParserClassName("org.apache.crimson.parser.XMLReaderImpl");
-		
-		
-		Log.println("Batik XML parser: ", XMLResourceDescriptor.getXMLParserClassName());
-		
-		System.out.println("TESTING XOM");
-		/*
-		try
-		{
-			// it finds PICCOLO and JADE before the default java XML parser (CRIMSON)
-			// need to specify the class.
-			// see: XMLResourceDescriptor.setXMLParserClassName
-			// OR
-			// SOURCE CODE for XOM
-			//
-			//
-			final javax.xml.parsers.SAXParserFactory saxParserFactory = javax.xml.parsers.SAXParserFactory.newInstance(); 
-			final javax.xml.parsers.SAXParser saxParser = saxParserFactory.newSAXParser(); 
-			final org.xml.sax.XMLReader reader = saxParser.getXMLReader();
-						
-			System.out.println("TEST: reader: "+reader);
-			
-			reader.setEntityResolver(new org.xml.sax.EntityResolver()
-			{
-				public org.xml.sax.InputSource resolveEntity(String publicID, String systemID)
-				{
-					System.out.println("resolveEntity()");
-					System.out.println("   publicID: "+publicID);
-					System.out.println("   systemID: "+systemID);
-					return null;	// default entity handling
-				}// resolveEntity()
-				
-				public org.xml.sax.InputSource getExternalSubset(java.lang.String name, java.lang.String baseURI)
-				{
-					System.out.println("getExternalSubset()");
-					System.out.println("   name: "+name);
-					System.out.println("   baseURI: "+baseURI);
-					return null;	// default entity handling
-				}
- 			});
-			
-			
-			nu.xom.Builder builder = new nu.xom.Builder(reader);
-			nu.xom.Document doc = builder.build("C:\\Java\\Projects\\jdip_16_17\\textXML.xml");
-			System.out.println(doc.toXML());
-		}
-		catch(Throwable t)
-		{
-			System.out.println(t);
-			t.printStackTrace();
-		}
-		*/
-		System.out.println("END XOM TEST");
 		
 		
 		// setup per-OS options

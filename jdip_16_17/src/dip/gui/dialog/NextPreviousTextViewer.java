@@ -110,10 +110,10 @@ public class NextPreviousTextViewer extends TextViewer
 	
 	
 	/** CommandBar additions */
-	protected JToolBar setupCommandBar(JToolBar jtb, 
+	protected void setupCommandBar(JToolBar jtb, 
 		TextViewer.JTextComponentActionListener listener)
 	{
-		jtb = super.setupCommandBar(jtb, listener);
+		super.setupCommandBar(jtb, listener);
 		
 		jtb.add(Box.createHorizontalGlue());
 		NPTVListener nptvl = new NPTVListener();
@@ -134,8 +134,6 @@ public class NextPreviousTextViewer extends TextViewer
 		bNext.setToolTipText(Utils.getLocalString(TT_NEXT));
 		bNext.setEnabled(false);
 		jtb.add(bNext);
-		
-		return jtb;
 	}// setupCommandBar()
 	
 	

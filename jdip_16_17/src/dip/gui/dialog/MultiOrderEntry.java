@@ -25,21 +25,29 @@ package dip.gui.dialog;
 import dip.order.OrderException;
 import dip.misc.Utils;
 import dip.misc.Log;
+import dip.misc.SimpleFileFilter;
 import dip.gui.ClientFrame;
 import dip.gui.OrderDisplayPanel;
+import dip.gui.swing.XJFileChooser;
+import dip.gui.dialog.prefs.GeneralPreferencePanel;
 import dip.world.Map;
 import dip.world.World;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import javax.swing.JScrollPane;
-
+import javax.swing.JButton;
+import javax.swing.JToolBar;
 /**
 *
 *	Modal dialog for entering multiple orders
@@ -58,6 +66,10 @@ public class MultiOrderEntry
 	private static final String RESULT_DIALOG_TITLE = "MOED.dlg.result.title"; 
 	private static final String RESULT_DIALOG_HEADER = "MOED.dlg.result.text.result"; 
 	private static final String COMMENT_PREFIX = "(*";
+	
+	private static final String LOAD_BUTTON_TEXT 	 = "MOED.button.loadOrders.text";
+	private static final String LOAD_BUTTON_TOOLTIP  = "MOED.button.loadOrders.tooltip";
+	private static final String LOAD_DIALOG_TITLE	 = "MOED.dlg.loadOrders.title";
 	
 	// constants
 	/**
@@ -88,7 +100,7 @@ public class MultiOrderEntry
 	
 	// instance variables
 	private ClientFrame parent;
-	private TextViewer tv;
+	private final TextViewer tv;
 	private OrderDisplayPanel orderDisplayPanel;
 	private World world;
 	private Pattern listPattern = null;
@@ -109,7 +121,29 @@ public class MultiOrderEntry
 		this.world = world;
 		this.orderDisplayPanel = parent.getOrderDisplayPanel();
 		
-		tv = new TextViewer(parent, true, true);
+		tv = new TextViewer(parent, true, true)
+		{
+			protected void setupCommandBar(JToolBar jtb, 
+				TextViewer.JTextComponentActionListener listener)
+			{
+				JButton openFile = new JButton(
+					Utils.getLocalString(LOAD_BUTTON_TEXT),
+					Utils.getIcon("resource/common/icons/24x24/stock_open_24.png"));
+				openFile.setToolTipText(Utils.getLocalString(LOAD_BUTTON_TOOLTIP));
+				openFile.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						loadOrders(tv);
+					}
+				});
+				
+				jtb.add(openFile);
+				
+				super.setupCommandBar(jtb, listener);
+			}// setupCommandBar()
+		};
+		
 		tv.setEditable(true);
 		tv.setHeaderText( Utils.getText(Utils.getLocalString(HEADER_TEXT_LOCATION)) );
 		tv.setTitle(Utils.getLocalString(TITLE));
@@ -121,6 +155,68 @@ public class MultiOrderEntry
 		tv.setHelpID(dip.misc.Help.HelpID.Dialog_MultiOrder);
 	}// MultiOrderEntry()
 	
+	
+	/**
+	*	Load orders (threaded) from a file-request dialog.
+	*/
+	private void loadOrders(final TextViewer tv)
+	{
+		// JFileChooser setup 
+		XJFileChooser chooser = XJFileChooser.getXJFileChooser();
+		chooser.addFileFilter(SimpleFileFilter.TXT_FILTER);
+		chooser.setFileFilter(SimpleFileFilter.TXT_FILTER);
+		chooser.setCurrentDirectory( GeneralPreferencePanel.getDefaultGameDir() );
+		final File file = chooser.displayOpen(parent, Utils.getLocalString(LOAD_DIALOG_TITLE));
+		XJFileChooser.dispose();
+		
+		// get file name
+		if(file != null)
+		{
+			TextViewer.TVRunnable tvr = new TextViewer.TVRunnable()
+			{
+				public void run()
+				{
+					StringBuffer sb = new StringBuffer(4096);
+					BufferedReader in = null;
+					
+					try
+					{
+						in = new BufferedReader(new FileReader(file));
+						String line = null;
+						while((line = in.readLine()) != null)
+						{
+							sb.append(line);
+							sb.append('\n');
+						}
+						in.close();
+					}
+					catch (IOException e) 
+					{
+						ErrorDialog.displayFileIO(parent, e, file.toString());
+					}		
+					finally
+					{
+						if(in != null)
+						{
+							try
+							{
+								in.close();
+							}
+							catch(IOException e)
+							{
+								// do nothing
+							}
+						}
+					}
+					
+					tv.setText(sb.toString());
+				};
+			};
+			
+			Thread t = new Thread(tvr);
+			t.start();		
+		}
+	}// loadOrders()
 	
 	
 	private class Acceptor implements TextViewer.AcceptListener
@@ -417,7 +513,6 @@ public class MultiOrderEntry
 		
 		return false;
 	}// isRecognized()
-	
 	
 	
 }// class MultiOrderEntry()
