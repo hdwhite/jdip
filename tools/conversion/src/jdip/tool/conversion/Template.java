@@ -20,7 +20,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.conversion;
+package jdip.tool.conversion;
 
 import java.lang.*;
 import java.io.*;

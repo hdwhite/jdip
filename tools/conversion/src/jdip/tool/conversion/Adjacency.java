@@ -20,7 +20,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.conversion;
+package jdip.tool.conversion;
 
 import java.lang.*;
 import java.io.*;
@@ -143,5 +143,18 @@ class Adjacency
 		return sb.toString();
 	}// toXML()
 	
+	/** For debugging */
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append(this.getClass().getName());
+		sb.append("[");
+		sb.append(loc);
+		sb.append(",");
+		sb.append(hasMX);
+		sb.append(",");
+		sb.append( adjLocs );
+		return sb.toString();
+	}// toSTring()
 }// class Adjacency
 

@@ -20,7 +20,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.conversion;
+package jdip.tool.conversion;
 
 import java.lang.*;
 import java.io.*;
@@ -56,24 +56,8 @@ import java.util.*;
 */
 public class RPConvert
 {
-	private static final String VARIANT_TEMPLATE 	= "jdip/conversion/VariantXMLTemplate.txt";
+	private static final String VARIANT_TEMPLATE 	= "jdip/tool/conversion/VariantXMLTemplate.txt";
 	private static final String UNKNOWN_DATA = "_UNKNOWN_";
-	
-	
-	/*
-	
-	TODO:
-		
-		BUILD RULE implementation
-		PROPER power ownership info
-		
-	
-	
-	
-	*/
-	
-	
-	// later: create svg file
 	
 	
 	public static void main(String args[])

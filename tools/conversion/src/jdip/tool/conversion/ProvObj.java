@@ -20,7 +20,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.conversion;
+package jdip.tool.conversion;
 
 import java.lang.*;
 import java.io.*;
@@ -118,7 +118,7 @@ class ProvObj implements Comparable
 		for(int i=0; i<shortNames.size(); i++)
 		{
 			String sn = (String) shortNames.get(i);
-			if(sn.equals(in))
+			if(sn.equalsIgnoreCase(in))
 			{
 				return true;
 			}
@@ -147,7 +147,10 @@ class ProvObj implements Comparable
 		// short name MUST match province short name returned by getSN()!
 		if(!isSN( adj.getLoc().getShortName() ))
 		{
-			throw new IllegalStateException("Adding adjacency to wrong province!");
+			String msg = "Adding adjacency to wrong province!\n"+
+						 "ProvObj: "+getSN()+"\n"+
+						 "Adding: "+adj+"\n";
+			throw new IllegalStateException(msg);
 		}
 			
 		// no coast?
@@ -229,6 +232,16 @@ class ProvObj implements Comparable
 		throw new IllegalArgumentException();
 	}// compareTo()
 	
+	
+	public String getFullName()
+	{
+		return fullName;
+	}
+	
+	public String[] getShortNames()
+	{
+		return (String[]) shortNames.toArray(new String[shortNames.size()]);
+	}
 	
 	public boolean isConvoyableCoast()
 	{
@@ -339,7 +352,7 @@ class ProvObj implements Comparable
 				sb.append( makeBorderNames() );
 				if(isIce())
 				{
-					sb.append(", ");
+					sb.append(" ");
 				}
 			}
 			
@@ -381,7 +394,7 @@ class ProvObj implements Comparable
 	/** 
 	*	Create -mx border names:
 	*
-	*		mx_FromXXX (all caps)
+	*		mxFromXXX (XXX is all caps)
 	*
 	*/
 	private String makeBorderNames()
@@ -401,7 +414,10 @@ class ProvObj implements Comparable
 					{
 						String name = BORDER_NAME_PREFIX;
 						name += loc.getShortName().toUpperCase();
-						borders.add(name);
+						if(!borders.contains(name))
+						{
+							borders.add(name);
+						}
 					}
 				}
 			}
@@ -410,10 +426,10 @@ class ProvObj implements Comparable
 		StringBuffer sb = new StringBuffer(64);
 		for(int i=0; i<borders.size(); i++)
 		{
-			sb.append( borders.get(0) );
+			sb.append( borders.get(i) );
 			if(i < borders.size()-1)
 			{
-				sb.append(", ");
+				sb.append(" ");
 			}
 		}
 		

@@ -89,12 +89,12 @@
 		
 		<!-- create jar: judgeconvert -->
 		<jar jarfile="${build.dir}/judgeconvert.jar" basedir="${class.dir}/conversion"
-				includes="jdip/conversion/**/*"
+				includes="**/*"
 				manifest="${conversion.dir}/etc/judgeconvert_manifest.txt"/>
 		
 		<!-- create jar: rpconvert -->
 		<jar jarfile="${build.dir}/rpconvert.jar" basedir="${class.dir}/conversion"
-				includes="jdip/conversion/**/*"
+				includes="**/*"
 				manifest="${conversion.dir}/etc/rpconvert_manifest.txt"/>
 	</target>
 	

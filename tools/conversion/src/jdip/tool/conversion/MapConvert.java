@@ -20,7 +20,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.conversion;
+package jdip.tool.conversion;
 
 import java.lang.*;
 import java.io.*;
@@ -45,13 +45,11 @@ import java.util.*;
 public class MapConvert
 {
 	
-	private static final String VARIANT_TEMPLATE 	= "jdip/conversion/VariantXMLTemplate.txt";
-	private static final String ADJACENCY_TEMPLATE 	= "jdip/conversion/AdjacencyXMLTemplate.txt";
+	private static final String VARIANT_TEMPLATE 	= "jdip/tool/conversion/VariantXMLTemplate.txt";
+	private static final String ADJACENCY_TEMPLATE 	= "jdip/tool/conversion/AdjacencyXMLTemplate.txt";
 	private static final String UNKNOWN_DATA = "_UNKNOWN_";
 	
-	private final Map provMap;		// map of short-names (lower case) to objects
-	private final List provList; 	// list of province objects
-	
+	PMap pmap = null;
 	
 	/** Convert a Judge map to jDip Adjacency format. */
 	public static void main(String args[])
@@ -109,11 +107,8 @@ public class MapConvert
 		final Template adjacencyTemplate = new Template(
 			cl.getResourceAsStream(ADJACENCY_TEMPLATE) );
 			
-		provMap = new HashMap(211);		// map of short-names (lower case) to objects
-		provList = new LinkedList();		// list of province objects
-		
 		FileLine[] lines = null;
-		
+		pmap = new PMap();
 		
 		// read all lines.
 		LineNumberReader lnr = null;
@@ -166,8 +161,7 @@ public class MapConvert
 			
 			// add to both map AND list!
 			ProvObj po = ProvObj.makeProvObj(fl);
-			provMap.put(po.getSN(), po);
-			provList.add(po);
+			pmap.put(po);
 		}
 		
 		System.out.println("Province parsing complete.");
@@ -191,20 +185,7 @@ public class MapConvert
 			// through the map (slow!) until we find a matching name. If we don't,
 			// then we'll throw an exception.
 			final String adjName = adj.getLoc().getShortName();
-			ProvObj po = (ProvObj) provMap.get(adjName);
-			if(po == null)
-			{
-				Iterator iter = provList.iterator();
-				while(iter.hasNext())
-				{
-					po = (ProvObj) iter.next();
-					if(po.isSN(adjName))
-					{
-						break;	// we found it
-					}
-				}
-			}
-			
+			ProvObj po = pmap.get(adjName);
 			if(po == null)
 			{
 				fl.makeError("ERROR: adjacency province "+adjName+" not previously defined!");
@@ -225,7 +206,7 @@ public class MapConvert
 			bw = new BufferedWriter(new FileWriter(adjacencyOutput));
 			
 			StringBuffer sb = new StringBuffer(4096);
-			makeXMLData(sb, provList);
+			makeXMLData(sb, pmap.getList());
 			
 			// write adjacency data
 			HashMap templateData = new HashMap();
@@ -244,19 +225,19 @@ public class MapConvert
 	}// MapConvert()
 	
 	
-	/** Get a List of ProvObj objects. This is modifiable. */
+	/** Get a List of ProvObj objects. Umodifiable. */
 	public List getProvObjList()
 	{
-		return provList;
+		return pmap.getList();
 	}// getProvObjList()
 	
 	/**
 	*	Get the java.util.Map of ProvObj objects. These are mapped
-	*	by the first shortname of the ProvObj. This is modifiable.
+	*	by the (lowercased) first shortname of the ProvObj. Umodifiable.
 	*/
 	public Map getProvObjMap()
 	{
-		return provMap;
+		return pmap.getMap();
 	}// getProvObjMap()
 	
 	
@@ -488,6 +469,91 @@ public class MapConvert
 		// adjacency file name (NO path info!)
 		td.put("adjacencyURI", adjacencyFile.getName());
 	}// makeVariantXMLTemplateData()
+	
+	
+	/** Maps provinces to short names. Also keeps an iterable list. */
+	class PMap
+	{
+		private final HashMap map;
+		private final LinkedList list;
+		
+		
+		public PMap()
+		{
+			map = new HashMap(211);
+			list = new LinkedList();
+		}// PMap()
+		
+		
+		public void put(ProvObj po)
+		{
+			if(po == null)
+			{
+				throw new IllegalArgumentException();
+			}
+			
+			assert (po.getSN() != null);
+			map.put(po.getSN().toLowerCase(), po);
+			list.add(po);
+		}// put()
+		
+		
+		public ProvObj get(String name)
+		{
+			if(name == null)
+			{
+				throw new IllegalArgumentException();
+			}
+			
+			ProvObj po = (ProvObj) map.get(name.toLowerCase());
+			if(po == null)
+			{
+				// search thru list
+				Iterator iter = list.iterator();
+				while(iter.hasNext())
+				{
+					po = (ProvObj) iter.next();
+					
+					if(name.equalsIgnoreCase(po.getFullName()))
+					{
+						return po;
+					}
+					else
+					{
+						final String[] names = po.getShortNames();
+						for(int i=0; i<names.length; i++)
+						{
+							if(name.equalsIgnoreCase(names[i]))
+							{
+								return po;
+							}
+						}
+					}
+				}
+			}
+			
+			return po;
+		}// get()
+		
+		/**
+		*	Returns the List of provinces.
+		*	Unmodifiable.
+		*/
+		public List getList()
+		{
+			return Collections.unmodifiableList(list);
+		}
+		
+		/**
+		*	Returns the Map of province names.
+		*	Unmodifiable.
+		*/
+		public Map getMap()
+		{
+			return Collections.unmodifiableMap(map);
+		}
+		
+	}// class PMap
 	
 	
 }// class MapConvert
