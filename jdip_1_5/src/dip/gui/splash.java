@@ -46,8 +46,22 @@ public final class splash
 		//System.out.println("splash.main() START: "+time); 
 		checkRequirements();
 		
+		// check for a 'nosplash' argument
+		boolean noSplash = false;
+		for(int i=0; i<args.length; i++)
+		{
+			if(args[i].equalsIgnoreCase("-nosplash"))
+			{
+				noSplash = true;
+				break;
+			}
+		}
+		
 		// start splash
-		//new splash();
+		if(!noSplash)
+		{
+			new splash();
+		}
 		
 		// start main program
 		//

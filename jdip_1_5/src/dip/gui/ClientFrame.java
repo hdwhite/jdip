@@ -195,6 +195,12 @@ public class ClientFrame extends JFrame
 		Log.println("   mem total: ", String.valueOf(Runtime.getRuntime().totalMemory()));
 		Log.println("   mem free: ", String.valueOf(Runtime.getRuntime().freeMemory()));
 		
+		/*
+		// Batik setup. org.apache.crimson.parser.XMLReaderImpl is the built-in JDK 1.4 parser
+		XMLResourceDescriptor.setXMLParserClassName("org.apache.crimson.parser.XMLReaderImpl");	// doesn't work correctly...
+		*/
+		Log.println("Batik XML parser: ", XMLResourceDescriptor.getXMLParserClassName());
+		
 		// setup per-OS options
 		if(Utils.isOSX())
 		{
@@ -301,12 +307,6 @@ public class ClientFrame extends JFrame
 		// set frame icon
 		setIconImage(Utils.getImageIcon(Utils.FRAME_ICON).getImage());
 		
-		/*
-		// Batik setup. org.apache.crimson.parser.XMLReaderImpl is the built-in JDK 1.4 parser
-		XMLResourceDescriptor.setXMLParserClassName("org.apache.crimson.parser.XMLReaderImpl");	// doesn't work correctly...
-		*/
-		Log.println("Batik XML parser: ", XMLResourceDescriptor.getXMLParserClassName());
-		
 		// init help system
 		Help.init();
 		dtime = Log.printDelta(dtime, "CF: help init time: ");
@@ -352,6 +352,7 @@ public class ClientFrame extends JFrame
 		
 		// setup drag-and-drop support
 		new DropTarget(this, new CFDropTargetListener());
+		dtime = Log.printDelta(dtime, "CF: point A: ");
 		
 		// create default split pane
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false);
@@ -359,19 +360,23 @@ public class ClientFrame extends JFrame
 		splitPane.setVisible(false);
 		splitPane.setDividerSize(10);
 		splitPane.setResizeWeight(1);
+		dtime = Log.printDelta(dtime, "CF: point B: ");
 		
 		// create statusbar
 		statusBar = new StatusBar();
 		statusBar.setText(ClientFrame.PROGRAM_NAME + " " + getVersion());
+		dtime = Log.printDelta(dtime, "CF: point c: ");
 		
 		// PhaseSelector
 		phaseSel = new PhaseSelector(this);
+		dtime = Log.printDelta(dtime, "CF: point d: ");
 		
 		// add mode listener for this object
 		addPropertyChangeListener(new ModeListener());
 		
 		// set initial mode
 		fireChangeMode(MODE_NONE);
+		dtime = Log.printDelta(dtime, "CF: point e: ");
 		
 		// register menu listeners
 		MenuHandler mh = new MenuHandler();
@@ -379,6 +384,7 @@ public class ClientFrame extends JFrame
 		
 		// get default order formatting options
 		orderFormatOptions = DisplayPreferencePanel.getOrderFormatOptions();
+		dtime = Log.printDelta(dtime, "CF: point f: ");
 		
 		// setup layout
 		getContentPane().setLayout(new BorderLayout());
@@ -387,7 +393,7 @@ public class ClientFrame extends JFrame
 		pack();
 		GeneralPreferencePanel.getWindowSettings(this);
 		setVisible(true);
-		System.out.println(">>>> "+(System.currentTimeMillis()-ttime));
+System.out.println(">>>> "+(System.currentTimeMillis()-ttime));		// OVERALL timing indicator
 		fireChangeMode(MODE_NONE);
 		toFront();
 		splash.destroy();
@@ -1123,6 +1129,9 @@ public class ClientFrame extends JFrame
 		BooleanParam validateOpt =
 			new BooleanParam("validate", "validate XML and SVG data files");
 		
+		BooleanParam splashOpt =
+			new BooleanParam("nosplash", "do not show splash screen");
+		
 		// verbose help text
 		String helpText	=	" ";	
 		
@@ -1132,7 +1141,7 @@ public class ClientFrame extends JFrame
 				"jdip",
 				"Adjudicator and Game Manager for multiplayer diplomacy-based strategy games",
 				// options
-				new Parameter[] {argLocale, argLogFile, argVariantPath, validateOpt},
+				new Parameter[] {argLocale, argLogFile, argVariantPath, validateOpt, splashOpt},
 				// arguments [left on command line]
 				new Parameter[] {}
 			)
