@@ -265,7 +265,7 @@ public class World implements Serializable
 		while(iter.hasNext())
 		{
 			Phase phase = (Phase) iter.next();
-			if(current == phase)
+			if(current.compareTo(phase) == 0)
 			{
 				if(iter.hasNext())
 				{
@@ -323,7 +323,7 @@ public class World implements Serializable
 		while(iter.hasNext())
 		{
 			Phase phase = (Phase) iter.next();
-			if(phase != current)
+			if(phase.compareTo(current) != 0)
 			{
 				previous = phase;
 			}
