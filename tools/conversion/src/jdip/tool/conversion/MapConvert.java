@@ -31,9 +31,8 @@ import java.util.*;
 	Converts JUDGE map files to jDip XML adjacency format.
 	<p>
 	This must be run from the command line<br>
-	e.g., <code>java dip.misc.Convert [input-file] [output-file-prefix]</code>
 	<p>
-	This fully supports:
+	This <b>fully</b> supports:
 	<ul>
 		<li>Convoyable coasts</li>
 		<li>Ice provinces</li>

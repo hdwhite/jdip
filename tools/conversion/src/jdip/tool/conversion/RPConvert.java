@@ -65,10 +65,12 @@ public class RPConvert
 		if(args.length != 1)
 		{
 			System.err.println("\nrpconvert: converts realpolitik variant files to jDip format.");
-			System.err.println("\nUSAGE: judgeconvert <input_file>");
+			System.err.println("\nUSAGE: rpconvert <input_file>");
+			System.err.println("\nEXAMPLE: rpconvert \"\\Programs\\Realpolitik\\Variant Files\\Modern\\Modern.var\"");
 			System.err.println("\nThis will create: ");
-			System.err.println("   [variantName]_adjacency.xml (a jDip variant adjacency format)");
-			System.err.println("   variant.xml (the variant definition file)");
+			System.err.println("   [variantName]_adjacency.xml (a jDip variant adjacency file)");
+			System.err.println("   variants.xml (the variant definition file)");
+			System.err.println("\nThe created variants.xml file will be nearly-completely specified.");
 			System.exit(1);
 		}
 		
@@ -154,7 +156,7 @@ public class RPConvert
 		final Template variantTemplate = new Template(
 			cl.getResourceAsStream(VARIANT_TEMPLATE) );
 		
-		File out = new File("variant.xml");
+		File out = new File("variants.xml");
 		
 		BufferedWriter bw = null;
 		try
