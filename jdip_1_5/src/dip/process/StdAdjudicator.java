@@ -280,6 +280,7 @@ public class StdAdjudicator implements Adjudicator
 	/** Add a BouncedResult to the result list */
 	public final  void addBouncedResult(OrderState os, OrderState bouncer)
 	{
+		Log.println("Bounce Result added: ", os.getOrder(), "; by ", bouncer.getSourceProvince());
 		BouncedResult br = new BouncedResult(os.getOrder());
 		br.setBouncer(bouncer.getSourceProvince());
 		resultList.add(br);
@@ -288,6 +289,7 @@ public class StdAdjudicator implements Adjudicator
 	/** Add a DislodgedResult to the result list */
 	public final  void addDislodgedResult(OrderState os)
 	{
+		Log.println("Bounce Result added: ", os.getOrder(), "; from: ", os.getDislodger().getSourceProvince());
 		DislodgedResult dr = new DislodgedResult(os.getOrder(), null);
 		dr.setDislodger(os.getDislodger().getSourceProvince());
 		resultList.add(dr);
@@ -555,7 +557,7 @@ public class StdAdjudicator implements Adjudicator
 			// Step 8:
 			// a) convert 'maybe' dislodged to 'yes' disloged
 			// b) create 'dislodged' result
-			// c) any 'dislodged' with 'uncertain' ==> failure / dislodged
+			// c) any 'dislodged' with 'uncertain' evaluation ==> failure / dislodged
 			// d) if power isn't active (e.g., Italy in a 6-player game), and 
 			//    its unit is dislodged, it will be automatically disbanded (later)
 			// e) set flag indicating if any units are dislodged
@@ -574,6 +576,15 @@ public class StdAdjudicator implements Adjudicator
 					{
 						os.setEvalState(Tristate.FAILURE);
 						//addResult(os, ResultType.FAILURE, null);
+						addDislodgedResult(os);
+					}
+					else if(os.getEvalState() == Tristate.FAILURE)
+					{
+						// we were dislodged, probably by another unit, not the
+						// unit that caused the failure (see bug #952038)
+						// So, we need to create a dislodged result, in addition
+						// to setting the DislodgedState flag.
+						// 
 						addDislodgedResult(os);
 					}
 				}
