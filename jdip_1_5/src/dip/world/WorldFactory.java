@@ -332,7 +332,7 @@ public class WorldFactory
 				try
 				{
 					location = location.getValidatedSetup(unitType);
-					unit.setCoast(location.getCoast());
+					unit.setLocation(location);
 					pos.setUnit(province, unit);
 					
 					// set 'lastOccupier' for unit

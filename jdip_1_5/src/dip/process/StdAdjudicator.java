@@ -729,7 +729,7 @@ public class StdAdjudicator implements Adjudicator
 					 && os.getEvalState() == Tristate.SUCCESS)
 			{
 				Location dest = ((Move)order).getDest();
-				newUnit.setCoast( dest.getCoast() );
+				newUnit.setLocation( dest );
 				nextPosition.setUnit(dest.getProvince(), newUnit);
 				nextPosition.setLastOccupier(dest.getProvince(), newUnit.getPower());
 			}
@@ -1340,7 +1340,7 @@ public class StdAdjudicator implements Adjudicator
 			{
 				Location dest = ((Move)order).getDest();
 				Province destProvince = dest.getProvince();
-				newUnit.setCoast( dest.getCoast() );
+				newUnit.setLocation( dest );
 				nextPosition.setUnit(destProvince, newUnit);
 				nextPosition.setLastOccupier(destProvince, newUnit.getPower());
 				
@@ -1612,7 +1612,7 @@ public class StdAdjudicator implements Adjudicator
 				if(order instanceof Build)
 				{
 					Unit unit = new Unit(order.getPower(), order.getSourceUnitType());
-					unit.setCoast(order.getSource().getCoast());
+					unit.setLocation(order.getSource());
 					nextPosition.setUnit(sourceProvince, unit);
 					nextPosition.setLastOccupier(sourceProvince, unit.getPower());
 				}

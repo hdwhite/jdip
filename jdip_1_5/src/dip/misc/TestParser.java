@@ -718,7 +718,7 @@ public class TestParser
 			String line = (String) iter.next();
 			DefineState ds = parseDSOrder(line.trim());
 			Unit unit = new Unit(ds.getPower(), ds.getSourceUnitType());
-			unit.setCoast(ds.getSource().getCoast());
+			unit.setLocation(ds.getSource());
 			pos.setUnit(ds.getSource().getProvince(), unit);
 			count++;
 		}
@@ -732,7 +732,7 @@ public class TestParser
 			String line = (String) iter.next();
 			DefineState ds = parseDSOrder(line.trim());
 			Unit unit = new Unit(ds.getPower(), ds.getSourceUnitType());
-			unit.setCoast(ds.getSource().getCoast());
+			unit.setLocation(ds.getSource());
 			pos.setDislodgedUnit(ds.getSource().getProvince(), unit);
 			count++;
 		}

@@ -368,7 +368,7 @@ public class JudgeImport
 			
 			// create unit, and add to Position
 			Unit unit = new Unit(power, unitType);
-			unit.setCoast(location.getCoast());
+			unit.setLocation(location);
 			position.setUnit(location.getProvince(), unit);
 		}
 		

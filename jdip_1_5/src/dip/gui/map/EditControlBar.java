@@ -372,7 +372,7 @@ public class EditControlBar extends ViewControlBar
 			{
 				// add an army
 				Unit army = new Unit(currentPower, Unit.Type.ARMY);
-				army.setCoast(Coast.NONE);
+				army.setLocation(loc);
 				addUnit(province, army, isDislodged());
 
 				undoManager.addEdit(new UndoEditAddUnit(undoManager, position, province, army, isDislodged()));
@@ -386,7 +386,7 @@ public class EditControlBar extends ViewControlBar
 					Coast coast = loc.getCoast();
 					if(coast.isDirectional())
 					{
-						fleet.setCoast(coast);
+						fleet.setLocation(loc);
 					}
 					else
 					{
@@ -395,7 +395,7 @@ public class EditControlBar extends ViewControlBar
 				}
 				else
 				{
-					fleet.setCoast(Coast.SINGLE);
+					fleet.setLocation(loc);
 				}
 
 				addUnit(province, fleet, isDislodged());
@@ -405,7 +405,7 @@ public class EditControlBar extends ViewControlBar
 			{
 				// add a Wing
 				Unit wing = new Unit(currentPower, Unit.Type.WING);
-				wing.setCoast(Coast.WING);
+				wing.setLocation(loc);
 				addUnit(province, wing, isDislodged());
 
 				undoManager.addEdit(new UndoEditAddUnit(undoManager, position, province, wing, isDislodged()));

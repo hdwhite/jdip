@@ -229,28 +229,34 @@ public class AIDemo
 		// set extra German units
 		//
 		Power germany = map.getPower("germany");
+		Province prov = map.getProvince("pru");
 		Unit u = new Unit(germany, Unit.Type.ARMY);
-		u.setCoast(Coast.LAND);		// Army units always must be in Coast.LAND (== Coast.NONE)
-		pos.setUnit(map.getProvince("pru"), u);
+		u.setLocation(new Location(prov, Coast.LAND));		// Army units always must be in Coast.LAND (== Coast.NONE)
+		pos.setUnit(prov, u);
 		
 		// NOTE: it would be VERY BAD to use the same unit we created above, and also
 		// insert it in another province. Why? Because when a one province has a unit
 		// moved or destroyed, the other province would have the same. So don't do that.
 		//
-		u = new Unit(germany, Unit.Type.ARMY);
-		u.setCoast(Coast.LAND);
-		pos.setUnit(map.getProvince("sil"), u);
 		
 		u = new Unit(germany, Unit.Type.ARMY);
-		u.setCoast(Coast.LAND);
-		pos.setUnit(map.getProvince("gal"), u);
+		prov = map.getProvince("sil");
+		u.setLocation(new Location(prov, Coast.LAND));
+		pos.setUnit(prov, u);
+		
+		
+		u = new Unit(germany, Unit.Type.ARMY);
+		prov = map.getProvince("gal");
+		u.setLocation(new Location(prov, Coast.LAND));
+		pos.setUnit(prov, u);
 		
 		// set extra Russian units
 		//
 		Power russia = map.getPower("russia");
 		u = new Unit(russia, Unit.Type.ARMY);
-		u.setCoast(Coast.LAND);
-		pos.setUnit(map.getProvince("lvn"), u);
+		prov = map.getProvince("lvn");
+		u.setLocation(new Location(prov, Coast.LAND));
+		pos.setUnit(prov, u);
 		
 		System.out.println("\nInitial position created.");
 		return pos;

@@ -1,28 +1,27 @@
 //
-//  @(#)Unit.java		4/2002
+//	@(#)Unit.java		4/2002
 //
-//  Copyright 2002 Zachary DelProposto. All rights reserved.
-//  Use is subject to license terms.
+//	Copyright 2002 Zachary DelProposto. All rights reserved.
+//	Use is subject to license terms.
 //
 //
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation; either version 2 of the License, or
-//  (at your option) any later version.
+//	This program is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
 //
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
 //
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//  Or from http://www.gnu.org/
+//	You should have received a copy of the GNU General Public License
+//	along with this program; if not, write to the Free Software
+//	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//	Or from http://www.gnu.org/
 //
 package dip.world;
 
-import dip.order.Order;
 import dip.misc.Utils;
 
 
@@ -40,8 +39,8 @@ public class Unit implements java.io.Serializable, Cloneable
 {
 	// instance variables
 	protected final Unit.Type type;
-	protected final Power owner;
-	protected Coast coast = Coast.UNDEFINED;
+	protected final Power owner;	
+	protected Location location;
 	
 	
 	/**                                                               
@@ -65,17 +64,31 @@ public class Unit implements java.io.Serializable, Cloneable
 	
 	
 	/** For Cloning: *NO* arguments are checked. */
-	private Unit(Power power, Unit.Type unitType, Coast coast)
+	private Unit(Power power, Unit.Type unitType, Location location)
 	{
 		this.owner = power;
 		this.type = unitType;
-		this.coast = coast;
+		this.location = location;
 	}// Unit()
 	
 	
+	public void setLocation(Location pLocation)
+	{
+		if(pLocation == null)
+		{
+			throw new IllegalArgumentException("null location");
+		}
+		location = pLocation;
+	}
+	
+	public Location getLocation()
+	{
+		return location;
+	}
+	
 	/**
 	*	Set the coast of a unit.
-	*/
+	*
 	public void setCoast(Coast coast)
 	{
 		if(coast == null)
@@ -88,7 +101,14 @@ public class Unit implements java.io.Serializable, Cloneable
 	
 	
 	/** Get the Coast where this Unit is located */
-	public Coast getCoast() 			{ return coast; }
+	public Coast getCoast() 			
+	{ 
+		if(location != null)
+		{
+			return location.getCoast();
+		}
+		return Coast.UNDEFINED;
+	}
 	
 	/** Get the Power who controls this Unit */
 	public Power getPower() 			{ return owner; }
@@ -106,8 +126,9 @@ public class Unit implements java.io.Serializable, Cloneable
 		else if(obj instanceof Unit)
 		{
 			Unit unit = (Unit) obj;
-			return (unit.type == this.type	&& unit.owner == this.owner
-				&& unit.coast == this.coast);
+			return (unit.type == this.type	&& 
+					unit.owner == this.owner && 
+					unit.location.equals(this.location));
 		}
 		
 		return false;
@@ -120,7 +141,7 @@ public class Unit implements java.io.Serializable, Cloneable
 	*/
 	public Object clone()
 	{
-		return new Unit(owner, type, coast);
+		return new Unit(owner, type, location);
 	}// clone()
 	
 	
@@ -132,8 +153,8 @@ public class Unit implements java.io.Serializable, Cloneable
 		sb.append(type);
 		sb.append(",power=");
 		sb.append(owner);
-		sb.append(",coast=");
-		sb.append(coast);
+		sb.append(",location=");
+		sb.append(location);
 		sb.append(']');
 		return sb.toString();
 	}// toString()

@@ -460,7 +460,7 @@ final class JudgeImportHistory
 			
 			// create unit, and add to Position
 			Unit unit = new Unit(order.getPower(), unitType);
-			unit.setCoast(loc.getCoast());
+			unit.setLocation(loc);
 			position.setUnit(loc.getProvince(), unit);
 			position.setLastOccupier(loc.getProvince(), power);
 			
@@ -577,10 +577,10 @@ final class JudgeImportHistory
 						 * in their destination place for copying.
 						 */
 						if(!positionPlacement) {
-							unit.setCoast(order.getSource().getCoast());
+							unit.setLocation(order.getSource());
 							position.setUnit(order.getSource().getProvince(), unit);
 						} else {
-							unit.setCoast(order.getSource().getCoast());
+							unit.setLocation(order.getSource());
 							position.setDislodgedUnit(order.getSource().getProvince(), unit);
 						}					
 					}
@@ -596,11 +596,11 @@ final class JudgeImportHistory
 						 * in their destination place for copying.
 						 */
 						if(!positionPlacement) {
-							unit.setCoast(move.getSource().getCoast());
+							unit.setLocation(move.getSource());
 							position.setUnit(move.getSource().getProvince(), unit);
 							position.setLastOccupier(move.getSource().getProvince(), move.getPower());
 						} else {
-							unit.setCoast(move.getDest().getCoast());
+							unit.setLocation(move.getDest());
 							position.setUnit(move.getDest().getProvince(), unit);
 							position.setLastOccupier(move.getDest().getProvince(), move.getPower());
 						}
@@ -616,7 +616,7 @@ final class JudgeImportHistory
 						 */
 						if(!position.hasUnit(order.getSource().getProvince()))
 						{
-							unit.setCoast(order.getSource().getCoast());
+							unit.setLocation(order.getSource());
 							position.setUnit(order.getSource().getProvince(), unit);
 							position.setLastOccupier(order.getSource().getProvince(), order.getPower());
 						}
@@ -759,11 +759,11 @@ final class JudgeImportHistory
 						 * in their destination place for copying.
 						 */
 						if(!positionPlacement) {
-							unit.setCoast(move.getSource().getCoast());
+							unit.setLocation(move.getSource());
 							position.setDislodgedUnit(move.getSource().getProvince(), unit);
 							position.setLastOccupier(move.getSource().getProvince(), move.getPower());
 						} else {
-							unit.setCoast(move.getDest().getCoast());
+							unit.setLocation(move.getDest());
 							position.setUnit(move.getDest().getProvince(), unit);
 							position.setLastOccupier(move.getSource().getProvince(), move.getPower());
 						}
@@ -774,7 +774,7 @@ final class JudgeImportHistory
 						 */
 						Unit unit = new Unit(order.getPower(), order.getSourceUnitType());
 						if(!positionPlacement) {
-							unit.setCoast(order.getSource().getCoast());
+							unit.setLocation(order.getSource());
 							position.setDislodgedUnit(order.getSource().getProvince(), unit);
 						}
 					}
@@ -920,7 +920,7 @@ final class JudgeImportHistory
 							if(positionPlacement)
 							{
 								final Unit unit = new Unit(newOrder.getPower(), newOrder.getSourceUnitType());
-								unit.setCoast(newOrder.getSource().getCoast());
+								unit.setLocation(newOrder.getSource());
 								position.setUnit(newOrder.getSource().getProvince(), unit);
 								position.setLastOccupier(newOrder.getSource().getProvince(), newOrder.getPower());
 							}

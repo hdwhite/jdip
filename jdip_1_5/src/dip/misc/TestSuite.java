@@ -886,7 +886,7 @@ public final class TestSuite
 		public UnitPos(DefineState ds, boolean isDislodged)
 		{
 			this.unit = new Unit(ds.getPower(), ds.getSourceUnitType());
-			unit.setCoast(ds.getSource().getCoast());
+			unit.setLocation(ds.getSource());
 			this.province = ds.getSource().getProvince();
 			this.isDislodged = isDislodged;
 		}// UnitPos()
@@ -1168,7 +1168,7 @@ public final class TestSuite
 				for(int i=0; i<preState.length; i++)
 				{
 					Unit unit = new Unit(preState[i].getPower(), preState[i].getSourceUnitType());
-					unit.setCoast(preState[i].getSource().getCoast());
+					unit.setLocation(preState[i].getSource());
 					position.setUnit(preState[i].getSource().getProvince(), unit);
 				}		
 				
@@ -1176,7 +1176,7 @@ public final class TestSuite
 				for(int i=0; i<preDislodged.length; i++)
 				{
 					Unit unit = new Unit(preDislodged[i].getPower(), preDislodged[i].getSourceUnitType());
-					unit.setCoast(preDislodged[i].getSource().getCoast());
+					unit.setLocation(preDislodged[i].getSource());
 					position.setDislodgedUnit(preDislodged[i].getSource().getProvince(), unit);
 				}		
 				
