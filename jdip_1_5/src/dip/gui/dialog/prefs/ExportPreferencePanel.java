@@ -26,7 +26,7 @@ package dip.gui.dialog.prefs;
 import dip.gui.ClientFrame;
 import dip.gui.swing.GradientJLabel;
 import dip.order.OrderFormat;
-import dip.order.OrderFormat.OrderFormatOptions;
+import dip.order.OrderFormatOptions;
 import dip.misc.SharedPrefs;
 import dip.misc.Utils;
 

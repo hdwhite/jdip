@@ -39,7 +39,7 @@ import dip.gui.dialog.TextViewer;
 
 import dip.order.*;
 import dip.order.result.OrderResult;
-import dip.order.OrderFormat.OrderFormatOptions;
+import dip.order.OrderFormatOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;

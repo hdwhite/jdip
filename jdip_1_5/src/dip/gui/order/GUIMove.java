@@ -81,7 +81,6 @@ public class GUIMove extends Move implements GUIOrder
 	private transient int numSupports = -9999;
 	private transient Point2D.Float failPt = null;
 	private transient SVGGElement group = null;
-	private static final transient String moveFormatOrigin = Utils.getLocalString("MOVE_FORMAT_ORIGIN");
 	
 	/** Creates a GUIMove */
 	protected GUIMove()
@@ -608,19 +607,6 @@ public class GUIMove extends Move implements GUIOrder
 	
 	/** We are dependent on the presence of Support orders for certain drawing parameters. */
 	public boolean isDependent()	{ return true; }
-	
-	
-	/** Provides partial order text if, for example, destination is not yet set. */
-	public String getDefaultFormat()
-	{
-		if(dest == null)
-		{
-			return moveFormatOrigin;
-		}
-		
-		return super.getDefaultFormat();
-	}// getDefaultFormat()
-	
 	
 	
 	/**

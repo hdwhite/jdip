@@ -47,7 +47,8 @@ import java.net.URI;
 public class Inspector implements Tool
 {
 	ClientFrame clientFrame = null;
-	final OrderFormat.OrderFormatOptions OFO = OrderFormat.OrderFormatOptions.DEBUG;
+	final OrderFormat.OrderFormatOptions OFO = OrderFormatOptions.createDebug();
+	final OrderFormat.OrderFormatOptions TERSE_OFO = OrderFormatOptions.createTerse();
 	
 	
 	/** Get the current Tool version */
@@ -406,7 +407,7 @@ public class Inspector implements Tool
 						sb.append("FAILURE: ");
 					}
 					
-					sb.append(o.toFormattedString(OrderFormat.OrderFormatOptions.TERSE));
+					sb.append(o.toFormattedString(TERSE_OFO));
 					sb.append("\n");
 				}
 			}
@@ -426,7 +427,7 @@ public class Inspector implements Tool
 		{
 			sb.append("\t");
 			Orderable o = (Orderable) iter.next();
-			sb.append(o.toFormattedString(OrderFormat.OrderFormatOptions.TERSE));
+			sb.append(o.toFormattedString(TERSE_OFO));
 			sb.append("\n");
 		}
 		

@@ -67,7 +67,6 @@ public class Move extends Order
 	private static final String MOVE_FAILED_NO_SELF_DISLODGE = "MOVE_FAILED_NO_SELF_DISLODGE";
 	private static final String MOVE_FORMAT = "MOVE_FORMAT";
 	private static final String MOVE_FORMAT_EXPLICIT_CONVOY = "MOVE_FORMAT_EXPLICIT_CONVOY";
-	private static final String MOVE_ARROW = "MOVE_ARROW";
 	private static final String CONVOY_PATH_MUST_BE_EXPLICIT = "CONVOY_PATH_MUST_BE_EXPLICIT";
 	private static final String CONVOY_PATH_MUST_BE_IMPLICIT = "CONVOY_PATH_MUST_BE_IMPLICIT";
 	
@@ -76,9 +75,7 @@ public class Move extends Order
 	private static final String orderNameBrief 	= "M";
 	private static final String orderNameFull 	= "Move";
 	private static final transient String orderFormatString = Utils.getLocalString(MOVE_FORMAT);
-	private static final transient String orderFormatArrow = Utils.getLocalString(MOVE_ARROW);	// arrow 
 	private static final transient String orderFormatExCon = Utils.getLocalString(MOVE_FORMAT_EXPLICIT_CONVOY);	// explicit convoy format
-	
 	
 	// instance variables
 	protected Location dest = null;
@@ -165,7 +162,7 @@ public class Move extends Order
 	*	Note that this is <b>not</b> always true for all convoyed moves;
 	*	to check if a move is convoyed, see isConvoying().
 	*	<p>
-	*	Note that explicitly ordering a convoy doesn't really matter if
+	*	Note that explicitly ordering a convoy doesn't really matter
 	*	unless there are <b>both</b> a land route and a convoy route. See
 	*	Dec-16-2003 DATC 6.G.8.
 	*/
@@ -556,7 +553,7 @@ public class Move extends Order
 			}
 			else
 			{
-				sb.append(orderFormatArrow);
+				sb.append(" -> ");
 			}
 			
 			

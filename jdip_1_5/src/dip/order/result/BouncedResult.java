@@ -23,7 +23,7 @@ package dip.order.result;
 
 import dip.order.Orderable;
 import dip.order.OrderFormat;
-import dip.order.OrderFormat.OrderFormatOptions;
+import dip.order.OrderFormatOptions;
 import dip.world.Location;
 import dip.world.Province;
 import dip.misc.Utils;

@@ -73,8 +73,6 @@ public class GUIConvoy extends Convoy implements GUIOrder
 	// instance variables
 	private transient static final int REQ_LOC = 3;
 	private transient int currentLocNum = 0;
-	private static final transient String convoyFormatOrigin = Utils.getLocalString("CONVOY_FORMAT_PART_ORIGIN");
-	private static final transient String convoyFormatCvySrc = Utils.getLocalString("CONVOY_FORMAT_PART_CVYSRC");
 	private transient Point2D.Float failPt = null;
 	private transient SVGGElement group = null;
 	
@@ -573,25 +571,6 @@ public class GUIConvoy extends Convoy implements GUIOrder
 	
 	
 	public boolean isDependent()	{ return false; }
-	
-	
-	/** 
-	*	Provides partial order text if, for example, Convoy source and/or
-	*	Convoy destination is not yet set. 
-	*/
-	public String getDefaultFormat()
-	{
-		if(convoySrc == null)
-		{
-			return convoyFormatOrigin;
-		}
-		else if(convoyDest == null)
-		{
-			return convoyFormatCvySrc;
-		}
-		
-		return super.getDefaultFormat();
-	}// getDefaultFormat()
 	
 	
 }// class GUIConvoy

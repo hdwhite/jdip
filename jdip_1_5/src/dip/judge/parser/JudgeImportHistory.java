@@ -490,6 +490,8 @@ final class JudgeImportHistory
 				orderMap.put(powers[i], new LinkedList());
 			}
 			
+			Log.println("JIH::procMove():ORDER PARSING START");
+			
 			// parse all orders
 			for(int i=0; i<orderInfo.length; i++)
 			{
@@ -503,6 +505,7 @@ final class JudgeImportHistory
 					}
 					order.validate(ts, valOpts, ruleOpts);
 					LinkedList list = (LinkedList) orderMap.get(order.getPower());
+					Log.println("  ok: ", order);
 					list.add(order);
 					
 					// create results [EXCEPT dislodged results]
@@ -510,6 +513,8 @@ final class JudgeImportHistory
 				}
 				catch(OrderException e)
 				{
+					Log.println("JIH::procMove():OrderException! using loose validation....");
+					
 					//Try loosening the validation object
 					valOpts.setOption(ValidationOptions.KEY_GLOBAL_PARSING, ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE);
 					
@@ -522,6 +527,7 @@ final class JudgeImportHistory
 						Order order = orderParser.parse(orderFactory, orderInfo[i].getOrderText(), null, ts, false, false);
 						order.validate(ts, valOpts, world.getRuleOptions());
 						LinkedList list = (LinkedList) orderMap.get(order.getPower());
+						Log.println("  ok: ", order);
 						list.add(order);
 						
 						// create "invalid" order results
@@ -535,6 +541,8 @@ final class JudgeImportHistory
 					valOpts.setOption(ValidationOptions.KEY_GLOBAL_PARSING, ValidationOptions.VALUE_GLOBAL_PARSING_STRICT);					 
 				}
 			}
+			
+			Log.println("JIH::procMove():ORDER PARSING COMPLETE");
 			
 			// clear all units (dislodged or not) from the board
 			Province[] unitProv = position.getUnitProvinces();

@@ -56,6 +56,7 @@ public class Support extends Order
 	private static final String SUPPORT_VER_MOVE_BADCOAST = "SUPPORT_VER_MOVE_BADCOAST";
 	private static final String SUPPORT_EVAL_CUT = "SUPPORT_EVAL_CUT";
 	private static final String SUPPORT_DIFF_PASS = "SUPPORT_DIFF_PASS";
+	
 	private static final String SUPPORT_FORMAT_MOVE = "SUPPORT_FORMAT_MOVE";
 	private static final String SUPPORT_FORMAT_NONMOVE = "SUPPORT_FORMAT_NONMOVE";
 	

@@ -1,9 +1,9 @@
-/*
-*  @(#)Result.java	1.00	4/1/2002
-*
-*  Copyright 2002 Zachary DelProposto. All rights reserved.
-*  Use is subject to license terms.
-*/
+//	
+//	@(#)Result.java		4/2002
+//	
+//	Copyright 2002 Zachary DelProposto. All rights reserved.
+//	Use is subject to license terms.
+//	
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation; either version 2 of the License, or
@@ -22,7 +22,7 @@
 package dip.order.result;
 
 import dip.order.OrderFormat;
-import dip.order.OrderFormat.OrderFormatOptions;
+import dip.order.OrderFormatOptions;
 import dip.world.Power;
 
 import java.io.Serializable;
@@ -37,6 +37,9 @@ import java.io.Serializable;
 */
 public class Result extends Object implements Serializable, Comparable
 {
+	// constants
+	private static final OrderFormatOptions DEFAULT_OFO = OrderFormatOptions.createDefault();
+	
 	// instance variables
 	/** The Power to whom this Result applies; null if it applies to everyone */
 	protected Power power = null;
@@ -87,7 +90,7 @@ public class Result extends Object implements Serializable, Comparable
 	*/
 	public final String getMessage()
 	{ 
-		return getMessage(OrderFormatOptions.DEFAULT); 
+		return getMessage(DEFAULT_OFO); 
 	}// getMessage()
 	
 	/** 

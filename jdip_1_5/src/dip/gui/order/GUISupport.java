@@ -85,8 +85,6 @@ public class GUISupport extends Support implements GUIOrder
 	private transient boolean dependentFound = false;	// true associated Move or Support order found
 	private transient Point2D.Float failPt = null;
 	private transient SVGGElement group = null;
-	private static final transient String supFormatOrigin = Utils.getLocalString("SUPPORT_FORMAT_ORIGIN");
-	private static final transient String supFormatSupSrc = Utils.getLocalString("SUPPORT_FORMAT_SUPSRC");
 	
 	
 	/** Creates a GUISupport */
@@ -685,25 +683,6 @@ public class GUISupport extends Support implements GUIOrder
 	
 	/** We are dependent upon other orders to determine how we render this order. */
 	public boolean isDependent()	{ return true; }
-	
-	
-	/** 
-	*	Provides partial order text if, for example, support source and/or
-	*	support destination is not yet set. 
-	*/
-	public String getDefaultFormat()
-	{
-		if(supSrc == null)
-		{
-			return supFormatOrigin;
-		}
-		else if(supDest == null)
-		{
-			return supFormatSupSrc;
-		}
-		
-		return super.getDefaultFormat();
-	}// getDefaultFormat()
 	
 	
 	/** Check a Move between two locations, for adjacency (even by theoretical convoy route). */

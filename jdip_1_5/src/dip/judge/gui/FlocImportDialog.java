@@ -107,6 +107,7 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 		// component creation
 		tfGameName = new JTextField("", 25);
 		cbJudges = new JComboBox( Utils.getCommonStringArray(JUDGE_NAMES) );
+		cbJudges.setPrototypeDisplayValue("MMMM");	// wide enough for any 4-letter judge
 		cbJudges.setEditable(false);
 		cbJudges.setSelectedIndex(0);	// default, if setSelectedItem() fails
 		cbJudges.setSelectedItem(lastJudgeUsed);

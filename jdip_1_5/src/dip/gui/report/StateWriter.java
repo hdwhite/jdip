@@ -27,7 +27,7 @@ import dip.gui.dialog.TextViewer;
 
 import dip.world.*;
 import dip.order.*;
-import dip.order.OrderFormat.OrderFormatOptions;
+import dip.order.OrderFormatOptions;
 import dip.misc.Utils;
 import dip.misc.Help;
 import dip.process.Adjustment;

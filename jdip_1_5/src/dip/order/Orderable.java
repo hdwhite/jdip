@@ -96,7 +96,7 @@ public interface Orderable
 	*	While this enables better formatting, it is slower than using the toBriefString() and toFullString() 
 	*	methods.
 	*/	
-	public String toFormattedString(OrderFormat.OrderFormatOptions ofo);
+	public String toFormattedString(OrderFormatOptions ofo);
 	
 	
 	

@@ -30,7 +30,7 @@ import dip.gui.dialog.prefs.*;
 import dip.gui.order.GUIOrderFactory;
 import dip.gui.report.*;
 import dip.order.Orderable;
-import dip.order.OrderFormat.OrderFormatOptions;
+import dip.order.OrderFormatOptions;
 import dip.world.*;
 import dip.misc.*;
 import dip.gui.undo.UndoResolve;

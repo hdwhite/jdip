@@ -38,7 +38,7 @@ import dip.order.Orderable;
 import dip.order.result.Result;
 import dip.order.result.OrderResult;
 import dip.order.result.OrderResult.ResultType;
-import dip.order.OrderFormat.OrderFormatOptions;
+import dip.order.OrderFormatOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -68,6 +68,7 @@ import java.util.*;
 */
 public class Province implements java.io.Serializable, Comparable
 {
+	
 	// immutable persistent fields
 	private final String fullName; 				// fullName MUST BE UNIQUE
 	private final String shortNames[]; 			// always has AT LEAST one, and all are globally unique

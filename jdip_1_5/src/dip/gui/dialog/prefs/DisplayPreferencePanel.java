@@ -1,4 +1,4 @@
-//
+
 //  @(#)DisplayPreferencePanel.java		2/2003
 //
 //  Copyright 2003 Zachary DelProposto. All rights reserved.
@@ -26,9 +26,11 @@ package dip.gui.dialog.prefs;
 import dip.gui.ClientFrame;
 import dip.gui.swing.GradientJLabel;
 import dip.order.OrderFormat;
-import dip.order.OrderFormat.OrderFormatOptions;
+import dip.order.OrderFormatOptions;
 import dip.misc.SharedPrefs;
 import dip.misc.Utils;
+
+
 
 // HIGLayout
 import cz.autel.dmi.HIGConstraints;
@@ -39,9 +41,15 @@ import java.util.prefs.BackingStoreException;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import javax.swing.*;
+import java.awt.*;
+import javax.swing.event.*;
+import java.awt.event.*;
 
 import java.awt.Component;
 
@@ -58,6 +66,7 @@ public class DisplayPreferencePanel extends PreferencePanel
 	// i18n keys
 	private static final String I18N_TAB_NAME		= "DPP.tab.text";
 	
+	private static final String I18N_ORDFMT_GROUP_NAME = "DPP.orderformat.group.text";
 	private static final String I18N_FULL_NAME 		= "DPP.radiobutton.value.full";	
 	private static final String I18N_BRIEF_NAME		= "DPP.radiobutton.value.brief";
 	
@@ -65,15 +74,21 @@ public class DisplayPreferencePanel extends PreferencePanel
 	private static final String I18N_ORDFMT_COAST		= "DPP.radiobutton.coast.text";
 	private static final String I18N_ORDFMT_PROVINCE	= "DPP.radiobutton.province.text";
 	private static final String I18N_ORDFMT_ORDERNAME	= "DPP.radiobutton.ordername.text";
-	private static final String I18N_ORDFMT_GROUP_NAME = "DPP.orderformat.group.text";
+	private static final String I18N_ORDFMT_POWERNAME	= "DPP.radiobutton.power.text";
+	
+	private static final String I18N_STYLE 			= "DPP.label.style";
+	private static final String I18N_ARROW_STYLE 	= "DPP.label.arrowStyle";
+	private static final String I18N_LABLE_PLURAL 	= "DPP.label.plural";
+	private static final String I18N_LABLE_PAREN 	= "DPP.label.parentheses";
+	private static final String I18N_LABLE_POSSESSIVE 	= "DPP.label.possessivePowers";
+	private static final String I18N_LABLE_END_DOT 		= "DPP.label.enddot";
+	private static final String I18N_STYLE_NAMES	= "DPP.combobox.stylenames";
+	
 	
 	
 	// Preference Node Keys
-	private static final String NODE_ORDERFORMAT_COAST 		= "orderFormat.Coast";
-	private static final String NODE_ORDERFORMAT_PROVINCE	= "orderFormat.Province";
-	private static final String NODE_ORDERFORMAT_ORDERNAME	= "orderFormat.OrderName";
-	private static final String NODE_ORDERFORMAT_UNIT 		= "orderFormat.UnitType";
-	
+	private static final String NODE_ORDERFORMAT_ENCODED	= "orderFormat.format";
+	                                                    
 	// misc
 	private static final int BORDER = 10;
 	private static final int INDENT = 20;
@@ -81,10 +96,16 @@ public class DisplayPreferencePanel extends PreferencePanel
 	private OrderFormatOptions orderFormat = null;
 	
 	// GUI items
-	private ChoiceSelection		csUnitFormat;
-	private ChoiceSelection		csOrderNameFormat;
-	private ChoiceSelection		csProvinceFormat;
-	private ChoiceSelection		csCoastFormat;
+	private ChoiceSelection		csPower;
+	private ChoiceSelection		csUnit;
+	private ChoiceSelection		csOrderName;
+	private ChoiceSelection		csProvince;
+	private ChoiceSelection		csCoast;
+	
+	private JCheckBox cbPossessive;
+	private JCheckBox cbDot;
+	private JComboBox arrowBox;
+	
 	private JLabel example;
 	
 	
@@ -99,39 +120,69 @@ public class DisplayPreferencePanel extends PreferencePanel
 		
 		// create GUI components
 		makeChoiceSelections();
-		example = new JLabel("");
+		example = new JLabel(""); //Utils.createTextLabel("", false);
 		updateExampleAndFormatOptions();
 		
 		// layout 
-		int h1[] = { BORDER, 0,5,  0,5,  0,1, 0,1, 0,1, 0,1,   0, BORDER };
-		int w1[] = { BORDER, INDENT, 0,5,  0,5,  0, 0,  BORDER };
+		//                   2      4      6    8   10     13   15       18    20     22     23
+		int h1[] = { BORDER, 0,15,  35,10,  0,2, 0,2, 0,0,2, 0,2, 0,0,15,  0,5,  0,10,  0,15,  0,  BORDER };
+		int w1[] = { BORDER, INDENT, 0,10,  0,15,  0,25,  0,4,0,  0, 0,  BORDER };
 		
 		HIGLayout l1 = new HIGLayout(w1, h1);
-		l1.setColumnWeight(8, 1);
-		l1.setRowWeight(14, 1);
+		l1.setColumnWeight(13, 1);
+		l1.setRowWeight(23, 1);
 		setLayout(l1);
 		
 		HIGConstraints c = new HIGConstraints();
 		
-		add(new GradientJLabel(Utils.getLocalString(I18N_ORDFMT_GROUP_NAME)), c.rcwh(2,2,7,1,"lr"));
+		add(new GradientJLabel(Utils.getLocalString(I18N_ORDFMT_GROUP_NAME)), c.rcwh(2,2,12,1,"lr"));
 		
-		add(example, c.rcwh(4,3,7,1,"l"));
+		add(example, c.rcwh(4,3,11,1,"lr"));
 		
-		add(csProvinceFormat.getLabel(), c.rcwh(6,3,1,1,"l"));
-		add(csProvinceFormat.getChoice1(), c.rcwh(6,5,1,1,"l"));
-		add(csProvinceFormat.getChoice2(), c.rcwh(6,7,1,1,"l"));
+		add(csPower.getLabel(), c.rcwh(6,3,1,1,"l"));
+		/* power names cannot be full/brief (yet); show no radiobuttons
+		add(csPower.getChoice1(), c.rcwh(6,5,1,1,"l"));
+		add(csPower.getChoice2(), c.rcwh(6,7,1,1,"l"));
+		*/
+		add(new JLabel(Utils.getLocalString(I18N_STYLE)), c.rcwh(6,9,1,1,"r"));
+		add(csPower.getComboBox(), c.rcwh(6,11,1,1,"l"));
 		
-		add(csCoastFormat.getLabel(), c.rcwh(8,3,1,1,"l"));
-		add(csCoastFormat.getChoice1(), c.rcwh(8,5,1,1,"l"));
-		add(csCoastFormat.getChoice2(), c.rcwh(8,7,1,1,"l"));
+		add(csUnit.getLabel(), c.rcwh(8,3,1,1,"l"));
+		add(csUnit.getChoice1(), c.rcwh(8,5,1,1,"l"));
+		add(csUnit.getChoice2(), c.rcwh(8,7,1,1,"l"));
+		add(new JLabel(Utils.getLocalString(I18N_STYLE)), c.rcwh(8,9,1,1,"r"));
+		add(csUnit.getComboBox(), c.rcwh(8,11,1,1,"l"));
 		
-		add(csUnitFormat.getLabel(), c.rcwh(10,3,1,1,"l"));
-		add(csUnitFormat.getChoice1(), c.rcwh(10,5,1,1,"l"));
-		add(csUnitFormat.getChoice2(), c.rcwh(10,7,1,1,"l"));
+		add(csOrderName.getLabel(), c.rcwh(10,3,1,1,"l"));
+		add(csOrderName.getChoice1(), c.rcwh(10,5,1,1,"l"));
+		add(csOrderName.getChoice2(), c.rcwh(10,7,1,1,"l"));
+		add(new JLabel(Utils.getLocalString(I18N_STYLE)), c.rcwh(10,9,1,1,"r"));
+		add(csOrderName.getComboBox(), c.rcwh(10,11,1,1,"l"));
+		add(csOrderName.getCheckBox(), c.rcwh(11, 5,9,1,"l"));
 		
-		add(csOrderNameFormat.getLabel(), c.rcwh(12,3,1,1,"l"));
-		add(csOrderNameFormat.getChoice1(), c.rcwh(12,5,1,1,"l"));
-		add(csOrderNameFormat.getChoice2(), c.rcwh(12,7,1,1,"l"));
+		add(csProvince.getLabel(), c.rcwh(13,3,1,1,"l"));
+		add(csProvince.getChoice1(), c.rcwh(13,5,1,1,"l"));
+		add(csProvince.getChoice2(), c.rcwh(13,7,1,1,"l"));
+		add(new JLabel(Utils.getLocalString(I18N_STYLE)), c.rcwh(13,9,1,1,"r"));
+		add(csProvince.getComboBox(), c.rcwh(13,11,1,1,"l"));
+		
+		add(csCoast.getLabel(), c.rcwh(15,3,1,1,"l"));
+		add(csCoast.getChoice1(), c.rcwh(15,5,1,1,"l"));
+		add(csCoast.getChoice2(), c.rcwh(15,7,1,1,"l"));
+		add(new JLabel(Utils.getLocalString(I18N_STYLE)), c.rcwh(15,9,1,1,"r"));
+		add(csCoast.getComboBox(), c.rcwh(15,11,1,1,"l"));
+		add(csCoast.getCheckBox(), c.rcwh(16, 5,9,1,"l"));
+		
+		add(cbPossessive, c.rcwh(18, 3, 11, 1, "l"));
+		add(cbDot, c.rcwh(20, 3, 11, 1, "l"));
+		
+		JPanel arrowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		arrowPanel.add(new JLabel(Utils.getLocalString(I18N_ARROW_STYLE)));
+		arrowPanel.add(Box.createHorizontalStrut(4));
+		arrowPanel.add(arrowBox);
+		
+		add(arrowPanel, c.rcwh(22, 3, 11, 1, "l"));
+		
 	}// DisplayPreferencePanel()
 	
 	
@@ -152,10 +203,7 @@ public class DisplayPreferencePanel extends PreferencePanel
 		Preferences prefs = SharedPrefs.getUserNode();
 		
 		// set preference nodes
-		prefs.putBoolean(NODE_ORDERFORMAT_COAST, csCoastFormat.getValue());
-		prefs.putBoolean(NODE_ORDERFORMAT_PROVINCE, csProvinceFormat.getValue());
-		prefs.putBoolean(NODE_ORDERFORMAT_ORDERNAME, csOrderNameFormat.getValue());
-		prefs.putBoolean(NODE_ORDERFORMAT_UNIT, csUnitFormat.getValue());
+		prefs.putByteArray(NODE_ORDERFORMAT_ENCODED, orderFormat.encode());
 		
 		// apply OrderFormat to ClientFrame
 		clientFrame.setOFO(orderFormat);
@@ -166,7 +214,7 @@ public class DisplayPreferencePanel extends PreferencePanel
 	
 	public void setDefault()
 	{
-		orderFormat = OrderFormatOptions.DEFAULT;
+		orderFormat = OrderFormatOptions.createDefault();
 	}// setDefault()
 	
 	
@@ -182,16 +230,19 @@ public class DisplayPreferencePanel extends PreferencePanel
 	*/
 	public static OrderFormatOptions getOrderFormatOptions()
 	{
+		OrderFormatOptions ofo = OrderFormatOptions.createDefault();
+		
 		Preferences prefs = SharedPrefs.getUserNode();
 		try { prefs.sync(); } catch (BackingStoreException bse) {}
 		
-		OrderFormatOptions defaultOFO = OrderFormatOptions.DEFAULT;
-		OrderFormatOptions ofo = new OrderFormatOptions(
-			prefs.getBoolean(NODE_ORDERFORMAT_UNIT, defaultOFO.getBriefUnitType()),
-			prefs.getBoolean(NODE_ORDERFORMAT_ORDERNAME, defaultOFO.getBriefOrderName()),
-			prefs.getBoolean(NODE_ORDERFORMAT_PROVINCE, defaultOFO.getBriefProvince()),
-			prefs.getBoolean(NODE_ORDERFORMAT_COAST, defaultOFO.getBriefCoast())
-		);
+		final byte[] encodedBytes = prefs.getByteArray(NODE_ORDERFORMAT_ENCODED, 
+			null);
+		
+		if(encodedBytes != null)
+		{
+			ofo = OrderFormatOptions.decode(encodedBytes, 
+				OrderFormatOptions.createDefault());
+		}
 		
 		return ofo;
 	}// getOrderFormatOptions()
@@ -205,24 +256,41 @@ public class DisplayPreferencePanel extends PreferencePanel
 		try { prefs.sync(); } catch (BackingStoreException bse) {}
 		
 		// defaults: 
-		final OrderFormatOptions ofo = OrderFormatOptions.DEFAULT;
+		orderFormat = getOrderFormatOptions();
 		
 		// change listener
 		ExampleChangeListener ecl = new ExampleChangeListener();
 		
 		// order-format radiobutton setings
-		csUnitFormat = new ChoiceSelection(Utils.getLocalString(I18N_ORDFMT_UNIT),
-			prefs.getBoolean(NODE_ORDERFORMAT_UNIT, ofo.getBriefUnitType()), ecl);
+		csPower = new ChoiceSelection(Utils.getLocalString(I18N_ORDFMT_POWERNAME),
+			orderFormat.getPowerFormat(), orderFormat.getPowerStyle(), false, false, ecl);	
+		
+		csUnit = new ChoiceSelection(Utils.getLocalString(I18N_ORDFMT_UNIT),
+			orderFormat.getUnitFormat(), orderFormat.getUnitStyle(), false, false, ecl);	
+		
+		csProvince = new ChoiceSelection(Utils.getLocalString(I18N_ORDFMT_PROVINCE),
+			orderFormat.getProvinceFormat(), orderFormat.getProvinceStyle(), false, false, ecl);	
 			
-		csOrderNameFormat = new ChoiceSelection(Utils.getLocalString(I18N_ORDFMT_ORDERNAME),
-			prefs.getBoolean(NODE_ORDERFORMAT_ORDERNAME, ofo.getBriefOrderName()), ecl);
+		csCoast = new ChoiceSelection(Utils.getLocalString(I18N_ORDFMT_COAST),
+			orderFormat.getCoastFormat(), orderFormat.getCoastStyle(), true, false, ecl);	
 			
-		csProvinceFormat = new ChoiceSelection(Utils.getLocalString(I18N_ORDFMT_PROVINCE),
-			prefs.getBoolean(NODE_ORDERFORMAT_PROVINCE, ofo.getBriefProvince()), ecl);
-			
-		csCoastFormat = new ChoiceSelection(Utils.getLocalString(I18N_ORDFMT_COAST),
-			prefs.getBoolean(NODE_ORDERFORMAT_COAST, ofo.getBriefCoast()), ecl);
-			
+		csOrderName = new ChoiceSelection(Utils.getLocalString(I18N_ORDFMT_ORDERNAME),
+				orderFormat.getOrderNameFormat(), orderFormat.getOrderNameStyle(), false, true, ecl);	
+		
+		// misc. options
+		cbPossessive = new JCheckBox(Utils.getLocalString(I18N_LABLE_POSSESSIVE));
+		cbPossessive.setSelected(orderFormat.getShowPossessivePower());
+		cbPossessive.addChangeListener(ecl);
+		
+		cbDot = new JCheckBox(Utils.getLocalString(I18N_LABLE_END_DOT));
+		cbDot.setSelected(orderFormat.getEndWithDot());
+		cbDot.addChangeListener(ecl);
+		
+		arrowBox = new JComboBox(OrderFormatOptions.ARROWS);
+		arrowBox.setEditable(false);
+		arrowBox.setPrototypeDisplayValue("MMM");
+		arrowBox.setSelectedItem(orderFormat.getArrow());
+		arrowBox.addActionListener(ecl);
 	}// makeChoiceSelections()
 	
 	
@@ -232,12 +300,27 @@ public class DisplayPreferencePanel extends PreferencePanel
 	*/
 	private void updateExampleAndFormatOptions()
 	{
-		orderFormat = new OrderFormatOptions(
-			csProvinceFormat.getValue(),
-			csCoastFormat.getValue(),
-			csOrderNameFormat.getValue(),
-			csUnitFormat.getValue()
-		);
+		assert (orderFormat != null);
+		
+		orderFormat.setPowerFormat(csPower.getFormat());
+		orderFormat.setPowerStyle(csPower.getStyle());
+		
+		orderFormat.setUnitFormat(csUnit.getFormat());
+		orderFormat.setUnitStyle(csUnit.getStyle());
+		
+		orderFormat.setOrderNameFormat(csOrderName.getFormat());
+		orderFormat.setOrderNameStyle(csOrderName.getStyle());
+		
+		orderFormat.setProvinceFormat(csProvince.getFormat());
+		orderFormat.setProvinceStyle(csProvince.getStyle());
+		
+		orderFormat.setCoastFormat(csCoast.getFormat());
+		orderFormat.setCoastStyle(csCoast.getStyle());
+		
+		orderFormat.setShowPossessivePower(cbPossessive.isSelected());
+		orderFormat.setEndWithDot(cbDot.isSelected());
+		
+		orderFormat.setArrow((String) arrowBox.getSelectedItem());
 		
 		// update the example text
 		StringBuffer sb = new StringBuffer(128);
@@ -253,45 +336,77 @@ public class DisplayPreferencePanel extends PreferencePanel
 	*	Inner class that implements a description plus 2 choices
 	*	which are radiobuttons. Allows the getting() and setting()
 	*	of the radiobuttons based upon OrderFormat FMT constants.
-	*	<p>
-	*	Also takes care of proper display (layout).
 	*/
-	private class ChoiceSelection extends JPanel
+	private static class ChoiceSelection extends JPanel
 	{
 		private ButtonGroup bg;
 		private JRadioButton brief;
 		private JRadioButton full;
+		private JComboBox styleBox;
 		private JLabel label;
+		private JCheckBox checkBox = null;
+		private boolean allowPlural = false;
+		private boolean allowParens = false;
+		
+		private static final int PLURAL_DELTA = (OrderFormatOptions.STYLE_PLURAL_NONE - OrderFormatOptions.STYLE_NONE);
 		
 		/** 
 		*	Create a ChoiceSelection with the given category label "label", and
 		*	the given format value: brief (true) or full (false)).
 		*/
-		public ChoiceSelection(String labelText, boolean fmtValue, ChangeListener cl)
+		public ChoiceSelection(final String labelText, final int formatValue, 
+			final int styleValue, final boolean allowParentheses,
+			final boolean allowPlural, final ExampleChangeListener cl)
 		{
 			super();
 			
-			// create components
+			if(allowPlural && allowParentheses)
+			{
+				throw new IllegalArgumentException();
+			}
+			
+			this.allowPlural = allowPlural;
+			this.allowParens = allowParentheses;
+			
+			// create and add components
 			bg = new ButtonGroup();
 			full = new JRadioButton(Utils.getLocalString(I18N_FULL_NAME));
 			full.getModel().addChangeListener(cl);
 			brief = new JRadioButton(Utils.getLocalString(I18N_BRIEF_NAME));
 			brief.getModel().addChangeListener(cl);
 			
+			// label
+			label = new JLabel(labelText);
+			
+			// combobox 
+			styleBox = new JComboBox((String[]) Utils.parseCSV(
+				Utils.getLocalString(I18N_STYLE_NAMES)));
+			styleBox.setPrototypeDisplayValue("MMMMMMMMMM");
+			styleBox.setEditable(false);
+			styleBox.addActionListener(cl);
+			
+			// add buttongroup components
 			bg.add(full);
 			bg.add(brief);
 			
-			if(fmtValue)
+			
+			if(allowParens)
 			{
-				brief.setSelected(true);
+				checkBox = new JCheckBox(Utils.getLocalString(I18N_LABLE_PAREN));
 			}
-			else
+			else if(allowPlural)
 			{
-				full.setSelected(true);
+				checkBox = new JCheckBox(Utils.getLocalString(I18N_LABLE_PLURAL));
 			}
 			
-			// label
-			label = new JLabel(labelText);
+			
+			if(checkBox != null)
+			{
+				checkBox.addChangeListener(cl);
+			}
+			
+			// set components with initial settings
+			update(formatValue, styleValue);
 		}// ChoiceSelection()
 		
 		
@@ -301,33 +416,93 @@ public class DisplayPreferencePanel extends PreferencePanel
 		public Component getChoice1()		{ return full; }
 		/** Get choice 2 */
 		public Component getChoice2()		{ return brief; }
+		/** Get style combobox */
+		public Component getComboBox()		{ return styleBox; }
+		/** Get checkbox (if any); may return null */
+		public Component getCheckBox()		{ return checkBox; }
+		
+		
+		
+		public void update(final int formatValue, final int styleValue)
+		{
+			if( formatValue == OrderFormatOptions.FORMAT_BRIEF 
+				|| formatValue == OrderFormatOptions.FORMAT_COAST_PAREN_BRIEF )
+			{
+				brief.setSelected(true);
+			}
+			else if(formatValue == OrderFormatOptions.FORMAT_FULL 
+					|| formatValue == OrderFormatOptions.FORMAT_COAST_PAREN_FULL)
+			{
+				full.setSelected(true);
+			}
+			
+			if(allowParens)
+			{
+				if( formatValue == OrderFormatOptions.FORMAT_COAST_PAREN_FULL
+					|| formatValue == OrderFormatOptions.FORMAT_COAST_PAREN_BRIEF )
+				{
+					checkBox.setSelected(true);
+				}
+				else
+				{
+					checkBox.setSelected(false);
+				}
+			}
+			
+			if(allowPlural)
+			{
+				if(styleValue >= PLURAL_DELTA)
+				{
+					styleBox.setSelectedIndex(styleValue - PLURAL_DELTA);
+					checkBox.setSelected(true);
+				}
+				else
+				{
+					styleBox.setSelectedIndex(styleValue);
+					checkBox.setSelected(false);
+				}
+			}
+			else
+			{
+				styleBox.setSelectedIndex(styleValue);
+			}
+		}// update()
 		
 		
 		/** 
-		*	Returns true or false, depending 
-		*	upon the JRadioButton selected.
+		*	Returns the OrderFormat FORMAT specifier
 		*/
-		public boolean getValue()
+		public int getFormat()
 		{
+			final int mod = (allowParens && checkBox.isSelected()) ? 10 : 0;
+			
 			if(bg.isSelected(brief.getModel()))
 			{
-				return true;
+				return OrderFormatOptions.FORMAT_BRIEF + mod;
 			}
-			if(bg.isSelected(full.getModel()))
+			else if(bg.isSelected(full.getModel()))
 			{
-				return false;
+				return OrderFormatOptions.FORMAT_FULL + mod;
 			}
 			else
 			{
 				throw new IllegalStateException();
 			}
-		}// getValue()
+		}// getBriefOrFull()
 		
+		/**
+		*	Returns the OrderFormat STYLE specifier
+		*/
+		public int getStyle()
+		{
+			final int mod = (allowPlural && checkBox.isSelected()) ? PLURAL_DELTA : 0;
+			return styleBox.getSelectedIndex() + mod;
+		}// getStyle()
 	}// inner class ChoiceSelection
 	
 	
 	/** Listens for radiobutton changes, and updates the Example text. */
-	private class ExampleChangeListener implements ChangeListener
+	private class ExampleChangeListener implements ChangeListener, ActionListener
 	{
 		public void stateChanged(ChangeEvent e)
 		{
@@ -336,6 +511,14 @@ public class DisplayPreferencePanel extends PreferencePanel
 				updateExampleAndFormatOptions();
 			}
 		}// stateChanged()
+		
+		public void actionPerformed(ActionEvent e)
+		{
+			if(example != null)
+			{
+				updateExampleAndFormatOptions();
+			}
+		}// actionPerformed()
 	}// ExampleChangeListener()
 	
 }// class DisplayPreferencePanel

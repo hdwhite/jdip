@@ -100,11 +100,13 @@ public class StdAdjudicator implements Adjudicator
 	// messageformat statics [for performance enhancement]
 	// these are complex Choice formats
 	// ?? will this be threadsafe ?? 
-	private static MessageFormat MFRemove = new MessageFormat(Utils.getLocalString(STDADJ_PREADJ_TOREMOVE));
-	private static MessageFormat MFBuild = new MessageFormat(Utils.getLocalString(STDADJ_PREADJ_TOBUILD));
+	private static final MessageFormat MFRemove = new MessageFormat(Utils.getLocalString(STDADJ_PREADJ_TOREMOVE));
+	private static final MessageFormat MFBuild = new MessageFormat(Utils.getLocalString(STDADJ_PREADJ_TOBUILD));
+	private static final OrderFormatOptions DEFAULT_OFO = OrderFormatOptions.createDefault();
 	
 	// instance variables
 	private final OrderFactory orderFactory;
+	private OrderFormatOptions orderFormat = DEFAULT_OFO;
 	private final TurnState turnState;
 	private final Position position;
 	private final World world;
@@ -167,6 +169,18 @@ public class StdAdjudicator implements Adjudicator
 			throw new IllegalStateException("cannot adjudicate phase: "+pt);
 		}
 	}// process()
+	
+	
+	/** Sets the order formatting options */
+	public void setOrderFormat(OrderFormatOptions ofo)
+	{
+		if(ofo == null)
+		{
+			throw new IllegalArgumentException();
+		}
+		
+		orderFormat = ofo;
+	}// setOrderFormat()
 	
 	
 	/** Enable or disable reporting of failure statistics. */
@@ -322,7 +336,7 @@ public class StdAdjudicator implements Adjudicator
 					
 					// create an informative result
 					// {0} power, {1} order (formatted)
-					String orderText = order.toFormattedString(OrderFormat.OrderFormatOptions.DEFAULT);
+					String orderText = order.toFormattedString(orderFormat);
 					addResult( new Result(Utils.getLocalString(
 						STDADJ_POWER_ORDER_LIST_CORRUPT, power, orderText)) );
 				}

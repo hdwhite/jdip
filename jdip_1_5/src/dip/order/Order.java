@@ -137,9 +137,9 @@ public abstract class Order extends Object implements Orderable, java.io.Seriali
 	// 
 	// Format methods
 	// 
-	public String toFormattedString(OrderFormat.OrderFormatOptions ofo)
+	public String toFormattedString(OrderFormatOptions ofo)
 	{
-		return OrderFormat.format(ofo, this, getDefaultFormat());
+		return OrderFormat.format(ofo, getDefaultFormat(), this);
 	}// toFormattedString()
 	
 	

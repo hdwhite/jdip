@@ -95,7 +95,6 @@ public class GUIMoveExplicit extends Move implements GUIOrder
 	private transient int numSupports = -9999;
 	private transient Point2D.Float failPt = null;
 	private transient SVGGElement group = null;
-	private static final transient String moveFormatOrigin = Utils.getLocalString("MOVE_FORMAT_ORIGIN");
 	
 	
 	
@@ -463,25 +462,6 @@ public class GUIMoveExplicit extends Move implements GUIOrder
 		
 		return false;
 	}// setLocation()
-	
-	
-	/** Provides partial order text if, for example, destination is not yet set. */
-	public String getDefaultFormat()
-	{
-		if(convoyRoutes != null)
-		{
-			return super.getDefaultFormat();
-		}
-		else
-		{
-			if(dest == null)
-			{
-				return moveFormatOrigin;
-			}
-		}
-		
-		return super.getDefaultFormat();
-	}// getDefaultFormat()
 	
 	
 	/** Updates convoyPath() from tmpConvoyPath() */
