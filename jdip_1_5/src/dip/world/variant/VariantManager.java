@@ -510,11 +510,21 @@ public class VariantManager
 	*	Thus it is assured that a SymbolPack will always be obtained.
 	*/
 	public static synchronized SymbolPack getSymbolPack(MapGraphic mg, 
-		String symbolPackName, float symbolPackVersion)
+		String symbolPackName, final float symbolPackVersion)
 	{
 		if(mg == null) { throw new IllegalArgumentException(); }
 		
-		SymbolPack sp = getSymbolPack(symbolPackName, symbolPackVersion);
+		// safety:
+		// if version is invalid (< 0.0f), convert to VERSION_NEWEST 
+		// automatically. Log this method, though
+		float spVersion = symbolPackVersion;
+		if(spVersion <= 0.0f)
+		{
+			Log.println("WARNING: VariantManager.getSymbolPack() called with symbolPackVersion of <= 0.0f. Check parameters.");
+			spVersion = VERSION_NEWEST;
+		}
+		
+		SymbolPack sp = getSymbolPack(symbolPackName, spVersion);
 		if(sp == null)
 		{
 			sp = getSymbolPack(symbolPackName, VERSION_NEWEST);
@@ -594,7 +604,7 @@ public class VariantManager
 	{
 		if(version <= 0.0f && (version != VERSION_NEWEST && version != VERSION_OLDEST))
 		{
-			throw new IllegalArgumentException("invalid version or version constant");
+			throw new IllegalArgumentException("invalid version or version constant: "+version);
 		}
 	}// checkVersionConstant()
 	

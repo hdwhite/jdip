@@ -133,7 +133,9 @@ public class MapPicker extends HeaderDialog
 				// set the new URI in World object.
 				World.VariantInfo vi = world.getVariantInfo();
 				vi.setMapName(mg.getName());
+				
 				vi.setSymbolPackName(sp.getName());
+				vi.setSymbolPackVersion(sp.getVersion());
 				
 				// re-render the map
 				clientFrame.getMapPanel().reloadMap();
