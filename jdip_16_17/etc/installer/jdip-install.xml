@@ -49,11 +49,12 @@
  		<res id="ImgPacksPanel.img.5"   src="images/imperium_thumb.png"/>
 		<res id="ImgPacksPanel.img.6"   src="images/loeb9.gif" />
 		<res id="ImgPacksPanel.img.7"   src="images/milan_thumb.png" />
-        <res id="ImgPacksPanel.img.8"   src="images/octarine_thumb.png" />
- 		<res id="ImgPacksPanel.img.9"   src="images/pure_thumb.png" />
-        <res id="ImgPacksPanel.img.10"  src="images/rootz_thumb.png" />
-        <res id="ImgPacksPanel.img.11"  src="images/sailho_thumb.png" />
-		<res id="ImgPacksPanel.img.12"  src="images/youngstown_thumb.png" />
+        <res id="ImgPacksPanel.img.8"   src="images/modern_thumb.jpg" />
+		<res id="ImgPacksPanel.img.9"   src="images/octarine_thumb.png" />
+ 		<res id="ImgPacksPanel.img.10"   src="images/pure_thumb.png" />
+        <res id="ImgPacksPanel.img.11"  src="images/rootz_thumb.png" />
+        <res id="ImgPacksPanel.img.12"  src="images/sailho_thumb.png" />
+		<res id="ImgPacksPanel.img.13"  src="images/youngstown_thumb.png" />
      </resources>
     
 	<native type="izpack" name="ShellLink.dll"/>
@@ -124,6 +125,10 @@
 		<pack name="Milan" required="no" override="true">
 			<description>The Milan variant.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/milanVariants.zip"/>
+		</pack>
+		<pack name="Modern" required="no" override="true">
+			<description>The Modern variant.</description>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/modernVariants.zip"/>
 		</pack>
 		<pack name="Octarine" required="no" override="true">
 			<description>The Octarine variant.</description>
