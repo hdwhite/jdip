@@ -89,7 +89,7 @@
 		URI="bitmap_std.svg" thumbURI="detailed_thumb.png">
 		<DESCRIPTION>
 		A detailed version of the traditional map. While this map has 
-		rich graphical detail some features, such as province highlighting, 
+		rich graphical detail, some features such as province highlighting 
 		are not available.
 		</DESCRIPTION>
 	</MAP_DEFINITION>
