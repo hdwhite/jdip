@@ -107,4 +107,23 @@ public class PlayerMetadata implements Serializable
 	/** Sets notes. Null values will create an empty string. */
 	public void setNotes(String value)				{ notes = (value == null) ? EMPTY : value; }
 	
+	/** Parse the type into a constant */
+	public static String parseType(String in)
+	{
+		if(TYPE_HUMAN.equals(in))
+		{
+			return TYPE_HUMAN;
+		}
+		else if(TYPE_INACTIVE.equals(in))
+		{
+			return TYPE_INACTIVE;
+		}
+		else if(TYPE_AI.equals(in))
+		{
+			return TYPE_AI;
+		}
+		
+		return null;
+	}// parseType()
+	
 }// class PlayerMetadata

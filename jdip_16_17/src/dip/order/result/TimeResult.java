@@ -27,8 +27,19 @@ import dip.order.OrderFormatOptions;
 import dip.world.Power;
 import dip.misc.Utils;
 
-import java.io.Serializable;
 import java.util.Date;
+
+import dip.world.io.XMLSerializer;
+import dip.world.io.converter.ResultConverter;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
 *		TimeResult<p> 
@@ -38,7 +49,7 @@ import java.util.Date;
 public class TimeResult extends Result
 {
 	// instance variables
-	protected final long timeStamp;	// milliseconds since midnight, January 1, 1970 UTC.
+	protected long timeStamp;	// milliseconds since midnight, January 1, 1970 UTC.
 	
 	
 	/** A TimeStamped result, applicable to a particular power. 
@@ -99,4 +110,56 @@ public class TimeResult extends Result
 	}// toString()
 	
 	
+	/** For XStream serialization */
+	public static class TimeResultConverter implements Converter
+	{
+		
+		public TimeResultConverter(ClassMapper cm)
+		{
+			cm.alias("timeResult", TimeResult.class, TimeResult.class);
+		}
+		
+		
+		public void marshal(java.lang.Object source, HierarchicalStreamWriter hsw, 
+			MarshallingContext context)
+		{
+			final XMLSerializer xs = XMLSerializer.get(context);
+			final TimeResult timeResult = (TimeResult) source;
+			
+			ResultConverter.writeBasic(timeResult, xs, hsw);
+			
+			hsw.startNode("time");
+			hsw.setValue(String.valueOf(timeResult.getGMTMillis()));
+			hsw.endNode();
+		}// marshal()
+		
+		public boolean canConvert(java.lang.Class type)
+		{
+			return type.equals(TimeResult.class);
+		}// canConvert()
+		
+		public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
+		{
+			final XMLSerializer xs = XMLSerializer.get(context);
+			
+			final Power power = xs.getPower( reader.getAttribute("power") );
+			
+			assert(reader.hasMoreChildren());
+			
+			reader.moveDown();
+			final String message = xs.getString( reader.getValue() );
+			reader.moveUp();
+			
+			assert(reader.hasMoreChildren());
+			
+			reader.moveDown();
+			final long time = xs.getLong( reader.getValue(), 0L );
+			reader.moveUp();
+			
+			TimeResult tr = new TimeResult(power, message);
+			tr.timeStamp = time;
+			return tr;
+		}// unmarshal()	
+	}// TimeResultConverter
+
 }// class TimeResult

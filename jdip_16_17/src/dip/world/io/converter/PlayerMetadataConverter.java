@@ -23,6 +23,7 @@
 package dip.world.io.converter;
 
 import dip.world.io.XMLSerializer;  
+import dip.world.io.NameValuePair; 
 
 import dip.world.metadata.PlayerMetadata;
 
@@ -82,6 +83,69 @@ public class PlayerMetadataConverter implements Converter
 	
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 	{
-		return null;
-	}// unmarshal()		
+		final XMLSerializer xs = XMLSerializer.get(context);
+		
+		final PlayerMetadata pmd = new PlayerMetadata(
+			xs.getPower( reader.getAttribute("power") ));
+		pmd.setType( PlayerMetadata.parseType(reader.getAttribute("type")) );
+		
+		while(reader.hasMoreChildren())
+		{
+			reader.moveDown();
+			
+			final String nodeName = reader.getNodeName();
+			if("notes".equals(nodeName))
+			{
+				pmd.setNotes(reader.getValue());
+			}
+			else
+			{
+				Object obj = xs.lookupAndReadNode(cm, reader, context);
+				if(obj instanceof NameValuePair)
+				{
+					processNVP(pmd, xs, (NameValuePair) obj);
+				}
+			}
+			
+			reader.moveUp();
+		}
+		
+		return pmd;
+	}// unmarshal()
+	
+	
+	private void processNVP(PlayerMetadata pmd, XMLSerializer xs, NameValuePair nvp)
+	{
+		final String name = nvp.getName();
+		
+		List emails = null;
+		
+		if("name".equals(name))
+		{
+			pmd.setName( xs.getString(nvp.getValue()) );
+		}
+		else if("nick".equals(name))
+		{
+			pmd.setNickname( xs.getString(nvp.getValue()) );
+		}
+		else if("uri".equals(name))
+		{
+			pmd.setURI( xs.getURI(nvp.getValue()) );
+		}
+		else if(name.startsWith("email"))
+		{
+			if(emails == null)
+			{
+				emails = new ArrayList(4);
+			}
+			emails.add( xs.getString(nvp.getValue()) );
+		}
+		
+		if(emails != null)
+		{
+			pmd.setEmailAddresses((String[]) emails.toArray(new String[emails.size()]));
+		}
+	}// processNVP()
+	
+	
 }// PlayerMetadataConverter

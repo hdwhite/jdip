@@ -44,6 +44,9 @@ import com.thoughtworks.xstream.alias.ClassMapper;
 */
 public class VariantInfoConverter implements Converter
 {
+	/** Context: Temporary VictoryConditions Object Key */
+	public static final String CONTEXT_KEY_VC = "_temporary-victoryconditions_";
+	
 	private final ClassMapper cm;
 	
 	public VariantInfoConverter(ClassMapper cm)
@@ -125,7 +128,7 @@ public class VariantInfoConverter implements Converter
 				else if(obj instanceof VictoryConditions)
 				{
 					// temporarily store the VictoryConditions object
-					context.put(XMLSerializer.CONTEXT_KEY_VC, obj);
+					context.put(CONTEXT_KEY_VC, obj);
 				}
 			}
 			

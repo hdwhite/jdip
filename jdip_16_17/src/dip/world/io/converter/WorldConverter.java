@@ -51,6 +51,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.alias.CannotResolveClassException;
 
 /**
 *	XStream Converter
@@ -127,73 +128,124 @@ public class WorldConverter implements Converter
 	/** Returns a World object */
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 	{
-		System.out.println("WorldConvert: --unmarshal--");
-		
 		// setup XMLSerializer
 		final XMLSerializer xs = XMLSerializer.get(context);
 		xs.setOrderFactory(orderFactory);
 		
-		System.out.println("  wc-a");
+		// Creator / CreatorVersion from file. 
+		// we don't do anything with these yet.
+		final String readCreator = reader.getAttribute("creator");
+		final String readCreatorVersion = reader.getAttribute("creatorVersion");
 		
-		// Check specification/etc.
-		System.out.println( reader.getAttribute("creator") );
-		System.out.println( reader.getAttribute("creatorVersion") );
-		System.out.println( reader.getAttribute("specification") );
+		// check specification
+		final String readSpec = reader.getAttribute("specification");
+		if(!specification.equals(readSpec))
+		{
+			throw new ConversionException("Specification "+readSpec+" not supported.");
+		}
 		
+		// Start reading children. The <variant> element *must* come first.
+		if(reader.hasMoreChildren())
+		{
+			reader.moveDown();
+			try
+			{
+				createWorld((VariantInfo) context.convertAnother(context, 
+					VariantInfo.class), xs, context);
+			}
+			catch(CannotResolveClassException e)
+			{
+				throw new ConversionException("Expected first element, \"variant\", invalid or missing.");
+			}
+			reader.moveUp();
+		}
 		
-		System.out.println("TODO: CHECK SPECIFICATION");
-		// throw ConversionException if differs
+		boolean victoryConditionsSet = false;
 		
-		
-		// start reading children. 
+		// Start reading the other children.
 		while(reader.hasMoreChildren())
 		{
-			// read in VariantInfo
-			//
 			reader.moveDown();
-			
 			final String nodeName = reader.getNodeName();
 			
 			if("info".equals(nodeName))
 			{
-				System.out.println("---> <info> processing");
-				
-				// read in METADATA
-				
+				while(reader.hasMoreChildren())
+				{
+					reader.moveDown();
+					Object obj = xs.lookupAndReadNode(cm, reader, context);
+					
+					if(obj instanceof PlayerMetadata)
+					{
+						PlayerMetadata pmd = (PlayerMetadata) obj;
+						xs.getWorld().setPlayerMetadata(pmd.getPower(), pmd);
+					}
+					else if(obj instanceof GameMetadata)
+					{
+						GameMetadata gmd = (GameMetadata) obj;
+						xs.getWorld().setGameMetadata(gmd);
+					}
+					
+					reader.moveUp();
+				}
 			}
 			else if("setup".equals(nodeName))
 			{
-				System.out.println("---> <setup> processing");
+				System.out.println("---> TODO: <setup> processing");
 				
 				// read in SETUP data (f2f, default, etc.)
 				
 			}
 			else
 			{
-				final Class cls = cm.lookupType(nodeName);
-				final Object obj = context.convertAnother(context, cls);
+				// should only be <turn> elements....
+				Class cls = null;
 				
-				if(cls.equals(VariantInfo.class))
+				try
 				{
-					createWorld((VariantInfo) obj, xs, context);
+					cls = cm.lookupType(nodeName);
 				}
-				else if(cls.equals(TurnState.class))
+				catch(CannotResolveClassException e)
 				{
-					final TurnState ts = (TurnState) obj;
-					ts.setWorld(xs.getWorld());
-					xs.getWorld().setTurnState(ts);
+					Log.println("WorldConverter: skipping unknown node: ", nodeName);
 				}
-				else
+					
+				if(cls != null)
 				{
-					Log.println("WorldConverter: unknown node: ", nodeName);
+					final Object obj = context.convertAnother(context, cls);
+					
+					if(cls.equals(TurnState.class))
+					{
+						final TurnState ts = (TurnState) obj;
+						ts.setWorld(xs.getWorld());
+						xs.getWorld().setTurnState(ts);
+						
+						// using phase from first turn, set the VictoryConditions
+						if(!victoryConditionsSet)
+						{
+							VictoryConditions tmpVC = (VictoryConditions) 
+								context.get(VariantInfoConverter.CONTEXT_KEY_VC);
+							
+							VictoryConditions vc = new VictoryConditions(
+								tmpVC.getSCsRequiredForVictory(), 
+								tmpVC.getYearsWithoutSCChange(),
+								tmpVC.getMaxGameDurationYears(), 
+								ts.getPhase()
+							);
+							
+							xs.getWorld().setVictoryConditions(vc);
+							victoryConditionsSet = true;
+						}
+					}
 				}
 			}
 			
 			reader.moveUp();
-		}
+		}// while()
 		
 		return xs.getWorld();
 	}// unmarshal()
+	
 	
 	/** Create the Map and World */
 	private void createWorld(VariantInfo vi, XMLSerializer xs, 
@@ -236,8 +288,6 @@ public class WorldConverter implements Converter
 		}
 		
 		// world setup
-		world.setVictoryConditions(
-			(VictoryConditions) context.get(XMLSerializer.CONTEXT_KEY_VC));
 		world.setVariantInfo(vi);
 		
 		// XMLSerializer final setup

@@ -37,10 +37,13 @@ import com.thoughtworks.xstream.alias.ClassMapper;
 
 /**
 *	XStream Converter
+*	<p>
+*	When unmarshalling, this creates a *temporary* VictoryConditions object,
+*	with the intial-year set to 1. This <b>must</b> be adjusted appropriately when
+*	the first turn is read.
 */
 public class VictoryConditionsConverter implements Converter
 {
-	
 	
 	public VictoryConditionsConverter(ClassMapper cm)
 	{
@@ -67,11 +70,6 @@ public class VictoryConditionsConverter implements Converter
 		hsw.addAttribute("value",
 			String.valueOf(vc.getMaxGameDurationYears()));
 		hsw.endNode();
-		
-		hsw.startNode("initialYear");
-		hsw.addAttribute("value",
-			String.valueOf(vc.getInitialYear()));
-		hsw.endNode();
 	}// marshal()
 	
 	public boolean canConvert(java.lang.Class type)
@@ -96,7 +94,7 @@ public class VictoryConditionsConverter implements Converter
 			((Integer) elements.get("winningSupplyCenters")).intValue(),
 			((Integer) elements.get("yearsWithoutSCCapture")).intValue(),
 			((Integer) elements.get("maxGameLengthInYears")).intValue(),
-			((Integer) elements.get("initialYear")).intValue()
+			1
 		);
 	}// unmarshal()		
 }// VictoryConditionsConverter

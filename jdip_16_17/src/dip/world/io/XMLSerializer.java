@@ -29,6 +29,7 @@ import dip.world.io.converter.*;
 import dip.order.Orderable;
 import dip.order.OrderFactory;
 import dip.order.result.Result;
+import dip.order.result.TimeResult;
 
 import java.io.Writer;
 import java.io.Reader;
@@ -52,11 +53,14 @@ import java.util.IdentityHashMap;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.GZIPInputStream;
+
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.*;
 import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.alias.CannotResolveClassException;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 
@@ -64,15 +68,13 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 *	Serializes World objects to XML, and vice-versa. This method
 *	is the preferred method for saved games. XML files are compressed
 *	with GZIP (via a GZIPOutputStream) automatically.
+*	<p>
 *	
 */
 public class XMLSerializer
 {
 	/** Specification Level : 1.0 */
 	public static final String SPECIFICATION_FORMAT_1_0 = "FORMAT_1_0";
-	
-	/** Context: VictoryConditions Object Key */
-	public static final String CONTEXT_KEY_VC = "_victoryconditions_";
 	
 	private static final String KEY_SERIALIZER = "KEY_SERIALIZER";
 	private static final String VALUE_NONE = "none";
@@ -294,8 +296,25 @@ System.out.println(e);
 		}
 		
 		return in;
-	}// getProvince()
+	}// getString()
 	
+	/** Get a URI. "none" or an invalid URI is converted to null. */
+	public URI getURI(String in)
+	{
+		if(VALUE_NONE.equals(in))
+		{
+			return null;
+		}
+		
+		try
+		{
+			return new URI(in);
+		}
+		catch(URISyntaxException e)
+		{
+			return null;
+		}
+	}// getURI()
 	
 	/** Convert a String to a Province. "none" converts to null.*/
 	public Province getProvince(String in)
@@ -664,6 +683,35 @@ System.out.println(e);
 	}// lookupAndWriteNode()
 	
 	
+	/**
+	*	Reads a Node, using the ClassMapper to get the node name,
+	*	name, and convertAnother to read the object. This is similar
+	*	to the following:
+	*	<code>
+	*		String nodeName = reader.getNodeName();<br>
+	*		Class cls = cm.lookupType(nodeName);<br>
+	*		Object obj = context.convertAnother(reader, cls);<br>
+	*	</code>
+	*	<p>
+	*	Note, however, that this will not throw an exception; instead,
+	*	a <code>null</code> object will be returned.
+	*/
+	public Object lookupAndReadNode(final ClassMapper cm, 
+		final HierarchicalStreamReader reader, final UnmarshallingContext context)
+	{
+		String nodeName = reader.getNodeName();
+		
+		try
+		{
+			Class cls = cm.lookupType(nodeName);
+			return context.convertAnother(reader, cls);
+		}
+		catch(CannotResolveClassException e)
+		{
+			return null;
+		}
+	}// lookupAndReadNode()
+	
 	
 	/** 
 	*	Safely get a String value. If the value is empty or "none",
@@ -720,6 +768,25 @@ System.out.println(e);
 		return defaultValue;
 	}// getInt()
 	
+	/**
+	*	Safely get a Long value. If the value is empty or "none",
+	*	or conversion to a Long fails, the default value is used.
+	*/
+	public long getLong(String value, long defaultValue)
+	{
+		if(value != null && value.length() > 0)
+		{
+			try
+			{
+				return Long.parseLong(value);
+			}
+			catch(NumberFormatException e)
+			{
+			}
+		}
+		
+		return defaultValue;
+	}// getLong()
 	
 	/**
 	*	Safely get an Integer value. If the value is empty or "none",
@@ -762,7 +829,7 @@ System.out.println(e);
 		return map;
 	}// getMap()
 	
-	/** Get the dip.world.World object */
+	/** Get the World object */
 	public World getWorld()
 	{
 		return world;
@@ -804,11 +871,13 @@ System.out.println(e);
 		turnNum++;
 	}// setTurnNumber()
 	
+	/** Set the current TurnState object */
 	public TurnState getCurrentTurnState()
 	{
 		return turnState;
 	}// getCurrentTurnState()
 	
+	/** Get the current TurnState object */
 	public void setCurrentTurnState(TurnState ts)
 	{
 		this.turnState = ts;
@@ -881,7 +950,7 @@ System.out.println(e);
 		
 		// results
 		xstream.registerConverter(new ResultConverter(cm));
-		xstream.registerConverter(new TimeResultConverter(cm));
+		xstream.registerConverter(new TimeResult.TimeResultConverter(cm));
 		
 		// order results
 		xstream.registerConverter(new OrderResultConverter(cm));

@@ -77,6 +77,24 @@ public class GameMetadataConverter implements Converter
 	
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 	{
-		return null;
+		final XMLSerializer xs = XMLSerializer.get(context);
+		final GameMetadata gmd = new GameMetadata();
+		final HashMap map = new HashMap(11);
+		
+		while(reader.hasMoreChildren())
+		{
+			reader.moveDown();
+			map.put(reader.getNodeName(), reader.getValue());
+			reader.moveUp();
+		}
+		
+		gmd.setGameName( xs.getString((String) map.get("name")) );
+		gmd.setGameID( xs.getString((String) map.get("gameID")) );
+		gmd.setGameURI( xs.getURI((String) map.get("URI")) );
+		gmd.setJudgeName( xs.getString((String) map.get("judge")) );
+		gmd.setComment( xs.getString((String) map.get("comment")) );
+		gmd.setNotes( xs.getString((String) map.get("notes")) );
+		
+		return gmd;
 	}// unmarshal()		
 }// GameMetadataConverter
