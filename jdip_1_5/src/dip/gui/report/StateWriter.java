@@ -130,6 +130,7 @@ public class StateWriter
 	/** StateWriter constructor */
 	private StateWriter(ClientFrame cf, TurnState ts)
 	{
+		assert(cf != null);
 		turnState = ts;
 		allPowers = ts.getWorld().getMap().getPowers();
 		displayablePowers = (cf == null) ? allPowers : cf.getDisplayablePowers();

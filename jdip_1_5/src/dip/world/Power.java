@@ -30,7 +30,7 @@ package dip.world;
 public class Power implements Comparable, java.io.Serializable
 {
 	// constants for name array; always stored in this order.
-	private final int FULL_NAME	= 0;	// required
+	private static final int FULL_NAME	= 0;	// required
 
 	
 	// immutable fields

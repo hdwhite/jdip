@@ -55,7 +55,6 @@ public class SCHistoryWriter
 	
 	
 	// instance variables
-	final ClientFrame cf; 
 	final World world;
 	final Power[] allPowers;
 	final Province[] scProvs;	// provinces with SCs
@@ -100,7 +99,6 @@ public class SCHistoryWriter
 	/** StateWriter constructor */
 	private SCHistoryWriter(ClientFrame cf, World w, boolean inColor)
 	{
-		this.cf = cf;
 		this.world = w;
 		this.allPowers = w.getMap().getPowers();
 		
@@ -464,7 +462,7 @@ public class SCHistoryWriter
 		England     3   5   5   3   2   1   1   2   3       Chris White
 		France      3   5   6   7   7   7   6   5   5       Scott Sisson
 		Germany     3   5   4   4   5   6   5   5   3       jon
-		Italy       3   4   4   5   5   5   6   5   4       Valéry MENJON
+		Italy       3   4   4   5   5   5   6   5   4       Valï¿½ry MENJON
 		Russia      4   6   6                               John Schofield
 					            7   9   9   9   8  10       Millis Miller
 		Turkey      3   4   3   3   3   3   4   5   5       Greg Marrinan
