@@ -22,6 +22,8 @@
 package dip.order.result;
 
 import dip.order.Orderable;
+import dip.order.OrderFormat;
+import dip.order.OrderFormat.OrderFormatOptions;
 import dip.world.Location;
 import dip.world.Province;
 import dip.misc.Utils;
@@ -124,7 +126,7 @@ public class BouncedResult extends OrderResult
 	*	Creates an appropriate internationalized text 
 	*	message given the set and unset parameters.
 	*/
-	public String getMessage()
+	public String getMessage(OrderFormatOptions ofo)
 	{
 		/*
 		0 : province not specified
@@ -136,11 +138,17 @@ public class BouncedResult extends OrderResult
 		{3} : def
 		*/
 		
+		String fmtProvince = null;
+		if(bouncer != null)
+		{
+			fmtProvince = OrderFormat.format(ofo, bouncer);
+		}
+		
 		// create messageformat arguments
 		Object[] args = 
 		{
 			((bouncer == null) ? new Integer(0) : new Integer(1)), 	// {0}; 0 if no province specified
-			bouncer,												// {1}
+			fmtProvince,											// {1}
 			new Integer(atkStrength),								// {2}
 			new Integer(defStrength),								// {3}
 		};
@@ -148,6 +156,7 @@ public class BouncedResult extends OrderResult
 		// return formatted message
 		return Utils.getLocalString("BouncedResult.message", args);
 	}// getMessage()
+
 	
 	
 	/**

@@ -22,6 +22,8 @@
 package dip.order.result;
 
 import dip.order.Orderable;
+import dip.order.OrderFormat;
+import dip.order.OrderFormat.OrderFormatOptions;
 import dip.world.Location;
 import dip.world.Province;
 import dip.misc.Utils;
@@ -65,7 +67,7 @@ public class DependentMoveFailedResult extends OrderResult
 	*	Creates an appropriate internationalized text 
 	*	message given the set and unset parameters.
 	*/
-	public String getMessage()
+	public String getMessage(OrderFormatOptions ofo)
 	{
 		/*
 		{0} : the dependent order, formatted with OrderFormat
@@ -73,7 +75,7 @@ public class DependentMoveFailedResult extends OrderResult
 		
 		// return formatted message
 		return Utils.getLocalString("DependentMoveFailedResult.message", 
-			dependentOrder.toFormattedString(OrderFormatOptions.DEFAULT));
+			dependentOrder.toFormattedString(ofo));
 	}// getMessage()
 	
 	

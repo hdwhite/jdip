@@ -22,6 +22,8 @@
 package dip.order.result;
 
 
+import dip.order.OrderFormat;
+import dip.order.OrderFormat.OrderFormatOptions;
 import dip.world.Power;
 import dip.misc.Utils;
 
@@ -67,9 +69,11 @@ public class TimeResult extends Result
 	}// getGMTMillis()
 	
 	
-	/** Converts the Resource to a properly-internationlized text message.
-	*	arg {0} is always the time. */
-	public String getMessage()
+	/** 
+	*	Converts the Resource to a properly-internationlized text message.
+	*	argument {0} is always the time. 
+	*/
+	public String getMessage(OrderFormatOptions ofo)
 	{
 		return Utils.getLocalString(message, new Date(timeStamp));
 	}// getMessage()

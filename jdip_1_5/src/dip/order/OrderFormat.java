@@ -202,11 +202,43 @@ public class OrderFormat
 		return ofo.getBriefUnitType() ? unitType.getShortName() : unitType.getFullName();
 	}// format()
 	
-	
+	/**
+	*	Format a Location given the order formatting parameters.
+	*	Does not handle null.
+	*/
+	public static String format(OrderFormatOptions ofo, Location loc)
+	{
+		StringBuffer sb = new StringBuffer(32);
+		sb.append(format(ofo, loc.getProvince()));
+		
+		// use '/' if brief coast AND brief province
+		// use '(COAST)' for all other cases.
+		final boolean brief = (ofo.getBriefProvince() && ofo.getBriefCoast());
+		final String coast = format(ofo, loc.getCoast());
+		
+		// if coast is non-displayable (""), we don't want to print it.
+		if(coast.length() > 0)
+		{
+			if(brief)
+			{
+				sb.append("/");
+				sb.append(coast);
+			}
+			else
+			{
+				sb.append(" (");
+				sb.append(coast);
+				sb.append(")");
+			}
+		}
+		
+		return sb.toString();
+	}// format()
 	
 	/**
 	*	Formats an Order according to the specified order format specifier 
-	*	String and specified order format options.
+	*	String and specified order format options. Does not handle null 
+	*	orders.
 	*/
 	public static String format(OrderFormatOptions ofo, Order order, String format)
 	{

@@ -22,6 +22,8 @@
 package dip.order.result;
 
 import dip.order.Orderable;
+import dip.order.OrderFormat;
+import dip.order.OrderFormat.OrderFormatOptions;
 import dip.world.Location;
 import dip.world.Province;
 import dip.misc.Utils;
@@ -77,7 +79,7 @@ public class ConvoyPathResult extends OrderResult
 	*	Creates an appropriate internationalized text message given the 
 	*	convoy path.
 	*/
-	public String getMessage()
+	public String getMessage(OrderFormatOptions ofo)
 	{
 		/*
 		arguments:
@@ -88,11 +90,11 @@ public class ConvoyPathResult extends OrderResult
 		StringBuffer sb = new StringBuffer(128);
 		final String arrow = Utils.getLocalString(KEY_ARROW);
 		
-		sb.append(convoyPath[0].getShortName());
+		sb.append(OrderFormat.format(ofo, convoyPath[0]));
 		for(int i=1; i<convoyPath.length; i++)
 		{
 			sb.append(arrow);
-			sb.append(convoyPath[i].getShortName());
+			sb.append(OrderFormat.format(ofo, convoyPath[i]));
 		}
 		
 		// return formatted message

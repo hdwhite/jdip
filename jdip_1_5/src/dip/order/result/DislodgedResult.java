@@ -22,6 +22,8 @@
 package dip.order.result;
 
 import dip.order.Orderable;
+import dip.order.OrderFormat;
+import dip.order.OrderFormat.OrderFormatOptions;
 import dip.world.Location;
 import dip.world.Province;
 import dip.misc.Utils;
@@ -151,7 +153,7 @@ public class DislodgedResult extends OrderResult
 	*	Creates an appropriate internationalized text message given the 
 	*	set and unset parameters.
 	*/
-	public String getMessage()
+	public String getMessage(OrderFormatOptions ofo)
 	{
 		/*
 		0 : province not specified
@@ -165,6 +167,13 @@ public class DislodgedResult extends OrderResult
 		{5} : retreats (comma-separated)
 		*/
 		
+		// create formated dislodged present (if any)
+		String fmtDislodger = null;
+		if(dislodger != null)
+		{
+			fmtDislodger = OrderFormat.format(ofo, dislodger);
+		}
+		
 		// create retreat list
 		StringBuffer retreats = new StringBuffer(128);
 		if(retreatLocations != null)
@@ -172,7 +181,9 @@ public class DislodgedResult extends OrderResult
 			for(int i=0; i<retreatLocations.length; i++)
 			{
 				retreats.append(' ');
-				retreatLocations[i].appendBrief(retreats);
+				
+				retreats.append( OrderFormat.format(ofo, retreatLocations[i]) );
+				
 				if(i < (retreatLocations.length-1))
 				{
 					retreats.append(',');
@@ -184,7 +195,7 @@ public class DislodgedResult extends OrderResult
 		Object[] args = 
 		{
 			((dislodger == null) ? new Integer(0) : new Integer(1)), 	// {0}; 0 if no province specified
-			dislodger,													// {1}
+			fmtDislodger,												// {1}
 			new Integer(atkStrength),									// {2}
 			new Integer(defStrength),									// {3}
 			((retreatLocations == null) ? new Integer(-1) : new Integer(retreatLocations.length)),  // {4} 
