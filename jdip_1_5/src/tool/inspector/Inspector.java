@@ -47,8 +47,8 @@ import java.net.URI;
 public class Inspector implements Tool
 {
 	ClientFrame clientFrame = null;
-	final OrderFormat.OrderFormatOptions OFO = OrderFormatOptions.createDebug();
-	final OrderFormat.OrderFormatOptions TERSE_OFO = OrderFormatOptions.createTerse();
+	final OrderFormatOptions OFO = OrderFormatOptions.createDebug();
+	final OrderFormatOptions TERSE_OFO = OrderFormatOptions.createTerse();
 	
 	
 	/** Get the current Tool version */
