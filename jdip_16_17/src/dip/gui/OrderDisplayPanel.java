@@ -508,7 +508,7 @@ public class OrderDisplayPanel extends JPanel
 			return false;
 		}
 		
-		boolean found = removeOrderFromTS(order);
+		final boolean found = removeOrderFromTS(order);
 		assert(found);
 		
 		if(undoable && found)
@@ -547,12 +547,13 @@ public class OrderDisplayPanel extends JPanel
 			
 			if(isOrderable(order))
 			{
-				assert(removeOrderFromTS(order));
+				final boolean isRemoved = removeOrderFromTS(order);
+				assert(isRemoved);
 				deletedOrderList.add(order);
 				count++;
 			}
 		}
-			
+		
 		Orderable[] deletedOrders = (Orderable[]) deletedOrderList.toArray(new Orderable[deletedOrderList.size()]);
 		
 		if(undoable)
@@ -655,7 +656,8 @@ public class OrderDisplayPanel extends JPanel
 		for(int i=0; i<selected.length; i++)
 		{
 			selectedOrders[i] = ((DisplayOrder) selected[i]).getOrder();
-			assert(removeOrderFromTS(selectedOrders[i]));
+			final boolean isRemoved = removeOrderFromTS(selectedOrders[i]);
+			assert(isRemoved);
 		}
 		
 		if(selectedOrders.length == 1)
@@ -1026,7 +1028,7 @@ public class OrderDisplayPanel extends JPanel
 			{
 				isEditable = false;
 				displayablePowers = world.getMap().getPowers();
-				orderablePowers = new Power[0];
+				orderablePowers = Power.EMPTY_ARRAY;
 				orderList.setEnabled(false);
 				orderList.clearSelection();
 			}
