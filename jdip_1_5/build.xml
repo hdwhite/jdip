@@ -244,6 +244,12 @@
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
+		<!-- Variant Package: Chaos (nJudge compatible) -->
+		<zip  destfile="${variant.dir}/chaosNJudgeVariant.zip"
+				basedir="${resource.dir}/variants/chaos"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				
 		<!-- Variant Package: Imperium -->
 		<zip  destfile="${variant.dir}/imperiumVariants.zip"
 				basedir="${resource.dir}/variants/imperium"
@@ -285,6 +291,14 @@
 				basedir="${resource.dir}/variants/symbols/imperium"
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
+		
+		<!-- SymbolPack: flagged -->
+		<!--
+		<zip  destfile="${variant.dir}/flaggedSymbols.zip"
+				basedir="${resource.dir}/variants/symbols/flagged"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
+		-->
 	</target>
 	
 	
