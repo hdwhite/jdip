@@ -25,6 +25,7 @@ package dip.gui;
 import dip.order.*;
 import dip.world.*;
 import dip.gui.undo.*;
+import dip.gui.swing.*;
 import dip.gui.order.GUIOrder;
 import dip.misc.Utils;
 import dip.process.Adjustment;
@@ -56,7 +57,7 @@ import java.text.MessageFormat;
 *	where the user may enter orders in text format.
 *	
 */
-public class OrderStatusPanel extends JPanel
+public class OrderStatusPanel extends XJPanel
 {
 	// i18n constnats
 	private final static String LABEL_ORDER			= "OP.label.order";

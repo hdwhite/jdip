@@ -432,7 +432,6 @@ public class ClientMenu
 		JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(item.getName(), defaultState);
 		//menuItem.setFont(menuFont);
 		menuItem.setMnemonic(item.getMnemonic());
-		menuItem.setIcon(item.getIcon());
 		menuItem.setAccelerator(item.getAccelerator());
 		if(indent)
 		{
@@ -450,7 +449,6 @@ public class ClientMenu
 		bg.add(menuItem);
 		//menuItem.setFont(menuFont);
 		menuItem.setMnemonic(item.getMnemonic());
-		menuItem.setIcon(item.getIcon());
 		menuItem.setAccelerator(item.getAccelerator());
 		if(indent)
 		{
@@ -693,6 +691,7 @@ public class ClientMenu
 		setEnabled(VIEW_DISLODGED_UNITS, value);
 		setEnabled(VIEW_SUPPLY_CENTERS, value);
 		setEnabled(VIEW_UNORDERED, value);
+		setEnabled(VIEW_SHOW_MAP, value);
 		setEnabled(VIEW_INFLUENCE, value);
 		setEnabled(VIEW_SELECT_MAP, value);
 	}// setViewRenderItemsEnabled()
@@ -745,6 +744,7 @@ public class ClientMenu
 		setEnabled(VIEW_DISLODGED_UNITS, false);
 		setEnabled(VIEW_SUPPLY_CENTERS, false);
 		setEnabled(VIEW_UNORDERED, false);
+		setEnabled(VIEW_SHOW_MAP, false);
 		setEnabled(VIEW_INFLUENCE, false);
 		setEnabled(VIEW_SELECT_MAP, false);
 		
@@ -795,6 +795,7 @@ public class ClientMenu
 		setEnabled(VIEW_DISLODGED_UNITS, true);
 		setEnabled(VIEW_SUPPLY_CENTERS, true);
 		setEnabled(VIEW_UNORDERED, true);
+		setEnabled(VIEW_SHOW_MAP, true);
 		setEnabled(VIEW_INFLUENCE, true);
 		setEnabled(VIEW_SELECT_MAP, true);
 		
@@ -844,6 +845,7 @@ public class ClientMenu
 		setEnabled(VIEW_DISLODGED_UNITS, true);
 		setEnabled(VIEW_SUPPLY_CENTERS, true);
 		setEnabled(VIEW_UNORDERED, true);
+		setEnabled(VIEW_SHOW_MAP, true);
 		setEnabled(VIEW_INFLUENCE, true);
 		setEnabled(VIEW_SELECT_MAP, true);
 		
@@ -896,6 +898,7 @@ public class ClientMenu
 		setEnabled(VIEW_DISLODGED_UNITS, true);
 		setEnabled(VIEW_SUPPLY_CENTERS, true);
 		setEnabled(VIEW_UNORDERED, true);
+		setEnabled(VIEW_SHOW_MAP, true);
 		setEnabled(VIEW_INFLUENCE, true);
 		setEnabled(VIEW_SELECT_MAP, true);
 		

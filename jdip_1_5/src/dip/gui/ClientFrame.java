@@ -205,19 +205,48 @@ public class ClientFrame extends JFrame
 			*/
 		}
 		
+		// replace bad-looking (metal, motif) LAFs with better-looking
+		// ones. 
+		String lafClassName = UIManager.getSystemLookAndFeelClassName();
+		assert (lafClassName != null);
 		
-		// setup default L&F: use system L&F by default.
+		if(Utils.isWindows())
+		{
+			// higher-fidelity windows LAF
+			lafClassName = "com.jgoodies.plaf.windows.ExtWindowsLookAndFeel";
+		}
+		else if(!Utils.isOSX())
+		{
+			// keep synth; switch if Motif / Metal
+			if( lafClassName.indexOf("MotifLookAndFeel") >= 0 || 
+				lafClassName.indexOf("MetalLookAndFeel") >= 0 )
+			{
+				// good generic LAF
+				lafClassName = "com.jgoodies.plaf.plastic.PlasticLookAndFeel";
+			}
+		}
+		
+		
 		try
 		{
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch(Exception e)
+			if(lafClassName.indexOf("jgoodies") >= 0)
+			{
+				// for WebStart compatibility
+				UIManager.put("ClassLoader", com.jgoodies.plaf.LookUtils.class.getClassLoader());
+			}
+			Log.println(lafClassName);
+			UIManager.setLookAndFeel(lafClassName);
+		} 
+		catch (Exception e) 
 		{
 			// do nothing; swing will load default L&F
+			Log.println(e);
 		}
+		
 		
 		// set exception handler
 		GUIExceptionHandler.registerHandler();
+		
 		
 		// init help system
 		Help.init();
