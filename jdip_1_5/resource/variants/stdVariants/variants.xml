@@ -84,7 +84,6 @@
 		</DESCRIPTION>
 	</MAP_DEFINITION>
 	
-	<!-- NOTE: detailed doesn't support Crowded or Chaos variants. -->
 	<MAP_DEFINITION id="detailed" title="Detailed" preferredUnitStyle="modern"
 		URI="bitmap_std.svg" thumbURI="detailed_thumb.png">
 		<DESCRIPTION>
@@ -108,14 +107,6 @@
 		</DESCRIPTION>
 	</MAP_DEFINITION>
 	
-	<MAP_DEFINITION id="chaos" title="Standard"  preferredUnitStyle="modern"
-		URI="chaos.svg" thumbURI="egdipmap_thumb.png">
-		<DESCRIPTION>
-		The traditional map, optimized for Chaos games.
-		</DESCRIPTION>
-	</MAP_DEFINITION>
-	
-	
 	<VARIANT name="Standard" version="1.0" default="true">
 		<DESCRIPTION><![CDATA[Standard 7-power / 7-player Diplomacy.]]></DESCRIPTION> 
 		<MAP adjacencyURI="std_adjacency.xml">
@@ -125,7 +116,6 @@
 			<MAP_GRAPHIC ref="topo" />
 		</MAP>
 		<!-- this is the default, but it's here just as an example -->
-		<!-- for a 'chaos' variant, value="VALUE_BUILDS_ANY_OWNED" -->
 		<RULEOPTIONS>
 			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
 		</RULEOPTIONS>
