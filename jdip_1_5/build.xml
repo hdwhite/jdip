@@ -153,6 +153,7 @@
 		<mkdir dir="${build.dir}/resource/help"/>
 		<mkdir dir="${optional.dir}"/>
 		<mkdir dir="${test.results.dir}"/>
+		<mkdir dir="${packaged.dist.dir}"/>
 	</target>
 	
 	<target name="help">
@@ -250,6 +251,12 @@
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
+		<!-- Variant Package: Chaos (DPJudge compatible) -->
+		<zip  destfile="${variant.dir}/chaosDPJudgeVariant.zip"
+				basedir="${resource.dir}/variants/chaos_dp"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				
 		<!-- Variant Package: Imperium -->
 		<zip  destfile="${variant.dir}/imperiumVariants.zip"
 				basedir="${resource.dir}/variants/imperium"
@@ -300,18 +307,6 @@
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 		-->
 	</target>
-	
-	
-	<!-- OPTIONAL variant package: DPJudge variants -->
-	<target name="dpjudge" depends="init" description="Create DPJudge variant package">
-	    <echo message="Creating DPJudge variants"/>
-		<!-- Variant Package: DPJudge Variants -->
-		<zip  destfile="${optional.dir}/DPJudgeVariants.zip"
-				basedir="${resource.dir}/variants/dpjudge"
-				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
-	</target>
-
 	
 	
 	<!-- run PMD checker -->
@@ -463,23 +458,23 @@
 	<!-- IzPack installer target; requires 'dist' -->
 	<target name="install" depends="dist" description="Create Install version of program">
 		<echo message="Making the IzPack installer"/>
-
+		
         <!-- Allows us to use the IzPack Ant task -->
 		<taskdef name="izpack" classpath="${izpack.dir}/lib/compiler.jar"
 				classname="com.izforge.izpack.ant.IzPackTask"/>
 
 		<copy todir="${dist.dir}/">
 			<fileset dir="${installer.dir}">
-				<include name="*"/>
+				<include name="**/*"/>
 			</fileset>
 		</copy>
         
-		<!--        <copy file="${installer.dir}/jdip.ico" todir="${dist.dir}"/>-->
+		<!--  <copy file="${installer.dir}/jdip.ico" todir="${dist.dir}"/>-->
 		<replace file="${dist.dir}/${installer.file}" token="!VERSION!" value="${version}"/>
 		
 		<izpack input="${dist.dir}/jdip-install.xml"
 				output="${packaged.dist.dir}/jdip-${version}-install.jar"
-				installerType="standard-kunststoff"
+				installerType="standard"
 				basedir="${dist.dir}"
 				izPackDir="${izpack.dir}/"/>
 	</target>
