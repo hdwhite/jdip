@@ -42,7 +42,7 @@ public class ConvoyPathResult extends OrderResult
 	private static final String KEY_ARROW = "ConvoyPathResult.arrow";
 	
 	// instance fields
-	private Province[] convoyPath = null;
+	protected Province[] convoyPath = null;
 	
 	
 	/** Create a ConvoyPathResult */

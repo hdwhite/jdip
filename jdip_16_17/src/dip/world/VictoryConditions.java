@@ -35,6 +35,7 @@ import dip.misc.Utils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+
 /**
 *
 *	Establishes the conditions required to determine who wins a game, and contains
@@ -265,8 +266,5 @@ public class VictoryConditions implements java.io.Serializable
 		
 		return sb.toString();
 	}// getRemainingPowers()
-	
-	
-	
 	
 }// class VictoryConditions

@@ -26,6 +26,8 @@ import dip.world.metadata.PlayerMetadata;
 import dip.world.metadata.GameMetadata;
 import dip.gui.undo.UndoRedoManager;
 
+import dip.world.io.XMLSerializer;
+
 import dip.net.message.PressStore;
 import dip.net.message.DefaultPressStore;
 
@@ -37,7 +39,6 @@ import java.net.*;
 import java.util.zip.*;
 
 import JSX.*;
-
 
 /**
 *	The entire game World. This contains the state of an entire game.
@@ -108,6 +109,7 @@ public class World implements Serializable
 	/**
 	*	Saves a World object to a file.
 	*/
+	// TODO: eliminate from world!!
 	public static void save(File file, World world)
 	throws IOException
 	{
@@ -140,7 +142,26 @@ public class World implements Serializable
 				gzos.close();
 			}	
 		}
-	}// save()
+		
+		// very temp
+		System.out.println("XStream test: start (initial position only saved)");
+		dip.world.io.XMLSerializer.toXML(world,
+			new File(file.toString()+"_new.xml"), false,
+			"jdip",
+			"1.7.0",
+			dip.world.io.XMLSerializer.SPECIFICATION_FORMAT_1_0
+		);
+		System.out.println("XStream test: end");
+		
+		System.out.println("XStream test WITH compression");
+		dip.world.io.XMLSerializer.toXML(world,
+			new File(file.toString()+"_new.gz"), true, 
+			"jdip",
+			"1.7.0",
+			dip.world.io.XMLSerializer.SPECIFICATION_FORMAT_1_0
+		);
+		System.out.println("end");
+	}// save()			
 	
 	
 	
@@ -476,7 +497,7 @@ public class World implements Serializable
 		PlayerMetadata pmd = (PlayerMetadata) nonTurnData.get(power);
 		if(pmd == null)
 		{
-			pmd = new PlayerMetadata();
+			pmd = new PlayerMetadata(power);
 			setPlayerMetadata(power, pmd);
 		}
 		return pmd;
@@ -630,7 +651,7 @@ public class World implements Serializable
 				throw new IllegalArgumentException("version: "+v);
 			}
 		}// checkVersion();
+		
 	}// nested class VariantInfo
-	
 	
 }// class World

@@ -74,7 +74,6 @@ public class RetreatChecker
 	public RetreatChecker(TurnState current)
 	{
 		List results = null;
-		
 		TurnState last = current.getWorld().getPreviousTurnState(current);
 		if(last == null)
 		{

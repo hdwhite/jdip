@@ -26,6 +26,8 @@ import dip.world.GameSetup;
 import dip.world.TurnState;
 import dip.world.World;
 import dip.world.Power;
+import dip.world.io.XMLSerializer;
+import dip.world.io.converter.AbstractConverter;
 
 import dip.gui.map.*;
 import dip.gui.undo.UndoRedoManager;
@@ -33,6 +35,13 @@ import dip.gui.undo.UndoRedoManager;
 import java.awt.*;
 
 import javax.swing.*;
+
+import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.alias.ClassMapper;
 
 /**
 *	The Default GameSetup. This is used when we are not in face-
@@ -42,6 +51,12 @@ import javax.swing.*;
 */
 public class F2FGUIGameSetup implements GUIGameSetup
 {
+	/* static setup */
+	static
+	{
+		XMLSerializer.registerConverter(new F2FGUIGameSetupConverter());
+	}
+	
 	// serialized data
 	private boolean[] enabledTabs = null;	// only null if never saved
 	private Power selectedPower = null;		// may be null
@@ -62,7 +77,7 @@ public class F2FGUIGameSetup implements GUIGameSetup
 			F2FOrderDisplayPanel.F2FState state = new F2FOrderDisplayPanel.F2FState(
 				selectedPower,
 				enabledTabs );
-				
+			
 			odp.restoreState(state);
 		}
 		
@@ -114,5 +129,47 @@ public class F2FGUIGameSetup implements GUIGameSetup
 		this.enabledTabs = state.getTabState();
 	}// save()
 	
-	
+	/** For XStream serialization */
+	private static class F2FGUIGameSetupConverter extends AbstractConverter
+	{
+		
+		public void alias()
+		{
+			getCM().alias("setup-f2f", F2FGUIGameSetup.class, 
+				F2FGUIGameSetup.class);
+		}// alias()
+		
+		public boolean canConvert(Class type)
+		{
+			return type.equals(F2FGUIGameSetup.class);
+		}// canConvert()
+		
+		public void marshal(Object source, 
+			HierarchicalStreamWriter hsw, MarshallingContext context)
+		{
+			final F2FGUIGameSetup ggs = (F2FGUIGameSetup) source;
+			final XMLSerializer xs = XMLSerializer.get(context);
+			final Power[] powers = xs.getWorld().getMap().getPowers();
+			final ClassMapper cm = getCM();
+			
+			xs.writeNVP("selectedPower", xs.toString(ggs.selectedPower), cm, hsw, context);
+			
+			hsw.startNode("submittedOrders");
+			
+			for(int i=1; i<ggs.enabledTabs.length; i++)
+			{
+				xs.writeNVP(xs.toString(powers[i-1]), 
+					String.valueOf(!ggs.enabledTabs[i]), 
+					cm, hsw, context);
+			}
+			hsw.endNode();
+		}// marshal()
+			
+		public Object unmarshal(HierarchicalStreamReader reader, 
+			UnmarshallingContext context)
+		{
+			return null;
+		}// unmarshal()
+			
+	}// inner class F2FGUIGameSetupConverter
 }// class F2FGUIGameSetup

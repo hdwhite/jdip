@@ -1,7 +1,7 @@
 //
-//  @(#)GameSetup.java		6/2003
+//  @(#)PhaseConverter.java		9/2004
 //
-//  Copyright 2003 Zachary DelProposto. All rights reserved.
+//  Copyright 2004 Zachary DelProposto. All rights reserved.
 //  Use is subject to license terms.
 //
 //
@@ -20,27 +20,50 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package dip.world;
+package dip.world.io.converter;
 
+import dip.world.io.XMLSerializer;  
+
+import dip.world.Phase;
+
+import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.alias.ClassMapper;
+
 /**
-*	A GameSetup is an object set in the World object that 
-*	contains the required functionality to restore a saved
-*	game. For example, if playing a networked game, it should
-*	contain the nescessary data to restore the game.
-*	<p>
-*	<b>NOTE:</b> all implementations of GameSetup MUST register a
-*	dip.world.io.AbstractConverter to properly serialize and deserialize 
-*	GameSetup data.
-*	
+*	XStream Converter
 */
-public interface GameSetup
+public class PhaseConverter implements Converter
 {
 	
-	// just a marker interface
 	
-}// interface GameSetup
+	public PhaseConverter(ClassMapper cm)
+	{
+		cm.alias("phase", Phase.class, Phase.class);
+	}
+	
+	public void marshal(java.lang.Object source, HierarchicalStreamWriter hsw, 
+		MarshallingContext context)
+	{
+		Phase phase = (Phase) source;
+		
+		hsw.addAttribute("season", phase.getSeasonType().toString());
+		hsw.addAttribute("phase", phase.getPhaseType().toString());
+		hsw.addAttribute("year", phase.getYearType().toString());
+		
+	}// marshal()
+	
+	public boolean canConvert(java.lang.Class type)
+	{
+		return type.equals(Phase.class);
+	}
+	
+	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
+	{
+		return null;
+	}
+		
+}// PhaseConverter()	

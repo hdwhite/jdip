@@ -448,5 +448,4 @@ public class RuleOptions implements Serializable
 	}// createFromVariant()
 	
 	
-	
 }// class RuleOptions

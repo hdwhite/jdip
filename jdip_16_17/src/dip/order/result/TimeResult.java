@@ -1,10 +1,10 @@
-/*
-*  @(#)Result.java	1.00	4/1/2002
-*
-*  Copyright 2002 Zachary DelProposto. All rights reserved.
-*  Use is subject to license terms.
-*/
-//  This program is free software; you can redistribute it and/or modify
+//	
+//	@(#)Result.java	4/2002
+//	
+//	Copyright 2002 Zachary DelProposto. All rights reserved.
+//	Use is subject to license terms.
+//	
+//	This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation; either version 2 of the License, or
 //  (at your option) any later version.
@@ -38,7 +38,7 @@ import java.util.Date;
 public class TimeResult extends Result
 {
 	// instance variables
-	private final long timeStamp;	// milliseconds since midnight, January 1, 1970 UTC.
+	protected final long timeStamp;	// milliseconds since midnight, January 1, 1970 UTC.
 	
 	
 	/** A TimeStamped result, applicable to a particular power. 

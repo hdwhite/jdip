@@ -41,9 +41,9 @@ import dip.misc.Utils;
 public class BouncedResult extends OrderResult
 {
 	// instance fields
-	private Province bouncer = null;
-	private int atkStrength = -1;
-	private int defStrength = -1;
+	protected Province bouncer = null;
+	protected int atkStrength = -1;
+	protected int defStrength = -1;
 	
 	public BouncedResult(Orderable order)
 	{

@@ -1,7 +1,7 @@
 //
-//  @(#)GameSetup.java		6/2003
+//  @(#)DependentMoveFailedResultConverter.java		9/2004
 //
-//  Copyright 2003 Zachary DelProposto. All rights reserved.
+//  Copyright 2004 Zachary DelProposto. All rights reserved.
 //  Use is subject to license terms.
 //
 //
@@ -20,27 +20,47 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package dip.world;
+package dip.world.io.converter;
 
+import dip.world.io.XMLSerializer;  
+
+import java.io.*;
+import java.util.*;
+import java.lang.reflect.*;
+
+
+import dip.order.*;
+import dip.order.result.*;
+
+import dip.world.io.XMLSerializer;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.alias.ClassMapper;
-/**
-*	A GameSetup is an object set in the World object that 
-*	contains the required functionality to restore a saved
-*	game. For example, if playing a networked game, it should
-*	contain the nescessary data to restore the game.
-*	<p>
-*	<b>NOTE:</b> all implementations of GameSetup MUST register a
-*	dip.world.io.AbstractConverter to properly serialize and deserialize 
-*	GameSetup data.
-*	
-*/
-public interface GameSetup
+import com.thoughtworks.xstream.converters.ConversionException;
+
+public class DependentMoveFailedResultConverter extends OrderResultConverter
 {
 	
-	// just a marker interface
+	public void write(OrderResult orderResult, XMLSerializer xs,
+		HierarchicalStreamWriter hsw, MarshallingContext context)
+	{
+		DependentMoveFailedResult dmfr = (DependentMoveFailedResult) orderResult;
+		
+		hsw.startNode("dependentOrder");
+		context.convertAnother(dmfr.getDependentOrder());
+		hsw.endNode();
+	}// write()
 	
-}// interface GameSetup
+	public boolean canConvert(java.lang.Class type)
+	{
+		return type.equals(DependentMoveFailedResult.class);
+	}// canConvert()
+	
+}// class DependentMoveFailedResultConverter
+
+

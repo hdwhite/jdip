@@ -22,6 +22,8 @@
 //
 package dip.world.metadata;
 
+import dip.world.Power;
+
 import java.io.Serializable;
 import java.net.URI;
 /**
@@ -36,20 +38,35 @@ import java.net.URI;
 public class PlayerMetadata implements Serializable
 {
 	// constants
+	public static final String TYPE_HUMAN		= "human";
+	public static final String TYPE_AI			= "ai";
+	public static final String TYPE_INACTIVE	= "inactive";
+	
 	private static final String EMPTY = "";
 	
 	// MetaData
-	private String 		name = EMPTY;
-	private String[] 	email = new String[0];
-	private URI 		uri = null;
-	private String		notes = EMPTY;
-	
+	private String 			name = EMPTY;
+	private String[] 		email = new String[0];
+	private URI 			uri = null;
+	private String			notes = EMPTY;
+	private String			type = TYPE_HUMAN;
+	private final Power 	power;
+	private String			nick = EMPTY;
 	
 	/** Create a PlayerMetadata object */
-	public PlayerMetadata()
+	public PlayerMetadata(Power power)
 	{
+		this.power = power;
 	}// PlayerMetadata()
 	
+	/** Get the player's power. Never null. */
+	public Power getPower()						{ return power; }
+	
+	/** Get player's nickname. Never null */
+	public String getNickname()					{ return nick; }
+	
+	/** Get the Player Type. Should be a constant value. */
+	public String getType()						{ return type; }
 	
 	/** Gets player name. Never null. May be empty. */
 	public String getName()						{ return name; }
@@ -67,6 +84,19 @@ public class PlayerMetadata implements Serializable
 	
 	/** Sets the player name. A null value will create an empty string. */
 	public void setName(String value)				{ name = (value == null) ? EMPTY : value; }
+	
+	public void setNickname(String value)			{ nick = (value == null) ? EMPTY : value; }
+	
+	/** Get the Player Type. Should be a constant value. */
+	public void setType(String value)			
+	{
+		if(value == null) 
+		{
+			throw new IllegalArgumentException();
+		}
+		
+		type = value;
+	}// setType()
 	
 	/** Sets the player's email addresses. a Null value will create a zero-length array.*/
 	public void setEmailAddresses(String[] value)	{ email = (value == null) ? new String[0] : value; }

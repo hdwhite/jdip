@@ -26,10 +26,19 @@ import dip.world.Province;
 import dip.world.Power;
 import dip.world.Unit;
 
+import dip.world.io.XMLSerializer;
+
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.alias.ClassMapper;
 
 /**
 *
@@ -704,7 +713,7 @@ public class Position implements java.io.Serializable, Cloneable
 		ProvinceData pd = provArray[idx];
 		if(pd == null)
 		{
-			pd = new ProvinceData();
+			pd = new ProvinceData(idx);
 			provArray[idx] = pd;
 		}
 		
@@ -733,6 +742,16 @@ public class Position implements java.io.Serializable, Cloneable
 		private Power 	SCOwner = null;
 		private Power	SCHomePower = null;
 		private Power	lastOccupier = null;
+		transient private int provIdx = -1;			// TODO: make final
+		
+		
+		public ProvinceData(int provIdx)
+		{
+			this.provIdx = provIdx;
+		}// ProvinceData()
+		
+		// get the index
+		public int getIdx()						{ return provIdx; }
 		
 		// unit set/get
 		public boolean hasUnit() 				{ return (unit != null); }
@@ -759,11 +778,18 @@ public class Position implements java.io.Serializable, Cloneable
 		public Power getLastOccupier()			{ return lastOccupier; }
 		public void setLastOccupier(Power p)	{ lastOccupier = p; }
 		
+		// determine if all fields are null!.
+		public boolean isAllNull()
+		{
+			return( unit==null && dislodgedUnit==null 
+					&& SCOwner==null && SCHomePower==null
+					&& lastOccupier==null );
+		}// isImportant()
 		
 		// normal clone
 		public ProvinceData normClone()
 		{
-			ProvinceData pd = new ProvinceData();
+			ProvinceData pd = new ProvinceData(getIdx());
 			
 			// deep copy unit information
 			if(unit != null)
@@ -796,7 +822,7 @@ public class Position implements java.io.Serializable, Cloneable
 			}
 			
 			// create a ProvinceData object
-			ProvinceData pd = new ProvinceData();
+			ProvinceData pd = new ProvinceData(getIdx());
 			
 			// shallow copy Power [Power is immutable]
 			pd.SCOwner = this.SCOwner;
@@ -817,7 +843,7 @@ public class Position implements java.io.Serializable, Cloneable
 			}
 			
 			// create a ProvinceData object
-			ProvinceData pd = new ProvinceData();
+			ProvinceData pd = new ProvinceData(getIdx());
 			
 			// shallow copy Power [Power is immutable]
 			pd.SCOwner = this.SCOwner;
@@ -876,5 +902,124 @@ public class Position implements java.io.Serializable, Cloneable
 			tmpProvArray = new Province[provArray.length];
 		}
 	}// makeTmpProvArray()
+	
+	
+	/*
+	*
+	*
+	*/
+	public static class ProvinceDataConverter implements Converter
+	{
+		public ProvinceDataConverter(ClassMapper cm)
+		{
+			cm.alias("province", ProvinceData.class, ProvinceData.class);
+		}// ProvinceDataConverter()
+		
+		
+		public void marshal(java.lang.Object source, HierarchicalStreamWriter hsw, 
+			MarshallingContext context)
+		{
+			XMLSerializer xs = XMLSerializer.get(context);
+			ProvinceData pd = (ProvinceData) source;
+			
+			hsw.addAttribute( "name", 
+				xs.toString( xs.getMap().reverseIndex(pd.getIdx()) ) );
+			
+			if(pd.getLastOccupier() != null)
+			{
+				hsw.addAttribute( "lastOccupier", xs.toString(pd.getLastOccupier()) );
+			}
+			
+			if(pd.hasUnit())
+			{
+				addUnit(hsw, xs, pd.getUnit(), false);
+			}
+			
+			if(pd.hasDislodgedUnit())
+			{
+				addUnit(hsw, xs, pd.getDislodgedUnit(), true);
+			}
+			
+			if(pd.isSCAHome() || pd.isSCOwned())
+			{
+				hsw.startNode("SC");
+				hsw.addAttribute("owner", xs.toString(pd.getSCOwner()));
+				hsw.addAttribute("homePower", xs.toString(pd.getSCHomePower()));
+				hsw.endNode();
+			}
+		}// marshal()
+		
+		private void addUnit(HierarchicalStreamWriter hsw, XMLSerializer xs, 
+			Unit unit, boolean isDislodged)
+		{
+			hsw.startNode("unit");
+			
+			hsw.addAttribute("power", xs.toString(unit.getPower()));
+			
+			if(unit.getCoast().isDirectional())
+			{
+				hsw.addAttribute("coast", unit.getCoast().getAbbreviation());
+			}
+			
+			hsw.addAttribute("type", xs.toString(unit.getType()));
+			
+			// assume not dislodged.
+			if(isDislodged)
+			{
+				hsw.addAttribute("dislodged", String.valueOf(isDislodged));
+			}
+			
+			hsw.endNode();
+		}// addUnit()
+		
+		public boolean canConvert(java.lang.Class type)
+		{
+			return type.equals(ProvinceData.class);
+		}
+		
+		public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
+		{
+			return null;
+		}
+			
+	}// ProvinceDataConverter()
+	
+	public static class PositionConverter implements Converter
+	{
+		private final ClassMapper cm;
+		
+		public PositionConverter(ClassMapper cm)
+		{
+			this.cm = cm;
+		}// PositionConverter()
+		
+		public void marshal(java.lang.Object source, HierarchicalStreamWriter hsw, 
+			MarshallingContext context)
+		{
+			Position pos = (Position) source;
+			
+			for(int i=0; i<pos.provArray.length; i++)
+			{
+				final ProvinceData pd = pos.provArray[i];
+				if(pd != null && !pd.isAllNull())
+				{
+					hsw.startNode(cm.lookupName(pd.getClass()));
+					context.convertAnother(pd);
+					hsw.endNode();
+				}
+			}
+		}
+		
+		public boolean canConvert(java.lang.Class type)
+		{
+			return type.equals(Position.class);
+		}
+		
+		public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
+		{
+			return null;
+		}
+			
+	}// PositionConverter()	
 }// class Position
 

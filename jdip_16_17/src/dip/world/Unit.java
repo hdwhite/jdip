@@ -25,7 +25,6 @@ package dip.world;
 import dip.order.Order;
 import dip.misc.Utils;
 
-
 /**
 *
 *	A Unit is an object that has an owner (power), a coast location, and a Type
@@ -219,6 +218,12 @@ public class Unit implements java.io.Serializable, Cloneable
 			return name.hashCode();
 		}// hashCode()
 		
+		/** Returns the internal name */
+		public String getInternalName()
+		{
+			return internalName;
+		}// getInternalName()
+		
 		/*
 			equals():
 			
@@ -314,7 +319,7 @@ public class Unit implements java.io.Serializable, Cloneable
 			
 			return type;
 		}// readResolve()
+		
 	}// inner class Type
-	
 	
 }// class Unit

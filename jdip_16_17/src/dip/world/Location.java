@@ -25,7 +25,6 @@ package dip.world;
 import dip.order.OrderException;
 import dip.misc.Utils;
 
-
 /**
 *
 *	A Location defines where an object on the map exists.
@@ -557,6 +556,7 @@ public class Location implements Cloneable
 		return ((newCoast == getCoast()) ? this : new Location(getProvince(), newCoast));
 	}// getValidated()
 	
+
 	
 }// class Location
 

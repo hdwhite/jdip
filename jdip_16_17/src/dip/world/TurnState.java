@@ -36,7 +36,22 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import dip.order.Orderable;
+import dip.order.result.Result;
 import dip.order.result.OrderResult;
+import dip.order.result.DislodgedResult;
+
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import dip.world.io.XMLSerializer;
+import dip.process.RetreatChecker;
+import dip.process.Adjustment;
+import dip.process.Adjustment.AdjustmentInfo;
+import dip.process.Adjustment.AdjustmentInfoMap;
+import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
 *

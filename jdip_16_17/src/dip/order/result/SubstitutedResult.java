@@ -36,7 +36,7 @@ import dip.order.Orderable;
 */
 public class SubstitutedResult extends OrderResult
 {
-	private Orderable newOrder = null;
+	protected Orderable newOrder = null;
 	
 	
 	/** 

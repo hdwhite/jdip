@@ -160,7 +160,7 @@ public class MetadataDialog extends HeaderDialog
 			for(int i=1; i<tabPane.getTabCount(); i++)
 			{
 				PlayerPanel pp = (PlayerPanel) tabPane.getComponentAt(i);
-				PlayerMetadata pmd = new PlayerMetadata();
+				PlayerMetadata pmd = new PlayerMetadata(pp.getPower());
 				pp.write(pmd);
 				world.setPlayerMetadata(pp.getPower(), pmd);
 			}

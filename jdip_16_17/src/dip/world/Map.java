@@ -561,6 +561,25 @@ public class Map implements Serializable
 	}// parseLocation()
 	
 	
+	/**
+	*	Strict Location Parsing. This does NOT normalize coasts
+	*	prior to parsing. Thus coast, if present, is expected to be separated 
+	*	with a forward slash, backslash, or hyphen. Note that a forward 
+	*	slash is preferred. Strict matching (not closest-matching) is
+	*	used. This method is mainly intended for parsing data that 
+	*	is in an expected and rigid format. 
+	*/
+	public Location parseLocationStrict(String input)
+	{
+		final Province province = getProvince( Coast.getProvinceName(input) );
+		if(province != null)
+		{
+			return new Location(province, Coast.parse(input));
+		}
+		
+		return null;
+	}// parseLocationStrict()
+	
 	
 	/**
 	*	Searches the input string for any province names that contain

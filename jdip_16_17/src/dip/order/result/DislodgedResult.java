@@ -42,10 +42,10 @@ import dip.misc.Utils;
 public class DislodgedResult extends OrderResult
 {
 	// instance fields
-	private Location[] retreatLocations = null; 
-	private Province dislodger = null;
-	private int atkStrength = -1;
-	private int defStrength = -1;
+	protected Location[] retreatLocations = null; 
+	protected Province dislodger = null;
+	protected int atkStrength = -1;
+	protected int defStrength = -1;
 	
 	
 	public DislodgedResult(Orderable order, Location[] retreatLocations)

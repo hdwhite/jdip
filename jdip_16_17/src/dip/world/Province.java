@@ -26,7 +26,6 @@ import dip.order.Order;
 
 import java.util.*;
 
-
 /**
 *
 *	A Province represents a region on the map.

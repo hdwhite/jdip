@@ -24,6 +24,7 @@ package dip.order.result;
 import dip.order.Orderable;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 /**
 *	A message sent to a specific Power that refers to a specific order.
@@ -296,5 +297,28 @@ public class OrderResult extends Result
 			return rt;
 		}// readResolve()
 	}// nested class ResultType
+	
+	
+	/**
+	*	Re-arranges orderResults such that SubstitutedResults always 
+	*	come first. The order other Result types is not changed.
+	*/
+	public static class SubstitutedFirstComparator implements Comparator
+	{
+		
+		public int compare(Object o1, Object o2)
+		{
+			final boolean s1 = (o1 instanceof SubstitutedResult);
+			final boolean s2 = (o2 instanceof SubstitutedResult);
+			return (s1 ^ s2) ? -1 : 0;
+		}// compare()
+		
+		
+		public boolean equals(Object obj)
+		{
+			return (obj == this);
+		}
+		
+	}// SubstitutedFirstComparator()
 	
 }// class OrderResult

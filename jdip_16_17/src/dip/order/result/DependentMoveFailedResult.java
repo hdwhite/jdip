@@ -42,7 +42,7 @@ import dip.misc.Utils;
 public class DependentMoveFailedResult extends OrderResult
 {
 	// instance fields
-	private Orderable dependentOrder = null;
+	protected Orderable dependentOrder = null;
 	
 	
 	public DependentMoveFailedResult(Orderable order, Orderable dependentOrder)

@@ -214,10 +214,11 @@ public class ErrorDialog extends TextViewer
 	public static void displayFileIO(JFrame parent, Exception e, String fileName)
 	{
 		Object[] args = new Object[4];
+		final Throwable cause = (e.getCause() != null) ? e.getCause() : e;
 		
-		args[0] = getCleanName(e.getClass().getName());
-		args[1] = getMsg(e);
-		args[2] = getStackTrace(e);	
+		args[0] = getCleanName(cause.getClass().getName());
+		args[1] = getMsg(cause);
+		args[2] = getStackTrace(cause);	
 		args[3] = (fileName == null) ? UNKNOWN : fileName;
 		
 		Log.println("FileIOError: ", args[0]);
@@ -226,7 +227,7 @@ public class ErrorDialog extends TextViewer
 		Log.println("  stack trace:\n", args[2]);
 		
 		String text = null;
-		if(e instanceof FileNotFoundException)
+		if(cause instanceof FileNotFoundException)
 		{
 			text = Utils.getText(Utils.getLocalString(FNF_TEMPLATE));
 		}

@@ -27,12 +27,22 @@ import dip.world.TurnState;
 import dip.world.World;
 import dip.world.Power;
 
+import dip.world.io.XMLSerializer;
+import dip.world.io.converter.AbstractConverter;
+
 import dip.gui.map.*;
 import dip.gui.undo.UndoRedoManager;
 
 import java.awt.*;
 
 import javax.swing.*;
+
+import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.alias.ClassMapper;
 
 /**
 *	The Default GameSetup. This is used when we are not in face-
@@ -42,6 +52,11 @@ import javax.swing.*;
 */
 public class DefaultGUIGameSetup implements GUIGameSetup
 {
+	/* static setup */
+	static
+	{
+		XMLSerializer.registerConverter(new DefaultGUIGameSetupConverter());
+	}
 	
 	/** Setup the game. */
 	public void setup(ClientFrame cf, World world)
@@ -95,5 +110,32 @@ public class DefaultGUIGameSetup implements GUIGameSetup
 	/** We do not need to save any data. */
 	public void save(ClientFrame cf)	{}
 	
-	
+	/** For XStream serialization */
+	private static class DefaultGUIGameSetupConverter extends AbstractConverter
+	{
+		
+		public void alias()
+		{
+			getCM().alias("setup-default", DefaultGUIGameSetup.class, 
+				DefaultGUIGameSetup.class);
+		}// alias()
+		
+		public boolean canConvert(Class type)
+		{
+			return type.equals(DefaultGUIGameSetup.class);
+		}// canConvert()
+		
+		public void marshal(Object source, 
+			HierarchicalStreamWriter hsw, MarshallingContext context)
+		{
+			// do nothing;
+		}// marshal()
+			
+		public Object unmarshal(HierarchicalStreamReader reader, 
+			UnmarshallingContext context)
+		{
+			return new DefaultGUIGameSetup();
+		}// unmarshal()
+			
+	}// inner class DefaultGUIGameSetupConverter
 }// class DefaultGUIGameSetup
