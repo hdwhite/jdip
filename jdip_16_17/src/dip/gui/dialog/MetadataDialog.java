@@ -92,9 +92,6 @@ public class MetadataDialog extends HeaderDialog
 	private static final String PDF_EMAIL = "MetadataDialog.field.player.email";
 	private static final String PDF_URI = "MetadataDialog.field.player.uri";
 	
-	// text color choices
-	private static final Color[] TEXT_COLORS = {Color.WHITE, Color.BLACK};
-	
 	// misc constants
 	private static final int COMMENT_LENGTH = 80;	// we want to keep comments brief
 	private static final int NOTE_LENGTH = 32767;	// arbitrary
@@ -363,8 +360,7 @@ public class MetadataDialog extends HeaderDialog
 				email[i] = Utils.createEmailTextField(COLUMNS);
 			}
 			
-			gjl = new GradientJLabel("<html><b>"+panelName, SwingConstants.LEFT,
-				textColor, null);
+			gjl = new GradientJLabel("<html><b>"+panelName, null);
 			
 			// layout
 			int w1[] = { BORDER, 35, 0, 5, 0, 20, 0, 5, 0, BORDER };
@@ -406,11 +402,6 @@ public class MetadataDialog extends HeaderDialog
 		{
 			gjl.setGradientColor(color);
 		}// setColor()
-		
-		public void setTextColor(Color color)
-		{
-			gjl.setTextColor(color);
-		}// setTextColor()
 		
 		/** Get the panel values from the given ParticipantMetadata object. */
 		public void read(ParticipantMetadata pmd)
@@ -486,7 +477,7 @@ public class MetadataDialog extends HeaderDialog
 	}// nested class IconColorListener
 	
 	
-	/** Sets the tab icons for each power. */
+	/** Sets the tab icons (and gradient label colros) for each power. */
 	private void setTabIcons()
 	{
 		if(mmd != null)
@@ -502,10 +493,9 @@ public class MetadataDialog extends HeaderDialog
 					Color color = SVGColorParser.parseColor(colorName);
 					tabPane.setIconAt( i, new ColorRectIcon(12,12, color) );
 					
-					// figure out what is more readable: black or white text
 					ParticipantPanel pp = (ParticipantPanel) tabPane.getComponentAt(i);
 					pp.setColor(color);
-					pp.setTextColor(GUIUtils.findBestBright(color, TEXT_COLORS));
+					pp.repaint();
 				}
 			}
 		}

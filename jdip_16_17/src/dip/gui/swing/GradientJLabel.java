@@ -32,22 +32,42 @@ import javax.swing.*;
 */
 public class GradientJLabel extends JPanel
 {
+	private static final Color[] TEXT_COLORS = {Color.WHITE, Color.BLACK};
+	
+	boolean autocolor;
 	final JLabel label;
 	Color gradColor;
 	
 	/** Create a GradientJLabel */
 	public GradientJLabel(String text)
 	{
-		this(text, SwingConstants.LEFT, null, null);
+		this(text, SwingConstants.LEFT, null, null, false);
 	}// GradientJLabel()
 	
 	
 	/** Create a GradientXJEditorPane */
-	public GradientJLabel(String text, int horizontalAlignment, Color textColor, Color gradColor)
+	public GradientJLabel(String text, int horizontalAlignment, Color textColor, Color gradientColor)
+	{
+		this(text, horizontalAlignment, textColor, gradientColor, false);
+	}// GradientJLabel()
+	
+	
+	/** 
+	*	Create a colored GradientJLabel. The Text color will default to
+	*	either black or white, depending upon what is most readable.
+	*/
+	public GradientJLabel(String text, Color gradientColor)
+	{
+		this(text, SwingConstants.LEFT, null, gradientColor, true);
+	}// GradientJLabel()
+	
+	
+	/** Create a GradientXJEditorPane */
+	private GradientJLabel(String text, int horizontalAlignment, Color textColor, Color gradientColor, boolean autoColor)
 	{
 		super(new FlowLayout(FlowLayout.LEFT, 0, 3));
 		
-		this.gradColor = gradColor;
+		this.autocolor = autoColor;
 		
 		label = new JLabel(text, horizontalAlignment)
 		{
@@ -55,17 +75,15 @@ public class GradientJLabel extends JPanel
 			public boolean isFocusable()	{ return false; }
 		};
 		
-		if(textColor != null)
-		{
-			label.setForeground(textColor);
-		}
+		setGradientColor(gradientColor);
+		setTextColor(textColor);
 		
 		setOpaque(false);
 		label.setOpaque(false);
 		
 		add(Box.createHorizontalStrut(5));	// should adjust to font .. perhaps width of "N"?
 		add(label);
-	}// GradientJLabel()
+	}// GradientJLabel()	
 	
 	
 	/** Overrides setText() */
@@ -74,22 +92,42 @@ public class GradientJLabel extends JPanel
 		label.setText(text);
 	}// setText()
 	
-	/** Set gradient color. If null, uses default. */
+	/** 
+	*	Set gradient color. If null, uses default. Should call repaint() 
+	*	to ensure a change occurs.
+	*/
 	public void setGradientColor(Color color)
 	{
-		gradColor = color;
+		gradColor = ((color == null) ? UIManager.getColor("TextField.highlight") : color);
+		
+		if(autocolor)
+		{
+			setTextColor(null);
+		}
 	}// setGradientColor()
 	
-	/** Set text color. If null, uses default. */
+	/** 
+	*	Set text color. If null, the default is used. 
+	*	<p>
+	*	Note that if we are 'automatically' selecting the text color,
+	*	color values passed will be ignored.
+	*/
 	public void setTextColor(Color color)
 	{
-		if(color != null)
+		if(autocolor)
 		{
-			label.setForeground(color);
+			label.setForeground(GUIUtils.findBestBright(gradColor, TEXT_COLORS));
 		}
 		else
 		{
-			label.setForeground(UIManager.getColor("Label.foreground"));
+			if(color != null)
+			{
+				label.setForeground(color);
+			}
+			else
+			{
+				label.setForeground(UIManager.getColor("Label.foreground"));
+			}
 		}
 	}// setTextColor()
 	
