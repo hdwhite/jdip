@@ -20,9 +20,13 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package dip.gui;
+package dip.gui.report;
+
+import dip.gui.ClientFrame;
+import dip.gui.dialog.TextViewer;
 
 import dip.misc.Utils;
+import dip.misc.Help;
 
 import dip.world.World;
 import dip.world.Power;
@@ -43,6 +47,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JScrollPane;
 
 /**
 *	Writes a summary of adjudication results in HTML format.
@@ -57,6 +62,8 @@ public class ResultWriter
 	private static final String HTML_TEMPLATE 			= "ResultWriter.template";
 	private static final String HTML_NO_RESULTS			= "ResultWriter.noresults.message";
 	private static final String NO_GENERAL_RESULTS		= "ResultWriter.nogeneralresults.message";
+	// i18n dialog constants
+	private static final String DIALOG_TITLE		= "ResultWriter.dialog.title";
 	
 	
 	// instance variables
@@ -83,6 +90,34 @@ public class ResultWriter
 	}// resultsToHTML()
 	
 	
+	/**
+	*	Returns the HTML-encoded adjudication results inside a dialog.
+	*/
+	public static void displayDialog(final ClientFrame clientFrame, 
+		final TurnState ts, final OrderFormatOptions orderFormatOptions)
+	{
+		final StringBuffer title = new StringBuffer(64);
+		title.append(Utils.getLocalString(DIALOG_TITLE));
+		title.append(": ");
+		title.append(ts.getPhase());
+		
+		TextViewer tv = new TextViewer(clientFrame);
+		tv.setEditable(false);
+		tv.addSingleButton( tv.makeOKButton() );
+		tv.setTitle(title.toString());
+		tv.setHelpID(Help.HelpID.Dialog_ResultReport);
+		tv.setHeaderVisible(false);
+		tv.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		tv.lazyLoadDisplayDialog(new TextViewer.TVRunnable()
+		{
+			public void run()
+			{
+				setText(resultsToHTML(ts, orderFormatOptions));
+			}
+		});
+	}// displayDialog()
+
 	
 	/** ResultWriter constructor. */
 	private ResultWriter(TurnState ts, OrderFormatOptions ofo)

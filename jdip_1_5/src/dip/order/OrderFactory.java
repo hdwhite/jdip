@@ -104,7 +104,7 @@ public abstract class OrderFactory
 	
 	/** Creates a Convoy order */
 	public abstract Convoy createConvoy(Power power, Location src, 
-		Unit.Type srcUnitType, Location convoySrc, 
+		Unit.Type srcUnitType, Location convoySrc, Power convoyPower,
 		Unit.Type convoySrcUnitType, Location convoyDest);
 	
 	/** Creates a Retreat order */
@@ -201,11 +201,11 @@ public abstract class OrderFactory
 		
 		/** Creates a Convoy order */
 		public Convoy createConvoy(Power power, Location src, 
-			Unit.Type srcUnitType, Location convoySrc, 
+			Unit.Type srcUnitType, Location convoySrc, Power convoyPower,
 			Unit.Type convoySrcUnitType, Location convoyDest)
 		{
 			return new Convoy(power, src, srcUnitType, convoySrc, 
-				convoySrcUnitType, convoyDest);
+				convoyPower, convoySrcUnitType, convoyDest);
 		}// createConvoy()
 		
 		

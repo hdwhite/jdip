@@ -27,6 +27,8 @@ import dip.gui.dialog.newgame.*;
 import dip.gui.dialog.prefs.*;
 import dip.judge.gui.FlocImportDialog;
 
+import dip.gui.report.ResultWriter;
+
 import dip.world.World;
 import dip.world.Phase;
 import dip.world.TurnState;
@@ -549,17 +551,8 @@ public class PersistenceManager
 					// show results (if desired)
 					if(GeneralPreferencePanel.getShowResolutionResults())
 					{
-						clientFrame.viewData(clientFrame.VIEW_ADJUDICATION_TITLE, true, clientFrame.getTurnState(), 
-									Help.HelpID.Dialog_ResultReport,
-									new TextViewer.TVRunnable()
-									{
-										public void run()
-										{
-											TurnState priorTS = clientFrame.getWorld().getPreviousTurnState(clientFrame.getWorld().getLastTurnState());
-											setText(ResultWriter.resultsToHTML(priorTS, clientFrame.getOFO()));
-										}
-									}
-						);
+						final TurnState priorTS = clientFrame.getWorld().getPreviousTurnState(clientFrame.getWorld().getLastTurnState());
+						ResultWriter.displayDialog(clientFrame, priorTS, clientFrame.getOFO());
 					}
 				}
 				

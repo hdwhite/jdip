@@ -86,9 +86,12 @@ public class GUIConvoy extends Convoy implements GUIOrder
 	}// GUIConvoy()
 	
 	/** Creates a GUIConvoy */
-	protected GUIConvoy(Power power, Location src, Unit.Type srcUnitType, Location convoySrc, Unit.Type convoySrcUnitType, Location convoyDest)
+	protected GUIConvoy(Power power, Location src, Unit.Type srcUnitType, 
+		Location convoySrc, Power convoyPower, Unit.Type convoySrcUnitType, 
+		Location convoyDest)
 	{
-		super(power, src, srcUnitType, convoySrc, convoySrcUnitType, convoyDest);
+		super(power, src, srcUnitType, convoySrc, convoyPower, 
+			convoySrcUnitType, convoyDest);
 	}// GUIConvoy()
 	
 	/** This only accepts Convoy orders. All others will throw an IllegalArgumentException. */
@@ -106,6 +109,7 @@ public class GUIConvoy extends Convoy implements GUIOrder
 		
 		convoySrc = convoy.getConvoySrc();
 		convoyDest = convoy.getConvoyDest();
+		convoyPower = convoy.getConvoyedPower();
 		convoyUnitType = convoy.getConvoyUnitType();
 		
 		// set completed
@@ -293,6 +297,7 @@ public class GUIConvoy extends Convoy implements GUIOrder
 		srcUnitType = null;
 		convoySrc = null;
 		convoyDest = null;
+		convoyPower = null;
 		convoyUnitType = null;
 		
 		return true;

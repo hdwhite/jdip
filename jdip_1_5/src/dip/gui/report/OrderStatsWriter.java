@@ -20,9 +20,13 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package dip.gui;
+package dip.gui.report;
+
+import dip.gui.ClientFrame;
+import dip.gui.dialog.TextViewer;
 
 import dip.misc.Utils;
+import dip.misc.Help;
 
 import dip.world.World;
 import dip.world.Power;

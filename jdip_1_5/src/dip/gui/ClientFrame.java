@@ -28,6 +28,7 @@ import dip.gui.dialog.*;
 import dip.gui.dialog.newgame.NewGameDialog;
 import dip.gui.dialog.prefs.*;
 import dip.gui.order.GUIOrderFactory;
+import dip.gui.report.*;
 import dip.order.Orderable;
 import dip.order.OrderFormat.OrderFormatOptions;
 import dip.world.*;
@@ -46,6 +47,7 @@ import dip.misc.Help;
 //import dip.order.Order;
 
 import javax.swing.*;
+
 //import javax.swing.event.*;
 //import javax.swing.border.*;
 import java.awt.*;
@@ -126,9 +128,6 @@ public class ClientFrame extends JFrame
 	/** "None" Mode: no World object is active */
 	public static final String MODE_NONE	= "MODE_NONE";
 	
-	// HTML template for variant info
-	private static final String VARIANTINFO_TEMPLATE_LOCATION = "ClientFrame.template.variantinfo.location";
-	
 	// private constants
 	private static final String PROGRAM_NAME = Utils.getLocalString("PROGRAM_NAME");
 	private static final int VERSION_MAJOR = 1;
@@ -136,9 +135,6 @@ public class ClientFrame extends JFrame
 	private static final String KEY_VERSION_REVISION = "VERSION_REVISION";
 	private static final String KEY_CURRENT_LANGUAGE = "CURRENT_LANGUAGE";
 	
-	// private i18n constants
-	private static final String VIEW_STATUS_TITLE		= "ClientFrame.status.dialog.title";
-	public static final String VIEW_ADJUDICATION_TITLE	= "ClientFrame.adjudication.dialog.title";
 	
 	// plugin directories
 	private static final String VARIANT_DIR				= "variants";
@@ -734,33 +730,6 @@ public class ClientFrame extends JFrame
 	}// getTurnState()
 	
 	
-	/** 
-	*	View results in a result window 
-	*/
-	public void viewData(String localizedNameKey, boolean appendPhase, TurnState viewTS, 
-		Help.HelpID helpID, TextViewer.TVRunnable tvr)
-	{
-		StringBuffer title = new StringBuffer(64);
-		title.append(Utils.getLocalString(localizedNameKey));
-		
-		if(appendPhase)
-		{
-			title.append(": ");
-			title.append(viewTS.getPhase());
-		}
-		
-		TextViewer tv = new TextViewer(ClientFrame.this, false);	// nonmodal
-		tv.setEditable(false);
-		tv.addSingleButton( tv.makeOKButton() );
-		tv.setTitle(title.toString());
-		tv.setHeaderVisible(false);
-		tv.setHelpID(helpID);
-		
-		tv.lazyLoadDisplayDialog(tvr);
-	}// viewData()
-	
-	
-	
 	
 	/** Fired when an order was created */
 	public final void fireOrderCreated(Orderable newOrder)
@@ -1005,54 +974,6 @@ public class ClientFrame extends JFrame
 	}// class CFDropTargetListener
 	
 	
-	/** 
-	*	Get the variant info. This is similar to that displayed by the 
-	*	New Game dialog, but, we add Rule Settings and thus use a different
-	*	template.
-	*/
-	private String getVariantInfo(World w)
-	{
-		// get template
-		String template = Utils.getText(  Utils.getLocalString(VARIANTINFO_TEMPLATE_LOCATION) );
-		if(template == null)
-		{
-			template = "ERROR: missing template resource "+ Utils.getLocalString(VARIANTINFO_TEMPLATE_LOCATION);
-		}
-		
-		// get selcted variant
-		World.VariantInfo vi = w.getVariantInfo();
-		Variant variant = VariantManager.getVariant(vi.getVariantName(), vi.getVariantVersion());
-		
-		// get 8 main arguments
-		Object[] oldArgs = variant.getHTMLSummaryArguments();
-		
-		// make extra space
-		Object[] newArgs = new Object[oldArgs.length + 1];
-		System.arraycopy(oldArgs, 0, newArgs, 0, oldArgs.length);
-		
-		// make 9th argument: 'rules settings'
-		StringBuffer sb = new StringBuffer(256);
-		
-		RuleOptions ro = w.getRuleOptions();
-		Set allOpts = ro.getAllOptions();
-		Iterator iter = allOpts.iterator();
-		while(iter.hasNext())
-		{
-			RuleOptions.Option opt = (RuleOptions.Option) iter.next();
-			RuleOptions.OptionValue optVal = ro.getOptionValue(opt);
-			
-			sb.append("<p><b>");
-			sb.append(opt.getNameI18N());
-			sb.append(":</b> ");
-			sb.append(optVal.getNameI18N());
-			sb.append('\n');
-		}
-		
-		newArgs[newArgs.length - 1] = sb.toString();
-		
-		// return text.
-		return Utils.format(template, newArgs);
-	}// getVariantInfo()
 	
 	
 	/**
@@ -1278,17 +1199,8 @@ public class ClientFrame extends JFrame
 			// show results (if desired)
 			if(GeneralPreferencePanel.getShowResolutionResults())
 			{
-				viewData(VIEW_ADJUDICATION_TITLE, true, getTurnState(), 
-						 	Help.HelpID.Dialog_ResultReport,
-							new TextViewer.TVRunnable()
-							{
-								public void run()
-								{
-									TurnState priorTS = getWorld().getPreviousTurnState(newTurnState);
-									setText(ResultWriter.resultsToHTML(priorTS, getOFO()));
-								}
-							}
-				);
+				TurnState priorTS = getWorld().getPreviousTurnState(newTurnState);
+				ResultWriter.displayDialog(ClientFrame.this, priorTS, getOFO());
 			}
 			
 			fireTurnstateResolved(resolvedTurnState);
@@ -1662,16 +1574,7 @@ public class ClientFrame extends JFrame
 		//
 		public void onReportsResults()
 		{
-			viewData(VIEW_ADJUDICATION_TITLE, true, getTurnState(), 
-					 Help.HelpID.Dialog_ResultReport,
-					new TextViewer.TVRunnable()
-					{
-						public void run()
-						{
-							setText(ResultWriter.resultsToHTML(getTurnState(), getOFO()));
-						}
-					}
-				);
+			ResultWriter.displayDialog(ClientFrame.this, getTurnState(), getOFO());
 		}
 		
 		public void onReportsPreviousResults()
@@ -1680,17 +1583,7 @@ public class ClientFrame extends JFrame
 			if(mapPanel != null)
 			{
 				final TurnState ts = getTurnState();
-				final OrderFormatOptions ofo = getOFO();
-				viewData(VIEW_ADJUDICATION_TITLE, true, world.getPreviousTurnState(ts), 
-						 Help.HelpID.Dialog_ResultReport,
-						new TextViewer.TVRunnable()
-						{
-							public void run()
-							{
-								setText(ResultWriter.resultsToHTML(world.getPreviousTurnState(ts), ofo));
-							}
-						}
-				);
+				ResultWriter.displayDialog(ClientFrame.this, world.getPreviousTurnState(ts), getOFO());
 			}
 		}
 		
@@ -1701,15 +1594,7 @@ public class ClientFrame extends JFrame
 		
 		public void onReportsStatus()
 		{
-			viewData(VIEW_STATUS_TITLE, true, getTurnState(), null,
-					new TextViewer.TVRunnable()
-					{
-						public void run()
-						{
-							setText(StateWriter.stateToHTML(ClientFrame.this, getTurnState()));
-						}
-					}
-				);
+			StateWriter.displayDialog(ClientFrame.this, getTurnState());
 		}
 		
 		
@@ -1720,18 +1605,9 @@ public class ClientFrame extends JFrame
 		
 		public void onReportsMapInfo()
 		{
-			if(world != null)
+			if(getWorld() != null)
 			{
-				viewData("VariantInfo.title", false, getTurnState(), 
-						 Help.HelpID.Dialog_StatusReport, 
-						new TextViewer.TVRunnable()
-						{
-							public void run()
-							{
-								setText( getVariantInfo(world) );
-							}
-						}
-					);
+				VariantInfoWriter.displayDialog(ClientFrame.this, getWorld());
 			}
 		}
 		

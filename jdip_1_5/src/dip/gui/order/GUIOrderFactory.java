@@ -183,10 +183,11 @@ public class GUIOrderFactory extends OrderFactory
 	
 	/** Creates a GUIConvoy order */
 	public Convoy createConvoy(Power power, Location src, Unit.Type srcUnitType,
-		Location convoySrc, Unit.Type convoySrcUnitType, Location convoyDest)
+		Location convoySrc, Power convoyPower, 
+		Unit.Type convoySrcUnitType, Location convoyDest)
 	{
 		return new GUIConvoy(power, src, srcUnitType, convoySrc, 
-			convoySrcUnitType, convoyDest);
+			convoyPower, convoySrcUnitType, convoyDest);
 	}// createConvoy()
 	
 	

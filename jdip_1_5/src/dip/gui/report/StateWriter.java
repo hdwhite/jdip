@@ -20,14 +20,19 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package dip.gui;
+package dip.gui.report;
 
+import dip.gui.ClientFrame;
+import dip.gui.dialog.TextViewer;
 
 import dip.world.*;
 import dip.order.*;
 import dip.order.OrderFormat.OrderFormatOptions;
 import dip.misc.Utils;
+import dip.misc.Help;
 import dip.process.Adjustment;
+
+import javax.swing.JScrollPane;
 
 import java.util.*;
 
@@ -66,6 +71,9 @@ public class StateWriter
 	private static final String SC_NUM					= "StateWriter.sc.number";
 	private static final String ORD_TOO_FEW				= "StateWriter.order.toofew";
 	
+	// i18n dialog constants
+	private static final String DIALOG_TITLE		= "StateWriter.dialog.title";
+	
 	
 	// instance constants
 	private final Power[] 		displayablePowers;
@@ -87,6 +95,36 @@ public class StateWriter
 		StateWriter sw = new StateWriter(cf, ts);
 		return sw.getStateAsHTML();
 	}// stateToHTML()
+	
+	
+	
+	/**
+	*	Returns the HTML-encoded current state inside a dialog.
+	*/
+	public static void displayDialog(final ClientFrame clientFrame, 
+		final TurnState ts)
+	{
+		final StringBuffer title = new StringBuffer(64);
+		title.append(Utils.getLocalString(DIALOG_TITLE));
+		title.append(": ");
+		title.append(ts.getPhase());
+		
+		TextViewer tv = new TextViewer(clientFrame);
+		tv.setEditable(false);
+		tv.addSingleButton( tv.makeOKButton() );
+		tv.setTitle(title.toString());
+		tv.setHelpID(Help.HelpID.Dialog_StatusReport);
+		tv.setHeaderVisible(false);
+		tv.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		tv.lazyLoadDisplayDialog(new TextViewer.TVRunnable()
+		{
+			public void run()
+			{
+				setText(stateToHTML(clientFrame, ts));
+			}
+		});
+	}// displayDialog()
 	
 	
 	/** StateWriter constructor */

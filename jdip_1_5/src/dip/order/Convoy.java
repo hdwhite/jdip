@@ -64,10 +64,12 @@ public class Convoy extends Order
 	protected Location convoySrc = null;
 	protected Location convoyDest = null;
 	protected Unit.Type convoyUnitType = null;
-	
+	protected Power convoyPower = null;
 	
 	/** Creates a Convoy order */
-	protected Convoy(Power power, Location src, Unit.Type srcUnit, Location convoySrc, Unit.Type convoyUnitType, Location convoyDest)
+	protected Convoy(Power power, Location src, Unit.Type srcUnit, 
+		Location convoySrc, Power convoyPower, Unit.Type convoyUnitType, 
+		Location convoyDest)
 	{
 		super(power, src, srcUnit);
 
@@ -78,6 +80,7 @@ public class Convoy extends Order
 				
 		this.convoySrc = convoySrc;
 		this.convoyUnitType = convoyUnitType;
+		this.convoyPower = convoyPower;
 		this.convoyDest = convoyDest;
 	}// Convoy()
 	
@@ -98,6 +101,18 @@ public class Convoy extends Order
 	*	no strict validation was performed (via <code>validate()</code>).
 	*/
 	public Unit.Type getConvoyUnitType() 		{ return convoyUnitType; }
+	
+	/**
+	*	Returns the Power of the Unit we are Convoying.
+	*	<b>Warning:</b> this can be null, if no unit type was set, and
+	*	no strict validation was performed (via <code>validate()</code>).
+	*	<p>
+	*	<b>Important Note:</b> This also may be null only when a saved game
+	*	from 1.5.1 or prior versions are loaded into a recent version,
+	*	since prior versions did not support this field.
+	*/
+	public Power getConvoyedPower()				{ return convoyPower; }
+	
 	
 	/** Returns the Location of the Convoy destination */
 	public Location getConvoyDest() 			{ return convoyDest; }

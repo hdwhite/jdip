@@ -589,8 +589,13 @@ public class OrderParser
 			Location conDest = parseLocation(map, conDestName);
 			Unit.Type conUnitType = parseUnitType(conUnitName);
 			
+			// get power, from unit 
+			assert (position.hasUnit(conSrc.getProvince()));
+			final Power conPower = position.getUnit(conSrc.getProvince()).getPower();
+			
 			// create order.
-			return orderFactory.createConvoy(power, src, srcUnitType, conSrc, conUnitType, conDest);
+			return orderFactory.createConvoy(power, src, srcUnitType,
+				conSrc, conPower, conUnitType, conDest);
 		}
 		else if(orderType.equals("d"))
 		{
