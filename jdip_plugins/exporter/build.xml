@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<project name="jDip_plugin_exporter" default="build" basedir=".">
+	
+	<!--
+		BUILD file for jdip plugins: Exporter
+	-->
+	
+	<!-- unique properties for this plugin -->
+	<property name="plugin.name" value="ExportTool"/>
+	
+	<!-- where jdip.jar is, and any associated jdip libraries -->
+	<property name="jdip.base" value="../../jdip_1_5"/>
+	
+	<!-- build properties -->
+	<property name="debug" value="true"/>
+	<property name="javadoc.dir" value="${basedir}/javadoc"/>		<!-- documentation for all tools goes here -->
+	<property name="build.dir" value="${basedir}/build"/>			<!-- plugin .jar files -->
+	<property name="dist.dir" value="${build.dir}/dist"/>			<!-- where distributable packages go -->
+	<property name="class.dir" value="${build.dir}/classes"/>		<!-- where build classes go -->
+	<property name="etc.dir" value="${basedir}/etc"/>				<!-- where the misc. be -->
+	<property name="src.dir" value="${basedir}/src"/>				<!-- where the source be -->
+	<property name="lib.dir" value="${basedir}/lib"/>				<!-- library .jars, if any -->
+	<property name="etc.dist.dir" value="${etc.dir}/dist"/>			<!-- files to include in distribution -->
+	<property name="plugin.name.jar" value="${plugin.name}.jar"/>
+	
+	<!-- misc build properties -->
+	<property name="build.compiler" value="modern"/>            
+	
+    <!-- all jars, also those in subdirs -->
+	<patternset id="jars_recursive">
+		<include name="**/*.jar"/>
+	</patternset>
+	
+	<!-- compile class path -->
+	<path id="compile.class.path">
+		<fileset dir="${basedir}/">
+			<patternset refid="jars_recursive"/>
+		</fileset>
+		<fileset dir="${jdip.base}/">
+			<patternset refid="jars_recursive"/>
+		</fileset>
+	</path>
+	
+	<!-- cleans the build directory (but not javadocs) -->
+	<target name="clean" description="Delete build/ directory">
+		<delete dir="${build.dir}"/>
+	</target>
+	
+	<!-- init -->
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${class.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+		<echo message="Using jDip files from: ${jdip.base}"/>
+	</target>
+	
+	<target name="help">
+		<echo message="To see all targets, please use the command: ant -projecthelp"/>
+	</target>
+	
+	
+	<target name="build" depends="init" description="builds plugin">
+		<!-- compile everything -->
+		<javac srcdir="${src.dir}" destdir="${class.dir}" includes="**/*.java" source="1.4" debug="${debug}">
+			<classpath refid="compile.class.path"/>
+		</javac>
+		
+		<!-- copy resource files (if any) -->
+		<copy todir="${class.dir}/">
+			<fileset dir="${src.dir}">
+				<include name="**/*.txt"/>
+				<include name="**/*.xml"/>
+				<include name="**/*.properties"/>
+			</fileset>
+		</copy>
+		
+		<!-- create jar -->
+		<delete file="${build.dir}/${plugin.name.jar}"/>
+		<jar jarfile="${build.dir}/${plugin.name.jar}" basedir="${class.dir}"
+				includes="**/*"
+				manifest="${etc.dir}/manifest.txt"/>
+	</target>
+	
+	
+	<target name="dist" depends="build" description="create distributable zip">
+		<!-- TODO: include other pertinent files (readme, license, docs, etc.) -->
+		<tstamp>
+			<format property="build.date" pattern="MMM-dd-yyyy"/>
+		</tstamp>
+		
+		<property name="plugin.dist.name" value="${dist.dir}/${plugin.name}-${build.date}.zip"/>
+		<delete file="${plugin.dist.name}"/>
+		<zip destfile="${plugin.dist.name}" duplicate="fail">
+			<zipfileset dir="${build.dir}" includes="*.jar" prefix=""/>
+			<zipfileset dir="${etc.dist.dir}" includes="*.txt *.TXT" excludes="*manifest*" prefix=""/>
+		</zip>
+	</target>
+	
+	
+	
+	<target name="docs" depends="init" description="creates plugin documentation">
+		<mkdir dir="${javadoc.dir}"/>
+		<javadoc
+				sourcepath="${src.dir}" destdir="${javadoc.dir}" 
+				packagenames="jdip.plugin.inspector.*"
+				author="true" version="true" use="true"
+				windowtitle="jDip Plugin Documentation: ${plugin.name}" doctitle="jDip"
+				bottom="Copyright 2004 Zachary DelProposto. All Rights Reserved."
+				source="1.4"
+				splitindex="true"
+				classpathref="compile.class.path"
+				additionalparam="-breakiterator -quiet">
+			
+			<fileset dir="${src.dir}" defaultexcludes="yes">
+				<include name="**/*.java" />
+			</fileset>
+		</javadoc>
+	</target>	
+	
+	
+	
+	
+	
+		
+</project>
