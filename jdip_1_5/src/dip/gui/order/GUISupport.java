@@ -97,20 +97,25 @@ public class GUISupport extends Support implements GUIOrder
 	
 	
 	/** Creates a GUISupport */
-	protected GUISupport(Power power, Location src, Unit.Type srcUnitType, Location supSrc, Unit.Type supUnitType)
+	protected GUISupport(Power power, Location src, Unit.Type srcUnitType, 
+		Location supSrc, Power supPower, Unit.Type supUnitType)
 	{
-		super(power, src, srcUnitType, supSrc, supUnitType);
+		super(power, src, srcUnitType, supSrc, supPower, supUnitType);
 	}// GUISupport()
 	
 	
 	/** Creates a GUISupport */
-	protected GUISupport(Power power, Location src, Unit.Type srcUnitType, Location supSrc, Unit.Type supUnitType, Location supDest)
+	protected GUISupport(Power power, Location src, Unit.Type srcUnitType, 
+		Location supSrc, Power supPower, Unit.Type supUnitType, Location supDest)
 	{
-		super(power, src, srcUnitType, supSrc, supUnitType, supDest);
+		super(power, src, srcUnitType, supSrc, supPower, supUnitType, supDest);
 	}// GUISupport()
 	
 	
-	/** This only accepts Support orders. All others will throw an IllegalArgumentException. */
+	/** 
+	*	This only accepts Support orders. 
+	*	All others will throw an IllegalArgumentException. 
+	*/
 	public void deriveFrom(Orderable order)
 	{
 		if( !(order instanceof Support) )
@@ -125,6 +130,7 @@ public class GUISupport extends Support implements GUIOrder
 		
 		supSrc = support.getSupportedSrc();
 		supDest = support.getSupportedDest();
+		supPower = support.getSupportedPower();
 		supUnitType = support.getSupportedUnitType();
 		narrowingOrder = support.getNarrowingOrder();
 		
@@ -292,6 +298,7 @@ public class GUISupport extends Support implements GUIOrder
 		srcUnitType = null;
 		supSrc = null;
 		supDest = null;
+		supPower = null;
 		supUnitType = null;
 		
 		return true;
@@ -320,6 +327,7 @@ public class GUISupport extends Support implements GUIOrder
 			{
 				Unit unit = stateInfo.getPosition().getUnit(location.getProvince());
 				supSrc = new Location(location.getProvince(), unit.getCoast());
+				supPower = unit.getPower();
 				supUnitType = unit.getType();
 				
 				sb.setLength(0);

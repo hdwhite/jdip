@@ -288,6 +288,7 @@ public class AIDemo
 						  makeLocation(pos, map.getProvince("war")),
 						  Unit.Type.ARMY,
 						  makeLocation(pos, map.getProvince("lvn")),
+						  russia,
 						  Unit.Type.ARMY,
 						  makeLocation(pos, map.getProvince("pru"))
 						  ));
@@ -324,6 +325,7 @@ public class AIDemo
 						  	makeLocation(pos, map.getProvince("sil")),
 						  	Unit.Type.ARMY,
 						  	makeLocation(pos, map.getProvince("pru")),
+							germany,
 							Unit.Type.ARMY,
 						  	makeLocation(pos, map.getProvince("war"))
 						  	));
@@ -332,6 +334,7 @@ public class AIDemo
 						  	makeLocation(pos, map.getProvince("gal")),
 						  	Unit.Type.ARMY,
 						  	makeLocation(pos, map.getProvince("pru")),
+							germany,
 							Unit.Type.ARMY,
 						  	makeLocation(pos, map.getProvince("war"))
 						  	));
@@ -348,6 +351,7 @@ public class AIDemo
 						  	makeLocation(pos, map.getProvince("pru")),
 						  	Unit.Type.ARMY,
 						  	makeLocation(pos, map.getProvince("sil")),
+							germany,
 							Unit.Type.ARMY,
 						  	makeLocation(pos, map.getProvince("war"))
 						  	));
@@ -362,6 +366,7 @@ public class AIDemo
 							makeLocation(pos, map.getProvince("gal")),
 						  	Unit.Type.ARMY,
 						  	makeLocation(pos, map.getProvince("sil")),
+							germany,
 							Unit.Type.ARMY,
 						  	makeLocation(pos, map.getProvince("war"))
 						  	));

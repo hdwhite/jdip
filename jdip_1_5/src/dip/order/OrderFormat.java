@@ -296,7 +296,8 @@ public class OrderFormat
 		Location src = 		new Location(prov1, Coast.SEA);
 		Location supSrc = 	new Location(prov2, Coast.SOUTH);
 		
-		Support support = of.createSupport(power1, src, Unit.Type.FLEET, supSrc, Unit.Type.FLEET);
+		Support support = of.createSupport(power1, src, Unit.Type.FLEET, 
+			supSrc, power1, Unit.Type.FLEET);
 		return format(ofo, support, support.getDefaultFormat());
 	}// getFormatExample()
 	

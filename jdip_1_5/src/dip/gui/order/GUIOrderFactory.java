@@ -133,60 +133,74 @@ public class GUIOrderFactory extends OrderFactory
 	
 	
 	/** Creates a GUIMove order */
-	public Move createMove(Power power, Location source, Unit.Type srcUnitType, Location dest)
+	public Move createMove(Power power, Location source, 
+		Unit.Type srcUnitType, Location dest)
 	{
 		return new GUIMove(power, source, srcUnitType, dest, false);
 	}// createMove()
 	
 	/** Creates a GUIMove order */
-	public Move createMove(Power power, Location source, Unit.Type srcUnitType, Location dest, boolean isConvoying)
+	public Move createMove(Power power, Location source, Unit.Type srcUnitType, 
+		Location dest, boolean isConvoying)
 	{
 		return new GUIMove(power, source, srcUnitType, dest, isConvoying);
 	}// createMove()
 	
 	/** Creates a GUIMove order */
-	public Move createMove(Power power, Location src, Unit.Type srcUnitType, Location dest, Province[] convoyRoute)
+	public Move createMove(Power power, Location src, Unit.Type srcUnitType, 
+		Location dest, Province[] convoyRoute)
 	{
 		return new GUIMove(power, src, srcUnitType, dest, convoyRoute);
 	}// createMove()
 	
 	/** Creates a GUIMove order */
-	public Move createMove(Power power, Location src, Unit.Type srcUnitType, Location dest, List routes)
+	public Move createMove(Power power, Location src, Unit.Type srcUnitType, 
+		Location dest, List routes)
 	{
 		return new GUIMove(power, src, srcUnitType, dest, routes);
 	}// createMove()
 	
 	
 	/** Creates a GUISupport order, to Support a unit staying in place. */
-	public Support createSupport(Power power, Location src, Unit.Type srcUnitType, Location supSrc, Unit.Type supUnitType)
+	public Support createSupport(Power power, Location src, Unit.Type srcUnitType, 
+		Location supSrc, Power supPower, Unit.Type supUnitType)
 	{
-		return new GUISupport(power, src, srcUnitType, supSrc, supUnitType);
+		return new GUISupport(power, src, srcUnitType, supSrc, supPower, supUnitType);
 	}// createSupport()
 	
 	
-	/** Creates a GUISupport order, to Support a unit moving (or staying in place, if supDest == null) */
-	public Support createSupport(Power power, Location src, Unit.Type srcUnitType, Location supSrc, Unit.Type supUnitType, Location supDest)
+	/** 
+	*	Creates a GUISupport order, to Support a unit moving 
+	*	(or staying in place, if supDest == null) 
+	*/
+	public Support createSupport(Power power, Location src, Unit.Type srcUnitType, 
+		Location supSrc, Power supPower, Unit.Type supUnitType, Location supDest)
 	{
-		return new GUISupport(power, src, srcUnitType, supSrc, supUnitType, supDest);
+		return new GUISupport(power, src, srcUnitType, supSrc, supPower, 
+			supUnitType, supDest);
 	}// createSupport()
 	
 	
 	/** Creates a GUIConvoy order */
-	public Convoy createConvoy(Power power, Location src, Unit.Type srcUnitType, Location convoySrc, Unit.Type convoySrcUnitType, Location convoyDest)
+	public Convoy createConvoy(Power power, Location src, Unit.Type srcUnitType,
+		Location convoySrc, Unit.Type convoySrcUnitType, Location convoyDest)
 	{
-		return new GUIConvoy(power, src, srcUnitType, convoySrc, convoySrcUnitType, convoyDest);
+		return new GUIConvoy(power, src, srcUnitType, convoySrc, 
+			convoySrcUnitType, convoyDest);
 	}// createConvoy()
 	
 	
 	/** Creates a GUIRetreat order */
-	public Retreat createRetreat(Power power, Location source, Unit.Type srcUnitType, Location dest)
+	public Retreat createRetreat(Power power, Location source, 
+		Unit.Type srcUnitType, Location dest)
 	{
 		return new GUIRetreat(power, source, srcUnitType, dest);
 	}// createRetreat()
 	
 	
 	/** Creates a GUIDisband order */
-	public Disband createDisband(Power power, Location source, Unit.Type sourceUnitType)
+	public Disband createDisband(Power power, Location source, 
+		Unit.Type sourceUnitType)
 	{
 		return new GUIDisband(power, source, sourceUnitType);
 	}// createDisband()
@@ -212,7 +226,8 @@ public class GUIOrderFactory extends OrderFactory
 	}// createGUIWaive()
 	
 	/** Creates a GUIDefineState order */
-	public DefineState createDefineState(Power power, Location source, Unit.Type sourceUnitType)
+	public DefineState createDefineState(Power power, Location source, 
+		Unit.Type sourceUnitType)
 	throws OrderException
 	{
 		return new GUIDefineState(power, source, sourceUnitType);

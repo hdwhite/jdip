@@ -1,5 +1,4 @@
 //
-//	$Id
 // 	@(#)Convoy.java		4/2002
 //
 // 	Copyright 2002 Zachary DelProposto. All rights reserved.
@@ -92,8 +91,14 @@ public class Convoy extends Order
 	
 	/** Returns the Location of the Unit to be Convoyed */
 	public Location getConvoySrc() 			{ return convoySrc; }
-	/** Returns the Unit Type of the Unit to be Convoyed */
+	
+	/** 
+	*	Returns the Unit Type of the Unit to be Convoyed 
+	*	<b>Warning:</b> this can be null, if no unit type was set, and
+	*	no strict validation was performed (via <code>validate()</code>).
+	*/
 	public Unit.Type getConvoyUnitType() 		{ return convoyUnitType; }
+	
 	/** Returns the Location of the Convoy destination */
 	public Location getConvoyDest() 			{ return convoyDest; }
 	

@@ -53,7 +53,8 @@ public abstract class OrderFactory
 	
 	
 	/** 
-	*	Get the default OrderFactory, which is dip.order.OrderFactory.DefaultOrderFactory.
+	*	Get the default OrderFactory, which is 
+	*	dip.order.OrderFactory.DefaultOrderFactory.
 	*	<p>
 	*	<b>WARNING:</b> this should NOT be used if there is any likelyhood
 	*	of every wanting to use GUI orders (e.g., via GUIOrderFactory). 
@@ -69,46 +70,65 @@ public abstract class OrderFactory
 	}// getDefault()
 	
 	/** Creates a Hold order */
-	public abstract Hold createHold(Power power, Location source, Unit.Type sourceUnitType);
+	public abstract Hold createHold(Power power, Location source, 
+		Unit.Type sourceUnitType);
 	
 	/** Creates a Move order */
-	public abstract Move createMove(Power power, Location source, Unit.Type srcUnitType, Location dest);
+	public abstract Move createMove(Power power, Location source, 
+		Unit.Type srcUnitType, Location dest);
 	
 	/** Creates a Move order */
-	public abstract Move createMove(Power power, Location source, Unit.Type srcUnitType, Location dest, boolean isConvoying);
+	public abstract Move createMove(Power power, Location source, 
+		Unit.Type srcUnitType, Location dest, boolean isConvoying);
 	
 	/** Creates a Move order */
-	public abstract Move createMove(Power power, Location src, Unit.Type srcUnitType, Location dest, Province[] convoyRoute);
+	public abstract Move createMove(Power power, Location src, 
+		Unit.Type srcUnitType, Location dest, Province[] convoyRoute);
 	
 	/** Creates a Move order */
-	public abstract Move createMove(Power power, Location src, Unit.Type srcUnitType, Location dest, List routes);
+	public abstract Move createMove(Power power, Location src, 
+		Unit.Type srcUnitType, Location dest, List routes);
 	
 	/** Creates a Support order, to Support a unit staying in place. */
-	public abstract Support createSupport(Power power, Location src, Unit.Type srcUnitType, Location supSrc, Unit.Type supUnitType);
+	public abstract Support createSupport(Power power, Location src, 
+		Unit.Type srcUnitType, Location supSrc, Power supPower, 
+		Unit.Type supUnitType);
 	
-	/** Creates a Support order, to Support a unit moving (or staying in place, if supSrc == supDest) */
-	public abstract Support createSupport(Power power, Location src, Unit.Type srcUnitType, Location supSrc, Unit.Type supUnitType, Location supDest);
+	/** 
+	*	Creates a Support order, to Support a unit moving 
+	*	(or staying in place, if supDest == null) 
+	*/
+	public abstract Support createSupport(Power power, Location src, 
+		Unit.Type srcUnitType, Location supSrc, Power supPower, 
+		Unit.Type supUnitType, Location supDest);
 	
 	/** Creates a Convoy order */
-	public abstract Convoy createConvoy(Power power, Location src, Unit.Type srcUnitType, Location convoySrc, Unit.Type convoySrcUnitType, Location convoyDest);
+	public abstract Convoy createConvoy(Power power, Location src, 
+		Unit.Type srcUnitType, Location convoySrc, 
+		Unit.Type convoySrcUnitType, Location convoyDest);
 	
 	/** Creates a Retreat order */
-	public abstract Retreat createRetreat(Power power, Location source, Unit.Type srcUnitType, Location dest);
+	public abstract Retreat createRetreat(Power power, Location source, 
+		Unit.Type srcUnitType, Location dest);
 	
 	/** Creates a Disband order */
-	public abstract Disband createDisband(Power power, Location source, Unit.Type sourceUnitType);
+	public abstract Disband createDisband(Power power, Location source, 
+		Unit.Type sourceUnitType);
 	
 	/** Creates a Build order */
-	public abstract Build createBuild(Power power, Location source, Unit.Type sourceUnitType);
+	public abstract Build createBuild(Power power, Location source, 
+		Unit.Type sourceUnitType);
 	
 	/** Creates a Remove order */
-	public abstract Remove createRemove(Power power, Location source, Unit.Type sourceUnitType);
+	public abstract Remove createRemove(Power power, Location source, 
+		Unit.Type sourceUnitType);
 	
 	/** Creates a Waive order */
 	public abstract Waive createWaive(Power power, Location source);
 	
 	/** Creates a DefineState order */
-	public abstract DefineState createDefineState(Power power, Location source, Unit.Type sourceUnitType)
+	public abstract DefineState createDefineState(Power power, 
+		Location source, Unit.Type sourceUnitType)
 	throws OrderException;
 	
 	
@@ -121,80 +141,101 @@ public abstract class OrderFactory
 		}// DefaultOrderFactory()
 		
 		/** Creates a Hold order */
-		public Hold createHold(Power power, Location source, Unit.Type sourceUnitType)
+		public Hold createHold(Power power, Location source, 
+			Unit.Type sourceUnitType)
 		{
 			return new Hold(power, source, sourceUnitType);
 		}// createHold()
 		
 		
 		/** Creates a Move order */
-		public Move createMove(Power power, Location source, Unit.Type srcUnitType, Location dest)
+		public Move createMove(Power power, Location source, 
+			Unit.Type srcUnitType, Location dest)
 		{
 			return new Move(power, source, srcUnitType, dest);
 		}// createMove()
 		
 		/** Creates a Move order */
-		public Move createMove(Power power, Location source, Unit.Type srcUnitType, Location dest, boolean isConvoying)
+		public Move createMove(Power power, Location source, 
+			Unit.Type srcUnitType, Location dest, boolean isConvoying)
 		{
 			return new Move(power, source, srcUnitType, dest, isConvoying);
 		}// createMove()
 		
 		/** Creates a Move order */
-		public Move createMove(Power power, Location src, Unit.Type srcUnitType, Location dest, Province[] convoyRoute)
+		public Move createMove(Power power, Location src, 
+			Unit.Type srcUnitType, Location dest, Province[] convoyRoute)
 		{
 			return new Move(power, src, srcUnitType, dest, convoyRoute);
 		}// createMove()
 		
 		/** Creates a Move order */
-		public Move createMove(Power power, Location src, Unit.Type srcUnitType, Location dest, List routes)
+		public Move createMove(Power power, Location src, 
+			Unit.Type srcUnitType, Location dest, List routes)
 		{
 			return new Move(power, src, srcUnitType, dest, routes);
 		}// createMove()
 		
 		/** Creates a Support order, to Support a unit staying in place. */
-		public Support createSupport(Power power, Location src, Unit.Type srcUnitType, Location supSrc, Unit.Type supUnitType)
+		public Support createSupport(Power power, Location src, 
+			Unit.Type srcUnitType, Location supSrc, Power supPower, 
+			Unit.Type supUnitType)
 		{
-			return new Support(power, src, srcUnitType, supSrc, supUnitType);
+			return new Support(power, src, srcUnitType, 
+				supSrc, supPower, supUnitType);
 		}// createSupport()
 		
 		
-		/** Creates a Support order, to Support a unit moving (or staying in place, if supSrc == supDest) */
-		public Support createSupport(Power power, Location src, Unit.Type srcUnitType, Location supSrc, Unit.Type supUnitType, Location supDest)
+		/** 
+		*	Creates a Support order, to Support a unit moving 
+		*	(or staying in place, if supDest == null) 
+		*/
+		public Support createSupport(Power power, Location src, 
+			Unit.Type srcUnitType, Location supSrc, Power supPower, 
+			Unit.Type supUnitType, Location supDest)
 		{
-			return new Support(power, src, srcUnitType, supSrc, supUnitType, supDest);
+			return new Support(power, src, srcUnitType, supSrc, 
+				supPower, supUnitType, supDest);
 		}// createSupport()
 		
 		
 		/** Creates a Convoy order */
-		public Convoy createConvoy(Power power, Location src, Unit.Type srcUnitType, Location convoySrc, Unit.Type convoySrcUnitType, Location convoyDest)
+		public Convoy createConvoy(Power power, Location src, 
+			Unit.Type srcUnitType, Location convoySrc, 
+			Unit.Type convoySrcUnitType, Location convoyDest)
 		{
-			return new Convoy(power, src, srcUnitType, convoySrc, convoySrcUnitType, convoyDest);
+			return new Convoy(power, src, srcUnitType, convoySrc, 
+				convoySrcUnitType, convoyDest);
 		}// createConvoy()
 		
 		
 		/** Creates a Retreat order */
-		public Retreat createRetreat(Power power, Location source, Unit.Type srcUnitType, Location dest)
+		public Retreat createRetreat(Power power, Location source, 
+			Unit.Type srcUnitType, Location dest)
 		{
 			return new Retreat(power, source, srcUnitType, dest);
 		}// createRetreat()
 		
 		
 		/** Creates a Disband order */
-		public Disband createDisband(Power power, Location source, Unit.Type sourceUnitType)
+		public Disband createDisband(Power power, Location source, 
+			Unit.Type sourceUnitType)
 		{
 			return new Disband(power, source, sourceUnitType);
 		}// createDisband()
 		
 		
 		/** Creates a Build order */
-		public Build createBuild(Power power, Location source, Unit.Type sourceUnitType)
+		public Build createBuild(Power power, Location source, 
+			Unit.Type sourceUnitType)
 		{
 			return new Build(power, source, sourceUnitType);
 		}// createBuild()
 		
 		
 		/** Creates a Remove order */
-		public Remove createRemove(Power power, Location source, Unit.Type sourceUnitType)
+		public Remove createRemove(Power power, Location source, 
+			Unit.Type sourceUnitType)
 		{
 			return new Remove(power, source, sourceUnitType);
 		}// createRemove()
@@ -206,7 +247,8 @@ public abstract class OrderFactory
 		}// createWaive()
 		
 		/** Creates a DefineState order */
-		public DefineState createDefineState(Power power, Location source, Unit.Type sourceUnitType)
+		public DefineState createDefineState(Power power, Location source, 
+			Unit.Type sourceUnitType)
 		throws OrderException
 		{
 			return new DefineState(power, source, sourceUnitType);

@@ -532,8 +532,12 @@ public class OrderParser
 			Unit.Type supUnitType = parseUnitType(tas.type);
 			Location supSrc = parseLocation(map, tas.src);
 			
-			assert(supUnitType != null);
-			assert(supSrc != null);
+			assert (supUnitType != null);
+			assert (supSrc != null);
+			
+			// get power, from unit 
+			assert (position.hasUnit(supSrc.getProvince()));
+			final Power supPower = position.getUnit(supSrc.getProvince()).getPower();
 			
 			// support a MOVE [if specified]
 			if(st.hasMoreTokens())
@@ -545,7 +549,8 @@ public class OrderParser
 					String supDestName = getToken(st, Utils.getLocalString(OF_SUPPORT_NO_DEST));
 					Location supDest = parseLocation(map, supDestName);
 					assert(supDest != null);
-					return orderFactory.createSupport(power, src, srcUnitType, supSrc, supUnitType, supDest);
+					return orderFactory.createSupport(power, src, srcUnitType, 
+						supSrc, supPower, supUnitType, supDest);
 				}
 				else if(!token.equals("h"))
 				{
@@ -556,7 +561,8 @@ public class OrderParser
 			}
 
 			// support a HOLD
-			return orderFactory.createSupport(power, src, srcUnitType, supSrc, supUnitType);
+			return orderFactory.createSupport(power, src, srcUnitType, supSrc, 
+				supPower, supUnitType);
 		}
 		else if(orderType.equals("c"))
 		{
@@ -1013,8 +1019,10 @@ public class OrderParser
 				provinces[provinces.length - 1]));
 		}
 	}// parseLocation()
-
 	
+	
+	
+
 	
 	//
 	// uses unit.Type.parse()

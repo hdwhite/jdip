@@ -67,14 +67,17 @@ public class Support extends Order
 	
 	// instance variables
 	protected Location 	supSrc = null;
-	protected Location 	supDest = null;		// TODO: probably, this should stay null if we're supporting a hold
+	protected Location 	supDest = null;
 	protected Unit.Type supUnitType = null;
 	protected Order 	narrowingOrder = null; 
+	protected Power 	supPower = null;
+	
 	
 	/** Creates a Support order, for supporting a Hold or other <b>non</b>-movement order. */
-	protected Support(Power power, Location src, Unit.Type srcUnit, Location supSrc, Unit.Type supUnit)
+	protected Support(Power power, Location src, Unit.Type srcUnit, 
+		Location supSrc, Power supPower, Unit.Type supUnit)
 	{
-		this(power, src, srcUnit, supSrc, supUnit, null);
+		this(power, src, srcUnit, supSrc, supPower, supUnit, null);
 	}// Support()
 	
 	/** 
@@ -86,7 +89,8 @@ public class Support extends Order
 	*	location is not a valid order.
 	*	<p>
 	*/
-	protected Support(Power power, Location src, Unit.Type srcUnit, Location supSrc, Unit.Type supUnit, Location supDest)
+	protected Support(Power power, Location src, Unit.Type srcUnit, 
+		Location supSrc, Power supPower, Unit.Type supUnit, Location supDest)
 	{
 		super(power, src, srcUnit);
 		
@@ -95,6 +99,7 @@ public class Support extends Order
 			throw new IllegalArgumentException("null argument(s)");
 		}
 		
+		this.supPower = supPower;
 		this.supSrc = supSrc;
 		this.supUnitType = supUnit;
 		this.supDest = supDest;
@@ -108,9 +113,13 @@ public class Support extends Order
 	}// Support()
 	
 	/** 
-	*	A narrowing order only applies to non-move Supports, to make it more specific. 
+	*	A narrowing order only applies to non-move Supports, 
+	*	to make it more specific. 
 	*	<p>
-	*	<b>Note:</b> this can be set, but narrowing order usage is not currently implemented.
+	*	<b>Note:</b> this can be set, but narrowing order usage is 
+	*	not currently implemented.
+	*
+	*	@throws IllegalArgumentException if this is a Move support.
 	*/
 	public void setNarrowingOrder(Order o)
 	{
@@ -126,19 +135,50 @@ public class Support extends Order
 	
 	/** Returns the Location of the Unit we are Supporting */
 	public Location getSupportedSrc() 				{ return supSrc; }
-	/** Returns the Unit Type of the Unit we are Supporting */
+	
+	/** 
+	*	Returns the Unit Type of the Unit we are Supporting 
+	*	<b>Warning:</b> this can be null, if no unit type was set, and
+	*	no strict validation was performed (via <code>validate()</code>).
+	*/
 	public Unit.Type getSupportedUnitType() 		{ return supUnitType; }
+	
 	/** Returns the Narrowing order, or null if none was specified. */
 	public Order getNarrowingOrder() 				{ return narrowingOrder; }
 	
-	/** Returns true if we are supporting a non-Move order */
+	/**
+	*	Returns the Power of the Unit we are Supporting.
+	*	<b>Warning:</b> this can be null, if no unit type was set, and
+	*	no strict validation was performed (via <code>validate()</code>).
+	*	<p>
+	*	<b>Important Note:</b> This also may be null only when a saved game
+	*	from 1.5.1 or prior versions are loaded into a recent version,
+	*	since prior versions did not support this field.
+	*/
+	public Power getSupportedPower()				{ return supPower; }
+	
+	/** 
+	*	Returns true if we are supporting a non-Move order.
+	*	This is the preferred method of determining if we are truly
+	*	supporting a Move order verses a non-Move (Hold) order.
+	*/
 	public final boolean isSupportingHold()			{ return (supDest == null); }	
+	
+	/**
+	*	Returns true if we are supporting a non-Move order.
+	*	<p>
+	*	Note: isSupportingHold() should be deprecated. There is no 
+	*	difference (other than name) between this method and
+	*	isSupportingHold()).
+	*/
+	public final boolean isNonMoveSupport()			{ return (supDest == null); }	
+	
 	
 	/** 
 	*	Returns the Location that we are Supporting into; 
 	*	if this is a non-move Support, this will return 
 	*	the same (referentially!) location as getSupportedSrc().
-	*	It will not return null. 
+	*	It will not return null.
 	*/
 	public Location getSupportedDest() 				
 	{ 
@@ -229,6 +269,7 @@ public class Support extends Order
 			if(	super.equals(support)
 				&& supUnitType == support.supUnitType
 				&& supSrc.equals(support.supSrc) 
+				&& supPower == support.supPower
 				&& ((supDest == support.supDest) || ((supDest != null) && (supDest.equals(support.supDest)))) )
 			{
 				return true;
@@ -245,6 +286,7 @@ public class Support extends Order
 		checkSeasonMovement(state, orderNameFull);
 		checkPower(power, state, true);
 		super.validate(state, valOpts, ruleOpts);
+		
 		if(valOpts.getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_STRICT))
 		{
 			Position position = state.getPosition();
@@ -259,6 +301,11 @@ public class Support extends Order
 			// v.1: unit existence / matching
 			Unit supUnit = position.getUnit( supSrc.getProvince() );
 			supUnitType = getValidatedUnitType(supSrc.getProvince(), supUnitType, supUnit);
+			
+			// v.1.5: supported unit power matching. As per DATC, if specified
+			// supporting Power is missing, we'll add it. If it's incorrect, we'll
+			// change it to the correct power, without throwing an exception.
+			supPower = supUnit.getPower();
 			
 			// v.2: location validation
 			supSrc = supSrc.getValidatedAndDerived(supUnitType, supUnit);
