@@ -310,11 +310,11 @@
 	<target name="createmanifest" description="create a manifest file">
 		<echo message="Auto-generating jar manifest..."/>
 		
-		<fileset dir="${base.dir}/lib" id="manifest.fileset">
+		<fileset dir="${lib.dir}" id="manifest.fileset">
 			<include name="*.jar"/>
 		</fileset>
 		
-		<property  name="manifest.lib.dir" location="${base.dir}/lib"/>
+		<property  name="manifest.lib.dir" location="${lib.dir}"/>
 		
 		<pathconvert pathsep=" " dirsep="/" property="manifest.class.path">
 			<map from="${manifest.lib.dir}" to="lib"/>
@@ -325,7 +325,7 @@
 			</path>
 		</pathconvert>
 		
-		<manifest file="${base.dir}/MANIFEST.MF" mode="replace">
+		<manifest file="${build.dir}/MANIFEST.MF" mode="replace">
 			<attribute name="Main-Class" value="dip.gui.splash"/>
 			<attribute name="Class-Path" value="${manifest.class.path}"/>
 		</manifest>
@@ -341,7 +341,8 @@
 		<!-- include build directory, which contains the resource directory -->
 
 		<!-- exclude any tools (source and jar) -->
-		<jar jarfile="${dist.dir}/jdip.jar" basedir="${build.dir}" excludes="variants/** maptool/** tools/** **/*.zip **/*.db **/*.jar **/misc/TestPars*.class **/misc/Convert*.class ${test.results.dir}/**" manifest="${base.dir}/MANIFEST.MF"/>
+		<jar jarfile="${dist.dir}/jdip.jar" basedir="${build.dir}" excludes="variants/** maptool/** tools/** **/*.zip **/*.db **/*.jar **/*.MF **/misc/TestPars*.class **/misc/Convert*.class ${test.results.dir}/**" 
+			manifest="${build.dir}/MANIFEST.MF"/>
 		
 		<!-- make empty 'tool' plugin dir -->
 		<mkdir dir="${dist.dir}/${plugin.dir}"/>
