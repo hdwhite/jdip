@@ -166,100 +166,6 @@
 	  hilightCSSClass CDATA #REQUIRED
 	  >
 ]>
-<!--
-	<!ENTITY ADR "408,303">
-	<!ENTITY AEG "542,404">
-	<!ENTITY Aem "300,229">
-	<!ENTITY Ala "282,170">
-	<!ENTITY Ale "631,525">
-	<!ENTITY Alp "268,238">
-	<!ENTITY Anc "358,291">
-	<!ENTITY Ant "723,421">
-	<!ENTITY Aqu "170,222">
-	<!ENTITY Asd "462,164">
-	<!ENTITY Ath "494,399">
-	<!ENTITY ATL "16,250">
-	<!ENTITY Bae "100,380">
-	<!ENTITY BAL "220,368">
-	<!ENTITY Bel "196,124">
-	<!ENTITY BRI "30,120">
-	<!ENTITY Bru "408,335">
-	<!ENTITY Bur "144,273">
-	<!ENTITY Byz "615,333">
-	<!ENTITY CAN "84,234">
-	<!ENTITY Cap "373,334">
-	<!ENTITY Car "290,436">
-	<!ENTITY Cha "371,117">
-	<!ENTITY Che "677,239">
-	<!ENTITY Col "245,133">
-	<!ENTITY CYP "624,475">
-	<!ENTITY Dac "479,292">
-	<!ENTITY Dal "411,257">
-	<!ENTITY Ebu-wc "99,13">
-	<!ENTITY Ebu-ec "137,17">
-	<!ENTITY Ebu "113,15">
-	<!ENTITY EUX "685,284">
-	<!ENTITY Fla "94,68">
-	<!ENTITY Fra "264,89">
-	<!ENTITY Fri "248,56">
-	<!ENTITY Gal "653,376">
-	<!ENTITY Gen "305,254">
-	<!ENTITY GER "194,23">
-	<!ENTITY Hai "339,39">
-	<!ENTITY Hu1 "450,41">
-	<!ENTITY Hu2 "469,121">
-	<!ENTITY Hu3 "620,80">
-	<!ENTITY Hu4 "601,217">
-	<!ENTITY Iaz "518,242">
-	<!ENTITY INT "423,461">
-	<!ENTITY ION "440,391">
-	<!ENTITY Jut "283,51">
-	<!ENTITY Lan "314,73">
-	<!ENTITY LIG "268,292">
-	<!ENTITY Lon "110,100">
-	<!ENTITY Lug "126,179">
-	<!ENTITY Lut "194,167">
-	<!ENTITY Lyb "497,517">
-	<!ENTITY Mac-wc "467,345">
-	<!ENTITY Mac-ec "500,352">
-	<!ENTITY Mac "483,345">
-	<!ENTITY Mas "235,258">
-	<!ENTITY Mau "160,455">
-	<!ENTITY Max "135,65">
-	<!ENTITY Mil "600,398">
-	<!ENTITY Nar "189,277">
-	<!ENTITY Num "320,505">
-	<!ENTITY Oli "36,360">
-	<!ENTITY Ost "725,184">
-	<!ENTITY Ori "730,480">
-	<!ENTITY Pon "740,360">
-	<!ENTITY Qua "421,158">
-	<!ENTITY Rav "332,264">
-	<!ENTITY Reg "317,185">
-	<!ENTITY Rhe "401,362">
-	<!ENTITY Rip "343,100">
-	<!ENTITY Rom "349,311">
-	<!ENTITY Rot "155,150">
-	<!ENTITY Sag "149,327">
-	<!ENTITY Sam "385,316">
-	<!ENTITY SAX "141,125">
-	<!ENTITY Scy "567,289">
-	<!ENTITY Seq "253,199">
-	<!ENTITY Sil "415,90">
-	<!ENTITY Sue "375,150">
-	<!ENTITY Syr "365,396">
-	<!ENTITY Tar "75,305">
-	<!ENTITY Teu "287,113">
-	<!ENTITY Thr "540,314">
-	<!ENTITY Tus "326,290">
-	<!ENTITY TYR "330,360">
-	<!ENTITY Van "313,143">
-	<!ENTITY Ver "338,223">
-	<!ENTITY Vie "217,200">
-	<!ENTITY Vin "385,195">
-	<!ENTITY Vis "550,150">
-]>
--->
 <svg width="778px" height="538px" viewBox="0 0 780 540"
 	xmlns="http://www.w3.org/2000/svg" version="1.0"
 	xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMinYMin">
@@ -295,8 +201,8 @@
 		<jdipNS:REMOVE deltaRadius="2"/>
 		<jdipNS:DISBAND deltaRadius="2"/>
 		<jdipNS:WAIVE deltaRadius="0"/>
-		<jdipNS:HOLD deltaRadius="3" strokeCSSStyle="varwidthorder" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="4,6,8,10" shadowWidths="7,9,11,13"/>
-		<jdipNS:MOVE deltaRadius="3" strokeCSSStyle="varwidthorder" markerID="arrow" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="4,6,8,10" shadowWidths="7,9,11,13"/>
+		<jdipNS:HOLD deltaRadius="3" strokeCSSStyle="varwidthorder" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="4,6,8,10" shadowWidths="6,8,10,12"/>
+		<jdipNS:MOVE deltaRadius="3" strokeCSSStyle="varwidthorder" markerID="arrow" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="4,6,8,10" shadowWidths="6,8,10,12"/>
 		<jdipNS:RETREAT deltaRadius="5" strokeCSSStyle="defaultorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadoworder"/>
 		<jdipNS:SUPPORT deltaRadius="5" strokeCSSStyle="supportorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadowdash"/>
 		<jdipNS:CONVOY deltaRadius="5" strokeCSSStyle="convoyorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadowdash"/>
@@ -408,7 +314,6 @@
 		Feel free to use this template for whatever you want; 
 		but don't delete this copyright
 	-->
-	
 	<defs>
 		<style type="text/css">
 		<![CDATA[
@@ -456,8 +361,8 @@
 			.supportorder	{stroke-width:4;fill:none;stroke-dasharray:5,5;}
 			.convoyorder	{stroke-dasharray:15,5;stroke-width:4;fill:none;}
 			
-			.shadoworder	{stroke-width:7;fill:none;stroke:black;}
-			.shadowdash		{stroke-width:7;fill:none;stroke:black;opacity:0.45;}
+			.shadoworder	{stroke-width:6;fill:none;stroke:black;}
+			.shadowdash		{stroke-width:6;fill:none;stroke:black;opacity:0.45;}
 			
 			.varwidthorder  {fill:none;}
 			.varwidthshadow {fill:none;stroke:black;}
