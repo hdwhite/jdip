@@ -30,7 +30,14 @@ import dip.gui.*;
 import java.io.InvalidClassException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.BufferedReader;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.util.Date;
 import javax.swing.JFrame;
 import java.awt.Dimension;
 import java.awt.event.*;
@@ -83,6 +90,13 @@ public class ErrorDialog extends TextViewer
 	private static final String VERSION_MISMATCH_TITLE = "ErrorDlg.file.version.title";
 	private static final String VERSION_MISMATCH_BUTTON = "ErrorDlg.file.version.button";
 	
+	// bug submission parameters
+	private static final String SUBMIT_BUTTON = "ErrorDlg.submit.button";
+	private static final String SUBMIT_TITLE = "ErrorDlg.submit.text.title";
+	private static final String SUBMIT_SUCCESS = "ErrorDlg.submit.text.success";
+	private static final String SUBMIT_FAILED = "ErrorDlg.submit.text.failed";
+	private final static String ACTION_SUBMIT = "ACTION_SUBMIT";	
+	
 	// simple testing
 	/*
 	public static void main(String args[])
@@ -92,13 +106,10 @@ public class ErrorDialog extends TextViewer
 		
 		// display each dialog
 		displayFileIO(null, new FileNotFoundException("file_not_exist"), "TestFile.test");
-		displayVariantNotAvailable(null, "VariantNameHere", "PluginNameHere", 9.99f);
 		displayFileIO(null, ioe, "TestFile.test");
-		
 		displayFileIO(null, new InvalidClassException("bad version"), "TestFile.test");
 		displayNetIO(null, new UnknownHostException("Unknown host"), "127.0.0.1");
 		displayNetIO(null, new IOException("Some Exception Occured"), "http://127.0.0.1/whoknows.html");
-		
 		displayGeneral(null, ex);
 		displaySerious(null, ex);
 		displayFatal(null, ex);
@@ -131,10 +142,11 @@ public class ErrorDialog extends TextViewer
 		
 		ErrorDialog ed = getForcedExitDialog(parent,
 			Utils.getLocalString(SERIOUS_TITLE), Utils.format(text, args),
+			(String) args[2],
 			Utils.getLocalString(SERIOUS_BUTTON_QUIT),
 			Utils.getLocalString(SERIOUS_BUTTON_CONTINUE),
 			Utils.getScreenSize(0.4f),
-			true);
+			true, true);
 		ed.setVisible(true);
 	}// displaySerious()
 	
@@ -162,7 +174,9 @@ public class ErrorDialog extends TextViewer
 		String text = Utils.getText(Utils.getLocalString(FATAL_TEMPLATE));
 		ErrorDialog ed = ErrorDialog.getOneButtonDialog(parent, 
 			Utils.getLocalString(FATAL_TITLE), 
-			Utils.format(text, args), Utils.getLocalString(FATAL_BUTTON),
+			Utils.format(text, args), 
+			(String) args[2],
+			Utils.getLocalString(FATAL_BUTTON),
 			Utils.getScreenSize(0.4f), true, true);
 		ed.setVisible(true);
 		
@@ -206,7 +220,9 @@ public class ErrorDialog extends TextViewer
 		
 		ErrorDialog ed = getOneButtonDialog(parent, 
 			Utils.getLocalString(FILE_TITLE), Utils.format(text, args), 
-			Utils.getLocalString(FILE_BUTTON), Utils.getScreenSize(0.4f), true, true);
+			(String) args[2],
+			Utils.getLocalString(FILE_BUTTON), Utils.getScreenSize(0.4f), 
+			true, false);
 		
 		ed.setVisible(true);		
 	}// displayFileIO()
@@ -237,6 +253,7 @@ public class ErrorDialog extends TextViewer
 		Log.println("  stack trace:\n", args[2]);
 		
 		String text = null;
+		boolean submittable = false;
 		if(e instanceof UnknownHostException)
 		{
 			text = Utils.getText(Utils.getLocalString(NET_UNKNOWN_HOST_TEMPLATE));
@@ -244,12 +261,15 @@ public class ErrorDialog extends TextViewer
 		else
 		{
 			text = Utils.getText(Utils.getLocalString(NET_TEMPLATE));
+			submittable = true;
 		}
 		
 		
 		ErrorDialog ed = getOneButtonDialog(parent, 
 			Utils.getLocalString(NET_TITLE), Utils.format(text, args), 
-			Utils.getLocalString(NET_BUTTON), Utils.getScreenSize(0.4f), true, true);
+			(String) args[2],
+			Utils.getLocalString(NET_BUTTON), Utils.getScreenSize(0.4f), 
+			true, submittable);
 		ed.setVisible(true);		
 	}// displayNetIO()
 	
@@ -275,7 +295,9 @@ public class ErrorDialog extends TextViewer
 		String text = Utils.getText(Utils.getLocalString(GENERAL_TEMPLATE));
 		ErrorDialog ed = getOneButtonDialog(parent, 
 			Utils.getLocalString(GENERAL_TITLE), Utils.format(text, args), 
-			Utils.getLocalString(GENERAL_BUTTON), Utils.getScreenSize(0.4f), true, true);
+			(String) args[2],
+			Utils.getLocalString(GENERAL_BUTTON), Utils.getScreenSize(0.4f), 
+			true, true);
 		ed.setVisible(true);		
 	}// displayGeneral()
 	
@@ -294,7 +316,9 @@ public class ErrorDialog extends TextViewer
 		String text = Utils.getText(Utils.getLocalString(VERSION_MISMATCH_TEMPLATE));
 		ErrorDialog ed = getOneButtonDialog(parent, 
 			Utils.getLocalString(VERSION_MISMATCH_TITLE), Utils.format(text, args), 
-			Utils.getLocalString(VERSION_MISMATCH_BUTTON), Utils.getScreenSize(0.4f), true, false);
+			(String) args[2],
+			Utils.getLocalString(VERSION_MISMATCH_BUTTON), 
+			Utils.getScreenSize(0.4f), true, false);
 		ed.setVisible(true);
 		
 	}// displayVariantNotAvailable()
@@ -314,7 +338,9 @@ public class ErrorDialog extends TextViewer
 		String text = Utils.getText(Utils.getLocalString(NOVARIANT_TEMPLATE));
 		ErrorDialog ed = getOneButtonDialog(parent, 
 			Utils.getLocalString(NOVARIANT_TITLE), Utils.format(text, args), 
-			Utils.getLocalString(NOVARIANT_BUTTON), Utils.getScreenSize(0.4f), true, false);
+			(String) args[2],
+			Utils.getLocalString(NOVARIANT_BUTTON), Utils.getScreenSize(0.4f), 
+			true, false);
 		ed.setVisible(true);
 	}// displayVariantNotAvailable()
 	
@@ -330,25 +356,29 @@ public class ErrorDialog extends TextViewer
 		
 		try
 		{
-			sb.append("\nJava version: ");
+			sb.append("<br>\nJava version: ");
 			sb.append(System.getProperty("java.version", "?"));
-			sb.append("\nJava vendor: ");
+			sb.append("<br>\nJava vendor: ");
 			sb.append(System.getProperty("java.vendor", "?"));
-			sb.append("\nJava runtime version: ");
+			sb.append("<br>\nJava runtime version: ");
 			sb.append(System.getProperty("java.runtime.version", "?"));
-			sb.append("\nOS name: ");
+			sb.append("<br>\nOS name: ");
 			sb.append(System.getProperty("os.name", "?"));
-			sb.append("\nOS version: ");
+			sb.append("<br>\nOS version: ");
 			sb.append(System.getProperty("os.version", "?"));
-			sb.append("\nOS arch: ");
+			sb.append("<br>\nOS arch: ");
 			sb.append(System.getProperty("os.arch", "?"));
 		}
 		catch(Exception e)
 		{
-			sb.append("\n[Exception occured while getting a system property]");
+			sb.append("<br>\n[Exception occured while getting a system property]");
 		}
 		
-		sb.append('\n');
+		sb.append("<br>\n");
+		sb.append(t.getClass().getName());
+		sb.append("<br>\n");
+		sb.append(t.getMessage());
+		sb.append("<br>\n");
 		
 		appendBatikInfo(sb, t);
 		
@@ -390,18 +420,52 @@ public class ErrorDialog extends TextViewer
 		setTitle(title);
 	}// ErrorDialog()
 	
-	/** Create an ErrorDialog that is setup with a single button */
-	private static ErrorDialog getOneButtonDialog(JFrame parent, String title, 
-		String text, String buttonText, Dimension size, boolean resizable,
-		boolean copyText)
+	/** 
+	*	Create an ErrorDialog that is setup with a single button.
+	*	However, if submittable is set to true, a "submit" button is also present,
+	*	to send the bug report to the jDip bug report database.
+	*/
+	private static ErrorDialog getOneButtonDialog(final JFrame parent, String title, 
+		final String text, final String rawText, 
+		String buttonText, Dimension size, boolean resizable, boolean submittable)
 	{
-		ErrorDialog ed = new ErrorDialog(parent, title);
+		ErrorDialog ed = new ErrorDialog(parent, title)
+		{
+			protected void close(String actionCommand)
+			{
+				if(ACTION_SUBMIT.equals(actionCommand))
+				{
+					setButtonEnabled(ACTION_SUBMIT, false);
+					if(!submitBug(parent, rawText))
+					{
+						setButtonEnabled(ACTION_SUBMIT, true);
+					}
+				}
+				else
+				{
+					super.close(actionCommand);
+				}
+			}// close();
+		};
 		ed.setContentType("text/html");
 		ed.setEditable(false);
 		ed.setText(text);
 		ed.setHeaderVisible(false);
-		ed.addSingleButton( ed.makeButton(buttonText, ACTION_CLOSE, true) );
+		if(submittable)
+		{
+			ed.addTwoButtons( 
+				ed.makeButton(buttonText, ACTION_CLOSE, true),
+				ed.makeButton(Utils.getLocalString(SUBMIT_BUTTON),
+					ACTION_SUBMIT, true),
+				false, true);
+		}
+		else
+		{
+			ed.addSingleButton( ed.makeButton(buttonText, ACTION_CLOSE, true) );
+		}
 		ed.pack();
+		
+		
 		
 		if(size != null)
 		{
@@ -410,15 +474,6 @@ public class ErrorDialog extends TextViewer
 		
 		ed.setResizable(resizable);
 		Utils.centerInScreen(ed);
-		
-		JEditorPane editor = ed.getEditorPane();
-		if(copyText)
-		{
-			editor.selectAll();
-			editor.copy();
-		}
-		
-		editor.setCaretPosition(0);
 		return ed;
 	}// getOneButtonDialog()
 	
@@ -426,16 +481,26 @@ public class ErrorDialog extends TextViewer
 	/** 
 	*	Create an ErrorDialog that is setup with two buttons, 
 	*	the second of which exits the program.
+	*	However, if submittable is set to true, a "submit" button is also present,
+	*	to send the bug report to the jDip bug report database.
+	*	rawText is the error-message alone (no dialog text)
 	*/
-	private static ErrorDialog getForcedExitDialog(JFrame parent, String title, 
-		String text, String exitText, String continueText, 
-		Dimension size, boolean resizable)
+	private static ErrorDialog getForcedExitDialog(final JFrame parent, String title, 
+		final String text, final String rawText, String exitText, String continueText, 
+		Dimension size, boolean resizable, boolean submittable)
 	{
 		ErrorDialog ed = new ErrorDialog(parent, title)
 		{
 			protected void close(String actionCommand)
 			{
-				if(isOKorAccept(actionCommand))
+				if(ACTION_SUBMIT.equals(actionCommand))
+				{
+					if(submitBug(parent, rawText))
+					{
+						setButtonEnabled(ACTION_SUBMIT, false);
+					}
+				}
+				else if(isOKorAccept(actionCommand))
 				{
 					setVisible(false);
 					dispose();		// attempt to continue
@@ -452,11 +517,11 @@ public class ErrorDialog extends TextViewer
 		ed.setEditable(false);
 		ed.setText(text);
 		ed.setHeaderVisible(false);
-		ed.addTwoButtons( 
-			ed.makeButton(exitText, ACTION_CANCEL, true),
-			ed.makeButton(continueText, ACTION_OK, true),
-			false, true);
-			
+		
+		JButton bR = ed.makeButton(exitText, ACTION_CANCEL, true);
+		JButton bC = ed.makeButton(continueText, ACTION_OK, true);
+		JButton bL = ed.makeButton(Utils.getLocalString(SUBMIT_BUTTON), ACTION_SUBMIT, true);
+		ed.addThreeButtons(bL, bC, bR, bC, bR);
 		ed.pack();
 		
 		if(size != null)
@@ -466,11 +531,6 @@ public class ErrorDialog extends TextViewer
 		
 		ed.setResizable(resizable);
 		Utils.centerInScreen(ed);
-		
-		JEditorPane editor = ed.getEditorPane();
-		editor.selectAll();
-		editor.copy();
-		editor.setCaretPosition(0);
 		
 		return ed;
 	}// getForcedExitDialog()
@@ -532,5 +592,113 @@ public class ErrorDialog extends TextViewer
 		}
 	}// appendBatikInfo()
 	
+	
+	
+	/** 
+	*	GUI version of sendBugReport. Popup error message with result.
+	*	Does not enable or disable the submit button.
+	*/
+	private static boolean submitBug(JFrame parent, String text)
+	{
+		if(sendBugReport(text))
+		{
+			Utils.popupInfo(parent, Utils.getLocalString(SUBMIT_TITLE), 
+				 Utils.getLocalString(SUBMIT_SUCCESS));
+			return true;
+		}
+		else
+		{
+			Utils.popupError(parent, Utils.getLocalString(SUBMIT_TITLE), 
+				 Utils.getLocalString(SUBMIT_FAILED));
+			return false;
+		}
+	}// submitBug()
+	
+	/**
+	*	Send bug report to jDip website. Synchronous. Will not
+	*	throw further exceptions (unless a null String is passed).
+	*/
+	private static boolean sendBugReport(String text)
+	{
+		if(text == null)
+		{
+			throw new IllegalArgumentException();
+		}
+		
+		OutputStreamWriter wr = null;
+		BufferedReader rd = null;
+		
+		try
+		{
+			URL url = new URL("http://jdip.sourceforge.net/forms/data/bugFormProc.php");
+			
+			HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+			urlConn.setRequestMethod("POST");
+			urlConn.setDoInput(true);
+			urlConn.setDoOutput(true);
+			urlConn.setUseCaches(false);
+			urlConn.setRequestProperty("Content-Type","application/x-www-form-urlencoded"); 
+			urlConn.setRequestProperty("Accept-Charset", "*");
+			urlConn.setRequestProperty("User-Agent", "jDip");
+			
+			wr = new OutputStreamWriter(urlConn.getOutputStream());
+			final String header 	= "brHeader="+URLEncoder.encode(
+				"JDIP_REMOTE_BUG_REPORT", "UTF-8");
+			final String time 	= "&brTime="+URLEncoder.encode(
+				String.valueOf(new Date()), "UTF-8");
+			final String message 	= "&brText="+URLEncoder.encode(text, "UTF-8");
+			
+			wr.write(header);
+			wr.write(time);
+			wr.write(message);
+			
+			wr.flush();
+			wr.close();
+			
+			rd = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
+			String line;
+			while ((line = rd.readLine()) != null)
+			{
+				if(line.indexOf("Thanks.") != -1)
+				{
+					return true;
+				}
+			}
+			rd.close();
+		}
+		catch(Exception e)
+		{
+			Log.println("ERROR: could not send bug report.");
+			Log.println(e);
+		}
+		finally
+		{
+			try
+			{
+				if(wr != null)
+				{
+					wr.close();
+				}
+			}
+			catch(Exception e)
+			{
+				Log.println("ErrorDialog: ", e);
+			}
+			
+			try
+			{
+				if(rd != null)
+				{
+					rd.close();
+				}
+			}
+			catch(Exception e)
+			{
+				Log.println("ErrorDialog: ", e);
+			}
+		}
+		
+		return false;
+	}// sendBugReport()
 	
 }// class ErrorDialog

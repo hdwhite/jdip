@@ -307,6 +307,31 @@ public class HeaderDialog extends XDialog
 	}// makeButton()
 	
 	
+	/** 
+	*	Enable or Disable a button based upon actionCommand.
+	*	Button must have been added to the button panel.
+	*	ActionCommand CANNOT be null.
+	*/
+	public void setButtonEnabled(String actionCommand, boolean enabled)
+	{
+		if(actionCommand == null)
+		{
+			throw new IllegalArgumentException();
+		}
+		
+		Iterator iter = btnList.iterator();
+		while(iter.hasNext())
+		{
+			JButton b = (JButton) iter.next();
+			if( actionCommand.equals(b.getActionCommand()) )
+			{
+				b.setEnabled(enabled);
+				break;
+			}
+		}
+	}// setButtonEnabled()
+	
+	
 	/** Make a spacer of the desired width in pixels */
 	public static Component makeSpacer(int width)
 	{
@@ -356,6 +381,25 @@ public class HeaderDialog extends XDialog
 		setDefaultCloseButton((rightClose) ? rightMost : leftMost);
 	}// addTwoButtons()
 	
+	/**
+	*	Adds 3 buttons:<br>
+	*		Right	(right-aligned)<br>
+	*		Middle	(closer to Right button)<br>
+	*		Left	(left-aligned)<br>
+	*	Default and Default Close actions are also settable.
+	*/
+	public void addThreeButtons(JButton left, JButton center, JButton right,
+		JButton defaultButton, JButton closeButton)
+	{
+		addToButtonPanel(left);
+		addToButtonPanel( makeGlue() );
+		addToButtonPanel(makeSpacer(BTN_BAR_BETWEEN));
+		addToButtonPanel(center);
+		addToButtonPanel(makeSpacer(BTN_BAR_BETWEEN));
+		addToButtonPanel(right);
+		setDefaultButton(defaultButton);
+		setDefaultCloseButton(closeButton);
+	}// addThreeButtons()
 	
 	/** 
 	*	Creates a default border around the given component, 
