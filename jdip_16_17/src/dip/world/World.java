@@ -344,6 +344,62 @@ public class World implements Serializable
 	}// getPreviousTurnState()
 	
 	
+	/** Determine if there is a previous TurnState to this. */
+	public boolean hasPrevious(TurnState turnState)
+	{
+		if(turnState == null)
+		{
+			throw new IllegalArgumentException();
+		}
+		
+		final Phase current = turnState.getPhase();
+		Phase previous = null;
+		Iterator iter = turnStates.keySet().iterator();
+		while(iter.hasNext())
+		{
+			Phase phase = (Phase) iter.next();
+			if(phase.compareTo(current) != 0)
+			{
+				previous = phase;
+			}
+			else
+			{
+				break;
+			}
+		}
+		
+		return (previous != null);
+	}// hasPrevious()
+	
+	/** Determine if there is a next TurnState after this. */
+	public boolean hasNext(TurnState turnState)
+	{
+		if(turnState == null)
+		{
+			throw new IllegalArgumentException();
+		}
+		
+		final Phase current = turnState.getPhase();
+		Phase next = null;
+		Iterator iter = turnStates.keySet().iterator();
+		while(iter.hasNext())
+		{
+			Phase phase = (Phase) iter.next();
+			if(current.compareTo(phase) == 0)
+			{
+				if(iter.hasNext())
+				{
+					next = (Phase) iter.next();
+				}
+				
+				break;
+			}
+		}
+		
+		return(next != null);
+	}// hasNext()
+	
+	
 	/** If a TurnState with the given phase already exists, it is replaced. */
 	public void setTurnState(TurnState turnState)
 	{
