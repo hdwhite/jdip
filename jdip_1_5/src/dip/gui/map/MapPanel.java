@@ -79,6 +79,17 @@ import org.apache.batik.bridge.BridgeContext;
 import org.apache.batik.gvt.*;
 
 
+// TEST
+import org.apache.batik.util.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.sax.*;
+import javax.xml.transform.stream.*;
+
 /**
 *	The Main Map display component.
 *	<p>
@@ -273,6 +284,13 @@ public class MapPanel extends JPanel
 	{
 		super(new BorderLayout());
 		
+// TST
+System.out.println("new parsed-URL handler");
+		ParsedURL.registerHandler(new TESTParsedURLProtocolHandler());
+		ParsedURL.registerHandler(new XJarHandler());
+		
+		
+		
 		startTime = System.currentTimeMillis();
 		Log.printTimed(startTime, "MapPanel() constructor start.");
 		
@@ -322,6 +340,7 @@ public class MapPanel extends JPanel
 	/** Set the SVG Document from XML Document */ 
 	private void setDocument(Document xmlDoc, Variant variant)
 	{
+System.out.println(">>>>>> SET_DOCUMENT");		
 		// setup private loader-listeners
 		gvtRenderListener = new MP_GVTRenderListener();
 		documentListener = new MP_DocumentListener();       
@@ -330,7 +349,7 @@ public class MapPanel extends JPanel
 		svgCanvas.addGVTTreeRendererListener(gvtRenderListener);
 		svgCanvas.addSVGDocumentLoaderListener(documentListener);
 		svgCanvas.addGVTTreeBuilderListener(treeBuilderListener);
-		
+		           
 		// setup update listener
 		uml = new MP_UpdateManagerListener();
 		svgCanvas.addUpdateManagerListener(uml);
@@ -348,9 +367,11 @@ public class MapPanel extends JPanel
 		if(svgCanvas.getSVGDocument() instanceof SVGOMDocument)
 		{
 			final SVGOMDocument omd = (SVGOMDocument) svgCanvas.getSVGDocument();
+System.out.println("(pre) getURLObject(): "+omd.getURLObject());		
 			omd.setURLObject(VariantManager.getVariantPackageJarURL(variant));
+System.out.println("getURLObject(): "+omd.getURLObject());		
 		}
-		else
+		else              
 		{
 			// shouldn't happen.
 			Log.println("ERROR: MapPanel::setDocument(): object model replacement? SVGOMDocument not found. URI not set.");
@@ -574,8 +595,8 @@ public class MapPanel extends JPanel
 	{
 		try
 		{
-			svgCanvas.setSVGDocument(null);
 			svgCanvas.flushImageCache();
+			svgCanvas.dispose();
 			 
 			if(uml != null)
 			{
@@ -903,6 +924,8 @@ public class MapPanel extends JPanel
 			{
 				if(!isLoaded)
 				{
+System.out.println(" ** NOT LOADED :: TS CHANGED");					
+					
 					// set turnstate & position
 					turnState = ts;
 					position = turnState.getPosition();
@@ -1050,8 +1073,48 @@ public class MapPanel extends JPanel
 	*/
 	public void reloadMap()
 	{
-		svgCanvas.suspendProcessing();
+	//	svgCanvas.suspendProcessing();
+		System.out.println("reloadMap");
+		
+svgCanvas.removeSVGDocumentLoaderListener(new SVGDocumentLoaderAdapter()
+	{
+public void 	documentLoadingCancelled(SVGDocumentLoaderEvent e)
+{
+	System.out.println("docload: documentLoadingCancelled: "+e);
+}
+public void 	documentLoadingCompleted(SVGDocumentLoaderEvent e)
+{
+	System.out.println("docload: documentLoadingCompleted: "+e);
+}
+public void 	documentLoadingFailed(SVGDocumentLoaderEvent e)
+{
+	System.out.println("docload: documentLoadingFailed: "+e);
+}
+public void 	documentLoadingStarted(SVGDocumentLoaderEvent e) 	
+{
+	System.out.println("docload: documentLoadingStarted: "+e);
+}
+	});
+
+		
+		
+	// TEST	
+		System.out.println(svgCanvas.getSVGDocument());
 		svgCanvas.flushImageCache();
+		svgCanvas.setURI(null);
+		svgCanvas.setSVGDocument(null);
+	// END TST
+		
+	System.out.println(svgCanvas.getSVGDocument());
+	
+		if(svgCanvas.getSVGDocument() instanceof SVGOMDocument)
+		{
+			final SVGOMDocument omd = (SVGOMDocument) svgCanvas.getSVGDocument();
+System.out.println("XX (pre) getURLObject(): "+omd.getURLObject());		
+			omd.setURLObject(null);
+System.out.println("XX getURLObject(): "+omd.getURLObject());		
+		}
+		
 		
 		// cleanup this
 		if(mapRenderer != null)
@@ -1085,12 +1148,180 @@ public class MapPanel extends JPanel
 		
 		// reload the map
 		assert(turnState != null);
-		svgCanvas.resumeProcessing();
+//		svgCanvas.resumeProcessing();
 		isLoaded = false;
 		isReloading = true;	// this activates some additional code
 		clientFrame.fireTurnstateChanged(turnState);
 	}// reloadMap()
 	
+	
+	// for testing
+	class TESTParsedURLProtocolHandler extends AbstractParsedURLProtocolHandler
+	{
+		public TESTParsedURLProtocolHandler()
+		{
+			super("test");
+			System.out.println("TESTParsedURLProtocolHandler()");
+		}
+		
+		
+		public ParsedURLData parseURL(ParsedURL baseURL, String urlStr) {
+			
+			String theURL = "";
+			
+			if(baseURL != null)
+			{
+				theURL += baseURL;
+			}
+			
+			theURL += urlStr;
+			
+			return new TESTParsedURLData(theURL);
+		}
+
+		
+		public ParsedURLData parseURL(java.lang.String urlStr)
+		{
+			return parseURL(null, urlStr);
+/*			
+			System.out.println("TESTParsedURLProtocolHandler::parseURL()"); 
+			System.out.println("  urlStr: "+urlStr);
+			
+			if(urlStr.startsWith("test://"))
+			{
+			}
+			else
+			{
+				return null;
+			}
+*/		}
+	}
+	
+	class XJarHandler extends ParsedURLJarProtocolHandler
+	{
+		
+		public XJarHandler()
+		{
+			super();
+			System.out.println("XJarHandler()");
+		}
+		
+		
+		public ParsedURLData parseURL(ParsedURL baseURL, java.lang.String urlStr)
+		{
+	//		System.out.println("XJarHandler::parseURL()");
+	//		System.out.println("   baseURL: "+baseURL);
+	//		System.out.println("   urlStr: "+urlStr);
+			
+			ParsedURLData pud = super.parseURL(baseURL, urlStr);
+	//		System.out.println("   pud: "+pud);
+			
+			return pud;
+		}
+		
+		protected ParsedURLData constructParsedURLData(URL url) 
+		{
+			return new XParsedURLData(url);
+		}
+
+		
+		
+	}
+	
+	
+	class XParsedURLData extends ParsedURLData
+	{
+		
+		public XParsedURLData(URL url)
+		{
+			super(url);
+		}
+		
+		protected boolean sameFile(ParsedURLData other)
+		{
+	//		System.out.println("sameFile()");
+	//		System.out.println("  this: "+this);
+	//		System.out.println("  that: "+other);
+			boolean val = super.sameFile(other);
+	//		System.out.println("  match: "+val);
+			return val;
+		}
+	}
+	
+	
+	class TESTParsedURLData extends ParsedURLData
+	{
+		private final String theURL;
+		int count = 0;
+		
+		public TESTParsedURLData(String in)
+		{
+			super();
+			theURL = in;
+			System.out.println("TESTParsedURLData::TESTParsedURLData()");
+			System.out.println("   in: "+theURL);
+			
+			// remove leading '/' if possible
+		}
+		
+		
+		
+		protected URL buildURL() throws MalformedURLException 
+		{
+			throw new MalformedURLException();
+		}		
+		
+		
+		protected InputStream openStreamInternal(String userAgent,
+        		Iterator mimeTypes, Iterator encodingTypes) 
+		throws IOException
+		{
+			System.out.println("\n--TESTParsedURLData::openStreamInternal()"); 
+			/*
+			System.out.println("  MIME types:");
+			while(mimeTypes.hasNext())
+			{
+				System.out.println("      "+mimeTypes.next());
+			}
+			System.out.println("  encoding types:");
+			while(encodingTypes.hasNext())
+			{
+				System.out.println("      "+encodingTypes.next());
+			}
+			
+			System.out.println("  protocol: "+protocol);
+			System.out.println("  host: "+host);
+			System.out.println("  path: "+path);
+			System.out.println("  port: "+port);
+			*/
+			System.out.println("  theURL: "+theURL);
+			System.out.println("  count: "+count);
+			count++;
+			
+			// replace below with open-from-jar code
+			/*
+			public static java.net.URL getResource(java.net.URL packURL,
+                                       java.net.URI uri)
+									   
+			HOW:
+			
+			
+			jdip://variant-pack-
+			
+			
+			
+			*/
+			
+			
+			// if below is OK, our counts are '0'
+			return new ByteArrayInputStream(new byte[100]);
+		}
+	}
+	
+	
+	
+	
+
 	
 }// class MapPanel
 

@@ -24,6 +24,7 @@
 package dip.gui.dialog.prefs;
 
 import dip.gui.ClientFrame;
+import dip.gui.OrderDisplayPanel;
 import dip.gui.swing.GradientJLabel;
 import dip.order.OrderFormat;
 import dip.order.OrderFormatOptions;
@@ -209,6 +210,13 @@ public class DisplayPreferencePanel extends PreferencePanel
 		clientFrame.setOFO(orderFormat);
 		
 		try { prefs.flush(); } catch (BackingStoreException bse) {}
+		
+		// refresh OrderPanel
+		final OrderDisplayPanel odp = clientFrame.getOrderDisplayPanel();
+		if(odp != null)
+		{
+			odp.refresh();
+		}
 	}// apply()
 	
 	

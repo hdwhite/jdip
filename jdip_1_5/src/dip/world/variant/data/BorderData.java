@@ -39,37 +39,49 @@ public class BorderData
 	private String from = null;
 	private String orderTypes = null;
 	private String baseMoveModifier = null;
-	private String prohibited = null;
-	
-	/** Gets the Border ID */
-	public void setID(String value)						{ id = value; }
-	/** Gets the Border description */
-	public void setDescription(String value)			{ description = value; }
-	/** Gets the Border unit types  */
-	public void setUnitTypes(String value)				{ unitTypes = value; }
-	/** Gets the Border From locations */
-	public void setFrom(String value)					{ from = value; }
-	/** Gets the Border Order types  */
-	public void setOrderTypes(String value)				{ orderTypes = value; }
-	/** Gets the Border  Support modifier */
-	public void setBaseMoveModifier(String value)		{ baseMoveModifier = value; }
-	/** Gets the Border prohibitions */
-	public void setProhibited(String value)				{ prohibited = value; }
+	private String year = null;
+	private String phase = null;
+	private String season = null;
 	
 	/** Sets the Border ID */
-	public String getID()						{ return id; }
+	public void setID(String value)						{ id = value; }
 	/** Sets the Border description */
-	public String getDescription()				{ return description; }
-	/** Sets the Border unit types */
-	public String getUnitTypes()				{ return unitTypes; }
+	public void setDescription(String value)			{ description = value; }
+	/** Sets the Border unit types  */
+	public void setUnitTypes(String value)				{ unitTypes = value; }
 	/** Sets the Border From locations */
-	public String getFrom()						{ return from; }
-	/** Sets the Border Order types */
-	public String getOrderTypes()				{ return orderTypes; }
-	/** Sets the Border Support modifier */
-	public String getBaseMoveModifier()			{ return baseMoveModifier; }
-	/** Sets the Border prohibitions */
-	public String getProhibited()				{ return prohibited; }
+	public void setFrom(String value)					{ from = value; }
+	/** Sets the Border Order types  */
+	public void setOrderTypes(String value)				{ orderTypes = value; }
+	/** Sets the Border  Support modifier */
+	public void setBaseMoveModifier(String value)		{ baseMoveModifier = value; }
+	/** Sets the Border Year*/
+	public void setYear(String value)					{ year = value; }
+	/** Sets the Border Phase */
+	public void setPhase(String value)					{ phase = value; }
+	/** Sets the Border Season */
+	public void setSeason(String value)					{ season = value; }
 	
+	/** Gets the Border ID */
+	public String getID()						{ return id; }
+	/** Gets the Border description */
+	public String getDescription()				{ return description; }
+	/** Gets the Border unit types */
+	public String getUnitTypes()				{ return unitTypes; }
+	/** Gets the Border From locations */
+	public String getFrom()						{ return from; }
+	/** Gets the Border Order types */
+	public String getOrderTypes()				{ return orderTypes; }
+	/** Gets the Border Support modifier */
+	public String getBaseMoveModifier()			{ return baseMoveModifier; }
+	/** Gets the Border Year*/
+	public String getYear()						{ return year; } 
+	/** Gets the Border Phase */
+	public String getPhase()					{ return phase; }
+	/** Gets the Border Season */
+	public String getSeason()					{ return season; }
+	
+
+
 	
 }// class BorderData

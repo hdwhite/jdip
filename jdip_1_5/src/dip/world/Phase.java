@@ -148,8 +148,8 @@ public class Phase implements java.io.Serializable, Comparable
 	{
 		Phase phase = (Phase) obj;
 		if( yearType.equals(phase.yearType)
-			&& seasonType == phase.seasonType
-			&& phaseType == phase.phaseType )
+			&& seasonType.equals(phase.seasonType)
+			&& phaseType.equals(phase.phaseType) )
 		{
 			return true;
 		}
@@ -466,10 +466,15 @@ public class Phase implements java.io.Serializable, Comparable
 		/** Returns <code>true</code> if SeasonType objects are equivalent */
 		public boolean equals(Object obj)
 		{
+			if(obj == this)
+			{
+				return true;
+			}
 			if(obj instanceof SeasonType)
 			{
 				return ( this.position == ((SeasonType)obj).position );
 			}
+			
 			return false;
 		}// equals()
 		
@@ -692,9 +697,13 @@ public class Phase implements java.io.Serializable, Comparable
 		/** Returns <code>true</code> if PhaseType objects are equivalent */
 		public boolean equals(Object obj)
 		{
-			if(obj instanceof PhaseType)
+			if(obj == this)
 			{
-				return constName.equals( ((PhaseType)obj).constName );
+				return true;
+			}
+			else if(obj instanceof PhaseType)
+			{
+				return ( this.position == ((PhaseType)obj).position );
 			}
 			return false;
 		}// equals()
@@ -910,8 +919,7 @@ public class Phase implements java.io.Serializable, Comparable
 			{
 				return true;
 			}
-			
-			if(obj instanceof YearType)
+			else if(obj instanceof YearType)
 			{
 				return (year == ((YearType) obj).year);
 			}

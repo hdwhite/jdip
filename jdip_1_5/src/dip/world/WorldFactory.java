@@ -192,9 +192,10 @@ public class WorldFactory
 				BorderData bd = borderDataArray[i];
 				Location fromLocs[] = makeBorderLocations(bd.getFrom(), provNameMap);
 				
-				Border border = new Border( bd.getID(), bd.getDescription(), bd.getUnitTypes(),
-								fromLocs, bd.getOrderTypes(), bd.getBaseMoveModifier(), 
-								bd.getProhibited() );
+				Border border = new Border( bd.getID(), bd.getDescription(), 
+						bd.getUnitTypes(), fromLocs, bd.getOrderTypes(),
+						bd.getBaseMoveModifier(), bd.getSeason(), 
+						bd.getPhase(),bd.getYear() );
 								
 				borderMap.put(bd.getID(), border);
 			}
@@ -445,6 +446,9 @@ public class WorldFactory
 	*	Exception.
 	*	<p>
 	*	Input is a space and/or comma-seperated list.
+	*	<p>
+	*	This will return null if there are no border locations, instead of
+	*	a zero-length array.
 	*/
 	private Location[] makeBorderLocations(String in, HashMap provNameMap)
 	throws InvalidWorldException
@@ -466,7 +470,14 @@ public class WorldFactory
 			al.add(new Location(province, coast));
 		}
 		
-		return (Location[]) al.toArray(new Location[al.size()]);
+		if(al.isEmpty())
+		{
+			return null;
+		}
+		else
+		{
+			return (Location[]) al.toArray(new Location[al.size()]);
+		}
 	}// makeBorderLocation()
 	
 	

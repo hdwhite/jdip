@@ -675,7 +675,11 @@ public class OrderDisplayPanel extends JPanel
 		orderListModel.revalidateAllOrders();
 	}// revalidateAllOrders()
 	
-	
+	/** Refresh / revalidate the display */
+	public void refresh()
+	{
+		orderList.repaint();
+	}// refresh()
 	
 	/**
 	*	Overriden to return the preferred size. This ensures that
@@ -1289,6 +1293,12 @@ public class OrderDisplayPanel extends JPanel
 			
 			return component;
 		}// getListCellRendererComponent()
+		
+		/** Overridden for performance */
+		public void invalidate() {}
+		
+		/** Overriden for performance */
+		public void repaint() {}
 		
 	}// inner class OrderListRenderer
 	

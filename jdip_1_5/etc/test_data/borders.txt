@@ -1,0 +1,192 @@
+#############################################################
+#
+#	borders.txt
+#
+#	These are some (but not comprehensive) tests of the
+# 	Borders object. These do not test the base move modifier;
+#	see Loeb9 for that. Explicit tests in DATC section 8 for
+# 	"ice" borders are similar to these.
+#
+#############################################################
+
+#############################################################
+#	
+# Set the Variant for all cases.
+#
+#############################################################
+VARIANT_ALL TEST_Borders
+
+CASE Borders.1 Season border test #1
+PRESTATE_SETPHASE Spring 1901, Movement
+PRESTATE
+	England: A gas
+ORDERS
+	England: A gas-spa
+POSTSTATE
+	England: A gas
+END
+
+CASE Borders.2 Season border test #2
+PRESTATE_SETPHASE Fall 1901, Movement
+PRESTATE
+	England: A gas
+ORDERS
+	England: A gas-spa
+POSTSTATE
+	England: A spa
+END
+
+
+CASE Borders.3 Phase border test #1
+PRESTATE_SETPHASE Spring 1901, Movement
+PRESTATE
+	England: A mar
+ORDERS
+	England: A mar-pie
+POSTSTATE
+	England: A mar
+END
+
+CASE Borders.4 Phase border test #2
+PRESTATE_SETPHASE Spring 1901, Retreat
+PRESTATE
+	England: A mar
+PRESTATE_DISLODGED
+	France: A mar
+ORDERS
+	England: A mar H
+	France: A mar-pie
+POSTSTATE
+	England: A mar
+	France:  A pie
+END
+
+
+
+CASE Borders.5 Unit border test #1
+PRESTATE_SETPHASE Spring 1901, Movement
+PRESTATE
+	England: A bel
+	England: F bre
+ORDERS
+	England: A bel-pic
+	England: F bre H
+POSTSTATE
+	England: A pic
+	England: F bre
+END
+
+CASE Borders.6 Unit border test #2
+PRESTATE_SETPHASE Spring 1901, Movement
+PRESTATE
+	England: A bel
+	England: F bre
+ORDERS
+	England: A bel H
+	England: F bre-pic
+POSTSTATE
+	England: A bel
+	England: F bre
+END
+
+
+CASE Borders.8 Order border test
+PRESTATE_SETPHASE Spring 1901, Movement
+PRESTATE
+	England: A ber
+	England: A ruhr
+	France: A kiel
+ORDERS
+	England: A ber-kiel			# should fail
+	England: A ruhr S ber H		# OK
+	France: A kiel H
+POSTSTATE
+	England: A ber
+	England: A ruhr
+	France: A kiel
+END
+
+CASE Borders.9 Even/Odd: even year
+PRESTATE_SETPHASE Spring 1900, Movement
+PRESTATE
+	England: A ukr
+	England: A ser
+ORDERS
+	England: A ukr-rum
+	England: A ser-bul
+POSTSTATE
+	England: A rum
+	England: A ser	# fail; even years prohibited
+END
+
+
+CASE Borders.10 Even/Odd: odd year
+PRESTATE_SETPHASE Spring 1901, Movement
+PRESTATE
+	England: A ukr
+	England: A ser
+ORDERS
+	England: A ukr-rum
+	England: A ser-bul
+POSTSTATE
+	England: A ukr	# fail; odd years prohibited
+	England: A bul	
+END
+
+
+CASE Borders.11 Year of 1914
+PRESTATE_SETPHASE Spring 1914, Movement
+PRESTATE
+	England: A mun
+	England: A boh
+	England: A gal
+ORDERS
+	England: A mun-tyr
+	England: A boh-vie
+	England: A gal-bud
+POSTSTATE
+	England: A mun
+	England: A boh
+	England: A gal
+END
+
+
+CASE Borders.12 Year of 1000
+PRESTATE_SETPHASE Spring 1000, Movement
+PRESTATE
+	England: A mun
+	England: A boh
+	England: A gal
+ORDERS
+	England: A mun-tyr
+	England: A boh-vie
+	England: A gal-bud
+POSTSTATE
+	England: A tyr
+	England: A vie
+	England: A gal
+END
+
+
+CASE Borders.13 Year of 3000
+PRESTATE_SETPHASE Spring 3000, Movement
+PRESTATE
+	England: A mun
+	England: A boh
+	England: A gal
+ORDERS
+	England: A mun-tyr
+	England: A boh-vie
+	England: A gal-bud
+POSTSTATE
+	England: A tyr
+	England: A boh
+	England: A bud
+END
+
+#
+#
+#	TODO
+#
+#		<BORDER id="multiple" description="multiple#1" year="even" phase="movement" /> SMYRNA
+

@@ -29,93 +29,124 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
+import java.util.Arrays;
 /**
 *
 *	A Border limits movement or support between 2 provinces.
 *	
 *	A Border object is immutable.
 *	
-*	
-*
-*	
+*	The DTD for a Border object is:<br>
+*	<code>
+*	&lt;!ATTLIST BORDER	<br>
+*				id ID #REQUIRED<br>
+*				description CDATA #REQUIRED<br>
+*				from CDATA #IMPLIED<br>
+*				unitTypes CDATA #IMPLIED<br>
+*				orderTypes CDATA #IMPLIED<br>
+*				year CDATA #IMPLIED<br>
+*				season CDATA #IMPLIED<br>
+*				phase CDATA #IMPLIED<br>
+*				baseMoveModifier CDATA #IMPLIED<br>
+*				&gt;
+*	</code>
+*	<p>
+*	Therefore, all fields are optional except for "id" and "description".
+*	If a field is not specified, it is assumed to apply to all types.
+*	Therefore: a border with a unitType of "Army" and year of "1900, 2000" would
+*	prohibit Armies from passing during the 1900 to 2000 years. However, if the
+*	unitType was omitted, no unit could pass (Army, Wing, or Fleet) from 1900 to
+*	2000 years.
+*	<p>
+*	All specified items (except baseMoveModifier, thus from/unitTypes/
+*	orderTypes/year/season/phase) must match for the Border to prohibit 
+*	crossing.
+*	<p>
+*	Borders apply to ANY crossing; this includes Movement as well as Support.
+*	<p>
+*	<b>Field Values:</b>
+*	<ul>
+*		<li><b>id: </b>The unique ID that identified this Border. These
+*			IDs are used in subsequent PROVINCE definitions. Therefore,
+*			a Border can be used multiple times.</li>
+*		<li><b>description: </b>If the border prohibits movement, this
+*			text message is displayed.</li>
+*		<li><b>from: </b>The locations from which units are coming that this
+*			applies to. Optional. </li>
+*		<li><b>unitTypes: </b> The unit types to which this applies. 
+*			Optional. </li>
+*		<li><b>orderTypes: </b> The order types (e.g., dip.order.Move) to which
+*			this applies. Optional. </li>
+*		<li><b>year: </b> The years for which this applies. TWO year values 
+*			must be specified; the first is the minimum, the second is the maximum. 
+*			Alternatively, the phrase "odd" (for odd years) or "even" (for even
+*			years) may be used. Both minimum and maximum are inclusive. 
+*			Thus to specify a single year: "2000, 2000"; a range: "1900, 2000";
+*			even years: "even". Optional. </li>
+*		<li><b>season: </b> The seasons (e.g., "Fall", "Spring") to 
+*			which this applies. Optional. </li>
+*		<li><b>phase: </b>The phases (e.g., "Movement", "Retreat") to 
+*			to which this applies. Note that the Adjustment phase is not 
+*			allowed, as adjustments (adding/removing units) do not ocucr
+*			via borders. Optional. </li>
+*		<li><b>baseMoveModifier: </b> An optional modifier of Move strength. 
+*			This can be positive or negative. If not specified, it is assumed
+*			to be 0. If <b>from</b> is specified, this will only apply to 
+*			the specified locations. Optional. </li>
+*	</ul>
+
 */
 public class Border implements Serializable
 {
-	// constants
-	/** Constant indicating that transit is not limited during any particular PhaseType */
-	public static final Phase.PhaseType[] ANY_PHASE		= new Phase.PhaseType[0];
-	/** Constant indicating that transit is not limited during any particular Season */
-	public static final Phase.SeasonType[] ANY_SEASON	= new Phase.SeasonType[0];
-	/** Constant indicating that transit limitation applies from any Location */
-	public static final Location[] ANY_LOCATION			= new Location[0];
-	/** Constant indicating that transit limitation applies to any Order subclass */
-	public static final Class[] ANY_ORDER 				= new Class[0];
-	/** Constant indicating that transit limitation applies to any Unit.Type subclass */
-	public static final Unit.Type[] ANY_UNIT 			= new Unit.Type[0];
-	
-	/** Constant indicating year less-than */
-	private static final int YEAR_TYPE_BEFORE	= -1;
-	/** Constant indicating year greater-than */
-	private static final int YEAR_TYPE_AFTER	= 1;
-	/** Constant indicating year exactly */
-	private static final int YEAR_TYPE_EXACT	= 0;
-	/** Constant indicating year exactly */
-	private static final int YEAR_TYPE_UNUSED	= -666;
+	/** Constant indicating year was omitted */
+	private static final int YEAR_NOT_SPECIFIED	= 0;
+	/** Constant indicating year is ranged */
+	private static final int YEAR_SPECIFIED	= 1;
+	/** Constant indicating that the transit allowed only during odd years */
+	private static final int YEAR_ODD		= 2;
+	/** Constant indicating that the transit allowed only during even years */
+	private static final int YEAR_EVEN		= 3;
 	
 	
-	/** Constant indicating that the misc field is not used */
-	private static final int MISC_NOT_USED	= -1;
-	/** Constant indicating that the transit is always denied */
-	private static final int MISC_ALWAYS		= 0;
-	/** Constant indicating that the transit is denied during odd years */
-	private static final int MISC_ODD			= 1;
-	/** Constant indicating that the transit is denied during even years */
-	private static final int MISC_EVEN		= 2;
-	
-	// Private constants for token parsing
-	// SeasonType/PhaseType parsers 
-	private static final String TOK_MISC_ODD	= "odd";
-	private static final String TOK_MISC_EVEN	= "even";
-	private static final String TOK_MISC_ALWAYS	= "always";
-	// all year type tokes MUST have the same length
-	private static final String TOK_YEAR_EQ 	= "eq";
-	private static final String TOK_YEAR_GT 	= "gt";
-	private static final String TOK_YEAR_LT 	= "lt";
+	private static final String TOK_YEAR_ODD	= "odd";
+	private static final String TOK_YEAR_EVEN	= "even";
 	
 	
 	// instance fields
-	//
 	private final Location[]			from;		// location(s) from which this transit limit applies; 
-													// if zero-length, applies to all 'from' locations.
+													// if null, applies to all 'from' locations.
 													// may specify coasts; if coast not defined, any coast used
 													
-	private final Phase.SeasonType[]	seasons;	// [0] length if not used
-	private final Phase.PhaseType[]		phases;		// [0] length if not used
-	private final int 					yearType;	// [< = or > : -1,0,+1]
-	private final int					year;		// negative if not used
-	private final int					misc;		// odd/even/always
-	private final Unit.Type[] 			unitTypes;	// unit type to which this limitation applies
+	private final Phase.SeasonType[]	seasons;	// if null, applies to all seasons
+	private final Phase.PhaseType[]		phases;		// if null, applies to all phases
+	private final Unit.Type[] 			unitTypes;	// if null, applies to all unit types
 	private final String 				description; // description
-	private final Class[]				orderClasses;	// disallowed for these order types
+	private final Class[]				orderClasses;	// if null, applies to all order types
+	private int yearMin = 0;
+	private int yearMax = 0;
+	private int yearModifier = YEAR_NOT_SPECIFIED;	// if not specified, this is the result
+	
+	// not determinants in canTransit()
 	private final int 					baseMoveModifier;	// support modifier (defaults to 0)
 	private final String 				id;			// identifying name
-	
 	
 	/**
 	*	Constructor. The String arguments are parsed; if they are not valid,
 	*	an InvalidBorderException will be thrown. It is not recommended that 
 	*	null arguments are given. Instead, use empty strings or public constants
 	*	where appropriate.
+	*	<p>
+	*	The from Locations may be null, if that field is empty.
 	*
 	*	@throws InvalidBorderException		if any arguments are invalid.
 	*	@throws IllegalArgumentException	if id, description, or prohibited is null
 	*/
 	public Border(String id, String description, String units, Location[] from, 
-					String orders, String baseMoveModifier, String prohibited)
+					String orders, String baseMoveModifier, String season, String phase, String year)
 	throws InvalidBorderException
 	{
-		if(id == null || description == null || prohibited == null)
+		if(id == null || description == null || units == null || orders == null
+			|| season == null || phase == null || year == null)
 		{
 			throw new IllegalArgumentException();
 		}
@@ -132,208 +163,220 @@ public class Border implements Serializable
 		// e.g.: ARMY; must be a declared unit constant in dip.world.Unit 
 		unitTypes = parseUnitTypes(units);
 		
-		// parse year / type
-		// (find first index of <,=,>; if not found, ignored)
+		this.seasons = parseProhibitedSeasons(season);
+		this.phases = parseProhibitedPhases(phase);
+		parseYear(year);
 		
-		// parse seasons, phases, and misc
-		prohibited = prohibited.toLowerCase();
 		
-		this.seasons = parseProhibitedSeasons(prohibited);
-		this.phases = parseProhibitedPhases(prohibited);
-		this.misc = parseMisc(prohibited);
-		this.yearType = parseYearType(prohibited);
-		this.year = parseYear(prohibited);
 		this.baseMoveModifier = parseBaseMoveModifier(baseMoveModifier);
 		
 		// fields we don't need to parse
-		this.from = (from == null) ? ANY_LOCATION : from;
+		this.from = from;
 		this.description = description;
+		
+		/*
+		System.out.println("BORDER created:");
+		System.out.println("    ID: "+id);
+		System.out.println("    from: "+toList(from));
+		System.out.println("    seasons: "+toList(seasons));
+		System.out.println("    phases:  "+toList(phases));
+		System.out.println("    unitTypes: "+toList(unitTypes));
+		System.out.println("    orderClasses: "+toList(orderClasses));
+		System.out.println("    yearMin: "+yearMin);
+		System.out.println("    yearMax: "+yearMax);
+		System.out.println("    yearModifier: "+yearModifier);
+		System.out.println("    bmm: "+baseMoveModifier);
+		*/
 	}// Border()
 	
 	
+	// TEMP
+	private static String toList(Object[] obj)
+	{
+		if(obj != null)
+		{
+			return Arrays.asList(obj).toString();
+		}
+		
+		return "null";
+	}
+	
 	/** Parses the prohibited SeasonTypes (uses Phase.SeasonTypes.parse()) */
 	private Phase.SeasonType[] parseProhibitedSeasons(String in)
+	throws InvalidBorderException
 	{
-		StringTokenizer st = new StringTokenizer(in, ",");
+		StringTokenizer st = new StringTokenizer(in, ", ");
 		ArrayList list = new ArrayList();
 		while(st.hasMoreTokens())
 		{
 			String tok = st.nextToken().trim();
 			Phase.SeasonType season = Phase.SeasonType.parse(tok);
-			if(season != null)
+			if(season == null)
 			{
-				list.add(season);
+				throw new InvalidBorderException("Border "+id+": season \""+tok+"\" is not recognized."); 
 			}
+			list.add(season);
 		}
 		
-		return (Phase.SeasonType[]) list.toArray(new Phase.SeasonType[list.size()]);
+		if(list.isEmpty())
+		{
+			return null;
+		}
+		else
+		{
+			return (Phase.SeasonType[]) list.toArray(new Phase.SeasonType[list.size()]);
+		}
 	}// parseProhibitedSeasons()
 	
 	/** Parses the prohibited PhaseTypes (uses Phase.PhaseType.parse()) */
 	private Phase.PhaseType[] parseProhibitedPhases(String in)
+	throws InvalidBorderException
 	{
-		StringTokenizer st = new StringTokenizer(in, ",");
+		StringTokenizer st = new StringTokenizer(in, ", ");
 		ArrayList list = new ArrayList();
 		while(st.hasMoreTokens())
 		{
 			String tok = st.nextToken().trim();
 			Phase.PhaseType phase = Phase.PhaseType.parse(tok);
-			if(phase != null)
+			if(phase == null || Phase.PhaseType.ADJUSTMENT.equals(phase))
 			{
-				list.add(phase);
+				throw new InvalidBorderException("Border "+id+": phase \""+tok+"\" is not allowed or recognized."); 
 			}
+			
+			list.add(phase);
 		}
 		
-		return (Phase.PhaseType[]) list.toArray(new Phase.PhaseType[list.size()]);
+		if(list.isEmpty())
+		{
+			return null;
+		}
+		else
+		{
+			return (Phase.PhaseType[]) list.toArray(new Phase.PhaseType[list.size()]);
+		}
 	}// parseProhibitedPhases()
 	
-	/** 
-	*	Parses the miscellaneous attributes (e.g., always, odd, even, etc.) 
-	*	Note that no specified behavior should exist if more than one of odd/even/etc
-	*	are specified; they are to be mutually exclusive.
-	*/
-	private int parseMisc(String in)
-	{
-		if(in.indexOf(TOK_MISC_ODD) >= 0)
-		{
-			return MISC_ODD;
-		}
-		else if(in.indexOf(TOK_MISC_EVEN) >= 0)
-		{
-			return MISC_EVEN;
-		}
-		else if(in.indexOf(TOK_MISC_ALWAYS) >= 0)
-		{
-			return MISC_ALWAYS;
-		}
-		
-		return MISC_NOT_USED;
-	}// parseMisc()
 	
-	/** Parses the year value (integer) */
-	private int parseYear(String in)
+	
+	/** 
+	*	Parses the year value (integer) 
+	*	Expecting:
+	*		####, ####	(min/max)
+	*		odd
+	*		even
+	*/
+	private void parseYear(final String in)
 	throws InvalidBorderException
 	{
-		final int idx = getYearIndex(in);
-		if(idx == -1)
+		if(in == null)
 		{
-			return -1;
+			throw new IllegalArgumentException();
 		}
 		
-		// get all digits up until first non-digit.
-		StringBuffer sb = new StringBuffer(16);
-		int pos = idx+2;
-		boolean isDigit = true;
-		while(pos < in.length() && isDigit)
+		yearMin = Integer.MIN_VALUE;
+		yearMax = Integer.MAX_VALUE;
+		yearModifier = YEAR_SPECIFIED;
+		
+		// empty case
+		final String text = in.trim();
+		if("".equals(text))
 		{
-			final char c = in.charAt(pos);
-			isDigit = Character.isDigit(c);
-			if(isDigit)
+			yearModifier = YEAR_NOT_SPECIFIED;
+		}
+		else
+		{
+			StringTokenizer st = new StringTokenizer(in, ", \t");
+			String value1 = null;
+			String value2 = null;
+			
+			if(st.hasMoreTokens())
 			{
-				sb.append(c);
+				value1 = st.nextToken();
+			}
+			
+			if(st.hasMoreTokens())
+			{
+				value2 = st.nextToken();
+			}
+			
+			if(st.hasMoreTokens() || value1 == null)
+			{
+				throw new InvalidBorderException(
+					Utils.getLocalString("Border.error.badyear", 
+					id, "Too few / too many year tokens."));
+			}
+			
+			if(TOK_YEAR_ODD.equalsIgnoreCase(value1))
+			{
+				yearModifier = YEAR_ODD;
+				if(value2 != null)
+				{
+					throw new InvalidBorderException(
+						Utils.getLocalString("Border.error.badyear", 
+						id, "Cannot specify even/odd + year"));
+				}
+			}
+			else if(TOK_YEAR_EVEN.equalsIgnoreCase(value1))
+			{
+				yearModifier = YEAR_EVEN;
+				if(value2 != null)
+				{
+					throw new InvalidBorderException(
+						Utils.getLocalString("Border.error.badyear", 
+						id, "Cannot specify even/odd + year"));
+				}
+			}
+			else
+			{
+				try
+				{
+					yearMin = Integer.parseInt(value1);
+					yearMax = Integer.parseInt(value2);
+					
+					if(yearMin > yearMax)
+					{
+						throw new NumberFormatException();
+					}
+				}
+				catch(NumberFormatException e)
+				{
+					throw new InvalidBorderException(
+						Utils.getLocalString("Border.error.badyear", 
+						id, "Minimum and Maximum year values not specified or illegal."));
+				}
 			}
 		}
 		
-		// test digit string
-		try
-		{
-			return Integer.parseInt(sb.toString());
-		}
-		catch(NumberFormatException e)
-		{
-			throw new InvalidBorderException(Utils.getLocalString("Border.error.badyear", id, e.getMessage()));
-		}
+		return;
 	}// parseYear()
 	
-	/** Parses the year type (gt,lt,eq) */
-	private int parseYearType(String in)
-	throws InvalidBorderException
-	{
-		final int idx = getYearIndex(in);
-		if(idx == -1)
-		{
-			return YEAR_TYPE_UNUSED;
-		}
-		
-		if(in.regionMatches(0, TOK_YEAR_LT, 0, 2))
-		{
-			return YEAR_TYPE_BEFORE;
-		}
-		else if(in.regionMatches(0, TOK_YEAR_GT, 0, 2))
-		{
-			return YEAR_TYPE_AFTER;
-		}
-		else if(in.regionMatches(0, TOK_YEAR_EQ, 0, 2))
-		{
-			return YEAR_TYPE_EXACT;
-		}
-		
-		throw new IllegalStateException("Internal Error");
-	}// parseYearType()
-	
-	
-	/** Gets the position of a string starting with -,+,or = */
-	private int getYearIndex(String in)
-	{
-		int idx = in.indexOf(TOK_YEAR_EQ);
-		
-		if(idx == -1)
-		{
-			idx = in.indexOf(TOK_YEAR_GT);
-		}
-		
-		if(idx == -1)
-		{
-			idx = in.indexOf(TOK_YEAR_LT);
-		}
-		
-		if(idx == -1)
-		{
-			return -1;
-		}
-		
-		return idx;
-	}// getYearIndex()
 	
 	
 	/** Parses the unit types */
 	private Unit.Type[] parseUnitTypes(String in)
 	throws InvalidBorderException
 	{
-		Class superClass = null;
-		
-		try
-		{
-			superClass = Class.forName("dip.world.Unit$Type");	// Type is a nested class in Unit
-		}
-		catch(ClassNotFoundException e)
-		{
-			throw new InvalidBorderException(Utils.getLocalString("Border.error.internal", "parseUnitTypes()", e.getMessage()));
-		}
-		
-		
 		ArrayList list = new ArrayList(10);
 		StringTokenizer st = new StringTokenizer(in,", ");
 		while(st.hasMoreTokens())
 		{
 			String tok = st.nextToken();
-			try
-			{
-				Field field = superClass.getField(tok);
-				list.add( (Unit.Type) field.get(null) );
-			}
-			catch(Exception e)
+			final Unit.Type ut = Unit.Type.parse(tok);
+			if(ut == null)
 			{
 				throw new InvalidBorderException(Utils.getLocalString("Border.error.badunit", id, tok));
 			}
+			list.add( ut );
 		}
 		
 		if(list.isEmpty())
 		{
-			return ANY_UNIT;
+			return null;
 		}
-		
-		return (Unit.Type[]) list.toArray(new Unit.Type[list.size()]);
+		else
+		{
+			return (Unit.Type[]) list.toArray(new Unit.Type[list.size()]);
+		}
 	}// parseUnitTypes()
 	
 	
@@ -341,11 +384,11 @@ public class Border implements Serializable
 	private Class[] parseOrders(String in)
 	throws InvalidBorderException
 	{
-		Class[] classes = parseClasses2Objs(in, "dip.order.Order");
+		final Class[] classes = parseClasses2Objs(in, "dip.order.Order");
 		
 		if(classes.length == 0)
 		{
-			return ANY_ORDER;
+			return null;
 		}
 		
 		return classes;
@@ -436,82 +479,114 @@ public class Border implements Serializable
 	/**
 	*	Determines if a unit can transit from a location to this location.
 	*	<p>
+	*	All defined border attributes have to match to prohibit border transit.
+	*	<p>
 	*	Null arguments are not permitted.
 	*/
 	public boolean canTransit(Location fromLoc, Unit.Type unit, Phase phase, Class orderClass)
 	{
 		// check from
-		for(int i=0; i<from.length; i++)
+		int nResults = 0;
+		int failResults = 0;
+		
+		if(from != null)
 		{
-			if(from[i].equalsLoosely(fromLoc))
+			nResults++;
+			for(int i=0; i<from.length; i++)
 			{
-				return false;
+				if(from[i].equalsLoosely(fromLoc))
+				{
+					failResults++;
+					break;
+				}
 			}
 		}
 		
 		// check unit type
-		for(int i=0; i<unitTypes.length; i++)
+		if(unitTypes != null)
 		{
-			if(unitTypes[i] == unit)
+			nResults++;
+			for(int i=0; i<unitTypes.length; i++)
 			{
-				return false;
+				if(unitTypes[i].equals(unit))
+				{
+					failResults++;
+					break;
+				}
 			}
 		}
 		
 		// check order
-		for(int i=0; i<orderClasses.length; i++)
+		if(orderClasses != null)
 		{
-			if(orderClass == orderClasses[i])
+			nResults++;
+			for(int i=0; i<orderClasses.length; i++)
 			{
-				return false;
+				if(orderClass == orderClasses[i])
+				{
+					failResults++;
+					break;
+				}
 			}
 		}
 		
 		// check phase (season, phase, and year)
-		for(int i=0; i<seasons.length; i++)
+		if(seasons != null)
 		{
-			if(seasons[i] == phase.getSeasonType())
+			nResults++;
+			for(int i=0; i<seasons.length; i++)
 			{
-				return false;
+				if(phase.getSeasonType().equals(seasons[i]))
+				{
+					failResults++;
+					break;
+				}
 			}
 		}
 		
-		for(int i=0; i<phases.length; i++)
+		if(phases != null)
 		{
-			if(phases[i] == phase.getPhaseType())
+			nResults++;
+			for(int i=0; i<phases.length; i++)
 			{
-				return false;
+				if(phase.getPhaseType().equals(phases[i]))
+				{
+					failResults++;
+					break;
+				}
 			}
 		}
 		
-		final int theYear = phase.getYear();
-		if(year > 0 && yearType != YEAR_TYPE_UNUSED)
+		// we always check the year
+		if(yearModifier != YEAR_NOT_SPECIFIED)
 		{
-			if( (yearType == YEAR_TYPE_BEFORE && theYear < year)
-				|| (yearType == YEAR_TYPE_AFTER && theYear > year)
-				|| (yearType == YEAR_TYPE_EXACT && theYear == year) )
-			{	
-				return false;
+			nResults++;
+			final int theYear = phase.getYear();
+			if(yearModifier == YEAR_ODD)
+			{
+				failResults += ((theYear & 1) == 1) ? 1 : 0;
+			}
+			else if(yearModifier == YEAR_EVEN)
+			{
+				failResults += ((theYear & 1) == 1) ? 0 : 1;
+			}         
+			else
+			{
+				failResults += ((yearMin <= theYear) && (theYear <= yearMax)) ? 1 : 0;
 			}
 		}
 		
-		// NOTE: n & 1 == 0 if n is even
-		if(	(misc == MISC_ALWAYS)
-			|| (misc == MISC_ODD && ((year & 1) == 0))
-			|| (misc == MISC_EVEN && ((year & 1) == 1)) )
-		{	
-			return false;
-		}	
-		
-		// we pass!
-		return true;
+		// only return 'false' if EVERYTHING has failed, or, 
+		// nothing was tested
+		assert (failResults <= nResults);
+		return (failResults < nResults || nResults == 0);
 	}// canTransit()
 	
 	
 	/** Gets the base move modifier. Requires a non-null from location. */
 	public int getBaseMoveModifier(Location moveFrom)
 	{
-		if(from.length == 0)
+		if(from == null)
 		{
 			// if no locations defined, modifier is good for all locations.
 			return baseMoveModifier;

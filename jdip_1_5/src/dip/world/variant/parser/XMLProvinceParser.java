@@ -65,8 +65,11 @@ public class XMLProvinceParser implements ProvinceParser
 	public static final String ATT_FROM	= "from";
 	public static final String ATT_ORDER_TYPES	= "orderTypes";
 	public static final String ATT_BASE_MOVE_MODIFIER	= "baseMoveModifier";
-	public static final String ATT_PROHIBITED	= "prohibited";
 	public static final String ATT_BORDERS	= "borders";
+	public static final String ATT_YEAR = "year";
+	public static final String ATT_SEASON = "season";
+	public static final String ATT_PHASE = "phase";
+	
 	
 	// instance variables
 	private Document doc = null;
@@ -141,7 +144,9 @@ public class XMLProvinceParser implements ProvinceParser
 			bd.setFrom( border.getAttribute(ATT_FROM) );
 			bd.setOrderTypes( border.getAttribute(ATT_ORDER_TYPES) );
 			bd.setBaseMoveModifier( border.getAttribute(ATT_BASE_MOVE_MODIFIER) );
-			bd.setProhibited( border.getAttribute(ATT_PROHIBITED) );
+			bd.setYear( border.getAttribute(ATT_YEAR) );
+			bd.setSeason( border.getAttribute(ATT_SEASON) );
+			bd.setPhase( border.getAttribute(ATT_PHASE) );
 			
 			borderList.add(bd);
 		}

@@ -272,7 +272,11 @@
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 	
 	</target>
-
+	
+	
+	
+	
+	
 	<!-- run PMD checker -->
 	<target name="pmd" depends="build" description="Check source code with PMD">
 		<!-- PMD task def -->
@@ -591,6 +595,21 @@
 	</target>
 	
 	
+	<target name="checki18n" depends="build" description="Checks localization files for missing keys">
+		<!-- convert etc.dir to absolute path -->
+		<property name="absolute.etc.dir" location="${etc.dir}"/>
+		<java classname="dip.misc.PropertyCheck" fork="yes" dir="${build.dir}">
+			<arg value="${resource.dir}/il8n/il8ntext_en.properties"/>
+			<arg value="${resource.dir}/il8n/il8ntext_de.properties"/>
+			<arg value="${resource.dir}/il8n/il8ntext_fr.properties"/>
+			<arg value="${resource.dir}/il8n/il8ntext_nl.properties"/>
+			<classpath  refid="run.class.path"/>
+			<jvmarg  value="-ea"/>
+		</java>
+	</target>
+	
+	
+	
 	<!-- adjudicator test -->
 	<!-- NOTE: this requires that "base.dir" is an absolute path -->
 	<target name="testadj" depends="build" description="Run adjudicator test cases">
@@ -656,6 +675,12 @@
 		<java classname="dip.misc.TestSuite" fork="yes" dir="${build.dir}">
 			<arg value="-statsonly"/>
 			<arg value="${absolute.etc.dir}/test_data/wing.txt"/>
+			<classpath  refid="run.class.path"/>
+			<jvmarg  value="-ea"/>
+		</java>
+		<java classname="dip.misc.TestSuite" fork="yes" dir="${build.dir}">
+			<arg value="-statsonly"/>
+			<arg value="${absolute.etc.dir}/test_data/borders.txt"/>
 			<classpath  refid="run.class.path"/>
 			<jvmarg  value="-ea"/>
 		</java>
@@ -745,6 +770,12 @@
 		<java classname="dip.misc.TestSuite" fork="yes" dir="${build.dir}" output="${test.results.dir}/wing.out" append="false">
 			<arg value="-brief"/>
 			<arg value="${absolute.etc.dir}/test_data/wing.txt"/>
+			<classpath  refid="run.class.path"/>
+			<jvmarg  value="-ea"/>
+		</java>
+		<java classname="dip.misc.TestSuite" fork="yes" dir="${build.dir}" output="${test.results.dir}/borders.out" append="false">
+			<arg value="-brief"/>
+			<arg value="${absolute.etc.dir}/test_data/borders.txt"/>
 			<classpath  refid="run.class.path"/>
 			<jvmarg  value="-ea"/>
 		</java>
