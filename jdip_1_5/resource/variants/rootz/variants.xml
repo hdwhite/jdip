@@ -85,7 +85,7 @@
 		</DESCRIPTION>
 	</MAP_DEFINITION>
 	
-	<VARIANT name="Root Z" version="1.0" aliases="rootz">
+	<VARIANT name="Root Z" version="1.1" aliases="rootz">
 		<DESCRIPTION><![CDATA[
 		The idea for this variant comes from the mathematical concept of a cut in
 		the complex plane.  When applied to two diplomacy boards this creates a link
