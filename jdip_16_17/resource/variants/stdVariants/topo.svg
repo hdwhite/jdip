@@ -423,41 +423,41 @@
 	<g id="MapLayer">
 		<!-- land provinces -->
 		<!-- ALL ID's here must be preceded by an underscore, or province-coloring will not work. -->
-		<g id="_cly" class="nopower">
+		<g id="cly" class="nopower">
 			<rect x="60" y="30" width="60" height="30"/>
 		</g>
-		<g id="_lvp" class="nopower">
+		<g id="lvp" class="nopower">
 			<rect x="90" y="60" width="30" height="60"/>
 		</g>
-		<g id="_wal" class="nopower">
+		<g id="wal" class="nopower">
 			<rect x="90" y="120" width="30" height="60"/>
 		</g>
-		<g id="_edi" class="nopower">
+		<g id="edi" class="nopower">
 			<rect x="120" y="30" width="30" height="60"/>
 		</g>
-		<g id="_yor" class="nopower">
+		<g id="yor" class="nopower">
 			<rect x="120" y="90" width="30" height="60"/>
 		</g>
-		<g id="_lon" class="nopower">
+		<g id="lon" class="nopower">
 			<rect x="120" y="150" width="60" height="30"/>
 		</g>
 		
 		
-		<g id="_nwy" class="nopower">
+		<g id="nwy" class="nopower">
 			<rect x="270" y="90" width="330" height="30"/>
 		</g>
-		<g id="_swe" class="nopower">
+		<g id="swe" class="nopower">
 			<rect x="300" y="120" width="180" height="60"/>
 		</g>
-		<g id="_fin" class="nopower">
+		<g id="fin" class="nopower">
 			<rect x="480" y="120" width="120" height="60"/>
 		</g>
-		<g id="_stp" class="nopower">
+		<g id="stp" class="nopower">
 			<rect x="600" y="90" width="30" height="180"/>
 			<text class="provtext" x="615" y="105">nc</text>
 			<text class="provtext" x="615" y="260">sc</text>
 		</g>
-		<g id="_den" class="nopower">
+		<g id="den" class="nopower">
 			<rect x="270" y="150" width="30" height="90"/>
 			<line class="sealine" x1="285" y1="150" x2="285" y2="210"/>
 			<line class="sealine" x1="270" y1="210" x2="300" y2="210"/>
@@ -467,252 +467,253 @@
 		</g>
 		
 		
-		<g id="_por" class="nopower">
+		<g id="por" class="nopower">
 			<rect x="60" y="390" width="30" height="60"/>
 		</g>
-		<g id="_spa" class="nopower">
+		<g id="spa" class="nopower">
 			<rect x="90" y="360" width="30" height="120"/>
 			<text class="provtext" x="105" y="375">nc</text>
 			<text class="provtext" x="105" y="470">sc</text>
 		 </g>
 		
 		
-		<g id="_bre" class="nopower">
+		<g id="bre" class="nopower">
 			<rect x="30" y="240" width="30" height="60"/>
 		</g>
-		<g id="_gas" class="nopower">
+		<g id="gas" class="nopower">
 			<rect x="30" y="300" width="90" height="60"/>
 		</g>
-		<g id="_pic" class="nopower">
+		<g id="pic" class="nopower">
 			<rect x="60" y="240" width="90" height="30"/>
 		</g>
-		<g id="_par" class="nopower">
+		<g id="par" class="nopower">
 			<rect x="60" y="270" width="60" height="30"/>
 		</g>
-		<g id="_hol" class="nopower">
+		<g id="hol" class="nopower">
 			<rect x="180" y="210" width="60" height="30"/>
 		</g>
-		<g id="_bel" class="nopower">
+		<g id="bel" class="nopower">
 			<rect x="150" y="210" width="30" height="60"/>
 		</g>
-		<g id="_bur" class="nopower">
+		<g id="bur" class="nopower">
 			<rect x="120" y="270" width="60" height="60"/>
 		</g>
-		<g id="_mar" class="nopower">
+		<g id="mar" class="nopower">
 			<rect x="120" y="330" width="30" height="90"/>
 		</g>
 		
 		
 		
-		<g id="_swi">
+		<g id="swi">
 			<title>Switzerland</title>
 			<desc>This space is impassable.</desc>
 			<rect class="impassable" x="150" y="330" width="60" height="30"/>
 	   </g>
 		
 		
-		<g id="_ruh" class="nopower">
+		<g id="ruh" class="nopower">
 			<rect x="180" y="240" width="30" height="60"/>
 		</g>
-		<g id="_kie" class="nopower">
+		<g id="kie" class="nopower">
 			<rect x="210" y="240" width="120" height="60"/>
 		</g>
-		<g id="_ber" class="nopower">
+		<g id="ber" class="nopower">
 			<rect x="330" y="240" width="60" height="60"/>
 		</g>
-		<g id="_pru" class="nopower">
+		<g id="pru" class="nopower">
 			<rect x="390" y="240" width="30" height="60"/>
 		</g>
-		<g id="_mun" class="nopower">
+		<g id="mun" class="nopower">
 			<rect x="180" y="300" width="180" height="30"/>
 		</g>
-		<g id="_sil" class="nopower">
+		<g id="sil" class="nopower">
 			<rect x="360" y="300" width="60" height="30"/>
 		</g>
 		
 		
-		<g id="_lvn" class="nopower">
+		<g id="lvn" class="nopower">
 			<rect x="420" y="240" width="180" height="30"/>
 		</g>
-		<g id="_war" class="nopower">
+		<g id="war" class="nopower">
 			<rect x="420" y="270" width="60" height="60"/>
 		</g>
-		<g id="_mos" class="nopower">
+		<g id="mos" class="nopower">
 			<rect x="480" y="270" width="150" height="60"/>
 		</g>
-		<g id="_ukr" class="nopower">
+		<g id="ukr" class="nopower">
 			<rect x="450" y="330" width="60" height="30"/>
 		</g>
-		<g id="_sev" class="nopower">
+		<g id="sev" class="nopower">
 			<rect x="510" y="330" width="120" height="30"/>
 		</g>
 		
 		
-		<g id="_pie" class="nopower">
+		<g id="pie" class="nopower">
 			<rect x="150" y="360" width="60" height="90"/>
 		</g>
-		<g id="_tus" class="nopower">
+		<g id="tus" class="nopower">
 			<rect x="150" y="450" width="60" height="90"/>
 		</g>
-		<g id="_ven" class="nopower">
+		<g id="ven" class="nopower">
 			<rect x="210" y="420" width="60" height="90"/>
 		</g>
-		<g id="_rom" class="nopower">
+		<g id="rom" class="nopower">
 			<rect x="210" y="510" width="30" height="60"/>
 		</g>
-		<g id="_apu" class="nopower">
+		<g id="apu" class="nopower">
 			<rect x="240" y="510" width="60" height="60"/>
 		</g>
-		<g id="_nap" class="nopower">
+		<g id="nap" class="nopower">
 			<rect x="210" y="570" width="90" height="30"/>
 		</g>
 		
 		
-		<g id="_tyr" class="nopower">
+		<g id="tyr" class="nopower">
 			<rect x="210" y="330" width="60" height="90"/>
 		</g>
-		<g id="_boh" class="nopower">
+		<g id="boh" class="nopower">
 			<rect x="270" y="330" width="120" height="30"/>
 		</g>
-		<g id="_vie" class="nopower">
+		<g id="vie" class="nopower">
 			<rect x="270" y="360" width="120" height="30"/>
 		</g>
-		<g id="_tri" class="nopower">
+		<g id="tri" class="nopower">
 			<rect x="270" y="390" width="90" height="90"/>
 		</g>
-		<g id="_gal" class="nopower">
+		<g id="gal" class="nopower">
 			<rect x="390" y="330" width="60" height="60"/>
 		</g>
-		<g id="_bud" class="nopower">
+		<g id="bud" class="nopower">
 			<rect x="360" y="390" width="90" height="30"/>
 		</g>
 		
 		
-		<g id="_alb" class="nopower">
+		<g id="alb" class="nopower">
 			<rect x="330" y="480" width="60" height="30"/>
 		</g>
-		<g id="_ser" class="nopower">
+		<g id="ser" class="nopower">
 			<rect x="360" y="420" width="90" height="60"/>
 		</g>
-		<g id="_gre" class="nopower">
+		<g id="gre" class="nopower">
 			<rect x="390" y="480" width="60" height="60"/>
 		</g>
-		<g id="_rum" class="nopower">
+		<g id="rum" class="nopower">
 			<rect x="450" y="360" width="90" height="90"/>
 		</g>
-		<g id="_bul" class="nopower">
+		<g id="bul" class="nopower">
 			<rect x="450" y="450" width="90" height="90"/>
 			<text class="provtext" x="525" y="465">ec</text>
 			<text class="provtext" x="525" y="530">sc</text>
 		</g>
 		
 		
-		<g id="_con" class="nopower">
+		<g id="con" class="nopower">
 			<rect x="540" y="480" width="30" height="90"/>
 			<line class="sealine" x1="555" y1="480" x2="555" y2="570"/>
 			<title>Note:</title>
 			<desc>Fleets may traverse this province.</desc>
 		</g>
-		<g id="_ank" class="nopower">
+		<g id="ank" class="nopower">
 			<rect x="570" y="480" width="30" height="60"/>
 		</g>
-		<g id="_smy" class="nopower">
+		<g id="smy" class="nopower">
 			<rect x="570" y="540" width="30" height="60"/>
 		</g>
-		<g id="_arm" class="nopower">
+		<g id="arm" class="nopower">
 			<rect x="600" y="360" width="30" height="210"/>
 		</g>
-		<g id="_syr" class="nopower">
+		<g id="syr" class="nopower">
 			<rect x="600" y="570" width="30" height="60"/>
 		</g>
 		
 		
-		<g id="_naf" class="nopower">
+		<g id="naf" class="nopower">
 			<rect x="0" y="570" width="90" height="60"/>
 		</g>
-		<g id="_tun" class="nopower">
+		<g id="tun" class="nopower">
 			<rect x="90" y="570" width="60" height="60"/>
 		</g>
 		
 		
 		<!-- sea provinces -->
-		<g id="_nao">
+		<g id="nao">
 			<path class="seapoly" d="M 0,0 h 90 v 30 h -30 v 30 h 30 v 30 h -90 z"/>
 		</g>
-		<g id="_nwg">
+		<g id="nwg">
 			<path class="seapoly" d="M 90,0 h 240 v 90 h -60 v -60 h -180 z"/>
 		</g>
-		<g id="_nth">
+		<g id="nth">
 			<path class="seapoly" d="M 150,30 h 120 v 90 h -30 v 30 h 30 v 30 h -30 v 30 h -90 v -30 h 30 v -30 h -30 z"/>
 		</g>
-		<g id="_bar">
+		<g id="bar">
 			<rect class="seapoly" x="330" y="60" width="300" height="30"/>
 		</g>
-		<g id="_iri">
+		<g id="iri">
 			<rect class="seapoly" x="30" y="90" width="60" height="90"/>
 		</g>
-		<g id="_eng">
+		<g id="eng">
 			<rect class="seapoly" x="30" y="180" width="120" height="60"/>
 		</g>
-		<g id="_ska">
+		<g id="ska">
 			<rect class="seapoly" x="240" y="120" width="60" height="30"/>
 		</g>
-		<g id="_hel">
+		<g id="hel">
 			<rect class="seapoly" x="240" y="180" width="30" height="60"/>
 		</g>
-		<g id="_bal">
+		<g id="bal">
 			<rect class="seapoly" x="300" y="180" width="150" height="60"/>
 		</g>
-		<g id="_gob">
+		<g id="gob">
 			<rect class="seapoly" x="450" y="180" width="150" height="60"/>
 		</g>
-		<g id="_mao">
+		<g id="mao">
 			<path class="seapoly" d="M 0,90 h 30 v 270 h 60 v 30 h -30 v 60 h 30 v 30 h -60 v 90 h -30 z"/>
 		</g>
-		<g id="_wme">
+		<g id="wme">
 			<rect class="seapoly" x="30" y="480" width="90" height="90"/>
 		</g>
-		<g id="_gol">
+		<g id="gol">
 			<rect class="seapoly" x="120" y="420" width="30" height="90"/>
 		</g>
-		<g id="_adr">
+		<g id="adr">
 			<rect class="seapoly" x="270" y="480" width="60" height="30"/>
 		</g>
-		<g id="_eas"> <!-- NOTE: metadata DOES NOT WORK if switched with <rect> -->
+		<g id="eas"> <!-- NOTE: metadata DOES NOT WORK if switched with <rect> -->
 			<rect class="seapoly" x="420" y="600" width="180" height="30"/>
 		</g>
-		<g id="_bla">
+		<g id="bla">
 			<rect class="seapoly" x="540" y="360" width="60" height="120"/>
 		</g>
-		<g id="_tys">
+		<g id="tys">
 			<path class="seapoly" d="M 120,510 h 30 v 30 h 60 v 60 h -60 v -30 h -30 z"/>
 		</g>
-		<g id="_ion">
+		<g id="ion">
 			<path class="seapoly" d="M 300,510 h 90 v 30 h 30 v 90 h -270 v -30 h 150 z"/>
 		</g>
-		<g id="_aeg">
+		<g id="aeg">
 			<path class="seapoly" d="M 420,540 h 120 v 30 h 30 v 30 h -150 z"/>
+		</g>
+		
+		<!-- coasts -->
+		<g class="invisible">
+			<rect id="spa-nc" x="90" y="360" width="30" height="30"/>
+			<rect id="spa-sc" x="90" y="450" width="30" height="30"/>
+			<rect id="stp-nc" x="600" y="90" width="30" height="30"/>
+			<rect id="stp-sc" x="600" y="240" width="30" height="30"/>
+			<rect id="bul-ec" x="495" y="450" width="45" height="30"/>
+			<rect id="bul-sc" x="450" y="510" width="90" height="30"/>
 		</g>
 	</g>
 	
-	<!-- drawing layer: supply centers -->
-	<g id="SupplyCenterLayer"/>
- 	
-	<!-- drawing layer: orders -->
-	<g id="OrderLayer"/>
+	<g pointer-events="none">
+		<g id="SupplyCenterLayer"/>
+		<g id="OrderLayer"/>
+		<g id="UnitLayer"/>
+		<g id="DislodgedUnitLayer"/>
+		<g id="HighestOrderLayer"/>
+	</g>
 	
-	<!-- drawing layer: units -->
-	<g id="UnitLayer"/>
-	
-	<!-- drawing layer: dislodged units -->
-	<g id="DislodgedUnitLayer"/>
-	
-	<!-- drawing layer -->
-	<g id="HighestOrderLayer"/>
-	
-	
-	<!-- abbreviated name layer -->
-	<g id="BriefLabelLayer" class="labeltext" visibility="hidden">
+	<g id="BriefLabelLayer" class="labeltext" visibility="hidden" pointer-events="none">
 		<!-- seas -->
 		<text x="40" y="20">nao</text>
 		<text x="210" y="20">nwg</text>
@@ -787,7 +788,7 @@
 		<text x="585" y="495">ank</text>
 		<text x="585" y="555">smy</text>
 		<text x="615" y="585">syr</text>
-		<text id="brf_swi" x="179.1" y="346.1">swi</text>
+		<text x="179.1" y="346.1">swi</text>
 		
 		<text x="180" y="375">pie</text>
 		<text x="240" y="435">ven</text>
@@ -802,7 +803,7 @@
 	
 	
 	<!-- full name layer -->
-	<g id="FullLabelLayer" class="labeltext2" visibility="hidden">
+	<g id="FullLabelLayer" class="labeltext2" visibility="hidden" pointer-events="none">
 		<!-- seas -->
 		<text x="45" y="15">North-Atlantic</text><text x="45" y="27">Ocean</text>
 		<text x="210" y="20">Norwegian Sea</text>
@@ -892,110 +893,6 @@
 		<text x="45" y="585">North Africa</text>
 		<text x="120" y="585">Tunis</text>
 	</g>
-	
-	<!-- 	MouseLayer: for determining the mouse map for clickability 
-			
-			Note that this should be the last thing (or close to) the last
-			thing rendered; no rendering ontop of clickable areas should occur
-			below this layer (below this layer means "later in the SVG file").
-			
-			Note that coasts are supported; these can be layered 'over' a 
-			larger area by putting it at the end of the list.
-			
-			Also note that elements are supported as are <g> elements. 
-			More complex areas should be in a G element. DUPLICATE IDs are NOT
-			ALLOWED (by XML!). Coast modifiers do not count as duplicate IDs.
-	-->
-	<g id="MouseLayer" class="invisible">
- 		<rect id="cly" x="60" y="30" width="60" height="30"/>
-    	<rect id="lvp" x="90" y="60" width="30" height="60"/>
-     	<rect id="wal" x="90" y="120" width="30" height="60"/>
-     	<rect id="edi" x="120" y="30" width="30" height="60"/>
-     	<rect id="yor" x="120" y="90" width="30" height="60"/>
-      	<rect id="lon" x="120" y="150" width="60" height="30"/>
-     	<rect id="nwy" x="270" y="90" width="330" height="30"/>
-     	<rect id="swe" x="300" y="120" width="180" height="60"/>
-     	<rect id="fin" x="480" y="120" width="120" height="60"/>
-     	<rect id="stp" x="600" y="90" width="30" height="180"/>
-    	<rect id="den" x="270" y="150" width="30" height="90"/>
-    	<rect id="por" x="60" y="390" width="30" height="60"/>
- 		<rect id="spa" x="90" y="360" width="30" height="120"/>
-    	<rect id="bre" x="30" y="240" width="30" height="60"/>
-    	<rect id="gas" x="30" y="300" width="90" height="60"/>
-    	<rect id="pic" x="60" y="240" width="90" height="30"/>
-    	<rect id="par" x="60" y="270" width="60" height="30"/>
-    	<rect id="hol" x="180" y="210" width="60" height="30"/>
-    	<rect id="bel" x="150" y="210" width="30" height="60"/>
-    	<rect id="bur" x="120" y="270" width="60" height="60"/>
-    	<rect id="mar" x="120" y="330" width="30" height="90"/>
-    	<rect id="ruh" x="180" y="240" width="30" height="60"/>
-		<rect id="kie" x="210" y="240" width="120" height="60"/>
-    	<rect id="ber" x="330" y="240" width="60" height="60"/>
-    	<rect id="pru" x="390" y="240" width="30" height="60"/>
-    	<rect id="mun" x="180" y="300" width="180" height="30"/>
-    	<rect id="sil" x="360" y="300" width="60" height="30"/>
-    	<rect id="lvn"  x="420" y="240" width="180" height="30"/>
-    	<rect id="war" x="420" y="270" width="60" height="60"/>
-    	<rect id="mos" x="480" y="270" width="150" height="60"/>
-    	<rect id="ukr" x="450" y="330" width="60" height="30"/>
-    	<rect id="sev" x="510" y="330" width="120" height="30"/>
-     	<rect id="pie" x="150" y="360" width="60" height="90"/>
-    	<rect id="tus" x="150" y="450" width="60" height="90"/>
-    	<rect id="ven" x="210" y="420" width="60" height="90"/>
-     	<rect id="rom" x="210" y="510" width="30" height="60"/>
-    	<rect id="apu" x="240" y="510" width="60" height="60"/>
-     	<rect id="nap" x="210" y="570" width="90" height="30"/>
-     	<rect id="tyr" x="210" y="330" width="60" height="90"/>
-    	<rect id="boh" x="270" y="330" width="120" height="30"/>
-    	<rect id="vie" x="270" y="360" width="120" height="30"/>
-    	<rect id="tri" x="270" y="390" width="90" height="90"/>
-    	<rect id="gal" x="390" y="330" width="60" height="60"/>
-     	<rect id="bud" x="360" y="390" width="90" height="30"/>
-     	<rect id="alb" x="330" y="480" width="60" height="30"/>
-    	<rect id="ser" x="360" y="420" width="90" height="60"/>
-		<rect id="gre" x="390" y="480" width="60" height="60"/>
-     	<rect id="rum" x="450" y="360" width="90" height="90"/>
-    	<rect id="bul" x="450" y="450" width="90" height="90"/>
-    	<rect id="con" x="540" y="480" width="30" height="90"/>
-    	<rect id="ank" x="570" y="480" width="30" height="60"/>
-     	<rect id="smy" x="570" y="540" width="30" height="60"/>
-    	<rect id="arm" x="600" y="360" width="30" height="210"/>
-    	<rect id="syr" x="600" y="570" width="30" height="60"/>
-     	<rect id="naf" x="0" y="570" width="90" height="60"/>
-    	<rect id="tun" x="90" y="570" width="60" height="60"/>
-		<!-- seas -->
-		<path id="nao" d="M 0,0 h 90 v 30 h -30 v 30 h 30 v 30 h -90 z"/>
-		<path id="nwg" d="M 90,0 h 240 v 90 h -60 v -60 h -180 z"/>
-		<path id="nth" d="M 150,30 h 120 v 90 h -30 v 30 h 30 v 30 h -30 v 30 h -90 v -30 h 30 v -30 h -30 z"/>
-		<rect id="bar" x="330" y="60" width="300" height="30"/>
-		<rect id="iri" x="30" y="90" width="60" height="90"/>
-		<rect id="eng" x="30" y="180" width="120" height="60"/>
-		<rect id="ska" x="240" y="120" width="60" height="30"/>
-		<rect id="hel" x="240" y="180" width="30" height="60"/>
-		<rect id="bal" x="300" y="180" width="150" height="60"/>
-		<rect id="gob" x="450" y="180" width="150" height="60"/>
-		<path id="mao" d="M 0,90 h 30 v 270 h 60 v 30 h -30 v 60 h 30 v 30 h -60 v 90 h -30 z"/>
-		<rect id="wme" x="30" y="480" width="90" height="90"/>
-		<rect id="gol" x="120" y="420" width="30" height="90"/>
-		<rect id="adr" x="270" y="480" width="60" height="30"/>
-		<rect id="eas" x="420" y="600" width="180" height="30"/>
-		<rect id="bla" x="540" y="360" width="60" height="120"/>
-		<path id="tys" d="M 120,510 h 30 v 30 h 60 v 60 h -60 v -30 h -30 z"/>
-		<path id="ion" d="M 300,510 h 90 v 30 h 30 v 90 h -270 v -30 h 150 z"/>
-		<path id="aeg" d="M 420,540 h 120 v 30 h 30 v 30 h -150 z"/>
-		<!-- spain nc/sc -->
-		<rect id="spa-nc" x="90" y="360" width="30" height="30"/>
-		<rect id="spa-sc" x="90" y="450" width="30" height="30"/>
-		<!-- st. petersburg nc/sc -->
-		<rect id="stp-nc" x="600" y="90" width="30" height="30"/>
-		<rect id="stp-sc" x="600" y="240" width="30" height="30"/>
-		<!-- bulgaria ec/sc -->
-		<rect id="bul-ec" x="495" y="450" width="45" height="30"/>
-		<rect id="bul-sc" x="450" y="510" width="90" height="30"/>
-		<!-- impassable -->
-		<rect id="swi" x="150" y="330" width="60" height="30"/>
-	</g>
-	
 	
 	<!-- map legend / title block / border-->
 	<g>
