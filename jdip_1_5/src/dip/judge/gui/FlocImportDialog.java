@@ -113,6 +113,7 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 		cbJudges.setSelectedItem(lastJudgeUsed);
 		
 		progressBar = new JProgressBar(JProgressBar.HORIZONTAL);
+		progressBar.setIndeterminate(true);
 		progressBar.setStringPainted(true);
 		enableProgressBar(false);
 		
@@ -268,9 +269,8 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 		getButton(0).setEnabled(true);
 	}// flocImportUnregistered()
 	
-	private void enableProgressBar(boolean value)
+	private synchronized void enableProgressBar(boolean value)
 	{
-		progressBar.setIndeterminate(value);
 		progressBar.setVisible(value);
 		progressBar.setString("");
 	}// enableProgressBar()
