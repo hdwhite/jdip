@@ -466,7 +466,7 @@ public class OrderFormat
 		
 		if(order == null)
 		{
-			text = (ofo.isDebug() ? handleNull(order.getClass()) : EMPTY);
+			text = (ofo.isDebug() ? handleNull(Orderable.class) : EMPTY);
 		}
 		else
 		{
