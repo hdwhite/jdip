@@ -227,20 +227,42 @@ public class DMR2RenderCommandFactory extends RenderCommandFactory
 			Log.println("DMR2RCF::RCSetLabel(): ", labelValue);
 			DefaultMapRenderer2 dmr2 = (DefaultMapRenderer2) mr;
 			
+			Object newLabelValue = labelValue;
+			final MapMetadata mmd = dmr2.getMapMetadata();
+			
+			// not all maps have all label settings. All will have 
+			// NONE, but not all will have BRIEF and FULL. So, degrade
+			// gracefully based upon map metadata.
+			// full->brief->none is how we degrade.
+			//
+			if( newLabelValue == MapRenderer2.VALUE_LABELS_FULL
+				&& !mmd.getDisplayParamBoolean(MapMetadata.ATT_LABELS_FULL, false) )
+			{
+				newLabelValue = MapRenderer2.VALUE_LABELS_BRIEF;
+				Log.println("  degrading label to: ", newLabelValue);
+			}
+			
+			if( newLabelValue == MapRenderer2.VALUE_LABELS_BRIEF
+				&& !mmd.getDisplayParamBoolean(MapMetadata.ATT_LABELS_BRIEF, false) )
+			{
+				newLabelValue = MapRenderer2.VALUE_LABELS_NONE;
+				Log.println("  degrading label to: ", newLabelValue);
+			}
+			
 			final SVGElement elBrief = (SVGElement) dmr2.layerMap.get(DefaultMapRenderer2.LABEL_LAYER_BRIEF);
 			final SVGElement elFull = (SVGElement) dmr2.layerMap.get(DefaultMapRenderer2.LABEL_LAYER_FULL);
 			
-			if(labelValue == MapRenderer2.VALUE_LABELS_NONE)
+			if(newLabelValue == MapRenderer2.VALUE_LABELS_NONE)
 			{
 				dmr2.setElementVisibility(elBrief, false);
 				dmr2.setElementVisibility(elFull, false);
 			}
-			else if(labelValue == MapRenderer2.VALUE_LABELS_BRIEF)
+			else if(newLabelValue == MapRenderer2.VALUE_LABELS_BRIEF)
 			{
 				dmr2.setElementVisibility(elBrief, true);
 				dmr2.setElementVisibility(elFull, false);
 			}
-			else if(labelValue == MapRenderer2.VALUE_LABELS_FULL)
+			else if(newLabelValue == MapRenderer2.VALUE_LABELS_FULL)
 			{
 				dmr2.setElementVisibility(elBrief, false);
 				dmr2.setElementVisibility(elFull, true);

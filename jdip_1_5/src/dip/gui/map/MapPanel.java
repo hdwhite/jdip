@@ -78,8 +78,6 @@ import org.apache.batik.dom.svg.SVGOMDocument;
 import org.apache.batik.bridge.BridgeContext;
 import org.apache.batik.gvt.*;
 
-
-// TEST
 import java.io.*;
 
 import javax.xml.parsers.*;
@@ -177,6 +175,8 @@ public class MapPanel extends JPanel
 	private MP_GVTRenderListener gvtRenderListener = null;
 	private MP_DocumentListener documentListener = null;
 	private MP_GVTTreeBuilderListener treeBuilderListener = null;
+	
+	private Object oldLabelLevel = null;
 	
 	// for timing information
 	protected long startTime = 0L;
@@ -784,15 +784,26 @@ public class MapPanel extends JPanel
 					scroller.reset();
 				}
 				
+				final RenderCommandFactory rcf = mapRenderer.getRenderCommandFactory();
+				
 				// add property listener for setting position / turnstate information
 				// and set the current position.
 				//
 				// we do a 'force' if we are reloading
-				RenderCommand rc = mapRenderer.getRenderCommandFactory().createRCSetTurnstate(mapRenderer, turnState);
+				RenderCommand rc = rcf.createRCSetTurnstate(mapRenderer, turnState);
 				mapRenderer.execRenderCommand(rc);
 				
 				if(isReloading)
 				{
+					// if we have an old label level set, we'll set the
+					// same for the new map
+					//
+					if(oldLabelLevel != null)
+					{
+						rc = rcf.createRCSetLabel(mapRenderer, oldLabelLevel);
+						mapRenderer.execRenderCommand(rc);
+					}
+					
 					// Because we created a new DMR2, it didn't re-create the 
 					// orders, because it thought the 'old' turnstate was null
 					// and the new turnstate won't update, because the orders
@@ -801,7 +812,6 @@ public class MapPanel extends JPanel
 					// To fix this, we must destroy the existing orders, and
 					// then re-render them.
 					scroller.revalidate();
-					RenderCommandFactory rcf = mapRenderer.getRenderCommandFactory();
 					rc = ((DMR2RenderCommandFactory) rcf).createRCRenderAllForced(mapRenderer);
 					mapRenderer.execRenderCommand(rc);
 				}
@@ -1101,6 +1111,7 @@ public class MapPanel extends JPanel
 		// cleanup this
 		if(mapRenderer != null)
 		{
+			oldLabelLevel = mapRenderer.getRenderSetting(MapRenderer2.KEY_LABELS);
 			mapRenderer.close();
 			mapRenderer = null;
 		}
