@@ -1,0 +1,43 @@
+1.7.0 / ???? changelist
+
+CVS: in-progress changelist
+---------------------
+- New or Improved Features:
+	+ New save game format.
+		- Save games are now 7-10x smaller than before
+		- Games open and save faster
+		- File format is in a human-readable XML format
+		- New format can be easily manipulated by external tools
+	+ Next/Current/Previous buttons are available on appropriate 
+	  report windows (for example, the Result report), allowing easy
+	  review of information from prior turns as well.
+	+ The "Enter Multiple Orders" window now has a a button to load in
+	  orders from a file. Orders may still be typed in, cut/paste in, 
+	  or dragged into the window as well.
+	+ Application size is now smaller by about 1 MB.
+		**** TODO: quantify; size may change by release *****
+	+ More startup time improvements.
+- GUI changes:
+	+ Dialog menus (which can be confusing) replaced with button bar
+	+ Open dialogs are now closed when a new game is loaded
+	+ Improved appearance to General preferences tab
+	+ Game and Player Info:
+		- Improved layout and appearance
+		- Moderator now has a separate tab
+		- Now non-modal (you can do other things in jDip while window is open)
+- Bug Fixes:
+	+ Fixed: Deletion of single orders does not work (1005872)
+	+ Fixed: "Select All" in dialogs does not highlight text.
+	+ Fixed: Coast.normalize() fails with empty coasts (e.g., "()").
+	+ A significant portion of the F2F (face-to-face) mode code was rewritten
+	  to eliminate insidious bugs.
+- Core / API changes:
+	+ New XML file format allows non-GUI users to save games in a format
+	  that is also compatibile with the jDip GUI.
+	+ Metadata object changes
+	+ Power objects are now indexed
+	+ Thread safety changes in World/TurnState/Position objects
+- Compatibility:
+ 	+ ******** going to be poor with older version :)
+- Known Issues:
+	+ 
