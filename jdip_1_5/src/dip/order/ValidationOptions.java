@@ -54,13 +54,14 @@ public class ValidationOptions implements Serializable, Cloneable
 					new String[] {VALUE_GLOBAL_PARSING_STRICT,VALUE_GLOBAL_PARSING_LOOSE},
 					VALUE_GLOBAL_PARSING_STRICT);
 	
+	
 	// internal: list of all options (in base class)
 	protected static final Option[] _OPTIONS = {OPTION_GLOBAL_PARSING};
 	private static final String DESCRIPTION = "_description";
 			
 	
 	// instance variables
-	protected Hashtable map = new Hashtable(11);
+	protected Hashtable map = new Hashtable(5);
 	protected Option[] options = null; 			// subclasses should modify as appropriate in constructor
 	
 	

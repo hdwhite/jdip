@@ -94,21 +94,31 @@ public class RuleOptions implements Serializable
 														VALUE_WINGS_DISABLED });
 	
 	
+	public static final OptionValue VALUE_PATHS_EXPLICIT = new OptionValue("OptionValue.explicit-paths");
+	public static final OptionValue VALUE_PATHS_IMPLICIT = new OptionValue("OptionValue.implicit-paths");
+	public static final OptionValue VALUE_PATHS_EITHER = new OptionValue("OptionValue.either-path");
+	public static final Option OPTION_CONVOYED_MOVES = new Option("Option.move.convoyed", 
+													VALUE_PATHS_EITHER,
+													new OptionValue[] {
+														VALUE_PATHS_EITHER, 
+														VALUE_PATHS_EXPLICIT, 
+														VALUE_PATHS_IMPLICIT });
+	
+	
+	
 	// array of default options, that are always set for every variant.
-	private static final Option[] DEFAULT_RULE_OPTIONS = { OPTION_BUILDS, OPTION_WINGS };
+	private static final Option[] DEFAULT_RULE_OPTIONS = { OPTION_BUILDS, OPTION_WINGS, OPTION_CONVOYED_MOVES };
 	
 	// NOTE: we must include all options / optionvalues in these arrays
 	// OptionList -- for serialization/deserialization
-	private static final Option[] ALL_OPTIONS = {OPTION_BUILDS, OPTION_WINGS}; 
+	private static final Option[] ALL_OPTIONS = {OPTION_BUILDS, OPTION_WINGS, OPTION_CONVOYED_MOVES}; 
 	
 	// OptionValue -- for serialization/deserialization
 	private static final OptionValue[] ALL_OPTIONVALUES = {
 		VALUE_BUILDS_HOME_ONLY, VALUE_BUILDS_ANY_OWNED, VALUE_BUILDS_ANY_IF_HOME_OWNED,
-		VALUE_WINGS_ENABLED, VALUE_WINGS_DISABLED
+		VALUE_WINGS_ENABLED, VALUE_WINGS_DISABLED,
+		VALUE_PATHS_EXPLICIT, VALUE_PATHS_IMPLICIT, VALUE_PATHS_EITHER
 	}; 
-	
-	
-	
 	
 	
 	

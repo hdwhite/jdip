@@ -68,6 +68,8 @@ public class Move extends Order
 	private static final String MOVE_FORMAT = "MOVE_FORMAT";
 	private static final String MOVE_FORMAT_EXPLICIT_CONVOY = "MOVE_FORMAT_EXPLICIT_CONVOY";
 	private static final String MOVE_ARROW = "MOVE_ARROW";
+	private static final String CONVOY_PATH_MUST_BE_EXPLICIT = "CONVOY_PATH_MUST_BE_EXPLICIT";
+	private static final String CONVOY_PATH_MUST_BE_IMPLICIT = "CONVOY_PATH_MUST_BE_IMPLICIT";
 	
 	
 	// constants: names
@@ -367,9 +369,8 @@ public class Move extends Order
 	public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
 	throws OrderException
 	{
-		// assert that _isViaConvoy and _isConvoyIntent have same initial values.
-		// if not, internal error.
-		assert(_isViaConvoy == _isConvoyIntent);
+		// NOTE: the first time we validate(), _isViaConvoy == _isConvoyIntent.
+		// if we re-validate, that assertion may not be true.
 		
 		// basic checks
 		//
@@ -419,6 +420,19 @@ public class Move extends Order
 				if(srcUnitType != Unit.Type.ARMY)
 				{
 					throw new OrderException(Utils.getLocalString(MOVE_VAL_UNIT_ADJ, srcUnitType.getFullNameWithArticle()));
+				}
+				
+				// determine if explicit/implicit convoys are required
+				final RuleOptions.OptionValue convoyRule = ruleOpts.getOptionValue(RuleOptions.OPTION_CONVOYED_MOVES);
+				if(convoyRule == RuleOptions.VALUE_PATHS_EXPLICIT && convoyRoutes == null)
+				{
+					// no explicit route defined, and at least one should be
+					throw new OrderException(Utils.getLocalString(CONVOY_PATH_MUST_BE_EXPLICIT));
+				}
+				else if(convoyRule == RuleOptions.VALUE_PATHS_IMPLICIT && convoyRoutes != null)
+				{
+					// explicit route IS defined, and shouldn't be
+					throw new OrderException(Utils.getLocalString(CONVOY_PATH_MUST_BE_IMPLICIT));
 				}
 				
 				// nonadjacent moves must have a theoretical convoy path! 
