@@ -73,9 +73,9 @@ public class ViewControlBar extends ControlBar
 	private static final char KEY_FIT			= '=';
 	
 	// icons
-	private static final String ICON_ZOOM_IN 	= "resource/common/icons/24x24/ZoomIn24.gif";
-	private static final String ICON_ZOOM_OUT 	= "resource/common/icons/24x24/ZoomOut24.gif";
-	private static final String ICON_ZOOM_FIT	= "resource/common/icons/24x24/Refresh24.gif";
+	private static final String ICON_ZOOM_IN 	= "resource/common/icons/24x24/stock_zoom_in_24.png";
+	private static final String ICON_ZOOM_OUT 	= "resource/common/icons/24x24/stock_zoom_out_24.png";
+	private static final String ICON_ZOOM_FIT	= "resource/common/icons/24x24/stock_zoom_fit_24.png";
 	
 	
 	
