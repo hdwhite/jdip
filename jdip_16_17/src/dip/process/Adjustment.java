@@ -65,12 +65,11 @@ public class Adjustment
 		
 		AdjustmentInfo ai = new AdjustmentInfo(ruleOpts);
 		
-		Position position = turnState.getPosition();
-		final Province[] provinces = position.getProvinces();
-		
-		for(int i=0; i<provinces.length; i++)
+		final Position position = turnState.getPosition();
+		Iterator iter = position.getMap().getProvinceList().iterator();
+		while(iter.hasNext())
 		{
-			Province province = provinces[i];
+			final Province province = (Province) iter.next();
 			
 			// tally units
 			Unit unit = position.getUnit(province);
@@ -110,27 +109,27 @@ public class Adjustment
 	*	<p>
 	*	Results are returned as an AdjustmentInfoMap
 	*/
-	public static AdjustmentInfoMap getAdjustmentInfo(TurnState turnState, RuleOptions ruleOpts, Power[] powers)
+	public static AdjustmentInfoMap getAdjustmentInfo(TurnState turnState, RuleOptions ruleOpts, List powerList)
 	{
-		if(powers == null || turnState == null)
+		if(powerList == null || turnState == null)
 		{
 			throw new IllegalArgumentException();
 		}
 		
 		// setup AdjustmentInfoMap
 		AdjustmentInfoMap adjMap = new AdjustmentInfoMap();
-		for(int i=0; i<powers.length; i++)
+		Iterator iter = powerList.iterator();
+		while(iter.hasNext())
 		{
-			adjMap.put(powers[i], new AdjustmentInfo(ruleOpts));
+			adjMap.put((Power) iter.next(), new AdjustmentInfo(ruleOpts));
 		}
 		
 		// Iterate for all Powers
 		Position position = turnState.getPosition();
-		final Province[] provinces = position.getProvinces();
-		
-		for(int i=0; i<provinces.length; i++)
+		iter = position.getMap().getProvinceList().iterator();
+		while(iter.hasNext())
 		{
-			Province province = provinces[i];
+			final Province province = (Province) iter.next();
 			boolean hasUnit = false;
 			
 			// tally units
@@ -183,9 +182,9 @@ public class Adjustment
 		// these private fields may still be set by enclosing class
 		//
 		private int numUnits = 0;		// # of units total
-		private int numSC = 0;		// # of owned supply centers
-		private int numHSC = 0;		// # of owned home supply centers
-		private int numOccHSC = 0;	// # of occupied owned home supply centers
+		private int numSC = 0;			// # of owned supply centers
+		private int numHSC = 0;			// # of owned home supply centers
+		private int numOccHSC = 0;		// # of occupied owned home supply centers
 		private int numOccSC = 0;		// # of occupied non-home supply centers
 		private int numDislodgedUnits = 0;	// # of dislodged units
 		
