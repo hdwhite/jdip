@@ -230,6 +230,7 @@ public class PersistenceManager
 			XJFileChooser chooser = XJFileChooser.getXJFileChooser();
 			chooser.addFileFilter(SimpleFileFilter.SAVE_GAME_FILTER);
 			chooser.setFileFilter(SimpleFileFilter.SAVE_GAME_FILTER);
+			chooser.setCurrentDirectory( GeneralPreferencePanel.getDefaultGameDir() );
 			File file = chooser.displayOpen(clientFrame);
 			XJFileChooser.dispose();
 			
@@ -447,6 +448,7 @@ public class PersistenceManager
 		XJFileChooser chooser = XJFileChooser.getXJFileChooser();
 		chooser.addFileFilter(SimpleFileFilter.TXT_FILTER);
 		chooser.setFileFilter(SimpleFileFilter.TXT_FILTER);
+		chooser.setCurrentDirectory( GeneralPreferencePanel.getDefaultGameDir() );
 		File file = chooser.displayOpen(clientFrame, Utils.getLocalString(IMPORT_CHOOSER_TITLE));
 		XJFileChooser.dispose();
 			

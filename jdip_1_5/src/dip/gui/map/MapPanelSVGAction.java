@@ -26,6 +26,7 @@ package dip.gui.map;
 
 import dip.gui.dialog.ErrorDialog;
 import dip.gui.dialog.prefs.ExportPreferencePanel;
+import dip.gui.dialog.prefs.GeneralPreferencePanel;
 import dip.misc.SimpleFileFilter;
 import dip.misc.XJFileChooser;
 import dip.gui.ClientFrame;
@@ -370,6 +371,7 @@ public class MapPanelSVGAction
 		XJFileChooser chooser = XJFileChooser.getXJFileChooser();
 		chooser.addFileFilter(simpleFileFilter);
 		chooser.setFileFilter(simpleFileFilter);
+		chooser.setCurrentDirectory( GeneralPreferencePanel.getDefaultGameDir() );
 		chooser.setSelectedFile( new File(cf.getPM().getSuggestedExportName()) );
 		File file = chooser.displaySave(cf, Utils.getLocalString("MapPanel.export.title"));
 		chooser.dispose();
