@@ -24,6 +24,7 @@ package dip.gui.report;
 
 import dip.gui.ClientFrame;
 import dip.gui.dialog.TextViewer;
+import dip.gui.dialog.NextPreviousTextViewer;
 
 import dip.world.*;
 import dip.order.*;
@@ -104,26 +105,48 @@ public class StateWriter
 	public static void displayDialog(final ClientFrame clientFrame, 
 		final TurnState ts)
 	{
-		final StringBuffer title = new StringBuffer(64);
-		title.append(Utils.getLocalString(DIALOG_TITLE));
-		title.append(": ");
-		title.append(ts.getPhase());
-		
-		TextViewer tv = new TextViewer(clientFrame);
+		NextPreviousTextViewer tv = new NextPreviousTextViewer(clientFrame);
 		tv.setEditable(false);
 		tv.addSingleButton( tv.makeOKButton() );
-		tv.setTitle(title.toString());
+		tv.setTitle(makeTitle(ts));
 		tv.setHelpID(Help.HelpID.Dialog_StatusReport);
 		tv.setHeaderVisible(false);
 		tv.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		tv.lazyLoadDisplayDialog(new TextViewer.TVRunnable()
+		tv.setNextPreviousListener(new NextPreviousTextViewer.NextPreviousListener()
 		{
-			public void run()
+			TurnState selectedTS = ts;
+			TurnState lastTS = null;
+			
+			public NextPreviousTextViewer.NextPrevousAction npActionPerformed(int increment)
 			{
-				setText(stateToHTML(clientFrame, ts));
+				final World world = ts.getWorld();
+				
+				if(increment == 0)
+				{
+					selectedTS = ts;
+				}
+				else if(increment > 0)
+				{
+					selectedTS = world.getNextTurnState(selectedTS);
+				}
+				else
+				{
+					selectedTS = world.getPreviousTurnState(selectedTS);
+				}
+				
+				
+				if(selectedTS != lastTS)
+				{
+					lastTS = selectedTS;
+					return getNPA(clientFrame, selectedTS);
+				}
+				                         
+				return null;
 			}
 		});
+		
+		tv.executeAction( getNPA(clientFrame, ts) );
 	}// displayDialog()
 	
 	
@@ -139,6 +162,37 @@ public class StateWriter
 				turnState.getWorld().getRuleOptions(), allPowers);
 		ofo = cf.getOFO();
 	}// StateWriter()
+	
+	
+	private static String makeTitle(TurnState ts)
+	{
+		final StringBuffer title = new StringBuffer(64);
+		title.append(Utils.getLocalString(DIALOG_TITLE));
+		title.append(": ");
+		title.append(ts.getPhase());
+		return title.toString();
+	}// makeTitle()
+	
+	
+	/** Internal: get a NextPreviousTextViewer.NextPrevousAction */
+	private static NextPreviousTextViewer.NextPrevousAction getNPA(
+		final ClientFrame clientFrame, final TurnState theTS)
+	{
+		TextViewer.TVRunnable tvr = new TextViewer.TVRunnable()
+		{
+			public void run()
+			{
+				setText(stateToHTML(clientFrame, theTS));
+			}
+		};
+		
+		return new NextPreviousTextViewer.NextPrevousAction(
+			tvr,
+			makeTitle(theTS),
+			theTS.getWorld().hasNext(theTS),
+			theTS.getWorld().hasPrevious(theTS) );
+	}// getNPA()
+	
 	
 	
 	/** Write state as HTML */

@@ -67,6 +67,7 @@ import javax.swing.*;
 import java.awt.datatransfer.*;
 import javax.swing.text.*;
 import javax.swing.event.*;
+import java.awt.*;
 
 /**
 *	Display and (optionally) edit Text inside a HeaderDialog.
@@ -86,15 +87,21 @@ public class TextViewer extends HeaderDialog
 	/** "Loading" HTML message */
 	private static final String WAIT_MESSAGE = "TextViewer.message.wait";
 	
-	// Menu i18n constants
-	private static final String MENU_EDIT = "TV_EDIT";
-	private static final String MENU_FILE = "TV_FILE";
-	private static final String MENU_ITEM_COPY = "TV_EDIT_COPY";
-	private static final String MENU_ITEM_CUT = "TV_EDIT_CUT";
-	private static final String MENU_ITEM_PASTE = "TV_EDIT_PASTE";
-	private static final String MENU_ITEM_SELECTALL = "TV_EDIT_SELECTALL";
-	private static final String MENU_ITEM_SAVEAS = "TV_FILE_SAVEAS";
+	// CommandBar : Actions
 	private static final String SAVEAS_ACTION_CMD = "edit_saveas_action";
+	
+	// CommandBar : Icons
+	private static final String ICON_SAVEAS = "resource/common/icons/24x24/stock_save_as_24.png";
+	private static final String ICON_CUT 	= "resource/common/icons/24x24/stock_cut_24.png";
+	private static final String ICON_COPY 	= "resource/common/icons/24x24/stock_copy_24.png";
+	private static final String ICON_PASTE 	= "resource/common/icons/24x24/stock_paste_24.png";
+	
+	// CommandBar : Text : resource keys (from dip.gui.ClientMenu.java)
+	private static final String TEXT_SAVEAS 	= "FILE_SAVEAS";
+	private static final String TEXT_CUT 		= "TV_EDIT_CUT";
+	private static final String TEXT_COPY 		= "TV_EDIT_COPY";
+	private static final String TEXT_PASTE 		= "TV_EDIT_PASTE";
+	private static final String TEXT_SELECTALL 	= "TV_EDIT_SELECTALL";
 	
 	/** Content Type: text/html */
 	public static final String CONTENT_HTML = "text/html";
@@ -111,6 +118,9 @@ public class TextViewer extends HeaderDialog
 	private AcceptListener acceptListener = null;
 	private JEditorPane textPane;
 	private JScrollPane jsp;
+	
+	private JButton bPaste = null;
+	private JButton bCut = null;
 	
 	/**
 	*	Display the TextViewer, and return <code>true</code> if the 
@@ -130,12 +140,17 @@ public class TextViewer extends HeaderDialog
 	/** Create a non-modal TextViewer */
 	public TextViewer(JFrame parent)
 	{
-		this(parent, false);
+		this(parent, false, false);
 	}// TextViewer()
-	
 	
 	/** Create a TextViewer */
 	public TextViewer(final JFrame parent, boolean isModal)
+	{
+		this(parent, isModal, false);
+	}// TextViewer()
+	
+	/** Create a TextViewer */
+	public TextViewer(final JFrame parent, boolean isModal, boolean showCommandBar)
 	{
 		super(parent, "", isModal);
 		
@@ -357,18 +372,28 @@ public class TextViewer extends HeaderDialog
 			}// canImport()
 		});
 		
-		
-		// menu setup
-		makeMenu();
-		
 		// content pane setup
 		// BUG: top/bottom border of textPane disappears when scrolling. If we add a 
 		// lineborder to the viewport on the scroller, it doesn't look right. So, for
 		// now, we will do nothing.
 		jsp = new XJScrollPane(textPane);
-		createDefaultContentBorder(jsp);
-		setContentPane(jsp);
+		
+		if(showCommandBar)
+		{
+			JPanel p = new JPanel(new BorderLayout());
+			p.add(BorderLayout.CENTER, jsp);
+			p.add(BorderLayout.SOUTH, createCommandBar());
+			createDefaultContentBorder(p);
+			setContentPane(p);
+		}
+		else
+		{
+			createDefaultContentBorder(jsp);
+			setContentPane(jsp);
+		}
 	}// TextViewer()
+	
+	
 	
 	
 	/** 
@@ -449,6 +474,27 @@ public class TextViewer extends HeaderDialog
 	}// lazyLoad()
 	
 	
+	/** Update dialog text. Lazily. Only works for non-modal dialogs. */
+	public void lazyDialogTextUpdate(TVRunnable r)
+	{
+		if(r == null)
+		{
+			throw new IllegalArgumentException();
+		}
+		
+		if(isModal())
+		{
+			throw new IllegalStateException("lazyDialogTextUpdate(): only for NON modal dialogs.");
+		}
+		
+		setText(Utils.getLocalString(WAIT_MESSAGE));
+		r.setTV(this);
+		Thread t = new Thread(r);
+		t.start();
+	}// lazyDialogTextUpdate()
+	
+	
+	
 	/** Lazy Loading worker thread; must be subclassed */
 	public abstract static class TVRunnable implements Runnable
 	{
@@ -526,6 +572,16 @@ public class TextViewer extends HeaderDialog
 	public void setEditable(boolean value) 	
 	{
 		textPane.setEditable(value);
+		
+		if(bCut != null)
+		{
+			bCut.setEnabled(value);
+		}
+		
+		if(bPaste != null)
+		{
+			bPaste.setEnabled(value);
+		}
 	}// setEditable()
 	
 	/** Set if this TextViewer is highlightable */
@@ -608,89 +664,20 @@ public class TextViewer extends HeaderDialog
 	}// close()
 	
 	
-	/** Create the Dialog's Edit menu */
-	private void makeMenu()
-	{
-		final JMenuBar menuBar = new JMenuBar();
-		final JTextComponentMenuListener menuListener = new JTextComponentMenuListener(textPane);
-		JMenuItem menuItem = null;
-		
-		// FILE menu
-		ClientMenu.Item cmItem = new ClientMenu.Item(MENU_FILE);
-		JMenu menu = new JMenu(cmItem.getName());
-		menu.setMnemonic(cmItem.getMnemonic());
-		
-		menuItem = new ClientMenu.Item(MENU_ITEM_SAVEAS).makeMenuItem(false);
-		menuItem.setActionCommand(SAVEAS_ACTION_CMD);
-		menuItem.addActionListener(menuListener);
-		menu.add(menuItem);
-		
-		menuBar.add(menu);
-		
-		// EDIT menu
-		// 
-		cmItem = new ClientMenu.Item(MENU_EDIT);
-		menu = new JMenu(cmItem.getName());
-		menu.setMnemonic(cmItem.getMnemonic());
-		
-		final JMenuItem cutMenuItem = new ClientMenu.Item(MENU_ITEM_CUT).makeMenuItem(false);
-		cutMenuItem.setActionCommand(DefaultEditorKit.cutAction);
-		cutMenuItem.addActionListener(menuListener);
-		menu.add(cutMenuItem);
-		
-		menuItem = new ClientMenu.Item(MENU_ITEM_COPY).makeMenuItem(false);
-		menuItem.setActionCommand(DefaultEditorKit.copyAction);
-		menuItem.addActionListener(menuListener);
-		menu.add(menuItem);
-		
-		final JMenuItem pasteMenuItem = new ClientMenu.Item(MENU_ITEM_PASTE).makeMenuItem(false);
-		pasteMenuItem.setActionCommand(DefaultEditorKit.pasteAction);
-		pasteMenuItem.addActionListener(menuListener);
-		menu.add(pasteMenuItem);
-		
-		menu.add(new JSeparator());
-		
-		menuItem = new ClientMenu.Item(MENU_ITEM_SELECTALL).makeMenuItem(false);
-		menuItem.setActionCommand(DefaultEditorKit.selectAllAction);
-		menuItem.addActionListener(menuListener);
-		menu.add(menuItem);
-		
-		// add a listener to enable/disable 'paste'
-		menu.addMenuListener(new MenuListener()
-		{
-			public void	menuCanceled(MenuEvent e)
-			{}
-			
-			public void	menuDeselected(MenuEvent e)
-			{}
-			
-			public void	menuSelected(MenuEvent e)
-			{
-				cutMenuItem.setEnabled(textPane.isEditable());
-				pasteMenuItem.setEnabled(textPane.isEditable());
-			}
-		});
-		
-		menuBar.add(menu);
-		setJMenuBar(menuBar);
-		
-	}// makeMenu()
-	
-	
 	/** A specialized Listener for registered JTextComponent Actions */
-	private class JTextComponentMenuListener implements ActionListener
+	protected class JTextComponentActionListener implements ActionListener
 	{
 		private final JTextComponent textComponent;
 		
-		public JTextComponentMenuListener(JTextComponent component) 
+		public JTextComponentActionListener(JTextComponent component) 
 		{
 			if(component == null) { throw new IllegalArgumentException(); }
 			textComponent = component;
-		}// JTextComponentMenuListener()
+		}// JTextComponentActionListener()
 		
 		public void actionPerformed(ActionEvent e)
 		{
-			final String action = (String) e.getActionCommand();
+			final String action = e.getActionCommand();
 			Action a = textComponent.getActionMap().get(action);
 			if(a != null)
 			{
@@ -706,7 +693,7 @@ public class TextViewer extends HeaderDialog
 				}
 			}
 		}// actionPerformed()
-	}// inner class JTextComponentMenuListener
+	}// nested class JTextComponentActionListener
 	
 	
 	/**
@@ -811,6 +798,74 @@ public class TextViewer extends HeaderDialog
 		
 		return file;
 	}// getFileName()
+	
+	
+	/**
+	*	Creates the JToolbar (if a command bar is enabled). 
+	*	Sets up the main listener. Calls
+	*	setupCommandBar() to add components.
+	*/
+	protected JToolBar createCommandBar()
+	{
+		// toolbar
+		JToolBar jtb = new JToolBar();
+		jtb.setMargin(new Insets(5,5,5,5));
+		jtb.setFloatable(false);
+		jtb.setRollover(true);
+		//jtb.setBorder(new EtchedBorder(EtchedBorder.LOWERED)); 
+		
+		// listeners
+		final JTextComponentActionListener actionListener = new JTextComponentActionListener(textPane);
+		
+		// add default components
+		return setupCommandBar(jtb, actionListener);
+	}// createCommandBar()
+	
+	/**
+	*	Adds buttons to the command bar. This is not called if no command bar is
+	*	enabled for the dialog.
+	*/
+	protected JToolBar setupCommandBar(JToolBar jtb, JTextComponentActionListener listener)
+	{
+		// file
+		JButton b = new JButton(Utils.getLocalString(TEXT_SAVEAS), Utils.getIcon(ICON_SAVEAS));
+		b.setToolTipText(Utils.getLocalString(TEXT_SAVEAS));
+		b.setActionCommand(SAVEAS_ACTION_CMD);
+		b.addActionListener(listener);
+		jtb.add(b);
+		
+		// cut/copy/paste (in that order)
+		jtb.addSeparator();
+		
+		bCut = new JButton(Utils.getIcon(ICON_CUT));
+		bCut.setToolTipText(Utils.getLocalString(TEXT_CUT));
+		bCut.setActionCommand(DefaultEditorKit.cutAction);
+		bCut.addActionListener(listener);
+		jtb.add(bCut);                   
+		
+		b = new JButton(Utils.getIcon(ICON_COPY));
+		b.setToolTipText(Utils.getLocalString(TEXT_COPY));
+		b.setActionCommand(DefaultEditorKit.copyAction);
+		b.addActionListener(listener);
+		jtb.add(b);                   
+		
+		bPaste = new JButton(Utils.getIcon(ICON_PASTE));
+		bPaste.setToolTipText(Utils.getLocalString(TEXT_PASTE));
+		bPaste.setActionCommand(DefaultEditorKit.pasteAction);
+		bPaste.addActionListener(listener);
+		jtb.add(bPaste);
+		
+		// misc
+		jtb.addSeparator();
+		
+		b = new JButton(Utils.getLocalString(TEXT_SELECTALL));
+		b.setToolTipText(Utils.getLocalString(TEXT_SELECTALL));
+		b.setActionCommand(DefaultEditorKit.selectAllAction);
+		b.addActionListener(listener);
+		jtb.add(b);
+		
+		return jtb;
+	}// setupCommandBar()
 	
 }// class TextViewer
 

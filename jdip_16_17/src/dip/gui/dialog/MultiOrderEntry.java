@@ -109,7 +109,7 @@ public class MultiOrderEntry
 		this.world = world;
 		this.orderDisplayPanel = parent.getOrderDisplayPanel();
 		
-		tv = new TextViewer(parent, true);
+		tv = new TextViewer(parent, true, true);
 		tv.setEditable(true);
 		tv.setHeaderText( Utils.getText(Utils.getLocalString(HEADER_TEXT_LOCATION)) );
 		tv.setTitle(Utils.getLocalString(TITLE));

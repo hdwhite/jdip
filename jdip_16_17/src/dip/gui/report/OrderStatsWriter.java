@@ -24,6 +24,7 @@ package dip.gui.report;
 
 import dip.gui.ClientFrame;
 import dip.gui.dialog.TextViewer;
+import dip.gui.dialog.NextPreviousTextViewer;
 
 import dip.misc.Utils;
 import dip.misc.Help;
@@ -89,7 +90,7 @@ public class OrderStatsWriter
 	public static void displayDialog(final ClientFrame clientFrame, 
 		final World w, final OrderFormatOptions orderFormat)
 	{
-		TextViewer tv = new TextViewer(clientFrame);
+		TextViewer tv = new TextViewer(clientFrame, false, true);
 		tv.setEditable(false);
 		tv.addSingleButton( tv.makeOKButton() );
 		tv.setTitle(Utils.getLocalString(DIALOG_TITLE));

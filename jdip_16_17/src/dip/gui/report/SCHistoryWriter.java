@@ -24,6 +24,7 @@ package dip.gui.report;
 
 import dip.gui.ClientFrame;
 import dip.gui.dialog.TextViewer;
+import dip.gui.dialog.NextPreviousTextViewer;
 import dip.world.*;
 import dip.gui.map.*;
 import dip.misc.Utils;
@@ -79,7 +80,7 @@ public class SCHistoryWriter
 	*/
 	public static void displayDialog(final ClientFrame clientFrame, final World w)
 	{
-		TextViewer tv = new TextViewer(clientFrame);
+		TextViewer tv = new TextViewer(clientFrame, false, true);
 		tv.setEditable(false);
 		tv.addSingleButton( tv.makeOKButton() );
 		tv.setTitle(Utils.getLocalString(DIALOG_TITLE));
