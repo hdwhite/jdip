@@ -151,7 +151,7 @@ public class MapPanelSVGAction
 		public void setOptions(Transcoder t)
 		{
 			super.setOptions(t);
-			t.addTranscodingHint(ImageTranscoder.KEY_BACKGROUND_COLOR, Color.WHITE);
+			//t.addTranscodingHint(ImageTranscoder.KEY_BACKGROUND_COLOR, Color.WHITE);
 		}// ExportJPG()
 		
 	}// nested class ExportJPG
@@ -170,7 +170,7 @@ public class MapPanelSVGAction
 		public void setOptions(Transcoder t)
 		{
 			super.setOptions(t);
-			t.addTranscodingHint(ImageTranscoder.KEY_BACKGROUND_COLOR, Color.WHITE);
+			//t.addTranscodingHint(ImageTranscoder.KEY_BACKGROUND_COLOR, Color.WHITE);
 		}// ExportJPG()
 		
 	}// nested class ExportPNG
