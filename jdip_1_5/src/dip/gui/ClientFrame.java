@@ -322,15 +322,11 @@ public class ClientFrame extends JFrame
 		// to get the dialog icons it needs. We delay init of this class as long as possible,
 		// to see if that helps.
 		XJFileChooser.init();
-		dtime = Log.printDelta(dtime, "CF: XJFileChooser setup time: ");
 		
 		// Cached dialogs [these dialogs appear slowly if not cached]
 		NewGameDialog.createCachedDialog(this);
-		dtime = Log.printDelta(dtime, "CF: NewGameDialog setup time: ");
 		
 		AboutDialog.createCachedDialog(this);
-		dtime = Log.printDelta(dtime, "CF: AboutDialog setup time: ");
-		
 		
 		// persistence (must come after menus are defined)
 		persistMan = new PersistenceManager(this);
@@ -393,7 +389,6 @@ public class ClientFrame extends JFrame
 		pack();
 		GeneralPreferencePanel.getWindowSettings(this);
 		setVisible(true);
-System.out.println(">>>> "+(System.currentTimeMillis()-ttime));		// OVERALL timing indicator
 		fireChangeMode(MODE_NONE);
 		toFront();
 		splash.destroy();
@@ -1108,7 +1103,7 @@ System.out.println(">>>> "+(System.currentTimeMillis()-ttime));		// OVERALL timi
 	{
 		// locale option [takes 1 argument]
         StringParam argLocale =
-            new StringParam("lang", "force language to the specified ISO-639 2-letter type (e.g., \"fr\")",
+            new StringParam("lang", "force language to the specified ISO-639 2-letter type (e.g., \"de\", \"en\", \"fr\")",
                             2, 2, true, false);
 		
 		// log options
