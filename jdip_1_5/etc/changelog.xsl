@@ -151,7 +151,7 @@
   <xsl:template match="entry">
     <tr>
       <td class="dateAndAuthor">
-        <xsl:value-of select="date"/><xsl:text> </xsl:text><xsl:value-of select="time"/><xsl:text> </xsl:text><xsl:value-of select="author"/>
+        <xsl:value-of select="date"/><xsl:text> <!--</xsl:text><xsl:value-of select="time"/><xsl:text>--> </xsl:text><xsl:value-of select="author"/>
       </td>
     </tr>
 
