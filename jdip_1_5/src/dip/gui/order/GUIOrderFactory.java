@@ -52,31 +52,39 @@ public class GUIOrderFactory extends OrderFactory
 	
 	
 	
-	/** Creates a GUIDisband order */
+	/** Creates a GUIHold order */
 	public GUIHold createGUIHold()
 	{
 		return new GUIHold();
 	}// createGUIHold()
 	
-	/** Creates a GUIDisband order */
+	/** Creates a GUIMove order */
 	public GUIMove createGUIMove()
 	{
 		return new GUIMove();
 	}// createGUIMove()
 	
-	/** Creates a GUIDisband order */
+	/** Creates a GUIMoveExplicit order */
+	public GUIMoveExplicit createGUIMoveExplicit()
+	{
+		return new GUIMoveExplicit();
+	}// GUIMoveExplicit()
+	
+	
+	
+	/** Creates a GUISupport order */
 	public GUISupport createGUISupport()
 	{
 		return new GUISupport();
 	}// createGUISupport()
 	
-	/** Creates a GUIDisband order */
+	/** Creates a GUIConvoy order */
 	public GUIConvoy createGUIConvoy()
 	{
 		return new GUIConvoy();
 	}// createGUIConvoy()
 	
-	/** Creates a GUIDisband order */
+	/** Creates a GUIRetreat order */
 	public GUIRetreat createGUIRetreat()
 	{
 		return new GUIRetreat();

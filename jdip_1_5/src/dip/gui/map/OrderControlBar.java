@@ -109,7 +109,9 @@ public class OrderControlBar extends ViewControlBar
 	private boolean inDrag = false;
 	private Location dragSupportLoc = null;
 	private GUIOrder tempOrder = null;
-
+	
+	// use explicit GUIMove?
+	private final boolean useExplicitGUIMove; 
 
 	/**
 	 *  Any time the TurnState changes, a new OrderControlBar is created.
@@ -141,7 +143,10 @@ public class OrderControlBar extends ViewControlBar
 
 			stateInfo.setAdjustmenInfoMap( adjMap );
 		}
-
+		
+		RuleOptions ro = mapPanel.getWorld().getRuleOptions();
+		useExplicitGUIMove = RuleOptions.VALUE_PATHS_EXPLICIT.equals(ro.getOptionValue(RuleOptions.OPTION_CONVOYED_MOVES));
+		
 		makeLayout();
 	}
 	// OrderControlBar()
@@ -496,7 +501,14 @@ public class OrderControlBar extends ViewControlBar
 		}
 		else if( currentAction == MODE_MOVE )
 		{
-			currentOrder = guiOrderFactory.createGUIMove();
+			if(useExplicitGUIMove)
+			{
+				currentOrder = guiOrderFactory.createGUIMoveExplicit();
+			}
+			else
+			{
+				currentOrder = guiOrderFactory.createGUIMove();
+			}
 		}
 		else if( currentAction == MODE_SUPPORT )
 		{
@@ -755,6 +767,8 @@ public class OrderControlBar extends ViewControlBar
 		// actionPerformed()
 	}
 	// setUnitCursor
-
+	
+	
+	
 }
 

@@ -30,6 +30,7 @@ import dip.gui.order.GUIOrder.MapInfo;
 import dip.order.Orderable;
 import dip.order.Move;
 import dip.order.ValidationOptions;
+import dip.order.OrderFormat;
 
 import dip.misc.Utils;
 
@@ -46,6 +47,7 @@ import dip.process.Adjustment.AdjustmentInfoMap;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.awt.geom.Point2D;
 
@@ -60,14 +62,15 @@ import org.w3c.dom.*;
 *
 *	GUIOrder subclass of Move order.
 *	<p>
-*	Note that GUIMove fully supports moves with explicit convoy routes, 
-*	but their GUI entry is not supported.
+*	This differs from GUIMove in that Explicit convoy routes are <b>always</b>
+*	created. Implicit convoy routes <b>cannot</b> be created via GUI entry.
+*	<p>
+*	This should be used instead of GUIMove for games with RuleOptions that
+*	enforce explicit convoy routes (such as Judge-based games).
+*
 */
-public class GUIMove extends Move implements GUIOrder
+public class GUIMoveExplicit extends Move implements GUIOrder
 {
-	// MoveParameter constants
-	/** Optional. Sets this Move to be by convoy. Value must be a Boolean object (Boolean.TRUE or Boolean.FALSE) */
-	public transient static final MoveParameter BY_CONVOY = new MoveParameter("BY_CONVOY");
 	
 	// i18n keys
 	private final static String CLICK_TO_SET_DEST  		= "GUIMove.set.dest";
@@ -75,38 +78,53 @@ public class GUIMove extends Move implements GUIOrder
 	private final static String NO_CONVOY_ROUTE  		= "GUIMove.no_convoy_route";
 	private final static String CANNOT_MOVE_HERE  		= "GUIMove.cannot_move_here";
 	
+	// i18n keys for convoys
+	private final static String CANNOT_BACKTRACK		= "GUIMoveExplicit.convoy.backtrack";
+	private final static String FINAL_DESTINATION		= "GUIMoveExplicit.convoy.location.destination";
+	private final static String OK_CONVOY_LOCATION		= "GUIMoveExplicit.convoy.location.ok";
+	private final static String BAD_CONVOY_LOCATION		= "GUIMoveExplicit.convoy.location.bad";
+	private final static String NONADJACENT_CONVOY_LOCATION		= "GUIMoveExplicit.convoy.location.nonadjacent";
+	private final static String ADDED_CONVOY_LOCATION	= "GUIMoveExplicit.convoy.location.added";
+	
 	// instance variables
 	private transient static final int REQ_LOC = 2;
+	private transient boolean isConvoyableArmy = false;
+	private transient boolean isComplete = false;
+	private transient LinkedList tmpConvoyPath = null;
 	private transient int currentLocNum = 0;
 	private transient int numSupports = -9999;
 	private transient Point2D.Float failPt = null;
 	private transient SVGGElement group = null;
 	private static final transient String moveFormatOrigin = Utils.getLocalString("MOVE_FORMAT_ORIGIN");
 	
-	/** Creates a GUIMove */
-	protected GUIMove()
+	
+	
+	
+	
+	/** Creates a GUIMoveExplicit */
+	protected GUIMoveExplicit()
 	{
 		super();
-	}// GUIMove()
+	}// GUIMoveExplicit()
 	
-	/** Creates a GUIMove */
-	protected GUIMove(Power power, Location source, Unit.Type srcUnitType, Location dest, boolean isConvoying)
+	/** Creates a GUIMoveExplicit */
+	protected GUIMoveExplicit(Power power, Location source, Unit.Type srcUnitType, Location dest, boolean isConvoying)
 	{
 		super(power, source, srcUnitType, dest, isConvoying);
-	}// GUIMove()
+	}// GUIMoveExplicit()
 	
-	/** Creates a GUIMove */
-	protected GUIMove(Power power, Location src, Unit.Type srcUnitType, Location dest, Province[] convoyRoute)
+	/** Creates a GUIMoveExplicit */
+	protected GUIMoveExplicit(Power power, Location src, Unit.Type srcUnitType, Location dest, Province[] convoyRoute)
 	{
 		super(power, src, srcUnitType, dest, convoyRoute);
-	}// GUIMove()
+	}// GUIMoveExplicit()
 	
 	
-	/** Creates a GUIMove */
-	protected GUIMove(Power power, Location src, Unit.Type srcUnitType, Location dest, List routes)
+	/** Creates a GUIMoveExplicit */
+	protected GUIMoveExplicit(Power power, Location src, Unit.Type srcUnitType, Location dest, List routes)
 	{
 		super(power, src, srcUnitType, dest, routes);
-	}// GUIMove()
+	}// GUIMoveExplicit()
 	
 	
 	
@@ -130,22 +148,36 @@ public class GUIMove extends Move implements GUIOrder
 		_isConvoyIntent = isConvoyIntent();
 		
 		// set completed
-		currentLocNum = REQ_LOC;
+		isComplete = true;
 	}// GUIMove()
+	
 	
 	public boolean testLocation(StateInfo stateInfo, Location location, StringBuffer sb)
 	{
+		final LocationTestResult result = testLocationLTR(stateInfo, location, sb);
+		return result.isValid;
+	}// testLocation()
+	
+	/**
+	*	More complex version of testLocation(), that returns extended 
+	*	results that can be used by setLocation(). 
+	*	
+	*/
+	private LocationTestResult testLocationLTR(StateInfo stateInfo, Location location, StringBuffer sb)
+	{
 		sb.setLength(0);
+		
+		final LocationTestResult result = new LocationTestResult();
 		
 		if(isComplete())
 		{
 			sb.append( Utils.getLocalString(GUIOrder.COMPLETE, getFullName()) );
-			return false;
+			return result;
 		}
 		
 		
-		Position position = stateInfo.getPosition();
-		Province province = location.getProvince();
+		final Position position = stateInfo.getPosition();
+		final Province province = location.getProvince();
 		
 		if(currentLocNum == 0)
 		{
@@ -157,83 +189,174 @@ public class GUIMove extends Move implements GUIOrder
 				if( !stateInfo.canIssueOrder(unit.getPower()) )
 				{
 					sb.append( Utils.getLocalString(GUIOrder.NOT_OWNER, unit.getPower()) );
-					return false;
+					result.isValid = false;
+					return result;
 				}
 				
 				if( !GUIOrderUtils.checkBorder(this, new Location(province, unit.getCoast()), unit.getType(), stateInfo.getPhase(), sb) )
 				{
-					return false;
+					result.isValid = false;
+					return result;
 				}
 				
-				
 				sb.append( Utils.getLocalString(GUIOrder.CLICK_TO_ISSUE, getFullName()) );
-				return true;
+				result.isValid = true;
+				return result;
 			}
 			
 			// no unit in province
 			sb.append( Utils.getLocalString(GUIOrder.NO_UNIT, getFullName()) );
-			return false;
+			result.isValid = false;
+			return result;
 		}
-		else if(currentLocNum == 1)
+		else if(currentLocNum >= 1)
 		{
-			// set move destination
-			// - If we are not validating, any destination is acceptable (even source)
-			// - If we are validating, we check that the move is adjacent or a possible convoy
-			//		route exists.
-			//
-			if(stateInfo.getValidationOptions().getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE))
+			// If the convoy route is explicit only, we MUST create 
+			// a defined path, if we are actually convoying/convoyable.
+			if(currentLocNum == 1)
 			{
-				// lenient parsing enabled; we'll take anything!
-				sb.append( Utils.getLocalString(CLICK_TO_SET_DEST) );
-				return true;
-			}
-			
-			// strict parsing is enabled. We are more selective.
-			if(province == src.getProvince())
-			{
-				sb.append( Utils.getLocalString(CANNOT_MOVE_TO_ORIGIN) );
-				return false;
-			}
-			else if(src.isAdjacent(province))
-			{
-				sb.append( Utils.getLocalString(CLICK_TO_SET_DEST) );
-				return true;
-			}
-			else if(province.isCoastal() && srcUnitType == Unit.Type.ARMY)
-			{
-				// we may have a possible convoy route; if not, say so
-				// NOTE: assume destination coast is Coast.NONE
-				Path path = new Path(position);
-				if(path.isPossibleConvoyRoute(src, new Location(province, Coast.NONE)))
+				StringBuffer sbTmp = new StringBuffer();
+				if(testNonConvoyDest(stateInfo, location, sbTmp))
 				{
-					sb.append( Utils.getLocalString(CLICK_TO_SET_DEST) );
-					return true;
+					// not a convoyed move. successful.
+					sb.append(sbTmp);
+					result.isValid = true;
+					result.isFinalDest = true;
+					return result;
 				}
 				else
 				{
-					sb.append( Utils.getLocalString(NO_CONVOY_ROUTE) );
-					return false;
+					if(!isConvoyableArmy)
+					{
+						// invalid destination, and not a convoyable unit
+						sb.append( Utils.getLocalString(CANNOT_MOVE_HERE) );
+						result.isValid = false;
+						return result;
+					}
 				}
 			}
-			else if( !GUIOrderUtils.checkBorder(this, location, srcUnitType, stateInfo.getPhase(), sb) )
+			
+			
+			// we now have to check for convoy-path acceptability.
+			assert (isConvoyableArmy);
+			assert (tmpConvoyPath != null);
+			result.isConvoy = true;
+			
+			// the last location must be adjacent to this location. We use 
+			// 'correct' adjacency; e.g., Coast.SEA or Coast.(direction) for
+			// first check
+			//
+			final Province lastProv = (Province) tmpConvoyPath.getLast();
+			Coast coast = Coast.SEA;
+			
+			if(lastProv.equals(getSource()) && lastProv.isMultiCoastal())
 			{
-				// text already set by checkBorder() method
-				return false;
+				coast = getSource().getCoast();
 			}
 			
+			// current province cannot already be in our tmpConvoyPath.
+			if( tmpConvoyPath.contains(province) )
+			{
+				if(location.isProvinceEqual(getSource()))
+				{
+					// kinder, gentler message for src-location
+					sb.append( Utils.getLocalString(CANNOT_MOVE_TO_ORIGIN) );
+				}
+				else
+				{
+					// cannot backtrack message
+					sb.append( Utils.getLocalString(CANNOT_BACKTRACK) );	
+				}
+				
+				result.isValid = false;
+				return result;
+			}
 			
-			sb.append( Utils.getLocalString(CANNOT_MOVE_HERE) );
-			return false;
+			if(lastProv.isAdjacent(coast, province))
+			{
+				// this location must be a sea, convoyable coast, and contain a fleet
+				// unless it is the final destination, which should be coastal land
+				if(province.isCoastal())
+				{
+					result.isValid = true;
+					result.isFinalDest = true;
+					sb.append( Utils.getLocalString(FINAL_DESTINATION) );	// final destination message
+					return result;
+				}
+				else
+				{
+					if(province.isConvoyable() && position.hasUnit(province, Unit.Type.FLEET))
+					{
+						sb.append( Utils.getLocalString(OK_CONVOY_LOCATION) );	// OK location for convoy path
+						result.isValid = true;
+						return result;
+					}
+					else
+					{
+						sb.append( Utils.getLocalString(BAD_CONVOY_LOCATION) );	// invalid location for convoy path 
+						result.isValid = false;
+						return result;
+					}
+				}
+			}
+			else
+			{
+				sb.append( Utils.getLocalString(NONADJACENT_CONVOY_LOCATION) );	// non-adjacent location
+				result.isValid = false;
+				return result;
+			}
 		}
 		else
 		{
-			// should not occur.
 			throw new IllegalStateException();
 		}
 		
 		// NO return here: thus we must appropriately exit within an if/else block above.
-	}// testLocation()
+	}// testLocationLTR()
 	
+	/**
+	*	Tests a destination location for acceptability. Does not 
+	*	check for convoy-acceptability; thus will return false
+	*	in that case.
+	*/
+	private boolean testNonConvoyDest(StateInfo stateInfo, Location location, StringBuffer sb)
+	{
+		assert (currentLocNum == 1);
+		
+		final Province province = location.getProvince();
+		
+		// set move destination
+		// - If we are not validating, any destination is acceptable (even source)
+		// - If we are validating, we check that the move is adjacent 
+		//
+		if(stateInfo.getValidationOptions().getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE))
+		{
+			// lenient parsing enabled; we'll take anything!
+			sb.append( Utils.getLocalString(CLICK_TO_SET_DEST) );
+			return true;
+		}
+		
+		// strict parsing is enabled. We are more selective.
+		if(province.equals(src.getProvince()))
+		{
+			sb.append( Utils.getLocalString(CANNOT_MOVE_TO_ORIGIN) );
+			return false;
+		}
+		else if(src.isAdjacent(province))
+		{
+			sb.append( Utils.getLocalString(CLICK_TO_SET_DEST) );
+			return true;
+		}
+		else if( !GUIOrderUtils.checkBorder(this, location, srcUnitType, stateInfo.getPhase(), sb) )
+		{
+			// text already set by checkBorder() method
+			return false;
+		}
+		
+		
+		sb.append( Utils.getLocalString(CANNOT_MOVE_HERE) );
+		return false;
+	}// testNonConvoyDest()
 	
 	public boolean clearLocations()
 	{
@@ -251,13 +374,32 @@ public class GUIMove extends Move implements GUIOrder
 		_isAdjWithPossibleConvoy = false;
 		_isConvoyIntent = false;
 		
+		isConvoyableArmy = false;
+		isComplete = false;
+		
 		return true;
 	}// clearLocations()
 	
 	
+	private class LocationTestResult
+	{
+		public boolean isValid = false;		// true if this location is valid
+		public boolean isConvoy = false;	// true if this is part of a convoy path--or could be
+		public boolean isFinalDest = false;	// true if Location is a possible destination (convoyed or not)
+	}// inner class LocationTestResult
+	
+	
+	
 	public boolean setLocation(StateInfo stateInfo, Location location, StringBuffer sb)
 	{
-		if(testLocation(stateInfo, location, sb))
+		// WE need to manage isComplete here, as well as 
+		// setting the tmpConvoyPath
+		
+		// use testLocationLTR
+		// and currentLocNum....
+		// 
+		final LocationTestResult ltr = testLocationLTR(stateInfo, location, sb);
+		if(ltr.isValid)
 		{
 			if(currentLocNum == 0)
 			{
@@ -266,27 +408,101 @@ public class GUIMove extends Move implements GUIOrder
 				power = unit.getPower();
 				srcUnitType = unit.getType();
 				currentLocNum++;
-				return true;
-			}
-			else if(currentLocNum == 1)
-			{
-				dest = new Location(location.getProvince(), location.getCoast());
 				
-				sb.setLength(0);
-				sb.append( Utils.getLocalString(GUIOrder.COMPLETE, getFullName()) );
-				currentLocNum++;
+				// we're good to go. If this unit is a coastal army, it is
+				// considered "possibly convoyable". We may use this later.
+				isConvoyableArmy = (location.getProvince().isCoastal() &&  Unit.Type.ARMY.equals(srcUnitType));
+				if(isConvoyableArmy)
+				{
+					assert (tmpConvoyPath == null);
+					tmpConvoyPath = new LinkedList();
+					tmpConvoyPath.add( getSource().getProvince() );
+				}
+				
 				return true;
 			}
-			
+			else if(currentLocNum > 0)
+			{
+				if(ltr.isFinalDest && currentLocNum == 1)
+				{
+					// nonconvoyed; we are done.
+					// 
+					dest = new Location(location.getProvince(), location.getCoast());
+					
+					sb.setLength(0);
+					sb.append( Utils.getLocalString(GUIOrder.COMPLETE, getFullName()) );
+					currentLocNum++;
+					isComplete = true;
+					return true;
+				}
+				
+				// we are convoyed.... 
+				//
+				// add to tmp path
+				assert (isConvoyableArmy);
+				tmpConvoyPath.add( location.getProvince() );
+				currentLocNum++;
+				updateConvoyPath();
+				
+				if(ltr.isFinalDest)
+				{
+					dest = new Location(location.getProvince(), location.getCoast());
+					sb.setLength(0);
+					sb.append( Utils.getLocalString(GUIOrder.COMPLETE, getFullName()) );
+					isComplete = true;
+				}
+				else
+				{
+					sb.setLength(0);
+					sb.append( Utils.getLocalString(ADDED_CONVOY_LOCATION, location.getProvince()) );					
+				}
+				
+				return true;
+			}
 		}
 		
 		return false;
 	}// setLocation()
 	
+	
+	/** Provides partial order text if, for example, destination is not yet set. */
+	public String getDefaultFormat()
+	{
+		if(convoyRoutes != null)
+		{
+			return super.getDefaultFormat();
+		}
+		else
+		{
+			if(dest == null)
+			{
+				return moveFormatOrigin;
+			}
+		}
+		
+		return super.getDefaultFormat();
+	}// getDefaultFormat()
+	
+	
+	/** Updates convoyPath() from tmpConvoyPath() */
+	private void updateConvoyPath()
+	{
+		if(tmpConvoyPath == null)
+		{
+			convoyRoutes = null;
+		}
+		else
+		{
+			final Province[] provinceRoute = (Province[]) tmpConvoyPath.toArray(
+				new Province[tmpConvoyPath.size()]);
+			convoyRoutes = new ArrayList(1);
+			convoyRoutes.add(provinceRoute);
+		}
+	}// updateConvoyPath()
+	
 	public boolean isComplete()
 	{
-		assert (currentLocNum <= getNumRequiredLocations());
-		return (currentLocNum == getNumRequiredLocations());
+		return isComplete;
 	}// isComplete()
 	
 	public int getNumRequiredLocations()		{ return REQ_LOC; }
@@ -294,45 +510,11 @@ public class GUIMove extends Move implements GUIOrder
 	public int getCurrentLocationNum()			{ return currentLocNum; }
 	
 	
-	/**
-	*	Sets optional Move parameters.
-	*
-	*/
-	public void setParam(Parameter param, Object value)
-	{
-		if(param == BY_CONVOY)
-		{
-			if(value instanceof Boolean)
-			{
-				_isViaConvoy = ((Boolean) value).booleanValue();
-			}
-			else
-			{
-				throw new IllegalArgumentException();
-			}
-		}
-		else
-		{
-			throw new IllegalArgumentException();
-		}
-	}// setParam()
+	/** Always throws an IllegalArgumentException */
+	public void setParam(Parameter param, Object value)	{ throw new IllegalArgumentException(); }
 	
-
-	/**
-	*	Get optional Move parameters.
-	*
-	*/
-	public Object getParam(Parameter param)
-	{
-		if(param == BY_CONVOY)
-		{
-			return Boolean.valueOf(isViaConvoy());
-		}
-		else
-		{
-			throw new IllegalArgumentException();
-		}
-	}// getParam()
+	/** Always throws an IllegalArgumentException */
+	public Object getParam(Parameter param)	{ throw new IllegalArgumentException(); }
 	
 	
 	
@@ -610,19 +792,6 @@ public class GUIMove extends Move implements GUIOrder
 	public boolean isDependent()	{ return true; }
 	
 	
-	/** Provides partial order text if, for example, destination is not yet set. */
-	public String getDefaultFormat()
-	{
-		if(dest == null)
-		{
-			return moveFormatOrigin;
-		}
-		
-		return super.getDefaultFormat();
-	}// getDefaultFormat()
-	
-	
-	
 	/**
 	*	Typesafe Enumerated Parameter class for setting
 	*	optional Move parameters.
@@ -638,5 +807,4 @@ public class GUIMove extends Move implements GUIOrder
 	}// nested class MoveParameter
 	
 	
-	
-}// class GUIMove
+}// class GUIMoveExplicit
