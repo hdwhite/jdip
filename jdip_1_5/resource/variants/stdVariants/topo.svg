@@ -11,7 +11,7 @@
 	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
 	  dislodgedUnitOffset CDATA #IMPLIED
 	  >
-	<!ELEMENT jdipNS:PROVINCE (jdipNS:UNIT, jdipNS:DISLODGED_UNIT, jdipNS:SUPPLY_CENTER?)+>
+	<!ELEMENT jdipNS:PROVINCE (jdipNS:UNIT, jdipNS:DISLODGED_UNIT?, jdipNS:SUPPLY_CENTER?)+>
 	<!ATTLIST jdipNS:PROVINCE
 	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
 	  name CDATA #REQUIRED
@@ -223,89 +223,89 @@
 		<jdipNS:CONVOY deltaRadius="5" strokeCSSStyle="convoyorder" markerID="arrow" hilightOffset="0"  hilightCSSClass="shadowdash"/>
 	</jdipNS:ORDERDRAWING>
 	
-	<jdipNS:PROVINCE_DATA>
-		<jdipNS:PROVINCE name="adr"><jdipNS:UNIT x="300" y="495"/><jdipNS:DISLODGED_UNIT x="315" y="495"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="aeg"><jdipNS:UNIT x="480" y="570"/><jdipNS:DISLODGED_UNIT x="520" y="555"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="alb"><jdipNS:UNIT x="345" y="495"/><jdipNS:DISLODGED_UNIT x="375" y="495"/><jdipNS:SUPPLY_CENTER x="360" y="495"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ank"><jdipNS:UNIT x="585" y="495"/><jdipNS:DISLODGED_UNIT x="585" y="525"/><jdipNS:SUPPLY_CENTER x="585" y="510"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="apu"><jdipNS:UNIT x="255" y="525"/><jdipNS:DISLODGED_UNIT x="285" y="555"/><jdipNS:SUPPLY_CENTER x="270" y="540"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="arm"><jdipNS:UNIT x="615" y="435"/><jdipNS:DISLODGED_UNIT x="615" y="495"/><jdipNS:SUPPLY_CENTER x="615" y="465"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bal"><jdipNS:UNIT x="375" y="210"/><jdipNS:DISLODGED_UNIT x="425" y="200"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bar"><jdipNS:UNIT x="480" y="75 "/><jdipNS:DISLODGED_UNIT x="520" y=" 75"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bel"><jdipNS:UNIT x="165" y="225"/><jdipNS:DISLODGED_UNIT x="165" y="255"/><jdipNS:SUPPLY_CENTER x="165" y="240"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ber"><jdipNS:UNIT x="345" y="255"/><jdipNS:DISLODGED_UNIT x="375" y="285"/><jdipNS:SUPPLY_CENTER x="360" y="270"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bla"><jdipNS:UNIT x="570" y="420"/><jdipNS:DISLODGED_UNIT x="580" y="380"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="boh"><jdipNS:UNIT x="300" y="345"/><jdipNS:DISLODGED_UNIT x="360" y="345"/><jdipNS:SUPPLY_CENTER x="330" y="345"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bre"><jdipNS:UNIT x="45 " y="255"/><jdipNS:DISLODGED_UNIT x="45" y="285"/><jdipNS:SUPPLY_CENTER x="45" y="270"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bud"><jdipNS:UNIT x="385" y="405"/><jdipNS:DISLODGED_UNIT x="425" y="405"/><jdipNS:SUPPLY_CENTER x="405" y="405"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bul"><jdipNS:UNIT x="465" y="465"/><jdipNS:DISLODGED_UNIT x="525" y="525"/><jdipNS:SUPPLY_CENTER x="495" y="495"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bur"><jdipNS:UNIT x="150" y="300"/><jdipNS:DISLODGED_UNIT x="165" y="315"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="cly"><jdipNS:UNIT x="75 " y="45 "/><jdipNS:DISLODGED_UNIT x="90 " y=" 45"/><jdipNS:SUPPLY_CENTER x="105" y="45"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="con"><jdipNS:UNIT x="555" y="505"/><jdipNS:DISLODGED_UNIT x="555" y="545"/><jdipNS:SUPPLY_CENTER x="555" y="525"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="den"><jdipNS:UNIT x="285" y="165"/><jdipNS:DISLODGED_UNIT x="285" y="225"/><jdipNS:SUPPLY_CENTER x="285" y="195"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="eas"><jdipNS:UNIT x="510" y="615"/><jdipNS:DISLODGED_UNIT x="590" y="610"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="edi"><jdipNS:UNIT x="135" y="45 "/><jdipNS:DISLODGED_UNIT x="135" y=" 75"/><jdipNS:SUPPLY_CENTER x="135" y="60"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="eng"><jdipNS:UNIT x="65 " y="210"/><jdipNS:DISLODGED_UNIT x="105 " y="210"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="fin"><jdipNS:UNIT x="510" y="150"/><jdipNS:DISLODGED_UNIT x="570" y="150"/><jdipNS:SUPPLY_CENTER x="540" y="150"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="gal"><jdipNS:UNIT x="405" y="345"/><jdipNS:DISLODGED_UNIT x="435" y="375"/><jdipNS:SUPPLY_CENTER x="420" y="360"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="gas"><jdipNS:UNIT x="75 " y="315"/><jdipNS:DISLODGED_UNIT x="75 " y="345"/><jdipNS:SUPPLY_CENTER x="75" y="330"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="gre"><jdipNS:UNIT x="405" y="495"/><jdipNS:DISLODGED_UNIT x="435" y="525"/><jdipNS:SUPPLY_CENTER x="420" y="510"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bot"><jdipNS:UNIT x="525" y="210"/><jdipNS:DISLODGED_UNIT x="575" y="200"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="lyo"><jdipNS:UNIT x="135" y="465"/><jdipNS:DISLODGED_UNIT x="140" y="430"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="hel"><jdipNS:UNIT x="255" y="210"/><jdipNS:DISLODGED_UNIT x="260" y="190"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="hol"><jdipNS:UNIT x="195" y="225"/><jdipNS:DISLODGED_UNIT x="225" y="225"/><jdipNS:SUPPLY_CENTER x="210" y="225"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ion"><jdipNS:UNIT x="360" y="580"/><jdipNS:DISLODGED_UNIT x="330" y="540"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="iri"><jdipNS:UNIT x="65 " y="135"/><jdipNS:DISLODGED_UNIT x="65 " y="115"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="kie"><jdipNS:UNIT x="240" y="270"/><jdipNS:DISLODGED_UNIT x="300" y="270"/><jdipNS:SUPPLY_CENTER x="270" y="270"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="lon"><jdipNS:UNIT x="135" y="165"/><jdipNS:DISLODGED_UNIT x="165" y="165"/><jdipNS:SUPPLY_CENTER x="150" y="165"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="lvn"><jdipNS:UNIT x="480" y="255"/><jdipNS:DISLODGED_UNIT x="540" y="255"/><jdipNS:SUPPLY_CENTER x="510" y="255"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="lvp"><jdipNS:UNIT x="105" y="75 "/><jdipNS:DISLODGED_UNIT x="105" y="105"/><jdipNS:SUPPLY_CENTER x="105" y="90"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="mar"><jdipNS:UNIT x="135" y="345"/><jdipNS:DISLODGED_UNIT x="135" y="405"/><jdipNS:SUPPLY_CENTER x="135" y="375"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="mao"><jdipNS:UNIT x="30 " y="420"/><jdipNS:DISLODGED_UNIT x="45 " y="380"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="mos"><jdipNS:UNIT x="525" y="300"/><jdipNS:DISLODGED_UNIT x="585" y="300"/><jdipNS:SUPPLY_CENTER x="555" y="300"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="mun"><jdipNS:UNIT x="240" y="315"/><jdipNS:DISLODGED_UNIT x="300" y="315"/><jdipNS:SUPPLY_CENTER x="270" y="315"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="naf"><jdipNS:UNIT x="15 " y="600"/><jdipNS:DISLODGED_UNIT x="75 " y="600"/><jdipNS:SUPPLY_CENTER x="45" y="600"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nap"><jdipNS:UNIT x="235" y="585"/><jdipNS:DISLODGED_UNIT x="275" y="585"/><jdipNS:SUPPLY_CENTER x="255" y="585"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nao"><jdipNS:UNIT x="30 " y="60 "/><jdipNS:DISLODGED_UNIT x="30 " y=" 30"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nth"><jdipNS:UNIT x="205" y="100"/><jdipNS:DISLODGED_UNIT x="225" y="80"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nor"><jdipNS:UNIT x="405" y="105"/><jdipNS:DISLODGED_UNIT x="465" y="105"/><jdipNS:SUPPLY_CENTER x="435" y="105"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nwg"><jdipNS:UNIT x="300" y="45 "/><jdipNS:DISLODGED_UNIT x="300" y=" 20"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="par"><jdipNS:UNIT x="75 " y="285"/><jdipNS:DISLODGED_UNIT x="105" y="285"/><jdipNS:SUPPLY_CENTER x="90" y="285"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="pic"><jdipNS:UNIT x="85 " y="255"/><jdipNS:DISLODGED_UNIT x="125" y="255"/><jdipNS:SUPPLY_CENTER x="105" y="255"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="pie"><jdipNS:UNIT x="165" y="390"/><jdipNS:DISLODGED_UNIT x="195" y="420"/><jdipNS:SUPPLY_CENTER x="180" y="405"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="por"><jdipNS:UNIT x="75 " y="405"/><jdipNS:DISLODGED_UNIT x="75 " y="435"/><jdipNS:SUPPLY_CENTER x="75" y="420"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="pru"><jdipNS:UNIT x="405" y="255"/><jdipNS:DISLODGED_UNIT x="405" y="285"/><jdipNS:SUPPLY_CENTER x="360" y="270"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="rom"><jdipNS:UNIT x="225" y="525"/><jdipNS:DISLODGED_UNIT x="225" y="555"/><jdipNS:SUPPLY_CENTER x="225" y="540"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ruh"><jdipNS:UNIT x="195" y="255"/><jdipNS:DISLODGED_UNIT x="195" y="285"/><jdipNS:SUPPLY_CENTER x="195" y="270"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="rum"><jdipNS:UNIT x="465" y="375"/><jdipNS:DISLODGED_UNIT x="525" y="435"/><jdipNS:SUPPLY_CENTER x="495" y="405"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ser"><jdipNS:UNIT x="390" y="435"/><jdipNS:DISLODGED_UNIT x="420" y="465"/><jdipNS:SUPPLY_CENTER x="405" y="450"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="sev"><jdipNS:UNIT x="540" y="345"/><jdipNS:DISLODGED_UNIT x="600" y="345"/><jdipNS:SUPPLY_CENTER x="570" y="345"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="sil"><jdipNS:UNIT x="375" y="315"/><jdipNS:DISLODGED_UNIT x="405" y="315"/><jdipNS:SUPPLY_CENTER x="390" y="315"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ska"><jdipNS:UNIT x="270" y="135"/><jdipNS:DISLODGED_UNIT x="285" y="130"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="smy"><jdipNS:UNIT x="585" y="555"/><jdipNS:DISLODGED_UNIT x="585" y="585"/><jdipNS:SUPPLY_CENTER x="585" y="570"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="spa"><jdipNS:UNIT x="105" y="405"/><jdipNS:DISLODGED_UNIT x="105" y="435"/><jdipNS:SUPPLY_CENTER x="105" y="420"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="stp"><jdipNS:UNIT x="615" y="150"/><jdipNS:DISLODGED_UNIT x="615" y="210"/><jdipNS:SUPPLY_CENTER x="615" y="180"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="swe"><jdipNS:UNIT x="360" y="150"/><jdipNS:DISLODGED_UNIT x="420" y="150"/><jdipNS:SUPPLY_CENTER x="390" y="150"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="swi"><jdipNS:UNIT x="180" y="345"/><jdipNS:DISLODGED_UNIT x="180" y="345"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="syr"><jdipNS:UNIT x="615" y="585"/><jdipNS:DISLODGED_UNIT x="615" y="615"/><jdipNS:SUPPLY_CENTER x="615" y="600"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tri"><jdipNS:UNIT x="285" y="405"/><jdipNS:DISLODGED_UNIT x="345" y="465"/><jdipNS:SUPPLY_CENTER x="315" y="435"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tun"><jdipNS:UNIT x="120" y="585"/><jdipNS:DISLODGED_UNIT x="150" y="615"/><jdipNS:SUPPLY_CENTER x="135" y="600"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tus"><jdipNS:UNIT x="165" y="480"/><jdipNS:DISLODGED_UNIT x="195" y="510"/><jdipNS:SUPPLY_CENTER x="180" y="495"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tyr"><jdipNS:UNIT x="225" y="360"/><jdipNS:DISLODGED_UNIT x="255" y="390"/><jdipNS:SUPPLY_CENTER x="240" y="375"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tys"><jdipNS:UNIT x="180" y="570"/><jdipNS:DISLODGED_UNIT x="195" y="555"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ukr"><jdipNS:UNIT x="465" y="345"/><jdipNS:DISLODGED_UNIT x="495" y="345"/><jdipNS:SUPPLY_CENTER x="480" y="345"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ven"><jdipNS:UNIT x="225" y="450"/><jdipNS:DISLODGED_UNIT x="255" y="480"/><jdipNS:SUPPLY_CENTER x="240" y="465"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="vie"><jdipNS:UNIT x="300" y="375"/><jdipNS:DISLODGED_UNIT x="360" y="375"/><jdipNS:SUPPLY_CENTER x="330" y="375"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="wal"><jdipNS:UNIT x="105" y="135"/><jdipNS:DISLODGED_UNIT x="105" y="165"/><jdipNS:SUPPLY_CENTER x="105" y="150"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="war"><jdipNS:UNIT x="435" y="285"/><jdipNS:DISLODGED_UNIT x="465" y="315"/><jdipNS:SUPPLY_CENTER x="450" y="300"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="wes"><jdipNS:UNIT x="75 " y="525"/><jdipNS:DISLODGED_UNIT x="100" y="500"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="yor"><jdipNS:UNIT x="135" y="105"/><jdipNS:DISLODGED_UNIT x="135" y="135"/><jdipNS:SUPPLY_CENTER x="135" y="120"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bul-ec"><jdipNS:UNIT x="525" y="475"/><jdipNS:DISLODGED_UNIT x="535" y="465"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bul-sc"><jdipNS:UNIT x="495" y="525"/><jdipNS:DISLODGED_UNIT x="505" y="535"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="spa-nc"><jdipNS:UNIT x="105" y="385"/><jdipNS:DISLODGED_UNIT x="100" y="380"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="spa-sc"><jdipNS:UNIT x="105" y="445"/><jdipNS:DISLODGED_UNIT x="110" y="450"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="stp-nc"><jdipNS:UNIT x="615" y="120"/><jdipNS:DISLODGED_UNIT x="615" y="110"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="stp-sc"><jdipNS:UNIT x="615" y="230"/><jdipNS:DISLODGED_UNIT x="605" y="230"/></jdipNS:PROVINCE>
+	<jdipNS:PROVINCE_DATA dislodgedUnitOffset="8,-8">
+		<jdipNS:PROVINCE name="adr"><jdipNS:UNIT x="300" y="495"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="aeg"><jdipNS:UNIT x="480" y="570"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="alb"><jdipNS:UNIT x="345" y="495"/><jdipNS:SUPPLY_CENTER x="360" y="495"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ank"><jdipNS:UNIT x="585" y="495"/><jdipNS:SUPPLY_CENTER x="585" y="510"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="apu"><jdipNS:UNIT x="255" y="525"/><jdipNS:SUPPLY_CENTER x="270" y="540"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="arm"><jdipNS:UNIT x="615" y="435"/><jdipNS:SUPPLY_CENTER x="615" y="465"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bal"><jdipNS:UNIT x="375" y="210"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bar"><jdipNS:UNIT x="480" y="75 "/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bel"><jdipNS:UNIT x="165" y="225"/><jdipNS:SUPPLY_CENTER x="165" y="240"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ber"><jdipNS:UNIT x="345" y="255"/><jdipNS:SUPPLY_CENTER x="360" y="270"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bla"><jdipNS:UNIT x="570" y="420"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="boh"><jdipNS:UNIT x="300" y="345"/><jdipNS:SUPPLY_CENTER x="330" y="345"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bre"><jdipNS:UNIT x="45 " y="255"/><jdipNS:SUPPLY_CENTER x="45" y="270"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bud"><jdipNS:UNIT x="385" y="405"/><jdipNS:SUPPLY_CENTER x="405" y="405"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bul"><jdipNS:UNIT x="465" y="465"/><jdipNS:SUPPLY_CENTER x="495" y="495"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bur"><jdipNS:UNIT x="150" y="300"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cly"><jdipNS:UNIT x="75 " y="45 "/><jdipNS:SUPPLY_CENTER x="105" y="45"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="con"><jdipNS:UNIT x="555" y="505"/><jdipNS:SUPPLY_CENTER x="555" y="525"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="den"><jdipNS:UNIT x="285" y="165"/><jdipNS:SUPPLY_CENTER x="285" y="195"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="eas"><jdipNS:UNIT x="510" y="615"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="edi"><jdipNS:UNIT x="135" y="45 "/><jdipNS:SUPPLY_CENTER x="135" y="60"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="eng"><jdipNS:UNIT x="65 " y="210"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="fin"><jdipNS:UNIT x="510" y="150"/><jdipNS:SUPPLY_CENTER x="540" y="150"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gal"><jdipNS:UNIT x="405" y="345"/><jdipNS:SUPPLY_CENTER x="420" y="360"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gas"><jdipNS:UNIT x="75 " y="315"/><jdipNS:SUPPLY_CENTER x="75" y="330"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gre"><jdipNS:UNIT x="405" y="495"/><jdipNS:SUPPLY_CENTER x="420" y="510"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bot"><jdipNS:UNIT x="525" y="210"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lyo"><jdipNS:UNIT x="135" y="465"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="hel"><jdipNS:UNIT x="255" y="210"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="hol"><jdipNS:UNIT x="195" y="225"/><jdipNS:SUPPLY_CENTER x="210" y="225"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ion"><jdipNS:UNIT x="360" y="580"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="iri"><jdipNS:UNIT x="65 " y="135"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="kie"><jdipNS:UNIT x="240" y="270"/><jdipNS:SUPPLY_CENTER x="270" y="270"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lon"><jdipNS:UNIT x="135" y="165"/><jdipNS:SUPPLY_CENTER x="150" y="165"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lvn"><jdipNS:UNIT x="480" y="255"/><jdipNS:SUPPLY_CENTER x="510" y="255"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lvp"><jdipNS:UNIT x="105" y="75 "/><jdipNS:SUPPLY_CENTER x="105" y="90"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mar"><jdipNS:UNIT x="135" y="345"/><jdipNS:SUPPLY_CENTER x="135" y="375"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mao"><jdipNS:UNIT x="30 " y="420"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mos"><jdipNS:UNIT x="525" y="300"/><jdipNS:SUPPLY_CENTER x="555" y="300"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mun"><jdipNS:UNIT x="240" y="315"/><jdipNS:SUPPLY_CENTER x="270" y="315"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="naf"><jdipNS:UNIT x="15 " y="600"/><jdipNS:SUPPLY_CENTER x="45" y="600"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nap"><jdipNS:UNIT x="235" y="585"/><jdipNS:SUPPLY_CENTER x="255" y="585"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nao"><jdipNS:UNIT x="30 " y="60 "/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nth"><jdipNS:UNIT x="205" y="100"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nor"><jdipNS:UNIT x="405" y="105"/><jdipNS:SUPPLY_CENTER x="435" y="105"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nwg"><jdipNS:UNIT x="300" y="45 "/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="par"><jdipNS:UNIT x="75 " y="285"/><jdipNS:SUPPLY_CENTER x="90" y="285"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pic"><jdipNS:UNIT x="85 " y="255"/><jdipNS:SUPPLY_CENTER x="105" y="255"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pie"><jdipNS:UNIT x="165" y="390"/><jdipNS:SUPPLY_CENTER x="180" y="405"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="por"><jdipNS:UNIT x="75 " y="405"/><jdipNS:SUPPLY_CENTER x="75" y="420"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pru"><jdipNS:UNIT x="405" y="255"/><jdipNS:SUPPLY_CENTER x="360" y="270"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="rom"><jdipNS:UNIT x="225" y="525"/><jdipNS:SUPPLY_CENTER x="225" y="540"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ruh"><jdipNS:UNIT x="195" y="255"/><jdipNS:SUPPLY_CENTER x="195" y="270"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="rum"><jdipNS:UNIT x="465" y="375"/><jdipNS:SUPPLY_CENTER x="495" y="405"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ser"><jdipNS:UNIT x="390" y="435"/><jdipNS:SUPPLY_CENTER x="405" y="450"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sev"><jdipNS:UNIT x="540" y="345"/><jdipNS:SUPPLY_CENTER x="570" y="345"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sil"><jdipNS:UNIT x="375" y="315"/><jdipNS:SUPPLY_CENTER x="390" y="315"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ska"><jdipNS:UNIT x="270" y="135"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="smy"><jdipNS:UNIT x="585" y="555"/><jdipNS:SUPPLY_CENTER x="585" y="570"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="spa"><jdipNS:UNIT x="105" y="405"/><jdipNS:SUPPLY_CENTER x="105" y="420"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="stp"><jdipNS:UNIT x="615" y="150"/><jdipNS:SUPPLY_CENTER x="615" y="180"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="swe"><jdipNS:UNIT x="360" y="150"/><jdipNS:SUPPLY_CENTER x="390" y="150"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="swi"><jdipNS:UNIT x="180" y="345"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="syr"><jdipNS:UNIT x="615" y="585"/><jdipNS:SUPPLY_CENTER x="615" y="600"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tri"><jdipNS:UNIT x="285" y="405"/><jdipNS:SUPPLY_CENTER x="315" y="435"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tun"><jdipNS:UNIT x="120" y="585"/><jdipNS:SUPPLY_CENTER x="135" y="600"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tus"><jdipNS:UNIT x="165" y="480"/><jdipNS:SUPPLY_CENTER x="180" y="495"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tyr"><jdipNS:UNIT x="225" y="360"/><jdipNS:SUPPLY_CENTER x="240" y="375"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tys"><jdipNS:UNIT x="180" y="570"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ukr"><jdipNS:UNIT x="465" y="345"/><jdipNS:SUPPLY_CENTER x="480" y="345"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ven"><jdipNS:UNIT x="225" y="450"/><jdipNS:SUPPLY_CENTER x="240" y="465"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="vie"><jdipNS:UNIT x="300" y="375"/><jdipNS:SUPPLY_CENTER x="330" y="375"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="wal"><jdipNS:UNIT x="105" y="135"/><jdipNS:SUPPLY_CENTER x="105" y="150"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="war"><jdipNS:UNIT x="435" y="285"/><jdipNS:SUPPLY_CENTER x="450" y="300"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="wes"><jdipNS:UNIT x="75 " y="525"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="yor"><jdipNS:UNIT x="135" y="105"/><jdipNS:SUPPLY_CENTER x="135" y="120"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bul-ec"><jdipNS:UNIT x="525" y="475"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bul-sc"><jdipNS:UNIT x="495" y="525"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="spa-nc"><jdipNS:UNIT x="105" y="385"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="spa-sc"><jdipNS:UNIT x="105" y="450"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="stp-nc"><jdipNS:UNIT x="615" y="120"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="stp-sc"><jdipNS:UNIT x="615" y="230"/></jdipNS:PROVINCE>
 	</jdipNS:PROVINCE_DATA>
 	
 	<title>Topographical Map</title>
