@@ -97,6 +97,10 @@ public class NJudgeOrderParser
 		ORDER_CONVOY, ORDER_DISBAND
 	};
 	
+	// unit delimiter array
+	private static final String[] UNIT_DELIMS = {
+		"army", "fleet", "wing"
+	};
 	
 	// class variables
 	private static final Pattern ADJUSTMENT_PATTERN = Pattern.compile(ADJUSTMENT_REGEX);;
@@ -903,19 +907,37 @@ public class NJudgeOrderParser
 		*/
 		// token-index
 		int idx = op.tokenIndex;
-		String tok = getToken(pc, idx, tokens);
 		
-		// parse next token; may be a power
-		final Power supPower = pc.map.getPower(tok);
+		Power supPower = null;
 		
-		// if power is null, try to parse as a unit. if it is NOT null,
-		// increment token.
-		if(supPower != null)
+		// parse next token; may be a power (or power adjective), or null
+		String[] toks = getTokenUpto(pc, idx, tokens, UNIT_DELIMS);
+		if(toks != null)
 		{
-			idx++;
-			tok = getToken(pc, idx, tokens);
+			// conjugate strings before parsing with getPower()
+			StringBuffer sb = new StringBuffer(64);
+			sb.append(toks[0]);
+			for(int i=1; i<toks.length; i++)
+			{
+				sb.append(' ');
+				sb.append(toks[i]);
+			}
+			
+			final String supPowerName = sb.toString();
+			supPower = pc.map.getPower(supPowerName);
+			
+			// increment index appropriately
+			idx += toks.length;
+			
+			// if toks is not null, we should have a valid power
+			if(supPower == null)
+			{
+				throw new OrderException("Unrecognized Possesive Power \""+supPowerName+"\" in order: "+pc.orderText);
+			}
 		}
 		
+		// toks was null; thus, next token should be a unit.
+		String tok = getToken(pc, idx, tokens);
 		final Unit.Type supUnit = parseUnitType(pc, tok);
 		
 		// now parsing at token AFTER unit type token
@@ -984,19 +1006,37 @@ public class NJudgeOrderParser
 		
 		// token-index
 		int idx = op.tokenIndex;
-		String tok = getToken(pc, idx, tokens);
 		
-		// parse next token; may be a power
-		final Power convoyPower = pc.map.getPower(tok);
+		Power convoyPower = null;
 		
-		// if power is null, try to parse as a unit. if it is NOT null,
-		// increment token.
-		if(convoyPower != null)
+		// parse next token; may be a power (or power adjective), or null
+		String[] toks = getTokenUpto(pc, idx, tokens, UNIT_DELIMS);
+		if(toks != null)
 		{
-			idx++;
-			tok = getToken(pc, idx, tokens);
+			// conjugate strings before parsing with getPower()
+			StringBuffer sb = new StringBuffer(64);
+			sb.append(toks[0]);
+			for(int i=1; i<toks.length; i++)
+			{
+				sb.append(' ');
+				sb.append(toks[i]);
+			}
+			
+			final String convoyPowerName = sb.toString();
+			convoyPower = pc.map.getPower(convoyPowerName);
+			
+			// increment index appropriately
+			idx += toks.length;
+			
+			// if toks is not null, we should have a valid power
+			if(convoyPower == null)
+			{
+				throw new OrderException("Unrecognized Possesive Power \""+convoyPowerName+"\" in order: "+pc.orderText);
+			}
 		}
 		
+		// toks was null; thus, next token should be a unit.
+		String tok = getToken(pc, idx, tokens);
 		final Unit.Type convoyUnit = parseUnitType(pc, tok);
 		
 		// now parsing at token AFTER unit type token
@@ -1057,6 +1097,79 @@ public class NJudgeOrderParser
 		
 		return tokens[index];
 	}// getToken()
+	
+	
+	/**
+	*	Checks to see if index is within bounds of token length,
+	*	as getToken does. 
+	*	<p>
+	*	If the delimiter is found, it will return all tokens upto
+	*	the delimiter. If the delimiter is found at the index, 
+	*	'null' will be returned. If no delimiter is found, an
+	*	exception is thrown.
+	*	
+	*/
+	private String[] getTokenUpto(final ParseContext pc, final int index, 
+		final String[] tokens, final String[] delim) 
+	throws OrderException
+	{
+		if(index < 0)
+		{
+			throw new IllegalArgumentException();
+		}
+		
+		if(index >= tokens.length)
+		{
+			throw new OrderException("Truncated order: "+pc.orderText);
+		}
+		
+		// is delim at start? if so, return null.
+		String tok = tokens[index];
+		for(int nDelim=0; nDelim<delim.length; nDelim++)
+		{
+			if(tok.equalsIgnoreCase(delim[nDelim]))
+			{
+				return null;
+			}
+		}
+		
+		ArrayList al = new ArrayList(3);
+		al.add(tok);
+		
+		boolean foundDelim = false;
+		for(int i=index+1; i<tokens.length; i++)
+		{
+			tok = tokens[i];
+			
+			for(int nDelim=0; nDelim<delim.length; nDelim++)
+			{
+				if(tok.equalsIgnoreCase(delim[nDelim]))
+				{
+					foundDelim = true;
+					break;
+				}
+			}
+			
+			if(foundDelim)
+			{
+				break;
+			}
+			else
+			{
+				al.add(tok);
+			}
+		}
+		
+		
+		if(!foundDelim)
+		{
+			throw new OrderException("Truncated order: "+pc.orderText);
+		}
+		
+		assert (!al.isEmpty());
+		return (String[]) al.toArray(new String[al.size()]);
+	}// getTokenUpto()
+	
 	
 	
 	/**

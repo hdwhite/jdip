@@ -90,7 +90,7 @@ POSTSTATE
 END
 
 
-CASE Borders.8 Order border test
+CASE Borders.7 Order border test
 PRESTATE_SETPHASE Spring 1901, Movement
 PRESTATE
 	England: A ber
@@ -106,7 +106,7 @@ POSTSTATE
 	France: A kiel
 END
 
-CASE Borders.9 Even/Odd: even year
+CASE Borders.8 Even/Odd: even year
 PRESTATE_SETPHASE Spring 1900, Movement
 PRESTATE
 	England: A ukr
@@ -120,7 +120,7 @@ POSTSTATE
 END
 
 
-CASE Borders.10 Even/Odd: odd year
+CASE Borders.9 Even/Odd: odd year
 PRESTATE_SETPHASE Spring 1901, Movement
 PRESTATE
 	England: A ukr
@@ -134,7 +134,7 @@ POSTSTATE
 END
 
 
-CASE Borders.11 Year of 1914
+CASE Borders.10 Year of 1914
 PRESTATE_SETPHASE Spring 1914, Movement
 PRESTATE
 	England: A mun
@@ -151,7 +151,7 @@ POSTSTATE
 END
 
 
-CASE Borders.12 Year of 1000
+CASE Borders.11 Year of 1000
 PRESTATE_SETPHASE Spring 1000, Movement
 PRESTATE
 	England: A mun
@@ -168,7 +168,7 @@ POSTSTATE
 END
 
 
-CASE Borders.13 Year of 3000
+CASE Borders.12 Year of 3000
 PRESTATE_SETPHASE Spring 3000, Movement
 PRESTATE
 	England: A mun
@@ -183,6 +183,8 @@ POSTSTATE
 	England: A boh
 	England: A bud
 END
+
+
 
 #
 #
