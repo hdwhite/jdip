@@ -134,6 +134,7 @@ public class JudgeImport
 			
 			// essential! create the default rules
 			world.setRuleOptions(RuleOptions.createFromVariant(variant));
+			
 		}
 		catch(InvalidWorldException e)
 		{

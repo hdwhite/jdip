@@ -1,9 +1,9 @@
-/*
-*  @(#)Build.java	1.00	4/1/2002
-*
-*  Copyright 2002 Zachary DelProposto. All rights reserved.
-*  Use is subject to license terms.
-*/
+//	
+//	 @(#)Build.java		4/1/2002
+//	
+//	 Copyright 2002 Zachary DelProposto. All rights reserved.
+//	 Use is subject to license terms.
+//	
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation; either version 2 of the License, or

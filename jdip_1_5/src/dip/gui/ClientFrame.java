@@ -211,9 +211,8 @@ public class ClientFrame extends JFrame
 			// higher-fidelity windows LAF
  			lafClassName = "com.jgoodies.plaf.windows.ExtWindowsLookAndFeel";
 			
-			// probably better, at least on Windows XP ??
-			// TODO: making this TRUE (default) different on Java 1.5? Determine.
-			UIManager.put("Application.useSystemFontSettings", Boolean.FALSE);
+			// enable this to use the Java (not windows system) default font.
+			// UIManager.put("Application.useSystemFontSettings", Boolean.FALSE);
 		}
 		else if(!Utils.isOSX())
 		{

@@ -30,6 +30,7 @@ import java.io.ObjectStreamException;
 import java.io.InvalidObjectException;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.Iterator;
 import java.lang.reflect.*;
 
 /**
@@ -220,6 +221,12 @@ public class RuleOptions implements Serializable
 			
 			throw new InvalidObjectException("RuleOptions: ALL_OPTIONS internal error");
 		}// readResolve()
+		
+		/** For debugging only */
+		public String toString()
+		{
+			return name;
+		}
 	}// nested class Option
 	
 	
@@ -282,6 +289,12 @@ public class RuleOptions implements Serializable
 			
 			throw new InvalidObjectException("RuleOptions: ALL_OPTIONVALUES internal error");
 		}// readResolve()
+		
+		/** For debugging only */
+		public String toString()
+		{
+			return name;
+		}
 	}// nested class OptionValue()
 	
 	
@@ -348,7 +361,28 @@ public class RuleOptions implements Serializable
 	}// getAllOptions()
 	
 	
-	
+	/** For debugging only; print the rule options */
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer(256);
+		sb.append(this.getClass().getName());
+		sb.append('\n');
+		
+		Set set = getAllOptions();
+		Iterator iter = set.iterator();
+		while(iter.hasNext())
+		{
+			Option opt = (Option) iter.next();
+			OptionValue ov = getOptionValue(opt);
+			sb.append("  ");
+			sb.append(opt);
+			sb.append(" : ");
+			sb.append(ov);
+			sb.append('\n');
+		}
+		
+		return sb.toString();
+	}// toString()
 	
 	
 	/**
@@ -377,7 +411,6 @@ public class RuleOptions implements Serializable
 		
 		// look up all name-value pairs via reflection.
 		Variant.NameValuePair[] nvps = variant.getRuleOptionNVPs();
-		
 		for(int i=0; i<nvps.length; i++)
 		{
 			Option option = null;

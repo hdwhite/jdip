@@ -648,7 +648,7 @@ final class JudgeImportHistory
 		// process adjustment info ownership info (if any)
 		//
 		AdjustmentParser adjParser = new AdjustmentParser(map, turn.getText());
-		procAdjustmentBlock(adjParser.getOwnership(), ts);
+		procAdjustmentBlock(adjParser.getOwnership(), ts, position);
 		
 		// check for elimination
 		position.setEliminationStatus(map.getPowers());
@@ -790,7 +790,7 @@ final class JudgeImportHistory
 		
 		// process adjustment info ownership info (if any)
 		AdjustmentParser adjParser = new AdjustmentParser(map, turn.getText());
-		procAdjustmentBlock(adjParser.getOwnership(), ts);
+		procAdjustmentBlock(adjParser.getOwnership(), ts, position);
 		
 		// check for elimination
 		ts.getPosition().setEliminationStatus(map.getPowers());
@@ -1053,7 +1053,7 @@ final class JudgeImportHistory
 	
 	
 	/**
-	*	Copies the previous TurnState (Position, really) home supply center information.
+	*	Copies the previous TurnState (Position, really) home SC and SC info.
 	*	<p>
 	*	If no previous home supply center information is available (e.g., 
 	*	initial turn), the information from the initial board setup is 
@@ -1064,11 +1064,22 @@ final class JudgeImportHistory
 	*/
 	private void copyPreviousSCInfo(TurnState current)
 	{
-		//System.out.println("Copying *previous* SC ownership info: ");
+		Log.println("copyPreviousSCInfo(): ", current.getPhase());
 		
 		// get previous position information (or initial, if previous not available)
-		TurnState previousTS = current.getWorld().getPreviousTurnState(current);
+		final TurnState previousTS = current.getWorld().getPreviousTurnState(current);
 		Position prevPos = (previousTS == null) ? oldPosition : previousTS.getPosition();
+		
+		if(previousTS != null)
+		{
+			Log.println("  Copying *previous* SC ownership info from: ", previousTS.getPhase());
+		}
+		else
+		{
+			Log.println("  !! Copying *previous* SC ownership info from: oldPosition");
+			Log.println("  world has the following Turnstates: ");
+			Log.println("  ", current.getWorld().getPhaseSet());
+		}
 		
 		// current position
 		Position currentPos = current.getPosition();
@@ -1082,14 +1093,18 @@ final class JudgeImportHistory
 			{
 				//System.out.println("  SC @ "+provinces[i]+", owned by "+power);
 				currentPos.setSupplyCenterOwner(provinces[i], power);
+				Log.println("  set SC: ", provinces[i], " owned by ", power);
 			}
 			power = prevPos.getSupplyCenterHomePower(provinces[i]);
 			if(power != null)
 			{
 				currentPos.setSupplyCenterHomePower(provinces[i], power);
+				Log.println("  set HSC: ", provinces[i], " owned by ", power);
 			}
 		}
 	}// copyPreviousSCInfo()
+	
+	
 	
 	
 	/** Copies the Previous turnstate's lastOccupier information only */
@@ -1119,23 +1134,23 @@ final class JudgeImportHistory
 	*	If no SC owner info exists, copyPreviousSCInfo() is used to 
 	*	supply the appropriate information.
 	*/
-	private void procAdjustmentBlock(AdjustmentParser.OwnerInfo[] ownerInfo, TurnState ts)
+	private void procAdjustmentBlock(AdjustmentParser.OwnerInfo[] ownerInfo, TurnState ts, Position position)
 	throws IOException
 	{
+		Log.println("procAdjustmentBlock(): ", ts.getPhase());
 		if(ownerInfo.length == 0)
 		{
+			Log.println("   No adjustment block. Copying previous SC ownership info.");
 			copyPreviousSCInfo(ts);
 		}
 		else
 		{
-			//System.out.println("Reading Ownership of SC block:");
-			Position position = ts.getPosition();
-			
 			for(int i=0; i<ownerInfo.length; i++)
 			{
 				Power power = map.getPowerMatching(ownerInfo[i].getPowerName());
 				if(power != null)
 				{
+					Log.println("   SC Owned by Power: ", power);
 					String[] provNames = ownerInfo[i].getProvinces();
 					for(int pi=0; pi<provNames.length; pi++)
 					{
@@ -1145,72 +1160,19 @@ final class JudgeImportHistory
 							throw new IOException("Unknown Province in SC Ownership block: "+provNames[pi]);
 						}
 						
-						//System.out.println("  SC @ "+province+", owned by "+power);
+						Log.println("       ", province);
 						position.setSupplyCenterOwner(province, power);
 					}
+				}
+				else
+				{
+					Log.println("  *** Unrecognized power: ", ownerInfo[i].getPowerName());
+					throw new IOException("Unregognized power \""+ownerInfo[i].getPowerName()+"\" in Ownership block.");
 				}
 			}
 		}
 	}// procAdjustmentBlock()
 	
-	
-	/**
-	*	Parses the order result text, and creates appropriate order results
-	*	(by adding to resultList) for a given order.
-	*	<p>
-	*	resultText supports: null, bounce, cut, dislodged, void
-	*	<p>
-	*	(null == success).
-	*/
-	/* OBSOLETE
-	private void makeOrderResults(List resultList, Order order, String resultText)
-	{
-		// simple case
-		if(resultText == null)
-		{
-			resultList.add(new OrderResult(order, OrderResult.ResultType.SUCCESS, null));
-			return;
-		}
-		
-		// complex case
-		String[] results = resultText.split(",");
-		for(int i=0; i<results.length; i++)
-		{
-			String textResult = results[i].trim();
-			if(textResult.equalsIgnoreCase("bounce"))
-			{
-				resultList.add(new OrderResult(order, OrderResult.ResultType.FAILURE, null));
-			}
-			else if(textResult.equalsIgnoreCase("cut"))
-			{
-				resultList.add(new OrderResult(order, OrderResult.ResultType.FAILURE, null));
-			}
-			else if(textResult.equalsIgnoreCase("dislodged"))
-			{
-				// create a failure result (if we were only dislodged)
-				if(results.length == 1)
-				{
-					resultList.add(new OrderResult(order, OrderResult.ResultType.FAILURE, null));
-				}
-				
-				// create a TEMPORARY dislodged result here
-				resultList.add(new OrderResult(order, OrderResult.ResultType.DISLODGED, "**TEMP**"));
-			}
-			else if(textResult.equalsIgnoreCase("void"))
-			{
-				resultList.add(new OrderResult(order, OrderResult.ResultType.VALIDATION_FAILURE, null));
-			}
-			else
-			{
-				// unknown result type! Assume failure.
-				resultList.add(new OrderResult(order, OrderResult.ResultType.FAILURE, 
-					Utils.getLocalString(JIH_UNKNOWN_RESULT, textResult)));
-			}
-		}
-		
-		return;
-	}// makeOrderResults()
-	*/
 	
 	/** 
 	*	Creates correct dislodged results (with retreat information) by matching	

@@ -611,8 +611,10 @@ public class MapPanel extends JPanel
 		try
 		{
 			svgCanvas.flushImageCache();
+			svgCanvas.setSVGDocument(null);
+			svgCanvas.stopProcessing();
 			svgCanvas.dispose();
-			 
+			
 			if(uml != null)
 			{
 				svgCanvas.removeUpdateManagerListener(uml);
@@ -647,6 +649,13 @@ public class MapPanel extends JPanel
 				mapRenderer.close();
 				mapRenderer = null;
 			}
+			
+			
+			controlBar = null;
+			eventListener = null;
+			symbolPack = null;
+			world = null;
+			turnState = null;
 		}
 		catch(Exception e)
 		{
@@ -1086,8 +1095,8 @@ public class MapPanel extends JPanel
 	*/
 	public void reloadMap()
 	{
-		svgCanvas.suspendProcessing();
 		svgCanvas.flushImageCache();
+		svgCanvas.suspendProcessing();
 		
 		// cleanup this
 		if(mapRenderer != null)
