@@ -48,6 +48,7 @@ import java.awt.Toolkit;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.awt.Insets;
+import java.awt.Font;
 import java.awt.event.*;
 import java.util.*;
 import java.text.MessageFormat;
@@ -1237,6 +1238,7 @@ public class OrderDisplayPanel extends JPanel
 	*/
 	private class OrderListRenderer extends DefaultListCellRenderer
 	{
+		
 		public Component getListCellRendererComponent(JList list, Object value, int index,
 														boolean isSelected, boolean cellHasFocus)
 		{
@@ -1252,6 +1254,36 @@ public class OrderDisplayPanel extends JPanel
 				else
 				{
 					setBackground(BG_DEFAULT);
+				}
+			}
+			
+			// set text, w/ or w/o conversion, depending upon if we are unicode-aware
+			Font f = component.getFont();
+			if(!f.canDisplay('\u2192'))
+			{
+				// search for unicode-arrow; replace with "->"
+				String text = ((JLabel) this).getText();
+				if(text != null)
+				{
+					StringBuffer buffer = new StringBuffer(text);
+					boolean isChanged = false;
+					
+					for(int i=buffer.length()-1; i>=0; i--)
+					{
+						final char c = buffer.charAt(i);
+						
+						if(c == '\u2192')
+						{
+							buffer.deleteCharAt(i);
+							buffer.insert(i, "->");
+							isChanged = true;
+						}
+					}
+					
+					if(isChanged)
+					{
+						((JLabel) this).setText(buffer.toString());
+					}
 				}
 			}
 			

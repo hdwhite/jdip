@@ -85,7 +85,7 @@ public class OrderStatusPanel extends XJPanel
 		
 		
 		// setup text field
-		orderField = new JTextField();
+		orderField = new dip.gui.swing.XJTextField();
 		orderField.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
