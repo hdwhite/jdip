@@ -132,6 +132,7 @@ public class ClientMenu
 	public static final Item REPORTS_PREVIOUS_RESULTS	= new Item("REPORTS_PREVIOUS_RESULTS");
 	public static final Item REPORTS_STATUS			= new Item("REPORTS_STATUS");
 	public static final Item REPORTS_SC_HISTORY		= new Item("REPORTS_SC_HISTORY");
+	public static final Item REPORTS_ORDER_STATS	= new Item("REPORTS_ORDER_STATS");
 	public static final Item REPORTS_MAP_INFO		= new Item("REPORTS_MAP_INFO");
 	
 	// Tools menu
@@ -355,6 +356,7 @@ public class ClientMenu
 		menu.add(makeMenuItem(REPORTS_PREVIOUS_RESULTS, false));
 		menu.add(makeMenuItem(REPORTS_STATUS, false));
 		menu.add(makeMenuItem(REPORTS_SC_HISTORY, false));
+		menu.add(makeMenuItem(REPORTS_ORDER_STATS, false));
 		menu.add(makeMenuItem(REPORTS_MAP_INFO, false));
 		menu.add(new JSeparator());
 		menu.add(makeMenuItem(EDIT_METADATA, false));
@@ -753,6 +755,7 @@ public class ClientMenu
 		setEnabled(REPORTS_PREVIOUS_RESULTS, false);
 		setEnabled(REPORTS_STATUS, false);
 		setEnabled(REPORTS_SC_HISTORY, false);
+		setEnabled(REPORTS_ORDER_STATS, false);
 		setEnabled(REPORTS_MAP_INFO, false);
 	}// setModeNone()
 	
@@ -804,6 +807,7 @@ public class ClientMenu
 		// REPORTS_PREVIOUS_RESULTS controlled by PhaseSelector.java
 		setEnabled(REPORTS_STATUS, true);
 		setEnabled(REPORTS_SC_HISTORY, true);
+		setEnabled(REPORTS_ORDER_STATS, true);
 		setEnabled(REPORTS_MAP_INFO, true);
 	}// setModeOrder()
 	
@@ -854,6 +858,7 @@ public class ClientMenu
 		// REPORTS_PREVIOUS_RESULTS controlled by PhaseSelector.java
 		setEnabled(REPORTS_STATUS, true);
 		setEnabled(REPORTS_SC_HISTORY, true);
+		setEnabled(REPORTS_ORDER_STATS, true);
 		setEnabled(REPORTS_MAP_INFO, true);
 	}// setModeReview()
 	
@@ -907,6 +912,7 @@ public class ClientMenu
 		// REPORTS_PREVIOUS_RESULTS controlled by PhaseSelector.java
 		setEnabled(REPORTS_STATUS, true);
 		setEnabled(REPORTS_SC_HISTORY, true);
+		setEnabled(REPORTS_ORDER_STATS, true);
 		setEnabled(REPORTS_MAP_INFO, true);
 	}// setModeEdit()
 	

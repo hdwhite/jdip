@@ -213,7 +213,7 @@ public class ClientFrame extends JFrame
 		if(Utils.isWindows())
 		{
 			// higher-fidelity windows LAF
-			lafClassName = "com.jgoodies.plaf.windows.ExtWindowsLookAndFeel";
+ 			lafClassName = "com.jgoodies.plaf.windows.ExtWindowsLookAndFeel";
 		}
 		else if(!Utils.isOSX())
 		{
@@ -1370,6 +1370,7 @@ public class ClientFrame extends JFrame
 			clientMenu.setActionMethod(ClientMenu.REPORTS_PREVIOUS_RESULTS, this, "onReportsPreviousResults");
 			clientMenu.setActionMethod(ClientMenu.REPORTS_STATUS, this, "onReportsStatus");
 			clientMenu.setActionMethod(ClientMenu.REPORTS_SC_HISTORY, this, "onReportsSCHistory");
+			clientMenu.setActionMethod(ClientMenu.REPORTS_ORDER_STATS, this, "onReportsOrderStats");
 			clientMenu.setActionMethod(ClientMenu.REPORTS_MAP_INFO, this, "onReportsMapInfo");
 			
 			// help
@@ -1700,8 +1701,7 @@ public class ClientFrame extends JFrame
 		
 		public void onReportsStatus()
 		{
-			viewData(VIEW_STATUS_TITLE, true, getTurnState(), 
-					 Help.HelpID.Dialog_StatusReport, 
+			viewData(VIEW_STATUS_TITLE, true, getTurnState(), null,
 					new TextViewer.TVRunnable()
 					{
 						public void run()
@@ -1710,6 +1710,12 @@ public class ClientFrame extends JFrame
 						}
 					}
 				);
+		}
+		
+		
+		public void onReportsOrderStats()
+		{
+			OrderStatsWriter.displayDialog(ClientFrame.this, getWorld(), getOFO());
 		}
 		
 		public void onReportsMapInfo()
