@@ -41,12 +41,16 @@ import java.util.regex.Pattern;
 *
 */
 
-public class Coast implements java.io.Serializable
+public final class Coast implements java.io.Serializable
 {
 	// transient data
 	transient static private Pattern[] patterns = null;
 	
 	// internal constants
+	// TODO: these need to be properly internationalized.
+	// To do that, we need internationlization support for coast 
+	// normalization and parsing also
+	// 
 	private static final String NORTH_FULL 		= "North Coast";
 	private static final String NORTH_ABBREV 	= "nc";
 	private static final String SOUTH_FULL 		= "South Coast";
@@ -62,9 +66,9 @@ public class Coast implements java.io.Serializable
 	private static final String WING_FULL 		= "Wing";
 	private static final String WING_ABBREV		= "wx";
 	private static final String UNDEFINED_FULL 		= "Undefined";
-	private static final String UNDEFINED_ABBREV 	= "?";
+	private static final String UNDEFINED_ABBREV 	= "?";	// perhaps make it "?c" ??
 	
-	/* To be used in the future ....
+	/* To be used in the future .... parsing to accomodate
 	private static final String NW_FULL 		= "Northwest Coast";
 	private static final String NE_FULL 		= "Northeast Coast";
 	private static final String SW_FULL 		= "Southwest Coast";
@@ -76,31 +80,42 @@ public class Coast implements java.io.Serializable
 	*/
 	
 	
+	
 	// constants
-	/** Constant indicating North Coast */
-	public static final Coast NORTH = new Coast(NORTH_FULL, NORTH_ABBREV);
-	/** Constant indicating South Coast */
-	public static final Coast SOUTH = new Coast(SOUTH_FULL, SOUTH_ABBREV);
-	/** Constant indicating West Coast */
-	public static final Coast WEST = new Coast(WEST_FULL, WEST_ABBREV);
-	/** Constant indicating East Coast */
-	public static final Coast EAST = new Coast(EAST_FULL, EAST_ABBREV);
-	/** Constant indicating no coast (Army movement) */
-	public static final Coast NONE = new Coast(NONE_FULL, NONE_ABBREV);
-	/** Constant indicating a single Coast (for fleets in coastal land areas, or sea-only provinces) */
-	public static final Coast SINGLE = new Coast(SINGLE_FULL, SINGLE_ABBREV);
+	/** Constant indicated an Undefined coast */
+	public static final Coast UNDEFINED = new Coast(UNDEFINED_FULL, UNDEFINED_ABBREV, 0);
 	/** Constant indicating Wing coast (for Wing movement) */
-	public static final Coast WING = new Coast(WING_FULL, WING_ABBREV);
+	public static final Coast WING = new Coast(WING_FULL, WING_ABBREV, 1);
+	/** Constant indicating no coast (Army movement) */
+	public static final Coast NONE = new Coast(NONE_FULL, NONE_ABBREV, 2);
+	/** Constant indicating a single Coast (for fleets in coastal land areas, or sea-only provinces) */
+	public static final Coast SINGLE = new Coast(SINGLE_FULL, SINGLE_ABBREV, 3);
+	/** Constant indicating North Coast */
+	public static final Coast NORTH = new Coast(NORTH_FULL, NORTH_ABBREV, 4);
+	/** Constant indicating South Coast */
+	public static final Coast SOUTH = new Coast(SOUTH_FULL, SOUTH_ABBREV, 5);
+	/** Constant indicating West Coast */
+	public static final Coast WEST = new Coast(WEST_FULL, WEST_ABBREV, 6);
+	/** Constant indicating East Coast */
+	public static final Coast EAST = new Coast(EAST_FULL, EAST_ABBREV, 7);
+	
 	/** Alias for Coast.WING */
 	public static final Coast TOUCHING = WING;
 	/** Alias for Coast.NONE */
 	public static final Coast LAND = NONE;
 	/** Alias for Coast.SINGLE */
 	public static final Coast SEA = SINGLE;	
-	/** Constant indicated an Undefined coast */
-	public static final Coast UNDEFINED = new Coast(UNDEFINED_FULL, UNDEFINED_ABBREV);
 	
-	/** Array of Coasts that are not typically displayed */
+	// index-to-coast array
+	private static final Coast[] IDX_ARRAY = {
+		UNDEFINED, WING, NONE, SINGLE, NORTH, SOUTH, WEST, EAST
+	};
+	
+	
+	/** 
+	*	Array of Coasts that are not typically displayed
+	*	<b>Warning: this should not be mutated.</b>
+	*/
 	public static final Coast[] NOT_DISPLAYED = { NONE, SINGLE, UNDEFINED, WING };
 	
 	/** 
@@ -123,15 +138,24 @@ public class Coast implements java.io.Serializable
 	// class variables
 	private final String name;
 	private final String abbreviation;
+	private final int index;
+	
+	// TODO: ?? hashCode should be == index (since index is unique)
 	private transient int hashCode = 0;	// cache the hashCode
 	
 	/**
 	*	Constructs a Coast
 	*/
-	private Coast(String name, String abbreviation)
+	private Coast(String name, String abbreviation, int index)
 	{
+		if(index < 0)
+		{
+			throw new IllegalArgumentException();
+		}
+		
 		this.name = name;
 		this.abbreviation = abbreviation;
+		this.index = index;
 	}// Coast()
 	
 	
@@ -150,6 +174,24 @@ public class Coast implements java.io.Serializable
 	{
 		return abbreviation;
 	}// getAbbreviation()
+	
+	/** Gets the index of a Coast. Indices are &gt;= 0. */
+	public int getIndex()
+	{
+		return index;
+	}// getIndex()
+	
+	
+	/** Gets the Coast corresponding to an index; null if index is out of range. */
+	public static Coast getCoast(int idx)
+	{
+		if(idx >= 0 && idx < IDX_ARRAY.length)
+		{
+			return IDX_ARRAY[idx];
+		}
+		
+		return null;
+	}// getCoast()
 	
 	/**
 	*	Returns the full name of the coast
