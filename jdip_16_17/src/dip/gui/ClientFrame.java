@@ -59,7 +59,10 @@ import java.util.*;
 import java.awt.dnd.*;
 import java.awt.datatransfer.*;
 import java.io.*;
-//import java.net.*;
+
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.SAXParser;
+import org.xml.sax.XMLReader;
 
 import jcmdline.*;	// command line handlers
 
@@ -195,12 +198,19 @@ public class ClientFrame extends JFrame
 		Log.println("   mem total: ", String.valueOf(Runtime.getRuntime().totalMemory()));
 		Log.println("   mem free: ", String.valueOf(Runtime.getRuntime().freeMemory()));
 		
-		/*
-		// Batik setup. org.apache.crimson.parser.XMLReaderImpl is the built-in JDK 1.4 parser
-		XMLResourceDescriptor.setXMLParserClassName("org.apache.crimson.parser.XMLReaderImpl");	
-			// NOTE: the above will not work in 1.5
-		*/
-		
+		// set Batik XMLReader based on JAXP XMLReader. 
+		// this should work for JDK 1.5, 1.4, etc.
+		try
+		{
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			XMLReader xmlReader = factory.newSAXParser().getXMLReader();
+			XMLResourceDescriptor.setXMLParserClassName(xmlReader.getClass().getName());
+			Log.println("Batik XMLReader: ", XMLResourceDescriptor.getXMLParserClassName());
+		}
+		catch(Exception e)
+		{
+			ErrorDialog.displayFatal(this, e);
+		}
 		
 		// setup per-OS options
 		if(Utils.isOSX())
