@@ -158,12 +158,11 @@ public class F2FGUIGameSetup implements GUIGameSetup
 			final XMLSerializer xs = XMLSerializer.get(context);
 			final Power[] powers = xs.getWorld().getMap().getPowers();
 			final ClassMapper cm = getCM();
-			final F2FState state = new F2FState(ggs.getState());
 			
-			xs.writeNVP("currentPower", xs.toString(state.getCurrentPower()), cm, hsw, context);
+			xs.writeNVP("currentPower", xs.toString(ggs.getState().getCurrentPower()), cm, hsw, context);
 			
 			hsw.startNode("submittedOrders");
-			Iterator iter = state.iterator();
+			Iterator iter = ggs.getState().iterator();
 			while(iter.hasNext())
 			{
 				Map.Entry entry = (Map.Entry) iter.next();

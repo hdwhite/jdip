@@ -324,13 +324,14 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	{
 		if(mmd != null)
 		{
-			final Power[] allPowers = world.getMap().getPowers();
-		   	for(int i=0; i<allPowers.length; i++)
-            {
-				final int tabIdx = getTabIndex(allPowers[i]);
+			final List list = world.getMap().getPowerList();
+			for(int i=0; i<list.size(); i++)
+			{
+				final Power power = (Power) list.get(i);
+				final int tabIdx = getTabIndex(power);
 				if(tabIdx > 0)
 				{
-					Color color = SVGColorParser.parseColor(mmd.getPowerColor(allPowers[i]));
+					Color color = SVGColorParser.parseColor(mmd.getPowerColor(power));
 					tabPane.setIconAt(tabIdx, new ColorRectIcon(12,12, color));
 				}
            }
@@ -380,9 +381,10 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	{
 		if(tabIdx == 0)
 		{
-			Power[] allPowers = world.getMap().getPowers();
-			clientFrame.fireDisplayablePowersChanged(clientFrame.getDisplayablePowers(), allPowers);
-			clientFrame.fireOrderablePowersChanged(clientFrame.getOrderablePowers(), new Power[0]);
+			List powerList = world.getMap().getPowerList();
+			Power[] powers = (Power[]) powerList.toArray(new Power[powerList.size()]);
+			clientFrame.fireDisplayablePowersChanged(clientFrame.getDisplayablePowers(), powers);
+			clientFrame.fireOrderablePowersChanged(clientFrame.getOrderablePowers(), Power.EMPTY_ARRAY);
 		}
 		else
 		{
@@ -409,7 +411,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		tabListener.setEnabled(false);
 		
 		// change orderable powers
-		clientFrame.fireOrderablePowersChanged(clientFrame.getOrderablePowers(), new Power[0]);
+		clientFrame.fireOrderablePowersChanged(clientFrame.getOrderablePowers(), Power.EMPTY_ARRAY);
 		
 		// remove old tabs (except for 'all' tab)
 		tabPane.removeAll();
@@ -426,16 +428,17 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		// disable tabs for powers that don't require orders during
 		// retreat or adjustment phases, if appropriate.
 		final Position pos = turnState.getPosition();
-		final Power[] allPowers = world.getMap().getPowers();
-		Adjustment.AdjustmentInfoMap f2fAdjMap = Adjustment.getAdjustmentInfo(turnState, 
-				world.getRuleOptions(), allPowers);
+		final List powerList = world.getMap().getPowerList();
 		
-		for(int i=0; i<allPowers.length; i++)
+		Adjustment.AdjustmentInfoMap f2fAdjMap = Adjustment.getAdjustmentInfo(turnState, 
+				world.getRuleOptions(), (Power[]) powerList.toArray(new Power[powerList.size()]));
+		
+		for(int i=0; i<powerList.size(); i++)
 		{
-			if( !pos.isEliminated(allPowers[i]) && allPowers[i].isActive() )
+			final Power power = (Power) powerList.get(i);
+			if( !pos.isEliminated(power) && power.isActive() )
 			{
 				// first tab added is at index 1 (0 is TAB_ALL)
-				final Power power = allPowers[i];
 				final int tabIdx = (i+1);
 				Icon icon = null;
 				
@@ -445,10 +448,10 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 					icon = new ColorRectIcon(12,12, color);
 				}
 				
-				tabMap.put(allPowers[i], new Integer(tabIdx));
-				tabPane.addTab(allPowers[i].getName(), icon, new JPanel(new BorderLayout()), "");
+				tabMap.put(power, new Integer(tabIdx));
+				tabPane.addTab(power.getName(), icon, new JPanel(new BorderLayout()), "");
 				
-				Adjustment.AdjustmentInfo adjInfo = f2fAdjMap.get(allPowers[i]);
+				Adjustment.AdjustmentInfo adjInfo = f2fAdjMap.get(power);
 				if(turnState.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT)
 				{
 					if(adjInfo.getAdjustmentAmount() == 0)
@@ -505,15 +508,16 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
     private int selectNextRandomTab()
 	{
  		// find Power tabs that are not disabled
-		final Power[] allPowers = world.getMap().getPowers();
-		List tabSelectionOrderList = new ArrayList(allPowers.length);
+		final List list = world.getMap().getPowerList();
+		List tabSelectionOrderList = new ArrayList(list.size());
  		
-		for(int i=0; i<allPowers.length; i++)
+		for(int i=0; i<list.size(); i++)
 		{
-			final int tabIdx = getTabIndex(allPowers[i]);
+			final Power power = (Power) list.get(i);
+			final int tabIdx = getTabIndex(power);
 			if(tabIdx >= 0 && tabPane.isEnabledAt(tabIdx))
 			{
-				tabSelectionOrderList.add(allPowers[i]);
+				tabSelectionOrderList.add(power);
 			}
 	   }
 	   
@@ -665,12 +669,13 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		{
 			// set enabled tabs (submitted == disabled)
 			boolean aSubmit = false;
-			final Power[] allPowers = world.getMap().getPowers();
-		   	for(int i=0; i<allPowers.length; i++)
-            {
-				boolean value = state.getSubmitted(allPowers[i]);
+			final List list = world.getMap().getPowerList();
+			for(int i=0; i<list.size(); i++)
+			{
+				final Power power = (Power) list.get(i);
+				boolean value = state.getSubmitted(power);
 				aSubmit = (value) ? true : aSubmit;
-				setTabEnabled(allPowers[i], !value);
+				setTabEnabled(power, !value);
 			}
 			
 			// set TAB_ALL enabled (if aSubmit == true, at least one turn
@@ -713,10 +718,10 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		{
 			entryState.setCurrentPower(null);
 			final int selectedIdx = tabPane.getSelectedIndex();
-			final Power[] allPowers = world.getMap().getPowers();
-		   	for(int i=0; i<allPowers.length; i++)
-            {
-				final Power power = allPowers[i];
+			final List list = world.getMap().getPowerList();
+			for(int i=0; i<list.size(); i++)
+			{
+				final Power power = (Power) list.get(i);
 				entryState.setSubmitted(power, !isTabEnabled(power));
 				if(selectedIdx >= 0 && selectedIdx == getTabIndex(power))
 				{
@@ -771,9 +776,9 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		{
 			if(f2fs == null) { throw new IllegalArgumentException(); }
 			
-			currentPower = f2fs.getCurrentPower();
 			synchronized(f2fs)
 			{
+				currentPower = f2fs.getCurrentPower();
 				submittedMap = (HashMap) f2fs.submittedMap.clone();
 			}
 		}// F2FState()
@@ -812,11 +817,15 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 			submittedMap.clear();
 		}// clearSubmitted()
 		
-		/** Get an iterator. Warning: not synchronized. Should only be used on a copy. */
-		public Iterator iterator()
+		/** 
+		*	Get an iterator. Note that this <b>always</b> returns an iterator
+		*	on a <b>copy</b> of the F2FState.
+		*/
+		public synchronized Iterator iterator()
 		{
-			return submittedMap.entrySet().iterator();
-		}
+			final F2FState copy = new F2FState(this); 
+			return copy.submittedMap.entrySet().iterator();
+		}// iterator()
 	}// nested class F2FState
 	
 }// class F2FOrderDisplayPanel
