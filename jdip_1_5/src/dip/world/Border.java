@@ -58,7 +58,10 @@ import java.util.Arrays;
 *	unitType was omitted, no unit could pass (Army, Wing, or Fleet) from 1900 to
 *	2000 years.
 *	<p>
-*	All specified items (except baseMoveModifier, thus from/unitTypes/
+*	The exception to this is the "from" field. If a "from" field is present,
+*	the other criteria apply ONLY if "from" matches.
+*	<p>
+*	All specified items (except baseMoveModifier and from), thus unitTypes/
 *	orderTypes/year/season/phase) must match for the Border to prohibit 
 *	crossing.
 *	<p>
@@ -72,7 +75,7 @@ import java.util.Arrays;
 *		<li><b>description: </b>If the border prohibits movement, this
 *			text message is displayed.</li>
 *		<li><b>from: </b>The locations from which units are coming that this
-*			applies to. Optional. </li>
+*			applies to. Optional. See above.</li>
 *		<li><b>unitTypes: </b> The unit types to which this applies. 
 *			Optional. </li>
 *		<li><b>orderTypes: </b> The order types (e.g., dip.order.Move) to which
@@ -485,96 +488,112 @@ public class Border implements Serializable
 	*/
 	public boolean canTransit(Location fromLoc, Unit.Type unit, Phase phase, Class orderClass)
 	{
+		/*
+		System.out.println("border: "+id);
+		System.out.println("  "+fromLoc.getProvince()+":"+fromLoc.getCoast()+", "+phase);
+		*/
+		
 		// check from
 		int nResults = 0;
 		int failResults = 0;
+		boolean fromMatched = false;
 		
 		if(from != null)
 		{
-			nResults++;
 			for(int i=0; i<from.length; i++)
 			{
 				if(from[i].equalsLoosely(fromLoc))
 				{
-					failResults++;
+					fromMatched = true;
 					break;
 				}
 			}
 		}
 		
-		// check unit type
-		if(unitTypes != null)
+		// we only apply criteria if 'from' was not specified, or
+		// from was specified, and it matches.
+		if(from == null || fromMatched)
 		{
-			nResults++;
-			for(int i=0; i<unitTypes.length; i++)
+			// check unit type
+			if(unitTypes != null)
 			{
-				if(unitTypes[i].equals(unit))
+				nResults++;
+				for(int i=0; i<unitTypes.length; i++)
 				{
-					failResults++;
-					break;
+					if(unitTypes[i].equals(unit))
+					{
+						failResults++;
+						break;
+					}
 				}
 			}
-		}
-		
-		// check order
-		if(orderClasses != null)
-		{
-			nResults++;
-			for(int i=0; i<orderClasses.length; i++)
+			
+			// check order
+			if(orderClasses != null)
 			{
-				if(orderClass == orderClasses[i])
+				nResults++;
+				for(int i=0; i<orderClasses.length; i++)
 				{
-					failResults++;
-					break;
+					if(orderClass == orderClasses[i])
+					{
+						failResults++;
+						break;
+					}
 				}
 			}
-		}
-		
-		// check phase (season, phase, and year)
-		if(seasons != null)
-		{
-			nResults++;
-			for(int i=0; i<seasons.length; i++)
+			
+			// check phase (season, phase, and year)
+			if(seasons != null)
 			{
-				if(phase.getSeasonType().equals(seasons[i]))
+				nResults++;
+				for(int i=0; i<seasons.length; i++)
 				{
-					failResults++;
-					break;
+					if(phase.getSeasonType().equals(seasons[i]))
+					{
+						failResults++;
+						break;
+					}
 				}
 			}
-		}
-		
-		if(phases != null)
-		{
-			nResults++;
-			for(int i=0; i<phases.length; i++)
+			
+			if(phases != null)
 			{
-				if(phase.getPhaseType().equals(phases[i]))
+				nResults++;
+				for(int i=0; i<phases.length; i++)
 				{
-					failResults++;
-					break;
+					if(phase.getPhaseType().equals(phases[i]))
+					{
+						failResults++;
+						break;
+					}
+				}
+			}
+			
+			// we always check the year
+			if(yearModifier != YEAR_NOT_SPECIFIED)
+			{
+				nResults++;
+				final int theYear = phase.getYear();
+				if(yearModifier == YEAR_ODD)
+				{
+					failResults += ((theYear & 1) == 1) ? 1 : 0;
+				}
+				else if(yearModifier == YEAR_EVEN)
+				{
+					failResults += ((theYear & 1) == 1) ? 0 : 1;
+				}         
+				else
+				{
+					failResults += ((yearMin <= theYear) && (theYear <= yearMax)) ? 1 : 0;
 				}
 			}
 		}
 		
-		// we always check the year
-		if(yearModifier != YEAR_NOT_SPECIFIED)
-		{
-			nResults++;
-			final int theYear = phase.getYear();
-			if(yearModifier == YEAR_ODD)
-			{
-				failResults += ((theYear & 1) == 1) ? 1 : 0;
-			}
-			else if(yearModifier == YEAR_EVEN)
-			{
-				failResults += ((theYear & 1) == 1) ? 0 : 1;
-			}         
-			else
-			{
-				failResults += ((yearMin <= theYear) && (theYear <= yearMax)) ? 1 : 0;
-			}
-		}
+		/*
+		System.out.println("  fromMatched: "+fromMatched);
+		System.out.println("  nResults: "+nResults);
+		System.out.println("  failResults: "+failResults);
+		*/
 		
 		// only return 'false' if EVERYTHING has failed, or, 
 		// nothing was tested

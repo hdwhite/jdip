@@ -399,7 +399,7 @@ public class Move extends Order
 			dest = dest.getValidatedWithMove(srcUnitType, src);
 			
 			// check that we can transit into destination (check borders)
-			border = dest.getProvince().getTransit(dest, srcUnitType, state.getPhase(), this.getClass());
+			border = dest.getProvince().getTransit(src, srcUnitType, state.getPhase(), this.getClass());
 			if(border != null)
 			{
 				throw new OrderException( Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()) );
