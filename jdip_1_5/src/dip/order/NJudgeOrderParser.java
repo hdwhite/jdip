@@ -83,18 +83,18 @@ public class NJudgeOrderParser
 	private static final String ALTERNATE_ADJUSTMENT_REGEX = 
 	"(?i)^([\\p{Alnum}\\-\\_]+):\\s+(\\d*)\\s(unusable|unused)?.*(build).*((waived|pending)).*";
 	
-	
 	// order tokens
 	private static final String  ORDER_HOLD 	= "HOLD";
 	private static final String  ORDER_MOVE		= "->";
 	private static final String  ORDER_SUPPORT 	= "SUPPORT";
 	private static final String  ORDER_CONVOY 	= "CONVOY";
 	private static final String  ORDER_DISBAND	= "DISBAND";
+	private static final String  ORDER_NO_ORDERS = "No";  // "England: Fleet Denmark, No Orders Processed."
 	
 	// all order tokens
 	private static final String[] ORDER_NAME_TOKENS = {
 		ORDER_HOLD, ORDER_MOVE, ORDER_SUPPORT, 
-		ORDER_CONVOY, ORDER_DISBAND
+		ORDER_CONVOY, ORDER_DISBAND, ORDER_NO_ORDERS
 	};
 	
 	// unit delimiter array
@@ -543,7 +543,8 @@ public class NJudgeOrderParser
 		final String type = op.orderName;
 		
 		if(type == ORDER_HOLD
-			|| type == ORDER_DISBAND)
+			|| type == ORDER_DISBAND
+			|| type == ORDER_NO_ORDERS)
 		{
 			return parseHoldOrDisband(pc, op, tokens, type);
 		}
@@ -702,8 +703,10 @@ public class NJudgeOrderParser
 	private Location parseLocation(final ParseContext pc, final String text)
 	throws OrderException
 	{
+		final String replaceFrom[] = {".", ","};
+		final String replaceTo[] = {"", ""};
 		final String locationText = Coast.normalize( 
-			Utils.replaceAll(text, ".", "") );
+			Utils.replaceAll(text, replaceFrom, replaceTo) );
 		
 		final Location loc = pc.map.parseLocation(locationText);
 		
@@ -780,6 +783,11 @@ public class NJudgeOrderParser
 		else if(type == ORDER_DISBAND)
 		{
 			return pc.orderFactory.createDisband(op.power, op.location, op.unit);
+		}
+		else if(type == ORDER_NO_ORDERS)
+		{
+			// FIXME: create own order type for "No Orders Processed"
+			return pc.orderFactory.createHold(op.power, op.location, op.unit);
 		}
 		
 		throw new IllegalStateException("expected HOLD or DISBAND");
