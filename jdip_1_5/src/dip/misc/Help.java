@@ -60,14 +60,16 @@ public class Help
 	{
 		try
 		{ 
-			String helpFileName = Utils.getResourceBasePrefix() + HELP_FILE_NAME;
+			final String helpFileName = Utils.getResourceBasePrefix() + HELP_FILE_NAME;
+			
 			URL url = HelpSet.findHelpSet(Utils.getClassLoader(), helpFileName, Utils.getLocale());
 			Log.println("HelpSet URL: ", url);
 			helpSet = new HelpSet(null, url);
 		}
 		catch(Exception e)
 		{
-			ErrorDialog.displaySerious(null, e);
+			Log.println("Help not available: ", e);
+			//ErrorDialog.displaySerious(null, e);
 			return;
 		}
 		

@@ -250,8 +250,9 @@ public class ClientFrame extends JFrame
 		// set exception handler
 		GUIExceptionHandler.registerHandler();
 		
-		
 		// init help system
+		// WORKAROUND: cannot get *#@($ help to work in webstart; gives an
+		// 'access denied' error. 
 		Help.init();
 		
 		// get the variant and tool directories. 

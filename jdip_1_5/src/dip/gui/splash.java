@@ -181,15 +181,13 @@ public final class splash
 	*/
 	private static void checkRequirements()
 	{
-		// we actually check the class file version; JDK 1.4 has a version 48.0
-		// 1.0 == 44
-		// 1.4 == 48
-		//
+		// 48 = 1.4; 49 = 1.5; 44 = 1.0   : class file version -> java version
 		String cv = System.getProperty("java.class.version","44.0");
-		if("48.0".compareTo(cv) < 0)
+		if("48.0".compareTo(cv) > 0)
 		{
 			String version = System.getProperty("java.version", "(unknown)");
 			String vendor = System.getProperty("java.vendor", "(unknown)");
+			
 			
 			// print an error to stderr
 			// 

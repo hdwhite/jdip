@@ -411,6 +411,15 @@
 		</java>
 	</target>
 	
+	<!-- run from splash -->
+	<target name="runsplash" depends="build" description="Runs jDip w/splash">
+		<java classname="dip.gui.splash" fork="yes" dir="${build.dir}">
+			<classpath  refid="run.class.path"/>
+			<jvmarg  value="-ea"/>
+			<jvmarg  value="-Xss1024K"/>
+		</java>
+	</target>
+	
 	
 	<!-- run, logging output to stdout -->
 	<target name="runlogged" depends="build" description="Runs jDip with Logging to stdout">
@@ -1067,7 +1076,7 @@
 		<copy file="${etc.dir}/webstart/jdip_local.jnlp" todir="${webstart.dir}"/>
 		<copy file="${etc.dir}/webstart/help.jnlp" todir="${webstart.dir}"/>
 		<copy file="${etc.dir}/webstart/index.html" todir="${webstart.dir}"/>
-		<copy file="${etc.dir}/32x32_icon.gif" todir="${webstart.dir}"/>
+		<copy file="${etc.dir}/64x64_jdip_icon.jpg" todir="${webstart.dir}"/>
 		
 		<!-- copy main jdip jar -->
 		<copy file="${dist.dir}/jdip.jar" todir="${webstart.dir}"/>
@@ -1080,52 +1089,33 @@
 		
 		<!-- copy all support libraries -->
 		<copy todir="${webstart.dir}/lib">
-			<fileset dir="${dist.dir}/lib"/>
+			<fileset dir="${dist.dir}/lib" excludes="jnlp.jar"/>
 		</copy>
 		
-		<!-- sign the files. NOTE: password must be set! -->
-		<!-- do not sign jhbasic.jar; it's already signed. -->
+		<!-- 
+		
+			sign all jars. This includes:
+			
+			1) main jDip file (jdip.jar)
+			2) all variants
+			3) all libraries in /lib, unless they are already signed.
+			
+			pre-SIGNED files must be excluded!! (e.g., jhbasic.jar)
+		-->
+		
+		<!-- main jdip file -->
 		<signjar  jar="${webstart.dir}/jdip.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
 		
-		<signjar  jar="${webstart.dir}/variants/hundredVariants.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/variants/loeb9Variants.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/variants/milanVariants.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/variants/pureVariants.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/variants/rootzVariants.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/variants/sailhoVariants.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/variants/stdVariants.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/variants/youngstownVariants.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-			
-		<signjar  jar="${webstart.dir}/variants/modernSymbols.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/variants/periodSymbols.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/variants/simpleSymbols.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
+		<!-- variants -->
+		<signjar lazy="true" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}">
+			<fileset dir="${webstart.dir}/variants" includes="*.jar *.zip"/>
+		</signjar>
 		
-		<signjar  jar="${webstart.dir}/lib/batik-awt-util.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-bridge.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-css.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-dom.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-ext.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-extension.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-gui-util.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-gvt.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-parser.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-script.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-svg-dom.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-svggen.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-swing.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-transcoder.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-util.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/batik-xml.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
+		<!-- /lib -->
+		<signjar lazy="true" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}">
+			<fileset dir="${webstart.dir}/lib" includes="*.jar *.zip" excludes="jhbasic.jar"/>
+		</signjar>
 		
-		<signjar  jar="${webstart.dir}/lib/HIGLayout.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/jade.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/jcmdline-1.0.1.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/JSX2.0.9.6.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/pdf-transcoder.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/xerces_2_3_0.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		<signjar  jar="${webstart.dir}/lib/xml-apis.jar" keystore="${etc.dir}/webstart/jdipKeystore" alias="dev" storepass="${sign.password}"/>
-		
-	
 	</target>
 </project>
 
