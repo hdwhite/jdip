@@ -5,6 +5,7 @@
 	<tocitem text="What's New" target="what_s_new_htm"/>
 	<tocitem text="GNU General Public License" target="gnu_general_public_license_htm"/>
 	<tocitem text="Version History" expand="false">
+		<tocitem text="1.6.8" target="ver168_htm"/>
 		<tocitem text="1.6.7" target="ver167_htm"/>
 		<tocitem text="1.6" target="ver160_htm"/>
 		<tocitem text="1.5.1" target="ver151_htm"/>
