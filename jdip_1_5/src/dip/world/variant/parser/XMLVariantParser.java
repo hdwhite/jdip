@@ -141,7 +141,6 @@ public class XMLVariantParser implements VariantParser
 		docBuilder = dbf.newDocumentBuilder();
 		docBuilder.setErrorHandler(new XMLErrorHandler());
 		FastEntityResolver.attach(docBuilder);
-		
 		provinceParser = new XMLProvinceParser(dbf);
 		
 		variantList = new LinkedList();
@@ -560,6 +559,7 @@ public class XMLVariantParser implements VariantParser
 			// see if we already have the URI data cached.
 			if(adjCache.get(adjacencyURI) != null)
 			{
+				//Log.println("  AdjCache: using cached adjacency data: ", adjacencyURI);
 				return (AdjCache) adjCache.get(adjacencyURI);
 			}
 			
@@ -571,6 +571,7 @@ public class XMLVariantParser implements VariantParser
 			}
 			
 			// parse resolved URI
+			//Log.println("  AdjCache: not in cache: ", adjacencyURI);
 			InputStream is = null;
 			try
 			{
