@@ -439,40 +439,6 @@
 		</java>
 	</target>
 	
-	<!-- make all tools -->
-	<target name="tools" depends="build" description="Create all Tools">
-		
-		<!-- REMEMBER: all Tools must have a .jar that ends in "Tool.jar" -->
-		
-		<!-- Compile the java code for the tools -->
-		<javac srcdir="${tool.dir}" destdir="${build.dir}/" includes="**/*.java" source="1.4" debug="true">
-			<classpath refid="compile.class.path"/>
-		</javac>
-		
-        <!-- TOOL #1: MapTool -->
-		<!-- delete old maptool -->
-		<delete file="${build.dir}/${plugin.dir}/MapTool.jar"/>
-		       
-		<!-- jar it up -->
-		<jar jarfile="${build.dir}/${plugin.dir}/MapTool.jar" basedir="${build.dir}"
-				includes="maptool/**" manifest="${tool.dir}/maptool_manifest.txt"/>
-			
-			
-		<!-- TOOL #2: Inspector -->
-		<delete file="${build.dir}/${plugin.dir}/InspectorTool.jar"/>
-		
-		<!-- jar it up -->
-		<jar jarfile="${build.dir}/${plugin.dir}/InspectorTool.jar" basedir="${build.dir}"
-				includes="inspector/**" manifest="${tool.dir}/inspector_manifest.txt"/>
-			
-		<!-- TOOL #3: Exporter -->
-		<delete file="${build.dir}/${plugin.dir}/ExporterTool.jar"/>
-			   
-		<!-- jar it up -->
-		<jar jarfile="${build.dir}/${plugin.dir}/ExporterTool.jar" basedir="${build.dir}"
-				includes="maptool/**" manifest="${tool.dir}/exporter_manifest.txt"/>
-	
-	</target>
 	
 	<!-- IzPack installer target; requires 'dist' -->
 	<target name="install" depends="dist" description="Create Install version of program">
@@ -513,13 +479,7 @@
 	</target>
 	
 	
-	<!-- 
-		create nightly build targets
-		
-		TODO:
-			1) create changelog
-			2) ?? create documentation ??
-	-->
+	<!-- create nightly build -->
 	<target name="nightlybuild" description="Creates nightly builds and changelogs">
 		<tstamp>
 			<format property="nightly.date" pattern="MMM-dd-yyyy"/>
