@@ -70,7 +70,6 @@ public class GUIRetreat extends Retreat implements GUIOrder
 	private transient int currentLocNum = 0;
 	private transient Point2D.Float failPt = null;
 	private transient SVGGElement group = null;
-	private static final transient String moveFormatOrigin = Utils.getLocalString("MOVE_FORMAT_ORIGIN");
 	
 	
 	/** Creates a GUIRetreat */
@@ -402,17 +401,6 @@ public class GUIRetreat extends Retreat implements GUIOrder
 	
 	
 	public boolean isDependent()	{ return false; }
-	
-	/** Provides partial order text if, for example, destination is not yet set. */
-	public String getDefaultFormat()
-	{
-		if(dest == null)
-		{
-			return moveFormatOrigin;
-		}
-		
-		return super.getDefaultFormat();
-	}// getDefaultFormat()
 	
 	
 	/** Generate text message containing valid retreat locations (if any). Assumes non-zero retreatLocs length. */
