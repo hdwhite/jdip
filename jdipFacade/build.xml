@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     Nov 8, 2004 10:30:18 PM                                                        
+
+     jdipFacade    
+     A simple API layer for interfacing with the Jdip Diplomacy Adjudicator.
+                   
+     ryanmichela                                                                
+     ====================================================================== -->
+<project name="jdipFacade" default="All">
+    <description>
+            A simple API layer for interfacing with the Jdip Diplomacy Adjudicator.
+    </description>
+
+	<property name="src" value="src"/>
+	<property name="bin" value="bin"/>
+	<property name="lib" value="lib"/>
+	<property name="doc" value="doc"/>
+
+	<!-- ================================= 
+          target: Init              
+         ================================= -->
+	<target name="Init">
+		<input message="Enter path to jdip.jar: " addproperty="jdipPath"/>
+	</target>
+	<!-- ================================= 
+	       target: All              
+	     ================================= -->
+    <target name="All" depends="Build, JavaDoc" description="--> Compiles, jars, and documents jdipFacade.">
+        <echo>Building all.</echo>
+    </target>
+	
+	
+    <!-- ================================= 
+          target: Build              
+         ================================= -->
+    <target name="Build" depends="Init" description="--> Builds classes and creates jar.">
+		<echo>Creating directories.</echo>
+		<mkdir dir="${bin}"/>
+		<mkdir dir="${lib}"/>
+		<mkdir dir="${doc}"/>
+    		<echo>Building jdipFacade.</echo>
+    		<javac srcdir="${src}" destdir="${bin}" includes="**/*.java" classpath="${jdipPath}/jdip.jar"/>
+    		<echo>Building jar.</echo>
+    		<jar destfile="${lib}/jdipFacade.jar" basedir="${bin}"/>
+    </target>
+
+	
+    <!-- ================================= 
+          target: JavaDoc              
+         ================================= -->
+    <target name="JavaDoc" depends="Init" description="--> Creates JavaDoc.">
+        	<echo>Creating documentation.</echo>
+    		<mkdir dir="${doc}"/>
+    		<javadoc destdir="${doc}" classpath="${jdipPath}/jdip.jar" verbose="false">
+    			<fileset dir="${src}"/>
+    		</javadoc>
+    </target>
+
+
+
+</project>
+

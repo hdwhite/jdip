@@ -1,0 +1,10 @@
+===================================
+HISTORY and CHANGELOG of jdipFacade
+===================================
+
+11 Nov 04
+Ryan Michela
+Initial commit. Basic Jdip functionality works. Can load variants,
+create a map, set orders, get information about powers and turn-state, and
+adjudicate the map. The test harness has been somewhat thoroughly tested and in
+all cases matched the results of the Jdip application.
