@@ -68,6 +68,10 @@ public class VictoryConditionsConverter implements Converter
 			String.valueOf(vc.getMaxGameDurationYears()));
 		hsw.endNode();
 		
+		hsw.startNode("initialYear");
+		hsw.addAttribute("value",
+			String.valueOf(vc.getInitialYear()));
+		hsw.endNode();
 	}// marshal()
 	
 	public boolean canConvert(java.lang.Class type)
@@ -77,6 +81,22 @@ public class VictoryConditionsConverter implements Converter
 	
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 	{
-		return null;
+		final XMLSerializer xs = XMLSerializer.get(context);
+        
+		Map elements = new HashMap();
+		
+		while(reader.hasMoreChildren())
+		{
+            reader.moveDown();
+            elements.put(reader.getNodeName(), Integer.valueOf(reader.getAttribute("value")));
+            reader.moveUp();
+		}
+		
+		return new VictoryConditions(
+			((Integer) elements.get("winningSupplyCenters")).intValue(),
+			((Integer) elements.get("yearsWithoutSCCapture")).intValue(),
+			((Integer) elements.get("maxGameLengthInYears")).intValue(),
+			((Integer) elements.get("initialYear")).intValue()
+		);
 	}// unmarshal()		
 }// VictoryConditionsConverter

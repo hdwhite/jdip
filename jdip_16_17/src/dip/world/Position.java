@@ -25,6 +25,7 @@ package dip.world;
 import dip.world.Province;
 import dip.world.Power;
 import dip.world.Unit;
+import dip.order.OrderException;
 
 import dip.world.io.XMLSerializer;
 
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -734,7 +736,7 @@ public class Position implements java.io.Serializable, Cloneable
 	
 	
 	/** All mutable Province data is kept here */
-	private class ProvinceData implements java.io.Serializable
+	private static class ProvinceData implements java.io.Serializable
 	{
 		// instance variables
 		private Unit 	unit = null;
@@ -864,7 +866,7 @@ public class Position implements java.io.Serializable, Cloneable
 	
 	
 	/** All mutable Power data is kept here */
-	private class PowerData implements java.io.Serializable
+	private static class PowerData implements java.io.Serializable
 	{
 		// instance variables
 		private boolean isEliminated = false;
@@ -912,17 +914,17 @@ public class Position implements java.io.Serializable, Cloneable
 	{
 		public ProvinceDataConverter(ClassMapper cm)
 		{
-			cm.alias("province", ProvinceData.class, ProvinceData.class);
+			cm.alias("position", ProvinceData.class, ProvinceData.class);
 		}// ProvinceDataConverter()
 		
 		
 		public void marshal(java.lang.Object source, HierarchicalStreamWriter hsw, 
 			MarshallingContext context)
 		{
-			XMLSerializer xs = XMLSerializer.get(context);
-			ProvinceData pd = (ProvinceData) source;
+			final XMLSerializer xs = XMLSerializer.get(context);
+			final ProvinceData pd = (ProvinceData) source;
 			
-			hsw.addAttribute( "name", 
+			hsw.addAttribute( "province", 
 				xs.toString( xs.getMap().reverseIndex(pd.getIdx()) ) );
 			
 			if(pd.getLastOccupier() != null)
@@ -975,12 +977,78 @@ public class Position implements java.io.Serializable, Cloneable
 		public boolean canConvert(java.lang.Class type)
 		{
 			return type.equals(ProvinceData.class);
-		}
+		}// canConvert()
 		
 		public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 		{
-			return null;
-		}
+			final XMLSerializer xs = XMLSerializer.get(context);
+			
+			final Province prov = xs.getProvince(reader.getAttribute("province"));
+			final ProvinceData pd = new ProvinceData(prov.getIndex());
+			
+			String tmp = reader.getAttribute("lastOccupier");
+			if(tmp != null)
+			{
+				pd.setLastOccupier( xs.getPower(tmp) );
+			}
+			
+			while(reader.hasMoreChildren())
+			{
+				reader.moveDown();
+				
+				final String nodeName = reader.getNodeName();
+				
+				if("SC".equals(nodeName))
+				{
+					pd.setSCOwner( xs.getPower(reader.getAttribute("owner")) );
+					pd.setSCHomePower( xs.getPower(reader.getAttribute("homePower")) );
+				}
+				else if("unit".equals(nodeName))
+				{
+					// <unit power="Italy" type="fleet" coast="" dislodged="true"/>
+					// COAST and DISLODGED are optional
+					
+					final Unit unit = new Unit(
+						xs.getPower(reader.getAttribute("power")),
+						xs.getUnitType(reader.getAttribute("type")) );
+					
+					Coast coast = Coast.UNDEFINED;
+					tmp = reader.getAttribute("coast");
+					if(tmp != null)
+					{
+						coast = xs.getCoast(tmp);
+					}
+					
+					final boolean isDislodged = Boolean.getBoolean(reader.getAttribute("dislodged"));
+					
+					// validate unit coast (absolutely required if coast not specified)
+					try
+					{
+						Location loc = new Location(prov, coast);
+						loc = loc.getValidated(unit.getType());
+						unit.setCoast(loc.getCoast());
+					}
+					catch(OrderException e)
+					{
+						throw new ConversionException(e.getMessage());
+					}
+					
+					// add unit
+					if(isDislodged)
+					{
+						pd.setDislodgedUnit(unit);
+					}
+					else
+					{              
+						pd.setUnit(unit);
+					}
+				}
+				
+				reader.moveUp();
+			}
+			
+			return pd;
+		}// unmarshal()
 			
 	}// ProvinceDataConverter()
 	
@@ -991,6 +1059,7 @@ public class Position implements java.io.Serializable, Cloneable
 		public PositionConverter(ClassMapper cm)
 		{
 			this.cm = cm;
+			cm.alias("positions", Position.class, Position.class);
 		}// PositionConverter()
 		
 		public void marshal(java.lang.Object source, HierarchicalStreamWriter hsw, 
@@ -1017,8 +1086,20 @@ public class Position implements java.io.Serializable, Cloneable
 		
 		public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 		{
-			return null;
-		}
+			final XMLSerializer xs = XMLSerializer.get(context);
+			final Position position = new Position(xs.getMap());
+			
+			while(reader.hasMoreChildren())
+			{
+				reader.moveDown();
+				final Class cls = cm.lookupType(reader.getNodeName());
+				final ProvinceData pd = (ProvinceData) context.convertAnother(context, cls);
+				position.provArray[pd.getIdx()] = pd;
+				reader.moveUp();
+			}
+			
+			return position;
+		}// unmarshal()
 			
 	}// PositionConverter()	
 }// class Position

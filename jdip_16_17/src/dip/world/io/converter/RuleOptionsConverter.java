@@ -26,7 +26,9 @@ import dip.world.io.XMLSerializer;
 
 import dip.world.RuleOptions;
 import dip.world.RuleOptions.Option;
-  
+import dip.world.RuleOptions.OptionValue;
+import dip.misc.Log;
+
 import java.util.*;
 
 import com.thoughtworks.xstream.converters.Converter;
@@ -74,6 +76,35 @@ public class RuleOptionsConverter implements Converter
 	
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 	{
-		return null;
+		final XMLSerializer xs = XMLSerializer.get(context);
+		final RuleOptions ro = new RuleOptions();
+		
+		while(reader.hasMoreChildren())
+		{
+			reader.moveDown();
+			assert( "option".equals(reader.getNodeName()) );
+			
+			final String name = xs.getString(reader.getAttribute("name"), "");
+			final String value = xs.getString(reader.getAttribute("value"), "");
+			
+			final Option opt = Option.parse( name );
+			final OptionValue optVal = OptionValue.parse( value );
+			
+			// skip unrecognized options or values, bug log them
+			if(opt != null && optVal != null)
+			{
+				ro.setOption(opt, optVal);
+			}
+			else
+			{
+				Log.println("RuleOptionsConverter: unrecognized ruleoption: ");
+				Log.println("   name: ", name);
+				Log.println("   value: ", value);
+			}
+			
+			reader.moveUp();
+		}
+		
+		return ro;
 	}// unmarshal()		
 }// class RuleOptionsConverter

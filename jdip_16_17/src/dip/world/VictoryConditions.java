@@ -61,18 +61,17 @@ public class VictoryConditions implements java.io.Serializable
 	
 	/** VictoryConditions constructor */
 	public VictoryConditions(int numSCForVictory, int maxYearsNoSCChange, int maxGameTimeYears,
-		Phase initialPhase)
+		int initialYear)
 	{
 		if(maxGameTimeYears < 0 || numSCForVictory < 0 || maxYearsNoSCChange < 0)
 		{
 			throw new IllegalArgumentException("arg: < 0; use 0 to disable");
 		}
 		
-		if(initialPhase == null)
+		if(initialYear == 0)
 		{
-			throw new IllegalArgumentException("args invalid");
+			throw new IllegalArgumentException("invalid year");
 		}
-		
 		
 		if(maxGameTimeYears == 0 && numSCForVictory == 0 && maxYearsNoSCChange == 0)
 		{
@@ -82,7 +81,14 @@ public class VictoryConditions implements java.io.Serializable
 		this.numSCForVictory = numSCForVictory;
 		this.maxYearsNoSCChange = maxYearsNoSCChange;
 		this.maxGameTimeYears = maxGameTimeYears;
-		this.initialYear = initialPhase.getYear();
+		this.initialYear = initialYear;
+	}// VictoryConditions()
+	
+	/** VictoryConditions constructor */
+	public VictoryConditions(int numSCForVictory, int maxYearsNoSCChange, int maxGameTimeYears,
+		Phase initialPhase)
+	{
+		this(numSCForVictory, maxYearsNoSCChange, maxGameTimeYears, initialPhase.getYear());
 	}// VictoryConditions()
 	
 	
@@ -93,6 +99,9 @@ public class VictoryConditions implements java.io.Serializable
 	/** Returns number maximum game duration, in years. */
 	public int getMaxGameDurationYears() 		{ return maxGameTimeYears; }
 	
+	
+	/** Initial year */
+	public int getInitialYear()					{ return initialYear; }
 	
 	/** 
 	*	Returns the Result(s) of evaluate(). This will return an empty list if

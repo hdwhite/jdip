@@ -31,10 +31,14 @@ import dip.process.RetreatChecker;
 import dip.process.Adjustment;
 import dip.process.Adjustment.AdjustmentInfo;
 import dip.process.Adjustment.AdjustmentInfoMap;
+import dip.order.Orderable;
+
+import dip.misc.Log;
 
 import java.util.*;
 
 import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -64,6 +68,10 @@ public class TurnStateConverter implements Converter
 		final Power[] powers = xs.getMap().getPowers();
 		final List results = new ArrayList(ts.getResultList());
 		
+		// clear order-map identities 
+		// (we shouldn't be holding order references beyond 1 turn)
+		xs.getMarshallingOrderMap().clear();
+		
 		// workaround: loaded games do not have world() set for each
 		// turnstate, when loaded via Java serialization
 		// TODO: this can probably be removed once XML serialization is proper.
@@ -72,40 +80,33 @@ public class TurnStateConverter implements Converter
 			ts.setWorld(xs.getWorld());
 		}
 		
-		// clear order-map identities 
-		// (we shouldn't be holding order references beyond 1 turn)
-		xs.getOrderMap().clear();
 		
 		hsw.addAttribute("season", ts.getPhase().getSeasonType().toString());
 		hsw.addAttribute("phase",  ts.getPhase().getPhaseType().toString());
 		hsw.addAttribute("year",  ts.getPhase().getYearType().toString());
 		hsw.addAttribute("resolved", String.valueOf(ts.isResolved()));
 			
-			hsw.startNode("initialPositions");
-			context.convertAnother( ts.getPosition() );
-			hsw.endNode();
 			
-			hsw.startNode("adjustments");
+			// positions
+			xs.lookupAndWriteNode(ts.getPosition(), cm, hsw, context);
+			
+			// adjustments
+			// (only in ADJUSTMENT phase)
 			if(Phase.PhaseType.ADJUSTMENT.equals(ts.getPhase().getPhaseType()))
 			{
 				AdjustmentInfoMap aim = Adjustment.getAdjustmentInfo(ts,
 					xs.getWorld().getRuleOptions(), powers);
-					
-				for(int i=0; i<powers.length; i++)
-				{
-					AdjustmentInfo ai = aim.get(powers[i]);
-					
-					hsw.startNode("adjustment");
-					hsw.addAttribute("power", xs.toString(powers[i]));
-					hsw.addAttribute("scCount", String.valueOf(ai.getSupplyCenterCount()));
-					hsw.addAttribute("unitCount", String.valueOf(ai.getUnitCount()));
-					hsw.addAttribute("adj", String.valueOf(ai.getAdjustmentAmount()));
-					hsw.endNode();
-				}
+				
+				xs.lookupAndWriteNode(aim, cm, hsw, context);
 			}
-			hsw.endNode();
+			else
+			{
+				// empty node, otherwise
+				hsw.startNode("adjustments");
+				hsw.endNode();
+			}
 			
-			
+			// orders
 			hsw.startNode("orders");
 			for(int i=0; i<powers.length; i++)
 			{
@@ -187,15 +188,102 @@ public class TurnStateConverter implements Converter
 		xs.incrementTurnNumber();
 	}// marshal()
 	
-	public boolean canConvert(java.lang.Class type)
+	public boolean canConvert(Class type)
 	{
 		return type.equals(TurnState.class);
-	}
+	}// canConvert()
 	
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 	{
-		return null;
-	}
+		final XMLSerializer xs = XMLSerializer.get(context);
+		
+		// clear order map
+		xs.getUnmarshallingOrderMap().clear();
+		
+		// create TurnState, set Resolution status
+		final Phase tsPhase = new Phase(
+			Phase.SeasonType.parse(reader.getAttribute("season")),
+			xs.getInt(reader.getAttribute("year"), 0),
+			Phase.PhaseType.parse(reader.getAttribute("phase")) );
+			
+		final TurnState ts = new TurnState(tsPhase);
+		ts.setResolved(Boolean.getBoolean(reader.getAttribute("resolved")));
+		ts.setWorld(xs.getWorld());
+		xs.setCurrentTurnState(ts);
+		
+		boolean posSet = false;
+		
+		while(reader.hasMoreChildren())
+		{
+			reader.moveDown();
+			final String nodeName = reader.getNodeName();
+			
+			if("powerInfo".equals(nodeName))
+			{
+				assert (posSet);
+				
+				while(reader.hasMoreChildren())
+				{
+					reader.moveDown();
+					
+					final String node = reader.getNodeName();
+					if("eliminatedPowers".equals(node))
+					{
+						List powers = xs.getPowers(reader.getAttribute("powers"));
+						Iterator iter = powers.iterator();
+						while(iter.hasNext())
+						{
+							ts.getPosition().setEliminated((Power) iter.next(), true);
+						}
+					}
+					else
+					{
+						Log.println("(powerinfo) Unrecognized element: ", node);
+					}
+					
+					reader.moveUp();
+				}
+			}
+			else if("dislodgedUnits".equals(nodeName))
+			{
+				// do nothing; we don't use the adjustment info.
+				// The RetreatChecker Class and results take care of this
+			}
+			else if("results".equals(nodeName))
+			{
+				parseResults(ts, xs, reader, context);
+			}
+			else if("orders".equals(nodeName))
+			{
+				parseOrders(ts, xs, reader, context);
+			}
+			else if("adjustments".equals(nodeName))
+			{
+				// do nothing; we don't use the adjustment info.
+				// The Adjustment Class and results take care of this
+			}
+			else
+			{
+				final Class cls = cm.lookupType(nodeName);
+				final Object obj = context.convertAnother(context, cls);
+				
+				if(cls.equals(Position.class))
+				{
+					ts.setPosition((Position) obj);
+					posSet = true;
+				}
+			}
+			reader.moveUp();
+		}
+		
+		// TODO: make sure all TurnState flags are apporpriately set
+		// (ended, scchanged) 
+		System.out.println("--todo: check turn flags");
+		
+		xs.setCurrentTurnState(null);
+		
+		return ts;
+	}// unmarshal()
 	
 	private void addEliminatedPowers(TurnState ts, 
 		HierarchicalStreamWriter hsw, XMLSerializer xs)
@@ -223,4 +311,55 @@ public class TurnStateConverter implements Converter
 		}
 	}// addEliminatedPowers()
 	
+	private void parseOrders(TurnState ts, XMLSerializer xs, 
+		HierarchicalStreamReader reader, UnmarshallingContext context)
+	{
+		while(reader.hasMoreChildren())
+		{
+			reader.moveDown();
+			
+			String nodeName = reader.getNodeName();
+			if("orderSet".equals(nodeName))
+			{
+				List orderList = new ArrayList(32);
+				
+				final Power power = xs.getPower(reader.getAttribute("power"));
+				if(power == null) { throw new ConversionException("null power"); }
+				
+				while(reader.hasMoreChildren())
+				{
+					reader.moveDown();
+					nodeName = reader.getNodeName();
+					Orderable order = (Orderable) context.convertAnother(context, Orderable.class);
+					orderList.add(order);
+					reader.moveUp();
+				}
+				
+				ts.setOrders(power, orderList);
+			}
+			else
+			{
+				Log.println("(orderSet) unrecognized element: ", nodeName);
+			}
+			
+			reader.moveUp();
+		}
+	}// parseOrders()
+	
+	private void parseResults(TurnState ts, XMLSerializer xs, 
+		HierarchicalStreamReader reader, UnmarshallingContext context)
+	{
+		List resultList = new ArrayList(64);
+		
+		while(reader.hasMoreChildren())
+		{
+			reader.moveDown();
+			final Class cls = cm.lookupType(reader.getNodeName());
+			final Result result = (Result) context.convertAnother(context, cls);
+			resultList.add(result);
+			reader.moveUp();
+		}
+		
+		ts.setResultList(resultList);
+	}// parseResults()
 }// class TurnStateConverter

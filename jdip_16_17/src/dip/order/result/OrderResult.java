@@ -254,6 +254,42 @@ public class OrderResult extends Result
 			return (ordering - rt.ordering);
 		}// compareTo()
 		
+		/** Parse a String into a Result Type; null if invalid */
+		public static ResultType parse(String key)
+		{
+			ResultType rt = null;
+			
+			if(key.equals(KEY_VALIDATION_FAILURE))
+			{
+				rt = VALIDATION_FAILURE;
+			}
+			else if(key.equals(KEY_SUCCESS))
+			{
+				rt = SUCCESS;
+			}
+			else if(key.equals(KEY_FAILURE))
+			{
+				rt = FAILURE;
+			}
+			else if(key.equals(KEY_DISLODGED))
+			{
+				rt = DISLODGED;
+			}
+			else if(key.equals(KEY_CONVOY_PATH_TAKEN))
+			{
+				rt = CONVOY_PATH_TAKEN;
+			}
+			else if(key.equals(KEY_TEXT))
+			{
+				rt = TEXT;
+			}
+			else if(key.equals(KEY_SUBSTITUTED))
+			{
+				rt = SUBSTITUTED;
+			}
+			
+			return rt;
+		}// parse()
 		
 		/** Assigns serialized objects to a single constant reference */
 		protected Object readResolve()

@@ -222,6 +222,19 @@ public class RuleOptions implements Serializable
 			throw new InvalidObjectException("RuleOptions: ALL_OPTIONS internal error");
 		}// readResolve()
 		
+		/** Parse the given OptionValue. Null if not found. */
+		public static Option parse(String in)
+		{
+			for(int i=0; i<ALL_OPTIONS.length; i++)
+			{
+				if( in.equals(ALL_OPTIONS[i].name) )
+				{
+					return ALL_OPTIONS[i];
+				}
+			}
+			return null;
+		}// parse()
+		
 		/** For debugging only */
 		public String toString()
 		{
@@ -289,6 +302,20 @@ public class RuleOptions implements Serializable
 			
 			throw new InvalidObjectException("RuleOptions: ALL_OPTIONVALUES internal error");
 		}// readResolve()
+		
+		/** Parse the given OptionValue. Null if not found. */
+		public static OptionValue parse(String in)
+		{
+			for(int i=0; i<ALL_OPTIONVALUES.length; i++)
+			{
+				if( in.equals(ALL_OPTIONVALUES[i].name) )
+				{
+					return ALL_OPTIONVALUES[i];
+				}
+			}
+			return null;
+		}// parse()
+		
 		
 		/** For debugging only */
 		public String toString()

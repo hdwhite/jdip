@@ -32,6 +32,7 @@ import java.lang.reflect.*;
 import dip.order.*;
 import dip.order.result.*;
 
+import dip.world.Power;
 import dip.world.io.XMLSerializer;
 
 import com.thoughtworks.xstream.XStream;
@@ -45,6 +46,16 @@ import com.thoughtworks.xstream.converters.ConversionException;
 
 public class SubstitutedResultConverter extends OrderResultConverter
 {
+	
+	public SubstitutedResultConverter(ClassMapper cm)
+	{
+		super(cm);
+	}// SubstitutedResultConverter()
+	
+	public void alias(ClassMapper cm)
+	{
+		cm.alias("substitutedOrderResult", SubstitutedResult.class, SubstitutedResult.class);
+	}// alias()
 	
 	public void write(OrderResult orderResult, XMLSerializer xs,
 		HierarchicalStreamWriter hsw, MarshallingContext context)
@@ -60,6 +71,21 @@ public class SubstitutedResultConverter extends OrderResultConverter
 	{
 		return type.equals(SubstitutedResult.class);
 	}// canConvert()
+	
+	public Object read(Power power, OrderResult.ResultType type, Orderable order, String message,
+		XMLSerializer xs, HierarchicalStreamReader reader, UnmarshallingContext context)
+	{         
+		if(!reader.hasMoreChildren())
+		{
+			throw new ConversionException("truncated substituted result");
+		}
+		
+		reader.moveDown();
+		Orderable newOrder = (Orderable) context.convertAnother(context, Orderable.class);
+		reader.moveUp();
+		
+		return new SubstitutedResult(order, newOrder, message);
+	}// read()
 	
 }// class SubstitutedResultConverter
 

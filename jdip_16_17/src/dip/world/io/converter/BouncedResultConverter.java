@@ -32,6 +32,7 @@ import java.lang.reflect.*;
 import dip.order.*;
 import dip.order.result.*;
 
+import dip.world.Power;
 import dip.world.io.XMLSerializer;
 
 import com.thoughtworks.xstream.XStream;
@@ -45,6 +46,16 @@ import com.thoughtworks.xstream.converters.ConversionException;
 
 public class BouncedResultConverter extends OrderResultConverter
 {
+	
+	public BouncedResultConverter(ClassMapper cm)
+	{
+		super(cm);
+	}// BouncedResultConverter()
+	
+	public void alias(ClassMapper cm)
+	{
+		cm.alias("bouncedOrderResult", BouncedResult.class, BouncedResult.class);
+	}// alias()
 	
 	public void write(OrderResult orderResult, XMLSerializer xs,
 		HierarchicalStreamWriter hsw, MarshallingContext context)
@@ -68,6 +79,36 @@ public class BouncedResultConverter extends OrderResultConverter
 	{
 		return type.equals(BouncedResult.class);
 	}// canConvert()
+	
+	public Object read(Power power, OrderResult.ResultType type, Orderable order, String message,
+		XMLSerializer xs, HierarchicalStreamReader reader, UnmarshallingContext context)
+	{
+		BouncedResult br = new BouncedResult(order);
+		
+		while(reader.hasMoreChildren())
+		{
+			reader.moveDown();
+			
+			final String nodeName = reader.getNodeName();
+			
+			if("bouncer".equals(nodeName))
+			{
+				br.setBouncer( xs.getProvince(reader.getValue()) );
+			}
+			else if("atk".equals(nodeName))
+			{
+				br.setAttackStrength( xs.getInt(reader.getValue(), -1) );
+			}
+			else if("def".equals(nodeName))
+			{
+				br.setDefenseStrength( xs.getInt(reader.getValue(), -1) );
+			}
+			
+			reader.moveUp();
+		}
+		
+		return br;
+	}// read()
 
 }// class BouncedResultConverter
 

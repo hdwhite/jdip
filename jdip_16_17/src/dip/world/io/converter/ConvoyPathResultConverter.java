@@ -32,6 +32,7 @@ import java.lang.reflect.*;
 import dip.order.*;
 import dip.order.result.*;
 
+import dip.world.Power;
 import dip.world.io.XMLSerializer;
 
 import com.thoughtworks.xstream.XStream;
@@ -45,6 +46,16 @@ import com.thoughtworks.xstream.converters.ConversionException;
 
 public class ConvoyPathResultConverter extends OrderResultConverter
 {
+	
+	public ConvoyPathResultConverter(ClassMapper cm)
+	{
+		super(cm);
+	}// ConvoyPathResultConverter()
+	
+	public void alias(ClassMapper cm)
+	{
+		cm.alias("convoyPathOrderResult", ConvoyPathResult.class, ConvoyPathResult.class);
+	}// alias()
 	
 	public void write(OrderResult orderResult, XMLSerializer xs,
 		HierarchicalStreamWriter hsw, MarshallingContext context)
@@ -60,6 +71,23 @@ public class ConvoyPathResultConverter extends OrderResultConverter
 	{
 		return type.equals(ConvoyPathResult.class);
 	}// canConvert()
+	
+	public Object read(Power power, OrderResult.ResultType type, Orderable order, String message,
+		XMLSerializer xs, HierarchicalStreamReader reader, UnmarshallingContext context)
+	{
+		OrderResult result = null;
+		
+		if(!reader.hasMoreChildren())
+		{
+			throw new ConversionException("truncated convoy path result");
+		}
+		
+		reader.moveDown();
+		result = new ConvoyPathResult(order, xs.getProvinces(reader.getValue()));
+		reader.moveUp();
+		
+		return result;
+	}// read()
 	
 }// class ConvoyPathResultConverter
 

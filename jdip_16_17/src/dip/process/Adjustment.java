@@ -32,7 +32,7 @@ import dip.world.RuleOptions;
 import java.util.List;
 import java.util.Iterator;
 import java.util.HashMap;
-
+import java.util.Collections;
 
 
 
@@ -351,6 +351,11 @@ public class Adjustment
 			map.clear();
 		}// clear()
 		
+		/** Get iterator for internal Map; returns Map.Entrys. */
+		public Iterator iterator()
+		{
+			return Collections.unmodifiableSet(map.entrySet()).iterator();
+		}
 	}// nested class AdjustmentInfoMap
 	
 }// class Adjustment

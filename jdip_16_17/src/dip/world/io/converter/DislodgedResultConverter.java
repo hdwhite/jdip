@@ -32,6 +32,9 @@ import java.lang.reflect.*;
 import dip.order.*;
 import dip.order.result.*;
 
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.Location;
 import dip.world.io.XMLSerializer;
 
 import com.thoughtworks.xstream.XStream;
@@ -45,6 +48,16 @@ import com.thoughtworks.xstream.converters.ConversionException;
 
 public class DislodgedResultConverter extends OrderResultConverter
 {
+	
+	public DislodgedResultConverter(ClassMapper cm)
+	{
+		super(cm);
+	}// DislodgedResultConverter()
+	
+	public void alias(ClassMapper cm)
+	{
+		cm.alias("dislodgedOrderResult", DislodgedResult.class, DislodgedResult.class);
+	}// alias()
 	
 	public void write(OrderResult orderResult, XMLSerializer xs,
 		HierarchicalStreamWriter hsw, MarshallingContext context)
@@ -72,6 +85,54 @@ public class DislodgedResultConverter extends OrderResultConverter
 	{
 		return type.equals(DislodgedResult.class);
 	}// canConvert()
+	
+	public Object read(Power power, OrderResult.ResultType type, Orderable order, String message,
+		XMLSerializer xs, HierarchicalStreamReader reader, UnmarshallingContext context)
+	{
+		DislodgedResult result = null;
+		
+		while(reader.hasMoreChildren())
+		{
+			reader.moveDown();
+			
+			int atk = -1;
+			int def = -1;
+			Province dislodger = null;
+			Location[] retreats = null;
+			
+			final String nodeName = reader.getNodeName();
+			
+			if("atk".equals(nodeName))
+			{
+				atk = xs.getInt(reader.getValue(), -1);
+			}
+			else if("def".equals(nodeName))
+			{
+				def = xs.getInt(reader.getValue(), -1);
+			}
+			else if("dislodger".equals(nodeName))
+			{
+				dislodger = xs.getProvince(reader.getValue());
+			}
+			else if("retreats".equals(nodeName))
+			{
+				List list = xs.getLocations(reader.getValue());
+				if(list != null)
+				{
+					retreats = (Location[]) list.toArray(new Location[list.size()]);
+				}
+			}
+			
+			result = new DislodgedResult(order, message, retreats);
+			result.setAttackStrength(atk);
+			result.setDefenseStrength(def);
+			result.setDislodger(dislodger);
+			
+			reader.moveUp();
+		}
+		
+		return result;
+	}// read()
 	
 }// class DislodgedResultConverter
 

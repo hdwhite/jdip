@@ -32,6 +32,7 @@ import java.lang.reflect.*;
 import dip.order.*;
 import dip.order.result.*;
 
+import dip.world.Power;
 import dip.world.io.XMLSerializer;
 
 import com.thoughtworks.xstream.XStream;
@@ -45,6 +46,16 @@ import com.thoughtworks.xstream.converters.ConversionException;
 
 public class DependentMoveFailedResultConverter extends OrderResultConverter
 {
+	
+	public DependentMoveFailedResultConverter(ClassMapper cm)
+	{
+		super(cm);
+	}// DependentMoveFailedResultConverter()
+	
+	public void alias(ClassMapper cm)
+	{
+		cm.alias("dependentFailedOrderResult", DependentMoveFailedResult.class, DependentMoveFailedResult.class);
+	}// alias()
 	
 	public void write(OrderResult orderResult, XMLSerializer xs,
 		HierarchicalStreamWriter hsw, MarshallingContext context)
@@ -60,6 +71,21 @@ public class DependentMoveFailedResultConverter extends OrderResultConverter
 	{
 		return type.equals(DependentMoveFailedResult.class);
 	}// canConvert()
+	
+	public Object read(Power power, OrderResult.ResultType type, Orderable order, String message,
+		XMLSerializer xs, HierarchicalStreamReader reader, UnmarshallingContext context)
+	{
+		if(!reader.hasMoreChildren())
+		{
+			throw new ConversionException("truncated dmf result");
+		}
+		
+		reader.moveDown();
+		Orderable dependentOrder = (Orderable) context.convertAnother(context, Orderable.class);
+		reader.moveUp();
+		
+		return new DependentMoveFailedResult(order, dependentOrder);
+	}// read()
 	
 }// class DependentMoveFailedResultConverter
 

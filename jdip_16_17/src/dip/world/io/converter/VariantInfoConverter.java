@@ -24,8 +24,10 @@ package dip.world.io.converter;
 
 import dip.world.io.XMLSerializer;  
 
-import dip.world.World.VariantInfo;
 import dip.world.World;
+import dip.world.World.VariantInfo;
+import dip.world.RuleOptions;
+import dip.world.VictoryConditions;
 
 import java.util.*;
 
@@ -89,6 +91,47 @@ public class VariantInfoConverter implements Converter
 	
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 	{
-		return null;
+		final XMLSerializer xs = XMLSerializer.get(context);
+		final VariantInfo vi = new World.VariantInfo();
+		
+		Map elements = new HashMap();
+		
+		vi.setVariantName( xs.getString(reader.getAttribute("name"), null) );
+		vi.setVariantVersion( xs.getFloat(reader.getAttribute("version"), 1.0f) );
+		
+		while(reader.hasMoreChildren())
+		{
+			reader.moveDown();
+			final String nodeName = reader.getNodeName();
+			
+			if("symbols".equals(nodeName))
+			{
+				vi.setSymbolPackName( xs.getString(reader.getAttribute("name"), null) );
+				vi.setSymbolPackVersion( xs.getFloat(reader.getAttribute("version"), 1.0f) );
+			}
+			else if("map".equals(nodeName))
+			{
+				vi.setMapName( xs.getString(reader.getAttribute("name"), null) );
+			}
+			else
+			{
+				final Class cls = cm.lookupType(nodeName);
+				final Object obj = context.convertAnother(context, cls);
+				
+				if(obj instanceof RuleOptions)
+				{
+					vi.setRuleOptions((RuleOptions) obj);
+				}
+				else if(obj instanceof VictoryConditions)
+				{
+					// temporarily store the VictoryConditions object
+					context.put(XMLSerializer.CONTEXT_KEY_VC, obj);
+				}
+			}
+			
+			reader.moveUp();
+		}
+		
+		return vi;
 	}// unmarshal()		
 }// VariantInfoConverter

@@ -27,21 +27,29 @@ import dip.world.*;
 import dip.world.io.converter.*;
 
 import dip.order.Orderable;
+import dip.order.OrderFactory;
 import dip.order.result.Result;
 
 import java.io.Writer;
 import java.io.Reader;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.FileInputStream;
 
 import java.util.List;
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
+import java.util.StringTokenizer;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.net.URI;
@@ -63,24 +71,31 @@ public class XMLSerializer
 	/** Specification Level : 1.0 */
 	public static final String SPECIFICATION_FORMAT_1_0 = "FORMAT_1_0";
 	
+	/** Context: VictoryConditions Object Key */
+	public static final String CONTEXT_KEY_VC = "_victoryconditions_";
 	
 	private static final String KEY_SERIALIZER = "KEY_SERIALIZER";
 	private static final String VALUE_NONE = "none";
 	private static final String VALUE_UNDEFINED = "undefined";
 	private static final List converterList = new ArrayList();
-	private static int BUFFER_SIZE = 2048;
+	private static final int BUFFER_SIZE = 2048;
+	private static final String TOKENS = " ,";
 	
 	// instance variables
-	private World world = null;
-	private dip.world.Map map = null;
-	private int turnNum = 0;
-	private IdentityHashMap orderMap;
-	private int unique = 0;
+	private World world;
+	private dip.world.Map map;
+	private int turnNum;
+	private final IdentityHashMap marshallingOrderMap;
+	private final HashMap unmarshallingOrderMap;
+	private int unique;
+	private OrderFactory orderFactory;
+	private TurnState turnState;
 	
 	/** Create an XMLSerializer */
 	private XMLSerializer()
 	{
-		orderMap = new IdentityHashMap(61);
+		marshallingOrderMap = new IdentityHashMap(61);
+		unmarshallingOrderMap = new HashMap(61);
 	}// XMLSerializer()
 	
 	
@@ -96,7 +111,7 @@ public class XMLSerializer
 	{
 		XStream xstream = new XStream();
 		xstream.setMode(XStream.NO_REFERENCES);
-		registerConverters(xstream, creatorName, creatorVersion, specification);
+		registerConverters(xstream, null, creatorName, creatorVersion, specification);
 		writeHeader(writer);
 		xstream.toXML(world, writer);
 	}// toXML()
@@ -182,11 +197,78 @@ public class XMLSerializer
 	/**
 	*	Read the World object from a given Reader.
 	*/
-	public static World fromXML(Reader reader)
+	public static World fromXML(Reader reader, OrderFactory orderFactory,
+		String specification)
 	{
-		return null;
+		XStream xstream = new XStream();
+		xstream.setMode(XStream.NO_REFERENCES);
+		registerConverters(xstream, orderFactory, "", "", specification);
+		return (World) xstream.fromXML(reader);
 	}// fromXML()
 	
+	
+	/**
+	*	Read the World object from a given File. This automatically determines
+	*	if the file is compressed (with GZIP), and if so, attempts to 
+	*	uncompress it as it is reading it.
+	*/
+	public static World fromXML(File file, OrderFactory orderFactory, 
+		String specification)
+	throws IOException
+	{
+		if(file == null)
+		{
+			throw new IllegalArgumentException();
+		}
+		
+		InputStreamReader isr = null;
+		
+		try
+		{
+			BufferedInputStream bis = new BufferedInputStream(
+				new FileInputStream(file), BUFFER_SIZE);
+			
+			// read GZIP_MAGIC
+			bis.mark(32);
+			int magic = bis.read();
+			magic = (bis.read() << 8) | magic;	// intel byte order
+			bis.reset();
+			
+			// assign general InputStreamReader based on magic
+			if(GZIPInputStream.GZIP_MAGIC == magic)
+			{
+				isr = new InputStreamReader(new GZIPInputStream(bis, BUFFER_SIZE));
+			}
+			else
+			{
+				isr = new InputStreamReader(bis);
+			}
+			
+			return fromXML(isr, orderFactory, specification);
+		}
+		catch(IOException ioe)
+		{
+			throw ioe;
+		}
+		catch(Exception e)
+		{
+			
+System.out.println(e);			
+			
+			// wrap non-IOExceptions in an IOException, since we are doing IO
+			IOException ioe = new IOException(e.getMessage());
+			ioe.initCause(e);
+			throw ioe;
+		}
+		finally
+		{
+			if(isr != null)
+			{
+				isr.close();
+			}
+		}		
+	}// fromXML()
+
 	
 	/**
 	*	Allows Converters to get the XMLSerializer.
@@ -203,32 +285,69 @@ public class XMLSerializer
 		return xms;
 	}// get()
 	
+	/** Get a string. "none" is converted to null. */
+	public String getString(String in)
+	{
+		if(VALUE_NONE.equals(in))
+		{
+			return null;
+		}
+		
+		return in;
+	}// getProvince()
 	
 	
-	/** Convert a String to a Province */
+	/** Convert a String to a Province. "none" converts to null.*/
 	public Province getProvince(String in)
 	{
 		if(map == null) { throw new IllegalStateException(); }
+		if(VALUE_NONE.equals(in))
+		{
+			return null;
+		}
 		return map.getProvince(in);
 	}// getProvince()
 	
-	/** Convert a String to a Location */
+	/** Convert a String to a Province. "none" converts to null.*/
+	public Coast getCoast(String in)
+	{
+		if(map == null) { throw new IllegalStateException(); }
+		if(VALUE_NONE.equals(in))
+		{
+			return null;
+		}
+		return Coast.parse(in);
+	}// getProvince()
+	
+	/** Convert a String to a Coast. "none" converts to null. */
 	public Location getLocation(String in)
 	{
 		if(map == null) { throw new IllegalStateException(); }
+		if(VALUE_NONE.equals(in))
+		{
+			return null;
+		}
 		return map.parseLocationStrict(in);
 	}// getLocation()
 	
-	/** Convert a String to a Power */
+	/** Convert a String to a Power. "none" converts to null. */
 	public Power getPower(String in)
 	{
 		if(map == null) { throw new IllegalStateException(); }
+		if(VALUE_NONE.equals(in))
+		{
+			return null;
+		}
 		return map.getPower(in);
 	}// getPower()
 	
-	/** Convert a String to a Location */
+	/** Convert a String to a Location. "none" converts to null. */
 	public Unit.Type getUnitType(String in)
 	{
+		if(VALUE_NONE.equals(in))
+		{
+			return null;
+		}
 		return Unit.Type.parse(in);
 	}// getUnitType()
 	
@@ -350,11 +469,109 @@ public class XMLSerializer
 		return sb.toString();
 	}// toString()
 
+	/** 
+	*	Format an Array of Powers into a String (separated by a space).
+	*	Note that null becomes "undefined" while a zero-length array
+	*	becomes "none".
+	*/
+	public String toString(final Power[] powers)
+	{
+		if(powers == null)
+		{
+			return VALUE_UNDEFINED;
+		}
+		else if(powers.length == 0)
+		{
+			return VALUE_NONE;
+		}
+		
+		// e.g.: "xxx yyy zzz"
+		StringBuffer sb = new StringBuffer(64);
+		for(int i=0; i<powers.length; i++)
+		{
+			sb.append( toString(powers[i]) );
+			if((i+1)<powers.length)
+			{
+				sb.append(' ');
+			}
+		}
+		
+		return sb.toString();
+	}// toString()
+	
+	/** Parse a String of powers into a List */
+	public List getPowers(String in)
+	{
+		if(VALUE_UNDEFINED.equals(in))
+		{
+			return null;
+		}
+		else if(VALUE_NONE.equals(in))
+		{
+			return Collections.EMPTY_LIST;
+		}
+		
+		ArrayList list = new ArrayList();
+		StringTokenizer st = new StringTokenizer(in, TOKENS);
+		while(st.hasMoreTokens())
+		{
+			list.add( getPower(st.nextToken()) );
+		}
+		
+		return list;
+	}// getPowers()
+	
+	/** Parse a String of Provinces into a List */
+	public List getProvinces(String in)
+	{
+		if(VALUE_UNDEFINED.equals(in))
+		{
+			return null;
+		}
+		else if(VALUE_NONE.equals(in))
+		{
+			return Collections.EMPTY_LIST;
+		}
+		
+		ArrayList list = new ArrayList();
+		StringTokenizer st = new StringTokenizer(in, TOKENS);
+		while(st.hasMoreTokens())
+		{
+			list.add( getProvince(st.nextToken()) );
+		}
+		
+		return list;
+	}// getProvinces()
+	
+	/** Parse a String of Locations into a List */
+	public List getLocations(String in)
+	{
+		if(VALUE_UNDEFINED.equals(in))
+		{
+			return null;
+		}
+		else if(VALUE_NONE.equals(in))
+		{
+			return Collections.EMPTY_LIST;
+		}
+		
+		ArrayList list = new ArrayList();
+		StringTokenizer st = new StringTokenizer(in, TOKENS);
+		while(st.hasMoreTokens())
+		{
+			list.add( getLocation(st.nextToken()) );
+		}
+		
+		return list;
+	}// getProvinces()
+	
 	
 	/** 
 	*	Get a reference to an Orderable. If the Orderable has not been
 	*	prevously defined, null is returned. However, if the Orderable
 	*	itself is null, "none" is returned.
+	*	<p>
+	*	<b>This method should only be used during marshalling</b>
 	*/
 	public String toString(Orderable order)
 	{
@@ -364,9 +581,35 @@ public class XMLSerializer
 		}
 		else
 		{
-			return (String) getOrderMap().get(order);
+			return (String) getMarshallingOrderMap().get(order);
 		}
 	}// toString()
+	
+	/**
+	*	Get an order reference; returns null if the 
+	*	the input was "none". If no order reference
+	*	was found, a ConversionException is thrown.
+	*	<p>
+	*	<b>This method should only be used during unmarshalling</b>
+	*/
+	public Orderable getOrder(String orderRef)
+	{
+		if(VALUE_NONE.equals(orderRef))
+		{
+			return null;
+		}
+		else
+		{
+			Orderable order = (Orderable) getUnmarshallingOrderMap().get(orderRef);
+			if(order == null)
+			{
+				throw new ConversionException("no reference for order ID: "+orderRef);
+			}
+			return order;
+		}
+	}// toString()
+	
+	
 	
 	/** Convert a Power to a String. Null values are converted to "none". */
 	public String toString(URI uri)
@@ -421,6 +664,98 @@ public class XMLSerializer
 	}// lookupAndWriteNode()
 	
 	
+	
+	/** 
+	*	Safely get a String value. If the value is empty or "none",
+	*	the default value is used.
+	*/
+	public String getString(String value, String defaultValue)
+	{
+		if("".equals(value) || VALUE_NONE.equals(value))
+		{
+			return defaultValue;
+		}
+		
+		return value;
+	}// getString()
+	
+	/**
+	*	Safely get an float value. If the value is empty or "none",
+	*	or conversion to a float fails, the default value is used.
+	*/
+	public float getFloat(String value, float defaultValue)
+	{
+		if(value != null && value.length() > 0)
+		{
+			try
+			{
+				return Float.parseFloat(value);
+			}
+			catch(NumberFormatException e)
+			{
+			}
+		}
+		
+		return defaultValue;
+	}// getFloat()
+	
+	
+	/**
+	*	Safely get an Integer value. If the value is empty or "none",
+	*	or conversion to an Integer fails, the default value is used.
+	*/
+	public int getInt(String value, int defaultValue)
+	{
+		if(value != null && value.length() > 0)
+		{
+			try
+			{
+				return Integer.parseInt(value);
+			}
+			catch(NumberFormatException e)
+			{
+			}
+		}
+		
+		return defaultValue;
+	}// getInt()
+	
+	
+	/**
+	*	Safely get an Integer value. If the value is empty or "none",
+	*	or conversion to an Integer fails, the default value is used.
+	*	<p>
+	*	Also, if the value is out of the given range, the default value
+	*	is used. Min and Max are inclusive.
+	*/
+	public int getInt(String value, int defaultValue, int min, int max)
+	{
+		if(min > max)
+		{
+			throw new IllegalArgumentException("min > max!");
+		}
+		
+		if(value != null && value.length() > 0)
+		{
+			try
+			{
+				int i = Integer.parseInt(value);
+				if(i >= min && i <= max)
+				{
+					return i;
+				}
+			}
+			catch(NumberFormatException e)
+			{
+			}
+		}
+		
+		return defaultValue;
+	}// getInt()	
+	
+	
+	
+	
 	/** Get the dip.world.Map object */
 	public dip.world.Map getMap()
 	{
@@ -433,11 +768,29 @@ public class XMLSerializer
 		return world;
 	}// getWorld()
 	
-	/** Get the HashMap which maps Orderable objects to unique IDs */
-	public IdentityHashMap getOrderMap()
+	/** 
+	*	Get the HashMap which maps Orderable objects to unique IDs 
+	*	during marshalling.
+	*/
+	public IdentityHashMap getMarshallingOrderMap()
 	{
-		return orderMap;
-	}// getOrderMap()
+		return marshallingOrderMap;
+	}// getMarshallingOrderMap()
+	
+	/** 
+	*	Get the HashMap which maps Orderable objects to unique IDs 
+	*	during <b>un</b>marshalling. This is not an IdentityHashMap..
+	*/
+	public HashMap getUnmarshallingOrderMap()
+	{
+		return unmarshallingOrderMap;
+	}// getUnmarshallingOrderMap()
+	
+	/** Get the OrderFactory; only set when unmarshalling. */
+	public OrderFactory getOrderFactory()
+	{
+		return orderFactory;
+	}// getOrderFactory()
 	
 	/** Get the current Turn number. Never negative. */
 	public synchronized int getTurnNumber()
@@ -451,12 +804,21 @@ public class XMLSerializer
 		turnNum++;
 	}// setTurnNumber()
 	
+	public TurnState getCurrentTurnState()
+	{
+		return turnState;
+	}// getCurrentTurnState()
+	
+	public void setCurrentTurnState(TurnState ts)
+	{
+		this.turnState = ts;
+	}// setCurrentTurnState()
 	
 	/** Sets the World. This may be set only once. */
 	public void setWorld(World w)
 	{
 		if(w == null) { throw new IllegalArgumentException(); }
-		if(world != null) { throw new IllegalStateException(); }
+		if(this.world != null) { throw new IllegalStateException(); }
 		world = w;
 	}// setWorld()
 	
@@ -464,10 +826,16 @@ public class XMLSerializer
 	public void setMap(dip.world.Map worldMap)
 	{
 		if(worldMap == null) { throw new IllegalArgumentException(); }
-		if(map != null) { throw new IllegalStateException(); }
+		if(this.map != null) { throw new IllegalStateException(); }
 		map = worldMap;
 	}// setMap()
 	
+	/** Sets the OrderFactory. This may be set only once. */
+	public void setOrderFactory(OrderFactory factory)
+	{
+		if(this.orderFactory != null) { throw new IllegalStateException("non-null OrderFactory"); }
+		this.orderFactory = factory;
+	}// getOrderFactory()
 	
 	/** 
 	*	Get a unique ID (for the life of an XMLSerializer).
@@ -483,8 +851,8 @@ public class XMLSerializer
 	
 	
 	/** Register default converters */
-	private static void registerConverters(XStream xstream, String creator,
-		String creatorVersion, String specification)
+	private static void registerConverters(XStream xstream, OrderFactory of,
+		String creator, String creatorVersion, String specification)
 	{
 		final ClassMapper cm = xstream.getClassMapper();
 		
@@ -494,13 +862,14 @@ public class XMLSerializer
 		xstream.registerConverter(new LocationConverter(cm));
 		xstream.registerConverter(new UnitTypeConverter(cm));
 		xstream.registerConverter(new NameValuePair.NameValuePairConverter(cm));
+		xstream.registerConverter(new AdjustmentInfoMapConverter(cm));
 		
 		// main turn types
 		xstream.registerConverter(new Position.PositionConverter(cm));
 		xstream.registerConverter(new Position.ProvinceDataConverter(cm));
 		xstream.registerConverter(new TurnStateConverter(cm));
 		
-		xstream.registerConverter(new WorldConverter(cm,
+		xstream.registerConverter(new WorldConverter(cm, of,
 			creator, creatorVersion, specification));
 		
 		xstream.registerConverter(new VariantInfoConverter(cm));
@@ -508,7 +877,7 @@ public class XMLSerializer
 		xstream.registerConverter(new VictoryConditionsConverter(cm));
 		
 		// for *all* Orderable subclasses
-		xstream.registerConverter(new OrderableConverter());
+		xstream.registerConverter(new OrderableConverter(cm));
 		
 		// results
 		xstream.registerConverter(new ResultConverter(cm));
@@ -516,11 +885,11 @@ public class XMLSerializer
 		
 		// order results
 		xstream.registerConverter(new OrderResultConverter(cm));
-		xstream.registerConverter(new BouncedResultConverter());
-		xstream.registerConverter(new ConvoyPathResultConverter());
-		xstream.registerConverter(new DependentMoveFailedResultConverter());
-		xstream.registerConverter(new DislodgedResultConverter());
-		xstream.registerConverter(new SubstitutedResultConverter());
+		xstream.registerConverter(new BouncedResultConverter(cm));
+		xstream.registerConverter(new ConvoyPathResultConverter(cm));
+		xstream.registerConverter(new DependentMoveFailedResultConverter(cm));
+		xstream.registerConverter(new DislodgedResultConverter(cm));
+		xstream.registerConverter(new SubstitutedResultConverter(cm));
 		
 		// metadata
 		xstream.registerConverter(new GameMetadataConverter(cm));

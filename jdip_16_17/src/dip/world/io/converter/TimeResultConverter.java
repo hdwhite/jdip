@@ -28,7 +28,7 @@ import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
 
-
+import dip.world.*;
 import dip.order.*;
 import dip.order.result.*;
 
@@ -74,6 +74,23 @@ public class TimeResultConverter implements Converter
 	
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 	{
+		final XMLSerializer xs = XMLSerializer.get(context);
+		
+		final Power power = xs.getPower( reader.getAttribute("power") );
+		
+		assert(reader.hasMoreChildren());
+		
+		/*
+		
+		reader.moveDown();
+		final String message = xs.getString( reader.getValue() );
+		reader.moveUp();
+		
+		
+		*/
+		
+		System.out.println("TODO: TimeResult: needs to set time; must be internal static class....");
+		
 		return null;
 	}// unmarshal()	
 }// ResultConverter

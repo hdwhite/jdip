@@ -28,6 +28,7 @@ import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
 
+import dip.world.Power;
 
 import dip.order.*;
 import dip.order.result.*;
@@ -49,17 +50,14 @@ public class OrderResultConverter implements Converter
 	
 	public OrderResultConverter(ClassMapper cm)
 	{
-		cm.alias("orderResult", OrderResult.class, OrderResult.class);
-		cm.alias("orderResult", BouncedResult.class, BouncedResult.class);
-		cm.alias("orderResult", ConvoyPathResult.class, ConvoyPathResult.class);
-		cm.alias("orderResult", DependentMoveFailedResult.class, DependentMoveFailedResult.class);
-		cm.alias("orderResult", DislodgedResult.class, DislodgedResult.class);
-		cm.alias("orderResult", SubstitutedResult.class, SubstitutedResult.class);
+		alias(cm);
 	}// OrderResultConverter()
 	
-	protected OrderResultConverter()
+	
+	protected void alias(ClassMapper cm)
 	{
-	}// OrderResultConverter()
+		cm.alias("orderResult", OrderResult.class, OrderResult.class);
+	}// alias()
 	
 	
 	public void marshal(java.lang.Object source, HierarchicalStreamWriter hsw, 
@@ -102,6 +100,39 @@ public class OrderResultConverter implements Converter
 	
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 	{
-		return null;
-	}// unmarshal()	
+		final XMLSerializer xs = XMLSerializer.get(context);
+		
+		final Power power = xs.getPower( reader.getAttribute("power") );
+		final OrderResult.ResultType type = OrderResult.ResultType.parse( 
+			xs.getString( reader.getAttribute("type") ));
+		final Orderable order = xs.getOrder( reader.getAttribute("order") );
+		
+		if(type == null)
+		{
+			throw new ConversionException("unknown result type: "+type);
+		}
+		
+		if(!reader.hasMoreChildren())
+		{
+			throw new ConversionException("truncated orderresult/subclass");
+		}
+		
+		reader.moveDown();
+		final String message = xs.getString( reader.getValue() );
+		reader.moveUp();
+		
+		return read(power, type, order, message, xs, reader, context);
+	}// unmarshal()
+	
+	/**
+	*	Subclasses need to override this, to add additional
+	*	information when marshalling.
+	*/
+	public Object read(Power power, OrderResult.ResultType type, Orderable order, 
+		String message, XMLSerializer xs, HierarchicalStreamReader reader, 
+		UnmarshallingContext context)
+	{
+		return new OrderResult(order, type, message);
+	}// read()
+	
 }// OrderResultConverter

@@ -24,6 +24,7 @@ package dip.world.io.converter;
 
 import dip.world.io.XMLSerializer;  
 
+import dip.world.*;
 import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
@@ -75,6 +76,17 @@ public class ResultConverter implements Converter
 	
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) 
 	{
-		return null;
+		final XMLSerializer xs = XMLSerializer.get(context);
+		
+		final Power power = xs.getPower( reader.getAttribute("power") );
+		
+		assert(reader.hasMoreChildren());
+		
+		reader.moveDown();
+		final String message = xs.getString( reader.getValue() );
+		reader.moveUp();
+		
+		return new Result(power, message);
 	}// unmarshal()	
+	
 }// ResultConverter
