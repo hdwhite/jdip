@@ -100,10 +100,13 @@ public class XMLSymbolParser implements SymbolParser
 	public synchronized void parse(InputStream is, URL symbolPackURL)
 	throws IOException, SAXException
 	{
+		Log.println("XMLSymbolParser: Parsing: ", symbolPackURL);
+		long time = System.currentTimeMillis();
 		symbolPack = null;
 		this.symbolPackURL = symbolPackURL;
 		doc = docBuilder.parse(is);
 		procSymbolData();
+		Log.printTimed(time, "    time: ");
 	}// parse()
 	
 	

@@ -33,6 +33,7 @@ import dip.order.Orderable;
 import dip.order.OrderFormatOptions;
 import dip.world.*;
 import dip.misc.*;
+import dip.gui.swing.XJFileChooser;
 import dip.gui.undo.UndoResolve;
 import dip.gui.undo.UndoRedoManager;        
 import dip.world.variant.VariantManager;
@@ -183,9 +184,12 @@ public class ClientFrame extends JFrame
 	public ClientFrame(String args[])
 	{
 		super();
+		long ttime = System.currentTimeMillis();		// total time
+		long dtime = ttime;								// delta time
 		
 		// parse command-line args
 		parseCmdLine(args);
+		dtime = Log.printDelta(dtime, "CF: arg parse time: ");
 		
 		Log.println("   mem max: ", String.valueOf(Runtime.getRuntime().maxMemory()));
 		Log.println("   mem total: ", String.valueOf(Runtime.getRuntime().totalMemory()));
@@ -246,14 +250,10 @@ public class ClientFrame extends JFrame
 			Log.println(e);
 		}
 		
+		dtime = Log.printDelta(dtime, "CF: LAF setup time: ");
 		
 		// set exception handler
 		GUIExceptionHandler.registerHandler();
-		
-		// init help system
-		// WORKAROUND: cannot get *#@($ help to work in webstart; gives an
-		// 'access denied' error. 
-		Help.init();
 		
 		// get the variant and tool directories. 
 		// do not change the variantDirPath if it was set
@@ -285,6 +285,8 @@ public class ClientFrame extends JFrame
 			ErrorDialog.displayFatal(this, e);
 		}
 		
+		dtime = Log.printDelta(dtime, "CF: variant setup time: ");
+		
 		// init Tools
 		ToolManager.init(new File[]{toolDirPath});
 		Tool[] tools = ToolManager.getTools();
@@ -293,6 +295,8 @@ public class ClientFrame extends JFrame
 		{
 			tools[i].setToolProxy(toolProxy);
 		}
+		dtime = Log.printDelta(dtime, "CF: tool setup time: ");
+		
 		
 		// set frame icon
 		setIconImage(Utils.getImageIcon(Utils.FRAME_ICON).getImage());
@@ -303,9 +307,14 @@ public class ClientFrame extends JFrame
 		*/
 		Log.println("Batik XML parser: ", XMLResourceDescriptor.getXMLParserClassName());
 		
+		// init help system
+		Help.init();
+		dtime = Log.printDelta(dtime, "CF: help init time: ");
+		
 		// setup menu
 		clientMenu = new ClientMenu(this);
 		setJMenuBar(clientMenu.getJMenuBar());
+		dtime = Log.printDelta(dtime, "CF: menu setup time: ");
 		
 		// init special filedialog class
 		// 
@@ -313,9 +322,19 @@ public class ClientFrame extends JFrame
 		// to get the dialog icons it needs. We delay init of this class as long as possible,
 		// to see if that helps.
 		XJFileChooser.init();
+		dtime = Log.printDelta(dtime, "CF: XJFileChooser setup time: ");
+		
+		// Cached dialogs [these dialogs appear slowly if not cached]
+		NewGameDialog.createCachedDialog(this);
+		dtime = Log.printDelta(dtime, "CF: NewGameDialog setup time: ");
+		
+		AboutDialog.createCachedDialog(this);
+		dtime = Log.printDelta(dtime, "CF: AboutDialog setup time: ");
+		
 		
 		// persistence (must come after menus are defined)
 		persistMan = new PersistenceManager(this);
+		dtime = Log.printDelta(dtime, "CF: PersistenceManager setup time: ");
 		
 		// frame listener, handles JFrame close events
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -333,10 +352,6 @@ public class ClientFrame extends JFrame
 		
 		// setup drag-and-drop support
 		new DropTarget(this, new CFDropTargetListener());
-		
-		// Cached dialogs [these dialogs appear slowly if not cached]
-		AboutDialog.createCachedDialog(this);
-		NewGameDialog.createCachedDialog(this);
 		
 		// create default split pane
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false);
@@ -372,9 +387,13 @@ public class ClientFrame extends JFrame
 		pack();
 		GeneralPreferencePanel.getWindowSettings(this);
 		setVisible(true);
+		System.out.println(">>>> "+(System.currentTimeMillis()-ttime));
 		fireChangeMode(MODE_NONE);
 		toFront();
 		splash.destroy();
+		dtime = Log.printDelta(dtime, "CF: frame setup time: ");
+		
+		Log.printTimed(ttime, "ClientFrame() startup time: ");
 	}// ClientFrame()
 	
 	

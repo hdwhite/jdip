@@ -24,6 +24,7 @@ package dip.world.variant.parser;
 
 import dip.world.variant.data.ProvinceData;
 import dip.world.variant.data.BorderData;
+import dip.misc.Log;
 
 import java.io.*;
 import java.net.*;
@@ -95,11 +96,13 @@ public class XMLProvinceParser implements ProvinceParser
 	public void parse(InputStream is)
 	throws IOException, SAXException
 	{
+		long time = System.currentTimeMillis();
 		provinceList.clear();
 		borderList.clear();
 		
 		doc = docBuilder.parse(is);
 		procProvinceData();
+		Log.printTimed(time, "   province parse time: ");
 	}// parse()
 	
 	

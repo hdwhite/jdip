@@ -23,6 +23,7 @@
 package dip.misc;
 
 import dip.gui.dialog.ErrorDialog;
+import dip.gui.swing.SwingWorker;
 
 import java.awt.Frame;
 import java.awt.Component;
@@ -47,8 +48,16 @@ import javax.help.WindowPresentation;
 public class Help
 {
 	private static final String HELP_FILE_NAME = "help/applicationhelp.hs";
-	private static HelpBroker 	helpBroker = null;
-	private static HelpSet		helpSet = null;
+	private static HKeeper 		hk = null;
+	private static SwingWorker	loaderThread = null;
+	
+	
+	/** Mini-Class for keeping HelpBroker and HelpSet */
+	private static class HKeeper
+	{
+		public HelpBroker helpBroker = null;
+		public HelpSet helpSet = null;
+	}// inner class HKeeper
 	
 	
 	/** 
@@ -56,35 +65,62 @@ public class Help
 	*	for the given Locale. If a Help file cannot be found, an
 	*	error message is displayed, and help will be unavailable.
 	*/
-	public static void init()
+	public synchronized static void init()
 	{
-		try
-		{ 
-			final String helpFileName = Utils.getResourceBasePrefix() + HELP_FILE_NAME;
-			
-			URL url = HelpSet.findHelpSet(Utils.getClassLoader(), helpFileName, Utils.getLocale());
-			Log.println("HelpSet URL: ", url);
-			helpSet = new HelpSet(null, url);
-		}
-		catch(Exception e)
+		loaderThread = new SwingWorker()
 		{
-			Log.println("Help not available: ", e);
-			//ErrorDialog.displaySerious(null, e);
-			return;
-		}
+			public Object construct()
+			{
+				long time = System.currentTimeMillis();
+				HKeeper keeper = new HKeeper();
+				
+				try
+				{ 
+					final String helpFileName = Utils.getResourceBasePrefix() + HELP_FILE_NAME;
+					
+					URL url = HelpSet.findHelpSet(Utils.getClassLoader(), helpFileName, Utils.getLocale());
+					Log.println("HelpSet URL: ", url);
+					keeper.helpSet = new HelpSet(null, url);
+				}
+				catch(Exception e)
+				{
+					Log.println("Help not available: ", e);
+					//ErrorDialog.displaySerious(null, e);
+					return null;
+				}
+				
+				keeper.helpBroker = keeper.helpSet.createHelpBroker("main_help_window");
+				keeper.helpBroker.initPresentation();
+				Log.printTimed(time, "Help construct() complete: ");
+				return keeper;
+			}// construct()
+		};
 		
-		helpBroker = helpSet.createHelpBroker("main_help_window");
-		helpBroker.initPresentation();
+		loaderThread.start(Thread.MIN_PRIORITY);
  	}// init()
 	
+	
+	/** Checks if init() done; if not init, do nothing. */
+	private synchronized static void checkInit()
+	{
+		if(hk == null)
+		{
+			if(loaderThread != null)
+			{
+				hk = (HKeeper) loaderThread.get();
+				loaderThread = null;
+			}
+		}
+	}// checkInit()
 	
 	/** Sets the context-sensitive Dialog-Level help */
 	public static void enableDialogHelp(JDialog dialog, HelpID id)
 	{
-		if(helpBroker != null)
+		checkInit();
+		if(hk != null)
 		{
 			String sID = (id == null) ? null : id.toString();
-			helpBroker.enableHelpKey(dialog.getRootPane(), sID, helpSet);
+			hk.helpBroker.enableHelpKey(dialog.getRootPane(), sID, hk.helpSet);
 		}
 	}// enableWindowHelp()
 	
@@ -92,10 +128,11 @@ public class Help
 	/** Set the Help for a button (and Swing menu items) */
 	public static void enableHelpOnButton(AbstractButton button, HelpID id)
 	{
-		if(helpBroker != null)
+		checkInit();
+		if(hk != null)
 		{
 			String sID = (id == null) ? null : id.toString();
-			helpBroker.enableHelpOnButton(button, sID, null);
+			hk.helpBroker.enableHelpOnButton(button, sID, null);
 		}
 	}// enableHelpOnButton()
 	

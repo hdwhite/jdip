@@ -27,7 +27,7 @@ import dip.gui.ClientFrame;
 import dip.misc.SharedPrefs;
 import dip.misc.LRUCache;
 import dip.misc.Utils;
-import dip.misc.XJFileChooser;
+import dip.gui.swing.XJFileChooser;
 
 // HIGLayout
 import cz.autel.dmi.HIGConstraints;

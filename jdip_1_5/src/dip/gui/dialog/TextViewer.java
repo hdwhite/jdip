@@ -30,7 +30,7 @@ import dip.gui.dialog.ErrorDialog;
 import dip.gui.dialog.prefs.GeneralPreferencePanel;
 import dip.misc.Utils;
 import dip.misc.SimpleFileFilter;
-import dip.misc.XJFileChooser;
+import dip.gui.swing.XJFileChooser;
 import dip.misc.Log;
 
 import java.awt.Font;

@@ -30,6 +30,7 @@ import dip.world.variant.data.Variant;
 import dip.gui.swing.*;
 
 import dip.misc.Utils;
+import dip.misc.Log;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
@@ -64,7 +65,7 @@ public class NewGameDialog extends HeaderDialog
 	
 	// class variables
 	private static NewGameDialog dialogInstance = null;
-	
+	private static SwingWorker loader = null;
 	
 	
 	/** 
@@ -115,13 +116,33 @@ public class NewGameDialog extends HeaderDialog
 	
 	
 	/** Create a dialog, and place in cache */
-	public static synchronized void createCachedDialog(ClientFrame parent)
+	public static synchronized void createCachedDialog(final ClientFrame parent)
 	{
 		if(dialogInstance == null)
 		{
-			dialogInstance = new NewGameDialog(parent);
-			dialogInstance.pack();
-			dialogInstance.setSize(Utils.getScreenSize(0.67f, 0.82f));
+			if(loader == null)
+			{
+				loader = new SwingWorker()
+				{
+					public Object construct()
+					{
+						long time = System.currentTimeMillis();
+						NewGameDialog ngd = new NewGameDialog(parent);
+						ngd = new NewGameDialog(parent);
+						ngd.pack();
+						ngd.setSize(Utils.getScreenSize(0.67f, 0.82f));
+						Log.printTimed(time, "NGD construct() complete: ");
+						return ngd;
+					}// construct()
+				};
+				
+				loader.start(Thread.MIN_PRIORITY);
+			}
+			else
+			{
+				dialogInstance = (NewGameDialog) loader.get();
+				loader = null;
+			}
 		}
 	}// createCachedDialog()
 	

@@ -158,7 +158,8 @@ public class XMLVariantParser implements VariantParser
 	public void parse(InputStream is, URL variantPackageURL)
 	throws IOException, SAXException
 	{
-		Log.println("Parsing: ", variantPackageURL);
+		Log.println("XMLVariantParser: Parsing: ", variantPackageURL);
+		long time = System.currentTimeMillis();
 		
 		// cleanup cache (very important to remove references!)
 		AdjCache.clear();
@@ -172,6 +173,7 @@ public class XMLVariantParser implements VariantParser
 		AdjCache.setVariantPackageURL(variantPackageURL);
 		doc = docBuilder.parse(is);
 		procVariants();
+		Log.printTimed(time, "   time: ");
 	}// parse()
 	
 	

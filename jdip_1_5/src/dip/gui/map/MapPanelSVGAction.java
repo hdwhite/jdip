@@ -28,7 +28,7 @@ import dip.gui.dialog.ErrorDialog;
 import dip.gui.dialog.prefs.ExportPreferencePanel;
 import dip.gui.dialog.prefs.GeneralPreferencePanel;
 import dip.misc.SimpleFileFilter;
-import dip.misc.XJFileChooser;
+import dip.gui.swing.XJFileChooser;
 import dip.gui.ClientFrame;
 import dip.misc.Utils;
 

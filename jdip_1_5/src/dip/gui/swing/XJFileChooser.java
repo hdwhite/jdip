@@ -20,7 +20,11 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package dip.misc;
+package dip.gui.swing;
+
+import dip.misc.Utils;
+import dip.misc.SimpleFileFilter;
+import dip.misc.Log;
 
 import java.awt.Component;
 
@@ -85,6 +89,7 @@ public class XJFileChooser
 	
 	// class variables
 	private static XJFileChooser instance = null;
+	private static SwingWorker loader = null;
 	private static int refcount = 0;
 	
 	// instance variables
@@ -106,7 +111,26 @@ public class XJFileChooser
 	{
 		if(instance == null)
 		{
-			instance = new XJFileChooser();
+			if(loader == null)
+			{
+				loader = new SwingWorker()
+				{
+					public Object construct()
+					{
+						long time = System.currentTimeMillis();
+						XJFileChooser xjf = new XJFileChooser();
+						Log.printTimed(time, "XJFileChooser construct() complete: ");
+						return xjf;
+					}// construct()
+				};
+				
+				loader.start(Thread.MIN_PRIORITY);
+			}
+			else
+			{
+				instance = (XJFileChooser) loader.get();
+				instance = null;
+			}
 		}
 	}// init()
 	

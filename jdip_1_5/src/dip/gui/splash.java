@@ -36,20 +36,18 @@ import java.lang.reflect.*;
 public final class splash
 {
 	private static final String SPLASH_GRAPHIC = "resource/common/splash/splash.jpg";
-	private static splash sp = null;
-	
-	private Frame frame = null;
-	private Window win = null;
-	private Image img = null;
+	private static splashRunner sprunner = null;
 	
 	
 	/** Starts the Splash screen, then starts loading jDip (ClientFrame) */
 	public static void main(String args[])
 	{
+		//long time = System.currentTimeMillis();
+		//System.out.println("splash.main() START: "+time); 
 		checkRequirements();
 		
 		// start splash
-		sp = new splash();
+		//new splash();
 		
 		// start main program
 		//
@@ -62,109 +60,134 @@ public final class splash
 			Method m = cf.getMethod("main", new Class[] {String[].class});
 			Object[] params = new Object[] { args };
 			m.invoke(null, params);
+			//time = (System.currentTimeMillis() - time);
+			//System.out.println("splash.main() INVOKED: "+time); 
 		}
 		catch(Exception e)
 		{
 			System.err.println(e);
 		}
+		
+		// time = (System.currentTimeMillis() - time);
+		// System.out.println("splash.main() END: "+time); 
 	}// main()
 	
 	
 	/** Destroy the Splash Screen */
 	public synchronized static void destroy()
 	{
-		if(sp != null)
+		if(sprunner != null)
 		{
-			sp.dispose();
-			sp = null;
+			sprunner.destroy();
+			sprunner = null;
 		}
 	}// destroy()
 	
 	
-	/** Create display components */
+	/** */
 	private splash()
 	{
-		// if we are headless, OR, if X is not loaded (on unix systems), 
-		// this will throw an internal error. Fix.
-		try
+		 sprunner = new splashRunner();
+		 Thread t = new Thread(sprunner);
+		 t.setPriority(Thread.MIN_PRIORITY);
+		 t.start();
+	}// splsah()
+	
+	/** Create display components */
+	private class splashRunner implements Runnable
+	{
+		private Frame frame = null;
+		private Window win = null;
+		private Image img = null;
+		
+		public void destroy()
+		{ 
+			win.hide();
+			win.dispose();
+			frame.dispose();
+			img.flush();
+			img = null;
+			win = null;
+			frame = null;
+		}		
+		
+		public void run()
 		{
-			frame = new Frame("test");
-		}
-		catch(Throwable t)
-		{
-			// be a bit facetious
-			System.err.println("jDip requires a computer with a mouse, keyboard, monitor,"); 
-			System.err.println("and graphical environment (e.g., XWindows) to run.");
-			System.exit(1);
-		}
-		
-		
-		win = new Window(frame);
-		
-		// get image
-		ClassLoader classLoader = this.getClass().getClassLoader();
-		img = win.getToolkit().createImage(classLoader.getResource(SPLASH_GRAPHIC));
-		
-		// load entire image
-		MediaTracker tracker = new MediaTracker(win);
-		synchronized(tracker)
-		{
-			tracker.addImage(img, 0);
-			
+			//long time = System.currentTimeMillis();
+			//System.out.println("splash.run() START: "+time); 
+			// if we are headless, OR, if X is not loaded (on unix systems), 
+			// this will throw an internal error. Fix.
 			try
 			{
-				tracker.waitForID(0);
-				tracker.removeImage(img, 0);
+				frame = new Frame("test");
 			}
-			catch(InterruptedException e)
+			catch(Throwable t)
 			{
+				// be a bit facetious
+				System.err.println("jDip requires a computer with a mouse, keyboard, monitor,"); 
+				System.err.println("and graphical environment (e.g., XWindows) to run.");
+				System.exit(1);
 			}
-		}
-		
-		tracker = null;
-		
-		Canvas canvas = new Canvas()
-		{
-			public void paint(Graphics g)
+			
+			
+			win = new Window(frame);
+			
+			// get image
+			ClassLoader classLoader = this.getClass().getClassLoader();
+			img = win.getToolkit().createImage(classLoader.getResource(SPLASH_GRAPHIC));
+			
+			// load entire image
+			MediaTracker tracker = new MediaTracker(win);
+			synchronized(tracker)
 			{
-				super.paint(g);
-				if(img != null)
+				tracker.addImage(img, 0);
+				
+				try
 				{
-					g.drawImage(img, 0, 0, null);
+					tracker.waitForID(0);
+					tracker.removeImage(img, 0);
+				}
+				catch(InterruptedException e)
+				{
 				}
 			}
-		};
-		
-		if(img != null)
-		{
-			int w = img.getWidth(null);
-			int h = img.getHeight(null);
-			Dimension screenSize = win.getToolkit().getScreenSize();
-		
-			canvas.setBounds(0,0,w,h);
-			win.setLayout(null);
-			win.add(canvas);
-			win.setBounds(0,0,w,h);
-			win.pack();
-			win.setLocation((screenSize.width - w)/2, (screenSize.height - h)/2);
-			win.show();
-			win.repaint();
-			win.toFront();
+			
+			tracker = null;
+			
+			Canvas canvas = new Canvas()
+			{
+				public void paint(Graphics g)
+				{
+					super.paint(g);
+					if(img != null)
+					{
+						g.drawImage(img, 0, 0, null);
+					}
+				}
+			};
+			
+			if(img != null)
+			{
+				int w = img.getWidth(null);
+				int h = img.getHeight(null);
+				Dimension screenSize = win.getToolkit().getScreenSize();
+			
+				canvas.setBounds(0,0,w,h);
+				win.setLayout(null);
+				win.add(canvas);
+				win.setBounds(0,0,w,h);
+				win.pack();
+				win.setLocation((screenSize.width - w)/2, (screenSize.height - h)/2);
+				win.show();
+				win.repaint();
+				win.toFront();
+			}
+			//time = (System.currentTimeMillis() - time);
+			//System.out.println("splash.run() END: "+time+"; "+System.currentTimeMillis()); 
 		}
 	}// splash()
 	
 	
-	/** Cleanup */
-	private void dispose()
-	{
-		win.hide();
-		win.dispose();
-		frame.dispose();
-		img.flush();
-		img = null;
-		win = null;
-		frame = null;
-	}// dispose()
 	
 	
 	/** 

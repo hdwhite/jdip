@@ -24,7 +24,10 @@ package dip.gui.dialog;
 
 import dip.misc.Utils;
 import dip.gui.swing.XJScrollPane;
+import dip.gui.swing.SwingWorker;
 import dip.gui.*;
+
+import dip.misc.Log;
 
 // HIGLayout
 import cz.autel.dmi.HIGConstraints;
@@ -90,17 +93,36 @@ public class AboutDialog extends HeaderDialog
 	 
 	// for speed
 	private static AboutDialog dialogInstance = null;
-	
+	private static SwingWorker loader = null;
 	
 	
 	/** Create a cached copy of this dialog */
-	public static synchronized void createCachedDialog(JFrame parent)
+	public static synchronized void createCachedDialog(final JFrame parent)
 	{
 		if(dialogInstance == null)
 		{
-			dialogInstance = new AboutDialog(parent);
-			dialogInstance.pack();
-			dialogInstance.setSize(new Dimension(450, 575));
+			if(loader == null)
+			{
+				loader = new SwingWorker()
+				{
+					public Object construct()
+					{
+						long time = System.currentTimeMillis();
+						AboutDialog ad = new AboutDialog(parent);
+						ad.pack();
+						ad.setSize(new Dimension(450, 575));
+						Log.printTimed(time, "AboutDialog construct() complete: ");
+						return ad;
+					}// construct()
+				};
+				
+				loader.start(Thread.MIN_PRIORITY);
+			}
+			else
+			{
+				dialogInstance = (AboutDialog) loader.get();
+				loader = null;
+			}
 		}
 	}// createCachedDialog()
 	

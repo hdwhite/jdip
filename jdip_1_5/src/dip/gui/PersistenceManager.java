@@ -37,7 +37,7 @@ import dip.world.variant.data.Variant;
 
 import dip.misc.Help;
 import dip.misc.Utils;
-import dip.misc.XJFileChooser;
+import dip.gui.swing.XJFileChooser;
 import dip.misc.SimpleFileFilter;
 import dip.misc.Log;
 

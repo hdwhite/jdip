@@ -212,6 +212,26 @@ public final class Log
 		}
 	}// println()
 	
+	/** Print the delta from the given time. Return the new time. */
+	public static long printDelta(long lastTime, Object s0)
+	{
+		if(isLogging)
+		{
+			final long now = System.currentTimeMillis();
+			StringBuffer sb = new StringBuffer(128);
+			sb.append(s0);
+			sb.append(' ');
+			sb.append((now - lastTime));
+			sb.append(" ms [delta]");
+			sb.append(now);
+			println(sb);
+			return now;
+		}
+		
+		return 0L;
+	}// printDelta()
+	
+	
 	/** Print the given objects to the log */
 	public static void println(Object s0, Object s1)
 	{

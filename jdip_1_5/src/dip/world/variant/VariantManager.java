@@ -110,6 +110,10 @@ public class VariantManager
 	public static synchronized void init(File[] searchPaths, boolean isValidating)
 	throws javax.xml.parsers.ParserConfigurationException, NoVariantsException
 	{
+		long ttime = System.currentTimeMillis();
+		long vptime = ttime;
+		Log.println("VariantManager.init()");
+		
 		if(searchPaths == null || searchPaths.length == 0)
 		{
 			throw new IllegalArgumentException();
@@ -187,6 +191,7 @@ public class VariantManager
 			}
 		}
 		
+		
 		// if we are in webstart, search for variants within webstart jars
 		Enumeration enum = null;
 		ClassLoader cl = null;
@@ -263,6 +268,7 @@ public class VariantManager
 			throw new NoVariantsException(msg.toString());
 		}
 		
+		Log.printTimed(vptime, "VariantManager: variant parsing time: ");
 		
 		///////////////// SYMBOLS /////////////////////////
 		
@@ -380,6 +386,7 @@ public class VariantManager
 			
 			throw new NoVariantsException(msg.toString());
 		}
+		Log.printTimed(ttime, "VariantManager: total parsing time: ");
 	}// init()
 	
 	
