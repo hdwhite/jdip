@@ -294,7 +294,7 @@ public class ClientMenu
 		menu.add(makeMenuItem(EDIT_UNDO));
 		menu.add(makeMenuItem(EDIT_REDO));
 		menu.add(new JSeparator());
-		menu.add(makeCBMenuItem(EDIT_EDIT_MODE, false, true));
+		menu.add(makeCBMenuItem(EDIT_EDIT_MODE, false, false));
 		menu.add(new JSeparator());
 		menu.add(makeMenuItem(EDIT_PREFERENCES));
 		menuBar.add(menu);
