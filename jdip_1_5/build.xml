@@ -250,6 +250,11 @@
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
+		<!-- Variant Package: Octarine -->
+		<zip  destfile="${variant.dir}/octarineVariants.zip"
+				basedir="${resource.dir}/variants/octarine"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
 		<!-- SymbolPack: simple -->
 		<zip  destfile="${variant.dir}/simpleSymbols.zip"
@@ -506,6 +511,20 @@
 		</style>
 	</target>
 	
+	
+	<!-- create no-install .zip version -->
+	<target name="nightlyzip" description="Builds nightly build .zip distribution">
+		<tstamp>
+			<format property="nightly.date" pattern="MMM-dd-yyyy"/>
+		</tstamp>
+		<antcall target="dist"/>
+		<delete dir="${packaged.dist.dir}"/>
+		<mkdir dir="${packaged.dist.dir}"/>
+		<zip destfile="${packaged.dist.dir}/jdip-nightly-${nightly.date}.zip">
+			<zipfileset dir="${dist.dir}" prefix="jdip"/>
+		</zip>
+	</target>	
+
 	
 	<!-- build the no-installer version of jdip (based on dist) -->
 	<target name="distpacks" description="Builds javadoc .zip, no-install .zip, source snapshot, and multiplatform jar installer">
@@ -788,15 +807,15 @@
 			<classpath  refid="run.class.path"/>
 			<jvmarg  value="-ea"/>
 		</java>
-		<java classname="dip.misc.TestSuite" fork="yes" dir="${build.dir}" output="${test.results.dir}/wing.out" append="false">
-			<arg value="-brief"/>
-			<arg value="${absolute.etc.dir}/test_data/wing.txt"/>
-			<classpath  refid="run.class.path"/>
-			<jvmarg  value="-ea"/>
-		</java>
 		<java classname="dip.misc.TestSuite" fork="yes" dir="${build.dir}" output="${test.results.dir}/borders.out" append="false">
 			<arg value="-brief"/>
 			<arg value="${absolute.etc.dir}/test_data/borders.txt"/>
+			<classpath  refid="run.class.path"/>
+			<jvmarg  value="-ea"/>
+		</java>
+		<java classname="dip.misc.TestSuite" fork="yes" dir="${build.dir}" output="${test.results.dir}/wing.out" append="false">
+			<arg value="-brief"/>
+			<arg value="${absolute.etc.dir}/test_data/wing.txt"/>
 			<classpath  refid="run.class.path"/>
 			<jvmarg  value="-ea"/>
 		</java>
@@ -1095,7 +1114,6 @@
 		</copy>
 		
 		<!-- 
-		
 			sign all jars. This includes:
 			
 			1) main jDip file (jdip.jar)
