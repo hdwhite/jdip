@@ -7,33 +7,71 @@
         <authors>
 			<!-- <author name="The jDip Development Team" email="jdip-users@sourceforge.net"/> -->
 		</authors>
-        <url>jdip.sourceforge.net</url>
+        <url>http://jdip.sourceforge.net/</url>
     </info>
-    <guiprefs height="420" resizable="yes" width="650"/>
-    <locale>
+    
+	<guiprefs width="800" height="600" resizable="yes">
+		<laf name="liquid">
+			<os family="unix"/>
+			<os family="windows"/>
+		</laf>
+	</guiprefs>
+ 	
+	
+	<locale>
         <langpack iso3="eng"/>
+		<!--
+		<langpack iso3="ger"/>
+		<langpack iso3="fra"/>
+		<langpack iso3="ned"/>
+		-->
     </locale>
-    <resources>
+    
+	<resources>
         <res id="HTMLInfoPanel.info" src="install_readme.html"/>
-        <res id="HTMLLicencePanel.licence" src="install_license.html"/>
-        <res id="Installer.image" src="install_image.jpg" />
+        <res id="LicencePanel.licence" src="install_license.txt"/>
         <res id="shortcutSpec.xml" src="shortcutSpec.xml" />
-        <res src="useNativeLAF" id="useNativeLAF" />
-    </resources>
-    <native type="izpack" name="ShellLink.dll"/>
-    <panels>
+		
+		<res id="Installer.image.0" src="images/sequence_1.png" />
+        <res id="Installer.image.1" src="images/sequence_2.png" />
+        <res id="Installer.image.2" src="images/sequence_3.png" />
+        <res id="Installer.image.3" src="images/sequence_4.png" />
+        <res id="Installer.image.4" src="images/sequence_5.png" />
+		<res id="Installer.image.5" src="images/sequence_6.png" />
+        <res id="Installer.image.6" src="images/sequence_7.png" />
+        <res id="Installer.image.7" src="images/sequence_8.png" />
+		
+		<res id="ImgPacksPanel.img.0"  src="images/detailed_thumb.png" />
+		<res id="ImgPacksPanel.img.1"   src="images/asia_thumb.png" />
+        <res id="ImgPacksPanel.img.2"   src="images/chaos_thumb.png" />
+        <res id="ImgPacksPanel.img.3"   src="images/chaos_thumb.png" />
+        <res id="ImgPacksPanel.img.4"   src="images/h31_h32_thumb.png" />
+ 		<res id="ImgPacksPanel.img.5"   src="images/imperium_thumb.png"/>
+		<res id="ImgPacksPanel.img.6"   src="images/loeb9.gif" />
+		<res id="ImgPacksPanel.img.7"   src="images/milan_thumb.png" />
+        <res id="ImgPacksPanel.img.8"   src="images/octarine_thumb.png" />
+ 		<res id="ImgPacksPanel.img.9"   src="images/pure_thumb.png" />
+        <res id="ImgPacksPanel.img.10"  src="images/rootz_thumb.png" />
+        <res id="ImgPacksPanel.img.11"  src="images/sailho_thumb.png" />
+		<res id="ImgPacksPanel.img.12"  src="images/youngstown_thumb.png" />
+     </resources>
+    
+	<native type="izpack" name="ShellLink.dll"/>
+	
+	<panels>
         <panel classname="HelloPanel"/>
         <panel classname="HTMLInfoPanel"/>
-        <panel classname="HTMLLicencePanel"/>
-        <panel classname="PacksPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="ImgPacksPanel"/>
         <panel classname="TargetPanel"/>
         <panel classname="InstallPanel"/>
         <panel classname="ShortcutPanel"/>
-        <panel classname="FinishPanel"/>
+        <panel classname="SimpleFinishPanel"/>
     </panels>
-    <packs>
-        <pack name="Base" required="yes">
-            <description>jDip program files and Standard variants.</description>
+    
+	<packs>
+        <pack name="Core" required="yes">
+            <description>jDip program files and Standard variants (required).</description>
 			
 			<file targetdir="$INSTALL_PATH" src="lib"/>
             <file targetdir="$INSTALL_PATH" src="jdip.ico"/>
@@ -58,33 +96,53 @@
 			<executable os="mac" targetfile="$INSTALL_PATH/jdip.sh" stage="never" failure="warn" type="bin"/>
          </pack>
 		
+		<pack name="Asia variant" required="no" override="true">
+			<description>Youngstown variant</description>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/AsiaVariants.zip"/>
+		</pack>
+		<pack name="Chaos variant (nJudge compatible)" required="no" override="true">
+			<description>Youngstown variant</description>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/ChaosNJudgeVariant.zip"/>
+		</pack>
+		<pack name="Chaos variant (DPJudge compatible)" required="no" override="true">
+			<description>Youngstown variant</description>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/ChaosDPJudgeVariant.zip"/>
+		</pack>
 		<pack name="Hundred variants" required="no" override="true">
 			<description>Hundred3.1 and Hundred3.2 3-player variants.</description>
-            	<file targetdir="$INSTALL_PATH/variants" src="variants/hundredVariants.zip"/>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/hundredVariants.zip"/>
+		</pack>
+ 		<pack name="Imperium variant" required="no" override="true">
+			<description>Youngstown variant</description>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/ImperiumVariants.zip"/>
 		</pack>
 		<pack name="Loeb9 variant" required="no" override="true">
 			<description>Loeb9 variant</description>
-            	<file targetdir="$INSTALL_PATH/variants" src="variants/loeb9Variants.zip"/>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/loeb9Variants.zip"/>
 		</pack>
 		<pack name="Milan variants" required="no" override="true">
 			<description>Milan variants</description>
-            	<file targetdir="$INSTALL_PATH/variants" src="variants/milanVariants.zip"/>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/milanVariants.zip"/>
+		</pack>
+		<pack name="Octarine variant" required="no" override="true">
+			<description>Youngstown variant</description>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/OctarineVariants.zip"/>
 		</pack>
 		<pack name="Pure variant" required="no" override="true">
 			<description>The Pure variant.</description>
-            	<file targetdir="$INSTALL_PATH/variants" src="variants/pureVariants.zip"/>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/pureVariants.zip"/>
 		</pack>
 		<pack name="Root Z variants" required="no" override="true">
 			<description>Root Z variant</description>
-            	<file targetdir="$INSTALL_PATH/variants" src="variants/rootzVariants.zip"/>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/rootzVariants.zip"/>
 		</pack>
 		<pack name="Sail Ho! variants" required="no" override="true">
 			<description>Sail Ho! variants (including Sail Ho! Crowded)</description>
-            	<file targetdir="$INSTALL_PATH/variants" src="variants/sailhoVariants.zip"/>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/sailhoVariants.zip"/>
 		</pack>
 		<pack name="Youngstown variant" required="no" override="true">
 			<description>Youngstown variant</description>
-            	<file targetdir="$INSTALL_PATH/variants" src="variants/youngstownVariants.zip"/>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/youngstownVariants.zip"/>
 		</pack>
-    </packs>
+   </packs>
 </installation>

@@ -16,11 +16,11 @@
 		 iconIndex="0"
 		 initialState="noShow">
 		 
-		 <createForPack name="Base"/>
+		 <createForPack name="Core"/>
     </shortcut>
     
 	<shortcut
-        name="Uninstaller"
+        name="Uninstall jDip"
         programGroup="yes"
         desktop="no"
         applications="no"
@@ -28,8 +28,10 @@
         startup="no"
         target="$INSTALL_PATH\Uninstaller\uninstaller.jar"
         commandLine=""
-        description="jDip uninstaller">
+        description="jDip Uninstall">
         
-		<createForPack name="Base" />
+		<createForPack name="Core" />
     </shortcut>
+	
+	
 </shortcuts>
