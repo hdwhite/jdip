@@ -43,6 +43,7 @@ You will probably need to modify the codebase path to work
 		<jar href="variants/imperiumVariants.jar"/>
 		<jar href="variants/loeb9Variants.jar"/>
 		<jar href="variants/milanVariants.jar"/>
+		<jar href="variants/modernVariants.jar"/>
 		<jar href="variants/octarineVariants.jar"/>
 		<jar href="variants/pureVariants.jar"/>
 		<jar href="variants/rootzVariants.jar"/>
@@ -77,6 +78,7 @@ You will probably need to modify the codebase path to work
 		<jar href="lib/jade.jar"/>   
 		<jar href="lib/jcmdline-1.0.1.jar"/>   
 		<jar href="lib/JSX2.0.9.6.jar"/>   
+		<jar href="lib/l2fprod-common-directorychooser.jar"/>   
 		<jar href="lib/looks-1.2.1.jar"/>   
 		<jar href="lib/pdf-transcoder.jar"/>   
 		<jar href="lib/xerces_2_6_2.jar"/>   
@@ -84,7 +86,6 @@ You will probably need to modify the codebase path to work
 		<jar href="lib/batik-awt-util.jar"/>   
 		<jar href="lib/batik-bridge.jar"/>   
 		<jar href="lib/batik-css.jar"/>   
-		  
 		<!-- NOTE: this is signed by a separate certificate! -->
 		<extension name="Java Help" href="help.jnlp"/>	<!-- jhbasic.jar -->
 	</resources>     
