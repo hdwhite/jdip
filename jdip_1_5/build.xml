@@ -2,19 +2,8 @@
 <project name="jDip" default="run" basedir=".">
 <!-- ANT Build.xml file for jDip -->
 <!-- 
-	
 	NOTES:
 		JAVA_HOME and ANT_HOME environment vars must NOT have a trailing (back)slash
-		
-	TODO:
-		src/
-			-source-code-tree
-		build/
-			build/classes
-			build/dist
-					all dist files
-		
-		
 -->
     <!-- load external properties -->
 	<property file="build.properties"/>
@@ -255,6 +244,13 @@
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
+		<!-- Variant Package: Imperium -->
+		<zip  destfile="${variant.dir}/imperiumVariants.zip"
+				basedir="${resource.dir}/variants/imperium"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				
+				
 		<!-- SymbolPack: simple -->
 		<zip  destfile="${variant.dir}/simpleSymbols.zip"
 				basedir="${resource.dir}/variants/symbols/simple"
@@ -270,6 +266,12 @@
 		<!-- SymbolPack: modern -->
 		<zip  destfile="${variant.dir}/modernSymbols.zip"
 				basedir="${resource.dir}/variants/symbols/modern"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
+		
+		<!-- SymbolPack: imperium -->
+		<zip  destfile="${variant.dir}/imperiumSymbols.zip"
+				basedir="${resource.dir}/variants/symbols/imperium"
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 	</target>
