@@ -322,10 +322,10 @@
 			.invisible	{stroke:#000000;fill:#000000;fill-opacity:0.0;opacity:0.0}
 			
 			/* Text */
-			.title       {font:30px bold Times; fill:#aa0000}
-			.credits     {font: 10px black Arial}
-			 text         {font: 8px black Arial}
-			 .centertext	{font: 8px black Arial;text-anchor:middle;}
+			.title       	{font: bold 30px Times; fill:#aa0000}
+			.credits     	{font: 10px black Arial}
+			.text         	{font: 8px black Arial}
+			.centertext		{font: 8px black Arial;text-anchor:middle;}
 			 
 			/* Nations */
 			.water       {fill:#E6E6FF; stroke:black; stroke-linejoin:round}
