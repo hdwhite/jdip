@@ -58,6 +58,10 @@ various Border properties.
 			<BORDER id="yearOdd" description="Year: odd" year="odd"/>
 			<BORDER id="yearEven" description="Year: even" year="even"/>
 			
+			<!-- directed seasonal border -->
+			<BORDER id="seasonFromS" description="no movement from sil in spring!" from="sil" season="spring"/>
+			<BORDER id="seasonFromF" description="no movement from tyr in fall!" from="tyr" season="fall"/>
+			
 			<!-- multiple conditions -->
 			<BORDER id="multiple" description="multiple#1" year="even" phase="movement" />
 		</BORDER_DEFINITIONS>
@@ -103,7 +107,7 @@ various Border properties.
 		<PROVINCE shortname="bla" fullname="Black Sea">
 			<ADJACENCY type="xc" refs="rum sev arm ank con bul-ec" />
 		</PROVINCE>
-		<PROVINCE shortname="boh" fullname="Bohemia">
+		<PROVINCE shortname="boh" fullname="Bohemia" borders="seasonFromS seasonFromF">
 			<ADJACENCY type="mv" refs="mun sil gal vie tyr" />
 		</PROVINCE>
 		<PROVINCE shortname="bre" fullname="Brest">
@@ -227,7 +231,7 @@ various Border properties.
 		<PROVINCE shortname="mos" fullname="Moscow">
 			<ADJACENCY type="mv" refs="stp lvn war ukr sev" />
 		</PROVINCE>
-		<PROVINCE shortname="mun" fullname="Munich">
+		<PROVINCE shortname="mun" fullname="Munich" borders="seasonFromS seasonFromF">
 			<ADJACENCY type="mv" refs="bur ruh kie ber sil boh tyr" />
 		</PROVINCE>
 		<PROVINCE shortname="naf" fullname="North Africa">
