@@ -80,15 +80,18 @@ import org.apache.batik.gvt.*;
 
 
 // TEST
-import org.apache.batik.util.*;
 import java.io.*;
-import java.net.*;
-import java.util.*;
+
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
-import javax.xml.transform.dom.*;
-import javax.xml.transform.sax.*;
-import javax.xml.transform.stream.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.apache.batik.dom.svg.*;
+import org.apache.batik.dom.util.*;
+import org.apache.batik.util.*;
+import org.w3c.dom.*;
 
 /**
 *	The Main Map display component.
@@ -116,6 +119,16 @@ public class MapPanel extends JPanel
 	private static final String GVT_BUILD_STARTED = "MapPanel.gvt.build.start";
 	private static final String GVT_BUILD_COMPLETED = "MapPanel.gvt.build.complete";
 	private static final String GVT_BUILD_FAILED = "MapPanel.gvt.build.failed";
+	
+	
+	// misc
+	private static final String PSEUDO_ATTRIBUTE_TYPE = "type";
+	private static final String PSEUDO_ATTRIBUTE_HREF = "href";
+	private static final String XSL_PROCESSING_INSTRUCTION_TYPE = "text/xsl";
+
+	
+
+	
 	
 	
 	/** update text message */
@@ -284,13 +297,6 @@ public class MapPanel extends JPanel
 	{
 		super(new BorderLayout());
 		
-// TST
-System.out.println("new parsed-URL handler");
-		ParsedURL.registerHandler(new TESTParsedURLProtocolHandler());
-		ParsedURL.registerHandler(new XJarHandler());
-		
-		
-		
 		startTime = System.currentTimeMillis();
 		Log.printTimed(startTime, "MapPanel() constructor start.");
 		
@@ -340,7 +346,6 @@ System.out.println("new parsed-URL handler");
 	/** Set the SVG Document from XML Document */ 
 	private void setDocument(Document xmlDoc, Variant variant)
 	{
-System.out.println(">>>>>> SET_DOCUMENT");		
 		// setup private loader-listeners
 		gvtRenderListener = new MP_GVTRenderListener();
 		documentListener = new MP_DocumentListener();       
@@ -358,7 +363,19 @@ System.out.println(">>>>>> SET_DOCUMENT");
 		// listener, as it createas an SVG document synchronously 
 		// from the XML document we submit.
 		svgCanvas.setDocumentState(JSVGCanvas.ALWAYS_DYNAMIC);
-		svgCanvas.setDocument(xmlDoc);
+		
+		// we MUST transform the document, prior to setDocument()!
+		// subtle bugs emerge if we do not.
+		//
+		try
+		{
+			svgCanvas.setDocument( transform(xmlDoc, 
+				VariantManager.getVariantPackageJarURL(variant).toString()) );
+		}
+		catch(Exception e)
+		{
+			ErrorDialog.displaySerious(clientFrame, e);
+		}
 		
 		// fix the URI; if we don't do this, we aren't able to load 
 		// files that are referred to by the SVG. For example, the bitmap
@@ -367,9 +384,7 @@ System.out.println(">>>>>> SET_DOCUMENT");
 		if(svgCanvas.getSVGDocument() instanceof SVGOMDocument)
 		{
 			final SVGOMDocument omd = (SVGOMDocument) svgCanvas.getSVGDocument();
-System.out.println("(pre) getURLObject(): "+omd.getURLObject());		
 			omd.setURLObject(VariantManager.getVariantPackageJarURL(variant));
-System.out.println("getURLObject(): "+omd.getURLObject());		
 		}
 		else              
 		{
@@ -924,8 +939,6 @@ System.out.println("getURLObject(): "+omd.getURLObject());
 			{
 				if(!isLoaded)
 				{
-System.out.println(" ** NOT LOADED :: TS CHANGED");					
-					
 					// set turnstate & position
 					turnState = ts;
 					position = turnState.getPosition();
@@ -1073,48 +1086,8 @@ System.out.println(" ** NOT LOADED :: TS CHANGED");
 	*/
 	public void reloadMap()
 	{
-	//	svgCanvas.suspendProcessing();
-		System.out.println("reloadMap");
-		
-svgCanvas.removeSVGDocumentLoaderListener(new SVGDocumentLoaderAdapter()
-	{
-public void 	documentLoadingCancelled(SVGDocumentLoaderEvent e)
-{
-	System.out.println("docload: documentLoadingCancelled: "+e);
-}
-public void 	documentLoadingCompleted(SVGDocumentLoaderEvent e)
-{
-	System.out.println("docload: documentLoadingCompleted: "+e);
-}
-public void 	documentLoadingFailed(SVGDocumentLoaderEvent e)
-{
-	System.out.println("docload: documentLoadingFailed: "+e);
-}
-public void 	documentLoadingStarted(SVGDocumentLoaderEvent e) 	
-{
-	System.out.println("docload: documentLoadingStarted: "+e);
-}
-	});
-
-		
-		
-	// TEST	
-		System.out.println(svgCanvas.getSVGDocument());
+		svgCanvas.suspendProcessing();
 		svgCanvas.flushImageCache();
-		svgCanvas.setURI(null);
-		svgCanvas.setSVGDocument(null);
-	// END TST
-		
-	System.out.println(svgCanvas.getSVGDocument());
-	
-		if(svgCanvas.getSVGDocument() instanceof SVGOMDocument)
-		{
-			final SVGOMDocument omd = (SVGOMDocument) svgCanvas.getSVGDocument();
-System.out.println("XX (pre) getURLObject(): "+omd.getURLObject());		
-			omd.setURLObject(null);
-System.out.println("XX getURLObject(): "+omd.getURLObject());		
-		}
-		
 		
 		// cleanup this
 		if(mapRenderer != null)
@@ -1148,180 +1121,57 @@ System.out.println("XX getURLObject(): "+omd.getURLObject());
 		
 		// reload the map
 		assert(turnState != null);
-//		svgCanvas.resumeProcessing();
+		svgCanvas.resumeProcessing();
 		isLoaded = false;
 		isReloading = true;	// this activates some additional code
 		clientFrame.fireTurnstateChanged(turnState);
 	}// reloadMap()
 	
 	
-	// for testing
-	class TESTParsedURLProtocolHandler extends AbstractParsedURLProtocolHandler
+	
+	/**	 
+	* 	This code is based on: <br>
+	* 	http://cvs.apache.org/viewcvs.cgi/xml-batik/sources/org/apache/batik/apps/svgbrowser/XMLInputHandler.java?rev=1.7&view=auto
+	*	<p>
+	*	Essentially, it fixes the namespaces so that resolving URIs to 
+	*	the variant-pack jar's actually works. This fixes bug #900714.
+	*
+	*/
+    private Document transform(final Document inDoc, final String uri)
+	throws TransformerException, TransformerConfigurationException, IOException 
 	{
-		public TESTParsedURLProtocolHandler()
-		{
-			super("test");
-			System.out.println("TESTParsedURLProtocolHandler()");
-		}
+        TransformerFactory tFactory = TransformerFactory.newInstance();
+		
+        Transformer transformer = tFactory.newTransformer();
 		
 		
-		public ParsedURLData parseURL(ParsedURL baseURL, String urlStr) {
-			
-			String theURL = "";
-			
-			if(baseURL != null)
-			{
-				theURL += baseURL;
-			}
-			
-			theURL += urlStr;
-			
-			return new TESTParsedURLData(theURL);
-		}
+        // Now, apply the transformation to the input document.
+        //
+        // <!> Due to issues with namespaces, the transform creates the 
+        //     result in a stream which is parsed. This is sub-optimal
+        //     but this was the only solution found to be able to 
+        //     generate content in the proper namespaces.
+        //
+        // SVGOMDocument outDoc = 
+        //   (SVGOMDocument)impl.createDocument(svgNS, "svg", null);
+        // outDoc.setURLObject(new URL(uri));
+        // transformer.transform
+        //     (new DOMSource(inDoc),
+        //     new DOMResult(outDoc.getDocumentElement()));
+        //
+        StringWriter sw = new StringWriter();
+        StreamResult result = new StreamResult(sw);
+        transformer.transform(new DOMSource(inDoc),
+                              result);
+        sw.flush();
+        sw.close();
 
+        String parser = XMLResourceDescriptor.getXMLParserClassName();
+        SAXSVGDocumentFactory f = new SAXSVGDocumentFactory(parser);
+        SVGDocument outDoc = f.createSVGDocument(uri, new StringReader(sw.toString()));
 		
-		public ParsedURLData parseURL(java.lang.String urlStr)
-		{
-			return parseURL(null, urlStr);
-/*			
-			System.out.println("TESTParsedURLProtocolHandler::parseURL()"); 
-			System.out.println("  urlStr: "+urlStr);
-			
-			if(urlStr.startsWith("test://"))
-			{
-			}
-			else
-			{
-				return null;
-			}
-*/		}
-	}
-	
-	class XJarHandler extends ParsedURLJarProtocolHandler
-	{
-		
-		public XJarHandler()
-		{
-			super();
-			System.out.println("XJarHandler()");
-		}
-		
-		
-		public ParsedURLData parseURL(ParsedURL baseURL, java.lang.String urlStr)
-		{
-	//		System.out.println("XJarHandler::parseURL()");
-	//		System.out.println("   baseURL: "+baseURL);
-	//		System.out.println("   urlStr: "+urlStr);
-			
-			ParsedURLData pud = super.parseURL(baseURL, urlStr);
-	//		System.out.println("   pud: "+pud);
-			
-			return pud;
-		}
-		
-		protected ParsedURLData constructParsedURLData(URL url) 
-		{
-			return new XParsedURLData(url);
-		}
-
-		
-		
-	}
-	
-	
-	class XParsedURLData extends ParsedURLData
-	{
-		
-		public XParsedURLData(URL url)
-		{
-			super(url);
-		}
-		
-		protected boolean sameFile(ParsedURLData other)
-		{
-	//		System.out.println("sameFile()");
-	//		System.out.println("  this: "+this);
-	//		System.out.println("  that: "+other);
-			boolean val = super.sameFile(other);
-	//		System.out.println("  match: "+val);
-			return val;
-		}
-	}
-	
-	
-	class TESTParsedURLData extends ParsedURLData
-	{
-		private final String theURL;
-		int count = 0;
-		
-		public TESTParsedURLData(String in)
-		{
-			super();
-			theURL = in;
-			System.out.println("TESTParsedURLData::TESTParsedURLData()");
-			System.out.println("   in: "+theURL);
-			
-			// remove leading '/' if possible
-		}
-		
-		
-		
-		protected URL buildURL() throws MalformedURLException 
-		{
-			throw new MalformedURLException();
-		}		
-		
-		
-		protected InputStream openStreamInternal(String userAgent,
-        		Iterator mimeTypes, Iterator encodingTypes) 
-		throws IOException
-		{
-			System.out.println("\n--TESTParsedURLData::openStreamInternal()"); 
-			/*
-			System.out.println("  MIME types:");
-			while(mimeTypes.hasNext())
-			{
-				System.out.println("      "+mimeTypes.next());
-			}
-			System.out.println("  encoding types:");
-			while(encodingTypes.hasNext())
-			{
-				System.out.println("      "+encodingTypes.next());
-			}
-			
-			System.out.println("  protocol: "+protocol);
-			System.out.println("  host: "+host);
-			System.out.println("  path: "+path);
-			System.out.println("  port: "+port);
-			*/
-			System.out.println("  theURL: "+theURL);
-			System.out.println("  count: "+count);
-			count++;
-			
-			// replace below with open-from-jar code
-			/*
-			public static java.net.URL getResource(java.net.URL packURL,
-                                       java.net.URI uri)
-									   
-			HOW:
-			
-			
-			jdip://variant-pack-
-			
-			
-			
-			*/
-			
-			
-			// if below is OK, our counts are '0'
-			return new ByteArrayInputStream(new byte[100]);
-		}
-	}
-	
-	
-	
-	
-
+		return outDoc;
+    }
 	
 }// class MapPanel
 

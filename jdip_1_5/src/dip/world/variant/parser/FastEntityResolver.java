@@ -66,7 +66,10 @@ public class FastEntityResolver implements EntityResolver
 			Log.println("XML:Entity resolution ignored: ", publicID, "; ", systemID);
 		
 			// return an empty InputSource
-			return new InputSource(new StringReader(""));
+			InputSource is = new InputSource(new StringReader(""));
+			is.setPublicId(publicID);
+			is.setSystemId(systemID);
+			return is;
 		}
 		
 		return null;	// default entity handling
