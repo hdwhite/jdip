@@ -208,7 +208,7 @@
 		<UNIQUENAME name="eblack" />
 		<ADJACENCY type="xc" refs="sev don ros geo ank wbs"/>
 	</PROVINCE>
-	<PROVINCE fullname="Eastern Mediterannean" shortname="eme">
+	<PROVINCE fullname="Eastern Mediterranean" shortname="eme">
 		<UNIQUENAME name="emed" />
 		<ADJACENCY type="xc" refs="izm ana ada syr isr cai ale lbn ion aeg"/>
 	</PROVINCE>
