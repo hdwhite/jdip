@@ -24,8 +24,13 @@ package dip.order;
 import dip.order.result.Result;
 import dip.order.result.OrderResult;
 import dip.order.result.SubstitutedResult;
+import dip.order.result.DislodgedResult;
+
+import dip.misc.Utils;
+import dip.misc.Log;
 
 import dip.world.*;
+
 
 
 import java.util.StringTokenizer;
@@ -37,8 +42,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import dip.misc.Utils;
-import dip.misc.Log;
+
 
 // for testing
 import dip.world.variant.VariantManager;
@@ -48,13 +52,24 @@ import java.io.*;
 /**
 *	Parses nJudge-format orders into Orders and Results
 *	<p>
-*	This currently only handles MOVEMENT and RETREAT phase
-*	orders.
-
-** note about dislodged results and orders (no retreat info) **
-** note about adjustment-phase stuff
-
-
+*	This handles all 3 phases (Movement, Retreat, and Adjustment). 
+*	<p>
+*	Please note that knowledge of the phase is required prior to 
+*	processing; for example, Retreat orders are used intead of Move
+*	orders when the phase is PhaseType.RETREAT. Similarly, since 
+*	adjustment orders are in a format quite different from Movement
+*	or Retreat phase orders, a similar hint PhaseType.ADJUSTMENT is
+*	required.
+*	<p>
+*	Not all nJudge orders have a 1:1 mapping with jDip orders.
+*	For example, jDip waive orders currently require a Province; 
+*	nJudge orders do not. Unusable waived builds and unusable pending
+*	builds, as well as waived builds, are not converted to orders
+*	but are denoted specifically in the returned NJudgeOrder. 
+*	An informative text Result describes this.
+*	<p>
+*	Note that DISLOGDGED order results do not have valid retreat locations
+*	set. This cannot be done until further processing occurs.
 */
 public class NJudgeOrderParser 
 {
@@ -89,6 +104,7 @@ public class NJudgeOrderParser
 	
 	
 	// TEST harness
+	/*
 	public static void main(String args[])
 	throws OrderException
 	{
@@ -158,15 +174,14 @@ public class NJudgeOrderParser
 			 "F-Bul:     Defaults, removing the fleet in the Black Sea.",
 			 "F-Bul:     Defaults, removing the army in Siberia.",
 			 "2-Spa:     Removes the wing over the St. Petersberg.",
-			 "F-Bul:   Builds a wing in Sevastopol.",
+			 "F-Bul:   	 Builds a wing in Sevastopol.",
 			 
-			 
-			"F-Bul:    1 unusable build pending.",
+			"F-Bul:    	1 unusable build pending.",
 			"2-Spa:     3 unusable builds pending.",
 			"H-Den:     1 unused build pending.",
-			"2-Spa:      2 unused builds pending.",
-			"2-Spa:   Build waived.",
-			"F-Bul:    1 unusable build waived.",
+			"2-Spa:     2 unused builds pending.",
+			"2-Spa:   	Build waived.",
+			"F-Bul:    	1 unusable build waived.",
 			"2-Spa:     3 unusable builds waived."
 			 
 		};
@@ -199,16 +214,9 @@ public class NJudgeOrderParser
 			System.out.println(">   "+njo);
 		}
 		
-		
-		
-		
 		System.out.println("DONE:");
 	}
-	
-	
-	
-	
-	
+	*/
 	
 	
 	/** Create an NJudgeOrderParser */
@@ -238,15 +246,27 @@ public class NJudgeOrderParser
 			this(order, results, isAdjustmentPhase, null, false, 0, 0);
 		}// NJudgeOrder()
 		
+		/**
+		*	Create an NJudgeOrder
+		*/
+		public NJudgeOrder(Orderable order, Result aResult, 
+			boolean isAdjustmentPhase)
+		{
+			this(order, createResultList(aResult), 
+				isAdjustmentPhase, null, false, 0, 0);
+		}// NJudgeOrder()
 		
 		/** 
 		*	Create an Adjustment-phase NJudgeOrder for unused pending Builds,
 		*	or pending Waives, but not both.
+		*	Also creates a Result for this.
 		*/
 		public NJudgeOrder(Power power, int unusedPendingBuilds, 
-			int unusedPendingWaives)
+			int unusedPendingWaives, Result result)
 		{
-			this(null, new ArrayList(1), true, power, false,
+			this(null, 
+				createResultList(result), 
+				true, power, false,
 				unusedPendingBuilds, unusedPendingWaives);
 			
 			if( power == null
@@ -260,11 +280,14 @@ public class NJudgeOrderParser
 		
 		
 		/** 
-		*	Create an Adjustment-phase NJudgeOrder for a Waived Build
+		*	Create an Adjustment-phase NJudgeOrder for a Waived Build.
+		*	Also creates a Result for this.
 		*/
-		public NJudgeOrder(Power power)
+		public NJudgeOrder(Power power, Result result)
 		{
-			this(null, new ArrayList(1), true, power, true, 0, 0);
+			this(null, 
+				createResultList(result),
+				true, power, true, 0, 0);
 			
 			if(power == null)
 			{
@@ -291,25 +314,6 @@ public class NJudgeOrderParser
 			this.isWaive = isWaive;
 			this.unusedPendingBuilds = unusedPendingBuilds;
 			this.unusedPendingWaives = unusedPendingWaives;
-		}// NJudgeOrder()
-		
-		/**
-		*	Create an NJudgeOrder
-		*/
-		public NJudgeOrder(Orderable order, Result aResult, 
-			boolean isAdjustment)
-		{
-			this.order = order;
-			
-			ArrayList list = new ArrayList(1);
-			list.add(aResult);
-			this.results = Collections.unmodifiableList(list);
-			this.isAdjustment = isAdjustment;
-			
-			this.specialAdjustmentPower = null;
-			this.isWaive = false;
-			this.unusedPendingBuilds = 0;
-			this.unusedPendingWaives = 0;			
 		}// NJudgeOrder()
 		
 		
@@ -519,6 +523,14 @@ public class NJudgeOrderParser
 	}// tokenize()
 	
 	
+	/** Creates a List with a single result */
+	private static List createResultList(Result aResult)
+	{
+		List list = new ArrayList(1);
+		list.add(aResult);
+		return list;
+	}// createResultList()
+	
 	/** Parse the rest of the order */
 	private Orderable parsePredicate(final ParseContext pc, final OrderPrefix op, 
 		final String[] tokens)
@@ -584,14 +596,14 @@ public class NJudgeOrderParser
 			tok = getToken(pc, idx, tokens);
 			if(!tok.endsWith(":") || tok.length() <= 1)
 			{
-				throw new OrderException("Improper Power format: "+tok+" in order: "+pc.orderText);
+				throw new OrderException("Improper Power format: \""+tok+"\" in order: "+pc.orderText);
 			}
 			
 			final String powerNameText = tok.substring(0, tok.length()-1);
 			this.power = pc.map.getClosestPower(powerNameText);
 			if(this.power == null)
 			{
-				throw new OrderException("Unknown Power: "+powerNameText+" in order: "+pc.orderText);
+				throw new OrderException("Unknown Power: \""+powerNameText+"\" in order: "+pc.orderText);
 			}
 			
 			// search and parse unit type
@@ -1115,11 +1127,15 @@ public class NJudgeOrderParser
 			final String textResult = ((String) iter.next()).trim();
 			if(textResult.equalsIgnoreCase("bounce"))
 			{
-				results.add(new OrderResult(order, OrderResult.ResultType.FAILURE, null));
+				results.add(new OrderResult(order, OrderResult.ResultType.FAILURE, "Bounce"));
 			}
 			else if(textResult.equalsIgnoreCase("cut"))
 			{
-				results.add(new OrderResult(order, OrderResult.ResultType.FAILURE, null));
+				results.add(new OrderResult(order, OrderResult.ResultType.FAILURE, "Cut"));
+			}
+			else if(textResult.equalsIgnoreCase("no convoy"))
+			{
+				results.add(new OrderResult(order, OrderResult.ResultType.FAILURE, "No Convoy"));
 			}
 			else if(textResult.equalsIgnoreCase("dislodged"))
 			{
@@ -1132,9 +1148,20 @@ public class NJudgeOrderParser
 				// create a TEMPORARY dislodged result here
 				results.add(new OrderResult(order, OrderResult.ResultType.DISLODGED, "**TEMP**"));
 			}
+			else if(textResult.equalsIgnoreCase("destroyed"))
+			{
+				// create a failure result (if we were only dislodged)
+				if(stringResults.size() == 1)
+				{
+					results.add(new OrderResult(order, OrderResult.ResultType.FAILURE, null));
+				}
+				
+				// destroyed result
+				results.add(new DislodgedResult(order, null));
+			}
 			else if(textResult.equalsIgnoreCase("void"))
 			{
-				results.add(new OrderResult(order, OrderResult.ResultType.VALIDATION_FAILURE, null));
+				results.add(new OrderResult(order, OrderResult.ResultType.VALIDATION_FAILURE, "Void"));
 			}
 			else
 			{
@@ -1272,7 +1299,8 @@ public class NJudgeOrderParser
 				if(m.group(3) == null)
 				{
 					// Group3 is null when it is a 'regular' waive order.
-					return new NJudgeOrder(power);
+					Result result = new Result(power, "Build waived.");
+					return new NJudgeOrder(power, result);
 				}
 				else
 				{
@@ -1294,12 +1322,14 @@ public class NJudgeOrderParser
 					if(isPending)
 					{
 						// pending builds
-						return new NJudgeOrder(power, numBuilds, 0);
+						Result result = new Result(power, String.valueOf(numBuilds)+" unusable build(s) pending.");
+						return new NJudgeOrder(power, numBuilds, 0, result);
 					}
 					else
 					{
 						// waived builds
-						return new NJudgeOrder(power, 0, numBuilds);
+						Result result = new Result(power, String.valueOf(numBuilds)+" unusable build(s) waived.");
+						return new NJudgeOrder(power, 0, numBuilds, result);
 					}
 				}
 			}

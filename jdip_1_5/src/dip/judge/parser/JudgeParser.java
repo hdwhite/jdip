@@ -311,10 +311,8 @@ public class JudgeParser
 		// Next we try to find a result header.
 		Pattern hm = Pattern.compile(JudgeOrderParser.MOVE_ORDER_HEADER);
 		Pattern hr = Pattern.compile(JudgeOrderParser.RETREAT_ORDER_HEADER);
-		Pattern hr_o = Pattern.compile(JudgeOrderParser.RETREAT_ORDER_HEADER_OLD);
 		Pattern ha = Pattern.compile(JudgeOrderParser.ADJUSTMENT_ORDER_HEADER);
-		Pattern ha_o = Pattern.compile(JudgeOrderParser.ADJUSTMENT_ORDER_HEADER_OLD);
-
+		
 		reader.reset();
 		count = 0;
 		line = reader.readLine();
@@ -323,14 +321,10 @@ public class JudgeParser
 			count += line.length();
 			Matcher m_hm = hm.matcher(line);
 			Matcher m_hr = hr.matcher(line);
-			Matcher m_hr_o = hr_o.matcher(line);
 			Matcher m_ha = ha.matcher(line);
-			Matcher m_ha_o = ha_o.matcher(line);
 			if(m_hm.lookingAt() || 
 			   m_hr.lookingAt() ||
-			   m_hr_o.lookingAt() || 
-			   m_ha.lookingAt() || 
-			   m_ha_o.lookingAt())
+			   m_ha.lookingAt())
 			{
 				type = JP_TYPE_RESULTS;
 				phase = Phase.parse(line.substring(0,line.indexOf(".")));

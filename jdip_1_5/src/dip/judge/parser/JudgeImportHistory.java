@@ -39,14 +39,16 @@ import dip.misc.Utils;
 import dip.order.Build;
 import dip.order.Disband;
 import dip.order.Move;
+import dip.order.NJudgeOrderParser;
+import dip.order.NJudgeOrderParser.NJudgeOrder;
 import dip.order.Order;
 import dip.order.OrderException;
 import dip.order.OrderFactory;
-import dip.order.OrderParser;
 import dip.order.Orderable;
 import dip.order.Remove;
 import dip.order.ValidationOptions;
 import dip.order.result.DislodgedResult;
+import dip.order.result.SubstitutedResult;
 import dip.order.result.OrderResult;
 import dip.order.result.Result;
 import dip.process.Adjustment;
@@ -94,12 +96,12 @@ final class JudgeImportHistory
 	
 	
 	// instance variables
-	private dip.world.Map map = null;
-	private OrderFactory orderFactory = null;
-	private World world = null;
+	private final dip.world.Map map;
+	private final OrderFactory orderFactory;
+	private final World world;
 	private JudgeParser jp = null;
 	private Position oldPosition = null;
-	private ValidationOptions valOpts = null;
+	private final ValidationOptions valOpts;
 	private HSCInfo[] homeSCInfo = null;
 	private boolean finalTurn = false;
 	
@@ -422,94 +424,92 @@ final class JudgeImportHistory
 		copyPreviousLastOccupierInfo(ts);
 		
 		// parse orders, and create orders for each unit
-		JudgeOrderParser jop = new JudgeOrderParser(turn.getText(), map);
-		JudgeOrderParser.OrderInfo[] orderInfo = jop.getOrderInfo();
-		
-		// add results from JudgeOrderParser, if any
-		results.addAll( jop.getResults() );
-		
-		// parse start position from orders
-		PositionDeriver posFinder = new PositionDeriver(orderInfo);
-		PositionParser.PositionInfo[] posInfo = posFinder.getPositionInfo();
+		final JudgeOrderParser jop = new JudgeOrderParser(map, orderFactory, turn.getText());
+		final NJudgeOrder[] nJudgeOrders = jop.getNJudgeOrders();
 		
 		// get Position
 		Position position = ts.getPosition();
 		
 		// create units from start position
-		for(int i=0; i<posInfo.length; i++)
+		for(int i=0; i<nJudgeOrders.length; i++)
 		{
-			Power power = map.getPowerMatching( posInfo[i].getPowerName() );
-			Unit.Type unitType = Unit.Type.parse( posInfo[i].getUnitName() );
-			Location location = map.parseLocation( posInfo[i].getLocationName() );
+			final NJudgeOrder njo = nJudgeOrders[i];
 			
-			// check
-			if(power == null || location == null || unitType.equals(Unit.Type.UNDEFINED))
+			final Orderable order = njo.getOrder();
+			if(order == null)
 			{
-				throw new IOException( 
-						Utils.getLocalString(JIH_BAD_POSITION, 
-						posInfo[i].getPowerName(),
-						posInfo[i].getUnitName(),
-						posInfo[i].getLocationName()) );
+				Log.println("JIH::procMove(): Null order; njo: ", njo);
+				throw new IOException("Internal error: null order in JudgeImportHistory::procMove()");
 			}
-						
+			
+			Location loc = order.getSource();
+			final Unit.Type unitType = order.getSourceUnitType();
+			final Power power = order.getPower();
+			
 			// validate location
 			try
 			{
-				location = location.getValidated(unitType);
+				loc = loc.getValidated(unitType);
 			}
 			catch(OrderException e)
 			{
-				Log.println("ERROR: ", posInfo[i]);
+				Log.println("ERROR: ", njo);
 				Log.println("TURN: \n", turn.getText());
 				throw new IOException(e.getMessage());
 			}
 			
 			// create unit, and add to Position
-			Unit unit = new Unit(power, unitType);
-			unit.setCoast(location.getCoast());
-			position.setUnit(location.getProvince(), unit);
-			position.setLastOccupier(location.getProvince(), power);
+			Unit unit = new Unit(order.getPower(), unitType);
+			unit.setCoast(loc.getCoast());
+			position.setUnit(loc.getProvince(), unit);
+			position.setLastOccupier(loc.getProvince(), power);
+			
+			// if we found a Wing unit, make sure Wing units are enabled.
+			checkAndEnableWings(unitType);
 			
 			// debug
 			//System.out.println("  "+location+"; "+unit);
 		}
 		
 		
-		// create order objects from actual orders
-		// create result objects for all orders that were succesfully parsed
-		// create positions for all units whose orders were successfully parsed.
+		// now, validate all order objects from the parsed order
+		// also create result objects
+		// create positions from successful orders...
 		// note that we only need to set the last occupier for changing (moving)
 		// units, but we will do it for all units for consistency
-		OrderParser orderParser = OrderParser.getInstance();
+		//
 		{	
 			// create orderMap, which maps powers to their respective order list
 			Power[] powers = map.getPowers();
+			
+			Log.println("JIH::procMove():CREATING POWER->ORDER MAP");
+			
 			HashMap orderMap = new HashMap(powers.length);
 			for(int i=0; i<powers.length; i++)
 			{
 				orderMap.put(powers[i], new LinkedList());
 			}
 			
-			Log.println("JIH::procMove():ORDER PARSING START");
+			// process all orders
+			final RuleOptions ruleOpts = world.getRuleOptions();
 			
-			// parse all orders
-			for(int i=0; i<orderInfo.length; i++)
+			for(int i=0; i<nJudgeOrders.length; i++)
 			{
+				final NJudgeOrder njo = nJudgeOrders[i];
+				final Orderable order = njo.getOrder();
+				
+				// first try to validate under strict settings; if fail, try
+				// to validate under loose settings.
 				try
 				{
-					RuleOptions ruleOpts = world.getRuleOptions();
-					Order order = orderParser.parse(orderFactory, orderInfo[i].getOrderText(), null, ts, false, false);
-					if(order.getSourceUnitType() == Unit.Type.WING && ruleOpts.getOptionValue(RuleOptions.OPTION_WINGS) == RuleOptions.VALUE_WINGS_DISABLED){
-						ruleOpts.setOption(RuleOptions.OPTION_WINGS, RuleOptions.VALUE_WINGS_ENABLED);
-						world.setRuleOptions(ruleOpts);
-					}
 					order.validate(ts, valOpts, ruleOpts);
-					LinkedList list = (LinkedList) orderMap.get(order.getPower());
-					Log.println("  ok: ", order);
+					
+					List list = (LinkedList) orderMap.get(order.getPower());
 					list.add(order);
 					
-					// create results [EXCEPT dislodged results]
-					makeOrderResults(results, order, orderInfo[i].getResultText());
+					results.addAll(njo.getResults());
+					
+					Log.println("  order ok: ", order);
 				}
 				catch(OrderException e)
 				{
@@ -523,20 +523,25 @@ final class JudgeImportHistory
 					 * (Perhaps a few other things as well). jDip should accept these as well,
 					 * even if the move is illegal.
 					 */
-					 try {
-						Order order = orderParser.parse(orderFactory, orderInfo[i].getOrderText(), null, ts, false, false);
-						order.validate(ts, valOpts, world.getRuleOptions());
-						LinkedList list = (LinkedList) orderMap.get(order.getPower());
-						Log.println("  ok: ", order);
+					try 
+					{
+						order.validate(ts, valOpts, ruleOpts);
+						
+						List list = (LinkedList) orderMap.get(order.getPower());
 						list.add(order);
 						
-						// create "invalid" order results
-						makeOrderResults(results, order, "void");
-					 } catch (OrderException e1) {
-						// create a general result indicating failure if an order could not be parsed.
-						results.add( new Result(Utils.getLocalString(JIH_ORDER_PARSE_FAILURE, orderInfo[i].getOrderText(), e.getMessage())));
-						Log.println("JIH::procMove():OrderException: ", orderInfo[i].getOrderText(), "; ", e1.getMessage());
-					 }
+						results.addAll(njo.getResults());
+						
+						Log.println("  order ok: ", order);
+					} 
+					catch(OrderException e1)
+					{
+						// create a general result indicating failure if an order could not be validated.
+						results.add( new Result(Utils.getLocalString(JIH_ORDER_PARSE_FAILURE, order, e.getMessage())));
+						Log.println("JIH::procMove():OrderException (during validation): ", order, "; ", e1.getMessage());
+						throw new IOException("Cannot validate order on second pass.\n"+e1.getMessage());
+					}
+					
 					// Back to strict!
 					valOpts.setOption(ValidationOptions.KEY_GLOBAL_PARSING, ValidationOptions.VALUE_GLOBAL_PARSING_STRICT);					 
 				}
@@ -626,18 +631,16 @@ final class JudgeImportHistory
 			}
 		}
 		
-		// orders that were not successfully parsed are an exception, and require special processing.
-		// TODO: special processing of unsuccessful orders
-		// this will likely require use of the positioninfo object
-		// [NOT IMPLEMENTED]
-		
 		// process dislodged unit info, to determine retreat paths
-		// correct dislodged results are created here, and the old dislodged results
-		// created by makeOrderResults() are destroyed.		
-		if(!positionPlacement){
+		// correct dislodged results are created here, and the old dislodged 
+		// results are removed
+		if(!positionPlacement)
+		{
 			DislodgedParser dislodgedParser = new DislodgedParser(ts.getPhase(), turn.getText());
 			makeDislodgedResults(ts.getPhase(), results, position, dislodgedParser.getDislodgedInfo(), false);
-		} else {
+		}
+		else
+		{
 			DislodgedParser dislodgedParser = new DislodgedParser(ts.getPhase(), turn.getText());
 			makeDislodgedResults(ts.getPhase(), results, position, dislodgedParser.getDislodgedInfo(), true);
 		}
@@ -665,16 +668,16 @@ final class JudgeImportHistory
 	{
 		if (turn == null) return;
 		// create TurnState
-		TurnState ts = makeTurnState(turn);
-		List results = ts.getResultList();
+		final TurnState ts = makeTurnState(turn);
+		final Position position = ts.getPosition();
+		final List results = ts.getResultList();
+		final RuleOptions ruleOpts = world.getRuleOptions();
+		
 		Log.println("JIH::procRetreat(): ", ts.getPhase(), "; positionPlacement: ", String.valueOf(positionPlacement));
 		
 		// parse orders, and create orders for each unit
-		JudgeOrderParser jop = new JudgeOrderParser(turn.getText(), map);
-		JudgeOrderParser.OrderInfo[] orderInfo = jop.getOrderInfo();
-		
-		// add results from JudgeOrderParser, if any
-		results.addAll( jop.getResults() );
+		JudgeOrderParser jop = new JudgeOrderParser(map, orderFactory, turn.getText());
+		NJudgeOrder[] nJudgeOrders = jop.getNJudgeOrders();
 		
 		// Copy previous phase positions
 		copyPreviousPositions(ts);
@@ -683,11 +686,7 @@ final class JudgeImportHistory
 		// if order failed, it counts as a disband
 		// generate results
 		// create units for all successfull move (retreat) orders in destination province
-		OrderParser orderParser = OrderParser.getInstance();
 		{	
-			// get Position
-			Position position = ts.getPosition();
-			
 			// create orderMap, which maps powers to their respective order list
 			Power[] powers = map.getPowers();
 			HashMap orderMap = new HashMap(powers.length);
@@ -696,29 +695,36 @@ final class JudgeImportHistory
 				orderMap.put(powers[i], new LinkedList());
 			}
 			
-			// parse all orders
-			for(int i=0; i<orderInfo.length; i++)
+			// validate all parsed orders
+			for(int i=0; i<nJudgeOrders.length; i++)
 			{
+				final NJudgeOrder njo = nJudgeOrders[i];
+				final Orderable order = njo.getOrder();
+				if(order == null)
+				{
+					Log.println("JIH::procRetreat(): Null order; njo: ", njo);
+					throw new IOException("Internal error: null order in JudgeImportHistory::procRetreat()");
+				}
+				
+				// if we found a Wing unit, make sure Wing units are enabled.
+				checkAndEnableWings(order.getSourceUnitType());
+				
 				try
 				{
-					RuleOptions ruleOpts = world.getRuleOptions();
-					Order order = orderParser.parse(orderFactory, orderInfo[i].getOrderText(), null, ts, false, false);
-					if(order.getSourceUnitType() == Unit.Type.WING && ruleOpts.getOptionValue(RuleOptions.OPTION_WINGS) == RuleOptions.VALUE_WINGS_DISABLED){
-						ruleOpts.setOption(RuleOptions.OPTION_WINGS, RuleOptions.VALUE_WINGS_ENABLED);
-						world.setRuleOptions(ruleOpts);
-					}
 					order.validate(ts, valOpts, ruleOpts);
-					LinkedList list = (LinkedList) orderMap.get(order.getPower());
+					
+					List list = (LinkedList) orderMap.get(order.getPower());
 					list.add(order);
 					
-					// create results [EXCEPT dislodged results, which cannot occur in this phase.]
-					makeOrderResults(results, order, orderInfo[i].getResultText());
+					results.addAll(njo.getResults());
+					
+					Log.println("  order ok: ", order);
 				}	
 				catch(OrderException e)
 				{
-					// create a general result indicating failure if an order could not be parsed.
-					results.add( new Result(Utils.getLocalString(JIH_ORDER_PARSE_FAILURE, orderInfo[i].getOrderText(), e.getMessage())));
-					Log.println("JIH::procRetreat():OrderException: ", orderInfo[i].getOrderText(), "; ", e.getMessage());
+					results.add( new Result(Utils.getLocalString(JIH_ORDER_PARSE_FAILURE, order, e.getMessage())));
+					Log.println("JIH::procMove():OrderException (during validation): ", order, "; ", e.getMessage());
+					throw new IOException("Cannot validate retreat order.\n"+e.getMessage());
 				}
 			}
 			
@@ -802,18 +808,21 @@ final class JudgeImportHistory
 	private void procAdjust(Turn turn, boolean positionPlacement)
 	throws IOException
 	{
-		if (turn == null) return;
+		if(turn == null) 
+		{
+			return;
+		}
+		
 		// create TurnState
-		TurnState ts = makeTurnState(turn);
-		List results = ts.getResultList();
+		final TurnState ts = makeTurnState(turn);
+		final List results = ts.getResultList();
+		final RuleOptions ruleOpts = world.getRuleOptions();
+		
 		Log.println("JIH::procAdjust(): ", ts.getPhase());
 		
 		// parse orders, and create orders for each unit
-		JudgeOrderParser jop = new JudgeOrderParser(turn.getText(), map);
-		JudgeOrderParser.OrderInfo[] orderInfo = jop.getOrderInfo();
-		
-		// add results from JudgeOrderParser, if any
-		results.addAll( jop.getResults() );
+		final JudgeOrderParser jop = new JudgeOrderParser(map, orderFactory, turn.getText());
+		final NJudgeOrder[] nJudgeOrders = jop.getNJudgeOrders();
 		
 		// Copy previous phase positions
 		copyPreviousPositions(ts);
@@ -833,10 +842,9 @@ final class JudgeImportHistory
 		
 		// process adjustment orders (either builds or removes)
 		// create a unit, unless order failed
-		OrderParser orderParser  = OrderParser.getInstance();
 		{	
 			// get Position
-			Position position = ts.getPosition();
+			final Position position = ts.getPosition();
 			
 			// create orderMap, which maps powers to their respective order list
 			Power[] powers = map.getPowers();
@@ -847,49 +855,99 @@ final class JudgeImportHistory
 			}
 			
 			// parse all orders
-			for(int i=0; i<orderInfo.length; i++)
+			for(int i=0; i<nJudgeOrders.length; i++)
 			{
-				try
+				final NJudgeOrder njo = nJudgeOrders[i];
+				final Orderable order = njo.getOrder();
+				
+				// all adjustment orders produced by NJudgeOrderParser should
+				// have only 1 result
+				// 
+				if(njo.getResults().size() != 1)
 				{
-					RuleOptions ruleOpts = world.getRuleOptions();
-					Order order = orderParser.parse(orderFactory, orderInfo[i].getOrderText(), null, ts, false, false);
-					if(order.getSourceUnitType() == Unit.Type.WING && ruleOpts.getOptionValue(RuleOptions.OPTION_WINGS) == RuleOptions.VALUE_WINGS_DISABLED){
-						ruleOpts.setOption(RuleOptions.OPTION_WINGS, RuleOptions.VALUE_WINGS_ENABLED);
-						world.setRuleOptions(ruleOpts);
-					}
-					order.validate(ts, valOpts, ruleOpts);
-					LinkedList list = (LinkedList) orderMap.get(order.getPower());
-					list.add(order);
-					
-					// create results [EXCEPT dislodged results, which cannot occur in this phase.]
-					makeOrderResults(results, order, orderInfo[i].getResultText());
-					
-					// create or remove units for successfull orders
-					// ***** this may be a problem area 
-					if(orderInfo[i].getResultText() == null)
-					{
-						if(order instanceof Build)
-						{
-							if(positionPlacement){
-								Unit unit = new Unit(order.getPower(), order.getSourceUnitType());
-								unit.setCoast(order.getSource().getCoast());
-								position.setUnit(order.getSource().getProvince(), unit);
-								position.setLastOccupier(order.getSource().getProvince(), order.getPower());
-							}
-						}
-						else if(order instanceof Remove || order instanceof Disband)
-						{
-							if(positionPlacement){
-								position.setUnit(order.getSource().getProvince(), null);
-							}
-						}
-					}
+					throw new IOException("Internal error: JIH:procAdjustments(): "+
+						"getResults() != 1");
 				}
-				catch(OrderException e)
+				
+				final Result result = (Result) njo.getResults().get(0);
+				
+				// if result is a substituted result, the player defaulted,
+				// and the Judge inserted a Disband order
+				//
+				final boolean isDefaulted = (result instanceof SubstitutedResult);
+				
+				if(order == null && !isDefaulted)
 				{
-					// create a general result indicating failure if an order could not be parsed.
-					results.add( new Result(Utils.getLocalString(JIH_ORDER_PARSE_FAILURE, orderInfo[i].getOrderText(), e.getMessage())));
-					Log.println("JIH::procRetreat():OrderException: ", orderInfo[i].getOrderText(), "; ", e.getMessage());
+					// orders may be null; if they are, that is because
+					// it's a waive or unusable/pending order. These have 
+					// results, but no associated order.
+					results.addAll( njo.getResults() );
+				}
+				else
+				{
+					// NOTE: everything in this block should use newOrder,
+					// not order, from here on!!
+					Orderable newOrder = order;
+					
+					if(isDefaulted)
+					{
+						newOrder = ((SubstitutedResult) result).getSubstitutedOrder();
+						assert (newOrder != null);
+					}
+					
+					// if we found a Wing unit, make sure Wing units are enabled.
+					checkAndEnableWings(newOrder.getSourceUnitType());
+					
+					try
+					{
+						newOrder.validate(ts, valOpts, ruleOpts);
+						
+						if(!isDefaulted)
+						{
+							List list = (LinkedList) orderMap.get(newOrder.getPower());
+							list.add(newOrder);
+						}
+						
+						results.addAll(njo.getResults());
+						
+						Log.println("  order ok: ", newOrder);
+						
+						// create or remove units
+						// as far as I know, orders are always successful.
+						//
+						if(newOrder instanceof Build)
+						{
+							if(positionPlacement)
+							{
+								final Unit unit = new Unit(newOrder.getPower(), newOrder.getSourceUnitType());
+								unit.setCoast(newOrder.getSource().getCoast());
+								position.setUnit(newOrder.getSource().getProvince(), unit);
+								position.setLastOccupier(newOrder.getSource().getProvince(), newOrder.getPower());
+							}
+						}
+						else if(newOrder instanceof Remove)
+						{
+							if(positionPlacement)
+							{
+								position.setUnit(newOrder.getSource().getProvince(), null);
+							}
+						}
+						else
+						{
+							throw new IllegalStateException("JIH::procAdjust(): type :"+newOrder+" not handled!");
+						}
+					}
+					catch(OrderException e)
+					{
+						results.add( new Result(Utils.getLocalString(JIH_ORDER_PARSE_FAILURE, newOrder, e.getMessage())));
+						
+						Log.println("JIH::procAdjust():OrderException (during validation): ");
+						Log.println("     phase: ", ts.getPhase());
+						Log.println("     order: ", newOrder);
+						Log.println("     error: ", e.getMessage());
+						
+						throw new IOException("Cannot validate adjustment order.\n"+e.getMessage());
+					}
 				}
 			}
 			
@@ -908,7 +966,7 @@ final class JudgeImportHistory
 		ts.setResolved(true);
 		
 		// Since this is the adjustment phase, check for supply center change. Required for VictoryConditions
-		// Else problems can arise and the game will end after importing due to no SC change.
+		// Otherwise, problems can arise and the game will end after importing due to no SC change.
 		if(!positionPlacement){
 			TurnState previousTS = world.getPreviousTurnState(ts);
 			while(previousTS.getPhase().getPhaseType() != Phase.PhaseType.MOVEMENT){
@@ -1104,6 +1162,7 @@ final class JudgeImportHistory
 	*	<p>
 	*	(null == success).
 	*/
+	/* OBSOLETE
 	private void makeOrderResults(List resultList, Order order, String resultText)
 	{
 		// simple case
@@ -1151,7 +1210,7 @@ final class JudgeImportHistory
 		
 		return;
 	}// makeOrderResults()
-	
+	*/
 	
 	/** 
 	*	Creates correct dislodged results (with retreat information) by matching	
@@ -1163,6 +1222,7 @@ final class JudgeImportHistory
 	*/
 	private void makeDislodgedResults(Phase phase, List results, Position position, 
 		DislodgedParser.DislodgedInfo[] dislodgedInfo, boolean positionPlacement)
+	throws IOException
 	{
 		ListIterator iter = results.listIterator();
 		while(iter.hasNext())
@@ -1171,7 +1231,7 @@ final class JudgeImportHistory
 			if(result instanceof OrderResult)
 			{
 				OrderResult orderResult = (OrderResult) result;
-				if(orderResult.getResultType() == OrderResult.ResultType.DISLODGED)
+				if(OrderResult.ResultType.DISLODGED.equals(orderResult.getResultType()))
 				{
 					String[] retreatLocNames = null;
 					for(int i=0; i<dislodgedInfo.length; i++)
@@ -1179,7 +1239,7 @@ final class JudgeImportHistory
 						// find the province for this dislodgedInfo source
 						// remember, we use map.parseLocation() to auto-normalize coasts (see Coast.normalize())
 						Location location = map.parseLocation(dislodgedInfo[i].getSourceName());
-						if(orderResult.getOrder().getSource().getProvince() == location.getProvince())
+						if(orderResult.getOrder().getSource().isProvinceEqual(location))
 						{
 							retreatLocNames = dislodgedInfo[i].getRetreatLocationNames();
 							break;
@@ -1190,7 +1250,12 @@ final class JudgeImportHistory
 					if(retreatLocNames == null)
 					{
 						iter.add( new Result(Utils.getLocalString(JIH_NO_DISLODGED_MATCH, orderResult.getOrder())) );
-						Log.println("*** !Could not match dislodged order: ", orderResult.getOrder(), "; phase: ", phase);
+						
+						String message = "Could not match dislodged order: "+orderResult.getOrder()+"; phase: "+phase;
+						Log.println(message);
+						
+						// we are more strict with our errors
+						throw new IOException(message);
 					}
 					else
 					{
@@ -1213,6 +1278,7 @@ final class JudgeImportHistory
 								// destroy
 								Province province = orderResult.getOrder().getSource().getProvince();
 								Unit unit;
+								
 								/*
 								 * Check for the positionPlacement flag. If so, go ahead and set the unit to the
 								 * dislodged one. If not, the unit that is dislodged is not SHOWN as dislodged
@@ -1222,7 +1288,7 @@ final class JudgeImportHistory
 								else {	unit = position.getUnit(province);	}
 								
 								position.setDislodgedUnit(province, null);
-																
+								
 								// System.out.println(" ** DESTROYING unit: "+unit+" at "+province);
 								
 								// send result
@@ -1233,10 +1299,8 @@ final class JudgeImportHistory
 						{
 							// couldn't validate!! 
 							iter.add( new Result(Utils.getLocalString(JIH_INVALID_RETREAT, orderResult.getOrder())) );
-							//System.out.println("*** Invalid locations given for retreat order: "+orderResult.getOrder());
-						}
-						catch (NullPointerException n){
-							// not the best coding practice, to catch this :)
+							Log.println("JIH::makeDislodgedResults(): exception: ", orderResult.getOrder());
+							throw new IOException(e.getMessage());
 						}
 					}
 				}
@@ -1347,6 +1411,25 @@ final class JudgeImportHistory
 		// add to World
 		world.setTurnState(ts);
 	}// makeLastTurnState()
+	
+	
+	/**
+	*	If a WING unit is detected, make sure we have the WING option
+	*	enabled; if it already is, do nothing.
+	*/
+	private void checkAndEnableWings(Unit.Type unitType)
+	{
+		if(Unit.Type.WING.equals(unitType))
+		{
+			RuleOptions ruleOpts = world.getRuleOptions();
+			if(RuleOptions.VALUE_WINGS_DISABLED.equals(ruleOpts.getOptionValue(RuleOptions.OPTION_WINGS)))
+			{
+				ruleOpts.setOption(RuleOptions.OPTION_WINGS, RuleOptions.VALUE_WINGS_ENABLED);
+				world.setRuleOptions(ruleOpts);
+			}
+		}
+	}// enableWings()
+
 	
 	
 	/** Home Supply Center information */

@@ -30,6 +30,7 @@ import dip.world.variant.VariantManager;
 import dip.world.variant.data.Variant;
 import dip.world.variant.data.MapGraphic;
 import dip.misc.Utils;
+import dip.misc.Log;
 
 import java.io.*;
 import java.net.*;
@@ -130,11 +131,20 @@ public class JudgeImport
 		try
 		{
 			world = WorldFactory.getInstance().createWorld(variant);
+			
+			// essential! create the default rules
+			world.setRuleOptions(RuleOptions.createFromVariant(variant));
 		}
 		catch(InvalidWorldException e)
 		{
 			throw new IOException(e.getMessage());
 		}
+		
+		// set the 'explicit convoy' rule option (all nJudge games require this)
+		Log.println("JudgeImport: RuleOptions.VALUE_PATHS_EXPLICIT set");
+		RuleOptions ruleOpts = world.getRuleOptions();
+		ruleOpts.setOption(RuleOptions.OPTION_CONVOYED_MOVES, RuleOptions.VALUE_PATHS_EXPLICIT);
+		world.setRuleOptions(ruleOpts);
 		
 		// eliminate all existing TurnStates; we will create our own from parsed values
 		// we need the Position, though, since it has home-supply-center information
@@ -156,15 +166,6 @@ public class JudgeImport
 		variantInfo.setVariantName( variant.getName() );
 		variantInfo.setVariantVersion( variant.getVersion() );
 		variantInfo.setMapName( variant.getDefaultMapGraphic().getName() );
-		
-		// NOT YET IMPLEMENTED
-		/*
-		variantInfo.setSymbolsName(  );
-		variantInfo.setSymbolsVersion(  );
-		variantInfo.setZoomSymbols(  );
-		variantInfo.setAdjustSymbols(  );
-		*/
-		
 		
 		// set general metadata
 		GameMetadata gmd = world.getGameMetadata();
