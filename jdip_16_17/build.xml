@@ -257,6 +257,12 @@
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
+		<!-- Variant Package: Chromatic -->
+		<zip  destfile="${variant.dir}/chromaticVariant.zip"
+				basedir="${resource.dir}/variants/chromatic"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
+		
 		<!-- Variant Package: Imperium -->
 		<zip  destfile="${variant.dir}/imperiumVariants.zip"
 				basedir="${resource.dir}/variants/imperium"
