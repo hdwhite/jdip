@@ -256,6 +256,12 @@
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
+		<!-- Variant Package: Asia -->
+		<zip  destfile="${variant.dir}/asiaVariants.zip"
+				basedir="${resource.dir}/variants/asia"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				
 		<!-- SymbolPack: simple -->
 		<zip  destfile="${variant.dir}/simpleSymbols.zip"
 				basedir="${resource.dir}/variants/symbols/simple"
