@@ -331,4 +331,4 @@ public class UndoRedoManager extends UndoManager
 		}
 	}// reconstitute()
 	
-}// class UndoRedoManager////
+}// class UndoRedoManager
