@@ -74,6 +74,8 @@ public abstract class MapRenderer2
 	public static final String KEY_SHOW_ORDERS_FOR_POWERS = "KEY_SHOW_ORDERS_FOR_POWERS";
 	/** Key for getSettings(): */
 	public static final String KEY_INFLUENCE_MODE = "KEY_INFLUENCE_MODE";
+	/** Key for getSettings(): */
+	public static final String KEY_SHOW_MAP = "KEY_SHOW_MAP";
 	
 	
 	// constant return values for getRenderSetting()

@@ -380,7 +380,7 @@
     
 	
 	<!-- draw background -->
-	<g>
+	<g id="MapLayer">
 		<image x="0" y="0" width="1152" height="965" xlink:href="std_bit.png"/>
 	</g>
 	

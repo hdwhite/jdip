@@ -425,217 +425,218 @@
 		
 </defs>
 	
-	<!--Backdrop -->
-	<rect x="0" y="0" width="500" height="550" fill="beige" />
-	
-	<!-- Provinces (class should be nopower or water). IDs should be prefixed by an underscore. -->
-	<!-- Row 1 -->
-	<rect id="_adr" class="water" 	x="1" 	y="1" 	width="48" height="48" />
-	<rect id="_aeg" class="water" 	x="51" 	y="1" 	width="48" height="48" />
-	<rect id="_alb" class="nopower" 	x="101" y="1" 	width="48" height="48" />
-	<rect id="_ank" class="nopower" 	x="151" y="1" 	width="48" height="48" />
-	<rect id="_apu" class="nopower" 	x="201" y="1" 	width="48" height="48" />
-	<rect id="_arc" class="water" 	x="251" y="1" 	width="48" height="48" />
-	<rect id="_arm" class="nopower" 	x="301" y="1" 	width="48" height="48" />
-	<rect id="_bal" class="water" 	x="351" y="1" 	width="48" height="48" />
-	<rect id="_bar" class="water" 	x="401" y="1" 	width="48" height="48" />
-	<rect id="_bel" class="nopower" 	x="451" y="1" 	width="48" height="48" />
-	<!-- Row 2 -->
-	<rect id="_ber" class="nopower" 	x="1" 	y="51" 	width="48" height="48" />
-	<rect id="_bla" class="water" 	x="51" 	y="51" 	width="48" height="48" />
-	<rect id="_boh" class="nopower" 	x="101" y="51" 	width="48" height="48" />
-	<rect id="_bot" class="water" 	x="151" y="51" 	width="48" height="48" />
-	<rect id="_bre" class="nopower" 	x="201" y="51" 	width="48" height="48" />
-	<rect id="_bud" class="nopower" 	x="251" y="51" 	width="48" height="48" />
-	<rect id="_bul" class="nopower" 	x="301" y="51" 	width="148" height="48" />
-	<rect id="_bur" class="nopower" 	x="451" y="51" 	width="48" height="48" />
-	<!-- Row 3 -->
-	<rect id="_cat" class="nopower" 	x="1" 	y="101" 	width="48" height="48" />
-	<rect id="_cly" class="nopower" 	x="51" 	y="101" 	width="48" height="48" />
-	<rect id="_con" class="nopower" 	x="101" y="101" 	width="48" height="48" />
-	<rect id="_cor" class="nopower" 	x="151" y="101" 	width="48" height="48" />
-	<rect id="_crs" class="nopower" 	x="201" y="101" 	width="48" height="48" />
-	<rect id="_den" class="nopower" 	x="251" y="101" 	width="48" height="48" />
-	<rect id="_eas" class="water" 	x="301" y="101" 	width="48" height="48" />
-	<rect id="_edi" class="nopower" 	x="351" y="101" 	width="48" height="48" />
-	<rect id="_eng" class="water" 	x="401" y="101" 	width="48" height="48" />
-	<rect id="_fin" class="nopower" 	x="451" y="101" 	width="48" height="48" />
-	<!-- Row 4 -->
-	<rect id="_gal" class="nopower" 	x="1" 	y="151" 	width="48" height="48" />
-	<rect id="_gas" class="nopower" 	x="51" 	y="151" 	width="48" height="48" />
-	<rect id="_gre" class="nopower" 	x="101" y="151" 	width="48" height="48" />
-	<rect id="_hel" class="nopower" 	x="151" y="151" 	width="48" height="48" />
-	<rect id="_hol" class="nopower" 	x="201" y="151" 	width="48" height="48" />
-	<rect id="_ice" class="nopower" 	x="251" y="151" 	width="48" height="48" />
-	<rect id="_ion" class="water" 	x="301" y="151" 	width="48" height="48" />
-	<rect id="_ire" class="nopower" 	x="351" y="151" 	width="48" height="48" />
-	<rect id="_iri" class="water" 	x="401" y="151" 	width="48" height="48" />
-	<rect id="_kaz" class="nopower" 	x="451" y="151" 	width="48" height="48" />
-	<!-- Row 5 -->
-	<rect id="_kie" class="nopower" 	x="1" 	y="201" 	width="48" height="48" />
-	<rect id="_lon" class="nopower" 	x="51" 	y="201" 	width="48" height="48" />
-	<rect id="_lvn" class="nopower" 	x="101" y="201" 	width="48" height="48" />
-	<rect id="_lvp" class="nopower" 	x="151" y="201" 	width="48" height="48" />
-	<rect id="_lyo" class="water" 	x="201" y="201" 	width="48" height="48" />
-	<rect id="_mad" class="nopower" 	x="251" y="201" 	width="48" height="48" />
-	<rect id="_mao" class="water" 	x="301" y="201" 	width="48" height="48" />
-	<rect id="_mar" class="nopower" 	x="351" y="201" 	width="48" height="48" />
-	<rect id="_mos" class="nopower" 	x="401" y="201" 	width="48" height="48" />
-	<rect id="_mun" class="nopower" 	x="451" y="201" 	width="48" height="48" />
-	<!-- Row 6 -->
-	<rect id="_naf" class="nopower" 	x="1" 	y="251" 	width="48" height="48" />
-	<rect id="_nao" class="water" 	x="51" 	y="251" 	width="48" height="48" />
-	<rect id="_nap" class="nopower" 	x="101" y="251" 	width="48" height="48" />
-	<rect id="_nav" class="nopower" 	x="151" y="251" 	width="48" height="48" />
-	<rect id="_nor" class="nopower" 	x="201" y="251" 	width="48" height="48" />
-	<rect id="_nth" class="water" 	x="251" y="251" 	width="48" height="48" />
-	<rect id="_nwg" class="water" 	x="301" y="251" 	width="48" height="48" />
-	<rect id="_par" class="nopower" 	x="351" y="251" 	width="48" height="48" />
-	<rect id="_pic" class="nopower" 	x="401" y="251" 	width="48" height="48" />
-	<rect id="_pie" class="nopower" 	x="451" y="251" 	width="48" height="48" />
-	<!-- Row 7 -->
-	<rect id="_por" class="nopower" 	x="1" 	y="301" 	width="48" height="48" />
-	<rect id="_pru" class="nopower" 	x="51" 	y="301" 	width="48" height="48" />
-	<rect id="_rom" class="nopower" 	x="101" y="301" 	width="48" height="48" />
-	<rect id="_ruh" class="nopower" 	x="151" y="301" 	width="48" height="48" />
-	<rect id="_rum" class="nopower" 	x="201" y="301" 	width="48" height="48" />
-	<rect id="_sar" class="nopower" 	x="251" y="301" 	width="48" height="48" />
-	<rect id="_ser" class="nopower" 	x="301" y="301" 	width="48" height="48" />
-	<rect id="_sev" class="nopower" 	x="351" y="301" 	width="48" height="48" />
-	<rect id="_sib" class="nopower" 	x="401" y="301" 	width="48" height="48" />
-	<rect id="_sic" class="nopower" 	x="451" y="301" 	width="48" height="48" />
-	<!-- Row 8 -->
-	<rect id="_sil" class="nopower" 	x="1" 	y="351" 	width="48" height="48" />
-	<rect id="_ska" class="water" 	x="51" 	y="351" 	width="48" height="48" />
-	<rect id="_smy" class="nopower" 	x="101" y="351" 	width="48" height="48" />
-	<rect id="_stp" class="nopower" 	x="151" y="351" 	width="148" height="48" />
-	<rect id="_swe" class="nopower" 	x="301" y="351" 	width="48" height="48" />
-	<rect id="_syr" class="nopower" 	x="351" y="351" 	width="48" height="48" />
-	<rect id="_tri" class="nopower" 	x="401" y="351" 	width="48" height="48" />
-	<rect id="_tun" class="nopower" 	x="451" y="351" 	width="48" height="48" />
-	<!-- Row 9 -->
-	<rect id="_tus" class="nopower" 	x="1" 	y="401" 	width="48" height="48" />
-	<rect id="_tyr" class="nopower" 	x="51" 	y="401" 	width="48" height="48" />
-	<rect id="_tys" class="water" 	x="101" y="401" 	width="48" height="48" />
-	<rect id="_ukr" class="nopower" 	x="151" y="401" 	width="48" height="48" />
-	<rect id="_ven" class="nopower" 	x="201" y="401" 	width="48" height="48" />
-	<rect id="_vie" class="nopower" 	x="251" y="401" 	width="48" height="48" />
-	<rect id="_wal" class="nopower" 	x="301" y="401" 	width="48" height="48" />
-	<rect id="_war" class="nopower" 	x="351" y="401" 	width="48" height="48" />
-	<rect id="_wes" class="water" 	x="401" y="401" 	width="48" height="48" />
-	<rect id="_yor" class="nopower" 	x="451" y="401" 	width="48" height="48" />
-	<!-- End Provinces -->
-	
-	<!-- map title block -->
-	<g>
-		<rect stroke="black" fill="none" x="1" y="451" width="498" height="98" stroke-width="3"/>
-		<text class="titletext" x="250" y="480">Loeb9</text>
-		<text class="titletext" x="250" y="510">[Grid Test Map]</text>
+	<g id="MapLayer">
+		<!--Backdrop -->
+		<rect x="0" y="0" width="500" height="550" fill="beige" />
+		
+		<!-- Provinces (class should be nopower or water). IDs should be prefixed by an underscore. -->
+		<!-- Row 1 -->
+		<rect id="_adr" class="water" 	x="1" 	y="1" 	width="48" height="48" />
+		<rect id="_aeg" class="water" 	x="51" 	y="1" 	width="48" height="48" />
+		<rect id="_alb" class="nopower" 	x="101" y="1" 	width="48" height="48" />
+		<rect id="_ank" class="nopower" 	x="151" y="1" 	width="48" height="48" />
+		<rect id="_apu" class="nopower" 	x="201" y="1" 	width="48" height="48" />
+		<rect id="_arc" class="water" 	x="251" y="1" 	width="48" height="48" />
+		<rect id="_arm" class="nopower" 	x="301" y="1" 	width="48" height="48" />
+		<rect id="_bal" class="water" 	x="351" y="1" 	width="48" height="48" />
+		<rect id="_bar" class="water" 	x="401" y="1" 	width="48" height="48" />
+		<rect id="_bel" class="nopower" 	x="451" y="1" 	width="48" height="48" />
+		<!-- Row 2 -->
+		<rect id="_ber" class="nopower" 	x="1" 	y="51" 	width="48" height="48" />
+		<rect id="_bla" class="water" 	x="51" 	y="51" 	width="48" height="48" />
+		<rect id="_boh" class="nopower" 	x="101" y="51" 	width="48" height="48" />
+		<rect id="_bot" class="water" 	x="151" y="51" 	width="48" height="48" />
+		<rect id="_bre" class="nopower" 	x="201" y="51" 	width="48" height="48" />
+		<rect id="_bud" class="nopower" 	x="251" y="51" 	width="48" height="48" />
+		<rect id="_bul" class="nopower" 	x="301" y="51" 	width="148" height="48" />
+		<rect id="_bur" class="nopower" 	x="451" y="51" 	width="48" height="48" />
+		<!-- Row 3 -->
+		<rect id="_cat" class="nopower" 	x="1" 	y="101" 	width="48" height="48" />
+		<rect id="_cly" class="nopower" 	x="51" 	y="101" 	width="48" height="48" />
+		<rect id="_con" class="nopower" 	x="101" y="101" 	width="48" height="48" />
+		<rect id="_cor" class="nopower" 	x="151" y="101" 	width="48" height="48" />
+		<rect id="_crs" class="nopower" 	x="201" y="101" 	width="48" height="48" />
+		<rect id="_den" class="nopower" 	x="251" y="101" 	width="48" height="48" />
+		<rect id="_eas" class="water" 	x="301" y="101" 	width="48" height="48" />
+		<rect id="_edi" class="nopower" 	x="351" y="101" 	width="48" height="48" />
+		<rect id="_eng" class="water" 	x="401" y="101" 	width="48" height="48" />
+		<rect id="_fin" class="nopower" 	x="451" y="101" 	width="48" height="48" />
+		<!-- Row 4 -->
+		<rect id="_gal" class="nopower" 	x="1" 	y="151" 	width="48" height="48" />
+		<rect id="_gas" class="nopower" 	x="51" 	y="151" 	width="48" height="48" />
+		<rect id="_gre" class="nopower" 	x="101" y="151" 	width="48" height="48" />
+		<rect id="_hel" class="nopower" 	x="151" y="151" 	width="48" height="48" />
+		<rect id="_hol" class="nopower" 	x="201" y="151" 	width="48" height="48" />
+		<rect id="_ice" class="nopower" 	x="251" y="151" 	width="48" height="48" />
+		<rect id="_ion" class="water" 	x="301" y="151" 	width="48" height="48" />
+		<rect id="_ire" class="nopower" 	x="351" y="151" 	width="48" height="48" />
+		<rect id="_iri" class="water" 	x="401" y="151" 	width="48" height="48" />
+		<rect id="_kaz" class="nopower" 	x="451" y="151" 	width="48" height="48" />
+		<!-- Row 5 -->
+		<rect id="_kie" class="nopower" 	x="1" 	y="201" 	width="48" height="48" />
+		<rect id="_lon" class="nopower" 	x="51" 	y="201" 	width="48" height="48" />
+		<rect id="_lvn" class="nopower" 	x="101" y="201" 	width="48" height="48" />
+		<rect id="_lvp" class="nopower" 	x="151" y="201" 	width="48" height="48" />
+		<rect id="_lyo" class="water" 	x="201" y="201" 	width="48" height="48" />
+		<rect id="_mad" class="nopower" 	x="251" y="201" 	width="48" height="48" />
+		<rect id="_mao" class="water" 	x="301" y="201" 	width="48" height="48" />
+		<rect id="_mar" class="nopower" 	x="351" y="201" 	width="48" height="48" />
+		<rect id="_mos" class="nopower" 	x="401" y="201" 	width="48" height="48" />
+		<rect id="_mun" class="nopower" 	x="451" y="201" 	width="48" height="48" />
+		<!-- Row 6 -->
+		<rect id="_naf" class="nopower" 	x="1" 	y="251" 	width="48" height="48" />
+		<rect id="_nao" class="water" 	x="51" 	y="251" 	width="48" height="48" />
+		<rect id="_nap" class="nopower" 	x="101" y="251" 	width="48" height="48" />
+		<rect id="_nav" class="nopower" 	x="151" y="251" 	width="48" height="48" />
+		<rect id="_nor" class="nopower" 	x="201" y="251" 	width="48" height="48" />
+		<rect id="_nth" class="water" 	x="251" y="251" 	width="48" height="48" />
+		<rect id="_nwg" class="water" 	x="301" y="251" 	width="48" height="48" />
+		<rect id="_par" class="nopower" 	x="351" y="251" 	width="48" height="48" />
+		<rect id="_pic" class="nopower" 	x="401" y="251" 	width="48" height="48" />
+		<rect id="_pie" class="nopower" 	x="451" y="251" 	width="48" height="48" />
+		<!-- Row 7 -->
+		<rect id="_por" class="nopower" 	x="1" 	y="301" 	width="48" height="48" />
+		<rect id="_pru" class="nopower" 	x="51" 	y="301" 	width="48" height="48" />
+		<rect id="_rom" class="nopower" 	x="101" y="301" 	width="48" height="48" />
+		<rect id="_ruh" class="nopower" 	x="151" y="301" 	width="48" height="48" />
+		<rect id="_rum" class="nopower" 	x="201" y="301" 	width="48" height="48" />
+		<rect id="_sar" class="nopower" 	x="251" y="301" 	width="48" height="48" />
+		<rect id="_ser" class="nopower" 	x="301" y="301" 	width="48" height="48" />
+		<rect id="_sev" class="nopower" 	x="351" y="301" 	width="48" height="48" />
+		<rect id="_sib" class="nopower" 	x="401" y="301" 	width="48" height="48" />
+		<rect id="_sic" class="nopower" 	x="451" y="301" 	width="48" height="48" />
+		<!-- Row 8 -->
+		<rect id="_sil" class="nopower" 	x="1" 	y="351" 	width="48" height="48" />
+		<rect id="_ska" class="water" 	x="51" 	y="351" 	width="48" height="48" />
+		<rect id="_smy" class="nopower" 	x="101" y="351" 	width="48" height="48" />
+		<rect id="_stp" class="nopower" 	x="151" y="351" 	width="148" height="48" />
+		<rect id="_swe" class="nopower" 	x="301" y="351" 	width="48" height="48" />
+		<rect id="_syr" class="nopower" 	x="351" y="351" 	width="48" height="48" />
+		<rect id="_tri" class="nopower" 	x="401" y="351" 	width="48" height="48" />
+		<rect id="_tun" class="nopower" 	x="451" y="351" 	width="48" height="48" />
+		<!-- Row 9 -->
+		<rect id="_tus" class="nopower" 	x="1" 	y="401" 	width="48" height="48" />
+		<rect id="_tyr" class="nopower" 	x="51" 	y="401" 	width="48" height="48" />
+		<rect id="_tys" class="water" 	x="101" y="401" 	width="48" height="48" />
+		<rect id="_ukr" class="nopower" 	x="151" y="401" 	width="48" height="48" />
+		<rect id="_ven" class="nopower" 	x="201" y="401" 	width="48" height="48" />
+		<rect id="_vie" class="nopower" 	x="251" y="401" 	width="48" height="48" />
+		<rect id="_wal" class="nopower" 	x="301" y="401" 	width="48" height="48" />
+		<rect id="_war" class="nopower" 	x="351" y="401" 	width="48" height="48" />
+		<rect id="_wes" class="water" 	x="401" y="401" 	width="48" height="48" />
+		<rect id="_yor" class="nopower" 	x="451" y="401" 	width="48" height="48" />
+		<!-- End Provinces -->
+		
+		<!-- map title block -->
+		<g>
+			<rect stroke="black" fill="none" x="1" y="451" width="498" height="98" stroke-width="3"/>
+			<text class="titletext" x="250" y="480">Loeb9</text>
+			<text class="titletext" x="250" y="510">[Grid Test Map]</text>
+		</g>
+		
+		<!-- text abbreviations. NOTE: this layer is always displayed. -->
+		<g class="provtext">
+			<!-- Row 1 -->
+			<text x="25"    y="15">adr</text>
+			<text x="75"    y="15">aeg</text>
+			<text x="125"   y="15">alb</text>
+			<text x="175"   y="15">ank</text>
+			<text x="225"   y="15">apu</text>
+			<text x="275"   y="15">arc</text>
+			<text x="325"   y="15">arm</text>
+			<text x="375"   y="15">bal</text>
+			<text x="425"   y="15">bar</text>
+			<text x="475"   y="15">bel</text>
+			<!-- Row 2 -->
+			<text x="25"    y="65">ber</text>
+			<text x="75"    y="65">bla</text>
+			<text x="125"   y="65">boh</text>
+			<text x="175"   y="65">bot</text>
+			<text x="225"   y="65">bre</text>
+			<text x="275"   y="65">bud</text>
+			<text x="325"   y="65">bul</text>
+			<text x="375"   y="65">(ec)</text>
+			<text x="425"   y="65">(sc)</text>
+			<text x="475"   y="65">bur</text>
+			<!-- Row 3 -->
+			<text x="25"   y="115">cat</text>
+			<text x="75"   y="115">cly</text>
+			<text x="125"  y="115">con</text>
+			<text x="175"  y="115">cor</text>
+			<text x="225"  y="115">crs</text>
+			<text x="275"  y="115">den</text>
+			<text x="325"  y="115">eas</text>
+			<text x="375"  y="115">edi</text>
+			<text x="425"  y="115">eng</text>
+			<text x="475"  y="115">fin</text>
+			<!-- Row 4 -->
+			<text x="25"   y="165">gal</text>
+			<text x="75"   y="165">gas</text>
+			<text x="125"  y="165">gre</text>
+			<text x="175"  y="165">hel</text>
+			<text x="225"  y="165">hol</text>
+			<text x="275"  y="165">ice</text>
+			<text x="325"  y="165">ion</text>
+			<text x="375"  y="165">ire</text>
+			<text x="425"  y="165">iri</text>
+			<text x="475"  y="165">kaz</text>
+			<!-- Row 5 -->
+			<text x="25"   y="215">kie</text>
+			<text x="75"   y="215">lon</text>
+			<text x="125"  y="215">lvn</text>
+			<text x="175"  y="215">lvp</text>
+			<text x="225"  y="215">lyo</text>
+			<text x="275"  y="215">mad</text>
+			<text x="325"  y="215">mao</text>
+			<text x="375"  y="215">mar</text>
+			<text x="425"  y="215">mos</text>
+			<text x="475"  y="215">mun</text>
+			<!-- Row 6 -->
+			<text x="25"   y="265">naf</text>
+			<text x="75"   y="265">nao</text>
+			<text x="125"  y="265">nap</text>
+			<text x="175"  y="265">nav</text>
+			<text x="225"  y="265">nor</text>
+			<text x="275"  y="265">nth</text>
+			<text x="325"  y="265">nwg</text>
+			<text x="375"  y="265">par</text>
+			<text x="425"  y="265">pic</text>
+			<text x="475"  y="265">pie</text>
+			<!-- Row 7 -->
+			<text x="25"   y="315">por</text>
+			<text x="75"   y="315">pru</text>
+			<text x="125"  y="315">rom</text>
+			<text x="175"  y="315">ruh</text>
+			<text x="225"  y="315">rum</text>
+			<text x="275"  y="315">sar</text>
+			<text x="325"  y="315">ser</text>
+			<text x="375"  y="315">sev</text>
+			<text x="425"  y="315">sib</text>
+			<text x="475"  y="315">sic</text>
+			<!-- Row 8 -->
+			<text x="25"   y="365">sil</text>
+			<text x="75"   y="365">ska</text>
+			<text x="125"  y="365">smy</text>
+			<text x="175"  y="365">stp</text>
+			<text x="225"  y="365">(nc)</text>
+			<text x="275"  y="365">(sc)</text>
+			<text x="325"  y="365">swe</text>
+			<text x="375"  y="365">syr</text>
+			<text x="425"  y="365">tri</text>
+			<text x="475"  y="365">tun</text>
+			<!-- Row 9 -->
+			<text x="25"   y="415">tus</text>
+			<text x="75"   y="415">tyr</text>
+			<text x="125"  y="415">tys</text>
+			<text x="175"  y="415">ukr</text>
+			<text x="225"  y="415">ven</text>
+			<text x="275"  y="415">vie</text>
+			<text x="325"  y="415">wal</text>
+			<text x="375"  y="415">war</text>
+			<text x="425"  y="415">wes</text>
+			<text x="475"  y="415">yor</text>
+		</g>
 	</g>
-	
-	<!-- text abbreviations. NOTE: this layer is always displayed. -->
-	<g class="provtext">
-        <!-- Row 1 -->
-        <text x="25"    y="15">adr</text>
-        <text x="75"    y="15">aeg</text>
-        <text x="125"   y="15">alb</text>
-        <text x="175"   y="15">ank</text>
-        <text x="225"   y="15">apu</text>
-        <text x="275"   y="15">arc</text>
-        <text x="325"   y="15">arm</text>
-        <text x="375"   y="15">bal</text>
-        <text x="425"   y="15">bar</text>
-        <text x="475"   y="15">bel</text>
-        <!-- Row 2 -->
-        <text x="25"    y="65">ber</text>
-        <text x="75"    y="65">bla</text>
-        <text x="125"   y="65">boh</text>
-        <text x="175"   y="65">bot</text>
-        <text x="225"   y="65">bre</text>
-        <text x="275"   y="65">bud</text>
-        <text x="325"   y="65">bul</text>
-        <text x="375"   y="65">(ec)</text>
-        <text x="425"   y="65">(sc)</text>
-        <text x="475"   y="65">bur</text>
-        <!-- Row 3 -->
-        <text x="25"   y="115">cat</text>
-        <text x="75"   y="115">cly</text>
-        <text x="125"  y="115">con</text>
-        <text x="175"  y="115">cor</text>
-        <text x="225"  y="115">crs</text>
-        <text x="275"  y="115">den</text>
-        <text x="325"  y="115">eas</text>
-        <text x="375"  y="115">edi</text>
-        <text x="425"  y="115">eng</text>
-        <text x="475"  y="115">fin</text>
-        <!-- Row 4 -->
-        <text x="25"   y="165">gal</text>
-        <text x="75"   y="165">gas</text>
-        <text x="125"  y="165">gre</text>
-        <text x="175"  y="165">hel</text>
-        <text x="225"  y="165">hol</text>
-        <text x="275"  y="165">ice</text>
-        <text x="325"  y="165">ion</text>
-        <text x="375"  y="165">ire</text>
-        <text x="425"  y="165">iri</text>
-        <text x="475"  y="165">kaz</text>
-        <!-- Row 5 -->
-        <text x="25"   y="215">kie</text>
-        <text x="75"   y="215">lon</text>
-        <text x="125"  y="215">lvn</text>
-        <text x="175"  y="215">lvp</text>
-        <text x="225"  y="215">lyo</text>
-        <text x="275"  y="215">mad</text>
-        <text x="325"  y="215">mao</text>
-        <text x="375"  y="215">mar</text>
-        <text x="425"  y="215">mos</text>
-        <text x="475"  y="215">mun</text>
-        <!-- Row 6 -->
-        <text x="25"   y="265">naf</text>
-        <text x="75"   y="265">nao</text>
-        <text x="125"  y="265">nap</text>
-        <text x="175"  y="265">nav</text>
-        <text x="225"  y="265">nor</text>
-        <text x="275"  y="265">nth</text>
-        <text x="325"  y="265">nwg</text>
-        <text x="375"  y="265">par</text>
-        <text x="425"  y="265">pic</text>
-        <text x="475"  y="265">pie</text>
-        <!-- Row 7 -->
-        <text x="25"   y="315">por</text>
-        <text x="75"   y="315">pru</text>
-        <text x="125"  y="315">rom</text>
-        <text x="175"  y="315">ruh</text>
-        <text x="225"  y="315">rum</text>
-        <text x="275"  y="315">sar</text>
-        <text x="325"  y="315">ser</text>
-        <text x="375"  y="315">sev</text>
-        <text x="425"  y="315">sib</text>
-        <text x="475"  y="315">sic</text>
-        <!-- Row 8 -->
-        <text x="25"   y="365">sil</text>
-        <text x="75"   y="365">ska</text>
-        <text x="125"  y="365">smy</text>
-        <text x="175"  y="365">stp</text>
-        <text x="225"  y="365">(nc)</text>
-        <text x="275"  y="365">(sc)</text>
-        <text x="325"  y="365">swe</text>
-        <text x="375"  y="365">syr</text>
-        <text x="425"  y="365">tri</text>
-        <text x="475"  y="365">tun</text>
-        <!-- Row 9 -->
-        <text x="25"   y="415">tus</text>
-        <text x="75"   y="415">tyr</text>
-        <text x="125"  y="415">tys</text>
-        <text x="175"  y="415">ukr</text>
-        <text x="225"  y="415">ven</text>
-        <text x="275"  y="415">vie</text>
-        <text x="325"  y="415">wal</text>
-        <text x="375"  y="415">war</text>
-        <text x="425"  y="415">wes</text>
-        <text x="475"  y="415">yor</text>
-	</g>
-	
 	
 	<!-- drawing layer: supply centers -->
 	<g id="SupplyCenterLayer"/>

@@ -125,6 +125,7 @@ public class ClientMenu
 	public static final Item VIEW_UNORDERED			= new Item("VIEW_UNORDERED");		// cb
 	public static final Item VIEW_INFLUENCE			= new Item("VIEW_INFLUENCE");		// cb
 	public static final Item VIEW_SELECT_MAP		= new Item("VIEW_SELECT_MAP");
+	public static final Item VIEW_SHOW_MAP			= new Item("VIEW_SHOW_MAP");		// cb
 	
 	// Reports menu
 	public static final Item REPORTS_RESULTS		= new Item("REPORTS_RESULTS");
@@ -341,6 +342,7 @@ public class ClientMenu
 		menu.add(makeCBMenuItem(VIEW_DISLODGED_UNITS, true, false));
 		menu.add(makeCBMenuItem(VIEW_SUPPLY_CENTERS, true, false));
 		menu.add(makeCBMenuItem(VIEW_UNORDERED, false, false));
+		menu.add(makeCBMenuItem(VIEW_SHOW_MAP, true, false));
 		menu.add(makeCBMenuItem(VIEW_INFLUENCE, false, false));
 		menu.add(new JSeparator());
 		menu.add(makeMenuItem(VIEW_SELECT_MAP, true));

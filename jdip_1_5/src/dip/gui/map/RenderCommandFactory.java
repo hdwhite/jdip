@@ -49,6 +49,8 @@ public abstract class RenderCommandFactory
 	public abstract RCSetInfluenceMode createRCSetInfluenceMode(MapRenderer2 mr, boolean value);
 	/** */
 	public abstract RCSetPowerOrdersDisplayed createRCSetPowerOrdersDisplayed(MapRenderer2 mr, Power[] displayedPowers);
+	/** */
+	public abstract RCShowMap createRCShowMap(MapRenderer2 mr, boolean value);
 	
 	
 	
@@ -134,6 +136,17 @@ public abstract class RenderCommandFactory
 			super(mr);
 		}// RCRenderAll()
 	}// abstract nested class RCRenderAll
+	
+	
+	/** Show/hide the map (as opposed to background) */
+	protected static abstract class RCShowMap extends BooleanRenderCommand
+	{
+		/** Constructor */
+		public RCShowMap(MapRenderer2 mr, boolean value)
+		{
+			super(mr, value);
+		}// RCShowMap()
+	}// abstract nested class RCShowMap
 	
 	
 	/** Render the entire map */

@@ -1332,6 +1332,9 @@ public class ClientFrame extends JFrame
 			clientMenu.setActionMethod(ClientMenu.VIEW_UNORDERED, this, "onViewUnordered");
 			clientMenu.setActionMethod(ClientMenu.VIEW_INFLUENCE, this, "onViewInfluence");
 			clientMenu.setActionMethod(ClientMenu.VIEW_SELECT_MAP, this, "onViewSelectMap");
+			clientMenu.setActionMethod(ClientMenu.VIEW_SHOW_MAP, this, "onViewShowMap");
+			
+			
 			
 			// reports
 			clientMenu.setActionMethod(ClientMenu.REPORTS_RESULTS, this, "onReportsResults");
@@ -1612,6 +1615,18 @@ public class ClientFrame extends JFrame
 				MapPicker.displayDialog(ClientFrame.this, world);
 			}
 		}		
+		
+		public void onViewShowMap()
+		{
+			if(mapPanel != null)
+			{
+				boolean value = clientMenu.getSelected(ClientMenu.VIEW_SHOW_MAP);
+				RenderCommand rc = mapPanel.getRenderCommandFactory().createRCShowMap(mapPanel.getMapRenderer(), value);
+				execRenderCommand(rc);
+			}
+		}
+		
+		
 		
 		// reports
 		//

@@ -103,6 +103,12 @@ public class DMR2RenderCommandFactory extends RenderCommandFactory
 		return new RCSetPowerOrdersDisplayed(mr, displayedPowers);
 	}// RCSetPowerOrdersDisplayed()
 	
+	/** */
+	public RenderCommandFactory.RCShowMap createRCShowMap(MapRenderer2 mr, boolean value)
+	{
+		return new RCShowMap(mr, value);
+	}// RCSetPowerOrdersDisplayed()
+	
 	
 	
 	/** Force re-rendering of all orders (erase then update). The Turnstate better have been set. */
@@ -316,6 +322,24 @@ public class DMR2RenderCommandFactory extends RenderCommandFactory
 			dmr2.unsyncSetInfluenceMode(value);
 		}// execute()
 	}// nested class RCSetInfluenceMode
+	
+	/**  */
+	protected static class RCShowMap extends RenderCommandFactory.RCShowMap
+	{
+		public RCShowMap(MapRenderer2 dmr2, boolean value) { super(dmr2, value); }
+		
+		public void execute()
+		{
+			Log.println("DMR2RCF::RCShowMap()");
+			DefaultMapRenderer2 dmr2 = (DefaultMapRenderer2) mr;
+			dmr2.setRenderSetting(MapRenderer2.KEY_SHOW_MAP, Boolean.valueOf(value));
+			SVGElement mapLayer = (SVGElement) dmr2.layerMap.get(DefaultMapRenderer2.LAYER_MAP);
+			assert(mapLayer != null);
+			dmr2.setElementVisibility(mapLayer, value);
+		}// execute()
+	}// nested class RCShowMap
+	
+	
 	
 	/** */
 	protected static class RCSetPowerOrdersDisplayed extends RenderCommandFactory.RCSetPowerOrdersDisplayed

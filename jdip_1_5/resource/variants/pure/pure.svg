@@ -311,8 +311,7 @@
 	</defs>    
 	
 	
-	<!-- background & connections -->	
-	<g>
+	<g id="MapLayer">
 		<rect fill="rgb(240,237,168)" stroke="black" stroke-width="5" x="0" y="0"
 			width="995" height="995"/>
 		<path fill="none" stroke="black" stroke-width="3"
@@ -434,9 +433,7 @@
 			x="-315px" y="601px"
 			transform="translate(-82.6087 -241.304) translate(476.087 471.739) translate(5.76923 -9.61538) rotate(49.7338 -280.476 591.894) translate(3.62518 -22.1318) translate(-17.89 -12.0334)"
 			>Rome</text>
-	</g>
-	
-	<g>
+		
 		<path id="_vie" class="nopower"
 			d="M497.619 142.283 L650.619 176.571 L774.287 275.519 L866.51 207.835 L497.619 30.1868
 				z"/>

@@ -129,6 +129,8 @@ public class DefaultMapRenderer2 extends MapRenderer2
 	};
 	
 	
+	/** Layer: Map */
+	public static final String LAYER_MAP 				= "MapLayer";
 	/** Layer: Supply Center */
 	protected static final String LAYER_SC				= "SupplyCenterLayer";
 	/** Layer: Orders */
@@ -146,12 +148,11 @@ public class DefaultMapRenderer2 extends MapRenderer2
 	/** Label Layer: Full */
 	public static final String LABEL_LAYER_FULL 		= "FullLabelLayer";
 	
-	
 	/** All Label layers */
 	protected static final String[] LABEL_LAYERS = {LABEL_LAYER_BRIEF, LABEL_LAYER_FULL};
 	
 	/** All Layers */
-	protected static final String[] LAYERS = {	LAYER_SC, LAYER_ORDERS, HIGHEST_ORDER_LAYER,
+	protected static final String[] LAYERS = {	LAYER_MAP, LAYER_SC, LAYER_ORDERS, HIGHEST_ORDER_LAYER,
 												LAYER_UNITS, LAYER_DISLODGED_UNITS,
 												LABEL_LAYER_BRIEF, LABEL_LAYER_FULL, LAYER_MOUSE };
 	
@@ -216,6 +217,7 @@ public class DefaultMapRenderer2 extends MapRenderer2
 		}
 		
 		// set default render settings
+		renderSettings.put(KEY_SHOW_MAP, Boolean.TRUE);
 		renderSettings.put(KEY_SHOW_SUPPLY_CENTERS, Boolean.TRUE);
 		renderSettings.put(KEY_SHOW_UNITS, Boolean.TRUE);
 		renderSettings.put(KEY_SHOW_DISLODGED_UNITS, Boolean.TRUE);
@@ -736,6 +738,7 @@ public class DefaultMapRenderer2 extends MapRenderer2
 			cm.setEnabled(ClientMenu.VIEW_DISLODGED_UNITS, !value);
 			cm.setEnabled(ClientMenu.VIEW_SUPPLY_CENTERS, !value);
 			cm.setEnabled(ClientMenu.VIEW_UNORDERED, !value);
+			cm.setEnabled(ClientMenu.VIEW_SHOW_MAP, !value);
 			
 			
 			// now clear the render settings
@@ -764,6 +767,9 @@ public class DefaultMapRenderer2 extends MapRenderer2
 			elLayer = (SVGElement) layerMap.get(LAYER_DISLODGED_UNITS);
 			setElementVisibility(elLayer, false);
 			
+			elLayer = (SVGElement) layerMap.get(LAYER_MAP);	// always show map in influence mode
+			setElementVisibility(elLayer, true);
+			
 			Power[] visiblePowers = (Power[]) oldRenderSettings.get(MapRenderer2.KEY_SHOW_ORDERS_FOR_POWERS);
 			for(int i=0; i<visiblePowers.length; i++)
 			{
@@ -782,7 +788,6 @@ public class DefaultMapRenderer2 extends MapRenderer2
 			{
 				unsyncUpdateProvince(provinces[i]);
 			}
-			
 		}
 		else
 		{
@@ -828,6 +833,8 @@ public class DefaultMapRenderer2 extends MapRenderer2
 			setElementVisibility( (SVGElement) layerMap.get(LAYER_SC),
 				((Boolean) getRenderSetting(KEY_SHOW_SUPPLY_CENTERS)).booleanValue() );
 			unsyncSetVisiblePowers();	// takes care of KEY_SHOW_ORDERS_FOR_POWERS
+			setElementVisibility( (SVGElement) layerMap.get(LAYER_MAP), 
+				((Boolean) getRenderSetting(KEY_SHOW_MAP)).booleanValue() );
 			
 			// destroy old render settings
 			oldRenderSettings = null;
@@ -838,6 +845,7 @@ public class DefaultMapRenderer2 extends MapRenderer2
 			cm.setEnabled(ClientMenu.VIEW_DISLODGED_UNITS, !value);
 			cm.setEnabled(ClientMenu.VIEW_SUPPLY_CENTERS, !value);
 			cm.setEnabled(ClientMenu.VIEW_UNORDERED, !value);
+			cm.setEnabled(ClientMenu.VIEW_SHOW_MAP, !value);
 		}
 	}// unsyncSetInfluenceMode()
 	
