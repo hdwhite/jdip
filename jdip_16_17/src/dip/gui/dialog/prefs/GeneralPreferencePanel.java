@@ -25,6 +25,7 @@ package dip.gui.dialog.prefs;
 
 import dip.gui.ClientFrame;
 import dip.gui.OrderDisplayPanel;
+import dip.gui.swing.GradientJLabel;
 import dip.misc.SharedPrefs;
 import dip.misc.LRUCache;
 import dip.misc.Utils;
@@ -69,14 +70,11 @@ import java.awt.event.ActionEvent;
 *	<p>
 *	Static methods are included to access (in a controlled manner) preference-controlled
 *	functionality.
-*
+*	<p>
 *
 */
 public class GeneralPreferencePanel extends PreferencePanel
 {
-	// constants
-	public static final int BORDER = 10;
-	
 	// preference nodes keys
 	public static final String NODE_SAVE_WINDOW_SETTINGS	= "saveWindowSettings";
 	public static final String NODE_DEFAULT_GAME_DIR 		= "defaultGameDir";
@@ -100,6 +98,10 @@ public class GeneralPreferencePanel extends PreferencePanel
 	
 	// # of recent files to save
 	private static final int NUM_RECENT_FILES = 5;
+	
+	// width constants
+	private static final int BORDER = 10;
+	private static final int INDENT = 20;
 	
 	// LRU cache of files
 	private static LRUCache fileCache = null;
@@ -136,7 +138,8 @@ public class GeneralPreferencePanel extends PreferencePanel
 	private static final String GPP_ORDER_SORT_LABEL = "GPP.order.sort.label";
 	private static final String GPP_ORDER_SORT_DIRECTION = "GPP.order.sort.direction";
 	
-	
+	private static final String GPP_LABEL_GENERAL = "GPP.label.general";
+	private static final String GPP_LABEL_FILE = "GPP.label.file";
 	
 	private static final String DIALOG_TITLE		= "GPP.filedialog.title";
 	
@@ -185,7 +188,7 @@ public class GeneralPreferencePanel extends PreferencePanel
 		mapLabels = new AssocJComboBox(assocObjs);
 		
 		
-		// order sorting :: implement
+		// order sorting
 		arr = new String[] {
 			OrderDisplayPanel.SORT_POWER, OrderDisplayPanel.SORT_PROVINCE,
 			OrderDisplayPanel.SORT_UNIT, OrderDisplayPanel.SORT_ORDER
@@ -226,37 +229,39 @@ public class GeneralPreferencePanel extends PreferencePanel
 		mapP.add(mapLabels);
 		
 		// layout 
-		int h1[] = { BORDER, 0,8, 0,8, 0,8, 0,3,0,7,  36, 	// upto row 12
+		int h1[] = { BORDER, 0,8, 0,8, 0,8, 0,8, 0,3,0,7,  40, 	// upto row 12
 			0,3,0,10,  0,8, 0, BORDER };
-		int w1[] = { BORDER, 10, 0, 5, 0, BORDER };
+		int w1[] = { BORDER, INDENT, (INDENT/2), 0, 5, 0, BORDER };
 		
 		HIGLayout l1 = new HIGLayout(w1, h1);
 		l1.setColumnWeight(3, 1);
-		l1.setRowWeight(19, 1);
+		l1.setRowWeight(21, 1);
 		setLayout(l1);
 		
-		
 		HIGConstraints c = new HIGConstraints();
-		add(saveWindowSettings, c.rcwh(2,2,4,1,"l"));
-		add(showResolution, c.rcwh(4,2,4,1,"l"));
+		// titled separator
+		add(new GradientJLabel(Utils.getLocalString(GPP_LABEL_GENERAL)),
+			c.rcwh(2,2,5,1,"lr"));
 		
-		add(orderP, c.rcwh(6,2,4,1,"l"));
-		
-		add(mapP, c.rcwh(8,2,4,1,"l"));
+		add(saveWindowSettings, c.rcwh(4,3,4,1,"l"));
+		add(showResolution, c.rcwh(6,3,4,1,"l"));
+		add(orderP, c.rcwh(8,3,4,1,"l"));
+		add(mapP, c.rcwh(10,3,4,1,"l"));
 		add(new JLabel(Utils.getLocalString(GPP_MAP_LABEL_NOTE)),
-			c.rcwh(10,3,3,1,"ltb"));
+			c.rcwh(12,4,3,1,"ltb"));
 		
-		// separator bar (12)
-		add(new JSeparator(), c.rcwh(12,2,4,1,"lr"));
+		// titled separator
+		add(new GradientJLabel(Utils.getLocalString(GPP_LABEL_FILE)),
+			c.rcwh(14,2,5,1,"lr"));
 		
 		// save dir
 		add(new JLabel( Utils.getLocalString(GPP_SAVE_DIR_TEXT) ), 
-			c.rcwh(13,2,4,1,"l"));
-		add(saveDir, c.rcwh(15,3,1,1,"lr"));
-		add(browseSaveDir, c.rcwh(15,5,1,1,"lrtb"));
+			c.rcwh(15,3,4,1,"l"));
+		add(saveDir, c.rcwh(17,4,1,1,"lr"));
+		add(browseSaveDir, c.rcwh(17,6,1,1,"lrtb"));
 		
 		// clear MRU
-		add(clrPanel, c.rcwh(17,2,4,1,"l"));
+		add(clrPanel, c.rcwh(19,3,4,1,"l"));
 		
 	}// GeneralPreferencePanel()
 	
