@@ -77,7 +77,7 @@
 <VARIANTS>
 	<DESCRIPTION><![CDATA[Created variant.]]></DESCRIPTION> 
 	
-	<MAP_DEFINITION id="defaultMap" title="Imperium" preferredUnitStyle="modern"
+	<MAP_DEFINITION id="defaultMap" title="Imperium" preferredUnitStyle="imperium"
 		URI="imperium.svg" thumbURI="imperium_thumb.png">
 		<DESCRIPTION><![CDATA[
 			Imperium map by Martin Asal.
