@@ -535,9 +535,12 @@ public class OrderParser
 			assert (supUnitType != null);
 			assert (supSrc != null);
 			
-			// get power, from unit 
-			assert (position.hasUnit(supSrc.getProvince()));
-			final Power supPower = position.getUnit(supSrc.getProvince()).getPower();
+			// get power from unit, if possible
+			Power supPower = null;
+			if(position.hasUnit(supSrc.getProvince()))
+			{
+				supPower = position.getUnit(supSrc.getProvince()).getPower();
+			}
 			
 			// support a MOVE [if specified]
 			if(st.hasMoreTokens())
@@ -590,8 +593,11 @@ public class OrderParser
 			Unit.Type conUnitType = parseUnitType(conUnitName);
 			
 			// get power, from unit 
-			assert (position.hasUnit(conSrc.getProvince()));
-			final Power conPower = position.getUnit(conSrc.getProvince()).getPower();
+			Power conPower = null;
+			if(position.hasUnit(conSrc.getProvince()))
+			{
+				conPower = position.getUnit(conSrc.getProvince()).getPower();
+			}
 			
 			// create order.
 			return orderFactory.createConvoy(power, src, srcUnitType,
