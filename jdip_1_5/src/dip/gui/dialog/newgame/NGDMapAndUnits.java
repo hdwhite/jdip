@@ -89,7 +89,7 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane
 					ListItem item = mapSelector.getSelectedItem();
 					if(item != null)
 					{
-						MapGraphic mg = (MapGraphic) item.getReference();;
+						MapGraphic mg = (MapGraphic) item.getReference();
 						if(mg.getPreferredSymbolPackName() != null)
 						{
 							symbolSelector.setSelectedItemByName(mg.getPreferredSymbolPackName());

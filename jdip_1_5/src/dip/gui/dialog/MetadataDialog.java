@@ -26,8 +26,12 @@ package dip.gui.dialog;
 import dip.world.Power;
 import dip.world.World;
 import dip.gui.ClientFrame;
+import dip.gui.AbstractCFPListener;
 import dip.gui.swing.XJTextPane;
 import dip.gui.swing.XJScrollPane;
+import dip.gui.swing.ColorRectIcon;
+import dip.gui.map.SVGColorParser;
+import dip.gui.map.MapMetadata;
 import dip.world.metadata.GameMetadata;
 import dip.world.metadata.PlayerMetadata;
 import dip.misc.Utils;
@@ -93,6 +97,8 @@ public class MetadataDialog extends HeaderDialog
 	// instance variables
 	private JTabbedPane tabPane = null;
 	private ClientFrame clientFrame = null;
+	private IconColorListener propertyListener = null;	// for tab icons
+	private MapMetadata mmd = null;		// for tab icons
 	
 	
 	
@@ -117,7 +123,15 @@ public class MetadataDialog extends HeaderDialog
 		super(parent, Utils.getLocalString(TITLE), true);
 		this.clientFrame = parent;
 		
+		mmd = clientFrame.getMapMetadata();
+		if(mmd == null)
+		{
+			propertyListener = new IconColorListener();
+			clientFrame.addPropertyChangeListener(propertyListener);
+		}
+		
 		makeTabPanel();	
+		setTabIcons();
 		
 		setHeaderText( Utils.getText(Utils.getLocalString(HEADER_LOCATION)) );
 		createDefaultContentBorder(tabPane);
@@ -153,6 +167,11 @@ public class MetadataDialog extends HeaderDialog
 			
 			// set data-changed flag
 			clientFrame.fireStateModified();
+		}
+		
+		if(propertyListener != null)
+		{
+			clientFrame.removePropertyChangeListener(propertyListener);
 		}
 	}// close()
 	
@@ -415,6 +434,36 @@ public class MetadataDialog extends HeaderDialog
 		jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		return jsp;
 	}// makeScrollPane()
+	
+	
+	/** Listener to get Tab Icon colors */
+	private class IconColorListener extends AbstractCFPListener
+	{
+		public void actionMMDReady(MapMetadata mmd)
+		{
+			MetadataDialog.this.mmd = mmd;
+			setTabIcons();
+		}// actionMMDReady()
+	}// nested class IconColorListener
+	
+	
+	/** Sets the tab icons for each power. */
+	private void setTabIcons()
+	{
+		if(mmd != null)
+		{
+			final World world = clientFrame.getWorld();
+			final int tabCount = tabPane.getTabCount();
+		   	for(int i=1; i<tabCount; i++)	// no icon for 'game' info
+            {
+				Power power = world.getMap().getPower( tabPane.getTitleAt(i) );
+				assert(power != null);
+				String colorName = mmd.getPowerColor(power);
+				Color color = SVGColorParser.parseColor(colorName);
+				tabPane.setIconAt( i, new ColorRectIcon(12,12, color) );
+           }
+		}
+	}// setTabIcons()
 	
 }// class MetadataDialog
 

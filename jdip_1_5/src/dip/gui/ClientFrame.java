@@ -165,6 +165,7 @@ public class ClientFrame extends JFrame
 	private ValidationOptions valOpts = new ValidationOptions();
 	private UndoRedoManager undoManager = null;
 	private OrderFormatOptions orderFormatOptions = null;	
+	private MapMetadata mapMetadata = null;
 	
 	// power control instance variables
 	private Power[] orderablePowers = new Power[0];		// powers for which orders may be entered
@@ -394,7 +395,7 @@ public class ClientFrame extends JFrame
 	}// getUndoRedoManager()
 	
 	/** Get the current order validation options settings. */
-	public ValidationOptions getValidationOptions()
+	public synchronized ValidationOptions getValidationOptions()
 	{
 		return valOpts;
 	}
@@ -416,17 +417,22 @@ public class ClientFrame extends JFrame
 	
 	
 	/** Get the user-specified Order Format Options (OFO) */
-	public OrderFormatOptions getOFO()
+	public synchronized OrderFormatOptions getOFO()
 	{
 		return orderFormatOptions;
 	}// getOFO()
 	
 	/** Set the user-specified Order Format Options (OFO) */
-	public void setOFO(OrderFormatOptions value)
+	public synchronized void setOFO(OrderFormatOptions value)
 	{
 		orderFormatOptions = value;
 	}// setOFO()
 	
+	/** Get MapMetadata (note: may be null) */
+	public synchronized MapMetadata getMapMetadata()
+	{
+		return mapMetadata;
+	}// getMapMetadata()
 	
 	
 	/** 
@@ -1102,8 +1108,15 @@ public class ClientFrame extends JFrame
 					ClientFrame.this.orderablePowers = (Power[]) evt.getNewValue();
 				}
 			}
+			else if(evtName == EVT_MMD_READY)
+			{
+				synchronized(ClientFrame.this)
+				{
+					ClientFrame.this.mapMetadata = (MapMetadata) evt.getNewValue();
+				}
+			}
 		}
-	}// fireDisplayablePowersChanged()
+	}// class ModeListener
 	
 	
 	
@@ -1269,8 +1282,6 @@ public class ClientFrame extends JFrame
 	{
 		// inner state
 		private String oldEditMode = null;
-		private String oldAnimateMode = null;
-		
 		
 		/** Register the menu items */
 		public void registerMenuItems()

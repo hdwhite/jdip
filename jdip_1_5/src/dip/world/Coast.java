@@ -187,9 +187,9 @@ public class Coast implements java.io.Serializable
 	* unparsable coasts, Coast.UNDEFINED is returned.
 	* <p>
 	*/
-	public static Coast parse(String input)
+	public static Coast parse(String text)
 	{
-		input = input.toLowerCase().trim();
+		String input = text.toLowerCase().trim();
 		
 		// check if it is just a coast (2-letter) or
 		// part of a province name. If we don't check

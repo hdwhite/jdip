@@ -242,14 +242,14 @@ public class Unit implements java.io.Serializable, Cloneable
 		*	</pre>
 		*
 		*/
-		public static Unit.Type parse(String input)
+		public static Unit.Type parse(String text)
 		{
-			if(input == null)
+			if(text == null)
 			{
 				return Unit.Type.UNDEFINED;
 			}
 			
-			input = input.toLowerCase().trim();
+			String input = text.toLowerCase().trim();
 			if(Unit.Type.ARMY.getShortName().equals(input) 
 				|| Unit.Type.ARMY.getFullName().equals(input))
 			{

@@ -402,9 +402,11 @@ public class WorldFactory
 	*
 	* 
 	*/
-	private Location makeLocation(HashMap provNameMap, String name, Coast defaultCoast)
+	private Location makeLocation(HashMap provNameMap, String name, Coast theDefaultCoast)
 	throws InvalidWorldException
 	{
+		Coast defaultCoast = theDefaultCoast;
+		
 		if(defaultCoast.equals(Coast.UNDEFINED))
 		{
 			throw new InvalidWorldException(Utils.getLocalString(WF_ADJ_BAD_TYPE, name));

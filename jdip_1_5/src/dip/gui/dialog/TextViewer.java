@@ -27,10 +27,11 @@ import dip.gui.swing.XJTextPane;
 import dip.gui.swing.XJEditorPane;
 import dip.gui.swing.XJScrollPane;
 import dip.gui.dialog.ErrorDialog;
+import dip.gui.dialog.prefs.GeneralPreferencePanel;
 import dip.misc.Utils;
 import dip.misc.SimpleFileFilter;
 import dip.misc.XJFileChooser;
-import dip.gui.dialog.prefs.GeneralPreferencePanel;
+import dip.misc.Log;
 
 import java.awt.Font;
 import java.awt.Color;
@@ -110,8 +111,6 @@ public class TextViewer extends HeaderDialog
 	private AcceptListener acceptListener = null;
 	private JEditorPane textPane;
 	private JScrollPane jsp;
-	private HashMap actions;
-	
 	
 	/**
 	*	Display the TextViewer, and return <code>true</code> if the 
@@ -203,6 +202,11 @@ public class TextViewer extends HeaderDialog
 					catch(BadLocationException ble)
 					{
 						// do nothing
+					}
+					catch(IllegalStateException ise)
+					{
+						// could happen, say, if the clipboard is unavailable
+						Log.println("TextViewer::exportToClipboard(): "+ise);
 					}
 				}
 			}
@@ -338,7 +342,7 @@ public class TextViewer extends HeaderDialog
 	*/
 	protected String filterHTML(String in)
 	{
-		StringBuffer out = new StringBuffer(in);
+		StringBuffer out = new StringBuffer(in.length());
 		
 		boolean noCopy = false;
 		final int len = in.length();
@@ -577,10 +581,10 @@ public class TextViewer extends HeaderDialog
 		menu = new JMenu(cmItem.getName());
 		menu.setMnemonic(cmItem.getMnemonic());
 		
-		menuItem = new ClientMenu.Item(MENU_ITEM_CUT).makeMenuItem(false);
-		menuItem.setActionCommand(DefaultEditorKit.cutAction);
-		menuItem.addActionListener(menuListener);
-		menu.add(menuItem);
+		final JMenuItem cutMenuItem = new ClientMenu.Item(MENU_ITEM_CUT).makeMenuItem(false);
+		cutMenuItem.setActionCommand(DefaultEditorKit.cutAction);
+		cutMenuItem.addActionListener(menuListener);
+		menu.add(cutMenuItem);
 		
 		menuItem = new ClientMenu.Item(MENU_ITEM_COPY).makeMenuItem(false);
 		menuItem.setActionCommand(DefaultEditorKit.copyAction);
@@ -610,6 +614,7 @@ public class TextViewer extends HeaderDialog
 			
 			public void	menuSelected(MenuEvent e)
 			{
+				cutMenuItem.setEnabled(textPane.isEditable());
 				pasteMenuItem.setEnabled(textPane.isEditable());
 			}
 		});

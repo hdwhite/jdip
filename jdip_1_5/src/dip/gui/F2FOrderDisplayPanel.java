@@ -27,6 +27,7 @@ import dip.world.*;
 import dip.gui.undo.*;
 import dip.gui.order.GUIOrder;
 import dip.gui.map.SVGColorParser;
+import dip.gui.swing.ColorRectIcon;
 import dip.misc.Utils;
 import dip.process.Adjustment;
 import dip.misc.Log;
@@ -327,7 +328,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 				String colorName = mmd.getPowerColor(power);
 				Color color = SVGColorParser.parseColor(colorName);
 				
-				tabPane.setIconAt( i, new ColorRect(12,12, color) );
+				tabPane.setIconAt( i, new ColorRectIcon(12,12, color) );
            }
 		}
 	}// setTabIcons()
@@ -692,47 +693,5 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		public boolean[] getTabState()		{ return tabState; }
 		
 	}// nested class F2FState
-	
-	
-	/**
-	*	Creates an Icon that is a solid color within
-	*	a 1-pixel black rectangular border.
-	*	<p>
-	*	NOTE: if this is going to be used by ANY other class,
-	*	it should be taken out instead of be a nested class.
-	*/
-	public static class ColorRect implements Icon
-	{
-		private final int h;
-		private final int w;
-		private final Color color;
-		
-		/** Create a ColorRect */
-		public ColorRect(int height, int width, Color color)
-		{
-			this.h = height;
-			this.w = width;
-			this.color = color;
-		}// ColorRect()
-		
-		/** Icon height */
-		public int getIconHeight()	{ return h; }
-		
-		/** Icon width */
-		public int getIconWidth()	{ return w; }
-		
-		/** Draw the Icon */
-		public void paintIcon(Component c, Graphics g, int x, int y)
-		{
-			g.setColor(color);
-			g.fillRect(x, y, w, h);
-			
-			g.setColor( c.getBackground() );
-			g.draw3DRect(x, y, w, h, false);
-			//g.setColor(Color.black);
-			//g.drawRect(x, y, w, h);
-		}// paintIcon()
-		
-	}// nested class ColorRect	
 	
 }// class F2FOrderDisplayPanel

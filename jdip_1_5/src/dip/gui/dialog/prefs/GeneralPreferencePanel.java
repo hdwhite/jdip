@@ -195,15 +195,9 @@ public class GeneralPreferencePanel extends PreferencePanel
 		
 		if(dirPath != null)
 		{
-			saveDir.setText( dirPath.getName() );
-			saveDir.repaint();
+			saveDir.setText( dirPath.getAbsolutePath() );
 		}
 	}// directoryBrowse()
-	
-	
-	
-	
-	
 	
 	
 	
