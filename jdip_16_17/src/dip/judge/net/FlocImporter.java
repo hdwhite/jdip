@@ -161,7 +161,7 @@ public class FlocImporter implements Runnable
 			}
 			
 			// game is registered
-			if(fic.flocTextImportComplete(text));
+			if(fic.flocTextImportComplete(text))
 			{
 				// now, process into a World object
 				fic.flocImportMessage(Utils.getLocalString(CREATING_WORLD));

@@ -94,9 +94,9 @@ public class ViewControlBar extends ControlBar
 		makeLayout();
 		
 		// NULL test when we actually do IL8N
-		keyFit = ("" != null) ? (int) KEY_FIT : -1;
-		keyZoomIn = ("" != null) ? (int) KEY_ZOOM_IN : -1;
-		keyZoomOut = ("" != null) ? (int) KEY_ZOOM_OUT : -1;
+		keyFit = KEY_FIT;
+		keyZoomIn = KEY_ZOOM_IN;
+		keyZoomOut = KEY_ZOOM_OUT;
 	}// ViewControlBar()
 	
 	/** Called when the mouse pointer enters a province */

@@ -717,7 +717,6 @@ public class ErrorDialog extends TextViewer
 					return true;
 				}
 			}
-			rd.close();
 		}
 		catch(Exception e)
 		{

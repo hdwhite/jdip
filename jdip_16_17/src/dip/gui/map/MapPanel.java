@@ -1089,7 +1089,7 @@ public class MapPanel extends JPanel
 		{
 			// if updateMessage was the last message, we also should clear, otherwise
 			// we are always stuck on updateMessage
-			if(lastModeText == null || lastModeText == updateMessage)
+			if(lastModeText == null || lastModeText.equals(updateMessage))
 			{
 				statusBar.clearModeText();
 			}

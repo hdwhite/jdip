@@ -418,19 +418,19 @@ public class ClientFrame extends JFrame
 	}// getPhaseSelector()
 	
 	/** Get the OrderDisplayPanel component */
-	public OrderDisplayPanel getOrderDisplayPanel()
+	public synchronized OrderDisplayPanel getOrderDisplayPanel()
 	{
 		return orderDisplayPanel;
 	}// getOrderDisplayPanel()
 	
 	/** Get the OrderStatusPanel component */
-	public OrderStatusPanel getOrderStatusPanel()
+	public synchronized OrderStatusPanel getOrderStatusPanel()
 	{
 		return orderStatusPanel;
 	}// getOrderStatusPanel()
 	
 	/** Get the MapPanel component */
-	public MapPanel getMapPanel()
+	public synchronized MapPanel getMapPanel()
 	{
 		return mapPanel;
 	}// getMapPanel()
@@ -1041,7 +1041,7 @@ public class ClientFrame extends JFrame
 				{
 					statusBar.setModeText(Utils.getLocalString("ClientFrame.mode.review"));
 					
-					if(ClientFrame.this.turnState.isEnded())
+					if(ClientFrame.this.getTurnState().isEnded())
 					{
 						statusBar.setModeText(Utils.getLocalString("ClientFrame.mode.ended"));
 					}

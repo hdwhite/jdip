@@ -584,7 +584,7 @@ public class OrderDisplayPanel extends JPanel
 	*	
 	* 	@param undoable - <b>true</b> if this is an undoable action
 	*/
-	public void removeAllOrders(boolean undoable)
+	public synchronized void removeAllOrders(boolean undoable)
 	{
 		Orderable[] deletedOrderArray = null;
 		
@@ -964,7 +964,7 @@ public class OrderDisplayPanel extends JPanel
 			}
 		}// actionValOptsChanged()
 		
-		public void actionWorldCreated(World w)
+		public synchronized void actionWorldCreated(World w)
 		{
 			world = w;
 			undoManager = clientFrame.getUndoRedoManager();
@@ -1000,7 +1000,7 @@ public class OrderDisplayPanel extends JPanel
 			orderList.clearSelection();
 		}// actionTurnstateChanged()
 		
-		public void actionModeChanged(String newMode)
+		public synchronized void actionModeChanged(String newMode)
 		{
 			if(newMode == ClientFrame.MODE_ORDER)
 			{
@@ -1124,10 +1124,13 @@ public class OrderDisplayPanel extends JPanel
 		/** Sort the list, and fires a ContentsChanged message so the list is updated. */
 		private void sort()
 		{
-			Collections.sort(list, comparator);				// sort
-			comparator.setHighlighting(list.iterator()); 	// mark hilites
-			fireContentsChanged(this, 0, getSize() - 1);	// update entire list
-			activateMenu();
+			synchronized(this)
+			{
+				Collections.sort(list, comparator);				// sort
+				comparator.setHighlighting(list.iterator()); 	// mark hilites
+				fireContentsChanged(this, 0, getSize() - 1);	// update entire list
+				activateMenu();
+			}
 		}// sort()
 		
 		/** Adds a DisplayOrder to the list. Only an order

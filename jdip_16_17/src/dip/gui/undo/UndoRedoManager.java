@@ -155,13 +155,13 @@ public class UndoRedoManager extends UndoManager
 	}// dumpEdits()
 	
 	/** Returns the OrderDisplayPanel associated with this UndoRedo manager. */
-	public OrderDisplayPanel getOrderDisplayPanel()
+	public synchronized OrderDisplayPanel getOrderDisplayPanel()
 	{
 		return orderDisplayPanel;
 	}// getOrderDisplayPanel()
 	
 	/** Returns the ClientFrame object */
-	public ClientFrame getClientFrame()
+	public synchronized ClientFrame getClientFrame()
 	{
 		return clientFrame;
 	}// getWorld()

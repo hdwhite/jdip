@@ -274,7 +274,7 @@ public class Utils
 	*/
 	public static File appendExtension(File file, String ext)
 	{
-		String name = file.getName().toString();
+		String name = file.getName();
 		if(name.endsWith(ext))
 		{
 			return file;

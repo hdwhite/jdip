@@ -155,10 +155,11 @@ public class TextViewer extends HeaderDialog
 				for(int i=0; i<files.length; i++)
 				{
 					StringBuffer sb = new StringBuffer();
+					BufferedReader br = null;
 					
 					try
 					{
-						BufferedReader br = new BufferedReader(new FileReader(files[i]));
+						br = new BufferedReader(new FileReader(files[i]));
 						String line = br.readLine();
 						while(line != null)
 						{
@@ -170,6 +171,20 @@ public class TextViewer extends HeaderDialog
 					catch(IOException e)
 					{
 						ErrorDialog.displayFileIO(parent, e, files[i].getName());
+					}
+					finally
+					{
+						try
+						{
+							if(br != null)
+							{
+								br.close();
+							}
+						}
+						catch(IOException e)
+						{
+							ErrorDialog.displayFileIO(parent, e, files[i].getName());
+						}
 					}
 					
 					try
