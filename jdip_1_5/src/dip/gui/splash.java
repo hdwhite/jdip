@@ -80,6 +80,7 @@ public final class splash
 		catch(Exception e)
 		{
 			System.err.println(e);
+			e.printStackTrace();
 		}
 		
 		// time = (System.currentTimeMillis() - time);

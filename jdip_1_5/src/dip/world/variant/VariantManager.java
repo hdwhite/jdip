@@ -887,9 +887,16 @@ public class VariantManager
 	/** Get the webstart plugin name */
 	private static String getWSPluginName(URL url)
 	{
-		String s = url.toString();
+		final String s = url.toString();
 		final int idxExclam = s.indexOf('!');
-		return s.substring(s.lastIndexOf("/", idxExclam) + 1, idxExclam);
+		if(idxExclam >= 0)
+		{
+			return s.substring(s.lastIndexOf("/", idxExclam) + 1, idxExclam);
+		}
+		else
+		{
+			return s;
+		}
 	}// getWSPluginName()
 	
 	/** Checks if the fileName ends with an allowed extension; if so, returns true. */
@@ -1045,6 +1052,7 @@ public class VariantManager
 	*	Adds a Variant. If the variant already exists with the same
 	*	name, checks the version. If the same version already exists,
 	*	an exception is thrown. If not, the new version is also added.
+	*	If we are in Web Start, however, no exception is thrown.
 	*	<p>
 	*	All names and aliases are mapped to the MapRec, not the VRec.
 	*	When mapping an alias, if it corresponds to a DIFFERENT
@@ -1081,7 +1089,7 @@ public class VariantManager
 		{
 			// we are mapped. See if this version has been added. 
 			// If not, we'll add it.
-			if(!mapRec.add(vr))
+			if(!mapRec.add(vr) && !vm.isInWebstart)
 			{
 				final VRec vrec2 = (VRec) mapRec.get(v.getVersion());
 				final Variant v2 = vrec2.getVariant();
@@ -1166,7 +1174,7 @@ public class VariantManager
 		else
 		{
 			// we are mapped. See if this version has been added. 
-			if(!mapRec.add(spRec))
+			if(!mapRec.add(spRec) && !vm.isInWebstart)
 			{
 				SPRec spRec2 = (SPRec) mapRec.get(sp.getVersion());
 				final SymbolPack sp2 = spRec2.getSymbolPack();
