@@ -172,7 +172,7 @@
 	
 	<jdipNS:DISPLAY>
 		<jdipNS:ZOOM min="5" max="2200" factor="1.2"/>
-		<jdipNS:LABELS brief="true" full="false"/>
+		<jdipNS:LABELS brief="true" full="true"/>
 	</jdipNS:DISPLAY>
 	
 	<jdipNS:ORDERDRAWING>
@@ -186,27 +186,27 @@
 			<jdipNS:POWERCOLOR power="siberia"    	color="#ffff00"/>
 		</jdipNS:POWERCOLORS>
 		
-		<jdipNS:SYMBOLSIZE name="Fleet" width="40" height="40"/>
-		<jdipNS:SYMBOLSIZE name="Army" width="40" height="40"/>
-		<jdipNS:SYMBOLSIZE name="Wing" width="40" height="40"/>
-		<jdipNS:SYMBOLSIZE name="DislodgedFleet" width="40" height="40"/>
-		<jdipNS:SYMBOLSIZE name="DislodgedArmy" width="40" height="40"/>
-		<jdipNS:SYMBOLSIZE name="DislodgedWing" width="40" height="40"/>
-		<jdipNS:SYMBOLSIZE name="FailedOrder" width="30" height="30"/>
-		<jdipNS:SYMBOLSIZE name="SupplyCenter" width="20" height="20"/>
-		<jdipNS:SYMBOLSIZE name="BuildUnit" width="60" height="60"/>
-		<jdipNS:SYMBOLSIZE name="RemoveUnit" width="50" height="50"/>
-		<jdipNS:SYMBOLSIZE name="WaivedBuild" width="40" height="40"/>
+		<jdipNS:SYMBOLSIZE name="Fleet" width="20" height="20"/>
+		<jdipNS:SYMBOLSIZE name="Army" width="20" height="20"/>
+		<jdipNS:SYMBOLSIZE name="Wing" width="20" height="20"/>
+		<jdipNS:SYMBOLSIZE name="DislodgedFleet" width="20" height="20"/>
+		<jdipNS:SYMBOLSIZE name="DislodgedArmy" width="20" height="20"/>
+		<jdipNS:SYMBOLSIZE name="DislodgedWing" width="20" height="20"/>
+		<jdipNS:SYMBOLSIZE name="FailedOrder" width="25" height="25"/>
+		<jdipNS:SYMBOLSIZE name="SupplyCenter" width="12" height="12"/>
+		<jdipNS:SYMBOLSIZE name="BuildUnit" width="30" height="30"/>
+		<jdipNS:SYMBOLSIZE name="RemoveUnit" width="30" height="30"/>
+		<jdipNS:SYMBOLSIZE name="WaivedBuild" width="30" height="30"/>
 		
 		<jdipNS:BUILD deltaRadius="0"/>
 		<jdipNS:REMOVE deltaRadius="5"/>
 		<jdipNS:DISBAND deltaRadius="5"/>
 		<jdipNS:WAIVE deltaRadius="0"/>
-		<jdipNS:HOLD deltaRadius="5" strokeCSSStyle="varwidthorder" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="6,9,12,18" shadowWidths="10,15,20,25"/>
-		<jdipNS:MOVE deltaRadius="5" strokeCSSStyle="varwidthorder" markerID="arrow" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="6,9,12,18" shadowWidths="10,15,20,25"/>
+		<jdipNS:HOLD deltaRadius="8" strokeCSSStyle="varwidthorder" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="2,4,6,8" shadowWidths="4,6,8,10"/>
+		<jdipNS:MOVE deltaRadius="5" strokeCSSStyle="varwidthorder" markerID="arrow" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="2,4,6,8" shadowWidths="4,6,8,10"/>
 		<jdipNS:RETREAT deltaRadius="5" strokeCSSStyle="defaultorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadoworder"/>
-		<jdipNS:SUPPORT deltaRadius="10" strokeCSSStyle="supportorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadowdash"/>
-		<jdipNS:CONVOY deltaRadius="10" strokeCSSStyle="convoyorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadowdash"/>
+		<jdipNS:SUPPORT deltaRadius="8" strokeCSSStyle="supportorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadowdash"/>
+		<jdipNS:CONVOY deltaRadius="8" strokeCSSStyle="convoyorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadowdash"/>
 	</jdipNS:ORDERDRAWING>
 	
 	<jdipNS:PROVINCE_DATA dislodgedUnitOffset="7,-7">
@@ -306,11 +306,14 @@
 		<style type="text/css"><![CDATA[
 		
 		/* text */
-		.labeltext	{font: 8px black Arial;text-anchor:middle;}
+		.labeltextShort	{font: 8px black Arial;text-anchor:middle;}
+		.labeltextLong	{font: 6px black Arial;text-anchor:middle;}
+		.coastText		{font: 6px black Arial;font-weight:bold;text-anchor:middle;}
 		
 		/* decoration classes */
-		.heavy		{fill:none;stroke:black;stroke-width:2;}
-		
+		.border		{fill:none;stroke:black;stroke-width:2;}
+		.tooltip	{fill:#FEEFB8; stroke:black; stroke-width:1;}
+
 		/* invisible click rects fill:none does not work */
 		.invisible	{stroke:#000000;fill:#000000;fill-opacity:0.0;opacity:0.0}
 		
@@ -352,19 +355,19 @@
 		
 		/* order drawing styles, stroke and fill colors should not be specified */
 		
-		.defaultorder	{stroke-width:6;fill:none;}
-		.supportorder	{stroke-width:6;fill:none;stroke-dasharray:5,5;}
-		.convoyorder	{stroke-dasharray:15,5;stroke-width:6;fill:none;}
+		.defaultorder	{stroke-width:3;fill:none;}
+		.supportorder	{stroke-width:3;fill:none;stroke-dasharray:5,5;}
+		.convoyorder	{stroke-dasharray:15,5;stroke-width:3;fill:none;}
 		
-		.shadoworder	{stroke-width:10;fill:none;stroke:black;}
-		.shadowdash		{stroke-width:10;fill:none;stroke:black;opacity:0.45;}
+		.shadoworder	{stroke-width:3;fill:none;stroke:black;}
+		.shadowdash		{stroke-width:3;fill:none;stroke:black;opacity:0.45;}
 		
 		.varwidthorder  {fill:none;}
 		.varwidthshadow {fill:none;stroke:black;}
 		
 		]]></style>
 	
-		<marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="strokeWidth" markerWidth="4" markerHeight="3" orient="auto">
+		<marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="strokeWidth" markerWidth="6" markerHeight="4" orient="auto">
 			<path d="M 0 0 L 10 5 L 0 10 z"/>
 		</marker>
 	</defs>
@@ -455,28 +458,43 @@
 	</g>
 	<g>
 		<!-- decorations -->
-		<path class="nopower" d="M 0,0 L 0 142 L 11 102 L 11 98 L 9 86 L 11 68 L 18 55 L 21 40 L 24 32 L 33 29 L 39 27 L 41 26 L 44 19 L 46 10 L 39 0 L 0 0 "/>
-		<path class="nopower" d="M 0,215 L 0 475 L 64 475 L 102 405 L 102 296 L 32 296 L 19 203 L 7 205 L 7 214 L 0 215 "/>
+		<path class="neutral" d="M 0,0 L 0 142 L 11 102 L 11 98 L 9 86 L 11 68 L 18 55 L 21 40 L 24 32 L 33 29 L 39 27 L 41 26 L 44 19 L 46 10 L 39 0 L 0 0 "/>
+		<path class="neutral" d="M 0,215 L 0 475 L 64 475 L 102 405 L 102 296 L 32 296 L 19 203 L 7 205 L 7 214 L 0 215 "/>
 		<path class="water" d="M 42,147 L 50 156 L 53 152 L 60 153 L 67 150 L 68 148 L 65 147 L 64 149 L 58 148 L 51 150 L 42 147 "/>
 		<path class="water" d="M 76,210 L 82 220 L 85 219 L 79 209 L 76 210 "/>
 		<path class="water" d="M 110,142 L 125 150 L 141 153 L 153 162 L 154 159 L 142 150 L 126 147 L 111 139 L 110 142 "/>
 		<path class="neutral" d="M 286,201 L 305 221 L 315 227 L 332 233 L 335 233 L 343 235 L 351 226 L 360 229 L 366 228 L 371 236 L 377 236 L 384 240 L 385 227 L 379 222 L 368 217 L 351 215 L 341 215 L 335 216 L 322 208 L 306 205 L 296 200 L 286 201 "/>
-		<path class="heavy" d="M 0,142 L 20 177 L 32 168 L 42 147 L 51 150 L 58 148 L 64 149 L 65 147 L 64 145 L 64 137 L 67 130 L 80 121 L 95 122 L 102 128 L 108 137 L 111 139 L 126 147 L 142 150 L 154 159 L 155 154 L 153 147 L 146 140 L 142 136 L 140 128 L 150 118 L 152 117 L 159 117 L 167 120 L 165 126 L 161 127 L 157 132 L 164 140 L 165 145 L 167 145 L 173 151 L 170 158 L 172 162 L 173 169 L 155 170 L 150 170 L 153 162 L 141 153 L 125 150 L 110 142 L 106 145 L 78 143 L 73 149 L 68 148 L 67 150 L 60 153 L 53 152 L 50 156 L 57 177 L 97 177 L 88 207 L 79 209 L 85 219 L 86 219 L 94 225 L 98 221 L 115 254 L 133 278 L 135 285 L 139 301 L 159 301 L 171 294 L 182 285 L 210 256 L 196 247 L 193 239 L 183 246 L 173 245 L 170 236 L 151 217 L 153 210 L 174 215 L 184 225 L 201 227 L 213 242 L 226 241 L 252 240 L 262 260 L 272 260 L 275 286 L 300 335 L 309 335 L 315 325 L 318 311 L 318 300 L 329 288 L 335 276 L 346 267 L 352 260 L 358 260 L 360 253 L 367 258 L 370 255 L 370 264 L 373 272 L 380 277 L 383 283 L 381 290 L 383 294 L 388 289 L 389 293 L 392 293 L 393 291 L 405 304 L 406 322 L 413 332 L 419 348 L 425 355 L 431 361 L 436 362 L 436 341 L 428 338 L 422 333 L 418 327 L 415 318 L 415 311 L 417 305 L 423 302 L 426 302 L 434 307 L 437 314 L 441 319 L 446 315 L 452 309 L 461 301 L 461 289 L 459 284 L 457 279 L 455 282 L 444 270 L 439 263 L 439 257 L 443 250 L 445 249 L 457 253 L 460 249 L 467 241 L 474 241 L 476 240 L 483 230 L 489 221 L 490 214 L 490 211 L 489 207 L 490 200 L 489 196 L 488 193 L 486 191 L 482 188 L 480 186 L 475 183 L 472 177 L 472 175 L 475 170 L 477 169 L 478 166 L 477 164 L 474 164 L 468 166 L 467 169 L 463 166 L 457 159 L 457 155 L 459 149 L 464 145 L 467 143 L 467 146 L 473 151 L 478 149 L 481 147 L 485 151 L 487 156 L 489 160 L 495 161 L 500 166 L 501 170 L 497 174 L 499 178 L 504 178 L 511 176 L 513 173 L 511 165 L 507 158 L 503 152 L 498 151 L 498 147 L 500 143 L 500 138 L 503 131 L 509 131 L 510 128 L 514 124 L 517 118 L 519 109 L 521 103 L 516 94 L 513 89 L 509 88 L 509 82 L 507 79 L 500 72 L 493 61 L 484 60 L 474 63 L 468 60 L 480 43 L 486 41 L 493 35 L 508 33 L 514 34 L 520 37 L 525 43 L 525 51 L 524 58 L 524 64 L 527 70 L 531 74 L 534 70 L 534 61 L 534 52 L 532 43 L 531 33 L 535 27 L 527 18 L 522 14 L 518 13 L 506 11 L 499 11 L 483 12 L 455 14 L 416 21 L 352 18 L 336 23 L 320 29 L 230 38 L 215 39 L 179 41 L 172 33 L 171 23 L 163 32 L 144 42 L 134 49 L 110 37 L 71 32 L 66 29 L 64 19 L 71 25 L 70 18 L 67 9 L 52 9 L 46 10 L 44 19 L 41 26 L 39 27 L 33 29 L 24 32 L 21 40 L 18 55 L 11 68 L 9 86 L 11 98 L 11 102 L 0 142 "/>
-		<path class="heavy" d="M 0,215 L 7 214 L 7 205 L 19 203 L 49 203 L 59 213 L 76 210 L 82 220 L 81 223 L 102 275 L 132 315 L 171 315 L 154 357 L 139 369 L 102 405 L 64 475 "/>
-		<path class="heavy" d="M 19,203 L 32 296 L 102 296 L 102 405 "/>
-		<path class="heavy" d="M 39,0 L 46 10 "/>
-		<path class="heavy" d="M 124,475 L 145 450 L 164 441 L 165 475 "/>
-		<path class="heavy" d="M 286,201 L 296 200 L 306 205 L 322 208 L 335 216 L 341 215 L 351 215 L 368 217 L 379 222 L 385 227 L 384 240 L 377 236 L 371 236 L 366 228 L 360 229 L 351 226 L 343 235 L 335 233 L 332 233 L 315 227 L 305 221 L 286 201 "/>
-		<path class="heavy" d="M 324,339 L 330 334 L 335 340 L 344 347 L 337 359 L 326 361 L 326 351 L 324 339 "/>
-		<path class="heavy" d="M 388,335 L 388 346 L 390 348 L 395 351 L 397 356 L 401 359 L 403 366 L 413 378 L 413 384 L 414 390 L 424 396 L 431 403 L 435 404 L 439 401 L 440 388 L 431 376 L 410 353 L 408 350 L 400 344 L 395 343 L 392 343 L 388 335 "/>
-		<path class="heavy" d="M 430,412 L 439 413 L 441 414 L 443 413 L 452 411 L 462 415 L 476 415 L 484 415 L 493 413 L 487 405 L 479 408 L 473 401 L 467 401 L 457 400 L 453 403 L 445 406 L 440 408 L 430 412 "/>
-		<path class="heavy" d="M 453,358 L 458 359 L 461 361 L 464 362 L 467 354 L 473 348 L 483 337 L 483 334 L 492 325 L 494 325 L 494 327 L 497 331 L 504 330 L 501 333 L 499 337 L 497 339 L 495 343 L 495 346 L 498 346 L 499 351 L 507 358 L 503 364 L 499 362 L 498 367 L 496 369 L 493 376 L 498 381 L 487 392 L 480 383 L 476 387 L 472 382 L 459 381 L 461 376 L 456 372 L 453 358 "/>
-		<path class="heavy" d="M 486,475 L 492 467 L 517 463 L 529 459 L 533 452 L 537 447 L 540 445 L 547 441 L 553 447 L 557 442 L 581 441 L 581 448 L 595 453 "/>
-		<path class="heavy" d="M 502,261 L 505 257 L 510 250 L 514 251 L 518 251 L 519 256 L 522 261 L 518 265 L 514 269 L 518 274 L 522 278 L 526 283 L 527 285 L 528 290 L 531 296 L 538 307 L 541 310 L 542 315 L 543 320 L 543 325 L 539 328 L 535 331 L 532 325 L 528 319 L 523 323 L 520 324 L 520 321 L 521 319 L 523 315 L 525 313 L 528 310 L 522 303 L 516 295 L 507 286 L 510 286 L 515 282 L 515 280 L 511 276 L 505 277 L 504 275 L 504 268 L 502 265 L 502 261 "/>
-		<path class="heavy" d="M 524,187 L 526 190 L 529 191 L 532 186 L 537 181 L 542 179 L 548 182 L 552 177 L 555 174 L 560 173 L 564 169 L 563 162 L 565 156 L 563 152 L 563 147 L 560 142 L 556 141 L 549 138 L 544 148 L 551 152 L 548 158 L 541 160 L 540 168 L 531 172 L 529 178 L 527 183 L 524 187 "/>
-		<path class="heavy" d="M 534,130 L 537 130 L 538 135 L 542 137 L 543 132 L 546 129 L 551 131 L 556 130 L 561 125 L 558 119 L 556 113 L 554 112 L 547 113 L 536 107 L 539 112 L 542 116 L 540 120 L 535 125 L 534 130 "/>
-		<path class="heavy" d="M 534,377 L 548 376 L 553 387 L 562 388 L 570 384 L 578 388 L 579 385 L 585 391 L 595 392"/>
-		<path class="heavy" d="M 534,377 L 540 385 L 547 387 L 543 391 L 544 397 L 547 402 L 551 397 L 556 402 L 568 407 L 575 409 L 582 417 L 584 426 L 595 427"/>
+		<path class="border" d="M 0,142 L 20 177 L 32 168 L 42 147 L 51 150 L 58 148 L 64 149 L 65 147 L 64 145 L 64 137 L 67 130 L 80 121 L 95 122 L 102 128 L 108 137 L 111 139 L 126 147 L 142 150 L 154 159 L 155 154 L 153 147 L 146 140 L 142 136 L 140 128 L 150 118 L 152 117 L 159 117 L 167 120 L 165 126 L 161 127 L 157 132 L 164 140 L 165 145 L 167 145 L 173 151 L 170 158 L 172 162 L 173 169 L 155 170 L 150 170 L 153 162 L 141 153 L 125 150 L 110 142 L 106 145 L 78 143 L 73 149 L 68 148 L 67 150 L 60 153 L 53 152 L 50 156 L 57 177 L 97 177 L 88 207 L 79 209 L 85 219 L 86 219 L 94 225 L 98 221 L 115 254 L 133 278 L 135 285 L 139 301 L 159 301 L 171 294 L 182 285 L 210 256 L 196 247 L 193 239 L 183 246 L 173 245 L 170 236 L 151 217 L 153 210 L 174 215 L 184 225 L 201 227 L 213 242 L 226 241 L 252 240 L 262 260 L 272 260 L 275 286 L 300 335 L 309 335 L 315 325 L 318 311 L 318 300 L 329 288 L 335 276 L 346 267 L 352 260 L 358 260 L 360 253 L 367 258 L 370 255 L 370 264 L 373 272 L 380 277 L 383 283 L 381 290 L 383 294 L 388 289 L 389 293 L 392 293 L 393 291 L 405 304 L 406 322 L 413 332 L 419 348 L 425 355 L 431 361 L 436 362 L 436 341 L 428 338 L 422 333 L 418 327 L 415 318 L 415 311 L 417 305 L 423 302 L 426 302 L 434 307 L 437 314 L 441 319 L 446 315 L 452 309 L 461 301 L 461 289 L 459 284 L 457 279 L 455 282 L 444 270 L 439 263 L 439 257 L 443 250 L 445 249 L 457 253 L 460 249 L 467 241 L 474 241 L 476 240 L 483 230 L 489 221 L 490 214 L 490 211 L 489 207 L 490 200 L 489 196 L 488 193 L 486 191 L 482 188 L 480 186 L 475 183 L 472 177 L 472 175 L 475 170 L 477 169 L 478 166 L 477 164 L 474 164 L 468 166 L 467 169 L 463 166 L 457 159 L 457 155 L 459 149 L 464 145 L 467 143 L 467 146 L 473 151 L 478 149 L 481 147 L 485 151 L 487 156 L 489 160 L 495 161 L 500 166 L 501 170 L 497 174 L 499 178 L 504 178 L 511 176 L 513 173 L 511 165 L 507 158 L 503 152 L 498 151 L 498 147 L 500 143 L 500 138 L 503 131 L 509 131 L 510 128 L 514 124 L 517 118 L 519 109 L 521 103 L 516 94 L 513 89 L 509 88 L 509 82 L 507 79 L 500 72 L 493 61 L 484 60 L 474 63 L 468 60 L 480 43 L 486 41 L 493 35 L 508 33 L 514 34 L 520 37 L 525 43 L 525 51 L 524 58 L 524 64 L 527 70 L 531 74 L 534 70 L 534 61 L 534 52 L 532 43 L 531 33 L 535 27 L 527 18 L 522 14 L 518 13 L 506 11 L 499 11 L 483 12 L 455 14 L 416 21 L 352 18 L 336 23 L 320 29 L 230 38 L 215 39 L 179 41 L 172 33 L 171 23 L 163 32 L 144 42 L 134 49 L 110 37 L 71 32 L 66 29 L 64 19 L 71 25 L 70 18 L 67 9 L 52 9 L 46 10 L 44 19 L 41 26 L 39 27 L 33 29 L 24 32 L 21 40 L 18 55 L 11 68 L 9 86 L 11 98 L 11 102 L 0 142 "/>
+		<path class="border" d="M 0,215 L 7 214 L 7 205 L 19 203 L 49 203 L 59 213 L 76 210 L 82 220 L 81 223 L 102 275 L 132 315 L 171 315 L 154 357 L 139 369 L 102 405 L 64 475 "/>
+		<path class="border" d="M 19,203 L 32 296 L 102 296 L 102 405 "/>
+		<path class="border" d="M 39,0 L 46 10 "/>
+		<path class="border" d="M 124,475 L 145 450 L 164 441 L 165 475 "/>
+		<path class="border" d="M 286,201 L 296 200 L 306 205 L 322 208 L 335 216 L 341 215 L 351 215 L 368 217 L 379 222 L 385 227 L 384 240 L 377 236 L 371 236 L 366 228 L 360 229 L 351 226 L 343 235 L 335 233 L 332 233 L 315 227 L 305 221 L 286 201 "/>
+		<path class="border" d="M 324,339 L 330 334 L 335 340 L 344 347 L 337 359 L 326 361 L 326 351 L 324 339 "/>
+		<path class="border" d="M 388,335 L 388 346 L 390 348 L 395 351 L 397 356 L 401 359 L 403 366 L 413 378 L 413 384 L 414 390 L 424 396 L 431 403 L 435 404 L 439 401 L 440 388 L 431 376 L 410 353 L 408 350 L 400 344 L 395 343 L 392 343 L 388 335 "/>
+		<path class="border" d="M 430,412 L 439 413 L 441 414 L 443 413 L 452 411 L 462 415 L 476 415 L 484 415 L 493 413 L 487 405 L 479 408 L 473 401 L 467 401 L 457 400 L 453 403 L 445 406 L 440 408 L 430 412 "/>
+		<path class="border" d="M 453,358 L 458 359 L 461 361 L 464 362 L 467 354 L 473 348 L 483 337 L 483 334 L 492 325 L 494 325 L 494 327 L 497 331 L 504 330 L 501 333 L 499 337 L 497 339 L 495 343 L 495 346 L 498 346 L 499 351 L 507 358 L 503 364 L 499 362 L 498 367 L 496 369 L 493 376 L 498 381 L 487 392 L 480 383 L 476 387 L 472 382 L 459 381 L 461 376 L 456 372 L 453 358 "/>
+		<path class="border" d="M 486,475 L 492 467 L 517 463 L 529 459 L 533 452 L 537 447 L 540 445 L 547 441 L 553 447 L 557 442 L 581 441 L 581 448 L 595 453 "/>
+		<path class="border" d="M 502,261 L 505 257 L 510 250 L 514 251 L 518 251 L 519 256 L 522 261 L 518 265 L 514 269 L 518 274 L 522 278 L 526 283 L 527 285 L 528 290 L 531 296 L 538 307 L 541 310 L 542 315 L 543 320 L 543 325 L 539 328 L 535 331 L 532 325 L 528 319 L 523 323 L 520 324 L 520 321 L 521 319 L 523 315 L 525 313 L 528 310 L 522 303 L 516 295 L 507 286 L 510 286 L 515 282 L 515 280 L 511 276 L 505 277 L 504 275 L 504 268 L 502 265 L 502 261 "/>
+		<path class="border" d="M 524,187 L 526 190 L 529 191 L 532 186 L 537 181 L 542 179 L 548 182 L 552 177 L 555 174 L 560 173 L 564 169 L 563 162 L 565 156 L 563 152 L 563 147 L 560 142 L 556 141 L 549 138 L 544 148 L 551 152 L 548 158 L 541 160 L 540 168 L 531 172 L 529 178 L 527 183 L 524 187 "/>
+		<path class="border" d="M 534,130 L 537 130 L 538 135 L 542 137 L 543 132 L 546 129 L 551 131 L 556 130 L 561 125 L 558 119 L 556 113 L 554 112 L 547 113 L 536 107 L 539 112 L 542 116 L 540 120 L 535 125 L 534 130 "/>
+		<path class="border" d="M 534,377 L 548 376 L 553 387 L 562 388 L 570 384 L 578 388 L 579 385 L 585 391 L 595 392"/>
+		<path class="border" d="M 534,377 L 540 385 L 547 387 L 543 391 L 544 397 L 547 402 L 551 397 L 556 402 L 568 407 L 575 409 L 582 417 L 584 426 L 595 427"/>
+		<rect class="border" x="1" y="1" width="593" height="473"/>
+		<g class="coastText">
+			<!-- ara -->
+			<text x="155" y="238">ec</text>
+			<text x="128" y="255">wc</text>
+			<!-- bal -->
+			<text x="64" y="126">ec</text>
+			<text x="25" y="165">sc</text>
+			<!-- irn -->
+			<text x="163" y="183">nc</text>
+			<text x="194" y="220">sc</text>
+			<!-- sev -->
+			<text x="134" y="126">ec</text>
+			<text x="88" y="118">wc</text>
+		</g>
 	</g>
 	
 	<!-- drawing layer: supply centers -->
@@ -495,93 +513,368 @@
 	<g id="HighestOrderLayer"/>
 	
 	<!-- abbreviated province names -->
-	<g id="BriefLabelLayer" class="labeltext" visibility="hidden">
-		<text x="" y="">Afg</text>
-		<text x="" y="">Ara</text>
-		<text x="" y="">ARS</text>
-		<text x="" y="">ARC</text>
-		<text x="" y="">Aus</text>
-		<text x="" y="">Bal</text>
-		<text x="" y="">Ban</text>
-		<text x="" y="">BAR</text>
-		<text x="" y="">BOB</text>
-		<text x="" y="">Bjg</text>
-		<text x="" y="">BER</text>
-		<text x="" y="">BLA</text>
-		<text x="" y="">Bom</text>
-		<text x="" y="">Bor</text>
-		<text x="" y="">Bur</text>
-		<text x="" y="">Cal</text>
-		<text x="" y="">Cam</text>
-		<text x="" y="">CAS</text>
-		<text x="" y="">Cau</text>
-		<text x="" y="">CEL</text>
-		<text x="" y="">CIO</text>
-		<text x="" y="">Chq</text>
-		<text x="" y="">CHU</text>
-		<text x="" y="">Del</text>
-		<text x="" y="">EAf</text>
-		<text x="" y="">ECS</text>
-		<text x="" y="">ESb</text>
-		<text x="" y="">EAS</text>
-		<text x="" y="">EIO</text>
-		<text x="" y="">EME</text>
-		<text x="" y="">Egy</text>
-		<text x="" y="">Eka</text>
-		<text x="" y="">Hok</text>
-		<text x="" y="">HKg</text>
-		<text x="" y="">Hon</text>
-		<text x="" y="">Irn</text>
-		<text x="" y="">Irq</text>
-		<text x="" y="">Irk</text>
-		<text x="" y="">Jav</text>
-		<text x="" y="">JVS</text>
-		<text x="" y="">Kam</text>
-		<text x="" y="">Kaz</text>
-		<text x="" y="">Kor</text>
-		<text x="" y="">Kun</text>
-		<text x="" y="">Lao</text>
-		<text x="" y="">Liv</text>
-		<text x="" y="">Mad</text>
-		<text x="" y="">Man</text>
-		<text x="" y="">Mon</text>
-		<text x="" y="">Mos</text>
-		<text x="" y="">New</text>
-		<text x="" y="">Nov</text>
-		<text x="" y="">Oma</text>
-		<text x="" y="">Pak</text>
-		<text x="" y="">PER</text>
-		<text x="" y="">Phi</text>
-		<text x="" y="">RED</text>
-		<text x="" y="">OKH</text>
-		<text x="" y="">Sev</text>
-		<text x="" y="">SEY</text>
-		<text x="" y="">Sha</text>
-		<text x="" y="">SCS</text>
-		<text x="" y="">SIO</text>
-		<text x="" y="">Sri</text>
-		<text x="" y="">StP</text>
-		<text x="" y="">Sum</text>
-		<text x="" y="">Syr</text>
-		<text x="" y="">THS</text>
-		<text x="" y="">Tha</text>
-		<text x="" y="">Tib</text>
-		<text x="" y="">Tia</text>
-		<text x="" y="">Tur</text>
-		<text x="" y="">Ukr</text>
-		<text x="" y="">Ura</text>
-		<text x="" y="">Uzb</text>
-		<text x="" y="">Vie</text>
-		<text x="" y="">Vla</text>
-		<text x="" y="">War</text>
-		<text x="" y="">WSb</text>
-		<text x="" y="">Yak</text>
-		<text x="" y="">YEL</text>
-		<text x="" y="">Yem</text>
+	<g id="BriefLabelLayer" class="labeltextShort" transform="translate(0,10)" visibility="hidden">
+		<g class="tooltip" transform="translate(-15,-13)">
+			<rect x="240" y="186" width="30" height="16" rx="4" ry="4"/>
+			<rect x="144" y="246" width="30" height="16" rx="4" ry="4"/>
+			<rect x="144" y="246" width="30" height="16" rx="4" ry="4"/>
+			<rect x="228" y="321" width="30" height="16" rx="4" ry="4"/>
+			<rect x="251" y="9" width="30" height="16" rx="4" ry="4"/>
+			<rect x="562" y="452" width="30" height="16" rx="4" ry="4"/>
+			<rect x="30" y="125" width="30" height="16" rx="4" ry="4"/>
+			<rect x="357" y="238" width="30" height="16" rx="4" ry="4"/>
+			<rect x="104" y="14" width="30" height="16" rx="4" ry="4"/>
+			<rect x="364" y="309" width="30" height="16" rx="4" ry="4"/>
+			<rect x="418" y="149" width="30" height="16" rx="4" ry="4"/>
+			<rect x="564" y="51" width="30" height="16" rx="4" ry="4"/>
+			<rect x="84" y="130" width="30" height="16" rx="4" ry="4"/>
+			<rect x="295" y="286" width="30" height="16" rx="4" ry="4"/>
+			<rect x="480" y="356" width="30" height="16" rx="4" ry="4"/>
+			<rect x="378" y="259" width="30" height="16" rx="4" ry="4"/>
+			<rect x="326" y="259" width="30" height="16" rx="4" ry="4"/>
+			<rect x="439" y="295" width="30" height="16" rx="4" ry="4"/>
+			<rect x="154" y="125" width="30" height="16" rx="4" ry="4"/>
+			<rect x="136" y="160" width="30" height="16" rx="4" ry="4"/>
+			<rect x="554" y="346" width="30" height="16" rx="4" ry="4"/>
+			<rect x="309" y="392" width="30" height="16" rx="4" ry="4"/>
+			<rect x="407" y="220" width="30" height="16" rx="4" ry="4"/>
+			<rect x="550" y="10" width="30" height="16" rx="4" ry="4"/>
+			<rect x="294" y="227" width="30" height="16" rx="4" ry="4"/>
+			<rect x="135" y="338" width="30" height="16" rx="4" ry="4"/>
+			<rect x="557" y="257" width="30" height="16" rx="4" ry="4"/>
+			<rect x="372" y="29" width="30" height="16" rx="4" ry="4"/> 
+			<rect x="124" y="424" width="30" height="16" rx="4" ry="4"/>
+			<rect x="434" y="428" width="30" height="16" rx="4" ry="4"/>
+			<rect x="44" y="178" width="30" height="16" rx="4" ry="4"/>
+			<rect x="61" y="249" width="30" height="16" rx="4" ry="4"/>
+			<rect x="216" y="92" width="30" height="16" rx="4" ry="4"/>
+			<rect x="549" y="120" width="30" height="16" rx="4" ry="4"/>
+			<rect x="424" y="239" width="30" height="16" rx="4" ry="4"/>
+			<rect x="555" y="160" width="30" height="16" rx="4" ry="4"/>
+			<rect x="188" y="194" width="30" height="16" rx="4" ry="4"/>
+			<rect x="130" y="189" width="30" height="16" rx="4" ry="4"/>
+			<rect x="396" y="56" width="30" height="16" rx="4" ry="4"/> 
+			<rect x="466" y="406" width="30" height="16" rx="4" ry="4"/>
+			<rect x="537" y="409" width="30" height="16" rx="4" ry="4"/>
+			<rect x="480" y="25" width="30" height="16" rx="4" ry="4"/> 
+			<rect x="185" y="116" width="30" height="16" rx="4" ry="4"/>
+			<rect x="490" y="146" width="30" height="16" rx="4" ry="4"/>
+			<rect x="318" y="171" width="30" height="16" rx="4" ry="4"/>
+			<rect x="400" y="258" width="30" height="16" rx="4" ry="4"/>
+			<rect x="47" y="42" width="30" height="16" rx="4" ry="4"/>
+			<rect x="151" y="459" width="30" height="16" rx="4" ry="4"/>
+			<rect x="459" y="109" width="30" height="16" rx="4" ry="4"/>
+			<rect x="359" y="119" width="30" height="16" rx="4" ry="4"/>
+			<rect x="112" y="67" width="30" height="16" rx="4" ry="4"/>
+			<rect x="580" y="396" width="30" height="16" rx="4" ry="4"/>
+			<rect x="328" y="80" width="30" height="16" rx="4" ry="4"/>
+			<rect x="189" y="255" width="30" height="16" rx="4" ry="4"/>
+			<rect x="252" y="214" width="30" height="16" rx="4" ry="4"/>
+			<rect x="182" y="231" width="30" height="16" rx="4" ry="4"/>
+			<rect x="520" y="287" width="30" height="16" rx="4" ry="4"/>
+			<rect x="113" y="265" width="30" height="16" rx="4" ry="4"/>
+			<rect x="533" y="90" width="30" height="16" rx="4" ry="4"/>
+			<rect x="114" y="111" width="30" height="16" rx="4" ry="4"/>
+			<rect x="208" y="423" width="30" height="16" rx="4" ry="4"/>
+			<rect x="463" y="207" width="30" height="16" rx="4" ry="4"/>
+			<rect x="480" y="269" width="30" height="16" rx="4" ry="4"/>
+			<rect x="331" y="445" width="30" height="16" rx="4" ry="4"/>
+			<rect x="334" y="348" width="30" height="16" rx="4" ry="4"/>
+			<rect x="145" y="51" width="30" height="16" rx="4" ry="4"/>
+			<rect x="414" y="367" width="30" height="16" rx="4" ry="4"/>
+			<rect x="105" y="193" width="30" height="16" rx="4" ry="4"/>
+			<rect x="454" y="328" width="30" height="16" rx="4" ry="4"/>
+			<rect x="411" y="298" width="30" height="16" rx="4" ry="4"/>
+			<rect x="363" y="189" width="30" height="16" rx="4" ry="4"/>
+			<rect x="284" y="159" width="30" height="16" rx="4" ry="4"/>
+			<rect x="95" y="155" width="30" height="16" rx="4" ry="4"/>
+			<rect x="60" y="85" width="30" height="16" rx="4" ry="4"/>
+			<rect x="194" y="57" width="30" height="16" rx="4" ry="4"/>
+			<rect x="217" y="155" width="30" height="16" rx="4" ry="4"/>
+			<rect x="430" y="265" width="30" height="16" rx="4" ry="4"/>
+			<rect x="509" y="97" width="30" height="16" rx="4" ry="4"/>
+			<rect x="29" y="75" width="30" height="16" rx="4" ry="4"/>
+			<rect x="263" y="48" width="30" height="16" rx="4" ry="4"/>
+			<rect x="455" y="54" width="30" height="16" rx="4" ry="4"/>
+			<rect x="513" y="194" width="30" height="16" rx="4" ry="4"/>
+			<rect x="162" y="286" width="30" height="16" rx="4" ry="4"/> 
+		</g>
+		
+		<text x="240" y="186">Afg</text>
+		<text x="144" y="246">Ara</text>
+		<text x="228" y="321">ARS</text>
+		<text x="251" y="9">ARC</text>
+		<text x="562" y="452">Aus</text>
+		<text x="30" y="125">Bal</text>
+		<text x="357" y="238">Ban</text>
+		<text x="104" y="14">BAR</text>
+		<text x="364" y="309">BOB</text>
+		<text x="418" y="149">Bjg</text>
+		<text x="564" y="51">BER</text>
+		<text x="84" y="130">BLA</text>
+		<text x="295" y="286">Bom</text>
+		<text x="480" y="356">Bor</text>
+		<text x="378" y="259">Bur</text>
+		<text x="326" y="259">Cal</text>
+		<text x="439" y="295">Cam</text>
+		<text x="154" y="125">CAS</text>
+		<text x="136" y="160">Cau</text>
+		<text x="554" y="346">CEL</text>
+		<text x="309" y="392">CIO</text>
+		<text x="407" y="220">Chq</text>
+		<text x="550" y="10">CHU</text>
+		<text x="294" y="227">Del</text>
+		<text x="135" y="338">EAf</text>
+		<text x="557" y="257">ECS</text>
+		<text x="372" y="29"> ESb</text>
+		<text x="124" y="424">EAS</text>
+		<text x="434" y="428">EIO</text>
+		<text x="44" y="178">EME</text>
+		<text x="61" y="249">Egy</text>
+		<text x="216" y="92">Eka</text>
+		<text x="549" y="120">Hok</text>
+		<text x="424" y="239">HKg</text>
+		<text x="555" y="160">Hon</text>
+		<text x="188" y="194">Irn</text>
+		<text x="130" y="189">Irq</text>
+		<text x="396" y="56"> Irk</text>
+		<text x="466" y="406">Jav</text>
+		<text x="537" y="409">JVS</text>
+		<text x="480" y="25"> Kam</text>
+		<text x="185" y="116">Kaz</text>
+		<text x="490" y="146">Kor</text>
+		<text x="318" y="171">Kun</text>
+		<text x="400" y="258">Lao</text>
+		<text x="47" y="42">Liv</text>
+		<text x="151" y="459">Mad</text>
+		<text x="459" y="109">Man</text>
+		<text x="359" y="119">Mon</text>
+		<text x="112" y="67">Mos</text>
+		<text x="580" y="396">New</text>
+		<text x="328" y="80">Nov</text>
+		<text x="189" y="255">Oma</text>
+		<text x="252" y="214">Pak</text>
+		<text x="182" y="231">PER</text>
+		<text x="520" y="287">Phi</text>
+		<text x="113" y="265">RED</text>
+		<text x="533" y="90">OKH</text>
+		<text x="114" y="111">Sev</text>
+		<text x="208" y="423">SEY</text>
+		<text x="463" y="207">Sha</text>
+		<text x="480" y="269">SCS</text>
+		<text x="331" y="445">SIO</text>
+		<text x="334" y="348">Sri</text>
+		<text x="145" y="51">StP</text>
+		<text x="414" y="367">Sum</text>
+		<text x="105" y="193">Syr</text>
+		<text x="454" y="328">THS</text>
+		<text x="411" y="298">Tha</text>
+		<text x="363" y="189">Tib</text>
+		<text x="284" y="159">Tia</text>
+		<text x="95" y="155">Tur</text>
+		<text x="60"   y="85">Ukr</text>
+		<text x="194" y="57">Ura</text>
+		<text x="217" y="155">Uzb</text>
+		<text x="430" y="265">Vie</text>
+		<text x="509"  y="97">Vla</text>
+		<text x="29"   y="75">War</text>
+		<text x="263"  y="48">WSb</text>
+		<text x="455"  y="54">Yak</text>
+		<text x="513" y="194">YEL</text>
+		<text x="162" y="286">Yem</text>
 	</g>
 	
 	<!-- full province names -->
-	<g id="FullLabelLayer"/>
+	<g id="FullLabelLayer" class="labeltextLong" transform="translate(0,10)" visibility="hidden">
+		<rect x="240" y="186" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="240" y="186">Afghanistan</text>
+		<rect x="144" y="246" width="50" height="16" rx="4" ry="4" transform="translate(-25,-13)" class="tooltip"/>
+		<text x="144" y="246">Arabia</text>
+		<rect x="228" y="321" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="228" y="321">Arabian Sea</text>
+		<rect x="251" y="9" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="251" y="9">Arctic Sea</text>
+		<rect x="555" y="452" width="60" height="16" rx="4" ry="4" transform="translate(-30,-13)" class="tooltip"/>
+		<text x="555" y="452">Australia</text>
+		<rect x="30" y="125" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="30" y="125">Balkans</text>
+		<rect x="357" y="238" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="357" y="238">Bangladesh</text>
+		<rect x="115" y="14" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="115" y="14">Barents Sea</text>
+		<rect x="364" y="309" width="80" height="16" rx="4" ry="4" transform="translate(-40,-13)" class="tooltip"/>
+		<text x="364" y="309">Bay of Bengal</text>
+		<rect x="418" y="155" width="50" height="16" rx="4" ry="4" transform="translate(-25,-13)" class="tooltip"/>
+		<text x="418" y="155">Beijing</text>
+		<rect x="564" y="51" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="564" y="51">Bering Strait</text>
+		<rect x="84" y="130" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="84" y="130">Black Sea</text>
+		<rect x="295" y="286" width="60" height="16" rx="4" ry="4" transform="translate(-30,-13)" class="tooltip"/>
+		<text x="295" y="286">Bombay</text>
+		<rect x="480" y="356" width="50" height="16" rx="4" ry="4" transform="translate(-25,-13)" class="tooltip"/>
+		<text x="480" y="356">Borneo</text>
+		<rect x="378" y="259" width="45" height="16" rx="4" ry="4" transform="translate(-22,-13)" class="tooltip"/>
+		<text x="378" y="259">Burma</text>
+		<rect x="326" y="259" width="60" height="16" rx="4" ry="4" transform="translate(-30,-13)" class="tooltip"/>
+		<text x="326" y="259">Calcutta</text>
+		<rect x="439" y="295" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="439" y="295">Cambodia</text>
+		<rect x="154" y="125" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="154" y="125">Caspian Sea</text>
+		<rect x="136" y="160" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="136" y="160">Caucasus</text>
+		<rect x="554" y="342" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="554" y="342">Celebes Sea</text>
+		<rect x="309" y="392" width="120" height="16" rx="4" ry="4" transform="translate(-60,-13)" class="tooltip"/>
+		<text x="309" y="392">Central Indian Ocean</text>
+		<rect x="407" y="220" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="407" y="220">Chongqing</text>
+		<rect x="550" y="6" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="550" y="6">Chucki Sea</text>
+		<rect x="294" y="227" width="45" height="16" rx="4" ry="4" transform="translate(-22,-13)" class="tooltip"/>
+		<text x="294" y="227">Delhi</text>
+		<rect x="135" y="338" width="65" height="16" rx="4" ry="4" transform="translate(-33,-13)" class="tooltip"/>
+		<text x="135" y="338">East Africa</text>
+		<g>
+			<rect x="557" y="230" width="50" height="50" rx="4" ry="4" transform="translate(-25,-15)" class="tooltip"/>
+			<text x="557" y="230">Eastern</text>
+			<text x="557" y="245">China</text>
+			<text x="557" y="260">Sea</text>
+		</g>
+		<rect x="372" y="25" width="74" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/> 
+		<text x="372" y="25">East Siberia</text>
+		<g>
+			<rect x="130" y="400" width="45" height="45" rx="4" ry="4" transform="translate(-22,-13)" class="tooltip"/>
+			<text x="130" y="400">East</text>
+			<text x="130" y="415">African</text>
+			<text x="130" y="430">Sea</text>
+		</g>
+		<rect x="445" y="428" width="124" height="16" rx="4" ry="4" transform="translate(-62,-13)" class="tooltip"/>
+		<text x="445" y="428">Eastern Indian Ocean</text>
+		<g>
+			<rect x="44" y="178" width="80" height="32" rx="4" ry="4" transform="translate(-40,-13)" class="tooltip"/>
+			<text x="44" y="178">Eastern</text>
+			<text x="44" y="193">Mediterranean</text>
+		</g>
+		<rect x="61" y="249" width="45" height="16" rx="4" ry="4" transform="translate(-22,-13)" class="tooltip"/>
+		<text x="61" y="249">Egypt</text>
+		<rect x="216" y="92" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="216" y="92">Ekaterinburg</text>
+		<rect x="549" y="120" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="549" y="120">Hokkaido</text>
+		<rect x="424" y="239" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="424" y="239">Hong Kong</text>
+		<rect x="555" y="160" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="555" y="160">Honshu</text>
+		<rect x="188" y="194" width="35" height="16" rx="4" ry="4" transform="translate(-17,-13)" class="tooltip"/>
+		<text x="188" y="194">Iran</text>
+		<rect x="135" y="182" width="40" height="16" rx="4" ry="4" transform="translate(-20,-13)" class="tooltip"/>
+		<text x="135" y="182">Iraq</text>
+		<rect x="396" y="56" width="55" height="16" rx="4" ry="4" transform="translate(-27,-13)" class="tooltip"/> 
+		<text x="396" y="56">Irkutsk</text>
+		<rect x="466" y="406" width="40" height="16" rx="4" ry="4" transform="translate(-20,-13)" class="tooltip"/>
+		<text x="466" y="406">Java</text>
+		<g>
+			<rect x="520" y="390" width="42" height="32" rx="4" ry="4" transform="translate(-21,-13)" class="tooltip"/>
+			<text x="520" y="390">Jawan</text>
+			<text x="520" y="405">Sea</text>
+		</g>
+		<rect x="480" y="16" width="72" height="16" rx="4" ry="4" transform="translate(-36,-13)" class="tooltip"/> 
+		<text x="480" y="16">Kamchatka</text>
+		<rect x="185" y="116" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="185" y="116">Kazakhstan</text>
+		<rect x="490" y="146" width="45" height="16" rx="4" ry="4" transform="translate(-22,-13)" class="tooltip"/>
+		<text x="490" y="146">Korea</text>
+		<rect x="318" y="171" width="50" height="16" rx="4" ry="4" transform="translate(-25,-13)" class="tooltip"/>
+		<text x="318" y="171">Kunlun</text>
+		<rect x="400" y="258" width="40" height="16" rx="4" ry="4" transform="translate(-20,-13)" class="tooltip"/>
+		<text x="400" y="258">Laos</text>
+		<rect x="47" y="42" width="60" height="16" rx="4" ry="4" transform="translate(-30,-13)" class="tooltip"/>
+		<text x="47" y="42">Livonia</text>
+		<rect x="156" y="453" width="72" height="16" rx="4" ry="4" transform="translate(-36,-13)" class="tooltip"/>
+		<text x="156" y="453">Madagascar</text>
+		<rect x="459" y="109" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="459" y="109">Manchuria</text>
+		<rect x="370" y="119" width="55" height="16" rx="4" ry="4" transform="translate(-27,-13)" class="tooltip"/>
+		<text x="370" y="119">Mongolia</text>
+		<rect x="112" y="67" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="112" y="67">Moscow</text>
+		<rect x="565" y="370" width="44" height="32" rx="4" ry="4" transform="translate(-22,-13)" class="tooltip"/>
+		<g>
+			<text x="565" y="370">New</text>
+			<text x="565" y="385">Guinea</text>
+		</g>
+		<rect x="328" y="80" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="328" y="80">Novosibirsk</text>
+		<rect x="189" y="255" width="40" height="16" rx="4" ry="4" transform="translate(-20,-13)" class="tooltip"/>
+		<text x="189" y="255">Oman</text>
+		<rect x="252" y="214" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="252" y="214">Pakistan</text>
+		<rect x="182" y="231" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="182" y="231">Persian Gulf</text>
+		<rect x="535" y="295" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="535" y="295">Philippines</text>
+		<rect x="113" y="265" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="113" y="265">Red Sea</text>
+		<rect x="533" y="75" width="90" height="16" rx="4" ry="4" transform="translate(-45,-13)" class="tooltip"/>
+		<text x="533" y="75">Sea of Okhotsk</text>
+		<rect x="114" y="111" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="114" y="111">Sevastopol</text>
+		<rect x="200" y="423" width="70" height="16" rx="4" ry="4" transform="translate(-35,-13)" class="tooltip"/>
+		<text x="200" y="423">Seychelles</text>
+		<rect x="463" y="207" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="463" y="207">Shanghai</text>
+		<g>
+			<rect x="480" y="255" width="40" height="48" rx="4" ry="4" transform="translate(-20,-13)" class="tooltip"/>
+			<text x="480" y="255">South</text>
+			<text x="480" y="270">China</text>
+			<text x="480" y="285">Sea</text>
+		</g>
+		<rect x="331" y="455" width="123" height="16" rx="4" ry="4" transform="translate(-62,-13)" class="tooltip"/>
+		<text x="331" y="455">South Indian Ocean</text>
+		<rect x="334" y="348" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="334" y="348">Sri Lanka</text>
+		<rect x="145" y="51" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="145" y="51">St Petersburg</text>
+		<rect x="414" y="367" width="55" height="16" rx="4" ry="4" transform="translate(-27,-13)" class="tooltip"/>
+		<text x="414" y="367">Sumatra</text>
+		<rect x="105" y="193" width="45" height="16" rx="4" ry="4" transform="translate(-22,-13)" class="tooltip"/>
+		<text x="105" y="193">Syria</text>
+		<rect x="454" y="328" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="454" y="328">Thai Sea</text>
+		<rect x="411" y="298" width="60" height="16" rx="4" ry="4" transform="translate(-30,-13)" class="tooltip"/>
+		<text x="411" y="298">Thailand</text>
+		<rect x="375" y="189" width="42" height="16" rx="4" ry="4" transform="translate(-21,-13)" class="tooltip"/>
+		<text x="375" y="189">Tibet</text>
+		<rect x="284" y="150" width="60" height="16" rx="4" ry="4" transform="translate(-30,-13)" class="tooltip"/>
+		<text x="284" y="150">Tien Shan</text>
+		<rect x="80" y="155" width="45" height="16" rx="4" ry="4" transform="translate(-22,-13)" class="tooltip"/>
+		<text x="80" y="155">Turkey</text>
+		<rect x="55" y="85" width="50" height="16" rx="4" ry="4" transform="translate(-25,-13)" class="tooltip"/>
+		<text x="55"   y="85">Ukraine</text>
+		<rect x="194" y="57" width="40" height="16" rx="4" ry="4" transform="translate(-20,-13)" class="tooltip"/>
+		<text x="194" y="57">Urals</text>
+		<rect x="217" y="155" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="217" y="155">Uzbekistan</text>
+		<rect x="430" y="265" width="55" height="16" rx="4" ry="4" transform="translate(-27,-13)" class="tooltip"/>
+		<text x="430" y="265">Vietnam</text>
+		<rect x="509" y="97" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="509"  y="97">Vladivostok</text>
+		<rect x="29" y="75" width="55" height="16" rx="4" ry="4" transform="translate(-27,-13)" class="tooltip"/>
+		<text x="29"   y="75">Warsaw</text>
+		<rect x="263" y="48" width="75" height="16" rx="4" ry="4" transform="translate(-37,-13)" class="tooltip"/>
+		<text x="263"  y="48">West Siberia</text>
+		<rect x="455" y="54" width="55" height="16" rx="4" ry="4" transform="translate(-27,-13)" class="tooltip"/>
+		<text x="458"  y="54">Yakutsk</text>
+		<g>
+			<rect x="513" y="180" width="45" height="32" rx="4" ry="4" transform="translate(-23,-13)" class="tooltip"/>
+			<text x="513" y="182">Yellow</text>
+			<text x="513" y="195">Sea</text>
+		</g>
+		<rect x="162" y="286" width="45" height="16" rx="4" ry="4" transform="translate(-22,-13)" class="tooltip"/> 
+		<text x="162" y="286">Yemen</text>
+	</g>
 	
 	<!-- mouse-detect layer. This must be the last layer. -->
 	<g id="MouseLayer" class="invisible">
@@ -667,14 +960,14 @@
 		<path id="yak"  d="M 400,43 L 428 53 L 458 73 L 498 82 L 507 79 L 500 72 L 493 61 L 484 60 L 474 63 L 468 60 L 480 43 L 421 40 L 400 43 "/>
 		<path id="yel"  d="M 457,155 L 457 159 L 463 166 L 467 169 L 468 166 L 474 164 L 477 164 L 478 166 L 477 169 L 475 170 L 472 175 L 472 177 L 475 183 L 480 186 L 482 188 L 486 191 L 488 193 L 489 196 L 490 200 L 489 207 L 490 211 L 490 214 L 489 221 L 546 217 L 548 182 L 542 179 L 537 181 L 532 186 L 529 191 L 526 190 L 524 187 L 527 183 L 529 178 L 513 173 L 511 176 L 504 178 L 499 178 L 497 174 L 501 170 L 500 166 L 495 161 L 489 160 L 487 156 L 485 151 L 481 147 L 478 149 L 473 151 L 467 146 L 467 143 L 464 145 L 459 149 L 457 155 "/>
 		<path id="yem"  d="M 135,285 L 139 301 L 159 301 L 171 294 L 182 285 L 182 276 L 173 276 L 135 285 "/>
-		<!-- COASTS :: note that these are NOT YET FUNCTIONAL -->
-		<path id="ara-ec" d="M 0,0 L 10,10 z"/>
-		<path id="ara-wc" d="M 0,0 L 10,10 z"/>
-		<path id="bal-ec" d="M 0,0 L 10,10 z"/>
-		<path id="bal-sc" d="M 0,0 L 10,10 z"/>
-		<path id="irn-nc" d="M 0,0 L 10,10 z"/>
-		<path id="irn-sc" d="M 0,0 L 10,10 z"/>
-		<path id="sev-ec" d="M 0,0 L 10,10 z"/>
-		<path id="sev-wc" d="M 0,0 L 10,10 z"/>
+		<!-- COASTS -->
+		<path id="ara-ec" d="M 117 206 L 151 217 170 236 173 245 173 276 z"/>
+		<path id="ara-wc" d="M 117 206 L 108 212 L 98,221 L 115 254 L 133 278 L 135 285 L 173 276 z"/>
+		<path id="bal-ec" d="M 42 147 L 56 133 L 64 137 L 67 130 L 80 121 L 67 107 L 61 101 L 47 102 L 11 102 z"/>
+		<path id="bal-sc" d="M 0,142 L 20 177 L 32 168 L 42 147 L 11 102 z"/>
+		<path id="irn-nc" d="M 135,178 L 146 189 L 151 197 L 153 210 L 217 178 L 205 173 L 184 170 L 173 169 L 155 170 L 150 170 L 147 173 L 138 177 z"/>
+		<path id="irn-sc" d="M 153 210 L 174 215 L 184 225 L 201 227 L 213 242 L 226 241 L 221 210 L 217 178 z"/>
+		<path id="sev-ec" d="M 102 128 L 118 128 L 130 138 L 136 141 L 140 141 L 146 140 L 142 136 L 140 128 L 150 118 L 135 108 L 128 103 L 119 101 z"/>
+		<path id="sev-wc" d="M 67,107 L 80 121 L 95 122 L 102 128 L 119 101 L 104 102 L 93 104 L 82 104 z"/>
 	</g>
 </svg>
