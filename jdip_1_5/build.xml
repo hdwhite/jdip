@@ -500,6 +500,7 @@
 
 	<target name="changelog" depends="init" description="Create changelog from CVS">
 		<cvschangelog dir="${src.dir}"
+				cvsroot="/cvsroot/jdip/"
 				destfile="changelog.xml"
 				daysinpast="10"/>
 		<style in="changelog.xml"
@@ -512,17 +513,39 @@
 	</target>
 	
 	
-	<!-- create no-install .zip version -->
-	<target name="nightlyzip" description="Builds nightly build .zip distribution">
+	<!-- 
+		create nightly build targets
+		
+		TODO:
+			1) create changelog
+			2) ?? create documentation ??
+	-->
+	<target name="nightlybuild" description="Creates nightly builds and changelogs">
 		<tstamp>
 			<format property="nightly.date" pattern="MMM-dd-yyyy"/>
 		</tstamp>
+		
 		<antcall target="dist"/>
 		<delete dir="${packaged.dist.dir}"/>
 		<mkdir dir="${packaged.dist.dir}"/>
+		
 		<zip destfile="${packaged.dist.dir}/jdip-nightly-${nightly.date}.zip">
 			<zipfileset dir="${dist.dir}" prefix="jdip"/>
 		</zip>
+		
+		<!-- changelog : designed to work on sourceforge -->
+		<!-- requires a CVS checkout, not export -->
+		<cvschangelog dir="${src.dir}"
+			cvsRoot=":pserver:anonymous@cvs1:/cvsroot/jdip"
+			destfile="changelog.xml"
+			daysinpast="10"/>
+		<style 	in="changelog.xml"
+				out="${packaged.dist.dir}/changelog-${nightly.date}.html"
+				style="${etc.dir}/changelog.xsl">
+			<param name="title" expression="jDip ChangeLog"/>
+			<param name="module" expression="jdip"/>
+			<param name="cvsweb" expression="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/jdip/"/>
+		</style>
 	</target>	
 
 	
