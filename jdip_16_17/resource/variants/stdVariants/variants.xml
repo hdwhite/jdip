@@ -72,8 +72,6 @@
 				unitcoast CDATA #IMPLIED
 				>
 ]>
-<!-- NOTE: it's very important that the name of the file will be variants.xml, in all lower case -->
-<!-- NOTE: for CDATA escapes, no space between tag and bracket!! -->
 <VARIANTS>
 	<DESCRIPTION><![CDATA[The main variant list for jDip]]></DESCRIPTION> 
 	
