@@ -455,15 +455,24 @@ public class GUIMove extends Move implements GUIOrder
 		Point2D.Float ptTo = mmd.getUnitPt(dest.getProvince(), dest.getCoast());
 		
 		// respect radius, if there is a unit present in destination.
+		// if there is no unit, use radius / 2. (for an Army)
+		//
 		Point2D.Float newPtTo = ptTo;
 		Position position = mapInfo.getTurnState().getPosition();
+		float r = 0.0f;
 		if(position.hasUnit(dest.getProvince()))
 		{
 			Unit.Type destUnitType = position.getUnit(dest.getProvince()).getType();
-			float r = mmd.getOrderRadius(MapMetadata.EL_MOVE, mapInfo.getSymbolName(destUnitType));
-			newPtTo = GUIOrderUtils.getLineCircleIntersection(ptFrom.x+offset, ptFrom.y+offset, 
-				ptTo.x+offset, ptTo.y+offset, ptTo.x+offset, ptTo.y+offset, r);
+			r = mmd.getOrderRadius(MapMetadata.EL_MOVE, mapInfo.getSymbolName(destUnitType));
 		}
+		else
+		{
+			r = (mmd.getOrderRadius(MapMetadata.EL_MOVE, mapInfo.getSymbolName(Unit.Type.ARMY)) / 2);
+		}
+			
+		newPtTo = GUIOrderUtils.getLineCircleIntersection(ptFrom.x+offset, ptFrom.y+offset, 
+					ptTo.x+offset, ptTo.y+offset, ptTo.x+offset, ptTo.y+offset, r);
+		
 		
 		// calculate (but don't yet use) failPt
 		failPt = GUIOrderUtils.getLineMidpoint(ptFrom.x, ptFrom.y, newPtTo.x, newPtTo.y);

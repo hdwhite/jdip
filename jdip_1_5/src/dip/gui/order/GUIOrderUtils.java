@@ -242,6 +242,9 @@ final class GUIOrderUtils
 		assert(!Float.isNaN(pt.x));
 		assert(!Float.isNaN(pt.y));
 		
+		//System.out.println("args: L: "+x1+","+y1+","+x2+","+y2+", C: "+x3+","+y3+","+r);
+		//System.out.println("   result: "+pt);
+		
 		return pt;
 	}// getLineCircleIntersection()
 	

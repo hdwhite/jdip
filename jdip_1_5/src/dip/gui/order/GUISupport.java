@@ -551,7 +551,9 @@ public class GUISupport extends Support implements GUIOrder
 		ptSupDest.x += offset;
 		ptSupDest.y += offset;
 		
-		// destination 
+		// destination. If no unit, use the size of an army unit radius divided
+		// by 2 (as we do in GUIMove)
+		//
 		Point2D.Float newSupDest = null;
 		if(position.hasUnit(supDest.getProvince()))
 		{
@@ -562,8 +564,8 @@ public class GUISupport extends Support implements GUIOrder
 		}
 		else
 		{
-			// NOTE: do not manipulate newSupDest after this assignment...
-			newSupDest = ptSupDest;
+			float moveRadius = (mmd.getOrderRadius(MapMetadata.EL_MOVE, mapInfo.getSymbolName(Unit.Type.ARMY)) / 2);
+			newSupDest = GUIOrderUtils.getLineCircleIntersection(ptSupSrc.x, ptSupSrc.y, ptSupDest.x, ptSupDest.y, ptSupDest.x, ptSupDest.y, moveRadius);
 		}
 		
 		// calculate failed point marker
