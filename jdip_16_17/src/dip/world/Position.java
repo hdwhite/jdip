@@ -1050,7 +1050,7 @@ public class Position implements Cloneable
 						coast = xs.getCoast(tmp);
 					}
 					
-					final boolean isDislodged = Boolean.getBoolean(reader.getAttribute("dislodged"));
+					final boolean isDislodged = Boolean.valueOf(reader.getAttribute("dislodged")).booleanValue();
 					
 					// validate unit coast (absolutely required if coast not specified)
 					try

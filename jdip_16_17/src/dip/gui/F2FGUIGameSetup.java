@@ -107,6 +107,7 @@ public class F2FGUIGameSetup implements GUIGameSetup
 		
 		// inform everybody about the World
 		cf.fireWorldCreated(world);
+		cf.getUndoRedoManager().reconstitute();
 		
 		// set turnstate and powers
 		cf.fireDisplayablePowersChanged(cf.getDisplayablePowers(), world.getMap().getPowers());
@@ -194,7 +195,7 @@ public class F2FGUIGameSetup implements GUIGameSetup
 						NameValuePair nvp = (NameValuePair) xs.lookupAndReadNode(getCM(), reader, context);
 						state.setSubmitted(
 							xs.getPower(nvp.getName()),
-							Boolean.getBoolean(nvp.getValue())
+							Boolean.valueOf(nvp.getValue()).booleanValue()
 						);
 						reader.moveUp();
 					}

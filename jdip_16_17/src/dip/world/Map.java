@@ -35,10 +35,11 @@ import javax.xml.parsers.*;
 /**
 *	A Map is a list of Provinces and Powers, and methods for obtaining and parsing
 *	these Provinces and Powers.
-*
-*
+*	<p>
+*	Indices are always consistent for the life of a Map. Note that they may not
+*	be consistent between saves and loads, for example, if the Variant has minor
+*	changes. Thus storing an index is not an advisable means of serialization. 
 *	
-*
 */
 public class Map
 {
@@ -51,19 +52,22 @@ public class Map
 	private final Power[] 		powers;
 	private final Province[]	provinces;
 	
+	private final List uPowerList;
+	private final List uProvinceList;
+	
 	// None of the data below here is serialized; it can be derived from
 	// the above (serialized) data.
 	//
 	// Province-related
-	private transient HashMap nameMap = null; 	// map of all (short & full) names to a province; names in lower case
-	private transient String[] names = null;	// list of all province names [short & full]; names in lower case
+	private HashMap nameMap = null; 	// map of all (short & full) names to a province; names in lower case
+	private String[] names = null;	// list of all province names [short & full]; names in lower case
 	
 	// Power-related
-	private transient HashMap powerNameMap = null;		// created by createMappings()
+	private HashMap powerNameMap = null;		// created by createMappings()
 	
 	// fields created on first-use (by a method)
-	private transient String[] lcPowerNames = null;		// lower case power names & adjectives
-	private transient String[] wsNames = null;			// list of all province names that contain whitespace, "-", or " "
+	private String[] lcPowerNames = null;		// lower case power names & adjectives
+	private String[] wsNames = null;			// list of all province names that contain whitespace, "-", or " "
 	
 	
 	
@@ -78,19 +82,52 @@ public class Map
 		powers = powerArray;
 		provinces = provinceArray;
 		
-		// check provinceArray: index must be >= 0 and < provinceArray.length
-		int len = provinceArray.length;
-		for(int i=0; i<provinceArray.length; i++)
+		// unmodifiable power list
+		ArrayList list = new ArrayList(powers.length);
+		for(int i=0; i<powers.length; i++)
 		{
-			final int idx = provinceArray[i].getIndex();
-			if(idx < 0 || idx >= len)
+			list.add(powers[i]);
+		}
+	
+		uPowerList = Collections.unmodifiableList(list);
+		
+		// unmodifiable province list
+		list = new ArrayList(provinces.length);
+		for(int i=0; i<provinces.length; i++)
+		{
+			list.add(provinces[i]);
+		}
+	
+		uProvinceList = Collections.unmodifiableList(list);
+		
+		
+		// check provinceArray: index must be >= 0 and < provinceArray.length
+		for(int i=0; i<provinces.length; i++)
+		{
+			final int idx = provinces[i].getIndex();
+			if(idx < 0 || idx >= provinces.length)
 			{
-				throw new IllegalArgumentException("Province: "+provinceArray[i]+": illegal Index: "+idx);
+				throw new IllegalArgumentException("Province: "+provinces[i]+": illegal Index: "+idx);
 			}
 			
 			if(idx != i)
 			{
-				throw new IllegalArgumentException("Province: "+provinceArray[i]+": out of order (index: "+idx+"; position: "+i+")");
+				throw new IllegalArgumentException("Province: "+provinces[i]+": out of order (index: "+idx+"; position: "+i+")");
+			}
+		}
+		
+		// check powers; index must be in-bounds and in-order.
+		for(int i=0; i<powers.length; i++)
+		{
+			final int idx = powers[i].getIndex();
+			if(idx < 0 || idx >= powers.length)
+			{
+				throw new IllegalArgumentException("Power: "+powers[i]+": illegal index: "+idx);
+			}
+			
+			if(idx != i)
+			{
+				throw new IllegalArgumentException("Power: "+powers[i]+": out of order (index: "+idx+"; position: "+i+")");
 			}
 		}
 		
@@ -102,10 +139,6 @@ public class Map
 	
 	/**
 	*	Creates the name->power and name->province mappings.
-	*	<p>
-	*	After de-serialization, this method MUST be called, since 
-	*	the mappings aren't saved by default.
-	*
 	*/
 	private void createMappings()
 	{
@@ -155,18 +188,47 @@ public class Map
 	}// createMappings()
 	
 	
+	/**
+	*	Returns an Array of all Provinces.
+	*	 @deprecated  	see getProvinceList()
+	*/
+	public final Province[] getProvinces()
+	{
+		Province[] arr = new Province[provinces.length];
+		System.arraycopy(provinces, 0, arr, 0, provinces.length);
+		return arr;	
+	}// getProvinces()
 	
+	/**
+	*	Returns an Array of all Powers.
+	*	 @deprecated  	see getPowerList()
+	*/
+	public final Power[] getPowers()
+	{
+		Power[] arr = new Power[powers.length];
+		System.arraycopy(powers, 0, arr, 0, powers.length);
+		return arr;	
+	}// getPowers()
 	
 	
 	
 	/**
-	*	Returns an Array of all Powers.
-	*
+	*	Returns a List of all Powers. The list is both unmodifiable and
+	*	guaranteed to implement RandomAccess.
 	*/
-	public final Power[] getPowers()
+	public final List getPowerList()
 	{
-		return powers;
+		return uPowerList;
 	}// getPowers()
+	
+	/**
+	*	Returns a List of all Provinces. The list is both unmodifiable and
+	*	guaranteed to implement RandomAccess.
+	*/
+	public final List getProvinceList()
+	{
+		return uProvinceList;
+	}// getProvinceList()
 	
 	
 	/**
@@ -327,16 +389,6 @@ public class Map
 		return null;
 	}// getPowerMatching()
 	
-	
-	
-	/**
-	*	Returns an Array of all Provinces.
-	*
-	*/
-	public final Province[] getProvinces()
-	{
-		return provinces;	
-	}// getProvinces()
 	
 	
 	/**
@@ -698,12 +750,12 @@ public class Map
 	*	<p>
 	*	This is a special-purpose method for Order parsing.
 	*	<p>
-	*	examples:
+	*	examples:<br>
 	*	<code>
 	*		France: xxx-yyy     // returns "France"<br>
-	*		Fra: xxx-yyy		// returns "Fra" (assumed; it's before the colon)
-	*		Fra xxx-yyy			// returns null (Fra not recognized)
-	*		xxx-yyy				// returns null (xxx doesn't match a power)
+	*		Fra: xxx-yyy		// returns "Fra" (assumed; it's before the colon)<br>
+	*		Fra xxx-yyy			// returns null (Fra not recognized)<br>
+	*		xxx-yyy				// returns null (xxx doesn't match a power)<br>
 	*	</code>
 	*	
 	*/
@@ -772,12 +824,12 @@ public class Map
 	*	<p>
 	*	This is a special-purpose method for Order parsing.
 	*	<p>
-	*	examples:
+	*	examples:<br>
 	*	<code>
 	*		France: xxx-yyy     // returns "France"<br>
-	*		Fra: xxx-yyy		// returns "France" (assumed; it's before the colon)
-	*		Fra xxx-yyy			// returns null (Fra not recognized)
-	*		xxx-yyy				// returns null (xxx doesn't match a power)
+	*		Fra: xxx-yyy		// returns "France" (assumed; it's before the colon)<br>
+	*		Fra xxx-yyy			// returns null (Fra not recognized)<br>
+	*		xxx-yyy				// returns null (xxx doesn't match a power)<br>
 	*	</code>
 	*	
 	*/
@@ -834,13 +886,25 @@ public class Map
 	}// getFirstPower()
 	
 	
+	/** Given an index, return the corresponding Province */
+	public final Province getProvince(int i)
+	{
+		return provinces[i];
+	}// getProvince()
+	
+	/** Given an index, return the corresponding Power */
+	public final Power getPower(int i)
+	{
+		return powers[i];
+	}// getPower()
 	
 	/** 
 	*	Given an index, returns the Province to which that index corresponds.
+	*	@deprecated  replaced by {@link #getProvince(int)}
 	*/
 	public final Province reverseIndex(int i)
 	{
-		return provinces[i];
+		return getProvince(i);
 	}// reverseIndex()
 	
 	

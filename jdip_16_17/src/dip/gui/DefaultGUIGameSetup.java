@@ -87,6 +87,7 @@ public class DefaultGUIGameSetup implements GUIGameSetup
 		
 		// inform everybody about the World
 		cf.fireWorldCreated(world);
+		cf.getUndoRedoManager().reconstitute();
 		
 		// set turnstate and powers
 		cf.fireDisplayablePowersChanged(cf.getDisplayablePowers(), world.getMap().getPowers());

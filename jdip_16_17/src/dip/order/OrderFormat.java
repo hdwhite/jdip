@@ -862,8 +862,8 @@ public class OrderFormat
 		Province prov2 = new Province("St. Petersburg", new String[]{"stp"}, 0, false);
 		Province prov3 = new Province("Golf of Bothnia", new String[]{"gob"}, 0, false);
 		
-		Power power1 = new Power(new String[]{"Russia"}, "Russian", true);
-		Power power2 = new Power(new String[]{"German"}, "German", true);
+		Power power1 = new Power(new String[]{"Russia"}, "Russian", 0, true);
+		Power power2 = new Power(new String[]{"German"}, "German", 1, true);
 		
 		Location src = 		new Location(prov1, Coast.SEA);
 		Location supSrc = 	new Location(prov2, Coast.SOUTH);

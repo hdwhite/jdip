@@ -211,8 +211,11 @@ public class TurnStateConverter implements Converter
 			Phase.PhaseType.parse(reader.getAttribute("phase")) );
 			
 		final TurnState ts = new TurnState(tsPhase);
-		ts.setResolved(Boolean.getBoolean(reader.getAttribute("resolved")));
-		ts.setEnded(Boolean.getBoolean(reader.getAttribute("ended")));
+		
+		String t = reader.getAttribute("resolved");
+		boolean v = Boolean.getBoolean(t);
+		ts.setResolved(Boolean.valueOf(reader.getAttribute("resolved")).booleanValue());
+		ts.setEnded(Boolean.valueOf(reader.getAttribute("ended")).booleanValue());
 		ts.setWorld(xs.getWorld());
 		xs.setCurrentTurnState(ts);
 		

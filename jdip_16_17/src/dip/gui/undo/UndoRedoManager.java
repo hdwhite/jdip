@@ -27,6 +27,9 @@ import dip.gui.OrderDisplayPanel;
 import dip.gui.ClientFrame;
 import dip.misc.Log;
 
+import dip.order.Orderable;
+import dip.world.TurnState;
+
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
@@ -45,7 +48,7 @@ import java.util.*;
 public class UndoRedoManager extends UndoManager
 {
 	// the max number of undo/redo events we can hold
-	private static final int 	MAX_UNDOS			= 1000;
+	private static final int MAX_UNDOS = 250;
 	
 	
 	// instance variables
@@ -68,28 +71,6 @@ public class UndoRedoManager extends UndoManager
 		
 		super.setLimit(MAX_UNDOS);
 	}// UndoRedoManager()
-	
-	
-	/** Can be used post-deserialization */
-	public synchronized void setClientFrame(ClientFrame clientFrame)
-	{
-		if(clientFrame == null)
-		{
-			throw new IllegalArgumentException("null clientFrame");
-		}
-		this.clientFrame = clientFrame;
-	}// setClientFrame()
-	
-	
-	/** Can be used post-deserialization */
-	public synchronized void setOrderDisplayPanel(OrderDisplayPanel orderDisplayPanel)
-	{
-		if(orderDisplayPanel == null)
-		{
-			throw new IllegalArgumentException("null clientFrame");
-		}
-		this.orderDisplayPanel = orderDisplayPanel;
-	}// setOrderDisplayPanel()
 	
 	
 	/** Add an Edit (UndoableEdit) */
@@ -306,5 +287,48 @@ public class UndoRedoManager extends UndoManager
 			throw new IllegalArgumentException("error: clientframe/orderpanel not set");
 		}
 	}// checkState()
+	
+	
+	/** 
+	*	Reconstitute Undo/Redo actions from a serialized world.
+	*	This looks at the World object. For each resolved Turnstate,
+	*	An 'undo resolve' and an 'undo orders' action is created. This
+	*	allows progressive rewind of a game.
+	*	<p>
+	*	The World object must be set in ClientFrame for this method
+	*	to work properly.
+	*/
+	public synchronized void reconstitute()
+	{
+		assert(edits.size() == 0);
+		
+		List tsList = clientFrame.getWorld().getAllTurnStates();
+		ListIterator iter = tsList.listIterator();
+		while(iter.hasNext())
+		{
+			final TurnState ts = (TurnState) iter.next();
+			
+			// undo all orders (if any)
+			List orderList = ts.getAllOrders();
+			if(!orderList.isEmpty())
+			{
+				Orderable[] orders = (Orderable[]) ts.getAllOrders().toArray(new Orderable[orderList.size()]);
+				addEdit(new UndoAddMultipleOrders(this, orders));
+			}
+			
+			// undo resolved (if resolved)
+			if(ts.isResolved())
+			{
+				TurnState nextTS = null;
+				if(iter.hasNext())
+				{
+					nextTS = (TurnState) iter.next();
+					iter.previous();	// rewind
+				}
+				
+				addEdit(new UndoResolve(this, ts, nextTS));
+			}
+		}
+	}// reconstitute()
 	
 }// class UndoRedoManager////

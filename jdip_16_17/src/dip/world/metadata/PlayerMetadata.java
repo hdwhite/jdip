@@ -38,14 +38,21 @@ public class PlayerMetadata extends ParticipantMetadata
 {
 	private final Power power;
 	
-	/** Create a PlayerMetadata object. A <code>null</code> Power is not permitted. */
+	/** 
+	*	Create a PlayerMetadata object. A <code>null</code> Power is not permitted. 
+	*	The default role is ROLE_PLAYER and default type is TYPE_HUMAN. 
+	*/
 	public PlayerMetadata(Power power)
 	{
 		if(power == null) 
 		{
 			throw new IllegalArgumentException();
 		}
+		
 		this.power = power;
+		
+		setRole(ROLE_PLAYER);
+		setType(TYPE_HUMAN);
 	}// PlayerMetadata()
 	
 	/** Get the player's power. Never null. */

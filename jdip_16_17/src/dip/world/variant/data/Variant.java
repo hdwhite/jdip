@@ -159,7 +159,7 @@ public class Variant implements Cloneable, Comparable
 	public void setMapGraphics(List mgList)
 	{
 		mapGraphics = (MapGraphic[]) mgList.toArray(new MapGraphic[mgList.size()]); 			
-	}// setPowers()
+	}// setMapGraphics()
 	
 	/** Sets the Powers, from a List */
 	public void setPowers(List powerList)
@@ -202,6 +202,7 @@ public class Variant implements Cloneable, Comparable
 				Power old = powers[i];
 				powers[i] = new Power(	old.getNames(),
 										old.getAdjective(),
+										old.getIndex(),
 										values[i] );
 			}
 		}
@@ -347,6 +348,7 @@ public class Variant implements Cloneable, Comparable
 				Power thisPower = powers[i];
 				variant.powers[i] = new Power(	thisPower.getNames(),
 												thisPower.getAdjective(),
+												thisPower.getIndex(),
 												thisPower.isActive() );
 			}
 		}

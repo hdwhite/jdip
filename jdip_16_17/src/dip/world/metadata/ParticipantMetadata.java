@@ -46,10 +46,9 @@ public class ParticipantMetadata
 	/** Type: Computer */
 	public static final String TYPE_COMPUTER	= "computer";
 	/** Type: Unknown */
-	public static final String TYPE_UNKNOWN		= "unknown";
+	public static final String TYPE_UNSPECIFIED		= "unspecified";
 	/** Type: Inactive Computer Power (e.g., Italy in a 6 or 7 player game) */
 	public static final String TYPE_INACTIVE_COMPUTER	= "inactive";
-	
 	
 	
 	private static final String EMPTY = "";
@@ -59,7 +58,7 @@ public class ParticipantMetadata
 	private String[] 		email = new String[0];
 	private URI 			uri = null;
 	private String			notes = EMPTY;
-	private String			type = TYPE_UNKNOWN;
+	private String			type = TYPE_UNSPECIFIED;
 	private String 			role = ROLE_UNSPECIFIED;
 	private String			nick = EMPTY;
 	
@@ -75,7 +74,7 @@ public class ParticipantMetadata
 	public String getType()						{ return type; }
 	
 	/** Get the Participant Role. Should be a ROLE constant. */
-	public String getRole()						{ return type; }
+	public String getRole()						{ return role; }
 	
 	/** Gets participant name. Never null. May be empty. */
 	public String getName()						{ return name; }
@@ -101,8 +100,8 @@ public class ParticipantMetadata
 	/** Sets the participants nickname.  A null value will create an empty string. */
 	public void setNickname(String value)		{ nick = (value == null) ? EMPTY : value; }
 	
-	/** Set the Participant's Type. Should be a constant value. */
-	public void setType(String value)			
+	/** Set the Participant's Type. Should be a recognized constant. */
+	public final void setType(String value)			
 	{
 		final String tmp = parseType(value);
 		if(tmp != null)
@@ -115,8 +114,8 @@ public class ParticipantMetadata
 		}
 	}// setType()
 	
-	/** Set the Participant's Role. Should be a constant value. */
-	public void setRole(String value)			
+	/** Set the Participant's Role. Should be a recognized constant. */
+	public final void setRole(String value)			
 	{
 		final String tmp = parseRole(value);
 		if(tmp != null)
@@ -160,9 +159,9 @@ public class ParticipantMetadata
 		{
 			return TYPE_COMPUTER;
 		}
-		else if(TYPE_UNKNOWN.equals(in))
+		else if(TYPE_UNSPECIFIED.equals(in))
 		{
-			return TYPE_UNKNOWN;
+			return TYPE_UNSPECIFIED;
 		}
 		else if(TYPE_INACTIVE_COMPUTER.equals(in))
 		{

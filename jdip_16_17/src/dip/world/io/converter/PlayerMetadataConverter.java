@@ -75,7 +75,6 @@ public class PlayerMetadataConverter extends ParticipantMetadataConverter
 		final XMLSerializer xs = XMLSerializer.get(context);
 		final PlayerMetadata pmd = new PlayerMetadata(
 			xs.getPower( reader.getAttribute("power") ));
-			
 		return read(pmd, xs, reader, context);
 	}// unmarshal()
 	

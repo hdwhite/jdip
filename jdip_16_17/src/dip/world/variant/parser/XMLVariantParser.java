@@ -316,9 +316,10 @@ public class XMLVariantParser implements VariantParser
 				names[0] = name;
 				System.arraycopy(altNames, 0, names, 1, altNames.length);
 				
-				Power power = new Power(names, adjective, isActive);
+				Power power = new Power(names, adjective, j, isActive);
 				powerList.add(power);
 			}
+			
 			variant.setPowers(powerList);
 			
 			

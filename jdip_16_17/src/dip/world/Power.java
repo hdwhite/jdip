@@ -37,7 +37,7 @@ public class Power implements Comparable
 	private final String[] names;		// length >= 1
 	private final boolean isActive;
 	private final String adjective;
-	
+	private final int index;			// contiguous unique index
 	
 	// transient fields
 	private transient int hashCode = 0;
@@ -57,7 +57,7 @@ public class Power implements Comparable
 	*	Power uses instance equality, so two Power() objects created with the same arguments
 	*	will NOT be the same.
 	*/
-	public Power(String[] names, String adjective, boolean isActive)
+	public Power(String[] names, String adjective, int index, boolean isActive)
 	{
 		if(names == null || adjective == null)
 		{
@@ -74,8 +74,14 @@ public class Power implements Comparable
 			throw new IllegalArgumentException("empty adjective");
 		}
 		
+		if(index < 0)
+		{
+			throw new IllegalArgumentException("index < 0");
+		}
+		
 		this.names = names;
 		this.adjective = adjective;
+		this.index = index;
 		this.isActive = isActive;
 	}// Power()
 	
@@ -98,6 +104,14 @@ public class Power implements Comparable
 		return names;
 	}// getAllNames()
 	
+	/** 
+	*	Returns the Power index; this is an int between 0 (inclusive) and
+	*	the total number of provinces (exclusive). It is never negative.
+	*/
+	public final int getIndex()
+	{
+		return index;
+	}// getIndex()
 	
 	/** Determines if this power is active. Only active powers can order units. */
 	public boolean isActive()						{ return isActive; }

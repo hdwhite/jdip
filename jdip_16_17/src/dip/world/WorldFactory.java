@@ -234,6 +234,7 @@ public class WorldFactory
 			}
 		}
 		
+		
 		// Now that we know the variant, we know the powers, and can
 		// create the Map.
 		dip.world.Map map = new dip.world.Map(	
