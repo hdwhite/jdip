@@ -223,16 +223,29 @@ public class XMLSymbolParser implements SymbolParser
 				
 				style.normalize();
 				
-				// get style CDATA
-				CDATASection cdsNode = (CDATASection) XMLUtils.findChildNodeMatching(style,
-					CDATA_NODE_NAME, Node.CDATA_SECTION_NODE);
+				// find TEXT node, or CDATA node (if not coalesced)
+				//
+				String styleData = null;
 				
-				if(cdsNode == null)
+				Node childNode = style.getFirstChild();
+				while(childNode != null)
 				{
-					throw new IOException("CDATA in <style> node is null.");
+					if( childNode.getNodeType() == Node.TEXT_NODE 
+						|| childNode.getNodeType() == Node.CDATA_SECTION_NODE)
+					{
+						styleData = ((CharacterData) childNode).getData();
+						break;
+					}
+					
+					childNode = childNode.getNextSibling();
 				}
 				
-				symbolPack.setCSSStyles( parseCSS(cdsNode.getData()) );
+				if(styleData == null)
+				{
+					throw new IOException("TEXT or CDATA in style node is null!");
+				}
+				
+				symbolPack.setCSSStyles( parseCSS(styleData) );
 			}
 		}
 		

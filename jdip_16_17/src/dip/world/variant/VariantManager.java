@@ -138,22 +138,10 @@ public class VariantManager
 		
 		// setup document builder
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		
-		try
-		{
-			// this may improve performance, and really only apply to Xerces
-			dbf.setAttribute("http://apache.org/xml/features/dom/defer-node-expansion", Boolean.FALSE);
-			dbf.setAttribute("http://apache.org/xml/properties/input-buffer-size", new Integer(4096));
-			dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", Boolean.FALSE);
-		}
-		catch(Exception e)
-		{
-			Log.println("VM: Could not set XML feature.", e);
-		}
-		
 		dbf.setValidating(isValidating);
-		dbf.setCoalescing(false);
+		dbf.setCoalescing(true);
 		dbf.setIgnoringComments(true);
+		dbf.setIgnoringElementContentWhitespace(true);
 		
 		// setup variant parser
 		XMLVariantParser variantParser = new XMLVariantParser(dbf);
