@@ -390,18 +390,36 @@ final class JudgeImportHistory
 	*/
 	private TurnState makeTurnState(Turn turn)
 	{
-		TurnState ts = new TurnState(turn.getPhase());
-		ts.setWorld(world);
-		ts.setPosition(new Position(world.getMap()));
+		// does the turnstate already exist?
+		// it could, if we are importing orders into an already-existing game.
+		// 
+		Log.println("JIH::makeTurnState() ", turn.getPhase());
 		
-		// note: we don't add the turnstate to the World object at this point (although we could), because
-		// if a processing error occurs, we don't want a partial turnstate object in the World.
+		TurnState ts = world.getTurnState(turn.getPhase());
 		
-		// set Home Supply centers in position
-		Position pos = ts.getPosition();
-		for(int i=0; i<homeSCInfo.length; i++)
+		if(ts == null)
 		{
-			pos.setSupplyCenterHomePower(homeSCInfo[i].getProvince(), homeSCInfo[i].getPower());
+			Log.println("  creating new turnstate.");
+			// make new TurnState
+			ts = new TurnState(turn.getPhase());
+			ts.setWorld(world);
+			ts.setPosition(new Position(world.getMap()));
+			
+			// note: we don't add the turnstate to the World object at this point (although we could), because
+			// if a processing error occurs, we don't want a partial turnstate object in the World.
+			
+			// set Home Supply centers in position
+			Position pos = ts.getPosition();
+			for(int i=0; i<homeSCInfo.length; i++)
+			{
+				pos.setSupplyCenterHomePower(homeSCInfo[i].getProvince(), homeSCInfo[i].getPower());
+			}
+		}
+		else
+		{
+			// likely importing orders to an existing game.
+			// no changes to turnstate.
+			Log.println("  using existing turnstate");
 		}
 		
 		return ts;
@@ -736,6 +754,7 @@ final class JudgeImportHistory
 			
 			// now that all orders are parsed, and all units are cleared, put
 			// unit in the proper place.
+			//
 			Iterator iter = results.iterator();
 			while(iter.hasNext())
 			{
@@ -1021,11 +1040,16 @@ final class JudgeImportHistory
 		// get position info
 		Position newPos = current.getPosition();
 		Position oldPos = null;
-		if(previousTS == null){
+		if(previousTS == null)
+		{
 			oldPos = oldPosition;
-		} else {
+		} 
+		else 
+		{
 			oldPos = previousTS.getPosition();
 		}
+		
+		Log.println("copyPreviousPositions() from: ", oldPos);
 		
 		// clone!
 		final Province[] provinces = map.getProvinces();
@@ -1037,6 +1061,7 @@ final class JudgeImportHistory
 			{
 				Unit newUnit = (Unit) unit.clone();
 				newPos.setUnit(p, newUnit);
+				Log.println("  cloned unit from/into: ", p);
 			}
 			
 			unit = oldPos.getDislodgedUnit(p);
@@ -1044,6 +1069,7 @@ final class JudgeImportHistory
 			{
 				Unit newUnit = (Unit) unit.clone();
 				newPos.setDislodgedUnit(p, newUnit);
+				Log.println("  cloned dislodged unit from/into: ", p);
 			}
 			
 			// clone any lastOccupied info as well.
@@ -1070,6 +1096,7 @@ final class JudgeImportHistory
 		final TurnState previousTS = current.getWorld().getPreviousTurnState(current);
 		Position prevPos = (previousTS == null) ? oldPosition : previousTS.getPosition();
 		
+		/*
 		if(previousTS != null)
 		{
 			Log.println("  Copying *previous* SC ownership info from: ", previousTS.getPhase());
@@ -1080,6 +1107,7 @@ final class JudgeImportHistory
 			Log.println("  world has the following Turnstates: ");
 			Log.println("  ", current.getWorld().getPhaseSet());
 		}
+		*/
 		
 		// current position
 		Position currentPos = current.getPosition();
