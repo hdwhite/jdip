@@ -938,73 +938,25 @@ public class ClientFrame extends JFrame
 	*	DropTarget listener that allows ClientFrame to respond to
 	*	drag events.
 	*/
-	private class CFDropTargetListener extends DropTargetAdapter
+	private class CFDropTargetListener extends FileDropTargetListener
 	{
-		public void drop(DropTargetDropEvent dtde)
+		public void processDroppedFiles(File[] files)
 		{
-			if( dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor) )
+			for(int i=0; i<files.length; i++)
 			{
-				try
+				if(files.length >= 0)
 				{
-					dtde.acceptDrop(DnDConstants.ACTION_COPY);
-					Transferable xfer = dtde.getTransferable();
-					Object obj = xfer.getTransferData(DataFlavor.javaFileListFlavor);
-					
-					if(obj instanceof java.util.List)
+					World world = ClientFrame.this.persistMan.acceptDrag(files[0], ClientFrame.this.getWorld());
+					if(world != null)
 					{
-						java.util.List list = (java.util.List) obj;
-						if(list.size() > 0)
-						{
-							File selectedFile = (File) list.get(0);
-							
-							// WARNING: the following is not 100% pure java
-							// it can be commented out, if it doesn't compile
-							// it just converts Windows .LNK (shortcuts) to 
-							// a 'real' file.
-							if( Utils.isWindows() &&
-								selectedFile.getPath().toLowerCase().endsWith(".lnk") ) 
-							{
-								try
-								{
-									selectedFile = sun.awt.shell.ShellFolder.getShellFolder(selectedFile).getLinkLocation();
-								}	
-								catch(Throwable t)
-								{
-									// do nothing; we are not running in the SUN JVM
-								}
-							}
-							
-							// use the selectedFile
-							World world = ClientFrame.this.persistMan.acceptDrag(selectedFile, ClientFrame.this.getWorld());
-							if(world != null)
-							{
-								world.setGameSetup(new DefaultGUIGameSetup());
-								ClientFrame.this.createWorld(world);
-							}		
-							ClientFrame.this.persistMan.updateTitle();
-						}
-						
-						dtde.dropComplete(true);
-						return;
-					}
-				}
-				catch(UnsupportedFlavorException e)
-				{
-					// fail silently
-				}
-				catch(IOException e2)
-				{
-					// fail silently
+						world.setGameSetup(new DefaultGUIGameSetup());
+						ClientFrame.this.createWorld(world);
+					}		
+					ClientFrame.this.persistMan.updateTitle();
 				}
 			}
-			
-			// all done
-			dtde.acceptDrop(DnDConstants.ACTION_NONE);
-			dtde.dropComplete(true);
-		}
-	}// class CFDropTargetListener
-	
-	
+		}// processDroppedFiles()
+	}// inner class CFDropTargetListener
 	
 	
 	/**
