@@ -172,21 +172,21 @@
 		<RULEOPTIONS>
 			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
 		</RULEOPTIONS>
-		<POWER name="Austria1" active="true" adjective="Austrian1"/> 
-		<POWER name="England1" altnames="Britain1" active="true" adjective="English1"/> 
-		<POWER name="France1" active="true" adjective="French1"/> 
-		<POWER name="Germany1" active="true" adjective="German1"/> 
-		<POWER name="Italy1" active="true" adjective="Italian1"/> 
-		<POWER name="Russia1" active="true" adjective="Russian1"/> 
-		<POWER name="Turkey1" active="true" adjective="Turkish1"/> 
-		<POWER name="Austria2" active="true" adjective="Austrian2"/> 
-		<POWER name="England2" altnames="Britain2" active="true" adjective="English2"/> 
-		<POWER name="France2" active="true" adjective="French2"/> 
-		<POWER name="Germany2" active="true" adjective="German2"/> 
-		<POWER name="Italy2" active="true" adjective="Italian2"/> 
-		<POWER name="Russia2" active="true" adjective="Russian2"/> 
-		<POWER name="Turkey2" active="true" adjective="Turkish2"/> 
-		<STARTINGTIME turn="Spring, 1914, Movement" />
+		<POWER name="Austria1" active="true" adjective="1Austrian"/> 
+		<POWER name="England1" altnames="Britain1" active="true" adjective="1English"/> 
+		<POWER name="France1" active="true" adjective="1French"/> 
+		<POWER name="Germany1" active="true" adjective="1German"/> 
+		<POWER name="Italy1" active="true" adjective="1Italian"/> 
+		<POWER name="Russia1" active="true" adjective="1Russian"/> 
+		<POWER name="Turkey1" active="true" adjective="1Turkish"/> 
+		<POWER name="Austria2" active="true" adjective="2Austrian"/> 
+		<POWER name="England2" altnames="Britain2" active="true" adjective="2English"/> 
+		<POWER name="France2" active="true" adjective="2French"/> 
+		<POWER name="Germany2" active="true" adjective="2German"/> 
+		<POWER name="Italy2" active="true" adjective="2Italian"/> 
+		<POWER name="Russia2" active="true" adjective="2Russian"/> 
+		<POWER name="Turkey2" active="true" adjective="2Turkish"/> 
+		<STARTINGTIME turn="Spring, 1901, Movement" />
 		<VICTORYCONDITIONS>
 			<WINNING_SUPPLY_CENTERS value="28" />
 		</VICTORYCONDITIONS>
@@ -237,7 +237,7 @@
 		<SUPPLYCENTER homepower="Russia1"  owner="Russia1"  province="war1"/>
 		<SUPPLYCENTER homepower="Turkey1"  owner="Turkey1"  province="ank1"/>
 		<SUPPLYCENTER homepower="Turkey1"  owner="Turkey1"  province="con1"/>
-		<SUPPLYCENTEX homepower="Turkey1"  owner="Turkey1"  province="smy1"/>
+		<SUPPLYCENTER homepower="Turkey1"  owner="Turkey1"  province="smy1"/>
 		<!-- owned SC (board 2) -->
 		<SUPPLYCENTER homepower="Austria2" owner="Austria2" province="bud2"/>
 		<SUPPLYCENTER homepower="Austria2" owner="Austria2" province="tri2"/>
