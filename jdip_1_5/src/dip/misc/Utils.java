@@ -100,7 +100,7 @@ public class Utils
 	private static final int TEXT_INSETS = 5;
 	private static final String HEX[] = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"};
 	private static final String RESOURCE_BASE_DIR = "resource/";
-	private static final String BASE_RESOURCE_FILE = "resource/il8n/il8ntext";
+	private static final String BASE_RESOURCE_FILE = "resource/il8n/i18ntext";
 	private static final String COMMON_RESOURCE_FILE = "resource/common/common";
 	private static final char[] EMAIL_ALLOWED = {'@','.','-','_','+','!'};
 	private static final char[] URL_ALLOWED = {' ',';','/','?',':','@','&','=','+','$',',','-','_','.','!','~','*','\'','|','%','#' };
@@ -871,7 +871,6 @@ public class Utils
 				idx++;
 			}
 			
-			System.out.println(idx);
 			if(idx == 3)	// not enough values, if idx is less than 2
 			{
 				try
@@ -1198,11 +1197,8 @@ public class Utils
 	*	should find an acceptable substitute. If it cannot, the US English
 	*	bundle is used. 
 	*	<p>
-	*	If the US English bundle cannot be found, a fatal error message is
-	*	displayed.
-	*	<p>
-	*	This is to get around a problem on some Java installations about 
-	*	finding resource bundles, and the fallback mechanism not working.
+	*	If the default (US English) bundle cannot be found, a fatal error 
+	*	message is displayed, and the program will exit.
 	*	<p>
 	*	This requires the classLoader variable to be set.
 	*
@@ -1215,14 +1211,9 @@ public class Utils
 		}
 		catch(MissingResourceException mre)
 		{
-			try
-			{
-				resourceBundle = ResourceBundle.getBundle(BASE_RESOURCE_FILE, Locale.ENGLISH, classLoader);	
-			}
-			catch(MissingResourceException mre2)
-			{
-				ErrorDialog.displayFatal(null, mre2);
-			}
+			System.err.println(mre);
+			popupError(null, "ERROR: Cannot Start", "Resource File cannot be found!\n"+mre.getMessage());
+			System.exit(1);
 		}
 	}// setResourceBundle()
 	
