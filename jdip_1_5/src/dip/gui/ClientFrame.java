@@ -187,6 +187,10 @@ public class ClientFrame extends JFrame
 		// parse command-line args
 		parseCmdLine(args);
 		
+		Log.println("   mem max: ", String.valueOf(Runtime.getRuntime().maxMemory()));
+		Log.println("   mem total: ", String.valueOf(Runtime.getRuntime().totalMemory()));
+		Log.println("   mem free: ", String.valueOf(Runtime.getRuntime().freeMemory()));
+		
 		// setup per-OS options
 		if(Utils.isOSX())
 		{

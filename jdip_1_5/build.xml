@@ -37,6 +37,7 @@
 	<property name="installer.file" value="jdip-install.xml"/>		<!-- izpack installer file -->
 	<property name="testsuite.file" value="dip.TestSuite"/>			<!-- izpack installer file -->
 	<property name="tool.dir" value="${src.dir}/tool"/>				<!-- where add-in tools source code is located -->
+	<property name="optional.dir" value="${base.build.dir}/optional"/>	<!-- where optional packages go -->
 	<property name="sign.password" value="jdip2003"/>
 	
 	<!-- test and performance output directories and files -->
@@ -161,6 +162,7 @@
 		<mkdir dir="${build.dir}/resource/il8n"/>
 		<mkdir dir="${build.dir}/resource/common"/>
 		<mkdir dir="${build.dir}/resource/help"/>
+		<mkdir dir="${optional.dir}"/>
 		<mkdir dir="${test.results.dir}"/>
 	</target>
 	
@@ -252,7 +254,7 @@
 				basedir="${resource.dir}/variants/milan"
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
-			
+				
 		<!-- SymbolPack: simple -->
 		<zip  destfile="${variant.dir}/simpleSymbols.zip"
 				basedir="${resource.dir}/variants/symbols/simple"
@@ -270,11 +272,19 @@
 				basedir="${resource.dir}/variants/symbols/modern"
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
-	
 	</target>
 	
 	
-	
+	<!-- OPTIONAL variant package: DPJudge variants -->
+	<target name="dpjudge" depends="init" description="Create DPJudge variant package">
+	    <echo message="Creating DPJudge variants"/>
+		<!-- Variant Package: DPJudge Variants -->
+		<zip  destfile="${optional.dir}/DPJudgeVariants.zip"
+				basedir="${resource.dir}/variants/dpjudge"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
+	</target>
+
 	
 	
 	<!-- run PMD checker -->
