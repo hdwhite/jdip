@@ -1,0 +1,1014 @@
+<?xml version="1.0"?>
+<!DOCTYPE VARIANTS [
+	<!ELEMENT VARIANTS (DESCRIPTION, MAP_DEFINITION+, VARIANT+)>
+	
+	<!ELEMENT DESCRIPTION (#PCDATA)>
+	
+	<!ELEMENT MAP_DEFINITION (DESCRIPTION?)>
+	<!ATTLIST MAP_DEFINITION 
+		id ID #REQUIRED
+		title CDATA #REQUIRED
+		URI CDATA #REQUIRED
+		thumbURI CDATA #REQUIRED
+		preferredUnitStyle CDATA #IMPLIED
+		>
+	
+	<!ELEMENT VARIANT (DESCRIPTION, MAP, RULEOPTIONS?, POWER+, STARTINGTIME, VICTORYCONDITIONS, SUPPLYCENTER+, INITIALSTATE*)>
+	<!ATTLIST VARIANT
+			name CDATA #REQUIRED
+			default (true|false) "false"
+			version CDATA #REQUIRED
+			aliases CDATA #IMPLIED
+			>
+			
+	<!ELEMENT MAP (MAP_GRAPHIC*)>
+	<!ATTLIST MAP adjacencyURI CDATA #REQUIRED>
+	
+	<!ELEMENT MAP_GRAPHIC EMPTY>
+	<!ATTLIST MAP_GRAPHIC
+			ref IDREF #REQUIRED
+			default (true|false) "false"
+			preferredUnitStyle CDATA #IMPLIED
+			>
+	
+	<!ELEMENT RULEOPTIONS (RULEOPTION+)>
+	<!ELEMENT RULEOPTION EMPTY>
+	<!ATTLIST RULEOPTION	name CDATA #REQUIRED
+				value CDATA #REQUIRED>
+	
+	<!ELEMENT POWER EMPTY>
+	<!ATTLIST POWER name CDATA #REQUIRED
+			active (true|false) "true"
+			adjective CDATA #REQUIRED
+			altnames CDATA #IMPLIED
+			>
+	
+	<!ELEMENT STARTINGTIME EMPTY>
+	<!ATTLIST STARTINGTIME 	turn CDATA #REQUIRED
+				allowBCYears (true|false) "false"
+				>
+	
+	<!ELEMENT VICTORYCONDITIONS (WINNING_SUPPLY_CENTERS?, YEARS_WITHOUT_SC_CAPTURE?, GAME_LENGTH?)>
+	
+	<!ELEMENT WINNING_SUPPLY_CENTERS EMPTY>
+	<!ATTLIST WINNING_SUPPLY_CENTERS value CDATA #REQUIRED>
+	
+	<!ELEMENT YEARS_WITHOUT_SC_CAPTURE EMPTY>
+	<!ATTLIST YEARS_WITHOUT_SC_CAPTURE value CDATA #REQUIRED>
+	
+	<!ELEMENT GAME_LENGTH EMPTY>
+	<!ATTLIST GAME_LENGTH value CDATA #REQUIRED>
+	
+	<!ELEMENT SUPPLYCENTER EMPTY>
+	<!ATTLIST SUPPLYCENTER 	province CDATA #REQUIRED
+				homepower CDATA "none"
+				owner CDATA "none"
+				>
+				
+	<!ELEMENT INITIALSTATE EMPTY>
+	<!ATTLIST INITIALSTATE 	province CDATA #REQUIRED
+				power CDATA #REQUIRED
+				unit CDATA #REQUIRED
+				unitcoast CDATA #IMPLIED
+				>
+]>
+<!-- NOTE: it's very important that the name of the file will be variants.xml, in all lower case -->
+<!-- NOTE: for CDATA escapes, no space between tag and bracket!! -->
+<VARIANTS>
+	<DESCRIPTION><![CDATA[<div style="font-family:arial,helvetica;">
+	Unfinished variants (usually the maps are incomplete).
+	</div>]]></DESCRIPTION>
+	
+	<MAP_DEFINITION id="xxx" title="Standard" 
+		URI="egdipmap.svg" thumbURI="egdipmap_thumb.png">
+		<DESCRIPTION>
+		
+		</DESCRIPTION>
+	</MAP_DEFINITION>
+	
+	<VARIANT name="Loeb9" version="1.0">
+		<DESCRIPTION><![CDATA[<div style="font-family:arial,helvetica;">
+		<b>NOTE: Only a grid test map exists for this variant.</b>
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		Danny Loeb's 9 player variant to diplomacy follows the standard rules
+		of the Adjudicator with the following exceptions:
+		<div style="margin-top:0.5cm;font-family:arial,helvetica;">
+		<b>8th player:</b>
+		</div>
+		<div style="margin-top:0.15cm;font-family:arial,helvetica;">
+		Spain is divided into four regions:
+		<ul>
+		<li><b>Navarre:</b>   	Adjacent to the Mid Atlantic, Gascony, Catalonia, Madrid 
+					   			and Portugal.</li>
+		<li><b>Madrid:</b>    	Adjacent to Portugal, Navarre, Catalonia and Cordoba.</li>
+		<li><b>Catalonia:</b> 	Adjacent to Cordoba, Madrid, Navarre, Gascony, Marseilles,
+					   			Gulf of Lyon and Western Mediterranean.</li>
+		<li><b>Cordoba:</b>   	Adjacent to Portugal, Madrid, Catalonia, Western Mediterranean
+					   			and the Mid Atlantic.</li>
+		</ul>			   
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		Madrid and Cordoba are supply centers.
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		The Spanish player begins with Fleet Portugal, Army Cordoba and Army Madrid.
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		The following islands are now spaces: Iceland, Ireland, Corsica, Sardinia
+		and Sicily.
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		Ireland is a neutral supply center.
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		Passage between Cordoba and North Africa and passage between Naples and
+		Sicily is allowed by armies.  However, such a move is made with a force
+		equal to the number of supports (as opposed to one plus the number of
+		supports).  Note that fleets may not make this move and support cannot
+		be given in this fashion.  This form of movement is treated very much
+		like convoyed movement by the adjudicator.  An unsupported unit will
+		have no effect whatsoever on the destination province for the purposes
+		of cutting support or banning retreats.
+		</div>
+		<div style="margin-top:0.5cm;font-family:arial,helvetica;">
+		<b>9th player:</b>
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		An extra space is inserted on the north end of the map called the
+		Arctic Ocean.  A unit in the Arctic Ocean may not be given any sort of
+		orders durning a fall turn.  No unit may attempt to move into the
+		Arctic Ocean during a fall turn.  The Arctic Ocean is adjacent to the
+		North Atlantic, Norwegian Sea, Barents Sea and Siberia.
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		St Petersburg is divided in half.  The eastern half is not a supply center.
+		It is called Siberia and it is adjacent to Barents Sea, St Petersburg,
+		Moscow, Kazakz and the Arctic Ocean.
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		Moscow is divided in half.  The eastern half is not a supply center.
+		It is called Kazakz and is is adjacent to Siberia, Moscow and
+		Sevastople.
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		Prussia and Silesia are neutral supply centers.
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		The Norwegian player begins with Army Norway, Fleet Denmark and Fleet
+		Sweden.
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		The Russian fleet in St Petersburg starts out on the north coast rather than
+		the south coast.
+		</div>
+		<div style="margin-top:1cm;font-family:arial,helvetica;">Author: Danny Loeb</div>]]></DESCRIPTION> 
+		<MAP adjacencyURI="loeb9/loeb9_adjacency.xml">
+			<GRAPHIC uri="loeb9/loeb9_gridmap.svg" default="true" title="Grid Map" description="Test Grid Map" thumburi="grid_thumb.png"/>
+		</MAP>
+		<RULEOPTIONS>
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+		</RULEOPTIONS>
+		<POWER name="Austria" active="true" adjective="Austrian" /> 
+		<POWER name="England" active="true" adjective="English" altnames="Britain" /> 
+		<POWER name="France" active="true" adjective="French" /> 
+		<POWER name="Germany" active="true" adjective="German" /> 
+		<POWER name="Italy" active="true" adjective="Italian" />
+		<POWER name="Russia" active="true" adjective="Russian" /> 
+		<POWER name="Turkey" active="true" adjective="Turkish" /> 
+		<POWER name="Spain" active="true" adjective="Spanish" /> 
+		<POWER name="Norway" active="true" adjective="Norwegian" /> 
+		<STARTINGTIME turn="Spring, 1901, Movement" />
+		<VICTORYCONDITIONS>
+			<WINNING_SUPPLY_CENTERS value="20" />
+			<YEARS_WITHOUT_SC_CAPTURE value="7" />
+			<GAME_LENGTH value="35" />
+		</VICTORYCONDITIONS>
+ 	 	<!-- supply centers -->
+		<SUPPLYCENTER province="ank" homepower="turkey" owner="turkey"/>
+		<SUPPLYCENTER province="bel" />
+		<SUPPLYCENTER province="ber" homepower="germany" owner="germany"/>
+	 	<SUPPLYCENTER province="bre" homepower="france" owner="france"/>
+		<SUPPLYCENTER province="bud" homepower="austria" owner="austria"/>
+		<SUPPLYCENTER province="bul" />
+	 	<SUPPLYCENTER province="con" homepower="turkey" owner="turkey"/>
+		<SUPPLYCENTER province="den" />
+		<SUPPLYCENTER province="edi" homepower="britain" owner="britain"/>
+		<SUPPLYCENTER province="gre" />
+		<SUPPLYCENTER province="hol" />
+		<SUPPLYCENTER province="kie" homepower="germany" owner="germany"/>
+		<SUPPLYCENTER province="lvp" homepower="britain" owner="britain"/>
+		<SUPPLYCENTER province="lon" homepower="britain" owner="britain"/>
+	 	<SUPPLYCENTER province="mar" homepower="france" owner="france"/>
+	 	<SUPPLYCENTER province="mos" homepower="russia" owner="russia"/>
+		<SUPPLYCENTER province="mun" homepower="germany" owner="germany"/>
+	 	<SUPPLYCENTER province="nap" homepower="italy" owner="italy"/>
+		<SUPPLYCENTER province="nor" />
+	 	<SUPPLYCENTER province="par" homepower="france" owner="france"/>
+		<SUPPLYCENTER province="por" />
+	 	<SUPPLYCENTER province="rom" homepower="italy" owner="italy"/>
+		<SUPPLYCENTER province="rum" />
+		<SUPPLYCENTER province="ser" />
+	 	<SUPPLYCENTER province="sev" homepower="russia" owner="russia"/>
+	 	<SUPPLYCENTER province="smy" homepower="turkey" owner="turkey"/>
+	 	<SUPPLYCENTER province="stp" homepower="russia" owner="russia"/>
+		<SUPPLYCENTER province="swe" />
+		<SUPPLYCENTER province="tri" homepower="austria" owner="austria"/>
+		<SUPPLYCENTER province="tun" />
+	 	<SUPPLYCENTER province="ven" homepower="italy" owner="italy"/>
+		<SUPPLYCENTER province="vie" homepower="austria" owner="austria"/>
+	 	<SUPPLYCENTER province="war" homepower="russia" owner="russia"/>
+		<!-- new supply centers (spain, norway) -->
+		<SUPPLYCENTER province="mad" homepower="spain" owner="spain"/>
+		<SUPPLYCENTER province="cor" homepower="spain" owner="spain"/>
+		<SUPPLYCENTER province="por" homepower="spain" owner="spain"/>
+		<SUPPLYCENTER province="nor" homepower="norway" owner="norway"/>
+		<SUPPLYCENTER province="den" homepower="norway" owner="norway"/>
+		<SUPPLYCENTER province="swe" homepower="norway" owner="norway"/>
+		<!-- unit placement -->
+		<INITIALSTATE province="ank" power="turkey" unit="fleet" />
+		<INITIALSTATE province="ber" power="germany" unit="army" />
+		<INITIALSTATE province="bre" power="france" unit="fleet" />
+		<INITIALSTATE province="bud" power="austria" unit="army" />
+		<INITIALSTATE province="con" power="turkey" unit="army" />
+		<INITIALSTATE province="edi" power="britain" unit="fleet" />
+		<INITIALSTATE province="kie" power="germany" unit="fleet" />
+		<INITIALSTATE province="lvp" power="britain" unit="army" />
+		<INITIALSTATE province="lon" power="britain" unit="fleet" />
+		<INITIALSTATE province="mar" power="france" unit="army" />
+		<INITIALSTATE province="mos" power="russia" unit="army" />
+		<INITIALSTATE province="mun" power="germany" unit="army" />
+		<INITIALSTATE province="nap" power="italy" unit="fleet" />
+		<INITIALSTATE province="par" power="france" unit="army" />
+		<INITIALSTATE province="rom" power="italy" unit="army" />
+		<INITIALSTATE province="sev" power="russia" unit="fleet" />
+		<INITIALSTATE province="smy" power="turkey" unit="army" />
+		<INITIALSTATE province="stp" power="russia" unit="fleet" unitcoast="sc" />
+		<INITIALSTATE province="tri" power="austria" unit="fleet" />
+		<INITIALSTATE province="ven" power="italy" unit="army" />
+		<INITIALSTATE province="vie" power="austria" unit="army" />
+		<INITIALSTATE province="war" power="russia" unit="army" />
+		<!-- new units (spain, norway) -->
+		<INITIALSTATE province="mad" power="spain" unit="army" />
+		<INITIALSTATE province="cor" power="spain" unit="army" />
+		<INITIALSTATE province="por" power="spain" unit="fleet" />
+		<INITIALSTATE province="nor" power="norway" unit="army" />
+		<INITIALSTATE province="den" power="norway" unit="fleet" />
+		<INITIALSTATE province="swe" power="norway" unit="fleet" />
+	</VARIANT>
+	
+	
+	<VARIANT name="Ancient Mediterranean" version="1.0" aliases="ancmed, ancient_med">
+		<DESCRIPTION><![CDATA[<div style="font-family:arial,helvetica;">
+		<b>NOTE: Only a grid test map exists for this variant.</b>
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		The Ancient Mediterranean is a five player map variant based loosely 
+		on the powerful civilizations of that period and area; Rome, Carthage, Greece, Egypt and Persia.
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		The normal rules of the game of Diplomacy apply, with the following additions, 
+		exceptions and clarifications. Note there is only one minor exception to the normal 
+		rules (Baleares). The rest of the following explanations involve either the expected 
+		things that must be defined in Diplomacy variants or geographical considerations which 
+		simply clarify where units may or may not move. If you are familiar with the normal rules 
+		of Diplomacy, you will be able to read through the following very quickly--it's not as long 
+		as it looks.
+		</div>
+		<div style="margin-top:0.25cm;font-family:arial,helvetica;">
+		Home Supply Centers and Starting Positions of the Powers
+		<ul>
+			<li><b>Rome:</b> (red) fleet Neapolis  army Roma  army Ravenna</li>
+			<li><b>Carthage:</b>  (dark blue)  fleet Thapsus  army Cirta  army Carthage</li>
+			<li><b>Greece:</b>  (green)  fleet Sparta  army Athens  army Macedonia</li>
+			<li><b>Persia:</b>  (black)  fleet Sidon  army Antioch  army Damascus</li>
+			<li><b>Egypt:</b>  (yellow)  fleet Alexandria  army Memphis  army Thebes</li>
+		</ul>
+		</div>
+		<h2><font face="Arial, Helvetica">Victory Criteria</font></h2>
+			<font face="Arial, Helvetica">
+			18 supply centers. This is a simple majority (it's just coincidence that 
+			Ancient Med has the same number of supply centers as the standard game). 
+			</font>
+		<h2><font face="Arial, Helvetica">Move Dates and Adjustments</font></h2>
+			<font face="Arial, Helvetica">
+			Each turn alternates between Spring and Fall, starting the game on a Spring turn, 
+			with adjustments being made after a Fall turn. Each successive Spring the year 
+			increases by one. This is just like the standard game except the variant�s first year is 
+			01 AD instead of 1901 AD. 
+			</font>
+		<h2><font face="Arial, Helvetica">Impassable Spaces</font></h2>
+			<font face="Arial, Helvetica">
+			Any areas that are not named on the board are not passable. 
+			The Atlantic Ocean can not be occupied by any units.  
+			</font>
+		<h2><font face="Arial, Helvetica">Islands</font></h2>
+			<font face="Arial, Helvetica">
+			Islands are distinct spaces. An island may be occupied by an army or a fleet. 
+			Each island has one continuous coast, therefore a fleet on an island may move 
+			to any space adjacent to it. For example, a fleet could move from the Egyptian 
+			Sea to Crete in one turn, and then move to the Aegean Sea in the next turn.  
+			</font>
+		<h2><font face="Arial, Helvetica">Movement Across Narrow Straits</font></h2>
+			<font face="Arial, Helvetica">
+			Arrows on the board indicate two adjacent land (coastal) spaces. An army may 
+			move from one space to the other in one turn without being convoyed. Because 
+			they are adjacent, fleets may also move from one space to the other in one turn. 
+			Note that the Tyrrhenean Sea is adjacent to the Ausonian Sea.  
+			</font>
+		<h2><font face="Arial, Helvetica">Byzantium</font></h2>
+			<font face="Arial, Helvetica">
+			Byzantium is one space which straddles a waterway. The waterway allows movement 
+			of a fleet in Byzantium to any adjacent coastal space or sea space. The waterway 
+			does not impede the movement of an army through Byzantium. And it is a supply center. 
+			In other words, it works just like Constantinople in the standard game.  
+			</font>
+		<h2><font face="Arial, Helvetica">Baleares</font></h2>
+			<font face="Arial, Helvetica">
+			Baleares is a single space (which consists of the islands and the water around them). 
+			Since it contains both land and water, it can be occupied by a fleet or an army. However, 
+			since it is a single space, it can only be occupied by one unit at a time. Although an army 
+			can occupy Baleares, it can not move there directly from the mainland spaces since the 
+			islands are too far from the coast. For an army to enter or leave Baleares, it would have 
+			to be convoyed by a fleet in the Berber Sea or the Ligurian Sea. Since Baleares consists 
+			mostly of water, it is considered a sea space for the purposes of convoys, therefore a
+			fleet occupying Baleares may be used to convoy an army using the normal convoy rules. 
+			Baleares is a supply center.  
+			</font>
+		<h2><font face="Arial, Helvetica">Four-way Intersection in the High Seas</font></h2>
+			<font face="Arial, Helvetica">
+			In the middle of the board there is an area where four sea spaces come together at one point.
+			They are the Ausonian Sea, Messenian Sea, Gulf of Tacape and Libyan Sea. All four of these 
+			spaces are adjacent to each of the other three at that point. Therefore, a fleet in one of 
+			these spaces may move to any of the other three. In other words, a fleet in any of these 
+			spaces may move diagonally.
+			<p>
+			By virtue of the expanse of the open seas, fleets can pass each other in a criss-cross fashion 
+			without impeding each others' movement. For example, a Roman fleet could move from the Ausonian 
+			Sea to the Libyan Sea and a Greek fleet could move from the Messenian Sea to the Gulf of Tacape 
+			on the same turn and both of these moves would be allowed. Note that this criss-crossing is not
+			the same as two units exchanging places. For example, if a Roman fleet tried to move from the 
+			Ausonian Sea to the Libyan Sea and an Egyptian fleet tried to move from the Libyan Sea to the 
+			Ausonian Sea on the same turn, these moves would not be allowed due to the normal rules.  
+			</font>
+		<h2><font face="Arial, Helvetica">The Diolkos</font></h2>
+			<font face="Arial, Helvetica">
+			The border between Sparta and Athens effectively works like a canal. It cuts across the 
+			isthmus and allows fleets to move through. For example, a fleet in the Aegean Sea could move
+			to Athens and then, on the following turn, to the Ionian Sea. Note that in game terms, this
+			means Athens effectively has one continuous coast. Armies can freely move between Sparta and
+			Athens.
+			<p>
+			The historical precedence for this is not an actual canal. The Diolkos was a roadway built 
+			by the Greeks for the purpose of moving ships across the isthmus on large wheeled carts. 
+			You can still see the ruts in the ground today. See Ancient Diolkos of Corinth and The 
+			Diolkos and the Corinth Canal.  
+			</font>
+		<h2><font face="Arial, Helvetica">The Nile River and Canal</font></h2>
+			<font face="Arial, Helvetica">
+			The Nile River acts as the boundary between the spaces on its east and west banks. The river 
+			is not a space on the board. It can not be occupied by any units. However, it is considered to 
+			be navigable. Therefore, a fleet may move to and from spaces that are adjacent along the river.
+			For example, Sinai to Thebes, Thebes to Memphis, Memphis to Alexandria would all be legal moves
+			for a fleet. Memphis to Cyrene would not be a legal move for a fleet. Egypt can build fleets in
+			any of its home supply centers.
+			<p>
+			There is also a canal that connects the Nile River Delta to the Reed Sea. It acts as the 
+			boundary between Sinai and Thebes. It is also navigable and therefore allows fleet movement 
+			between Sinai, Thebes and Reed Sea. Reed Sea is not adjacent to the Gulf of Pelusium or 
+			Alexandria. Notice that due to the various waterways and coastlines, Sinai and Thebes each 
+			have one continuous coast.
+			<p>
+			Armies can freely move across the Nile River and canal.
+			<p>
+			There actually is much precedence for a canal connecting the Nile River to Reed Sea in 
+			ancient history. It required constant dredging to keep it clear of sand and therefore was 
+			subject to long periods in history of not being navigable (although this spuratic 
+			availablitly is not reflected in the game). See Pharaonic Egypt: Canals and Ancient 
+			Economies (this second article is long and does not deal with the canal directly, so search 
+			for the word "canal" using your browser's find command).  
+			</font>
+		<h2><font face="Arial, Helvetica">The Nile River Delta</font></h2>
+			<font face="Arial, Helvetica">
+			The Nile Delta is not a distinct space on the board. It can not be occupied by any units. 
+			There are four spaces which are in contact with the delta. They are Alexandria, Thebes, 
+			Sinai and the Gulf of Pelusium. All four of these spaces are considered to be adjacent to 
+			each of the other three, at all times, by virtue of the multiple water channels in the delta. 
+			This provides increased flexibility concerning the movement of fleets. A fleet in any of these
+			four spaces may move to any of the other three. The delta does not impede the movement of 
+			armies. An army in any of the three land spaces in contact with the delta, may move to 
+			either of the other two.
+			<p>
+			The key to remember is that Thebes is always adjacent to the Gulf of Pelusium <b>and</b> 
+			Alexandria is always adjacent to Sinai (in addition to the obvious adjacancies). For example, 
+			a fleet could move from Thebes to the Gulf of Pelusium and, on the same turn, an army or 
+			a fleet, could move from Alexandria to Sinai. It should be noted that this criss-crossing 
+			is not the same as two units exchanging places which is not allowed.
+			</font>
+		<h2><font face="Arial, Helvetica">Convoy Clarifications</font></h2>
+			<font face="Arial, Helvetica">
+			As in the normal rules, no fleet in a land space can convoy armies. This includes 
+			any coastal space, island, Byzantium and land spaces adjacent to the Nile River or 
+			the delta. Baleares is considered primarily a sea space for the purposes of convoys, 
+			therefore a fleet occupying it may be used to convoy an army using the normal convoy rules. 
+			</font>
+		<h2><font face="Arial, Helvetica">Abbreviations for Ancient Med Names</font></h2>
+			<font face="Arial, Helvetica">
+			For almost every space on the board, the first three letters of the name are used for 
+			its abbreviation. This includes spaces which have two words in the name. So the Egyptian 
+			Sea is "Egy" and the Cilician Strait is "Cil". None of the letters in the words "sea" or 
+			"strait" are used. However, names that have three words in them use the first letter of 
+			each of the three words. So the Gulf of Pelusium is "GoP". There are only a few exceptions 
+			to these guidelines due to redundancies. The following is a complete list of the exceptions 
+			to the "use the first three letters" rule.
+			<ul>
+				<li>Gulf of Pelusium = GoP</li>
+				<li>Gulf of Syrtis = GoS</li>
+				<li>Gulf of Tacape = GoT</li>
+				<li>Sardinia = Sad</li>
+				<li>Sarmatia = Sam</li>
+				<li>Sinai = Sii</li>
+				<li>Sinope = Sip</li>
+				<li>Tyre = Tye</li>
+				<li>Tyrrhenean Sea = Tyn</li>
+			</ul>
+			</font>
+		<div style="margin-top:0.75cm;font-family:arial,helvetica;">Author: Don Hessong</div>]]></DESCRIPTION> 
+		<MAP adjacencyURI="ancmed/ancmed_adjacency.xml">
+			<GRAPHIC uri="ancmed/ancmed_gridmap.svg" default="true" title="Grid Map" description="Test Grid Map" thumburi="grid_thumb.png"/>
+		</MAP>
+		<RULEOPTIONS>
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+		</RULEOPTIONS>
+		<POWER name="Rome" active="true" adjective="Roman" /> 
+		<POWER name="Carthage" active="true" adjective="Carthaginian" /> 
+		<POWER name="Persia" active="true" adjective="Persian" /> 
+		<POWER name="Greece" active="true" adjective="Greek" /> 
+		<POWER name="Egypt" active="true" adjective="Egyptian" /> 
+		<STARTINGTIME turn="Spring, 1, Movement" />
+		<VICTORYCONDITIONS>
+			<WINNING_SUPPLY_CENTERS value="18" />
+			<YEARS_WITHOUT_SC_CAPTURE value="7" />
+			<GAME_LENGTH value="35" />
+		</VICTORYCONDITIONS>
+ 	 	<!-- supply centers: owned, intial -->
+		<SUPPLYCENTER homepower="rome" province="rav" owner="rome" />
+		<SUPPLYCENTER homepower="rome" province="nea" owner="rome" />
+		<SUPPLYCENTER homepower="rome" province="rom" owner="rome" />
+		<SUPPLYCENTER homepower="carthage" province="car" owner="carthage" />
+		<SUPPLYCENTER homepower="carthage" province="cir" owner="carthage" />
+		<SUPPLYCENTER homepower="carthage" province="tha" owner="carthage" />
+		<SUPPLYCENTER homepower="persia" province="dam" owner="persia" />
+		<SUPPLYCENTER homepower="persia" province="ant" owner="persia" />
+		<SUPPLYCENTER homepower="persia" province="sid" owner="persia" />
+		<SUPPLYCENTER homepower="greece" province="spa" owner="greece" />
+		<SUPPLYCENTER homepower="greece" province="ath" owner="greece" />
+		<SUPPLYCENTER homepower="greece" province="mac" owner="greece" />
+		<SUPPLYCENTER homepower="egypt" province="mem" owner="egypt" />
+		<SUPPLYCENTER homepower="egypt" province="ale" owner="egypt" />
+		<SUPPLYCENTER homepower="egypt" province="the" owner="egypt" />
+		<!-- unowned supply centers -->
+		<SUPPLYCENTER province="vin"/>
+		<SUPPLYCENTER province="mas"/>
+		<SUPPLYCENTER province="dal"/>
+		<SUPPLYCENTER province="che"/>
+		<SUPPLYCENTER province="byz"/>
+		<SUPPLYCENTER province="sag"/>
+		<SUPPLYCENTER province="mil"/>
+		<SUPPLYCENTER province="sip"/>
+		<SUPPLYCENTER province="tye"/>
+		<SUPPLYCENTER province="jer"/>
+		<SUPPLYCENTER province="pet"/>
+		<SUPPLYCENTER province="cyr"/>
+		<SUPPLYCENTER province="lep"/>
+		<SUPPLYCENTER province="num"/>
+		<SUPPLYCENTER province="bal"/>
+		<SUPPLYCENTER province="sad"/>
+		<SUPPLYCENTER province="sic"/>
+		<SUPPLYCENTER province="cre"/>
+		<SUPPLYCENTER province="cyp"/>
+		<!-- unit placement -->
+		<INITIALSTATE power="rome" province="rav" unit="army" />
+		<INITIALSTATE power="rome" province="nea" unit="fleet" />
+		<INITIALSTATE power="rome" province="rom" unit="army" />
+		<INITIALSTATE power="carthage" province="car" unit="fleet" />
+		<INITIALSTATE power="carthage" province="cir" unit="army" />
+		<INITIALSTATE power="carthage" province="tha" unit="army" />
+		<INITIALSTATE power="persia" province="dam" unit="army" />
+		<INITIALSTATE power="persia" province="ant" unit="army" />
+		<INITIALSTATE power="persia" province="sid" unit="fleet" />
+		<INITIALSTATE power="greece" province="spa" unit="fleet" />
+		<INITIALSTATE power="greece" province="ath" unit="army" />
+		<INITIALSTATE power="greece" province="mac" unit="army" />
+		<INITIALSTATE power="egypt" province="mem" unit="army" />
+		<INITIALSTATE power="egypt" province="ale" unit="fleet" />
+		<INITIALSTATE power="egypt" province="the" unit="army" />
+	</VARIANT>
+	
+	<VARIANT name="Asia" version="1.0">
+		<DESCRIPTION><![CDATA[<div style="font-family:arial,helvetica;">
+		<b>NOTE: Only a grid test map exists for this variant.</b>
+		</div>
+		<div style="font-family:arial,helvetica;;margin-top:0.5cm">
+		This variant has undergone extensive development and playtesting over more
+		than four years.  Several email and quite a few live games later, here are the
+		results.
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.5cm">
+		Note that there are absolutely no rule changes from the standard Dip rulebook.
+		Just a new map.  Comments: canals are similar to Constantinople in the regular
+		Vanilla game; ie fleets and armies may cross, but only one may be occupying
+		the territory at a time. Asian Diplomacy has almost no historical basis.
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.5cm">
+		The original designers of the variant said "It is VERY well balanced, which 
+		should be the final criteria for a wargame.  All powers have equal chances to 
+		win." However, experience says that this is not the case. Some powers are much
+		stronger than others. It is also very easy to stalemate the game, which makes
+		solo wins unlikely, and draws much more likely.
+		</div>
+		<div style="margin-top:0.75cm;font-family:arial,helvetica;">Author: David Lawler and Peter Baer</div>]]></DESCRIPTION> 
+		<MAP adjacencyURI="asia/asia_adjacency.xml">
+			<GRAPHIC uri="asia/asia_gridmap.svg" default="true" title="Grid Map" description="Test Grid Map" thumburi="grid_thumb.png"/>
+		</MAP>
+		<RULEOPTIONS>
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+		</RULEOPTIONS>
+		<POWER name="China" active="true" adjective="Chinese" /> 
+		<POWER name="India" active="true" adjective="Indian" /> 
+		<POWER name="Indonesia" active="true" adjective="Indonesian" /> 
+		<POWER name="Japan" active="true" adjective="Japanese" /> 
+		<POWER name="Russia" active="true" adjective="Russian" /> 
+		<POWER name="Siberia" active="true" adjective="Siberian" /> 
+		<POWER name="Persia" active="true" adjective="Persian" /> 
+		<STARTINGTIME turn="Spring 1900, Movement" />
+		<VICTORYCONDITIONS>
+			<WINNING_SUPPLY_CENTERS value="21" />
+		</VICTORYCONDITIONS>
+ 	 	<!-- supply centers: owned, intial -->
+		<SUPPLYCENTER homepower="china" province="bei" owner="china" />
+		<SUPPLYCENTER homepower="china" province="tib" owner="china" />
+		<SUPPLYCENTER homepower="china" province="sha" owner="china" />
+		<SUPPLYCENTER homepower="India" province="cal" owner="India" />
+		<SUPPLYCENTER homepower="India" province="del" owner="India" />
+		<SUPPLYCENTER homepower="India" province="bom" owner="India" />
+		<SUPPLYCENTER homepower="Indonesia" province="bor" owner="Indonesia" />
+		<SUPPLYCENTER homepower="Indonesia" province="jav" owner="Indonesia" />
+		<SUPPLYCENTER homepower="Indonesia" province="sum" owner="Indonesia" />
+		<SUPPLYCENTER homepower="Japan" province="hok" owner="Japan" />
+		<SUPPLYCENTER homepower="Japan" province="hon" owner="Japan" />
+		<SUPPLYCENTER homepower="Japan" province="man" owner="Japan" />
+		<SUPPLYCENTER homepower="Japan" province="phi" owner="Japan" />
+		<SUPPLYCENTER homepower="Russia" province="mos" owner="Russia" />
+		<SUPPLYCENTER homepower="Russia" province="sev" owner="Russia" />
+		<SUPPLYCENTER homepower="Russia" province="stp" owner="Russia" />
+		<SUPPLYCENTER homepower="Siberia" province="irk" owner="Siberia" />
+		<SUPPLYCENTER homepower="Siberia" province="kam" owner="Siberia" />
+		<SUPPLYCENTER homepower="Siberia" province="wsb" owner="Siberia" />
+		<SUPPLYCENTER homepower="Persia" province="iran" owner="Persia" />
+		<SUPPLYCENTER homepower="Persia" province="iraq" owner="Persia" />
+		<SUPPLYCENTER homepower="Persia" province="ara" owner="Persia" />
+		<!-- unowned supply centers -->                        
+		<SUPPLYCENTER province="aus"/>
+		<SUPPLYCENTER province="bal"/>
+		<SUPPLYCENTER province="ban"/>
+		<SUPPLYCENTER province="egy"/>
+		<SUPPLYCENTER province="lao"/>
+		<SUPPLYCENTER province="mad"/>
+		<SUPPLYCENTER province="new"/>
+		<SUPPLYCENTER province="nov"/>
+		<SUPPLYCENTER province="oma"/>
+		<SUPPLYCENTER province="pak"/>
+		<SUPPLYCENTER province="sri"/>
+		<SUPPLYCENTER province="tha"/>
+		<SUPPLYCENTER province="tia"/>
+		<SUPPLYCENTER province="tur"/>
+		<SUPPLYCENTER province="ura"/>
+		<SUPPLYCENTER province="uzb"/>
+		<SUPPLYCENTER province="vie"/>
+		<SUPPLYCENTER province="yak"/>
+		<!-- unit placement -->
+		<INITIALSTATE power="china" province="bei" unit="army" />
+		<INITIALSTATE power="china" province="tib" unit="army" />
+		<INITIALSTATE power="china" province="sha" unit="fleet" />
+		<INITIALSTATE power="India" province="cal" unit="army" />
+		<INITIALSTATE power="India" province="del" unit="army" />
+		<INITIALSTATE power="India" province="bom" unit="fleet" />
+		<INITIALSTATE power="Indonesia" province="bor" unit="fleet" />
+		<INITIALSTATE power="Indonesia" province="jav" unit="fleet" />
+		<INITIALSTATE power="Indonesia" province="sum" unit="fleet" />
+		<INITIALSTATE power="Japan" province="hok" unit="fleet" />
+		<INITIALSTATE power="Japan" province="hon" unit="fleet" />
+		<INITIALSTATE power="Japan" province="man" unit="army" />
+		<INITIALSTATE power="Japan" province="phi" unit="fleet" />
+		<INITIALSTATE power="Russia" province="mos" unit="army" />
+		<INITIALSTATE power="Russia" province="sev" unit="army" />
+		<INITIALSTATE power="Russia" province="stp" unit="fleet" />
+		<INITIALSTATE power="Siberia" province="irk" unit="army" />
+		<INITIALSTATE power="Siberia" province="kam" unit="fleet" />
+		<INITIALSTATE power="Siberia" province="wsb" unit="army" />
+		<INITIALSTATE power="Persia" province="iran" unit="army" />
+		<INITIALSTATE power="Persia" province="iraq" unit="army" />
+		<INITIALSTATE power="Persia" province="ara" unit="fleet" unitcoast="ec"/>
+	</VARIANT>
+	
+	<VARIANT name="Modern" version="1.0">
+		<DESCRIPTION><![CDATA[<div style="font-family:arial,helvetica;">
+		<b>NOTE: Only a grid test map exists for this variant.</b>
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.25cm;">
+		Modern Diplomacy is intended to be diplomacy with an updated map,
+		circa 1994, taking place in Europe, the Middle East and North Africa.
+		Any country with more than 30 million inhabitants was made a power.
+		Those with more than 60 million inhabitants were given 4 home centers,
+		while Russia (with 200 million plus) was given 5. Iran would have
+		qualified as a 4 supply center power, but this would have made it
+		necessary to extend the map into Asia, so it was not done.
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.5cm">
+		Historically, we have to consider that the European Community and
+		all international alliances and organizations such as NATO and the
+		UN were broken down. Perhaps the United States suffered a major
+		cataclysm, or simply decided to ignore the outside world - but in
+		any case, it will not intervene in Europe.
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.5cm">
+		Other than this, borders and neutral supply centers were distributed
+		to even out the game. Monaco was made a neutral SC (it has lots 
+		of money) even though it's size does not warrant it, and Gibraltar was
+		made a British home SC, both to give Britain a port in the Mediterranean,
+		and to give Spain more than one neighbour). 
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.5cm">
+		There is also another type of unit optionally available, the wing.
+		Wings can go over water and land but can not capture a
+		supply center. Therefore, if France manages to move a plane over London,
+		England would still own it, but not be able to build there. 
+		Only the three 'nuclear' powers have wings available at the start
+		(Britain, France and Russia) though any power can build them.
+		</div>
+		<h2 style="font-family:arial,helvetica;">
+		Notes on Geography
+		</h2>
+		<div style="font-family:arial,helvetica;">
+		Cairo, Hamburg and Istanbul behave as Kiel and Constantinople did in the
+		original game: they have no coasts but fleets can pass through them to
+		bodies of water of both sides.
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.5cm">
+		There is another canal linking Rostov and Volga, thus permitting
+		access to the Caspian Sea to ships. Rostov is situated along the
+		Don River which empties into the Black Sea, while the Volga empties
+		into the Caspian Sea. In the real world there is a canal at Volgograd
+		linking the two rivers, somewhere in the southern Volga region on
+		the map. This is the only way to get ships into and out of the
+		Caspian Sea.
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.5cm">
+		Iran is the only territory with multiple coasts in the game--the south 
+		coast touches the Arabian Sea and the Persian Gulf, while the north coast
+		touches the Caspian Sea.
+		</div>
+		<h2 style="font-family:arial,helvetica;">
+		Abbreviations
+		</h2>
+		<div style="font-family:arial,helvetica;">
+		Abbreviations for territories are the first 3 letters of the territory,
+		except for:
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.5cm;margin-left:1.0cm;">
+		  Barents Sea: bare, bars  (conflict with Barcelona)<br>
+		  Bornholm Sea: born, bors  (conflict with Bordeaux)<br>
+		  Eastern Black Sea: ebs<br>
+		  Eastern Mediterranean: emed<br>
+		  Eastern Sahara: esah<br>
+		  Gulf of Bothnia<br>
+		  Gulf of Lyon: gol<br>
+		  Libyan Sea: lbn<br>
+		  North Atlantic Ocean: nao<br>
+		  North Sea: nth<br>
+		  Norwegian Sea: nwg<br>
+		  Seville: sve (conflict with sevastopol)<br>
+		  Western Black Sea: wbs<br>
+		  Western Mediterranean: wmed<br>
+		  Western Sahara: wsah
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.5cm">
+		Alternatives are also available for many spaces, especially water
+		spaces.
+		</div>
+		<div style="margin-top:0.75cm;font-family:arial,helvetica;">Author: Vincent Mous</div>]]></DESCRIPTION> 
+		<MAP adjacencyURI="modern/modern_adjacency.xml">
+			<GRAPHIC uri="modern/modern_gridmap.svg" default="true" title="Grid Map" description="Test Grid Map" thumburi="grid_thumb.png"/>
+		</MAP>
+		<RULEOPTIONS>
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+			<RULEOPTION name="OPTION_WINGS" value="VALUE_WINGS_DISABLED" />
+		</RULEOPTIONS>
+		<POWER name="Britain" active="true" adjective="British" /> 
+		<POWER name="Egypt" active="true" adjective="Egyptian" /> 
+		<POWER name="France" active="true" adjective="French" /> 
+		<POWER name="Germany" active="true" adjective="German" /> 
+		<POWER name="Italy" active="true" adjective="Italian" /> 
+		<POWER name="Poland" active="true" adjective="Poland" /> 
+		<POWER name="Russia" active="true" adjective="Russian" /> 
+		<POWER name="Spain" active="true" adjective="Spanish" /> 
+		<POWER name="Turkey" active="true" adjective="Turkish" /> 
+		<POWER name="Ukraine" active="true" adjective="Ukrainian" /> 
+		<STARTINGTIME turn="Spring 1994, Movement" />
+		<VICTORYCONDITIONS>
+			<WINNING_SUPPLY_CENTERS value="33" />
+		</VICTORYCONDITIONS>
+		<!-- Owned, Starting supply centers -->
+		<SUPPLYCENTER homepower="britain" province="edi" owner="britain" />
+		<SUPPLYCENTER homepower="britain" province="gib" owner="britain" />
+		<SUPPLYCENTER homepower="britain" province="liv" owner="britain" />
+		<SUPPLYCENTER homepower="britain" province="lon" owner="britain" />
+		<SUPPLYCENTER homepower="egypt" province="ale" owner="egypt" />
+		<SUPPLYCENTER homepower="egypt" province="asw" owner="egypt" />
+		<SUPPLYCENTER homepower="egypt" province="cai" owner="egypt" />
+		<SUPPLYCENTER homepower="france" province="bor" owner="france" />
+		<SUPPLYCENTER homepower="france" province="lyo" owner="france" />
+		<SUPPLYCENTER homepower="france" province="mar" owner="france" />
+		<SUPPLYCENTER homepower="france" province="par" owner="france" />
+		<SUPPLYCENTER homepower="germany" province="ber" owner="germany" />
+		<SUPPLYCENTER homepower="germany" province="fra" owner="germany" />
+		<SUPPLYCENTER homepower="germany" province="ham" owner="germany" />
+		<SUPPLYCENTER homepower="germany" province="mun" owner="germany" />
+		<SUPPLYCENTER homepower="italy" province="mil" owner="italy" />
+		<SUPPLYCENTER homepower="italy" province="nap" owner="italy" />
+		<SUPPLYCENTER homepower="italy" province="rom" owner="italy" />
+		<SUPPLYCENTER homepower="italy" province="ven" owner="italy" />
+		<SUPPLYCENTER homepower="poland" province="gda" owner="poland" />
+		<SUPPLYCENTER homepower="poland" province="kra" owner="poland" />
+		<SUPPLYCENTER homepower="poland" province="war" owner="poland" />
+		<SUPPLYCENTER homepower="russia" province="gor" owner="russia" />
+		<SUPPLYCENTER homepower="russia" province="mos" owner="russia" />
+		<SUPPLYCENTER homepower="russia" province="mur" owner="russia" />
+		<SUPPLYCENTER homepower="russia" province="ros" owner="russia" />
+		<SUPPLYCENTER homepower="russia" province="stp" owner="russia" />
+		<SUPPLYCENTER homepower="spain" province="bar" owner="spain" />
+		<SUPPLYCENTER homepower="spain" province="mad" owner="spain" />
+		<SUPPLYCENTER homepower="spain" province="sev" owner="spain" />
+		<SUPPLYCENTER homepower="turkey" province="ada" owner="turkey" />
+		<SUPPLYCENTER homepower="turkey" province="ank" owner="turkey" />
+		<SUPPLYCENTER homepower="turkey" province="ist" owner="turkey" />
+		<SUPPLYCENTER homepower="turkey" province="izm" owner="turkey" />
+		<SUPPLYCENTER homepower="ukraine" province="kha" owner="ukraine" />
+		<SUPPLYCENTER homepower="ukraine" province="kie" owner="ukraine" />
+		<SUPPLYCENTER homepower="ukraine" province="ode" owner="ukraine" />
+		<SUPPLYCENTER homepower="ukraine" province="sev" owner="ukraine" />
+		<!-- Neutral supply centers -->                         
+		<SUPPLYCENTER province="aus"/>
+		<SUPPLYCENTER province="bel"/>
+		<SUPPLYCENTER province="bie"/>
+		<SUPPLYCENTER province="bul"/>
+		<SUPPLYCENTER province="cro"/>
+		<SUPPLYCENTER province="cze"/>
+		<SUPPLYCENTER province="den"/>
+		<SUPPLYCENTER province="geo"/>
+		<SUPPLYCENTER province="gre"/>
+		<SUPPLYCENTER province="hol"/>
+		<SUPPLYCENTER province="hun"/>
+		<SUPPLYCENTER province="irn"/>
+		<SUPPLYCENTER province="ire"/>
+		<SUPPLYCENTER province="isr"/>
+		<SUPPLYCENTER province="lib"/>
+		<SUPPLYCENTER province="lit"/>
+		<SUPPLYCENTER province="mon"/>
+		<SUPPLYCENTER province="mor"/>
+		<SUPPLYCENTER province="nor"/>
+		<SUPPLYCENTER province="por"/>
+		<SUPPLYCENTER province="rum"/>
+		<SUPPLYCENTER province="sau"/>
+		<SUPPLYCENTER province="ser"/>
+		<SUPPLYCENTER province="swe"/>
+		<SUPPLYCENTER province="swi"/>
+		<SUPPLYCENTER province="tun"/>
+		<!-- Inital Unit positions -->
+		<INITIALSTATE power="britain" province="edi" unit="fleet" />
+		<INITIALSTATE power="britain" province="gib" unit="fleet" />
+		<INITIALSTATE power="britain" province="liv" unit="fleet" />
+		<INITIALSTATE power="britain" province="lon" unit="fleet" />
+		<INITIALSTATE power="egypt" province="ale" unit="fleet" />
+		<INITIALSTATE power="egypt" province="asw" unit="army" />
+		<INITIALSTATE power="egypt" province="cai" unit="fleet" />
+		<INITIALSTATE power="france" province="bor" unit="fleet" />
+		<INITIALSTATE power="france" province="lyo" unit="army" />
+		<INITIALSTATE power="france" province="mar" unit="army" />
+		<INITIALSTATE power="france" province="par" unit="army" />
+		<INITIALSTATE power="germany" province="ber" unit="fleet" />
+		<INITIALSTATE power="germany" province="fra" unit="army" />
+		<INITIALSTATE power="germany" province="ham" unit="fleet" />
+		<INITIALSTATE power="germany" province="mun" unit="army" />
+		<INITIALSTATE power="italy" province="mil" unit="army" />
+		<INITIALSTATE power="italy" province="nap" unit="fleet" />
+		<INITIALSTATE power="italy" province="rom" unit="army" />
+		<INITIALSTATE power="italy" province="ven" unit="fleet" />
+		<INITIALSTATE power="poland" province="gda" unit="fleet" />
+		<INITIALSTATE power="poland" province="kra" unit="army" />
+		<INITIALSTATE power="poland" province="war" unit="army" />
+		<INITIALSTATE power="russia" province="gor" unit="army" />
+		<INITIALSTATE power="russia" province="mos" unit="army" />
+		<INITIALSTATE power="russia" province="mur" unit="army" />
+		<INITIALSTATE power="russia" province="ros" unit="fleet" />
+		<INITIALSTATE power="russia" province="stp" unit="fleet" />
+		<INITIALSTATE power="spain" province="bar" unit="fleet" />
+		<INITIALSTATE power="spain" province="mad" unit="army" />
+		<INITIALSTATE power="spain" province="sev" unit="army" />
+		<INITIALSTATE power="turkey" province="ada" unit="army" />
+		<INITIALSTATE power="turkey" province="ank" unit="fleet" />
+		<INITIALSTATE power="turkey" province="ist" unit="army" />
+		<INITIALSTATE power="turkey" province="izm" unit="fleet" />
+		<INITIALSTATE power="ukraine" province="kha" unit="army" />
+		<INITIALSTATE power="ukraine" province="kie" unit="army" />
+		<INITIALSTATE power="ukraine" province="ode" unit="army" />
+		<INITIALSTATE power="ukraine" province="sev" unit="fleet" />
+	</VARIANT>
+	
+	
+	<VARIANT name="Modern [Wings]" version="1.0">
+		<DESCRIPTION><![CDATA[<div style="font-family:arial,helvetica;">
+		<b>NOTE: Only a grid test map exists for this variant.</b>
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.25cm;">
+		This is the Modern variant with the Wing option enabled, and
+		with the modern Nuclear powers having some units substituted with
+		Wing units.
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.5cm">
+		Wings can go over water and land but cannot capture a
+		supply center. Therefore, if France manages to move a plane over London,
+		England would still own it, but not be able to build there. 
+		Only the three 'nuclear' powers have wings available at the start
+		(Britain, France and Russia) though any power can build them.
+		</div>
+		<div style="font-family:arial,helvetica;margin-top:0.25cm;">
+		Note that if the Wing unit rule option is disabled, new Wing units
+		may not be built, and only the original Wing units will be available.
+		</div>
+		<div style="margin-top:0.75cm;font-family:arial,helvetica;">Author: Vincent Mous</div>]]></DESCRIPTION> 
+		<MAP adjacencyURI="modern/modern_adjacency.xml">
+			<GRAPHIC uri="modern/modern_gridmap.svg" default="true" title="Grid Map" description="Test Grid Map" thumburi="grid_thumb.png"/>
+		</MAP>
+		<RULEOPTIONS>
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+			<RULEOPTION name="OPTION_WINGS" value="VALUE_WINGS_ENABLED" />
+		</RULEOPTIONS>
+		<POWER name="Britain" active="true" adjective="British" /> 
+		<POWER name="Egypt" active="true" adjective="Egyptian" /> 
+		<POWER name="France" active="true" adjective="French" /> 
+		<POWER name="Germany" active="true" adjective="German" /> 
+		<POWER name="Italy" active="true" adjective="Italian" /> 
+		<POWER name="Poland" active="true" adjective="Poland" /> 
+		<POWER name="Russia" active="true" adjective="Russian" /> 
+		<POWER name="Spain" active="true" adjective="Spanish" /> 
+		<POWER name="Turkey" active="true" adjective="Turkish" /> 
+		<POWER name="Ukraine" active="true" adjective="Ukrainian" /> 
+		<STARTINGTIME turn="Spring 1994, Movement" />
+		<VICTORYCONDITIONS>
+			<WINNING_SUPPLY_CENTERS value="33" />
+		</VICTORYCONDITIONS>
+		<!-- Owned, Starting supply centers -->
+		<SUPPLYCENTER homepower="britain" province="edi" owner="britain" />
+		<SUPPLYCENTER homepower="britain" province="gib" owner="britain" />
+		<SUPPLYCENTER homepower="britain" province="liv" owner="britain" />
+		<SUPPLYCENTER homepower="britain" province="lon" owner="britain" />
+		<SUPPLYCENTER homepower="egypt" province="ale" owner="egypt" />
+		<SUPPLYCENTER homepower="egypt" province="asw" owner="egypt" />
+		<SUPPLYCENTER homepower="egypt" province="cai" owner="egypt" />
+		<SUPPLYCENTER homepower="france" province="bor" owner="france" />
+		<SUPPLYCENTER homepower="france" province="lyo" owner="france" />
+		<SUPPLYCENTER homepower="france" province="mar" owner="france" />
+		<SUPPLYCENTER homepower="france" province="par" owner="france" />
+		<SUPPLYCENTER homepower="germany" province="ber" owner="germany" />
+		<SUPPLYCENTER homepower="germany" province="fra" owner="germany" />
+		<SUPPLYCENTER homepower="germany" province="ham" owner="germany" />
+		<SUPPLYCENTER homepower="germany" province="mun" owner="germany" />
+		<SUPPLYCENTER homepower="italy" province="mil" owner="italy" />
+		<SUPPLYCENTER homepower="italy" province="nap" owner="italy" />
+		<SUPPLYCENTER homepower="italy" province="rom" owner="italy" />
+		<SUPPLYCENTER homepower="italy" province="ven" owner="italy" />
+		<SUPPLYCENTER homepower="poland" province="gda" owner="poland" />
+		<SUPPLYCENTER homepower="poland" province="kra" owner="poland" />
+		<SUPPLYCENTER homepower="poland" province="war" owner="poland" />
+		<SUPPLYCENTER homepower="russia" province="gor" owner="russia" />
+		<SUPPLYCENTER homepower="russia" province="mos" owner="russia" />
+		<SUPPLYCENTER homepower="russia" province="mur" owner="russia" />
+		<SUPPLYCENTER homepower="russia" province="ros" owner="russia" />
+		<SUPPLYCENTER homepower="russia" province="stp" owner="russia" />
+		<SUPPLYCENTER homepower="spain" province="bar" owner="spain" />
+		<SUPPLYCENTER homepower="spain" province="mad" owner="spain" />
+		<SUPPLYCENTER homepower="spain" province="sev" owner="spain" />
+		<SUPPLYCENTER homepower="turkey" province="ada" owner="turkey" />
+		<SUPPLYCENTER homepower="turkey" province="ank" owner="turkey" />
+		<SUPPLYCENTER homepower="turkey" province="ist" owner="turkey" />
+		<SUPPLYCENTER homepower="turkey" province="izm" owner="turkey" />
+		<SUPPLYCENTER homepower="ukraine" province="kha" owner="ukraine" />
+		<SUPPLYCENTER homepower="ukraine" province="kie" owner="ukraine" />
+		<SUPPLYCENTER homepower="ukraine" province="ode" owner="ukraine" />
+		<SUPPLYCENTER homepower="ukraine" province="sev" owner="ukraine" />
+		<!-- Neutral supply centers -->                         
+		<SUPPLYCENTER province="aus"/>
+		<SUPPLYCENTER province="bel"/>
+		<SUPPLYCENTER province="bie"/>
+		<SUPPLYCENTER province="bul"/>
+		<SUPPLYCENTER province="cro"/>
+		<SUPPLYCENTER province="cze"/>
+		<SUPPLYCENTER province="den"/>
+		<SUPPLYCENTER province="geo"/>
+		<SUPPLYCENTER province="gre"/>
+		<SUPPLYCENTER province="hol"/>
+		<SUPPLYCENTER province="hun"/>
+		<SUPPLYCENTER province="irn"/>
+		<SUPPLYCENTER province="ire"/>
+		<SUPPLYCENTER province="isr"/>
+		<SUPPLYCENTER province="lib"/>
+		<SUPPLYCENTER province="lit"/>
+		<SUPPLYCENTER province="mon"/>
+		<SUPPLYCENTER province="mor"/>
+		<SUPPLYCENTER province="nor"/>
+		<SUPPLYCENTER province="por"/>
+		<SUPPLYCENTER province="rum"/>
+		<SUPPLYCENTER province="sau"/>
+		<SUPPLYCENTER province="ser"/>
+		<SUPPLYCENTER province="swe"/>
+		<SUPPLYCENTER province="swi"/>
+		<SUPPLYCENTER province="tun"/>
+		<!-- Inital Unit positions -->
+		<INITIALSTATE power="britain" province="edi" unit="fleet" />
+		<INITIALSTATE power="britain" province="gib" unit="fleet" />
+		<INITIALSTATE power="britain" province="liv" unit="fleet" />
+		<INITIALSTATE power="britain" province="lon" unit="wing" />
+		<INITIALSTATE power="egypt" province="ale" unit="fleet" />
+		<INITIALSTATE power="egypt" province="asw" unit="army" />
+		<INITIALSTATE power="egypt" province="cai" unit="fleet" />
+		<INITIALSTATE power="france" province="bor" unit="wing" />
+		<INITIALSTATE power="france" province="lyo" unit="army" />
+		<INITIALSTATE power="france" province="mar" unit="army" />
+		<INITIALSTATE power="france" province="par" unit="army" />
+		<INITIALSTATE power="germany" province="ber" unit="fleet" />
+		<INITIALSTATE power="germany" province="fra" unit="army" />
+		<INITIALSTATE power="germany" province="ham" unit="fleet" />
+		<INITIALSTATE power="germany" province="mun" unit="army" />
+		<INITIALSTATE power="italy" province="mil" unit="army" />
+		<INITIALSTATE power="italy" province="nap" unit="fleet" />
+		<INITIALSTATE power="italy" province="rom" unit="army" />
+		<INITIALSTATE power="italy" province="ven" unit="fleet" />
+		<INITIALSTATE power="poland" province="gda" unit="fleet" />
+		<INITIALSTATE power="poland" province="kra" unit="army" />
+		<INITIALSTATE power="poland" province="war" unit="army" />
+		<INITIALSTATE power="russia" province="gor" unit="wing" />
+		<INITIALSTATE power="russia" province="mos" unit="army" />
+		<INITIALSTATE power="russia" province="mur" unit="army" />
+		<INITIALSTATE power="russia" province="ros" unit="fleet" />
+		<INITIALSTATE power="russia" province="stp" unit="fleet" />
+		<INITIALSTATE power="spain" province="bar" unit="fleet" />
+		<INITIALSTATE power="spain" province="mad" unit="army" />
+		<INITIALSTATE power="spain" province="sev" unit="army" />
+		<INITIALSTATE power="turkey" province="ada" unit="army" />
+		<INITIALSTATE power="turkey" province="ank" unit="fleet" />
+		<INITIALSTATE power="turkey" province="ist" unit="army" />
+		<INITIALSTATE power="turkey" province="izm" unit="fleet" />
+		<INITIALSTATE power="ukraine" province="kha" unit="army" />
+		<INITIALSTATE power="ukraine" province="kie" unit="army" />
+		<INITIALSTATE power="ukraine" province="ode" unit="army" />
+		<INITIALSTATE power="ukraine" province="sev" unit="fleet" />
+	</VARIANT>
+	
+	
+	<!--
+	<VARIANT name="xxxx" version="1.0">
+		<DESCRIPTION><![CDATA[<div style="font-family:arial,helvetica;">
+		</div>
+		<div style="margin-top:0.75cm;font-family:arial,helvetica;">Author: </div>]]></DESCRIPTION> 
+		<MAP adjacencyURI="chromatic/chromatic_adjacency.xml">
+			<GRAPHIC uri="chromatic/chromatic_gridmap.svg" default="true" title="Grid Map" description="Test Grid Map" thumburi="grid_thumb.png"/>
+		</MAP>
+		<RULEOPTIONS>
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+		</RULEOPTIONS>
+		<POWER name="xxx" active="true" adjective="xxx" /> 
+		<POWER name="xxx" active="true" adjective="xxx" /> 
+		<POWER name="xxx" active="true" adjective="xxx" /> 
+		<POWER name="xxx" active="true" adjective="xxx" /> 
+		<POWER name="xxx" active="true" adjective="xxx" /> 
+		<POWER name="xxx" active="true" adjective="xxx" /> 
+		<POWER name="xxx" active="true" adjective="xxx" /> 
+		<POWER name="xxx" active="true" adjective="xxx" /> 
+		<STARTINGTIME turn="time-goes-here" />
+		<VICTORYCONDITIONS>
+			<WINNING_SUPPLY_CENTERS value="xxx" />
+			<YEARS_WITHOUT_SC_CAPTURE value="7" />
+			<GAME_LENGTH value="35" />
+		</VICTORYCONDITIONS>
+ 	 	
+		<SUPPLYCENTER homepower="xxx" province="xxx" owner="xxx" />
+		
+		<SUPPLYCENTER province="xxx"/>
+		
+		<INITIALSTATE power="xxx" province="xxx" unit="xxx" />
+	</VARIANT>
+	-->
+	
+</VARIANTS>
+

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<installation version="1.0">
+    <info>
+        <appname>jDip</appname>
+        <appversion>!VERSION!</appversion>
+        <javaversion>1.4</javaversion>
+        <authors>
+			<!-- <author name="The jDip Development Team" email="jdip-users@sourceforge.net"/> -->
+		</authors>
+        <url>jdip.sourceforge.net</url>
+    </info>
+    <guiprefs height="420" resizable="yes" width="650"/>
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+    <resources>
+        <res id="HTMLInfoPanel.info" src="install_readme.html"/>
+        <res id="HTMLLicencePanel.licence" src="install_license.html"/>
+        <res id="Installer.image" src="install_image.jpg" />
+        <res id="shortcutSpec.xml" src="shortcutSpec.xml" />
+        <res src="useNativeLAF" id="useNativeLAF" />
+    </resources>
+    <native type="izpack" name="ShellLink.dll"/>
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="HTMLInfoPanel"/>
+        <panel classname="HTMLLicencePanel"/>
+        <panel classname="PacksPanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="ShortcutPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
+    <packs>
+        <pack name="Base" required="yes">
+            <description>jDip program files and Standard variants.</description>
+			
+			<file targetdir="$INSTALL_PATH" src="lib"/>
+            <file targetdir="$INSTALL_PATH" src="jdip.ico"/>
+			
+            <file targetdir="$INSTALL_PATH" src="jdip.jar"/>
+            <file targetdir="$INSTALL_PATH" src="LICENSE.TXT"/>
+            <file targetdir="$INSTALL_PATH" src="HISTORY.TXT"/>
+            <file targetdir="$INSTALL_PATH" src="README.TXT"/>
+			
+            <file targetdir="$INSTALL_PATH/variants" src="variants/stdVariants.zip"/>
+            
+			<file targetdir="$INSTALL_PATH/variants" src="variants/modernSymbols.zip"/>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/periodSymbols.zip"/>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/simpleSymbols.zip"/>
+			
+            <file os="windows" targetdir="$INSTALL_PATH" src="jdip.bat"/>
+            <file os="unix" targetdir="$INSTALL_PATH" src="jdip.sh" keep="true"/>
+            <file os="mac" targetdir="$INSTALL_PATH" src="jdip.sh" keep="true"/>
+			
+			<!-- set executable flag for shell script on unix -->
+			<executable os="unix" targetfile="$INSTALL_PATH/jdip.sh" stage="never" failure="warn" type="bin"/>
+			<executable os="mac" targetfile="$INSTALL_PATH/jdip.sh" stage="never" failure="warn" type="bin"/>
+         </pack>
+		
+		<pack name="Hundred variants" required="no" override="true">
+			<description>Hundred3.1 and Hundred3.2 3-player variants.</description>
+            	<file targetdir="$INSTALL_PATH/variants" src="variants/hundredVariants.zip"/>
+		</pack>
+		<pack name="Loeb9 variant" required="no" override="true">
+			<description>Loeb9 variant</description>
+            	<file targetdir="$INSTALL_PATH/variants" src="variants/loeb9Variants.zip"/>
+		</pack>
+		<pack name="Milan variants" required="no" override="true">
+			<description>Milan variants</description>
+            	<file targetdir="$INSTALL_PATH/variants" src="variants/milanVariants.zip"/>
+		</pack>
+		<pack name="Pure variant" required="no" override="true">
+			<description>The Pure variant.</description>
+            	<file targetdir="$INSTALL_PATH/variants" src="variants/pureVariants.zip"/>
+		</pack>
+		<pack name="Root Z variants" required="no" override="true">
+			<description>Root Z variant</description>
+            	<file targetdir="$INSTALL_PATH/variants" src="variants/rootzVariants.zip"/>
+		</pack>
+		<pack name="Sail Ho! variants" required="no" override="true">
+			<description>Sail Ho! variants (including Sail Ho! Crowded)</description>
+            	<file targetdir="$INSTALL_PATH/variants" src="variants/sailhoVariants.zip"/>
+		</pack>
+		<pack name="Youngstown variant" required="no" override="true">
+			<description>Youngstown variant</description>
+            	<file targetdir="$INSTALL_PATH/variants" src="variants/youngstownVariants.zip"/>
+		</pack>
+    </packs>
+</installation>

@@ -1,0 +1,1 @@
+@javaw -Xss1024K -jar jdip.jar
