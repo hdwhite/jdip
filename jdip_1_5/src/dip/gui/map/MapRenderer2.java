@@ -148,7 +148,6 @@ public abstract class MapRenderer2
 	*/
 	public abstract Object getRenderSetting(final Object key);
 	
-	
 	/**
 	*	Execute a RenderCommand. No commands are executed until the TurnState
 	*	has been set.

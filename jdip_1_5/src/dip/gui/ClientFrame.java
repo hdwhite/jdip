@@ -739,10 +739,12 @@ public class ClientFrame extends JFrame
 	
 	
 	
-	/** Fired when the MapMetadata object is ready. */
+	/** 
+	*	Fired when the MapMetadata object is ready, or if
+	*	it is not ready (null), such as when a map is reloaded.
+	*/
 	public void fireMMDReady(MapMetadata mmd)
 	{
-		checkNotNull(mmd);
 		firePropertyChange(EVT_MMD_READY, null, mmd);
 	}// fireTurnstateChanged()
 	

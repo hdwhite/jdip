@@ -181,10 +181,11 @@ public class DefaultMapRenderer2 extends MapRenderer2
 	private final Province[] provinces;
 	private final Power[] powers;
 	private Position position = null;					// current Position
-	private final MapMetadata mapMeta;					
+	private MapMetadata mapMeta = null;					
 	private DOMUIEventListener domEventListener = null;	
 	private boolean isDislodgedPhase = false;			// true if we are in Phase.RETREAT 
 	private static final DMR2RenderCommandFactory rcf; 	// default render command factory instance.
+	private final SymbolPack symbolPack;
 	
 	static
 	{
@@ -196,6 +197,7 @@ public class DefaultMapRenderer2 extends MapRenderer2
 	throws MapException
 	{
 		super(mp);
+		this.symbolPack = sp;
 		Log.printTimed(mapPanel.startTime, "DMR2 constructor start");
 		
 		// init variables

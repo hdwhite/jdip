@@ -346,6 +346,8 @@ public class MapPanel extends JPanel
 	/** Set the SVG Document from XML Document */ 
 	private void setDocument(Document xmlDoc, Variant variant)
 	{
+		Log.println("MP: setDocument()");
+		
 		// setup private loader-listeners
 		gvtRenderListener = new MP_GVTRenderListener();
 		documentListener = new MP_DocumentListener();       
@@ -735,7 +737,6 @@ public class MapPanel extends JPanel
 	{
 		private boolean loaded = false;
 		
-		
 		public void gvtRenderingStarted(GVTTreeRendererEvent e)
 		{
 			Log.printTimed(startTime, "MapPanel() GVTRender start.");
@@ -829,9 +830,8 @@ public class MapPanel extends JPanel
 				//svgCanvas.requestFocusInWindow();
 				controlBar.requestFocusInWindow();
 				
-				// remove listener; setup is complete.
 				statusBar.setText(Utils.getLocalString(GVT_RENDER_COMPLETED));
-				svgCanvas.removeGVTTreeRendererListener(this);
+				//svgCanvas.removeGVTTreeRendererListener(this);
 				statusBar.hidePB();
 				Log.printTimed(startTime, "MapPanel() GVTRender completed.");
 			}
@@ -1137,7 +1137,6 @@ public class MapPanel extends JPanel
 		{
 			svgCanvas.removeGVTTreeBuilderListener(treeBuilderListener);
 		}
-		
 		
 		// reload the map
 		assert(turnState != null);

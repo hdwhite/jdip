@@ -159,7 +159,7 @@ public abstract class AbstractCFPListener implements PropertyChangeListener
 	/** Invoked when the Mode has changed (see ClientFrame) */
 	public void actionModeChanged(String mode)	{}
 	
-	/** Invoked when MapMetadata information is ready */
+	/** Invoked when MapMetadata information is ready/not ready */
 	public void actionMMDReady(MapMetadata mmd)			{}
 	
 	/** Invoked when an Order is created */

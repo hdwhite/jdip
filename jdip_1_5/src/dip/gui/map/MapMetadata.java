@@ -215,6 +215,7 @@ public class MapMetadata
 	/** Clean up any resources used by this object */
 	public void close()
 	{
+		mp.getClientFrame().fireMMDReady(null);	// VERY important
 		infoMap.clear();
 		displayProps.clear();
 	}// close()
