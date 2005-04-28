@@ -174,7 +174,7 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 			
 			for(int i=0; i<gameName.length(); i++)
 			{
-				if( !Character.isLetterOrDigit(gameName.charAt(i)) )
+				if( !Character.isLetterOrDigit(gameName.charAt(i)) && (gameName.charAt(i) != '_') )
 				{
 					Utils.popupError( clientFrame,
 					Utils.getLocalString(NOT_REGISTERED_TITLE),
