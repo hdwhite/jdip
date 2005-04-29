@@ -174,7 +174,7 @@
 		<INITIALSTATE province="rom" power="italy" unit="army" />
 		<INITIALSTATE province="sev" power="russia" unit="fleet" />
 		<INITIALSTATE province="smy" power="turkey" unit="army" />
-		<INITIALSTATE province="stp" power="russia" unit="fleet" unitcoast="sc" />
+		<INITIALSTATE province="stp" power="russia" unit="fleet" unitcoast="nc" />
 		<INITIALSTATE province="tri" power="austria" unit="fleet" />
 		<INITIALSTATE province="ven" power="italy" unit="army" />
 		<INITIALSTATE province="vie" power="austria" unit="army" />
