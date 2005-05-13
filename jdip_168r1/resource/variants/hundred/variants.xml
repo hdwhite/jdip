@@ -267,7 +267,7 @@
 			<MAP_GRAPHIC ref="hundred3" default="true" />
 		</MAP>
 		<RULEOPTIONS>
-			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_ANY_IF_HOME_OWNED" />
 		</RULEOPTIONS>
 		<POWER name="Burgundy" active="true" adjective="Burgundian" /> 
 		<POWER name="England" active="true" adjective="English" altnames="Britain" /> 
@@ -329,7 +329,7 @@
 			<MAP_GRAPHIC ref="hundred3" default="true" />
 		</MAP>
 		<RULEOPTIONS>
-			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_ANY_IF_HOME_OWNED" />
 		</RULEOPTIONS>
 		<POWER name="Burgundy" active="true" adjective="Burgundian" /> 
 		<POWER name="England" active="true" adjective="English" altnames="Britain" /> 
