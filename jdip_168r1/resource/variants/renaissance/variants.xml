@@ -1,0 +1,179 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE VARIANTS [
+	<!ELEMENT VARIANTS (DESCRIPTION, MAP_DEFINITION+, VARIANT+)>
+	
+	<!ELEMENT DESCRIPTION (#PCDATA)>
+	
+	<!ELEMENT MAP_DEFINITION (DESCRIPTION?)>
+	<!ATTLIST MAP_DEFINITION 
+		id ID #REQUIRED
+		title CDATA #REQUIRED
+		URI CDATA #REQUIRED
+		thumbURI CDATA #REQUIRED
+		preferredUnitStyle CDATA #IMPLIED
+		>
+	
+	<!ELEMENT VARIANT (DESCRIPTION, MAP, RULEOPTIONS?, POWER+, STARTINGTIME, VICTORYCONDITIONS, SUPPLYCENTER+, INITIALSTATE*)>
+	<!ATTLIST VARIANT
+			name CDATA #REQUIRED
+			default (true|false) "false"
+			version CDATA #REQUIRED
+			aliases CDATA #IMPLIED
+			>
+			
+	<!ELEMENT MAP (MAP_GRAPHIC*)>
+	<!ATTLIST MAP adjacencyURI CDATA #REQUIRED>
+	
+	<!ELEMENT MAP_GRAPHIC EMPTY>
+	<!ATTLIST MAP_GRAPHIC
+			ref IDREF #REQUIRED
+			default (true|false) "false"
+			preferredUnitStyle CDATA #IMPLIED
+			>
+	
+	<!ELEMENT RULEOPTIONS (RULEOPTION+)>
+	<!ELEMENT RULEOPTION EMPTY>
+	<!ATTLIST RULEOPTION	name CDATA #REQUIRED
+				value CDATA #REQUIRED>
+	
+	<!ELEMENT POWER EMPTY>
+	<!ATTLIST POWER name CDATA #REQUIRED
+			active (true|false) "true"
+			adjective CDATA #REQUIRED
+			altnames CDATA #IMPLIED
+			>
+	
+	<!ELEMENT STARTINGTIME EMPTY>
+	<!ATTLIST STARTINGTIME 	turn CDATA #REQUIRED
+				allowBCYears (true|false) "false"
+				>
+	
+	<!ELEMENT VICTORYCONDITIONS (WINNING_SUPPLY_CENTERS?, YEARS_WITHOUT_SC_CAPTURE?, GAME_LENGTH?)>
+	
+	<!ELEMENT WINNING_SUPPLY_CENTERS EMPTY>
+	<!ATTLIST WINNING_SUPPLY_CENTERS value CDATA #REQUIRED>
+	
+	<!ELEMENT YEARS_WITHOUT_SC_CAPTURE EMPTY>
+	<!ATTLIST YEARS_WITHOUT_SC_CAPTURE value CDATA #REQUIRED>
+	
+	<!ELEMENT GAME_LENGTH EMPTY>
+	<!ATTLIST GAME_LENGTH value CDATA #REQUIRED>
+	
+	<!ELEMENT SUPPLYCENTER EMPTY>
+	<!ATTLIST SUPPLYCENTER 	province CDATA #REQUIRED
+				homepower CDATA "none"
+				owner CDATA "none"
+				>
+				
+	<!ELEMENT INITIALSTATE EMPTY>
+	<!ATTLIST INITIALSTATE 	province CDATA #REQUIRED
+				power CDATA #REQUIRED
+				unit CDATA #REQUIRED
+				unitcoast CDATA #IMPLIED
+				>
+]>
+<!-- NOTE: it's very important that the name of the file will be variants.xml, in all lower case -->
+<!-- NOTE: for CDATA escapes, no space between tag and bracket!! -->
+<VARIANTS>
+	<DESCRIPTION><![CDATA[Renaissance Variant]]></DESCRIPTION> 
+	
+	<MAP_DEFINITION id="renaissance" title="Renaissance" preferredUnitStyle="period"
+		URI="egdipmap.svg" thumbURI="egdipmap_thumb.png">
+		<DESCRIPTION>
+		The standard map.
+		</DESCRIPTION>
+	</MAP_DEFINITION>
+	
+	<VARIANT name="Renaissance" version="1.0" default="true">
+		<DESCRIPTION><![CDATA[This variant is set in Renaissance Europe and played on the standard Diplomacy map. 
+                                      The only difference on the map is that Switzerland is passable, and is a neutral supply center.
+                                      <p>
+                                      It tends to be a more brutal, bloody game than vanilla Diplomacy, as the powers get into conflict right from the outset. 
+                                      Makes for a very interesting opening few turns. Otherwise, it plays just like regular Diplomacy. 
+                                      </p>
+                                      <p>
+                                      Authors: Earle Ratcliffe & Michael Cuffaro
+                                      </p>
+                               ]]></DESCRIPTION> 
+		<MAP adjacencyURI="ren_adjacency.xml">
+			<MAP_GRAPHIC ref="renaissance" default="true" />
+		</MAP>
+		<!-- this is the default, but it's here just as an example -->
+		<RULEOPTIONS>
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+		</RULEOPTIONS>
+		<POWER name="Empire" active="true" adjective="Imperial"  altnames="Holy Roman Empire" /> 
+		<POWER name="England" active="true" adjective="English" /> 
+		<POWER name="France" active="true" adjective="French" /> 
+		<POWER name="Poland" active="true" adjective="Polish" /> 
+		<POWER name="Spain" active="true" adjective="Spanish" /> 
+		<POWER name="Turkey" active="true" adjective="Turkish"  altnames="Ottoman" /> 
+		<POWER name="Venice" active="true" adjective="Venetian" />
+		<STARTINGTIME turn="Spring, 1454, Movement" />
+		<VICTORYCONDITIONS>
+			<WINNING_SUPPLY_CENTERS value="18" />
+			<YEARS_WITHOUT_SC_CAPTURE value="7" />
+			<GAME_LENGTH value="35" />
+		</VICTORYCONDITIONS>
+ 	 	<!-- supply centers -->
+		<SUPPLYCENTER province="ank" homepower="turkey" owner="turkey"/>
+		<SUPPLYCENTER province="bel" homepower="france" owner="france"/>
+		<SUPPLYCENTER province="ber" homepower="empire" owner="empire"/>
+	 	<SUPPLYCENTER province="bre" homepower="england" owner="england"/>
+		<SUPPLYCENTER province="bud" />
+		<SUPPLYCENTER province="bul" homepower="turkey" owner="turkey"/>
+	 	<SUPPLYCENTER province="con" homepower="turkey" owner="turkey"/>
+		<SUPPLYCENTER province="den" />
+		<SUPPLYCENTER province="edi" />
+		<SUPPLYCENTER province="gre" homepower="venice" owner="venice"/>
+		<SUPPLYCENTER province="hol" />
+		<SUPPLYCENTER province="kie" />
+	 	<SUPPLYCENTER province="kra" homepower="poland" owner="poland"/>
+		<SUPPLYCENTER province="lvp" homepower="england" owner="england"/>
+		<SUPPLYCENTER province="lon" homepower="england" owner="england"/>
+	 	<SUPPLYCENTER province="mar" homepower="france" owner="france"/>
+	 	<SUPPLYCENTER province="mos" />
+		<SUPPLYCENTER province="mun" homepower="empire" owner="empire"/>
+	 	<SUPPLYCENTER province="nap" homepower="spain" owner="spain"/>
+		<SUPPLYCENTER province="nor" />
+	 	<SUPPLYCENTER province="nov" homepower="poland" owner="poland"/>
+	 	<SUPPLYCENTER province="par" homepower="france" owner="france"/>
+		<SUPPLYCENTER province="por" homepower="spain" owner="spain"/>
+	 	<SUPPLYCENTER province="rom" />
+		<SUPPLYCENTER province="rum" />
+		<SUPPLYCENTER province="ser" />
+	 	<SUPPLYCENTER province="sev" homepower="poland" owner="poland"/>
+	 	<SUPPLYCENTER province="smy" homepower="turkey" owner="turkey"/>
+		<SUPPLYCENTER province="spa" homepower="spain" owner="spain"/>
+		<SUPPLYCENTER province="swe" />
+		<SUPPLYCENTER province="swi" />
+		<SUPPLYCENTER province="tri" homepower="venice" owner="venice"/>
+		<SUPPLYCENTER province="tun" />
+	 	<SUPPLYCENTER province="ven" homepower="venice" owner="venice"/>
+		<SUPPLYCENTER province="vie" homepower="empire" owner="empire"/>
+		<!-- unit placement -->
+		<INITIALSTATE province="ank" power="turkey" unit="army" />
+		<INITIALSTATE province="bel" power="france" unit="fleet" />
+		<INITIALSTATE province="ber" power="empire" unit="fleet" />
+		<INITIALSTATE province="bre" power="england" unit="fleet" />
+		<INITIALSTATE province="bul" power="turkey" unit="fleet" unitcoast="ec" />
+		<INITIALSTATE province="con" power="turkey" unit="army" />
+		<INITIALSTATE province="gre" power="venice" unit="fleet" />
+		<INITIALSTATE province="kra" power="poland" unit="army" />
+		<INITIALSTATE province="lvp" power="england" unit="army" />
+		<INITIALSTATE province="lon" power="england" unit="fleet" />
+		<INITIALSTATE province="mar" power="france" unit="army" />
+		<INITIALSTATE province="mun" power="empire" unit="army" />
+		<INITIALSTATE province="nap" power="spain" unit="fleet" />
+		<INITIALSTATE province="nov" power="poland" unit="army" />
+		<INITIALSTATE province="par" power="france" unit="army" />
+		<INITIALSTATE province="por" power="spain" unit="army" />
+		<INITIALSTATE province="sev" power="poland" unit="fleet" />
+		<INITIALSTATE province="smy" power="turkey" unit="fleet" />
+		<INITIALSTATE province="spa" power="spain" unit="fleet" unitcoast="sc" />
+		<INITIALSTATE province="tri" power="venice" unit="army" />
+		<INITIALSTATE province="ven" power="venice" unit="army" />
+		<INITIALSTATE province="vie" power="empire" unit="army" />
+	</VARIANT>
+	
+</VARIANTS>
