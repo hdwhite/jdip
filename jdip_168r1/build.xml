@@ -281,6 +281,18 @@
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
+		<!-- Variant Package: Ancient Med -->
+		<zip  destfile="${variant.dir}/ancmedVariant.zip"
+				basedir="${resource.dir}/variants/ancient_med"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				
+		<!-- Variant Package: Renaissance -->
+		<zip  destfile="${variant.dir}/renaissanceVariant.zip"
+				basedir="${resource.dir}/variants/renaissance"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				
 				
 		<!-- SymbolPack: simple -->
 		<zip  destfile="${variant.dir}/simpleSymbols.zip"
@@ -306,13 +318,12 @@
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 		
-		<!-- SymbolPack: flagged -->
-		<!--
-		<zip  destfile="${variant.dir}/flaggedSymbols.zip"
-				basedir="${resource.dir}/variants/symbols/flagged"
+		<!-- SymbolPack: ancmed -->
+		<zip  destfile="${variant.dir}/imperiumSymbols.zip"
+				basedir="${resource.dir}/variants/symbols/ancient_med"
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
-		-->
+				
 	</target>
 	
 	
