@@ -1,0 +1,326 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE VARIANTS [
+	<!ELEMENT VARIANTS (DESCRIPTION, MAP_DEFINITION+, VARIANT+)>
+	
+	<!ELEMENT DESCRIPTION (#PCDATA)>
+	
+	<!ELEMENT MAP_DEFINITION (DESCRIPTION?)>
+	<!ATTLIST MAP_DEFINITION 
+		id ID #REQUIRED
+		title CDATA #REQUIRED
+		URI CDATA #REQUIRED
+		thumbURI CDATA #REQUIRED
+		preferredUnitStyle CDATA #IMPLIED
+		>
+	
+	<!ELEMENT VARIANT (DESCRIPTION, MAP, RULEOPTIONS?, POWER+, STARTINGTIME, VICTORYCONDITIONS, SUPPLYCENTER+, INITIALSTATE*)>
+	<!ATTLIST VARIANT
+			name CDATA #REQUIRED
+			default (true|false) "false"
+			version CDATA #REQUIRED
+			aliases CDATA #IMPLIED
+			>
+			
+	<!ELEMENT MAP (MAP_GRAPHIC*)>
+	<!ATTLIST MAP adjacencyURI CDATA #REQUIRED>
+	
+	<!ELEMENT MAP_GRAPHIC EMPTY>
+	<!ATTLIST MAP_GRAPHIC
+			ref IDREF #REQUIRED
+			default (true|false) "false"
+			preferredUnitStyle CDATA #IMPLIED
+			>
+	
+	<!ELEMENT RULEOPTIONS (RULEOPTION+)>
+	<!ELEMENT RULEOPTION EMPTY>
+	<!ATTLIST RULEOPTION	name CDATA #REQUIRED
+				value CDATA #REQUIRED>
+	
+	<!ELEMENT POWER EMPTY>
+	<!ATTLIST POWER name CDATA #REQUIRED
+			active (true|false) "true"
+			adjective CDATA #REQUIRED
+			altnames CDATA #IMPLIED
+			>
+	
+	<!ELEMENT STARTINGTIME EMPTY>
+	<!ATTLIST STARTINGTIME 	turn CDATA #REQUIRED
+				allowBCYears (true|false) "false"
+				>
+	
+	<!ELEMENT VICTORYCONDITIONS (WINNING_SUPPLY_CENTERS?, YEARS_WITHOUT_SC_CAPTURE?, GAME_LENGTH?)>
+	
+	<!ELEMENT WINNING_SUPPLY_CENTERS EMPTY>
+	<!ATTLIST WINNING_SUPPLY_CENTERS value CDATA #REQUIRED>
+	
+	<!ELEMENT YEARS_WITHOUT_SC_CAPTURE EMPTY>
+	<!ATTLIST YEARS_WITHOUT_SC_CAPTURE value CDATA #REQUIRED>
+	
+	<!ELEMENT GAME_LENGTH EMPTY>
+	<!ATTLIST GAME_LENGTH value CDATA #REQUIRED>
+	
+	<!ELEMENT SUPPLYCENTER EMPTY>
+	<!ATTLIST SUPPLYCENTER 	province CDATA #REQUIRED
+				homepower CDATA "none"
+				owner CDATA "none"
+				>
+				
+	<!ELEMENT INITIALSTATE EMPTY>
+	<!ATTLIST INITIALSTATE 	province CDATA #REQUIRED
+				power CDATA #REQUIRED
+				unit CDATA #REQUIRED
+				unitcoast CDATA #IMPLIED
+				>
+]>
+<VARIANTS>
+	<DESCRIPTION><![CDATA[Ancient Mediterranean variant.]]></DESCRIPTION>
+	
+	<MAP_DEFINITION id="ancientmed" title="Ancient Mediterranean"
+		URI="ancientmed.svg" thumbURI="ancientmed_thumb.jpg" preferredUnitStyle="Ancient Mediterranean">
+		<DESCRIPTION>
+		The map for Ancient Med variant.
+		</DESCRIPTION>
+	</MAP_DEFINITION>
+	
+	<VARIANT name="Ancient Mediterranean" version="1.0" aliases="ancientmed">
+		<DESCRIPTION><![CDATA[
+		<p>
+			The Ancient Mediterranean is a five-player Diplomacy variant based on the empires
+			that dominated the Mediterranean area during ancient history.
+		</p>
+			The powers are Rome, Carthage, Greece, Egypt and Persia. Much emphasis has been
+			placed on the playability of the variant. As for its historical accuracy, the game
+			depicts a period of history which is quite broad - not a single point in time.
+		</p>
+		<p>
+			The rules are consistent with the normal rules of Diplomacy, with some minor
+			exceptions due to the geography of the area.
+		</p>
+		<h2>Rules for Ancient Mediterranean</h2>
+		<p>
+			The normal rules of the game of Diplomacy apply, with the following additions,
+			exceptions and clarifications.
+		</p>
+		<h2>Home supply centers and starting positions of the powers</h2>
+		<p>
+			Rome     (red)         fleet Neapolis     army Roma      army Ravenna<br>
+			Carthage (blue)        fleet Thapsus      army Cirta     army Carthage<br>
+			Greece   (green)       fleet Sparta       army Athens    army Macedonia<br>
+			Persia   (black)       fleet Sidon        army Antioch   army Damascus<br>
+			Egypt    (yellow)      fleet Alexandria   army Memphis   army Thebes<br>
+		</p>
+		<h2>Victory criteria</h2>
+		<p>
+			18 supply centers.
+		</p>
+		<h2>Move dates and adjustments</h2>
+		<p>
+			As in the normal rules, each turn alternates between Spring and Fall, starting
+			the game on a Spring turn, with adjustments being made after a Fall turn. Each
+			successive Spring the year increases by one. The gameÕs first year is 01 AD.
+		</p>
+		<h2>Impassable spaces</h2>
+		<p>
+			Any areas that are not named on the board are not passable. The Atlantic Ocean
+			can not be occupied by any units.
+		</p>
+		<h2>Islands</h2>
+		<p>
+			Islands are distinct spaces. An island may be occupied by an army or a fleet.
+			Each island has one continuous coast, therefore a fleet on an island may move
+			to any space adjacent to it. For example, a fleet could move from the Egyptian
+			Sea to Crete in one turn, and then move to the Aegean Sea in the next turn.
+		</p>
+		<h2>Movement across narrow straits</h2>
+		<p>
+			Arrows on the board indicate two adjacent land spaces. An army may move from one
+			space to the other in one turn without being convoyed. Because they are adjacent,
+			fleets may also move from one space to the other in one turn.
+		</p>
+		<h2>Byzantium</h2>
+		<p>
+			Byzantium is one space which straddles a waterway. The waterway allows movement
+			of a fleet in Byzantium to any adjacent coastal space or sea space. The waterway
+			does not impede the movement of an army through Byzantium. And it is a supply center.
+			In other words, it works just like Constantinople in the standard game.
+		</p>
+		<h2>Baleares</h2>
+		<p>
+			Baleares is a single space which consists of the islands and the water around them.
+			Since it contains both land and water, it can be occupied by a fleet or an army.
+			However, it is still considered one single space and can only be occupied by one unit
+			at a time. Although an army can occupy Baleares, it can not move there directly from
+			the mainland spaces since the islands are too far from the coast. For an army to enter
+			or leave Baleares, it would have to be convoyed by a fleet in the Berber Sea or the
+			Ligurian Sea. Since Baleares consists mostly of water, it is considered a sea space for
+			the purposes of convoys, therefore a fleet occupying Baleares may be used to convoy an
+			army using the normal convoy rules. Baleares is a supply center.
+		</p>
+		<h2>Four-way intersection in the high seas</h2>
+		<p>
+			In the middle of the board there is an area where four sea spaces come together at one
+			point. They are the Ausonian Sea, Messenian Sea, Gulf of Tacape and Libyan Sea. All four
+			of these spaces are adjacent to each of the other three at that point. Therefore, a fleet
+			in one of these spaces may move to any of the other three.
+		</p>
+		<p>
+			Also, by virtue of the expanse of the open seas, fleets can pass each other in a criss-cross
+			fashion without impeding each others' movement. For example, a Roman fleet could move from
+			the Ausonian Sea to the Libyan Sea and a Greek fleet could move from the Messenian Sea to the
+			Gulf of Tacape on the same turn and both of these moves would be allowed. Note that this
+			criss-crossing is not the same as two units exchanging places. For example, if a Roman fleet
+			tried to move from the Ausonian Sea to the Libyan Sea and an Egyptian fleet tried to move from
+			the Libyan Sea to the Ausonian Sea on the same turn, these moves would not be allowed due to
+			the normal rules.
+		</p>
+		<h2>The Diolkos</h2>
+		<p>
+			The border between Sparta and Athens effectively works like a canal. It cuts across the isthmus
+			and allows fleets to move through. For example, a fleet in the Aegean Sea could move to Athens
+			and then, on the following turn, to the Ionian Sea. Note that in game terms, this means Athens
+			effectively has one continuous coast. Armies can freely move between Sparta and Athens.
+		</p>
+		<p>
+			The historical precedence for this is not an actual canal. The Diolkos was a roadway built by the
+			Greeks for the purpose of moving ships across the isthmus.
+		</p>
+		<h2>The Nile river and canal</h2>
+		<p>
+			The Nile River acts as the boundary between the spaces on its east and west banks. The river is
+			not a space on the board. It can not be occupied by any units. However, it is considered to be
+			navigable. Therefore, a fleet may move between spaces that are adjacent along the river. For
+			example, Sinai to Thebes, Thebes to Memphis, Memphis to Alexandria would all be legal moves for a
+			fleet. Memphis to Cyrene would not be a legal move for a fleet. Egypt can build fleets in any of
+			its home supply centers.
+		</p>
+		<p>
+			There is also a canal that connects the Nile River to the Reed Sea. It acts as the boundary between
+			Sinai and Thebes. It is also navigable and therefore allows fleet movement between Sinai, Thebes
+			and Reed Sea. Reed Sea is not adjacent to the Gulf of Pelusium or Alexandria. Notice that due to the
+			various waterways and coasts that Sinai and Thebes each have one continuous coast.
+		</p>
+			Armies can freely move across the Nile River and canal.
+		<p>
+			There actually is much precedence for a canal connecting the Nile River to the Red Sea in ancient history.
+		</p>
+		<h2>The Nile river delta</h2>
+		<p>
+			The Nile River Delta is not a distinct space on the board. It can not be occupied by any units. There are
+			four spaces which are in contact with the delta. They are Alexandria, Thebes, Sinai and the Gulf of Pelusium.
+			All four of these spaces are considered to be adjacent to each of the other three, at all times, by virtue
+			of the multiple water channels in the delta. This provides increased flexibility concerning the movement of
+			fleets. A fleet in any of these four spaces may move to any of the other three. The delta does not impede the
+			movement of armies. An army in any of the three land spaces in contact with the delta, may move to either of
+			the other two.
+		</p>
+		<p>
+			The key to remember is that Thebes is always adjacent to the Gulf of Pelusium AND Alexandria is always adjacent
+			to Sinai (in addition to the obvious adjacancies). For example, a fleet could move from Thebes to the Gulf of
+			Pelusium and, on the same turn, an army or a fleet, could move from Alexandria to Sinai.
+		</p>
+		<h2>Convoy clarifications</h2>
+		<p>
+			As in the normal rules, no fleet in a land space can convoy armies. This includes any coastal space, island,
+			Byzantium and land spaces adjacent to the Nile River or the delta. Baleares is considered primarily a sea
+			space for the purposes of convoys, therefore a fleet occupying it may be used to convoy an army using the
+			normal convoy rules.
+		</p>
+		<h2>Abbreviations for Ancient Mediterranean names</h2>
+		<p>
+			For almost every space on the board, the first three letters of the name are used for its abbreviation.
+			This includes spaces which have two words in the name. So the Egyptian Sea is Egy and the <i>Cilician Strait</i>
+			is <i>CIL</i>. None of the letters in the words "sea" or "strait" are used. However, names that have three words
+			in them use the first letter of each of the three words. So the Gulf of Pelusium is GoP. There are only a few
+			exceptions to these guidelines due to redundancies. The following is a complete list of the exceptions to the
+			"use the first three letters" rule.
+		</p>
+		<p style="margin-left:1cm;">
+			Gulf of Pelusium   <b>GoP</b><br>
+			Gulf of Syrtis     <b>GoS</b><br>
+			Gulf of Tacape     <b>GoT</b><br>
+			Sardinia           <b>Sad</b><br>
+			Sarmatia           <b>Sam</b><br>
+			Sinai              <b>Sii</b><br>
+			Sinope             <b>Sip</b><br>
+			Tyre               <b>Tye</b><br>
+			Tyrrhenean Sea     <b>Tyn</b><br>
+		</p>
+		<p>
+			Variant Author: Don Hessong<br>
+			jDip Variant Creator: Stefano Costantini<br>
+		</p>
+		]]>
+		</DESCRIPTION> 
+	
+		<MAP adjacencyURI="ancientmed_adjacency.xml">
+			<MAP_GRAPHIC ref="ancientmed" default="true" />
+		</MAP>
+
+		<!-- this is the default, but it's here just as an example -->
+		<RULEOPTIONS>
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+		</RULEOPTIONS>
+		<POWER name="Rome" active="true" adjective="Roman" /> 
+		<POWER name="Carthage" active="true" adjective="Carthagenian" /> 
+		<POWER name="Greece" active="true" adjective="Greecian" /> 
+		<POWER name="Persia" active="true" adjective="Persian" /> 
+		<POWER name="Egypt" active="true" adjective="Egyptian" /> 
+		<STARTINGTIME turn="Spring, 1, Movement" />
+		<VICTORYCONDITIONS>
+			<WINNING_SUPPLY_CENTERS value="18" />
+			<YEARS_WITHOUT_SC_CAPTURE value="7" />
+			<GAME_LENGTH value="35" />
+		</VICTORYCONDITIONS>
+ 	 	<!-- supply centers -->
+		<SUPPLYCENTER province="ale" homepower="egypt" owner="egypt"/>
+		<SUPPLYCENTER province="ant" homepower="persia" owner="persia"/>
+		<SUPPLYCENTER province="ath" homepower="greece" owner="greece"/>
+		<SUPPLYCENTER province="bal" />
+		<SUPPLYCENTER province="byz" />
+		<SUPPLYCENTER province="car" homepower="carthage" owner="carthage"/>
+		<SUPPLYCENTER province="che" />
+		<SUPPLYCENTER province="cir" homepower="carthage" owner="carthage"/>
+		<SUPPLYCENTER province="cre" />
+		<SUPPLYCENTER province="cyp" />
+		<SUPPLYCENTER province="cyr" />
+		<SUPPLYCENTER province="dal" />
+		<SUPPLYCENTER province="dam" homepower="persia" owner="persia"/>
+		<SUPPLYCENTER province="jer" />
+		<SUPPLYCENTER province="lep" />
+		<SUPPLYCENTER province="mac" homepower="greece" owner="greece"/>
+		<SUPPLYCENTER province="mas" />
+		<SUPPLYCENTER province="mem" homepower="egypt" owner="egypt"/>
+		<SUPPLYCENTER province="mil" />
+		<SUPPLYCENTER province="nea" homepower="rome" owner="rome"/>
+		<SUPPLYCENTER province="num" />
+		<SUPPLYCENTER province="pet" />
+		<SUPPLYCENTER province="rav" homepower="rome" owner="rome"/>
+		<SUPPLYCENTER province="rom" homepower="rome" owner="rome"/>
+		<SUPPLYCENTER province="sag" />
+		<SUPPLYCENTER province="sad" />
+		<SUPPLYCENTER province="sic" />
+		<SUPPLYCENTER province="sid" homepower="persia" owner="persia"/>
+		<SUPPLYCENTER province="sip" />
+		<SUPPLYCENTER province="spa" homepower="greece" owner="greece"/>
+		<SUPPLYCENTER province="tha" homepower="carthage" owner="carthage"/>
+		<SUPPLYCENTER province="the" homepower="egypt" owner="egypt"/>
+		<SUPPLYCENTER province="tye" />
+		<SUPPLYCENTER province="vin" />
+		<!-- unit placement -->
+		<INITIALSTATE province="ale" power="egypt" unit="fleet" />
+		<INITIALSTATE province="ant" power="persia" unit="army" />
+		<INITIALSTATE province="ath" power="greece" unit="army" />
+		<INITIALSTATE province="car" power="carthage" unit="army" />
+		<INITIALSTATE province="cir" power="carthage" unit="army" />
+		<INITIALSTATE province="dam" power="persia" unit="army" />
+		<INITIALSTATE province="mac" power="greece" unit="army" />
+		<INITIALSTATE province="mem" power="egypt" unit="army" />
+		<INITIALSTATE province="nea" power="rome" unit="fleet" />
+		<INITIALSTATE province="rav" power="rome" unit="army" />
+		<INITIALSTATE province="rom" power="rome" unit="army" />
+		<INITIALSTATE province="sid" power="persia" unit="fleet" />
+		<INITIALSTATE province="spa" power="greece" unit="fleet" />
+		<INITIALSTATE province="tha" power="carthage" unit="fleet" />
+		<INITIALSTATE province="the" power="egypt" unit="army" />
+	</VARIANT>
+</VARIANTS>
