@@ -1174,29 +1174,65 @@ public class Move extends Order
 					else if( !os.isHeadToHead() 
 							 || (os.isHeadToHead() && os.getDislodger() != os.getHeadToHead()) )	// 3.d.3
 					{
+						/*
+							This section has been re-written to take care of bugs
+							1116568 & 1053458 (which are the same bug). 
+							
+							TODO: clean up/simplify
+						*/
+						
 						// 3.b.1, 3.b.2 are accounted for within this else block
 						//
 						if( (attack_max + self_attack_max) <= (os.getAtkCertain() + os.getAtkSelfSupportCertain()) )
 						{
-							// 3.a.3.c: we can never be better than this pairing. Ever. Fail, unless destination
-							// is part of a head-to-head battle which was dislodged by a unit involved in the
-							// head-to-head battle. [3.d]
-							Log.println("   -- attack_max <= os.getAtkCertain() + getAtkSelfSupportCertain(); must fail!");
-							isBetterThanAllOtherMoves = false;
-							thisOS.setEvalState(Tristate.FAILURE);
-							//adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_BOUNCE));
-							adjudicator.addBouncedResult(thisOS, os);
-							return;
+							Log.println("   -- attack_max <= os.getAtkCertain() + getAtkSelfSupportCertain() ...");
+							
+							/*
+								If the other move has not found a convoy route, 
+								then we will *not* automatically fail.
+								
+								remember: with logical and (&&) we only evaluate the
+								second argument if the first is true.
+							*/
+							if( ((Move) os.getOrder()).isConvoying() && !os.hasFoundConvoyPath() )
+							{
+								Log.println("      however, no convoy route for dependent move exists (or exists yet).");
+							}
+							else
+							{
+								Log.println("      so we must fail.");
+								// 3.a.3.c: we can never be better than this pairing. Ever. Fail, unless destination
+								// is part of a head-to-head battle which was dislodged by a unit involved in the
+								// head-to-head battle. [3.d]
+								isBetterThanAllOtherMoves = false;
+								thisOS.setEvalState(Tristate.FAILURE);
+								//adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_BOUNCE));
+								adjudicator.addBouncedResult(thisOS, os);
+								return;
+							}
 						}
 						
 						
 						if( (attack_certain + self_attack_certain) <= (os.getAtkMax() + os.getAtkSelfSupportMax()) )
 						{
-							// 3.a.3.b: we are not better than *all* the unevaluated moves to destination
-							// this doesn't mean we fail, though, since the other moves strength calculations
-							// may not be final
-							Log.println("   -- atk_certain <= os.getAtkMax() + getAtkSelfSupportMax(); not conclusively better!");
-							isBetterThanAllOtherMoves = false;
+							/*
+								We will ignore the compared move if it is a convoying move
+								and no convoy route was found.
+								(isconvoying == true, hasFoundConvoyPath == false, and evalstate == false)
+							*/
+							if( ((Move) os.getOrder()).isConvoying() && !os.hasFoundConvoyPath() 
+								 && os.getEvalState()  == Tristate.FAILURE )
+							{
+								Log.println("   -- dependent move ignored (no valid corresponding convoy path).");
+							}
+							else
+							{
+								// 3.a.3.b: we are not better than *all* the unevaluated moves to destination
+								// this doesn't mean we fail, though, since the other moves strength calculations
+								// may not be final
+								Log.println("   -- atk_certain <= os.getAtkMax() + getAtkSelfSupportMax(); not conclusively better!");
+								isBetterThanAllOtherMoves = false;
+							}
 						}
 					}
 					// "else" os.isHeadToHead() && os.getDislodger() == os.getHeadToHead() :: we ignore the unit! (3.d.2)
