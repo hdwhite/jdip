@@ -1923,7 +1923,7 @@ POSTSTATE
 	England: A lon
 	Germany: F hel
 	Germany: F nth
-	Germany: A bel
+	Germany: A hol
 POSTSTATE_DISLODGED
 	England: F nth
 END
