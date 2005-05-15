@@ -29,6 +29,7 @@ import dip.judge.parser.JudgeImport;
 
 import dip.world.World;
 import dip.gui.ClientFrame;
+import dip.gui.swing.RegexFormatter;
 import dip.gui.dialog.HeaderDialog;
 import dip.gui.dialog.ErrorDialog;
 import dip.misc.Utils;
@@ -60,6 +61,8 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 	private static final String NOT_REGISTERED_TEXT = "FlocImportDialog.notregistered.text";
 	private static final String NOT_REGISTERED_TITLE = "FlocImportDialog.notregistered.title";
 	private static final String INVALID_INPUT_TEXT = "FlocImportDialog.badname.text";
+	private static final String INVALID_JUDGE_TEXT = "FlocImportDialog.badname.judge.text";
+	
 	
 	// pref constants
 	private static final String PREFS_LAST_JUDGE_USED = "FlocImport.judge.last";
@@ -105,10 +108,10 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 		final String lastJudgeUsed = prefs.get(PREFS_LAST_JUDGE_USED, "");
 		
 		// component creation
-		tfGameName = new JTextField("", 25);
+		tfGameName = Utils.createWordTextField(25);
 		cbJudges = new JComboBox( Utils.getCommonStringArray(JUDGE_NAMES) );
 		cbJudges.setPrototypeDisplayValue("MMMMM");	// wide enough for any 4-letter judge
-		cbJudges.setEditable(false);
+		cbJudges.setEditable(true);
 		cbJudges.setSelectedIndex(0);	// default, if setSelectedItem() fails
 		cbJudges.setSelectedItem(lastJudgeUsed);
 		
@@ -160,15 +163,34 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 		if(isOKorAccept(actionCommand))
 		{
 			// check game name text
+			final String judgeName = ((String) cbJudges.getSelectedItem()).trim().toUpperCase();
 			final String gameName = tfGameName.getText().trim();
+			
+			boolean invalidJudgeName = (judgeName == null || judgeName.length() != 4);
+			if(!invalidJudgeName)
+			{
+				for(int i=0; i<judgeName.length(); i++)
+				{
+					if( !Character.isLetterOrDigit(judgeName.charAt(i)) )
+					{
+						invalidJudgeName = true;
+					}
+				}
+			}
+			
+			if(invalidJudgeName)
+			{
+				Utils.popupError( clientFrame,
+					Utils.getLocalString(NOT_REGISTERED_TITLE),
+					Utils.getLocalString(INVALID_JUDGE_TEXT) );
+				return;
+			}
 			
 			if(gameName.length() == 0)
 			{
 				Utils.popupError( clientFrame,
-				Utils.getLocalString(NOT_REGISTERED_TITLE),
-				Utils.getLocalString(INVALID_INPUT_TEXT, 
-					tfGameName.getText().trim(),
-					(String) cbJudges.getSelectedItem()) );
+					Utils.getLocalString(NOT_REGISTERED_TITLE),
+					Utils.getLocalString(INVALID_INPUT_TEXT) );
 				return;
 			}
 			
@@ -177,17 +199,16 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 				if( !Character.isLetterOrDigit(gameName.charAt(i)) && (gameName.charAt(i) != '_') )
 				{
 					Utils.popupError( clientFrame,
-					Utils.getLocalString(NOT_REGISTERED_TITLE),
-					Utils.getLocalString(INVALID_INPUT_TEXT, 
-						tfGameName.getText().trim(),
-						(String) cbJudges.getSelectedItem()) );
+						Utils.getLocalString(NOT_REGISTERED_TITLE),
+						Utils.getLocalString(INVALID_INPUT_TEXT) );
 					return;
 				}	
 			}
 			
+			
 			// save selected judge
 			Preferences prefs = SharedPrefs.getUserNode();
-			prefs.put(PREFS_LAST_JUDGE_USED, (String) cbJudges.getSelectedItem());
+			prefs.put(PREFS_LAST_JUDGE_USED, judgeName);
 			SharedPrefs.savePrefs(prefs);
 			
 			// disable 'ok', show progress
@@ -197,7 +218,7 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 			// import!
 			fi = new FlocImporter(
 					gameName, 
-					(String) cbJudges.getSelectedItem(), 
+					judgeName, 
 					clientFrame.getGUIOrderFactory(),
 					this);
 			

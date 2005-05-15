@@ -1218,6 +1218,73 @@ public class Utils
 	}// setResourceBundle()
 	
 	
+	/**
+	*	Constructs a formatted text field that only allows 'Word' characters
+	*	to be entered (a-z, A-Z, 0-9, underscore). 
+	*/
+	public static JTextField createWordTextField(int cols)
+	{
+		JTextField jtf = new JTextField(cols);
+		AbstractDocument doc = (AbstractDocument) jtf.getDocument();
+		doc.setDocumentFilter(new DocumentFilter()
+		{
+			public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attr)
+			throws BadLocationException
+			{
+				this.replace(fb, offset, 0, text, attr);
+			}// insertString()
+			
+			public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attr)
+			throws BadLocationException
+			{
+				fb.replace(offset, length, getValidWordString(text), attr);
+			}// replace()
+			
+			private String getValidWordString(String in)
+			{
+				StringBuffer buffer = new StringBuffer(in);
+				
+				for(int i=buffer.length()-1; i>=0; i--)
+				{
+					char c = buffer.charAt(i);
+					
+					if( !isValidWord(c) )
+					{
+						buffer.deleteCharAt(i);
+					}
+				}
+				return buffer.toString();
+			}// getValidWordString()
+			
+			private boolean isValidWord(char c)
+			{
+				// check letters (A-Z, a-z)
+				if( (c >= 0x0041 && c<= 0x005A)
+					|| (c >= 0x0061 && c<= 0x007A) )
+				{
+					return true;
+				}
+				
+				// check digits (0-9)
+				if(c >= 0x0030 && c <= 0x0039)
+				{
+					return true;
+				}
+				
+				// check misc chars
+				if(c == '_')
+				{
+					return true;
+				}
+				
+				return false;
+			}// checkValid()
+		});
+		
+		return jtf;
+	}// createWordTextField()
+	
+	
 	/** 
 	*	Constructs a formatted text field that only allows valid email characters.
 	*	These are defined as ASCII alphanumerics (a-z, A-Z, 0-9), plus the characters 
@@ -1361,6 +1428,8 @@ public class Utils
 		
 		return jtf;
 	}// createURITextField()
+	
+	
 	
 	
 	
