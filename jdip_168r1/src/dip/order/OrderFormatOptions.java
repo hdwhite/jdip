@@ -88,12 +88,14 @@ public class OrderFormatOptions implements Cloneable
 	// arrows
 	/** The Default Movement arrow */
 	public static final String ARROW_DEFAULT	= "->";
+	/** A hyphen (instead of an arrow) */
+	public static final String ARROW_HYPHEN		= "-";
 	/** A fancier Unicode Movement arrow */
 	public static final String ARROW_UNICODE	= "\u2192";
 	
 	/** A list of all Movement arrows */
 	public static final String[] ARROWS = {
-		ARROW_DEFAULT, ARROW_UNICODE
+		ARROW_DEFAULT, ARROW_HYPHEN, ARROW_UNICODE
 	};
 	
 	// coast separators
