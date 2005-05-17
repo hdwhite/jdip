@@ -101,13 +101,13 @@
 			The normal rules of the game of Diplomacy apply, with the following additions,
 			exceptions and clarifications.
 		</p>
-		<h2>Home supply centers and starting positions of the powers</h2>
+		<h2>Home Supply Centers and Starting Positions</h2>
 		<p>
-			Rome     (red)         fleet Neapolis     army Roma      army Ravenna<br>
-			Carthage (blue)        fleet Thapsus      army Cirta     army Carthage<br>
-			Greece   (green)       fleet Sparta       army Athens    army Macedonia<br>
-			Persia   (black)       fleet Sidon        army Antioch   army Damascus<br>
-			Egypt    (yellow)      fleet Alexandria   army Memphis   army Thebes<br>
+			<b>Rome</b>    (red):         fleet Neapolis,     army Roma,      army Ravenna<br>
+			<b>Carthage</b> (blue):        fleet Thapsus,      army Cirta,     army Carthage<br>
+			<b>Greece</b>   (green):       fleet Sparta,       army Athens,   army Macedonia<br>
+			<b>Persia</b>   (black):       fleet Sidon,        army Antioch,   army Damascus<br>
+			<b>Egypt</b>    (yellow):      fleet Alexandria,   army Memphis,   army Thebes<br>
 		</p>
 		<h2>Victory criteria</h2>
 		<p>
