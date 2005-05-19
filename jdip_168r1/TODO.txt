@@ -1,0 +1,58 @@
+
+TODO list
+
+Bugs to be fixed
+================
+
+- [1084155] Errors in enter multiple orders breaks menu
+  If this can be replicated, it should be fixed
+
+- [1116567 ] Map->Jpeg exports
+  If this can be replicated, it should be fixed
+  
+- [1051166] copying orders to clipboard
+  <HTML> is inserted in front of each line. 
+  we should use plain text.
+  
+- [1051678] jdip does not see shortcut folders
+  we may be able to fix this in some versions of Java..
+  investigate under JDK 1.4.2 and 1.5.x
+
+- [1124808] impossible right click on mac
+  allow a command-click; also provide better prompting
+  in status bar
+
+- Menu doesn't match preferences for province-naming
+  e.g.: menu for province names lists 'none' if prefs
+  set to 'brief' names, and brief names are showing.
+  use 16_17 branch code
+
+- Select All in dialogs doesn't highlight text
+  use 16_17 branch code
+  
+- Coast.normalize() fails with empty coasts
+  use 16_17 branch code
+  
+- NPEs in F2F code
+  use 16_17 branch code
+  
+- close open dialog boxes (if any) when a new game
+  is opened; use 16_17 branch code
+  
+- ancient med: supply centers don't show up
+  not clear why this happens
+  test as standalone SVG using Squiggle
+
+- Judge Importing failures
+  This may be time-consuming; consider delaying for
+  the next update release, using the new judge parsing
+  code
+  
+Features / Changes
+==================
+- use old splash screen, instead of hexmap, as some
+  users find the hexamp confusing
+  
+- update credits in about:help
+
+- 
