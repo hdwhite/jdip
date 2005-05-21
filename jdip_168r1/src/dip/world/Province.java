@@ -652,9 +652,26 @@ public class Province implements java.io.Serializable, Comparable
 	}// isConvoyable()
 	
 	
-	/*
-	 NOTE: we just use default referential equality, since these objects are immutable!
+	/**
+	*	Implementation of equals(). Note that this <b>only</b> compares
+	*	the Province (full) name and index for equality, since they are assumed
+	*	be unique. Other fields/adjacency are not compared.
 	*/
+	public boolean equals(Object obj)
+	{
+		if(obj == this)
+		{
+			return true;
+		}
+		else if(obj instanceof Province)
+		{
+			final Province p = (Province) obj;
+			return( this.index == p.index &&
+					this.fullName.equals(p.fullName) );
+		}
+		
+		return false;
+	}// equals()
 	
 	
 	/** Returns the full name of the province */

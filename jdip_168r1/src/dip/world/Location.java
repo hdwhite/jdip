@@ -172,9 +172,8 @@ public class Location implements Cloneable
 		}
 		else if(obj instanceof Location)
 		{
-			// compare referential Province and Coast equality
 			Location loc = (Location) obj;
-			return (province == loc.province && coast == loc.coast);
+			return (province.equals(loc.province) && coast.equals(loc.coast));
 		}
 		
 		return false;

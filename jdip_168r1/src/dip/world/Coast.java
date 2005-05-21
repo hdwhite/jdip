@@ -454,13 +454,25 @@ public final class Coast implements java.io.Serializable
 	}// hashCode()
 	
 	
-	/*
-		equals():
+	/** Equals implementation (ignores localized names) */
+	public boolean equals(Object obj)
+	{
+		if(obj == this)
+		{
+			return true;
+		}
+		else if(obj instanceof Coast)
+		{
+			final Coast c = (Coast) obj;
+			
+			// only index/internal names must match
+			return( this.index == c.index
+					&& this.abbreviation.equals(c.abbreviation)
+					&& this.name.equals(c.name) );
+		}
 		
-		We use Object.equals(), which just does a test of 
-		referential equality. 
-		
-	*/
+		return false;
+	}// equals()
 	
 	
 	/** Assigns serialized objects to a single constant reference */
