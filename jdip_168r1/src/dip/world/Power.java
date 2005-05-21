@@ -29,6 +29,9 @@ package dip.world;
 */
 public class Power implements Comparable, java.io.Serializable
 {
+	/** An empty array of Power objects. */
+	public static final Power[] EMPTY_ARRAY = new Power[0];
+	
 	// constants for name array; always stored in this order.
 	private static final int FULL_NAME	= 0;	// required
 
