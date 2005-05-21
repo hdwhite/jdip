@@ -170,7 +170,10 @@ public class NJudgeOrderParser
 		// ADJUST:
 		String[] lines = 
 		{
-			
+			"F-Bul: Removes the fleet in Bulgaria.",
+			"F-Bul: Builds an army in Siberia.",
+			"F-Bul: Removes the fleet in the Norwegian Sea.",
+			"F-Bul: Remove fleet in the Norwegian Sea.",
 			
 			 "2-Spa:     Builds a fleet in Spain (south coast).",
 			 "F-Bul:     Builds an army in Bulgaria.",
