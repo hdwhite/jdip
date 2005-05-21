@@ -25,6 +25,7 @@ package dip.gui.dialog;
 import dip.gui.*;
 import dip.misc.Utils;
 import dip.misc.Help;
+import dip.world.World;
 
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -46,11 +47,14 @@ import java.awt.*;
 *	Features:
 *	<ol>
 *		<li>Automatically disposes dialog if close-button pressed, although
-*			this behavior can be changed by over-riding close()
-*		<li>Closes dialog if ESC pressed (calls close())
-*		<li>Internationalized button text, by default
-*		<li>Button constants
-*		<li>Help support
+*			this behavior can be changed by over-riding close()</li>
+*		<li>Closes dialog if ESC pressed (calls close())</li>
+*		<li>Internationalized button text, by default</li>
+*		<li>Button constants</li>
+*		<li>Help support</li>
+*		<li>If non-modal, automatically closes the dialog when the World object
+*			changes. This behavior can be modified by subclassing the 
+*			<code>worldChanged()</code> method.</li>
 *	</ol>
 *	<p>
 *	To add a default button, use JRootPane.setDefaultButton(); note that if a 
@@ -61,7 +65,6 @@ import java.awt.*;
 public class XDialog extends JDialog
 {
 	// common dialog constants
-	
 	/** Internationalized button text for "OK" */
 	public static final String TEXT_OK = Utils.getLocalString("XDialog.button.ok");
 	/** Internationalized button text for "Cancel" */
@@ -70,6 +73,10 @@ public class XDialog extends JDialog
 	public static final String TEXT_CLOSE = Utils.getLocalString("XDialog.button.close");
 	/** Internationalized button text for "Accept" */
 	public static final String TEXT_ACCEPT = Utils.getLocalString("XDialog.button.accept");
+	
+	
+	// instance vars
+	private AbstractCFPListener cfl = null;
 	
 	
 	/** Create an XDialog */
@@ -139,6 +146,9 @@ public class XDialog extends JDialog
 	{	
 		super.dialogInit();
 		
+		// install world-change listener (if appropriate)
+		setupCFL();
+		
 		// install close/close-button handling
 		super.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
@@ -188,7 +198,53 @@ public class XDialog extends JDialog
 	}// setHelpID()
 	
 	
+	public void dispose()
+	{
+		if(cfl != null)
+		{
+			((JComponent) getParent()).removePropertyChangeListener(cfl);
+			cfl = null;
+		}
+		
+		super.dispose();	
+	}// dispose()
 	
+	
+	/**
+	*	For non-modal dialogs, that are an instance of ClientFrame, add
+	*	a ClientFrame property listener to catch world created/destroyed
+	*	events. Our listener will call worldChanged().
+	*/
+	private void setupCFL() // CFL = client frame listener
+	{
+		if(getParent() instanceof ClientFrame && !isModal())
+		{
+			final ClientFrame cf = (ClientFrame) getParent();
+			cf.addPropertyChangeListener(new AbstractCFPListener()
+			{
+				public void actionWorldCreated(World w)
+				{
+					worldChanged();
+				}
+			
+				public void actionWorldDestroyed(World w)
+				{
+					worldChanged();
+				}
+			});
+		}
+	}// setupCFL()
+  	 
+  	 
+	/**
+	*	Called for non-modal dialogs with a ClientFrame parent, when a
+	*	World object has been deleted or created. By default, this calls
+	*	close().
+	*/
+	protected void worldChanged()
+	{
+		close();
+	}// worldChanged()	
 	
 }// class XDialog
 
