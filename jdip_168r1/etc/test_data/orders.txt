@@ -267,7 +267,44 @@ RES: support(france, bre/xc, fleet, naf, fleet, mao)
 #ORD: waive build lon
 #RES: waive(england, lon)
 #
-## this is interpreted as a DefineState order with a Wing (or perhaps a build)
-#ORD: w lon
-#RES: FAIL
+
+#######################################################################
+# 
+# Remove order tests
+# 
+#######################################################################
+ORD: France: Remove fleet North Africa.
+RES: remove(france, naf/xc, fleet)
+
+ORD: France: Remove fleet in North Africa.
+RES: remove(france, naf/xc, fleet)
+
+ORD: France: Removes the fleet in North Africa.
+RES: remove(france, naf/xc, fleet)
+
+ORD: France: Removes the fleet in the North Africa.
+RES: remove(france, naf/xc, fleet)
+
+#######################################################################
+# 
+# Build order tests
+# 
+#######################################################################
+ORD: Germany: Build Army Berlin.
+RES: build(Germany, ber/mv, army)
+
+ORD: Germany: Build an Army in Berlin.
+RES: build(Germany, ber/mv, army)
+
+ORD: Germany: Build a Fleet in Berlin.
+RES: build(Germany, ber/xc, fleet)
+
+ORD: Germany: Builds Army Berlin.
+RES: build(Germany, ber/mv, army)
+
+ORD: Germany: Builds an Army in Berlin.
+RES: build(Germany, ber/mv, army)
+
+ORD: Germany: Builds a Fleet in Berlin.
+RES: build(Germany, ber/xc, fleet)
 
