@@ -500,7 +500,7 @@ public class TestParser
 		if(loc == null)
 		{
 			System.out.println("ERROR: in result of order pair starting at line: "+orp.getLineNumber());
-			System.out.println("Location \""+tok+"\" not found.");
+			System.out.println("Location \""+tok+"\" not recognized.");
 			System.exit(1);
 		}
 		
@@ -522,6 +522,8 @@ public class TestParser
 			sb.append("\"");
 			sb.append(theLoc);
 			sb.append("\"");
+			sb.append(" (Was the coast specified? e.g., naf/xc naf/mv or stp/nc).");
+			
 			failedCases.add(sb.toString());
 			return false;
 		}
