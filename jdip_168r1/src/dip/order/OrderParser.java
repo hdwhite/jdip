@@ -131,21 +131,23 @@ public class OrderParser
 		{" an ", " "},
 		{" of ", " "},
 		{" on ", " "},
-		{" is ", " "},
+		// WARNING: if a province is named 'the', this will create a problem.
+		{" the ", " "},		
 		// convert unit-type specifiers
 		{"fleet", " f "},
 		{"army", " a "},		
 		{"wing", " w "},		
 		// WAIVE orders. Waive may NOT be abbreviated as "W"; otherwise, 
 		// w xxx (build a wing) may be confused as 'waive' 
-		{"waives"," waive "},
-		{"waive build "," waive "},		// e.g., waive build [province]; must come before "BUILD"
+		{"waives builds "," waive "},
 		{"waives build "," waive "},
 		{"waive builds "," waive "},	// e.g., waive build [province]; must come before "BUILD"
-		{"waives builds "," waive "},
+		{"waive build "," waive "},		// e.g., waive build [province]; must come before "BUILD"
+		{"waives"," waive "},
 		// adjustment order Remove (since it contains "move", must come before)
+		{"removes a ", " r "},
+		{"removes", " r "},		// plurals FIRST
 		{"remove"," r "},
-		{"removes", " r "},
 		// for MOVE orders; note that "->" must come before "-"
 		// also, we MUST replace any "-" in coasts with a "/" first.
 		{"-=>", " m "},
@@ -161,7 +163,6 @@ public class OrderParser
 		{"retreats", " m "}, 	// plural first
 		{"retreat", " m "},
 		{"moving to ", " m "},	// NOTE: space after "to" ...
-		{"moves to ", " m "}, 	// NOTE: space after "to" to avoid ambiguity e.g., "army bre moves tol"
 		{"moves to ", " m "}, 	// NOTE: space after "to" to avoid ambiguity e.g., "army bre moves tol"
 		{"move to ", " m "}, 	// NOTE: plurals and longer entries MUST come before shorter entries
 		{"moves", " m "}, 	
@@ -180,7 +181,7 @@ public class OrderParser
 		{" into ", " m "},		// prefixed with space (don't want to get the end of a province)
 		{" to ", " m "},		// used as a substitute for 'move to'; space prefix here is also important
 		// SUPPORT orders
-		{"supports", " s "},
+		{"supports", " s "},	// plurals FIRST
 		{"support", " s "},
 		{" to support", " s "},	// prefixed with space (to not get the end of another word)
 		// HOLD orders
@@ -194,9 +195,13 @@ public class OrderParser
 		{"transports", " c "},
 		{"transport", " c "},
 		// DISBAND orders	NOTE: 'remove' is up above (before 'move')
+		{"disbands a "," d "},
 		{"disbands"," d "},
 		{"disband"," d "},
 		// various adjustment orders
+		{"builds a "," b "},
+		{"builds"," b "},	// plurals FIRST
+		{"build a "," b "},
 		{"build"," b "},
 		// this occurs after coast-normalization, so convert parens to spaces.
 		{"(", " "},
