@@ -159,6 +159,7 @@ public class ClientFrame extends JFrame
 	private String currentMode = MODE_NONE;
 	private GUIOrderFactory guiOrderFactory = null;			// default GUI order factory.
 	private boolean isValidating = false;	// extra data validation when parsing?
+	private boolean applyGUIEnhancements = true;
 	private ValidationOptions valOpts = new ValidationOptions();
 	private UndoRedoManager undoManager = null;
 	private OrderFormatOptions orderFormatOptions = null;	
@@ -201,66 +202,72 @@ public class ClientFrame extends JFrame
 		*/
 		Log.println("Batik XML parser: ", XMLResourceDescriptor.getXMLParserClassName());
 		
-		// setup per-OS options
-		if(Utils.isOSX())
-		{
-			System.setProperty("apple.laf.useScreenMenuBar", "true");
-			System.setProperty("com.apple.mrj.application.apple.menu.about.name", PROGRAM_NAME);
-			System.setProperty("apple.awt.showGrowBox", "true");	// may no longer need
-			/*
-			NOTE: brushed metal is disabled; a bug in the Cocoa implementation causes 
-			dialogs to behave strangely when this is enabled.
-			//
-			//System.setProperty("apple.awt.brushMetalLook", "true");
-			*/
-		}
 		
-		// replace bad-looking (metal, motif) LAFs with better-looking
-		// ones. 
-		String lafClassName = UIManager.getSystemLookAndFeelClassName();
-		assert (lafClassName != null);
+		Log.println("Applying GUI enhancements: "+applyGUIEnhancements);
 		
-		if(Utils.isWindows())
+		if(applyGUIEnhancements)
 		{
-			// higher-fidelity windows LAF
- 			lafClassName = "com.jgoodies.looks.windows.WindowsLookAndFeel";
+			// setup per-OS options
+			if(Utils.isOSX())
+			{
+				System.setProperty("apple.laf.useScreenMenuBar", "true");
+				System.setProperty("com.apple.mrj.application.apple.menu.about.name", PROGRAM_NAME);
+				System.setProperty("apple.awt.showGrowBox", "true");	// may no longer need
+				/*
+				NOTE: brushed metal is disabled; a bug in the Cocoa implementation causes 
+				dialogs to behave strangely when this is enabled.
+				//
+				//System.setProperty("apple.awt.brushMetalLook", "true");
+				*/
+			}
 			
-			// enable this to use the Java (not windows system) default font.
-			// UIManager.put("Application.useSystemFontSettings", Boolean.FALSE);
-		}
-		else if(!Utils.isOSX())
-		{
-			// keep synth; switch if Motif / Metal
-			if( lafClassName.indexOf("MotifLookAndFeel") >= 0 || 
-				lafClassName.indexOf("MetalLookAndFeel") >= 0 )
+			// replace bad-looking (metal, motif) LAFs with better-looking
+			// ones. 
+			String lafClassName = UIManager.getSystemLookAndFeelClassName();
+			assert (lafClassName != null);
+			
+			if(Utils.isWindows())
 			{
-				// good generic LAF
-				lafClassName = "com.jgoodies.looks.plastic.PlasticLookAndFeel";
+				// higher-fidelity windows LAF
+				lafClassName = "com.jgoodies.looks.windows.WindowsLookAndFeel";
+				
+				// enable this to use the Java (not windows system) default font.
+				// UIManager.put("Application.useSystemFontSettings", Boolean.FALSE);
 			}
-		}
-		
-		
-		try
-		{
-			if(lafClassName.indexOf("jgoodies") >= 0)
+			else if(!Utils.isOSX())
 			{
-				// for WebStart compatibility
-				UIManager.put("ClassLoader", com.jgoodies.looks.LookUtils.class.getClassLoader());
+				// keep synth; switch if Motif / Metal
+				if( lafClassName.indexOf("MotifLookAndFeel") >= 0 || 
+					lafClassName.indexOf("MetalLookAndFeel") >= 0 )
+				{
+					// good generic LAF
+					lafClassName = "com.jgoodies.looks.plastic.PlasticLookAndFeel";
+				}
 			}
-			Log.println(lafClassName);
-			UIManager.setLookAndFeel(lafClassName);
-		} 
-		catch (Exception e) 
-		{
-			// do nothing; swing will load default L&F
-			Log.println(e);
+			
+			
+			try
+			{
+				if(lafClassName.indexOf("jgoodies") >= 0)
+				{
+					// for WebStart compatibility
+					UIManager.put("ClassLoader", com.jgoodies.looks.LookUtils.class.getClassLoader());
+				}
+				Log.println(lafClassName);
+				UIManager.setLookAndFeel(lafClassName);
+			} 
+			catch (Exception e) 
+			{
+				// do nothing; swing will load default L&F
+				Log.println(e);
+			}
 		}
 		
 		dtime = Log.printDelta(dtime, "CF: LAF setup time: ");
 		
 		// set exception handler
 		GUIExceptionHandler.registerHandler();
-		
+
 		// get the variant and tool directories. 
 		// do not change the variantDirPath if it was set
 		// from the command line
@@ -1056,31 +1063,33 @@ public class ClientFrame extends JFrame
 	/** Setup command-line options and parse the command line. */
 	private void parseCmdLine(String args[])
 	{
-		// locale option [takes 1 argument]
+		// parameterized options
         StringParam argLocale =
             new StringParam("lang", "force language to the specified ISO-639 2-letter type (e.g., \"de\", \"en\", \"fr\")",
                             2, 2, true, false);
 		
-		// log options
 		FileParam argLogFile =
 			new FileParam("log", "writes logging information to file or stdout [if \"stdout\" specified]",
 							FileParam.NO_ATTRIBUTES,
 							StringParam.OPTIONAL,
 							FileParam.SINGLE_VALUED);
 		
-		// variantpath specifier
 		FileParam argVariantPath = 
 			new FileParam("variantpath", "load variant plugins from specified directory", 
 							FileParam.IS_DIR & FileParam.IS_READABLE & FileParam.EXISTS,
 							FileParam.OPTIONAL,
 							FileParam.SINGLE_VALUED);
 		
-		// validate option
+		// boolean options
 		BooleanParam validateOpt =
 			new BooleanParam("validate", "validate XML and SVG data files");
 		
 		BooleanParam splashOpt =
 			new BooleanParam("nosplash", "do not show splash screen");
+		
+		// validate option
+		BooleanParam defaultGUI =
+			new BooleanParam("defaultgui", "do not apply GUI enhancements");
 		
 		// verbose help text
 		String helpText	=	" ";	
@@ -1091,7 +1100,7 @@ public class ClientFrame extends JFrame
 				"jdip",
 				"Adjudicator and Game Manager for multiplayer diplomacy-based strategy games",
 				// options
-				new Parameter[] {argLocale, argLogFile, argVariantPath, validateOpt, splashOpt},
+				new Parameter[] {argLocale, argLogFile, argVariantPath, validateOpt, splashOpt, defaultGUI},
 				// arguments [left on command line]
 				new Parameter[] {}
 			)
@@ -1129,8 +1138,9 @@ public class ClientFrame extends JFrame
 			Log.setLogging(true);
 		}
 		
-		// set validation flag
+		// set flags
 		isValidating = validateOpt.isTrue();
+		applyGUIEnhancements = !defaultGUI.isTrue();
 	}// parseCmdLine()
 	
 	
