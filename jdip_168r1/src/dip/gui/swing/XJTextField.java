@@ -82,7 +82,7 @@ public class XJTextField extends JTextField
 			
 			private String getFixedString(String in)
 			{
-				StringBuffer buffer = new StringBuffer(in);
+				StringBuffer buffer = new StringBuffer((in == null) ? "" : in);
 				
 				for(int i=buffer.length()-1; i>=0; i--)
 				{
