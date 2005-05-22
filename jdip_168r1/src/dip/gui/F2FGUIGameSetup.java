@@ -43,8 +43,7 @@ import javax.swing.*;
 public class F2FGUIGameSetup implements GUIGameSetup
 {
 	// serialized data
-	private boolean[] enabledTabs = null;	// only null if never saved
-	private Power selectedPower = null;		// may be null
+	private F2FOrderDisplayPanel.F2FState state = null;	// only null if never saved
 	
 	/** Setup the game. */
 	public void setup(ClientFrame cf, World world)
@@ -57,12 +56,8 @@ public class F2FGUIGameSetup implements GUIGameSetup
 		cf.setOrderStatusPanel( osp );
 		
 		// restore as appropriate
-		if(enabledTabs != null)
+		if(state != null)
 		{
-			F2FOrderDisplayPanel.F2FState state = new F2FOrderDisplayPanel.F2FState(
-				selectedPower,
-				enabledTabs );
-				
 			odp.restoreState(state);
 		}
 		
@@ -109,9 +104,8 @@ public class F2FGUIGameSetup implements GUIGameSetup
 	public void save(ClientFrame cf)
 	{
 		F2FOrderDisplayPanel fodp = (F2FOrderDisplayPanel) cf.getOrderDisplayPanel();
-		F2FOrderDisplayPanel.F2FState state = fodp.getState();
-		this.selectedPower = state.getCurrentPower();
-		this.enabledTabs = state.getTabState();
+		state = fodp.getState();
+
 	}// save()
 	
 	
