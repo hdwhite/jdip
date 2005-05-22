@@ -41,7 +41,9 @@ import org.w3c.dom.svg.*;
 *	Handles DOM UI Events, and dispatches the events (after some
 *	decoding) to the DOMUIEventHandler that is set. 
 *	<p>
-*	Currently this handles Mouse and Key events in the MapPanel.
+*	Currently this handles Mouse and Key events in the MapPanel. According to
+*	http://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030221/DOM3-Events.txt, 
+*	the mac 'command' key maps to the meta key.
 *
 */
 public class DOMUIEventListener implements EventListener 
@@ -140,5 +142,30 @@ public class DOMUIEventListener implements EventListener
 		}
 		
 	}// handleEvent()
+	
+	
+	/**
+	*	Method to decide if the mouse button is the Right mouse button, or,
+	*	command (meta) + left (default) mouse button.
+	*/
+	public static boolean isRMBorMetaLMB(MouseEvent me)
+	{
+		final short button = me.getButton();
+		return ( (button == BUTTON_RIGHT) ||
+			(button == BUTTON_LEFT && me.getMetaKey()) );
+	}// isRMBorMetaLMB()
+	
+	
+	/**
+	*	Method to decide if the mouse button is the middle mouse button, or,
+	*	control + left (default) mouse button.
+	*/
+	public static boolean isMMBorControlLMB(MouseEvent me)
+	{
+		final short button = me.getButton();
+		return ( (button == BUTTON_MIDDLE) ||
+			(button == BUTTON_LEFT && me.getShiftKey()) );
+	}// isMMBorControlLMB()
+	
 	
 }// DOMUIEventListener()

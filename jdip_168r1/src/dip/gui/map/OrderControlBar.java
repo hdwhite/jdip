@@ -384,15 +384,15 @@ public class OrderControlBar extends ViewControlBar
 			inDrag = true;
 			dragLoc = loc;
 			
-			final short button = me.getButton();
-			
-			if( button == DOMUIEventListener.BUTTON_RIGHT )
+			// Right mouse button OR 
+			// meta + default mouse button
+			if(DOMUIEventListener.isRMBorMetaLMB(me))
 			{
 				currentAction = MODE_SUPPORT;
 				setGUIOrder( loc );
 				// Start a support order
 			}
-			else if( button == DOMUIEventListener.BUTTON_MIDDLE )
+			else if(DOMUIEventListener.isMMBorControlLMB(me))
 			{
 				currentAction = MODE_HOLD;
 				setGUIOrder( loc );

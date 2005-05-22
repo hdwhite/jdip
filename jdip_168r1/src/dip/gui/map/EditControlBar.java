@@ -306,9 +306,7 @@ public class EditControlBar extends ViewControlBar
 	{
 		if(loc!=null)
 		{
-			final short button = me.getButton();
-			
-			if(button == DOMUIEventListener.BUTTON_RIGHT)
+			if(DOMUIEventListener.isRMBorMetaLMB(me))
 			{
 				// make RMB add the 'other unit' that is selected, 
 				// if an army or fleet is selected. if a wing or anything
@@ -326,7 +324,7 @@ public class EditControlBar extends ViewControlBar
 					currentAction = defaultAction;
 				}
 			}
-			else if(button == DOMUIEventListener.BUTTON_MIDDLE)
+			else if(DOMUIEventListener.isMMBorControlLMB(me))
 			{
 				currentAction = CLICK_TO_REMOVE;
 			}
