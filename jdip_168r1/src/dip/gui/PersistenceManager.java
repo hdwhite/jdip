@@ -192,7 +192,21 @@ public class PersistenceManager
 				}
 			}
 			
-			clientFrame.dispose();
+			
+			// workaround for "Can't dispose InputContext while it\'s active"
+			// bugs. This is not ideal... and should be investigated further. 
+			// However, consequences should be minimal, as we are destined
+			// to shut down at this point.
+			try
+			{
+				clientFrame.dispose();
+			}
+			catch(Exception e)
+			{
+				Log.println("PM::exit(): exception during clientFrame.dispose():");
+				Log.println(e);
+			}
+			
 			System.exit(0);
 		}
 	}// exit()
