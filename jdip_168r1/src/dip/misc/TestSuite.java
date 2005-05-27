@@ -269,7 +269,10 @@ public final class TestSuite
 		}
 		
 		
-		Log.setLogging(isAdjudicatorLogged);
+		if(isAdjudicatorLogged)
+		{
+			Log.setLogging(null);
+		}
 		
 		TestSuite ts = new TestSuite();
 		

@@ -176,7 +176,10 @@ public class TestParser
 		System.out.println("TestParser started on: "+new Date());
 		//Log.setLogging(isLogging);
 		parseCaseFile(input);
-		Log.setLogging(isLogging);
+		if(isLogging)
+		{
+			Log.setLogging(null);
+		}
 		runTest();
 	}// TestParser()
 	

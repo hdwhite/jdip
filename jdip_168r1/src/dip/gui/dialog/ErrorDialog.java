@@ -29,6 +29,7 @@ import dip.gui.*;
 
 import java.io.InvalidClassException;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -41,6 +42,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Properties;
+import java.util.Enumeration;
 import javax.swing.JFrame;
 import java.awt.Dimension;
 import java.awt.event.*;
@@ -122,9 +127,9 @@ public class ErrorDialog extends TextViewer
 	
 	
 	/** Convenience Method (no BugReportInfo required) */
-	public static void displaySerious(JFrame parent, Throwable e) 
+	public static void displaySerious(final JFrame parent, final Throwable t) 
 	{
-		ErrorDialog.displaySerious(parent, e, null);
+		ErrorDialog.displaySerious(parent, new BugReportInfo(t));
 	}// displaySerious()
 	
 	
@@ -135,12 +140,14 @@ public class ErrorDialog extends TextViewer
 	*	be irrecoverable, but gives the user a chance to continue 
 	*	working in the program if possible. The user may also quit
 	*	the program from this dialog.
+	*	<p>
+	*	Null BugReportInfo is not allowed.
 	*
 	*/
-	public static void displaySerious(JFrame parent, Throwable e, 
-		BugReportInfo bri)
+	public static void displaySerious(final JFrame parent, final BugReportInfo bri)
 	{
-		Object[] args = new Object[3];
+		final Throwable e = bri.getThrowable();
+		final Object[] args = new Object[3];
 		
 		args[0] = e.getClass().getName();
 		args[1] = getMsg(e);
@@ -164,9 +171,9 @@ public class ErrorDialog extends TextViewer
 	
 	
 	/** Convenience Method (no BugReportInfo required) */
-	public static void displayFatal(JFrame parent, Throwable e) 
+	public static void displayFatal(JFrame parent, Throwable t) 
 	{
-		ErrorDialog.displayFatal(parent, e, null);
+		ErrorDialog.displayFatal(parent, new BugReportInfo(t));
 	}// displayFatal()
 	
 	/**
@@ -177,9 +184,10 @@ public class ErrorDialog extends TextViewer
 	*	error code 1.
 	*
 	*/
-	public static void displayFatal(JFrame parent, Throwable e, BugReportInfo bri)
+	public static void displayFatal(JFrame parent, BugReportInfo bri)
 	{
-		Object[] args = new Object[3];
+		final Throwable e = bri.getThrowable();
+		final Object[] args = new Object[3];
 		
 		args[0] = e.getClass().getName();
 		args[1] = getMsg(e);
@@ -250,7 +258,7 @@ public class ErrorDialog extends TextViewer
 	public static void displayNetIO(JFrame parent, IOException e, 
 		String connection)
 	{
-		ErrorDialog.displayNetIO(parent, e, connection, null);
+		ErrorDialog.displayNetIO(parent, connection, new BugReportInfo(e));
 	}// displayNetIO()
 	
 	/**
@@ -263,10 +271,10 @@ public class ErrorDialog extends TextViewer
 	*	Special handling exists for an UnknownHostException.
 	*
 	*/
-	public static void displayNetIO(JFrame parent, IOException e, 
-		String connection, BugReportInfo bri)
+	public static void displayNetIO(JFrame parent, String connection, BugReportInfo bri)
 	{
-		Object[] args = new Object[4];
+		final Throwable e = bri.getThrowable();
+		final Object[] args = new Object[4];
 		
 		args[0] = getCleanName(e.getClass().getName());
 		args[1] = getMsg(e);
@@ -303,7 +311,7 @@ public class ErrorDialog extends TextViewer
 	/** Convenience Method (no BugReportInfo required) */
 	public static void displayGeneral(JFrame parent, Exception e)
 	{
-		ErrorDialog.displayGeneral(parent, e, null);
+		ErrorDialog.displayGeneral(parent, new BugReportInfo(e));
 	}// displayGeneral()
 	
 	
@@ -313,10 +321,10 @@ public class ErrorDialog extends TextViewer
 	*	A General error is an error that does not fit any of the
 	*	other categories.
 	*/
-	public static void displayGeneral(JFrame parent, Exception e, 
-		BugReportInfo bri)
+	public static void displayGeneral(JFrame parent, BugReportInfo bri)
 	{
-		Object[] args = new Object[3];
+		final Throwable e = bri.getThrowable();
+		final Object[] args = new Object[3];
 		
 		args[0] = getCleanName(e.getClass().getName());
 		args[1] = getMsg(e);
@@ -481,7 +489,7 @@ public class ErrorDialog extends TextViewer
 				if(ACTION_SUBMIT.equals(actionCommand))
 				{
 					setButtonEnabled(ACTION_SUBMIT, false);
-					if(!submitBug(parent, rawText, bri))
+					if(!submitBug(parent, bri))
 					{
 						setButtonEnabled(ACTION_SUBMIT, true);
 					}
@@ -541,7 +549,7 @@ public class ErrorDialog extends TextViewer
 			{
 				if(ACTION_SUBMIT.equals(actionCommand))
 				{
-					if(submitBug(parent, rawText, bri))
+					if(submitBug(parent, bri))
 					{
 						setButtonEnabled(ACTION_SUBMIT, false);
 					}
@@ -645,10 +653,9 @@ public class ErrorDialog extends TextViewer
 	*	Does not enable or disable the submit button. BugReportInfo
 	*	may be null.
 	*/
-	private static boolean submitBug(JFrame parent, String text, 
-		BugReportInfo bri)
+	private static boolean submitBug(JFrame parent, BugReportInfo bri)
 	{
-		if(sendBugReport(text, bri))
+		if(sendBugReport(bri))
 		{
 			Utils.popupInfo(parent, Utils.getLocalString(SUBMIT_TITLE), 
 				 Utils.getLocalString(SUBMIT_SUCCESS));
@@ -667,9 +674,25 @@ public class ErrorDialog extends TextViewer
 	*	throw further exceptions (unless a null String is passed).
 	*	BugReportInfo is allowed to be null.
 	*/
-	private static boolean sendBugReport(String text, BugReportInfo bri)
+	private static boolean sendBugReport(BugReportInfo bri)
 	{
-		if(text == null)
+		/*
+			Information about:
+			
+			http://jdip.sourceforge.net/forms/data/detailedBugFormProc.php
+			
+			fields:
+				brHeader		constant header
+				brVersion		jdip version
+				brBriefing		brief version of exception
+								(exception name + message)
+				brSystemInfo	system information
+				brStackTrace	stack trace
+				brLogTrace		in-memory log trace
+				
+		*/
+		
+		if(bri == null)
 		{
 			throw new IllegalArgumentException();
 		}
@@ -679,7 +702,7 @@ public class ErrorDialog extends TextViewer
 		
 		try
 		{
-			URL url = new URL("http://jdip.sourceforge.net/forms/data/bugFormProc.php");
+			URL url = new URL("http://jdip.sourceforge.net/forms/data/detailedBugFormProc.php");
 			
 			HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
 			urlConn.setRequestMethod("POST");
@@ -691,23 +714,35 @@ public class ErrorDialog extends TextViewer
 			urlConn.setRequestProperty("User-Agent", "jDip");
 			
 			wr = new OutputStreamWriter(urlConn.getOutputStream());
-			final String header 	= "brHeader="+URLEncoder.encode(
-				"JDIP_REMOTE_BUG_REPORT", "UTF-8");
-			final String time 	= "&brTime="+URLEncoder.encode(
-				String.valueOf(new Date()), "UTF-8");
-			final String message 	= "&brText="+URLEncoder.encode(text, "UTF-8");
 			
-			wr.write(header);
-			wr.write(time);
-			if(bri != null)
-			{
-				wr.write(bri.getInfo());
-			}
-			wr.write(message);
+			// write header
+			wr.write("&brHeader=");
+			wr.write(encode("JDIP_REMOTE_BUG_REPORT"));
+			
+			// version
+			wr.write("&brVersion=");
+			wr.write(encode(ClientFrame.getVersion()));
+			
+			// write brief message
+			wr.write("&brBriefing=");
+			wr.write( encode(bri.getBriefDescription()) );
+			
+			// write stack trace
+			wr.write("&brStackTrace=");
+			wr.write( encode(bri.getStackTrace()) );
+			
+			// write system info
+			wr.write("&brSystemInfo=");
+			wr.write( encode(bri.getSystemInfo()) );
+			
+			// write in-memory log contents
+			wr.write("&brLogTrace=");
+			wr.write( encode(bri.getLog()) );
 			
 			wr.flush();
 			wr.close();
 			
+			// read back HTTP response
 			rd = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
 			String line;
 			while ((line = rd.readLine()) != null)
@@ -753,6 +788,14 @@ public class ErrorDialog extends TextViewer
 		return false;
 	}// sendBugReport()
 	
+	/** Encode a string into http POST safe-strings. */
+	private static String encode(String in)
+	throws UnsupportedEncodingException
+	{
+		return URLEncoder.encode(in, "UTF-8");
+	}// encode()
+	
+	
 	
 	/**
 	*	Extra debug information that can be sent, and is included in debug
@@ -761,11 +804,40 @@ public class ErrorDialog extends TextViewer
 	public static class BugReportInfo
 	{
 		private final List list;
+		private final Throwable t;
+		private String memoryLogData;
 		
-		public BugReportInfo()
+		/** 
+		*	Create a BugReportInfo, with a corresponding exception.
+		*	<b>Note: </b> null arguments are not allowed!<br>
+		*	This method also gathers the in-memory log data (if any) at the point
+		*	of creation.
+		*/
+		public BugReportInfo(Throwable t)
 		{
+			if(t == null)
+			{
+				throw new IllegalArgumentException();
+			}
+			
 			list = new LinkedList();
+			this.t = t;
+			this.memoryLogData = Log.getMemoryBuffer();
 		}// BugInfo()
+		
+		
+		
+		/** Gets the throwable */
+		public Throwable getThrowable()
+		{
+			return t;
+		}// getThrowable()
+		
+		/** Gets the memory log, upto the point which this object was created */
+		public String getLog()
+		{
+			return memoryLogData;			
+		}// getLog()
 		
 		/**
 		*	Add a line; name/value. This is typically displayed as:<br>
@@ -781,24 +853,126 @@ public class ErrorDialog extends TextViewer
 			list.add(sb.toString());
 		}// add()
 		
+		
 		/**
 		*	Returns all name-value pairs, as a String.
 		*	Lines are terminated with newline charater(s).
 		*/
 		public String getInfo()
 		{
-			StringBuffer sb = new StringBuffer();
-			Iterator iter = list.iterator();
-			while(iter.hasNext())
+			if(list.isEmpty())
 			{
-				String line = (String) iter.next();
-				sb.append(line);
-				sb.append('\n');
+				return "";
 			}
-			
-			return sb.toString();
+			else
+			{
+				StringBuffer sb = new StringBuffer();
+				sb.append("\n------ Additional Info -------------------");
+				Iterator iter = list.iterator();
+				while(iter.hasNext())
+				{
+					sb.append('\n');
+					String line = (String) iter.next();
+					sb.append(line);
+				}
+				
+				sb.append('\n');
+				return sb.toString();
+			}
 		}// getInfo()
 		
+		
+		/** Gets a brief description of the throwable */
+		public String getBriefDescription()
+		{
+			StringBuffer sb = new StringBuffer(128);
+			sb.append(t.getClass().getName());
+			sb.append(": ");
+			sb.append(t.getMessage());
+			return sb.toString();
+		}// getBriefDescription()
+		
+		
+		/** 
+		*	Get stack trace from the given Throwable. 
+		*	First adds 'additional info' if any.
+		*/
+		public String getStackTrace()
+		{
+			final StringBuffer sb = new StringBuffer(2048);
+			
+			sb.append(getInfo());
+			
+			sb.append("\n------ Stack Trace------------------------");
+			
+			final StackTraceElement[] ste = t.getStackTrace();
+			for(int i=(ste.length - 1); i>=0; i--)
+			{
+				sb.append("\n  ");
+				sb.append(ste[i].toString());
+			}
+			
+			appendBatikInfo(sb, t);
+			sb.append('\n');
+			
+			return sb.toString();
+		}// getStackTrace()
+		
+		
+		/** Get system information */
+		public String getSystemInfo()
+		{
+			StringBuffer sb = new StringBuffer(1024);
+			
+			// memory
+			final Runtime rt = Runtime.getRuntime();
+			sb.append("\n------ Memory ----------------------------");
+			sb.append("\n  Memory Free:  ");
+			sb.append(rt.freeMemory());
+			sb.append("\n  Memory Total: ");
+			sb.append(rt.totalMemory());
+			sb.append("\n  Memory Max:   ");
+			sb.append(rt.maxMemory());
+			
+			sb.append("\n------ System Info -----------------------");
+			
+			// ArrayList of strings
+			ArrayList list = new ArrayList();
+			try
+			{
+				Properties props = System.getProperties();
+				Enumeration propEnum = props.propertyNames();
+				while(propEnum.hasMoreElements())
+				{
+					final String propName = (String) propEnum.nextElement();
+					if(!propName.equals("line.separator"))
+					{
+						StringBuffer line = new StringBuffer(128);
+						line.append(propName);
+						line.append(": ");
+						line.append(props.getProperty(propName));
+						list.add(line.toString());
+					}
+				}
+				
+				Collections.sort(list);
+			}
+			catch(Exception e)
+			{
+				sb.append("\n  Cannot obtain system properties.");
+			}
+			
+			
+			// system properties
+			for(Iterator iter=list.iterator(); iter.hasNext();)
+			{
+				sb.append("\n  ");
+				sb.append(iter.next());
+			}
+			
+			sb.append('\n');
+			return sb.toString();
+		}// getSystemInfo()
 		
 	}// nested class BugReportInfo
 	

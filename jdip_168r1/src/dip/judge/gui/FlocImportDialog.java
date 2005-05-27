@@ -243,13 +243,13 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 	public void flocImportException(IOException e)
 	{
 		// enhance our error report
-		ErrorDialog.BugReportInfo bri = new ErrorDialog.BugReportInfo();
+		ErrorDialog.BugReportInfo bri = new ErrorDialog.BugReportInfo(e);
 		bri.add("contact_site", "http://www.floc.net/");
 		bri.add("judge_name", (String) cbJudges.getSelectedItem());
 		bri.add("game_name", tfGameName.getText());
 		bri.add("world_open?", String.valueOf((clientFrame.getWorld() != null)));
 		
-		ErrorDialog.displayNetIO(clientFrame, e, "www.floc.net", bri);
+		ErrorDialog.displayNetIO(clientFrame,  "www.floc.net", bri);
 		enableProgressBar(false);
 		close(ACTION_CANCEL);
 	}// flocImportException()

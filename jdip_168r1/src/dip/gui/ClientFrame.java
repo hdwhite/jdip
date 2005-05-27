@@ -138,8 +138,8 @@ public class ClientFrame extends JFrame
 	
 	
 	// plugin directories
-	private static final String VARIANT_DIR				= "variants";
-	private static final String TOOL_DIR				= "plugins";
+	private static final String VARIANT_DIR	= "variants";
+	private static final String TOOL_DIR		= "plugins";
 	private File variantDirPath	= null;
 	
 	// instance variables
@@ -1128,14 +1128,16 @@ public class ClientFrame extends JFrame
 		{
 			if("stdout".equalsIgnoreCase(argLogFile.getFile().getName()))
 			{
-				Log.setFile(null);
+				Log.setLogging(null);
 			}
 			else
 			{
-				Log.setFile(argLogFile.getFile());
+				Log.setLogging(argLogFile.getFile());
 			}
-			
-			Log.setLogging(true);
+		}
+		else
+		{
+			Log.setLogging(Log.LOG_TO_MEMORY, null);
 		}
 		
 		// set flags
