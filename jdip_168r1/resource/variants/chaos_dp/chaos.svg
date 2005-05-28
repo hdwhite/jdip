@@ -175,40 +175,40 @@
 	
 	<jdipNS:ORDERDRAWING>
 		<jdipNS:POWERCOLORS>
-			<jdipNS:POWERCOLOR power="a-ank" color="yellowgreen"/>
-			<jdipNS:POWERCOLOR power="b-bel" color="lightgreen"/>
-			<jdipNS:POWERCOLOR power="c-ber" color="yellow"/>
-			<jdipNS:POWERCOLOR power="d-bre" color="violet"/>
-			<jdipNS:POWERCOLOR power="e-bud" color="lightcoral"/>
-			<jdipNS:POWERCOLOR power="f-bul" color="tomato"/>
-			<jdipNS:POWERCOLOR power="g-con" color="thistle"/>
-			<jdipNS:POWERCOLOR power="h-den" color="indigo"/>
-			<jdipNS:POWERCOLOR power="i-edi" color="gold"/>
-			<jdipNS:POWERCOLOR power="j-gre" color="sienna"/>
-			<jdipNS:POWERCOLOR power="k-hol" color="snow"/>
-			<jdipNS:POWERCOLOR power="l-kie" color="steelblue"/>
-			<jdipNS:POWERCOLOR power="n-lvp" color="teal"/>
-			<jdipNS:POWERCOLOR power="p-lon" color="deeppink"/>
-			<jdipNS:POWERCOLOR power="q-mar" color="red"/>
-			<jdipNS:POWERCOLOR power="r-mos" color="firebrick"/>
-			<jdipNS:POWERCOLOR power="s-mun" color="navy"/>
-			<jdipNS:POWERCOLOR power="t-nap" color="darkgoldenrod"/>
-			<jdipNS:POWERCOLOR power="u-nor" color="lime"/>
-			<jdipNS:POWERCOLOR power="v-par" color="lightslategrey"/>
-			<jdipNS:POWERCOLOR power="w-por" color="blueviolet"/>
-			<jdipNS:POWERCOLOR power="x-rom" color="lightsalmon"/>
-			<jdipNS:POWERCOLOR power="y-rum" color="burlywood"/>
-			<jdipNS:POWERCOLOR power="z-ser" color="darkslategray"/>
-			<jdipNS:POWERCOLOR power="0-sev" color="darkgreen"/>
-			<jdipNS:POWERCOLOR power="1-smy" color="fuchsia"/>
-			<jdipNS:POWERCOLOR power="2-spa" color="goldenrod"/>
-			<jdipNS:POWERCOLOR power="3-stp" color="orangered"/>
-			<jdipNS:POWERCOLOR power="4-swe" color="skyblue"/>
-			<jdipNS:POWERCOLOR power="5-tri" color="lemonchiffon"/>
-			<jdipNS:POWERCOLOR power="6-tun" color="lightgrey"/>
-			<jdipNS:POWERCOLOR power="7-ven" color="darkseagreen"/>
-			<jdipNS:POWERCOLOR power="8-vie" color="aquamarine"/>
-			<jdipNS:POWERCOLOR power="9-war" color="maroon"/>
+			<jdipNS:POWERCOLOR power="Ankara" color="yellowgreen"/>
+			<jdipNS:POWERCOLOR power="Belgium" color="lightgreen"/>
+			<jdipNS:POWERCOLOR power="Berlin" color="yellow"/>
+			<jdipNS:POWERCOLOR power="Brest" color="violet"/>
+			<jdipNS:POWERCOLOR power="Budapest" color="lightcoral"/>
+			<jdipNS:POWERCOLOR power="Bulgaria" color="tomato"/>
+			<jdipNS:POWERCOLOR power="Constantinople" color="thistle"/>
+			<jdipNS:POWERCOLOR power="Denmark" 	color="indigo"/>
+			<jdipNS:POWERCOLOR power="Edinburgh" color="gold"/>
+			<jdipNS:POWERCOLOR power="Greece" color="sienna"/>
+			<jdipNS:POWERCOLOR power="Holland" 	color="snow"/>
+			<jdipNS:POWERCOLOR power="Kiel" color="steelblue"/>
+			<jdipNS:POWERCOLOR power="Liverpool" color="teal"/>
+			<jdipNS:POWERCOLOR power="London" 	color="deeppink"/>
+			<jdipNS:POWERCOLOR power="Marseilles" color="red"/>
+			<jdipNS:POWERCOLOR power="Moscow" 	color="firebrick"/>
+			<jdipNS:POWERCOLOR power="Munich" 	color="navy"/>
+			<jdipNS:POWERCOLOR power="Naples" 	color="darkgoldenrod"/>
+			<jdipNS:POWERCOLOR power="Norway" 	color="lime"/>
+			<jdipNS:POWERCOLOR power="Paris" 	color="lightslategrey"/>
+			<jdipNS:POWERCOLOR power="Portugal" color="blueviolet"/>
+			<jdipNS:POWERCOLOR power="Rome" 	color="lightsalmon"/>
+			<jdipNS:POWERCOLOR power="Rumania" 	color="burlywood"/>
+			<jdipNS:POWERCOLOR power="Serbia" 	color="darkslategray"/>
+			<jdipNS:POWERCOLOR power="Sevastopol" color="darkgreen"/>
+			<jdipNS:POWERCOLOR power="Smyrna" 	color="fuchsia"/>
+			<jdipNS:POWERCOLOR power="Spain" 	color="goldenrod"/>
+			<jdipNS:POWERCOLOR power="StPetersburg" color="orangered"/>
+			<jdipNS:POWERCOLOR power="Sweden" 	color="skyblue"/>
+			<jdipNS:POWERCOLOR power="Trieste" 	color="lemonchiffon"/>
+			<jdipNS:POWERCOLOR power="Tunis" 	color="lightgrey"/>
+			<jdipNS:POWERCOLOR power="Venice" 	color="darkseagreen"/>
+			<jdipNS:POWERCOLOR power="Vienna" 	color="aquamarine"/>
+			<jdipNS:POWERCOLOR power="Warsaw" 	color="maroon"/>
 		</jdipNS:POWERCOLORS>
 		
 		<jdipNS:SYMBOLSIZE name="Fleet" width="40" height="40"/>
@@ -633,133 +633,116 @@
 		
 		.neutral	{fill:lightgray;		stroke:#000000;stroke-width:1}
 
-		.a-ank {fill:yellowgreen;fill-opacity:0.85}
-		.b-bel {fill:lightgreen;fill-opacity:0.85}
-		.c-ber {fill:yellow;fill-opacity:0.85}
-		.d-bre {fill:violet;fill-opacity:0.85}
-		.e-bud {fill:lightcoral;fill-opacity:0.85}
-		.f-bul {fill:tomato;fill-opacity:0.85}
-		.g-con {fill:thistle;fill-opacity:0.85}
-		.h-den {fill:indigo;fill-opacity:0.85}
-		.i-edi {fill:gold;fill-opacity:0.85}
-		.j-gre {fill:sienna;fill-opacity:0.85}
-		.k-hol {fill:snow;fill-opacity:0.85}
-		.l-kie {fill:steelblue;fill-opacity:0.85}
-		.n-lvp {fill:teal;fill-opacity:0.85}
-		.p-lon {fill:deeppink;fill-opacity:0.85}
-		.q-mar {fill:red;fill-opacity:0.85}
-		.r-mos {fill:firebrick;fill-opacity:0.85}
-		.s-mun {fill:navy;fill-opacity:0.85}
-		.t-nap {fill:darkgoldenrod;fill-opacity:0.85}
-		.u-nor {fill:lime;fill-opacity:0.85}
-		.v-par {fill:lightslategrey;fill-opacity:0.85}
-		.w-por {fill:blueviolet;fill-opacity:0.85}
-		.x-rom {fill:lightsalmon;fill-opacity:0.85}
-		.y-rum {fill:burlywood;fill-opacity:0.85}
-		.z-ser {fill:darkslategray;fill-opacity:0.85}
-		.X0-sev {fill:darkgreen;fill-opacity:0.85}
-		.X1-smy {fill:fuchsia;fill-opacity:0.85}
-		.X2-spa {fill:goldenrod;fill-opacity:0.85}
-		.X3-stp {fill:orangered;fill-opacity:0.85}
-		.X4-swe {fill:skyblue;fill-opacity:0.85}
-		.X5-tri {fill:lemonchiffon;fill-opacity:0.85}
-		.X6-tun {fill:lightgrey;fill-opacity:0.85}
-		.X7-ven {fill:darkseagreen;fill-opacity:0.85}
-		.X8-vie {fill:aquamarine;fill-opacity:0.85}
-		.X9-war {fill:maroon;fill-opacity:0.85}
+		.ankara 	  {fill:yellowgreen;fill-opacity:0.85}
+		.belgium 	  {fill:lightgreen;fill-opacity:0.85}
+		.berlin 	  {fill:yellow;fill-opacity:0.85}
+		.brest 	      {fill:violet;fill-opacity:0.85}
+		.budapest 	  {fill:lightcoral;fill-opacity:0.85}
+		.bulgaria 	  {fill:tomato;fill-opacity:0.85}
+		.constantinople {fill:thistle;fill-opacity:0.85}
+		.denmark 	  {fill:indigo;fill-opacity:0.85}
+		.edinburgh    {fill:gold;fill-opacity:0.85}
+		.greece 	  {fill:sienna;fill-opacity:0.85}
+		.holland 	  {fill:snow;fill-opacity:0.85}
+		.kiel 		  {fill:steelblue;fill-opacity:0.85}
+		.liverpool    {fill:teal;fill-opacity:0.85}
+		.london 	  {fill:deeppink;fill-opacity:0.85}
+		.marseilles   {fill:red;fill-opacity:0.85}
+		.moscow 	  {fill:firebrick;fill-opacity:0.85}
+		.munich 	  {fill:navy;fill-opacity:0.85}
+		.naples 	  {fill:darkgoldenrod;fill-opacity:0.85}
+		.norway 	  {fill:lime;fill-opacity:0.85}
+		.paris 	      {fill:lightslategrey;fill-opacity:0.85}
+		.portugal 	  {fill:blueviolet;fill-opacity:0.85}
+		.rome 		  {fill:lightsalmon;fill-opacity:0.85}
+		.rumania 	  {fill:burlywood;fill-opacity:0.85}
+		.serbia 	  {fill:darkslategray;fill-opacity:0.85}
+		.sevastopol    {fill:darkgreen;fill-opacity:0.85}
+		.smyrna 	   {fill:fuchsia;fill-opacity:0.85}
+		.spain 	       {fill:goldenrod;fill-opacity:0.85}
+		.stpetersburg  {fill:orangered;fill-opacity:0.85}
+		.sweden 	   {fill:skyblue;fill-opacity:0.85}
+		.trieste 	   {fill:lemonchiffon;fill-opacity:0.85}
+		.tunis 	       {fill:lightgrey;fill-opacity:0.85}
+		.venice 	   {fill:darkseagreen;fill-opacity:0.85}
+		.vienna 	   {fill:aquamarine;fill-opacity:0.85}
+		.warsaw 	   {fill:maroon;fill-opacity:0.85}
 		
 		/* unit colors, by power note that underscores are not supported */
 		
-		.unita-ank {fill:yellowgreen;fill-opacity:0.85}
-		.unitb-bel {fill:lightgreen;fill-opacity:0.85}
-		.unitc-ber {fill:yellow;fill-opacity:0.85}
-		.unitd-bre {fill:violet;fill-opacity:0.85}
-		.unite-bud {fill:lightcoral;fill-opacity:0.85}
-		.unitf-bul {fill:tomato;fill-opacity:0.85}
-		.unitg-con {fill:thistle;fill-opacity:0.85}
-		.unith-den {fill:indigo;fill-opacity:0.85}
-		.uniti-edi {fill:gold;fill-opacity:0.85}
-		.unitj-gre {fill:sienna;fill-opacity:0.85}
-		.unitk-hol {fill:snow;fill-opacity:0.85}
-		.unitl-kie {fill:steelblue;fill-opacity:0.85}
-		.unitn-lvp {fill:teal;fill-opacity:0.85}
-		.unitp-lon {fill:deeppink;fill-opacity:0.85}
-		.unitq-mar {fill:red;fill-opacity:0.85}
-		.unitr-mos {fill:firebrick;fill-opacity:0.85}
-		.units-mun {fill:navy;fill-opacity:0.85}
-		.unitt-nap {fill:darkgoldenrod;fill-opacity:0.85}
-		.unitu-nor {fill:lime;fill-opacity:0.85}
-		.unitv-par {fill:lightslategrey;fill-opacity:0.85}
-		.unitw-por {fill:blueviolet;fill-opacity:0.85}
-		.unitx-rom {fill:lightsalmon;fill-opacity:0.85}
-		.unity-rum {fill:burlywood;fill-opacity:0.85}
-		.unitz-ser {fill:darkslategray;fill-opacity:0.85}
-		.unitX0-sev {fill:darkgreen;fill-opacity:0.85}
-		.unitX1-smy {fill:fuchsia;fill-opacity:0.85}
-		.unitX2-spa {fill:goldenrod;fill-opacity:0.85}
-		.unitX3-stp {fill:orangered;fill-opacity:0.85}
-		.unitX4-swe {fill:skyblue;fill-opacity:0.85}
-		.unitX5-tri {fill:lemonchiffon;fill-opacity:0.85}
-		.unitX6-tun {fill:lightgrey;fill-opacity:0.85}
-		.unitX7-ven {fill:darkseagreen;fill-opacity:0.85}
-		.unitX8-vie {fill:aquamarine;fill-opacity:0.85}
-		.unitX9-war {fill:maroon;fill-opacity:0.85}
+		.unitankara 	     {fill:yellowgreen;fill-opacity:0.85}
+		.unitbelgium 	     {fill:lightgreen;fill-opacity:0.85}
+		.unitberlin 	     {fill:yellow;fill-opacity:0.85}
+		.unitbrest 	         {fill:violet;fill-opacity:0.85}
+		.unitbudapest 	     {fill:lightcoral;fill-opacity:0.85}
+		.unitbulgaria 	     {fill:tomato;fill-opacity:0.85}
+		.unitconstantinople {fill:thistle;fill-opacity:0.85}
+		.unitdenmark 	     {fill:indigo;fill-opacity:0.85}
+		.unitedinburgh       {fill:gold;fill-opacity:0.85}
+		.unitgreece 	     {fill:sienna;fill-opacity:0.85}
+		.unitholland 	     {fill:snow;fill-opacity:0.85}
+		.unitkiel 		     {fill:steelblue;fill-opacity:0.85}
+		.unitliverpool       {fill:teal;fill-opacity:0.85}
+		.unitlondon 	     {fill:deeppink;fill-opacity:0.85}
+		.unitmarseilles      {fill:red;fill-opacity:0.85}
+		.unitmoscow 	     {fill:firebrick;fill-opacity:0.85}
+		.unitmunich 	     {fill:navy;fill-opacity:0.85}
+		.unitnaples 	     {fill:darkgoldenrod;fill-opacity:0.85}
+		.unitnorway 	     {fill:lime;fill-opacity:0.85}
+		.unitparis 	         {fill:lightslategrey;fill-opacity:0.85}
+		.unitportugal 	     {fill:blueviolet;fill-opacity:0.85}
+		.unitrome 		     {fill:lightsalmon;fill-opacity:0.85}
+		.unitrumania 	     {fill:burlywood;fill-opacity:0.85}
+		.unitserbia 	     {fill:darkslategray;fill-opacity:0.85}
+		.unitsevastopol      {fill:darkgreen;fill-opacity:0.85}
+		.unitsmyrna 	     {fill:fuchsia;fill-opacity:0.85}
+		.unitspain 	         {fill:goldenrod;fill-opacity:0.85}
+		.unitstpetersburg    {fill:orangered;fill-opacity:0.85}
+		.unitsweden 	     {fill:skyblue;fill-opacity:0.85}
+		.unittrieste 	     {fill:lemonchiffon;fill-opacity:0.85}
+		.unittunis 	         {fill:lightgrey;fill-opacity:0.85}
+		.unitvenice 	     {fill:darkseagreen;fill-opacity:0.85}
+		.unitvienna 	     {fill:aquamarine;fill-opacity:0.85}
+		.unitwarsaw 	     {fill:maroon;fill-opacity:0.85}
 		
 		/* supply center styles */
 		
 		.scnopower	{fill:black;stroke:black;}
-		.sca-ank {fill:black;stroke:black;}
-		.scb-bel {fill:black;stroke:black;}
-		.scc-ber {fill:black;stroke:black;}
-		.scd-bre {fill:black;stroke:black;}
-		.sce-bud {fill:black;stroke:black;}
-		.scf-bul {fill:black;stroke:black;}
-		.scg-con {fill:black;stroke:black;}
-		.sch-den {fill:black;stroke:black;}
-		.sci-edi {fill:black;stroke:black;}
-		.scj-gre {fill:black;stroke:black;}
-		.sck-hol {fill:black;stroke:black;}
-		.scl-kie {fill:black;stroke:black;}
-		.scn-lvp {fill:black;stroke:black;}
-		.scp-lon {fill:black;stroke:black;}
-		.scq-mar {fill:black;stroke:black;}
-		.scr-mos {fill:black;stroke:black;}
-		.scs-mun {fill:black;stroke:black;}
-		.sct-nap {fill:black;stroke:black;}
-		.scu-nor {fill:black;stroke:black;}
-		.scv-par {fill:black;stroke:black;}
-		.scw-por {fill:black;stroke:black;}
-		.scx-rom {fill:black;stroke:black;}
-		.scy-rum {fill:black;stroke:black;}
-		.scz-ser {fill:black;stroke:black;}
-		.scX0-sev {fill:black;stroke:black;}
-		.scX1-smy {fill:black;stroke:black;}
-		.scX2-spa {fill:black;stroke:black;}
-		.scX3-stp {fill:black;stroke:black;}
-		.scX4-swe {fill:black;stroke:black;}
-		.scX5-tri {fill:black;stroke:black;}
-		.scX6-tun {fill:black;stroke:black;}
-		.scX7-ven {fill:black;stroke:black;}
-		.scX8-vie {fill:black;stroke:black;}
-		.scX9-war {fill:black;stroke:black;}		
 		
-		
-		/* CSS styles for Crowded variant only */
-		
-		.balkan 	{fill:#36E600;fill-opacity:0.65;stroke:#000000;stroke-width:1}
-		.lowland 	{fill:#E67700;fill-opacity:0.65;stroke:#000000;stroke-width:1}
-		.norway 	{fill:#E600E3;fill-opacity:0.65;stroke:#000000;stroke-width:1}
-		.spain 		{fill:#529A70;fill-opacity:0.65;stroke:#000000;stroke-width:1}
-		
-		.unitbalkan		{fill:#36E600;fill-opacity:0.85}
-		.unitlowland	{fill:#E67700;fill-opacity:0.85}
-		.unitnorway		{fill:#E600E3;fill-opacity:0.85}
-		.unitspain		{fill:#529A70;fill-opacity:0.85}
-		
-		.scbalkan		{fill:black;stroke:black;} 
-		.sclowland		{fill:black;stroke:black;} 
-		.scnorway		{fill:black;stroke:black;} 
-		.scspain		{fill:black;stroke:black;} 
+		.scankara 	          {fill:black;stroke:black;}
+		.scbelgium 	          {fill:black;stroke:black;}
+		.scberlin 	          {fill:black;stroke:black;}
+		.scbrest 	          {fill:black;stroke:black;}
+		.scbudapest 	      {fill:black;stroke:black;}
+		.scbulgaria 	      {fill:black;stroke:black;}
+		.scconstantinople     {fill:black;stroke:black;}
+		.scdenmark 	          {fill:black;stroke:black;}
+		.scedinburgh          {fill:black;stroke:black;}
+		.scgreece 	          {fill:black;stroke:black;}
+		.scholland 	          {fill:black;stroke:black;}
+		.sckiel 		      {fill:black;stroke:black;}
+		.scliverpool          {fill:black;stroke:black;}
+		.sclondon 	          {fill:black;stroke:black;}
+		.scmarseilles         {fill:black;stroke:black;}
+		.scmoscow 	          {fill:black;stroke:black;}
+		.scmunich 	          {fill:black;stroke:black;}
+		.scnaples 	          {fill:black;stroke:black;}
+		.scnorway 	          {fill:black;stroke:black;}
+		.scparis 	          {fill:black;stroke:black;}
+		.scportugal 	      {fill:black;stroke:black;}
+		.scrome 		      {fill:black;stroke:black;}
+		.scrumania 	          {fill:black;stroke:black;}
+		.scserbia 	          {fill:black;stroke:black;}
+		.scsevastopol         {fill:black;stroke:black;}
+		.scsmyrna 	          {fill:black;stroke:black;}
+		.scspain 	          {fill:black;stroke:black;}
+		.scstpetersburg       {fill:black;stroke:black;}
+		.scsweden 	          {fill:black;stroke:black;}
+		.sctrieste 	          {fill:black;stroke:black;}
+		.sctunis 	          {fill:black;stroke:black;}
+		.scvenice 	          {fill:black;stroke:black;}
+		.scvienna 	          {fill:black;stroke:black;}
+		.scwarsaw 	          {fill:black;stroke:black;}		
 		
 		/* order drawing styles, stroke and fill colors should not be specified */
 		
