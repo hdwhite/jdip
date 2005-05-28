@@ -44,13 +44,8 @@ import dip.tool.ToolManager;
 import dip.tool.ToolProxyImpl;
 import dip.tool.Tool;
 import dip.misc.Help;
-
-//import dip.order.Order;
-
 import javax.swing.*;
 
-//import javax.swing.event.*;
-//import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
@@ -59,11 +54,12 @@ import java.util.*;
 import java.awt.dnd.*;
 import java.awt.datatransfer.*;
 import java.io.*;
-//import java.net.*;
 
 import jcmdline.*;	// command line handlers
 
-//import org.apache.batik.swing.JSVGCanvas;
+// for Batik XML configuration
+import javax.xml.parsers.SAXParserFactory;
+import org.xml.sax.XMLReader;
 import org.apache.batik.util.XMLResourceDescriptor;
 
 /**
@@ -196,11 +192,20 @@ public class ClientFrame extends JFrame
 		Log.println("   mem total: ", String.valueOf(Runtime.getRuntime().totalMemory()));
 		Log.println("   mem free: ", String.valueOf(Runtime.getRuntime().freeMemory()));
 		
-		/*
-		// Batik setup. org.apache.crimson.parser.XMLReaderImpl is the built-in JDK 1.4 parser
-		XMLResourceDescriptor.setXMLParserClassName("org.apache.crimson.parser.XMLReaderImpl");	// doesn't work correctly...
-		*/
-		Log.println("Batik XML parser: ", XMLResourceDescriptor.getXMLParserClassName());
+		
+		// set Batik XMLReader based on JAXP XMLReader. 
+		// this should work for JDK 1.5, 1.4, etc.
+		try
+		{
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			XMLReader xmlReader = factory.newSAXParser().getXMLReader();
+			XMLResourceDescriptor.setXMLParserClassName(xmlReader.getClass().getName());
+			Log.println("Batik XMLReader: ", XMLResourceDescriptor.getXMLParserClassName());
+		}
+		catch(Exception e)
+		{
+			ErrorDialog.displayFatal(this, e);
+		}
 		
 		
 		Log.println("Applying GUI enhancements: "+applyGUIEnhancements);
