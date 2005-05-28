@@ -41,20 +41,25 @@
         <res id="Installer.image.6" src="images/sequence_7.png" />
         <res id="Installer.image.7" src="images/sequence_8.png" />
 		
+		<!-- core -->
 		<res id="ImgPacksPanel.img.0"  src="images/detailed_thumb.png" />
-		<res id="ImgPacksPanel.img.1"   src="images/asia_thumb.png" />
-        <res id="ImgPacksPanel.img.2"   src="images/chaos_thumb.png" />
+		
+		<res id="ImgPacksPanel.img.1"  src="images/ancmed-thumbnail.jpg" />
+		<res id="ImgPacksPanel.img.2"   src="images/asia_thumb.png" />
         <res id="ImgPacksPanel.img.3"   src="images/chaos_thumb.png" />
-        <res id="ImgPacksPanel.img.4"   src="images/h31_h32_thumb.png" />
- 		<res id="ImgPacksPanel.img.5"   src="images/imperium_thumb.png"/>
-		<res id="ImgPacksPanel.img.6"   src="images/loeb9.gif" />
-		<res id="ImgPacksPanel.img.7"   src="images/milan_thumb.png" />
-        <res id="ImgPacksPanel.img.8"   src="images/modern_thumb.jpg" />
-		<res id="ImgPacksPanel.img.9"   src="images/octarine_thumb.png" />
- 		<res id="ImgPacksPanel.img.10"   src="images/pure_thumb.png" />
-        <res id="ImgPacksPanel.img.11"  src="images/rootz_thumb.png" />
-        <res id="ImgPacksPanel.img.12"  src="images/sailho_thumb.png" />
-		<res id="ImgPacksPanel.img.13"  src="images/youngstown_thumb.png" />
+        <res id="ImgPacksPanel.img.4"   src="images/chaos_thumb.png" />
+        <res id="ImgPacksPanel.img.5"   src="images/h31_h32_thumb.png" />
+ 		<res id="ImgPacksPanel.img.6"   src="images/imperium_thumb.png"/>
+		<res id="ImgPacksPanel.img.7"   src="images/loeb9.gif" />
+		<res id="ImgPacksPanel.img.8"   src="images/milan_thumb.png" />
+        <res id="ImgPacksPanel.img.9"   src="images/modern_thumb.jpg" />
+		<res id="ImgPacksPanel.img.10"   src="images/octarine_thumb.png" />
+ 		<res id="ImgPacksPanel.img.11"   src="images/pure_thumb.png" />
+		<res id="ImgPacksPanel.img.12"  src="images/egdipmap_thumb.png" />	<!-- renaissance -->
+        <res id="ImgPacksPanel.img.13"  src="images/rootz_thumb.png" />
+        <res id="ImgPacksPanel.img.14"  src="images/sailho_thumb.png" />
+		<res id="ImgPacksPanel.img.15"  src="images/youngstown_thumb.png" />
+ 		
      </resources>
     
 	<native type="izpack" name="ShellLink.dll"/>
@@ -81,6 +86,7 @@
             <file targetdir="$INSTALL_PATH" src="LICENSE.TXT"/>
             <file targetdir="$INSTALL_PATH" src="HISTORY.TXT"/>
             <file targetdir="$INSTALL_PATH" src="README.TXT"/>
+            <file targetdir="$INSTALL_PATH" src="CHANGELOG.TXT"/>
 			
             <file targetdir="$INSTALL_PATH/variants" src="variants/stdVariants.zip"/>
             
@@ -98,6 +104,10 @@
 			<executable os="mac" targetfile="$INSTALL_PATH/jdip.sh" stage="never" failure="warn" type="bin"/>
          </pack>
 		
+		<pack name="Ancient Med" required="no" override="true">
+			<description>The Ancient Mediterranean variant.</description>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/ancmedVariant.zip"/>
+		</pack>
 		<pack name="Asia" required="no" override="true">
 			<description>The Asia variant.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/AsiaVariants.zip"/>
@@ -132,11 +142,15 @@
 		</pack>
 		<pack name="Octarine" required="no" override="true">
 			<description>The Octarine variant.</description>
-            <file targetdir="$INSTALL_PATH/variants" src="variants/OctarineVariants.zip"/>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/octarineVariants.zip"/>
 		</pack>
 		<pack name="Pure" required="no" override="true">
 			<description>The Pure variant.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/pureVariants.zip"/>
+		</pack>
+		<pack name="Renaissance" required="no" override="true">
+			<description>The Renaissance variant.</description>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/renaissanceVariant.zip"/>
 		</pack>
 		<pack name="Root Z" required="no" override="true">
 			<description>The Root Z variant.</description>
