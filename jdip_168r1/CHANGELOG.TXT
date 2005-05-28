@@ -11,8 +11,8 @@ Special thanks to James Thompson II, who helped fix many bugs for this
 release.
 
 
-jDip 1.6.9 Changelog
-====================
+jDip 1.6.9 Preview Release 1 Changelog
+======================================
 For best results, it is recommended that Java 5 (1.5) is used to run jDip.
 
 - Bugs not yet fixed:
@@ -29,7 +29,9 @@ For best results, it is recommended that Java 5 (1.5) is used to run jDip.
     + [1084155] Errors in enter multiple orders breaks menu
     + XJFileDialog already-in-use bug (submitted online)
 - New or Improved Features:
-    + Ancient Med variant added (thanks to Stefano Costantini)
+    + Ancient Med variant and symbols added (thanks to Stefano Costantini)
+    + Renaissance variant added (thanks to Ian Scrivins)
+    + Smaller (by more than 1 MB) and faster.
     + New commandline option: "-defaultgui". This forces jDip to the default
       GUI, without any enhancements. Use this if jDip will not start (this may
       happen on some versions of Linux). This option has not been extensively
@@ -72,6 +74,7 @@ For best results, it is recommended that Java 5 (1.5) is used to run jDip.
     + Exceptions should no longer occur when jDip exits.
     + NullPointerException occured with empty parenthetical coasts in 
       Coast.normalize().
+	+ Hundred map fixes.
 - Compatibility:
     + Saved Face-to-Facd (F2F) games from previous versions cannot be opened in
       this version due to extensive fixes.
