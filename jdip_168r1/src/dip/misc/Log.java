@@ -106,11 +106,6 @@ public final class Log
 			throw new IllegalArgumentException("Bad setLogging() value: "+value);
 		}
 		
-		if(value == LOG_TO_FILE && file == null)
-		{
-			throw new IllegalArgumentException("null file for LOG_TO_FILE");
-		}
-		
 		if(value == LOG_NONE)
 		{
 			close();			
@@ -270,6 +265,18 @@ public final class Log
 		}
 	}// println()
 	
+	
+	/** Print text followed by a boolean */
+	public static void println(Object s0, boolean b)
+	{
+		if(isLogging)
+		{
+			StringBuffer sb = new StringBuffer(256);
+			sb.append(s0);
+			sb.append(b);
+			println(sb);
+		}
+	}// println()
 	
 	/** Print text followed by an int */
 	public static void println(Object s0, int i0)
