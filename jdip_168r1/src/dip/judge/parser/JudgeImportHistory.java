@@ -388,38 +388,28 @@ final class JudgeImportHistory
 	*	<p>
 	*	This method ensures that TurnState objects are properly (and consistently) initialized. 
 	*/
-	private TurnState makeTurnState(Turn turn)
+	private TurnState makeTurnState(Turn turn, boolean positionPlacement)
 	{
 		// does the turnstate already exist?
 		// it could, if we are importing orders into an already-existing game.
 		// 
 		Log.println("JIH::makeTurnState() ", turn.getPhase());
 		
-		TurnState ts = world.getTurnState(turn.getPhase());
+		// TODO: we can import judge games, but we cannot import judge games
+		// into existing games successfully.
+		//
+		TurnState ts = new TurnState(turn.getPhase());
+		ts.setWorld(world);
+		ts.setPosition(new Position(world.getMap()));
 		
-		if(ts == null)
+		// note: we don't add the turnstate to the World object at this point (although we could), because
+		// if a processing error occurs, we don't want a partial turnstate object in the World.
+		
+		// set Home Supply centers in position
+		Position pos = ts.getPosition();
+		for(int i=0; i<homeSCInfo.length; i++)
 		{
-			Log.println("  creating new turnstate.");
-			// make new TurnState
-			ts = new TurnState(turn.getPhase());
-			ts.setWorld(world);
-			ts.setPosition(new Position(world.getMap()));
-			
-			// note: we don't add the turnstate to the World object at this point (although we could), because
-			// if a processing error occurs, we don't want a partial turnstate object in the World.
-			
-			// set Home Supply centers in position
-			Position pos = ts.getPosition();
-			for(int i=0; i<homeSCInfo.length; i++)
-			{
-				pos.setSupplyCenterHomePower(homeSCInfo[i].getProvince(), homeSCInfo[i].getPower());
-			}
-		}
-		else
-		{
-			// likely importing orders to an existing game.
-			// no changes to turnstate.
-			Log.println("  using existing turnstate");
+			pos.setSupplyCenterHomePower(homeSCInfo[i].getProvince(), homeSCInfo[i].getPower());
 		}
 		
 		return ts;
@@ -433,7 +423,7 @@ final class JudgeImportHistory
 	{
 		if (turn == null) return;
 		// create TurnState
-		TurnState ts = makeTurnState(turn);
+		TurnState ts = makeTurnState(turn, positionPlacement);
 		List results = ts.getResultList();
 		
 		Log.println("JIH::procMove(): ", ts.getPhase(), "; positionPlacement: ", String.valueOf(positionPlacement));
@@ -686,7 +676,7 @@ final class JudgeImportHistory
 	{
 		if (turn == null) return;
 		// create TurnState
-		final TurnState ts = makeTurnState(turn);
+		final TurnState ts = makeTurnState(turn, positionPlacement);
 		final Position position = ts.getPosition();
 		final List results = ts.getResultList();
 		final RuleOptions ruleOpts = world.getRuleOptions();
@@ -833,7 +823,7 @@ final class JudgeImportHistory
 		}
 		
 		// create TurnState
-		final TurnState ts = makeTurnState(turn);
+		final TurnState ts = makeTurnState(turn, positionPlacement);
 		final List results = ts.getResultList();
 		final RuleOptions ruleOpts = world.getRuleOptions();
 		
