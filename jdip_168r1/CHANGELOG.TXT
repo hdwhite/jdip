@@ -1,0 +1,78 @@
+===========================================================================
+NOTE: This is a PREVIEW RELEASE. Please read the following for 
+information about important changes and bug status.
+===========================================================================
+
+
+Thanks to everyone who has submitted bug reports, either via the online 
+submission system or on SourceForge.
+
+Special thanks to James Thompson II, who helped fix many bugs for this
+release.
+
+
+jDip 1.6.9 Changelog
+====================
+For best results, it is recommended that Java 5 (1.5) is used to run jDip.
+
+- Bugs not yet fixed:
+    + Judge import bugs; judge import is largely not working.
+    + Variant directory issues on Linux
+    + Menu for displayed names may not match what is actually displayed
+    + Ancient Med variant: Supply Centers not drawn
+    + Sending bug reports needs visual feedback of submission progress
+    + Parts of the help documentation are out-of-date.
+- Bugs that cannot be duplicated:
+  Please contact us with more information!
+    + [1051166] copying orders to clipboard
+    + [1116567] Map->Jpeg exports hangs jDip
+    + [1084155] Errors in enter multiple orders breaks menu
+    + XJFileDialog already-in-use bug (submitted online)
+- New or Improved Features:
+    + Ancient Med variant added (thanks to Stefano Costantini)
+    + New commandline option: "-defaultgui". This forces jDip to the default
+      GUI, without any enhancements. Use this if jDip will not start (this may
+      happen on some versions of Linux). This option has not been extensively
+      tested, and feedback regarding its use would be helpful.
+    + Online bug submission (which occurs with severe jDip errors) is now more
+      detailed.
+    + Improved logging: logging occurs to a circular memory buffer, enabling
+      more helpful and detailed online bug reports.
+    + Open dialogs now are closed if a new variant is loaded or opened.
+    + Splash screen changed to original pastel style.
+    + Upgraded rendering system to Batik 1.6.
+    + Upgraded other dependencies to new versions.
+- Fixed bugs
+    + Impossible Rick-click on a Mac [1124808]
+        - Command + Mouse button emulates right button
+        - Shift + Mouse button emulates middle button 
+    + jDip doesn't start under Linux [1053723]
+        - Should jDip not start with some versions of Linux, try the 
+          "-defaultgui" option on the command line.
+    + jDip does not see Shortcut Folders [1051678]
+        - This works with Java 5 (1.5). This is a known problem with some 
+          versions of Java 1.4.x. 
+    + Adjudication error: No convoy, but bounce [1205531, 1116568, 1053458]
+        - This is now fixed. As it turns out, one of the test cases 
+          had an incorrect resolution that masked this bug in prior versions.
+    + Variant Modern: Parsing error "Eastern Mediterranean" [1205550, 1205534]
+    + Parse error using judge result build phase [1205547]
+        - "Enter multiple orders" dialog now supports judge build orders
+    + Importing from floc.net hangs indefinitely [1158290]
+        - This cannot be reliable duplicated, but can occur if floc.net is 
+          down or responding slowly.
+    + Deleting of single orders does not work [1005872, 1118742]
+    + Map name/report discrepancy [1184073]
+    + Loeb9, STP fleet should start NC not SC [1066690]
+    + Cannot import - underscore not supported [1117835]
+        - Underscores are now supported in judge game names
+    + Many subtle order parsing errors were fixed.
+    + DPJudge Chaos map now works.
+    + Face-to-Face mode errors fixed.
+    + Exceptions should no longer occur when jDip exits.
+    + NullPointerException occured with empty parenthetical coasts in 
+      Coast.normalize().
+- Compatibility:
+    + Saved Face-to-Facd (F2F) games from previous versions cannot be opened in
+      this version due to extensive fixes.
+
