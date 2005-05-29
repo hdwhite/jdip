@@ -1,58 +1,146 @@
+	
+jDip TODO list
+==============
 
-TODO list
 
-Bugs to be fixed
-================
-
-- [1084155] Errors in enter multiple orders breaks menu
-  If this can be replicated, it should be fixed
-
-- [1116567 ] Map->Jpeg exports
-  If this can be replicated, it should be fixed
-  
+Cannot duplicate
+======================================================
 - [1051166] copying orders to clipboard
   <HTML> is inserted in front of each line. 
   we should use plain text.
+  *** CANNOT DUPLICATE on JDK 1.4.2 or 1.5.0
   
-- [1051678] jdip does not see shortcut folders
-  we may be able to fix this in some versions of Java..
-  investigate under JDK 1.4.2 and 1.5.x
+- [1116567 ] Map->Jpeg exports
+  *** CANNOT DUPLICATE on JDK 1.4.2 or 1.5.0
+  
+- [1084155] Errors in enter multiple orders breaks menu
+  *** CANNOT DUPLICATE on JDK 1.4.2 or 1.5.0
 
-- [1124808] impossible right click on mac
-  allow a command-click; also provide better prompting
-  in status bar
 
-- Menu doesn't match preferences for province-naming
-  e.g.: menu for province names lists 'none' if prefs
-  set to 'brief' names, and brief names are showing.
-  use 16_17 branch code
+Bugs to be fixed
+======================================================
 
-- Select All in dialogs doesn't highlight text
-  use 16_17 branch code
-  
-- Coast.normalize() fails with empty coasts
-  use 16_17 branch code
-  
-- NPEs in F2F code
-  use 16_17 branch code
-  
-- close open dialog boxes (if any) when a new game
-  is opened; use 16_17 branch code
-  
-- ancient med: supply centers don't show up
-  not clear why this happens
-  test as standalone SVG using Squiggle
+	1) ancient med map issues
+			supply centers don't show up
+			not clear why this happens
+			test as standalone SVG using Squiggle  
+			
+	2) update help text
+	
+	3)  Menu doesn't match preferences for province-naming
+	  	e.g.: menu for province names lists 'none' if prefs
+		set to 'brief' names, and brief names are showing.
+		use 16_17 branch code
+		975594 / 1015353 ] Province Names and Order Sorting not retained
+		is related
+	 
+	4)	Judge Importing failures
+		MOSTLY fixed...
+		
+		test judge importing into existing games
+		see what we can do about that
+		the current fix for general import may have broken that....
+		
+	5)	NO variants exception (on linux...)
+		
+		No variants found on path: /home/USERNAME/variants; <br>
+		No variants found on path: /home/USERNAME/variants; <br>
+		
+		"user.dir" = user's current working directory
+		"user.home" = user's home directory
+		
+		** REALLY, we should use 'user.home'
+			'user.dir' : init at JVM startup
+			'user.home' : user home directory
+			
+		determine HOW we are finding user home directory
+		program home directory
+		etc.
+		
+		CURRENT CODE
+		============
+		if(System.getProperty("user.dir") == null)
+		{
+			variantDirPath = (variantDirPath == null) ? new File(".", VARIANT_DIR) : variantDirPath;
+			toolDirPath = new File(".", TOOL_DIR);
+		}
+		else
+		{
+			variantDirPath = (variantDirPath == null) ? new File(System.getProperty("user.dir"), VARIANT_DIR) : variantDirPath;
+			toolDirPath = new File(System.getProperty("user.dir"), TOOL_DIR );
+		}
+		
+		HERE is how jEdit does it:
+		http://cvs.sourceforge.net/viewcvs.py/jedit/jEdit/installer/OperatingSystem.java?rev=1.19&view=auto
+		=========================
+		(after checking for UNIX)
+		
+		String dir = "/usr/local/share/";
+		if(!new File(dir).canWrite())
+			dir = System.getProperty("user.home");
+		return new File(dir,name.toLowerCase() + "/" + version).getPath();
+		
+		String dir = "/usr/local/";
+		if(!new File(dir).canWrite())
+			dir = System.getProperty("user.home");
+		
+		return new File(dir,"bin").getPath();
 
-- Judge Importing failures
-  This may be time-consuming; consider delaying for
-  the next update release, using the new judge parsing
-  code
-  
-Features / Changes
-==================
-- use old splash screen, instead of hexmap, as some
-  users find the hexamp confusing
-  
-- update credits in about:help
+		SOLUTION
+		========
+			MacOS and Windows
+				leave as-is; appears to work OK
+			Unix/Linux
+				use "user.home"
+				
+		TO INVESTIGATE:
+		==============
+			See how other programs with 'plugins' do it:
+				Eclipse
+				
+				Azureus
+					org.gudy.azureus2.pluginsimpl.local.PluginInitializer
+				finds directories in
+					File	user_dir = FileUtil.getUserFile("plugins");
+					File	app_dir	 = FileUtil.getApplicationFile("plugins");
+				
+				org.gudy.azureus2.core3.util.FileUtil;
+				org.gudy.azureus2.core3.util.SystemProperties;
+				
+					public static File getUserFile(String filename)
+					{
+						return new File(SystemProperties.getUserPath(), filename);
+					}
+					
+					public static File getApplicationFile(String filename)
+					{
+						String path = SystemProperties.getApplicationPath();
+						  
+						  if(Constants.isOSX) {
+							path = path + "/Azureus.app/Contents/";
+						  }
+						  
+						  return new File(path, filename);
+					}
+					
+				
+Installer
+======================================================
+	
+Would be nice to replace current windows installer with
+an NSIS-based installer. 
 
-- 
+We could include the 'online java installer' as well.
+
+The installer would:
+	a) check for Java; install (after prompting user) 
+		if user's java version is < minimum-required version
+		(that would be 1.4); if user says no, install quits
+		
+	b) if user java version >= 1.4 but <= 1.5.x, prompt for
+		java update (to the newer version)
+		if user cancels, we can still install
+	
+	c) then install jDip. 
+
+
