@@ -74,8 +74,8 @@ For best results, it is recommended that Java 5 (1.5) is used to run jDip.
     + Exceptions should no longer occur when jDip exits.
     + NullPointerException occured with empty parenthetical coasts in 
       Coast.normalize().
-	+ Hundred map fixes.
+    + Hundred map fixes.
 - Compatibility:
-    + Saved Face-to-Facd (F2F) games from previous versions cannot be opened in
-      this version due to extensive fixes.
+    + Saved Face-to-Facd (F2F) games from previous versions cannot be opened
+	  in this version due to extensive fixes.
 
