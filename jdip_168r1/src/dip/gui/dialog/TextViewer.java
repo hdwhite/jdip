@@ -33,6 +33,8 @@ import dip.misc.SimpleFileFilter;
 import dip.gui.swing.XJFileChooser;
 import dip.misc.Log;
 
+import java.awt.Component;
+import java.awt.Frame;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -805,8 +807,21 @@ public class TextViewer extends HeaderDialog
 		// set default save-game path
 		chooser.setCurrentDirectory( GeneralPreferencePanel.getDefaultGameDir() );
 		
+		// get parent jframe..
+		Component c = getParent();
+		Frame parentFrame = null;
+		while(c != null)
+		{
+			if(c instanceof Frame)
+			{
+				parentFrame = (Frame) c;
+				break;
+			}
+			c = c.getParent();
+		}
+		
 		// show dialog
-		File file = chooser.displaySaveAs(getParent());
+		File file = chooser.displaySaveAs(parentFrame);
 		XJFileChooser.dispose();
 		
 		return file;

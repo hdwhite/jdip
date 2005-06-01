@@ -23,6 +23,7 @@
 package dip.misc;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import javax.swing.filechooser.FileFilter;
 
 /**
@@ -32,7 +33,7 @@ import javax.swing.filechooser.FileFilter;
 *	Extensions are case-insensitively matched.
 *
 */
-public class SimpleFileFilter extends FileFilter
+public class SimpleFileFilter extends FileFilter implements FilenameFilter
 {
 	// commonly used file filters
 	/** Save Game file filter (typically, ".jdip") */
@@ -124,6 +125,19 @@ public class SimpleFileFilter extends FileFilter
 		return false;
 	}// accept()
 	
+	/** Implementation of FilenameFilter */
+	public boolean accept(File dir, String name)
+	{
+		if(name == null || dir == null)
+		{
+			return true;
+		}
+		else
+		{
+			return isMatch(name);
+		}
+	}// accept()
+	
 	/** Checks if user added extension; if not, the extension is added. */
 	public File appendExtension(File file)
 	{
@@ -156,7 +170,12 @@ public class SimpleFileFilter extends FileFilter
 	/** case-insensitive extension match to dotted extension */
 	private boolean isMatch(File file)
 	{
-		final String filename = file.getName();
+		return isMatch(file.getName());
+	}// isMatch()
+	
+	/** case-insensitive extension match to dotted extension */
+	private boolean isMatch(String filename)
+	{
 		final int fnLen = filename.length();
 		final int dextLen = dottedExt.length();
 		
