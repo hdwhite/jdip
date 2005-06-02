@@ -1,0 +1,310 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE VARIANTS [
+	<!ELEMENT VARIANTS (DESCRIPTION, MAP_DEFINITION+, VARIANT+)>
+	
+	<!ELEMENT DESCRIPTION (#PCDATA)>
+	
+	<!ELEMENT MAP_DEFINITION (DESCRIPTION?)>
+	<!ATTLIST MAP_DEFINITION 
+		id ID #REQUIRED
+		title CDATA #REQUIRED
+		URI CDATA #REQUIRED
+		thumbURI CDATA #REQUIRED
+		preferredUnitStyle CDATA #IMPLIED
+		>
+	
+	<!ELEMENT VARIANT (DESCRIPTION, MAP, RULEOPTIONS?, POWER+, STARTINGTIME, VICTORYCONDITIONS, SUPPLYCENTER+, INITIALSTATE*)>
+	<!ATTLIST VARIANT
+			name CDATA #REQUIRED
+			default (true|false) "false"
+			version CDATA #REQUIRED
+			aliases CDATA #IMPLIED
+			>
+			
+	<!ELEMENT MAP (MAP_GRAPHIC*)>
+	<!ATTLIST MAP adjacencyURI CDATA #REQUIRED>
+	
+	<!ELEMENT MAP_GRAPHIC EMPTY>
+	<!ATTLIST MAP_GRAPHIC
+			ref IDREF #REQUIRED
+			default (true|false) "false"
+			preferredUnitStyle CDATA #IMPLIED
+			>
+	
+	<!ELEMENT RULEOPTIONS (RULEOPTION+)>
+	<!ELEMENT RULEOPTION EMPTY>
+	<!ATTLIST RULEOPTION	name CDATA #REQUIRED
+				value CDATA #REQUIRED>
+	
+	<!ELEMENT POWER EMPTY>
+	<!ATTLIST POWER name CDATA #REQUIRED
+			active (true|false) "true"
+			adjective CDATA #REQUIRED
+			altnames CDATA #IMPLIED
+			>
+	
+	<!ELEMENT STARTINGTIME EMPTY>
+	<!ATTLIST STARTINGTIME 	turn CDATA #REQUIRED
+				allowBCYears (true|false) "false"
+				>
+	
+	<!ELEMENT VICTORYCONDITIONS (WINNING_SUPPLY_CENTERS?, YEARS_WITHOUT_SC_CAPTURE?, GAME_LENGTH?)>
+	
+	<!ELEMENT WINNING_SUPPLY_CENTERS EMPTY>
+	<!ATTLIST WINNING_SUPPLY_CENTERS value CDATA #REQUIRED>
+	
+	<!ELEMENT YEARS_WITHOUT_SC_CAPTURE EMPTY>
+	<!ATTLIST YEARS_WITHOUT_SC_CAPTURE value CDATA #REQUIRED>
+	
+	<!ELEMENT GAME_LENGTH EMPTY>
+	<!ATTLIST GAME_LENGTH value CDATA #REQUIRED>
+	
+	<!ELEMENT SUPPLYCENTER EMPTY>
+	<!ATTLIST SUPPLYCENTER 	province CDATA #REQUIRED
+				homepower CDATA "none"
+				owner CDATA "none"
+				>
+				
+	<!ELEMENT INITIALSTATE EMPTY>
+	<!ATTLIST INITIALSTATE 	province CDATA #REQUIRED
+				power CDATA #REQUIRED
+				unit CDATA #REQUIRED
+				unitcoast CDATA #IMPLIED
+				>
+]>
+<VARIANTS>
+	<DESCRIPTION><![CDATA[Aberration V variant.]]></DESCRIPTION> 
+	
+	<MAP_DEFINITION id="aberrationv" title="Aberration V" preferredUnitStyle="modern" URI="aberrationv.svg" thumbURI="aberrationv_thumb.png">
+		<DESCRIPTION>The map for Aberration V variant.</DESCRIPTION>
+	</MAP_DEFINITION>
+	
+	<VARIANT name="Aberration V" version="1.0" aliases="aberrationv, aberration_v, aberration">
+		<DESCRIPTION><![CDATA[
+		<p>
+			The judge version was designed by Nicholas Fitzpatrick, based very heavily on Rod Walker's Aberration III. 
+		</p>
+		<h2>Rules</h2>
+		<ol>
+			<li>Except as noted below, the standard rules of play for Diplomacy on the judge apply.</li>
+			<li>There are 9 great powers. The Sicilian player must use the letter "C" rather than "S" when signing on 
+			since "S" is reserved for Spain, and the Byzantine player must use "Z" rather than "B" as "B" is reserved for 
+			"Burgundy". The starting units are as follows:
+			<div class="indent1cm" style="margin-top:7pt;">
+				<b>Burgundy (B):</b> A Dijon, A Brussels, F Hague<br>
+				<b>Sicily (C):</b> A Rome , F Naples, F Palermo<br>
+				<b>Eire (E):</b> A Alcluyd, F Dublin, F Edinburgh<br>
+				<b>Hungary (H):</b> A Budapest, A Szeged, F Zara<br>
+				<b>Israel (I):</b> A Damascus, A Jerusalem, F Cairo<br>
+				<b>Poland (P):</b> A Warsaw, A Riga, F Gdansk<br>
+				<b>Spain (S):</b> A Toledo, F Santander, F Valencia<br>
+				<b>Ukraine (U):</b> A Kiev, A Odessa, F Yalta<br>
+				<b>Byzantium (z):</b> A Athens, F Constantinople, F Smyrna<br>
+			</div></li>
+			<li>A player may build on any supply centre he/she owns which is vacant as long as he/she still own atleast 
+			one of his/her original centres.</li>
+			<li>Six provinces have interior waterways, inland canals, or bordering canals. Each of these provinces operates 
+			exactly as does Kiel, Constantinople or Denmark in the regular game. They are: Cairo, Constantinople, Denmark, 
+			Holstein, Sinai, and Taurida. The Suez canal separates the provinces of Sinai and Cairo, units can pass from 
+			Sinai to Cairo. So in one turn the moves F Delta Sea-Sinai and F Red Sea-Cairo would both succeed.</li>
+			<li>The Caspian Sea, Crete, Iceland, Corsica and any other unnamed space is not passable.</li>
+			<li>There are 52 supply centres. The victory criterion is possession of 27 supply centres at the end of any 
+			Fall retreat.</li>
+			<li>There are 52 supply centres. The victory criterion is possession of 27 supply centres at the end of any 
+			Fall retreat.</li>
+			<li>The game begins in 1901.</li>
+		</ol>
+		</p>
+		<h2>Province Abreviations</h2>
+		<p>
+			All province are abbreviated by the first three letters of the province, except the following:
+		</p>
+		<p style="margin-left:1cm;">
+			<b>ebs</b> East Black Sea<br>
+			<b>ems</b> Eastern Mediterranean Sea<br>
+			<b>gob</b> Gulf of Bothnia<br>
+			<b>gol</b> Gulf of Lyon<br>
+			<b>pal</b> Palermo<br>
+			<b>plm</b> Palma Sea<br>
+			<b>nao</b> North Atlantic Ocean<br>
+			<b>nor</b> Norway<br>
+			<b>nmk</b> Norromark<br>
+			<b>nth</b> North Sea<br>
+			<b>nwg</b> Norwegian Sea<br>
+			<b>tyr</b> Tyrol<br>
+			<b>tys</b> Tyrrhenian Sea<br>
+			<b>wbs</b> West Black Sea<br>
+			<b>wms</b> Western Mediterranean Sea<br>
+		</p>
+		<h2>Scenario</h2>
+		<p>
+			Here are some brief suggestions to what may have happened to these powers such that they achieved greatness, 
+			while those that we know so well didn't.
+		</p>
+		<p>
+			<i>Burgundy</i>: The final confrontation between the civilization of the Seine and the Saone was no sure thing 
+			for the Parisian monarch. In this instance the victor was the Burgundian dynastic state, stretching from the 
+			Rhone to the North Sea.
+		</p>
+		<p>
+			<i>Byzantium</i>: This empire might have survived had the Turks failed to make a landing in Europe. The 
+			population of western Asia Minor was still basically Greek in the 1400s. Some strong emperors could have given 
+			the Greek state a new lease on life.
+		</p>
+		<p>
+			<i>Hungary</i>: She was a budding great power until the Turkish invasions. A strong Byzantium would have 
+			prevented that and Hungary, not Austria, could have become the great Danubian power.
+		</p>
+		<p>
+			<i>Eire</i>: If Irish missionary activity had been followed by political action on behalf of their fellow celts, 
+			the Anglo-Norman imperium at London might have been still-born. All the Irish needed was some real unity, which 
+			the almost achieved on occasion.
+		</p>
+		<p>
+			<i>Israel</i>: This could be a continuation of the ancient dynastic state under descendants of the Maccabees, or 
+			the Herods. More likely, however, it would be representative of the final victory of the Crusaders in the Middle 
+			East. It might therefore be called the "Kingdom of Jerusalem"
+		</p>
+		<p>
+			<i>Poland</i>: The Poles had many opportunities to overwhelm both the Russian and the eastern Germans. We must 
+			here assume that one opportunity finally worked.
+		</p>
+		<p>
+			<i>Sicily</i>: This island once had an excellent chance of gaining control of most of Italy under a powerful and 
+			aggressive Norman dynasty. These rulers died out, and Sicily became the pawn of others. Here we assume that the 
+			Norman dynasty did not die out.
+		</p>
+		<p>
+			<i>Spain</i>: The could be a Christian Spain which somehow remained powerful despite a long succession of 
+			cretinous monarchs. Perhaps they were spared the third-rate Hapsburgs and Bourbons which were thrust upon them. 
+			OR this is a Muslim Spain, which case we should refer to it as the "Caliphate of Toledo" (a change of capital 
+			from Cordova).
+		</p>
+		<p>
+			<i>Ukraine</i>: The original Russian state was centred at Kiev, and we suppose here that this southern centre 
+			remained dominant rather than losing out to the northern centres at Vladimir and Moscow. These people would, 
+			however, continue to call their land "Russia" or something like it.
+		</p>
+		<p>
+		<h2>Differences from Aberration III</h2>
+		</p>
+		<p>
+			Some changes were made to Aberration III, to allow it to be played on a judge.
+		</p>
+		<p>
+			The West, South and East Africa spaces were eliminated. The naval shipyard in Karelia was removed. In addition, 
+			some spaces had their names altered or changed, and a name Lemberg was given to a province whose name had been 
+			left off the NAVB map.
+		</p>
+		<p>
+			Variant Author: Rod Walker and Nicholas Fitzpatrick<br>
+			Original bitmap map by: Rob Addison<br>
+			jDip Variant Creator: Stefano Costantini<br>
+		</p>
+		]]>
+		</DESCRIPTION> 
+		<MAP adjacencyURI="aberrationv_adjacency.xml">
+			<MAP_GRAPHIC ref="aberrationv" default="true" />
+		</MAP>
+
+		<RULEOPTIONS>
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+		</RULEOPTIONS>
+		
+		<POWER name="Burgundy" active="true" adjective="Burgundian" />
+		<POWER name="Sicily" active="true" adjective="Sicilian" />
+		<POWER name="Eire" active="true" adjective="Irish" />
+		<POWER name="Hungary" active="true" adjective="Hungarian" />
+		<POWER name="Israel" active="true" adjective="Israeli" />
+		<POWER name="Poland" active="true" adjective="Polish" />
+		<POWER name="Spain" active="true" adjective="Spanish" />
+		<POWER name="Ukraine" active="true" adjective="Ukrainian" />
+		<POWER name="Byzantium" active="true" adjective="Byzantine" />
+		<STARTINGTIME turn="Spring, 1901, Movement" />
+		<VICTORYCONDITIONS>
+			<WINNING_SUPPLY_CENTERS value="27" />
+			<YEARS_WITHOUT_SC_CAPTURE value="7" />
+			<GAME_LENGTH value="35" />
+		</VICTORYCONDITIONS>
+
+		<SUPPLYCENTER province="alc" homepower="eire" owner="eire"/>
+		<SUPPLYCENTER province="ana" />
+		<SUPPLYCENTER province="arm" />
+		<SUPPLYCENTER province="ath" homepower="byzantium" owner="byzantium"/>
+		<SUPPLYCENTER province="aus" />
+		<SUPPLYCENTER province="bav" />
+		<SUPPLYCENTER province="boh" />
+		<SUPPLYCENTER province="bri" />
+		<SUPPLYCENTER province="bru" homepower="burgundy" owner="burgundy"/>
+		<SUPPLYCENTER province="bud" homepower="hungary" owner="hungary"/>
+		<SUPPLYCENTER province="bul" />
+		<SUPPLYCENTER province="cai" homepower="israel" owner="israel"/>
+		<SUPPLYCENTER province="con" homepower="byzantium" owner="byzantium"/>
+		<SUPPLYCENTER province="cyr" />
+		<SUPPLYCENTER province="dam" homepower="israel" owner="israel"/>
+		<SUPPLYCENTER province="den" />
+		<SUPPLYCENTER province="dij" homepower="burgundy" owner="burgundy"/>
+		<SUPPLYCENTER province="dub" homepower="eire" owner="eire"/>
+		<SUPPLYCENTER province="edi" homepower="eire" owner="eire"/>
+		<SUPPLYCENTER province="gda" homepower="poland" owner="poland"/>
+		<SUPPLYCENTER province="geo" />                        
+		<SUPPLYCENTER province="hag" homepower="burgundy" owner="burgundy"/>
+		<SUPPLYCENTER province="hes" />
+		<SUPPLYCENTER province="jer" homepower="israel" owner="israel"/>
+		<SUPPLYCENTER province="kie" homepower="ukraine" owner="ukraine"/>
+		<SUPPLYCENTER province="lan" />                       
+		<SUPPLYCENTER province="mor" />
+		<SUPPLYCENTER province="mus" />
+		<SUPPLYCENTER province="nap" homepower="sicily" owner="sicily"/>
+		<SUPPLYCENTER province="nov" />
+		<SUPPLYCENTER province="nwy" />
+		<SUPPLYCENTER province="ode" homepower="ukraine" owner="ukraine"/>
+		<SUPPLYCENTER province="pal" homepower="sicily" owner="sicily"/>
+		<SUPPLYCENTER province="pie" />                
+		<SUPPLYCENTER province="por" />
+		<SUPPLYCENTER province="rig" homepower="poland" owner="poland"/>
+		<SUPPLYCENTER province="rom" homepower="sicily" owner="sicily"/>
+		<SUPPLYCENTER province="rum" />                       
+		<SUPPLYCENTER province="san" homepower="spain" owner="spain"/>
+		<SUPPLYCENTER province="sax" />
+		<SUPPLYCENTER province="smy" homepower="byzantium" owner="byzantium"/>
+		<SUPPLYCENTER province="swe" />
+		<SUPPLYCENTER province="sze" homepower="hungary" owner="hungary"/>
+		<SUPPLYCENTER province="tol" homepower="spain" owner="spain"/>
+		<SUPPLYCENTER province="tun" />
+		<SUPPLYCENTER province="tur" />
+		<SUPPLYCENTER province="val" homepower="spain" owner="spain"/>
+		<SUPPLYCENTER province="ven" />
+		<SUPPLYCENTER province="war" homepower="poland" owner="poland"/>
+		<SUPPLYCENTER province="wes" />
+		<SUPPLYCENTER province="yal" homepower="ukraine" owner="ukraine"/>
+		
+		<INITIALSTATE province="dij" power="burgundy" unit="army" />
+		<INITIALSTATE province="bru" power="burgundy" unit="army" />
+		<INITIALSTATE province="hag" power="burgundy" unit="fleet" />
+		<INITIALSTATE province="rom" power="sicily" unit="army" />
+		<INITIALSTATE province="nap" power="sicily" unit="fleet" />
+		<INITIALSTATE province="pal" power="sicily" unit="fleet" />
+		<INITIALSTATE province="alc" power="eire" unit="army" />
+		<INITIALSTATE province="dub" power="eire" unit="fleet" />
+		<INITIALSTATE province="edi" power="eire" unit="fleet" />
+		<INITIALSTATE province="bud" power="hungary" unit="army" />
+		<INITIALSTATE province="sze" power="hungary" unit="army" />
+		<INITIALSTATE province="zar" power="hungary" unit="fleet" />
+		<INITIALSTATE province="dam" power="israel" unit="army" />
+		<INITIALSTATE province="jer" power="israel" unit="army" />
+		<INITIALSTATE province="cai" power="israel" unit="fleet" />
+		<INITIALSTATE province="war" power="poland" unit="army" />
+		<INITIALSTATE province="rig" power="poland" unit="army" />
+		<INITIALSTATE province="gda" power="poland" unit="fleet" />
+		<INITIALSTATE province="tol" power="spain" unit="army" />
+		<INITIALSTATE province="san" power="spain" unit="fleet" />
+		<INITIALSTATE province="val" power="spain" unit="fleet" />
+		<INITIALSTATE province="kie" power="ukraine" unit="army" />
+		<INITIALSTATE province="ode" power="ukraine" unit="army" />
+		<INITIALSTATE province="yal" power="ukraine" unit="fleet" />
+		<INITIALSTATE province="ath" power="byzantium" unit="army" />
+		<INITIALSTATE province="con" power="byzantium" unit="fleet" />
+		<INITIALSTATE province="smy" power="byzantium" unit="fleet" />
+	</VARIANT>
+</VARIANTS>

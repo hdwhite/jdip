@@ -1,0 +1,975 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" 
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"
+[
+	<!-- jDip-specific XML additions -->
+	<!-- PROVINCE_DATA -->
+	<!ENTITY % svgExt "| jdipNS:PROVINCE_DATA" >
+	
+	<!ELEMENT jdipNS:PROVINCE_DATA (jdipNS:PROVINCE)+>
+	<!ATTLIST jdipNS:PROVINCE_DATA
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  dislodgedUnitOffset CDATA #IMPLIED
+	  >
+	<!ELEMENT jdipNS:PROVINCE (jdipNS:UNIT, jdipNS:DISLODGED_UNIT?, jdipNS:SUPPLY_CENTER?)+>
+	<!ATTLIST jdipNS:PROVINCE
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  name CDATA #REQUIRED
+	  >
+	<!ELEMENT jdipNS:UNIT EMPTY>
+	<!ATTLIST jdipNS:UNIT
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  x CDATA #REQUIRED
+	  y CDATA #REQUIRED
+	  >
+	<!ELEMENT jdipNS:DISLODGED_UNIT EMPTY>
+	<!ATTLIST jdipNS:DISLODGED_UNIT
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  x CDATA #REQUIRED
+	  y CDATA #REQUIRED
+	  >
+	<!ELEMENT jdipNS:SUPPLY_CENTER EMPTY>
+	<!ATTLIST jdipNS:SUPPLY_CENTER
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  x CDATA #REQUIRED
+	  y CDATA #REQUIRED
+	  >
+	  
+	<!-- Display Parameters -->
+	<!ENTITY % svgExt "| jdipNS:DISPLAY" >
+	
+	<!ELEMENT jdipNS:DISPLAY (jdipNS:ZOOM, jdipNS:LABELS)>
+	<!ATTLIST jdipNS:DISPLAY
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  >
+	<!ELEMENT jdipNS:ZOOM EMPTY>
+	<!ATTLIST jdipNS:ZOOM
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  min CDATA #REQUIRED
+	  max CDATA #REQUIRED
+	  factor CDATA #REQUIRED
+	  >
+	<!ELEMENT jdipNS:LABELS EMPTY>
+	<!ATTLIST jdipNS:LABELS
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  brief (true|false) "true"
+	  full (true|false) "true"
+	  >
+	  
+	  <!-- Order Drawing Parameters -->
+	<!ENTITY % svgExt "| jdipNS:ORDERDRAWING" >
+	
+	<!ELEMENT jdipNS:ORDERDRAWING (jdipNS:POWERCOLORS, jdipNS:SYMBOLSIZE+, jdipNS:BUILD, jdipNS:REMOVE,  jdipNS:DISBAND, jdipNS:WAIVE, jdipNS:HOLD, jdipNS:MOVE, jdipNS:RETREAT, jdipNS:SUPPORT, jdipNS:CONVOY )>
+	<!ATTLIST jdipNS:ORDERDRAWING
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  >
+	
+	<!ELEMENT jdipNS:POWERCOLORS (jdipNS:POWERCOLOR+)>
+	<!ATTLIST jdipNS:POWERCOLORS
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  >
+	
+	<!ELEMENT jdipNS:POWERCOLOR EMPTY>
+	<!ATTLIST jdipNS:POWERCOLOR
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  power CDATA #REQUIRED
+	  color CDATA #REQUIRED
+	  >
+	  
+	<!ELEMENT jdipNS:SYMBOLSIZE EMPTY>
+	<!ATTLIST jdipNS:SYMBOLSIZE
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  name CDATA #REQUIRED
+	  width CDATA #REQUIRED
+	  height CDATA #REQUIRED
+	  >
+	
+	  <!ELEMENT jdipNS:HOLD EMPTY>
+	<!ATTLIST jdipNS:HOLD
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  deltaRadius CDATA #REQUIRED
+	  strokeCSSStyle CDATA #REQUIRED
+	  filterID CDATA #IMPLIED
+	  hilightOffset CDATA #REQUIRED
+	  hilightCSSClass CDATA #REQUIRED
+	  widths CDATA #REQUIRED
+	  shadowWidths CDATA #REQUIRED
+	  >
+	  
+	<!ELEMENT jdipNS:DISBAND EMPTY>
+	<!ATTLIST jdipNS:DISBAND
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  deltaRadius CDATA #REQUIRED
+	  >
+	
+	<!ELEMENT jdipNS:WAIVE EMPTY>
+	<!ATTLIST jdipNS:WAIVE
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  deltaRadius CDATA #REQUIRED
+	>
+	  
+	<!ELEMENT jdipNS:REMOVE EMPTY>
+	<!ATTLIST jdipNS:REMOVE
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  deltaRadius CDATA #REQUIRED
+	  >
+	  
+	<!ELEMENT jdipNS:BUILD EMPTY>
+	<!ATTLIST jdipNS:BUILD
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  deltaRadius CDATA #REQUIRED
+	  >
+	
+	<!ELEMENT jdipNS:MOVE EMPTY>
+	<!ATTLIST jdipNS:MOVE
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  deltaRadius CDATA #REQUIRED
+	  strokeCSSStyle CDATA #REQUIRED
+	  markerID CDATA #REQUIRED
+	  filterID CDATA #IMPLIED
+	  hilightOffset CDATA #REQUIRED
+	  hilightCSSClass CDATA #REQUIRED
+	  widths CDATA #REQUIRED
+	  shadowWidths CDATA #REQUIRED
+	  >
+	
+	<!ELEMENT jdipNS:RETREAT EMPTY>
+	<!ATTLIST jdipNS:RETREAT
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  deltaRadius CDATA #REQUIRED
+	  strokeCSSStyle CDATA #REQUIRED
+	  markerID CDATA #REQUIRED
+	  filterID CDATA #IMPLIED
+	  hilightOffset CDATA #REQUIRED
+	  hilightCSSClass CDATA #REQUIRED
+	  >
+	
+	<!ELEMENT jdipNS:SUPPORT EMPTY>
+	<!ATTLIST jdipNS:SUPPORT
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  deltaRadius CDATA #REQUIRED
+	  strokeCSSStyle CDATA #REQUIRED
+	  markerID CDATA #REQUIRED
+	  filterID CDATA #IMPLIED
+	  hilightOffset CDATA #REQUIRED
+	  hilightCSSClass CDATA #REQUIRED
+	  >
+	
+	<!ELEMENT jdipNS:CONVOY EMPTY>
+	<!ATTLIST jdipNS:CONVOY
+	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
+	  deltaRadius CDATA #REQUIRED
+	  strokeCSSStyle CDATA #REQUIRED
+	  markerID CDATA #REQUIRED
+	  filterID CDATA #IMPLIED
+	  hilightOffset CDATA #REQUIRED
+	  hilightCSSClass CDATA #REQUIRED
+	  >
+]>
+<svg width="770px" height="600px" viewBox="0 0 770 600" xmlns="http://www.w3.org/2000/svg" version="1.0" color-rendering="optimizeQuality" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMinYMin">
+	
+	<jdipNS:DISPLAY>
+		<jdipNS:ZOOM min="5" max="2200" factor="1.2"/>
+		<jdipNS:LABELS brief="true" full="false"/>
+	</jdipNS:DISPLAY>
+	
+	<jdipNS:ORDERDRAWING>
+		<jdipNS:POWERCOLORS>
+			<jdipNS:POWERCOLOR power="Burgundy" color="rgb(204,255,255)"/>
+			<jdipNS:POWERCOLOR power="Sicily" color="rgb(204,255,204)"/>
+			<jdipNS:POWERCOLOR power="Eire" color="rgb(243,243,243)"/>
+			<jdipNS:POWERCOLOR power="Hungary" color="rgb(255,217,192)"/>
+			<jdipNS:POWERCOLOR power="Israel" color="rgb(255,204,255)"/>
+			<jdipNS:POWERCOLOR power="Poland" color="rgb(255,255,230)"/>
+			<jdipNS:POWERCOLOR power="Spain" color="rgb(255,243,217)"/>
+			<jdipNS:POWERCOLOR power="Ukraine" color="rgb(217,204,192)"/>
+			<jdipNS:POWERCOLOR power="Byzantium" color="rgb(255,255,204)"/>
+		</jdipNS:POWERCOLORS>
+		
+		<jdipNS:SYMBOLSIZE name="Fleet" width="20" height="20"/>
+		<jdipNS:SYMBOLSIZE name="Army" width="20" height="20"/>
+		<jdipNS:SYMBOLSIZE name="Wing" width="20" height="20"/>
+		<jdipNS:SYMBOLSIZE name="DislodgedFleet" width="20" height="20"/>
+		<jdipNS:SYMBOLSIZE name="DislodgedArmy" width="20" height="20"/>
+		<jdipNS:SYMBOLSIZE name="DislodgedWing" width="20" height="20"/>
+		<jdipNS:SYMBOLSIZE name="FailedOrder" width="15" height="15"/>
+		<jdipNS:SYMBOLSIZE name="SupplyCenter" width="10" height="10"/>
+		<jdipNS:SYMBOLSIZE name="BuildUnit" width="30" height="30"/>
+		<jdipNS:SYMBOLSIZE name="RemoveUnit" width="25" height="25"/>
+		<jdipNS:SYMBOLSIZE name="WaivedBuild" width="20" height="20"/>
+		
+		<jdipNS:BUILD deltaRadius="0"/>
+		<jdipNS:REMOVE deltaRadius="5"/>
+		<jdipNS:DISBAND deltaRadius="5"/>
+		<jdipNS:WAIVE deltaRadius="0"/>
+		<jdipNS:HOLD deltaRadius="5" strokeCSSStyle="varwidthorder" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="6,9,12,18" shadowWidths="10,15,20,25"/>
+		<jdipNS:MOVE deltaRadius="5" strokeCSSStyle="varwidthorder" markerID="arrow" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="6,9,12,18" shadowWidths="10,15,20,25"/>
+		<jdipNS:RETREAT deltaRadius="5" strokeCSSStyle="defaultorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadoworder"/>
+		<jdipNS:SUPPORT deltaRadius="10" strokeCSSStyle="supportorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadowdash"/>
+		<jdipNS:CONVOY deltaRadius="10" strokeCSSStyle="convoyorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadowdash"/>
+	</jdipNS:ORDERDRAWING>
+	
+	<jdipNS:PROVINCE_DATA dislodgedUnitOffset="10,10">
+		<jdipNS:PROVINCE name="adr"><jdipNS:UNIT x="306" y="400"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="aeg"><jdipNS:UNIT x="405" y="475"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ait"><jdipNS:UNIT x="425" y="450"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ala"><jdipNS:UNIT x="423" y="574"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="alb"><jdipNS:UNIT x="345" y="427"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="alg"><jdipNS:UNIT x="159" y="492"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ang"><jdipNS:UNIT x="214" y="243"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="apu"><jdipNS:UNIT x="309" y="421"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ara"><jdipNS:UNIT x="624" y="560"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="arc"><jdipNS:UNIT x="209" y="18"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="aze"><jdipNS:UNIT x="618" y="378"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bal"><jdipNS:UNIT x="338" y="219"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bar"><jdipNS:UNIT x="420" y="20"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bay"><jdipNS:UNIT x="122" y="334"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bor"><jdipNS:UNIT x="309" y="237"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="car"><jdipNS:UNIT x="452" y="507"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cat"><jdipNS:UNIT x="147" y="391"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cil"><jdipNS:UNIT x="515" y="445"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cir"><jdipNS:UNIT x="563" y="340"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cly"><jdipNS:UNIT x="165" y="175"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cor"><jdipNS:UNIT x="157" y="263"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cro"><jdipNS:UNIT x="301" y="359"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cym"><jdipNS:UNIT x="160" y="245"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="del"><jdipNS:UNIT x="487" y="537"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="don"><jdipNS:UNIT x="495" y="280"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ebs"><jdipNS:UNIT x="519" y="380"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ems"><jdipNS:UNIT x="497" y="498"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="egy"><jdipNS:UNIT x="450" y="628"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="eng"><jdipNS:UNIT x="160" y="277"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="est"><jdipNS:UNIT x="82" y="400"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="fez"><jdipNS:UNIT x="275" y="615"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="fin"><jdipNS:UNIT x="386" y="132"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="fra"><jdipNS:UNIT x="185" y="315"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gal"><jdipNS:UNIT x="352" y="311"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gas"><jdipNS:UNIT x="160" y="355"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gib"><jdipNS:UNIT x="72" y="435"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gob"><jdipNS:UNIT x="343" y="145"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gol"><jdipNS:UNIT x="213" y="402"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="hel"><jdipNS:UNIT x="247" y="236"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="hol"><jdipNS:UNIT x="265" y="251"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ifn"><jdipNS:UNIT x="12" y="461"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ind"><jdipNS:UNIT x="720" y="612"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ion"><jdipNS:UNIT x="339" y="464"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ira"><jdipNS:UNIT x="690" y="433"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="iri"><jdipNS:UNIT x="130" y="250"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="kar"><jdipNS:UNIT x="460" y="128"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="kaz"><jdipNS:UNIT x="673" y="232"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="kub"><jdipNS:UNIT x="531" y="337"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lap"><jdipNS:UNIT x="338" y="51"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lat"><jdipNS:UNIT x="354" y="184"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lem"><jdipNS:UNIT x="390" y="321"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lib"><jdipNS:UNIT x="419" y="538"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lig"><jdipNS:UNIT x="246" y="397"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="liv"><jdipNS:UNIT x="389" y="240"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lor"><jdipNS:UNIT x="215" y="318"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mac"><jdipNS:UNIT x="361" y="412"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mal"><jdipNS:UNIT x="285" y="500"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mar"><jdipNS:UNIT x="293" y="254"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mas"><jdipNS:UNIT x="353" y="250"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mes"><jdipNS:UNIT x="630" y="470"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mid"><jdipNS:UNIT x="58" y="294"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="min"><jdipNS:UNIT x="150" y="163"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nmk"><jdipNS:UNIT x="331" y="112"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nao"><jdipNS:UNIT x="75" y="140"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nth"><jdipNS:UNIT x="218" y="188"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nwy"><jdipNS:UNIT x="249" y="79"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="plm"><jdipNS:UNIT x="732" y="512"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="per"><jdipNS:UNIT x="192" y="290"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pic"><jdipNS:UNIT x="239" y="365"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pis"><jdipNS:UNIT x="171" y="411"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pod"><jdipNS:UNIT x="413" y="310"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pyl"><jdipNS:UNIT x="359" y="509"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="red"><jdipNS:UNIT x="527" y="622"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ruh"><jdipNS:UNIT x="239" y="290"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sah"><jdipNS:UNIT x="139" y="560"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sar"><jdipNS:UNIT x="233" y="431"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sch"><jdipNS:UNIT x="238" y="342"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ser"><jdipNS:UNIT x="353" y="387"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sib"><jdipNS:UNIT x="570" y="93"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sil"><jdipNS:UNIT x="321" y="288"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sin"><jdipNS:UNIT x="507" y="579"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ska"><jdipNS:UNIT x="278" y="193"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sou"><jdipNS:UNIT x="25" y="392"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="swa"><jdipNS:UNIT x="243" y="318"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="syr"><jdipNS:UNIT x="555" y="465"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tau"><jdipNS:UNIT x="488" y="330"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="thr"><jdipNS:UNIT x="396" y="419"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tob"><jdipNS:UNIT x="328" y="542"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tra"><jdipNS:UNIT x="381" y="356"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tri"><jdipNS:UNIT x="290" y="566"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tus"><jdipNS:UNIT x="258" y="391"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tyr"><jdipNS:UNIT x="275" y="345"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tys"><jdipNS:UNIT x="260" y="442"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="uls"><jdipNS:UNIT x="142" y="204"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="umb"><jdipNS:UNIT x="286" y="399"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="uti"><jdipNS:UNIT x="200" y="445"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="vol"><jdipNS:UNIT x="550" y="215"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="wbs"><jdipNS:UNIT x="453" y="382"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="wms"><jdipNS:UNIT x="135" y="449"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="yor"><jdipNS:UNIT x="189" y="230"/></jdipNS:PROVINCE>
+		
+		<jdipNS:PROVINCE name="alc"><jdipNS:UNIT x="165" y="154"/><jdipNS:SUPPLY_CENTER x="165" y="154"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ana"><jdipNS:UNIT x="480" y="327"/><jdipNS:SUPPLY_CENTER x="480" y="327"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="arm"><jdipNS:UNIT x="555" y="333"/><jdipNS:SUPPLY_CENTER x="555" y="333"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ath"><jdipNS:UNIT x="372" y="364"/><jdipNS:SUPPLY_CENTER x="372" y="364"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="aus"><jdipNS:UNIT x="293" y="248"/><jdipNS:SUPPLY_CENTER x="293" y="248"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bav"><jdipNS:UNIT x="262" y="240"/><jdipNS:SUPPLY_CENTER x="262" y="240"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="boh"><jdipNS:UNIT x="280" y="225"/><jdipNS:SUPPLY_CENTER x="280" y="225"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bri"><jdipNS:UNIT x="124" y="209"/><jdipNS:SUPPLY_CENTER x="124" y="209"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bru"><jdipNS:UNIT x="204" y="192"/><jdipNS:SUPPLY_CENTER x="204" y="192"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bud"><jdipNS:UNIT x="329" y="253"/><jdipNS:SUPPLY_CENTER x="329" y="253"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bul"><jdipNS:UNIT x="375" y="317"/><jdipNS:SUPPLY_CENTER x="375" y="317"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cai"><jdipNS:UNIT x="469" y="446"/><jdipNS:SUPPLY_CENTER x="469" y="446"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="con"><jdipNS:UNIT x="434" y="321"/><jdipNS:SUPPLY_CENTER x="434" y="321"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cyr"><jdipNS:UNIT x="347" y="425"/><jdipNS:SUPPLY_CENTER x="347" y="425"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="dam"><jdipNS:UNIT x="523" y="395"/><jdipNS:SUPPLY_CENTER x="523" y="395"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="den"><jdipNS:UNIT x="280" y="160"/><jdipNS:SUPPLY_CENTER x="280" y="160"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="dij"><jdipNS:UNIT x="199" y="247"/><jdipNS:SUPPLY_CENTER x="199" y="247"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="dub"><jdipNS:UNIT x="133" y="146"/><jdipNS:SUPPLY_CENTER x="133" y="146"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="edi"><jdipNS:UNIT x="173" y="125"/><jdipNS:SUPPLY_CENTER x="173" y="125"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gda"><jdipNS:UNIT x="331" y="185"/><jdipNS:SUPPLY_CENTER x="331" y="185"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="geo"><jdipNS:UNIT x="566" y="291"/><jdipNS:SUPPLY_CENTER x="566" y="291"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="hag"><jdipNS:UNIT x="219" y="188"/><jdipNS:SUPPLY_CENTER x="219" y="188"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="hes"><jdipNS:UNIT x="240" y="199"/><jdipNS:SUPPLY_CENTER x="240" y="199"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="jer"><jdipNS:UNIT x="513" y="423"/><jdipNS:SUPPLY_CENTER x="513" y="423"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="kie"><jdipNS:UNIT x="421" y="219"/><jdipNS:SUPPLY_CENTER x="421" y="219"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lan"><jdipNS:UNIT x="196" y="291"/><jdipNS:SUPPLY_CENTER x="196" y="291"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mor"><jdipNS:UNIT x="49" y="377"/><jdipNS:SUPPLY_CENTER x="49" y="377"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mus"><jdipNS:UNIT x="470" y="160"/><jdipNS:SUPPLY_CENTER x="470" y="160"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nap"><jdipNS:UNIT x="284" y="343"/><jdipNS:SUPPLY_CENTER x="284" y="343"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nov"><jdipNS:UNIT x="408" y="133"/><jdipNS:SUPPLY_CENTER x="408" y="133"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nwg"><jdipNS:UNIT x="275" y="109"/><jdipNS:SUPPLY_CENTER x="275" y="109"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ode"><jdipNS:UNIT x="445" y="257"/><jdipNS:SUPPLY_CENTER x="445" y="257"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pal"><jdipNS:UNIT x="252" y="372"/><jdipNS:SUPPLY_CENTER x="252" y="372"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pie"><jdipNS:UNIT x="218" y="275"/><jdipNS:SUPPLY_CENTER x="218" y="275"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="por"><jdipNS:UNIT x="48" y="306"/><jdipNS:SUPPLY_CENTER x="48" y="306"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="rig"><jdipNS:UNIT x="373" y="155"/><jdipNS:SUPPLY_CENTER x="373" y="155"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="rom"><jdipNS:UNIT x="260" y="321"/><jdipNS:SUPPLY_CENTER x="260" y="321"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="rum"><jdipNS:UNIT x="401" y="286"/><jdipNS:SUPPLY_CENTER x="401" y="286"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="san"><jdipNS:UNIT x="78" y="270"/><jdipNS:SUPPLY_CENTER x="78" y="270"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sax"><jdipNS:UNIT x="291" y="208"/><jdipNS:SUPPLY_CENTER x="291" y="208"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="smy"><jdipNS:UNIT x="425" y="365"/><jdipNS:SUPPLY_CENTER x="425" y="365"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="swe"><jdipNS:UNIT x="320" y="117"/><jdipNS:SUPPLY_CENTER x="320" y="117"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sze"><jdipNS:UNIT x="335" y="277"/><jdipNS:SUPPLY_CENTER x="335" y="277"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tol"><jdipNS:UNIT x="96" y="314"/><jdipNS:SUPPLY_CENTER x="96" y="314"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tun"><jdipNS:UNIT x="215" y="378"/><jdipNS:SUPPLY_CENTER x="215" y="378"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tur"><jdipNS:UNIT x="671" y="294"/><jdipNS:SUPPLY_CENTER x="671" y="294"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="val"><jdipNS:UNIT x="119" y="333"/><jdipNS:SUPPLY_CENTER x="119" y="333"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ven"><jdipNS:UNIT x="269" y="278"/><jdipNS:SUPPLY_CENTER x="269" y="278"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="war"><jdipNS:UNIT x="348" y="209"/><jdipNS:SUPPLY_CENTER x="348" y="209"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="wes"><jdipNS:UNIT x="177" y="179"/><jdipNS:SUPPLY_CENTER x="177" y="179"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="yal"><jdipNS:UNIT x="480" y="275"/><jdipNS:SUPPLY_CENTER x="480" y="275"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="zar"><jdipNS:UNIT x="294" y="295"/><jdipNS:SUPPLY_CENTER x="294" y="295"/></jdipNS:PROVINCE>
+	</jdipNS:PROVINCE_DATA>                        
+	
+	<desc>Aberration V Map</desc>
+	<defs>
+		<style type="text/css"><![CDATA[
+		
+		/* unordered */
+		.unordered	{fill:red;stroke:black;stroke-width:1;fill-opacity:0.90;}
+		
+		/* text */
+		.smalllabeltext	{text-anchor:middle;stroke-width:0.1;stroke:black;fill:black;font-family:serif;font-style:italic;font-size:24;}
+		.brieflabeltext	{text-anchor:middle;stroke-width:0.1;stroke:black;fill:black;font-family:serif;font-style:italic;font-size:16;}
+		.fulllabeltext	{font-family:serif;font-style:italic;font-size:24;fill:black;stroke:black;}
+		
+		/* style class for invisible regions */
+		.invisible	{stroke:white;fill:white;fill-opacity:0.0;opacity:0.0}
+		
+		/* default region coloring (nopower if region not owned) */
+		.nopower 	{fill:rgb(255,217,140);stroke:black;stroke-width:1}
+		.water		{fill:rgb(167,222,235);stroke:black;stroke-width:1}
+		.channel	{fill:blue;stroke:black;stroke-width:1}
+		.impassable	{fill:rgb(127,127,127);stroke:black;stroke-width:3}
+		
+		/* region coloring by power */
+		.burgundy	{fill:rgb(204,255,255);stroke:black;stroke-width:1}
+		.sicily		{fill:rgb(204,255,204);stroke:black;stroke-width:1}
+		.eire		{fill:rgb(243,243,243);stroke:black;stroke-width:1}
+		.hungary	{fill:rgb(255,217,192);stroke:black;stroke-width:1}
+		.israel		{fill:rgb(255,204,255);stroke:black;stroke-width:1}
+		.poland		{fill:rgb(255,255,230);stroke:black;stroke-width:1}
+		.spain		{fill:rgb(255,243,217);stroke:black;stroke-width:1}
+		.ukraine	{fill:rgb(217,204,192);stroke:black;stroke-width:1}
+		.byzantium	{fill:rgb(255,255,204);stroke:black;stroke-width:1}
+		
+		/* unit colors fills, by power (units always have a power) */
+		.unitburgundy	{fill:rgb(204,255,255);fill-opacity:0.85}
+		.unitsicily	{fill:rgb(204,255,204);fill-opacity:0.85}
+		.uniteire	{fill:rgb(243,243,243);fill-opacity:0.85}
+		.unithungary	{fill:rgb(255,217,192);fill-opacity:0.85}
+		.unitisrael	{fill:rgb(255,204,255);fill-opacity:0.85}
+		.unitpoland	{fill:rgb(255,255,230);fill-opacity:0.85}
+		.unitspain	{fill:rgb(255,243,217);fill-opacity:0.85}
+		.unitukraine	{fill:rgb(217,204,192);fill-opacity:0.85}
+		.unitbyzantium	{fill:rgb(255,255,204);fill-opacity:0.85}
+		               
+		/* supply center styles (nopower if supply center not owned) */
+		.scnopower	{fill:black;stroke:black;}
+		.scburgundy	{fill:black;stroke:black;}
+		.scsicily	{fill:black;stroke:black;}
+		.sceire		{fill:black;stroke:black;}
+		.schungary	{fill:black;stroke:black;}
+		.scisrael	{fill:black;stroke:black;}
+		.scpoland	{fill:black;stroke:black;}
+		.scspain	{fill:black;stroke:black;}
+		.scukraine	{fill:black;stroke:black;}
+		.scbyzantium	{fill:black;stroke:black;}
+		               
+		/* order drawing styles, stroke and fill colors should not be specified */
+		.defaultorder	{stroke-width:6;fill:none;}
+		.supportorder	{stroke-width:6;fill:none;stroke-dasharray:3,3;}
+		.convoyorder	{stroke-dasharray:15,5;stroke-width:6;fill:none;}
+		
+		.shadoworder	{stroke-width:10;fill:none;stroke:black;}
+		.shadowdash	{stroke-width:10;fill:none;stroke:black;opacity:0.45;}
+		
+		.varwidthorder	{fill:none;}
+		.varwidthshadow	{fill:none;stroke:black;}
+		
+		]]></style>
+	
+	
+		<marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" 
+			markerUnits="strokeWidth" markerWidth="4" markerHeight="4" orient="auto">
+			<path d="M 0 0 L 10 5 L 0 10 z"/>
+		</marker>
+	</defs>
+
+	<g id="MapLayer">
+		<!-- background -->
+		<rect x="0" y="0" width="770" height="600" fill="black"/>
+		<!-- map -->
+		<path id="_adr" class="water" d="M 305,330 C 305,330 302,335 302,335 C 302,335 312,343 312,343 C 312,343 318,347 318,347 C 321,349 322,351 325,351 C 334,352 339,345 339,337 C 339,335 339,330 339,328 C 336,323 325,320 320,319 C 320,319 323,318 323,318 C 309,306 314,312 305,308 C 305,308 298,303 298,303 C 294,301 290,300 291,295 C 291,295 287,286 287,286 C 287,286 283,291 283,291 C 280,287 279,286 280,281 C 272,280 267,282 268,291 C 268,292 268,294 269,295 C 270,297 274,299 277,302 C 280,307 279,312 281,317 C 286,324 297,328 305,330 Z" />
+		<path id="_aeg" class="water" d="M 380,336 C 380,336 376,342 376,342 C 376,342 381,345 381,345 C 381,345 378,346 378,346 C 378,346 380,351 380,351 C 380,351 378,349 378,349 C 378,349 377,349 377,349 C 377,349 376,352 376,352 C 373,349 371,348 371,344 C 371,344 367,344 367,344 C 367,344 367,353 367,353 C 367,353 373,356 373,356 C 373,356 371,361 371,361 C 377,363 386,366 385,374 C 385,374 380,369 380,369 C 380,369 381,374 381,374 C 381,374 375,373 375,373 C 375,373 378,375 378,375 C 378,375 378,377 378,377 C 378,377 371,377 371,377 C 374,381 375,382 375,387 C 379,389 383,392 388,393 C 394,393 398,390 404,394 C 413,391 419,385 426,379 C 426,379 424,377 424,377 C 424,377 427,373 427,373 C 422,373 419,372 418,367 C 418,367 410,364 410,364 C 410,364 410,362 410,362 C 410,362 411,361 411,361 C 411,361 416,362 416,362 C 416,362 413,349 413,349 C 412,349 411,349 410,349 C 409,349 407,348 407,347 C 404,343 409,341 412,337 C 408,337 407,337 404,334 C 404,334 392,334 392,334 C 392,334 380,336 380,336 Z M 382,346 C 382,346 382,347 382,347 C 382,347 381,346 381,346 C 381,346 382,346 382,346 Z" />
+		<path id="_ait" class="nopower" d="M 439,351 C 438,348 438,344 435,342 C 431,340 417,343 414,347 C 412,349 411,355 416,357 C 419,357 424,356 427,355 C 427,355 439,351 439,351 Z" />
+		<path id="_ala" class="nopower" d="M 396,475 C 396,475 425,481 425,481 C 425,481 446,480 446,480 C 446,480 458,476 458,476 C 458,476 460,469 460,469 C 460,469 466,455 466,455 C 466,455 463,454 463,454 C 463,454 464,445 464,445 C 464,445 464,439 464,439 C 462,431 458,432 452,433 C 445,435 440,443 432,441 C 432,441 424,438 424,438 C 424,438 419,437 419,437 C 419,437 410,435 410,435 C 405,433 402,430 398,433 C 392,438 393,440 393,445 C 393,447 392,448 393,450 C 394,454 396,453 396,462 C 396,462 396,475 396,475 Z" />
+		<path id="_alb" class="nopower" d="M 335,326 C 337,327 338,328 339,330 C 339,330 339,333 339,333 C 338,343 339,339 336,348 C 336,348 341,353 341,353 C 341,353 343,353 343,353 C 345,350 348,346 348,343 C 348,343 348,336 348,336 C 347,333 348,332 348,329 C 346,319 340,315 335,326 Z" />
+		<path id="_alc" class="nopower" d="M 163,122 C 163,122 155,136 155,136 C 155,136 163,135 163,135 C 163,135 165,148 165,148 C 165,148 160,161 160,161 C 160,161 173,163 173,163 C 173,163 172,152 172,152 C 172,152 175,139 175,139 C 175,139 169,130 169,130 C 169,130 166,122 166,122 C 166,122 163,122 163,122 Z" />
+		<path id="_alg" class="nopower" d="M 104,373 C 105,375 107,378 107,380 C 108,383 108,394 107,397 C 104,402 100,403 95,404 C 93,405 89,405 89,407 C 88,409 90,413 90,415 C 91,417 92,418 93,420 C 93,420 98,427 98,427 C 101,431 112,437 117,439 C 130,443 127,439 135,438 C 135,438 152,437 152,437 C 166,437 177,436 189,427 C 191,426 194,423 195,422 C 199,417 193,414 193,409 C 193,407 195,404 196,401 C 197,397 195,391 197,385 C 199,381 203,377 201,375 C 200,373 196,372 194,372 C 194,372 185,371 185,371 C 185,371 177,371 177,371 C 177,371 172,371 172,371 C 172,371 166,371 166,371 C 166,371 160,370 160,370 C 160,370 139,368 139,368 C 139,368 125,370 125,370 C 122,371 119,374 116,375 C 114,376 107,374 104,373 Z" />
+		<path id="_ana" class="nopower" d="M 530,326 C 530,326 529,307 529,307 C 529,307 518,309 518,309 C 518,309 505,306 505,306 C 505,306 501,303 501,303 C 501,303 495,305 495,305 C 493,299 490,303 485,305 C 479,307 468,310 466,317 C 464,322 468,325 470,329 C 471,331 471,334 473,335 C 477,340 486,336 491,335 C 496,335 502,338 506,337 C 506,337 519,328 519,328 C 522,327 527,326 530,326 Z" />
+		<path id="_ang" class="water" d="M 184,163 C 187,164 191,164 194,166 C 199,171 189,177 186,179 C 186,179 186,181 186,181 C 186,181 194,189 194,189 C 194,189 204,188 204,188 C 204,188 217,188 217,188 C 220,184 225,179 230,177 C 230,162 237,157 239,145 C 222,145 219,141 200,145 C 197,146 190,148 189,149 C 185,152 188,155 188,158 C 187,161 186,161 184,163 Z" />
+		<path id="_apu" class="nopower" d="M 286,321 C 286,321 278,330 278,330 C 288,335 296,340 295,352 C 295,352 300,354 300,354 C 300,354 304,348 304,348 C 304,348 308,348 308,348 C 309,351 316,359 319,358 C 322,358 323,354 324,352 C 324,352 320,348 320,348 C 320,348 302,335 302,335 C 302,335 305,330 305,330 C 294,326 297,328 286,321 Z" />
+		<path id="_ara" class="nopower" d="M 542,400 C 540,403 536,406 535,409 C 534,412 534,415 534,418 C 534,418 531,425 531,425 C 531,425 529,433 529,433 C 527,438 524,440 521,444 C 517,452 521,459 510,460 C 510,460 511,467 511,467 C 511,467 518,466 518,466 C 521,473 527,479 531,485 C 534,489 533,491 535,494 C 537,498 540,496 543,502 C 549,512 549,521 554,530 C 556,533 558,534 560,537 C 564,543 568,556 568,563 C 568,571 571,576 572,580 C 573,583 572,585 571,588 C 579,592 578,590 583,590 C 586,589 587,590 590,589 C 593,588 595,586 598,586 C 598,586 606,586 606,586 C 606,586 613,582 613,582 C 613,582 620,581 620,581 C 620,581 659,569 659,569 C 659,567 658,563 658,561 C 661,555 666,555 671,554 C 671,554 683,551 683,551 C 683,551 691,551 691,551 C 696,550 696,546 701,547 C 704,547 706,549 710,548 C 713,546 714,543 716,541 C 720,539 722,540 724,537 C 724,537 730,522 730,522 C 730,522 731,525 731,525 C 736,522 734,519 736,515 C 739,510 741,510 742,503 C 737,500 735,498 733,492 C 725,491 717,489 715,480 C 713,474 718,475 713,466 C 708,469 699,481 697,487 C 697,487 686,487 686,487 C 686,487 680,487 680,487 C 680,487 666,489 666,489 C 667,483 668,475 661,472 C 658,479 658,481 659,488 C 659,488 654,480 654,480 C 654,480 650,476 650,476 C 650,476 643,465 643,465 C 643,465 635,459 635,459 C 635,459 626,450 626,450 C 626,450 612,449 612,449 C 612,449 607,443 607,443 C 607,443 585,439 585,439 C 585,439 585,432 585,432 C 585,432 560,427 560,427 C 557,426 552,426 550,423 C 545,418 545,406 542,400 Z" />
+		<path id="_arc" class="water" d="M 113,0 C 121,9 123,10 134,6 C 134,6 135,13 135,13 C 135,13 138,12 138,12 C 138,12 139,5 139,5 C 145,11 141,12 138,19 C 138,19 143,18 143,18 C 143,18 144,13 144,13 C 144,13 146,17 146,17 C 146,17 150,14 150,14 C 150,14 151,18 151,18 C 151,18 155,16 155,16 C 155,16 156,19 156,19 C 156,19 164,18 164,18 C 164,18 170,19 170,19 C 170,19 179,19 179,19 C 179,19 191,20 191,20 C 191,20 215,20 215,20 C 215,20 230,19 230,19 C 230,19 261,19 261,19 C 261,19 277,18 277,18 C 277,18 312,17 312,17 C 312,17 347,9 347,9 C 344,2 343,0 335,0 C 335,0 290,0 290,0 C 290,0 113,0 113,0 Z" />
+		<path id="_arm" class="nopower" d="M 540,352 C 540,352 557,345 557,345 C 557,345 573,345 573,345 C 572,341 570,337 567,334 C 568,326 565,318 563,311 C 562,308 562,304 560,303 C 558,301 555,301 553,301 C 548,301 534,301 532,306 C 530,310 532,315 532,319 C 532,319 532,325 532,325 C 532,325 534,337 534,337 C 534,337 540,352 540,352 Z" />
+		<path id="_ath" class="nopower" d="M 379,327 C 370,332 373,332 367,336 C 367,336 352,342 352,342 C 351,344 349,347 347,349 C 344,353 343,354 347,359 C 353,367 365,365 372,372 C 365,371 364,370 357,373 C 357,373 361,384 361,384 C 361,384 365,382 365,382 C 365,382 367,387 367,387 C 367,387 370,382 370,382 C 370,382 376,385 376,385 C 376,385 371,377 371,377 C 371,377 378,377 378,377 C 378,377 378,375 378,375 C 378,375 375,374 375,374 C 375,374 381,374 381,374 C 381,374 380,369 380,369 C 380,369 385,374 385,374 C 387,365 378,363 371,361 C 371,361 373,356 373,356 C 373,356 367,353 367,353 C 367,353 367,344 367,344 C 367,344 371,344 371,344 C 371,349 375,353 377,349 C 377,349 379,351 379,351 C 379,351 380,351 380,351 C 380,351 381,348 381,348 C 381,348 378,347 378,347 C 378,347 381,346 381,346 C 381,346 376,342 376,342 C 381,338 380,333 379,327 Z M 378,367 C 378,367 378,368 378,368 C 378,368 377,367 377,367 C 377,367 378,367 378,367 Z" />
+		<path id="_aus" class="nopower" d="M 302,261 C 302,260 302,257 302,256 C 304,246 315,248 322,246 C 330,244 333,242 336,235 C 332,234 327,230 324,231 C 319,231 320,236 310,237 C 301,238 300,232 291,240 C 283,247 290,260 293,261 C 295,262 300,261 302,261 Z" />
+		<path id="_aze" class="nopower" d="M 611,290 C 611,290 608,294 608,294 C 608,294 608,295 608,295 C 608,295 610,297 610,297 C 603,299 590,295 583,293 C 583,293 583,301 583,301 C 583,301 579,300 579,300 C 579,300 581,308 581,308 C 581,308 591,316 591,316 C 591,316 590,320 590,320 C 590,320 598,321 598,321 C 603,310 606,311 613,319 C 613,319 610,320 610,320 C 614,322 620,321 620,316 C 620,314 617,306 619,302 C 621,300 624,300 627,299 C 627,299 627,297 627,297 C 627,297 611,290 611,290 Z" />
+		<path id="_bal" class="water" d="M 319,144 C 319,144 316,156 316,156 C 316,156 306,156 306,156 C 307,167 312,169 317,186 C 320,185 324,183 327,184 C 330,185 332,188 335,188 C 337,189 342,187 344,187 C 344,182 346,183 350,183 C 350,183 351,173 351,173 C 351,164 348,165 352,154 C 352,154 336,147 336,147 C 336,147 319,144 319,144 Z" />
+		<path id="_bar" class="water" d="M 343,0 C 343,0 353,22 353,22 C 353,22 355,18 355,18 C 359,20 361,20 361,25 C 367,30 369,23 371,28 C 371,28 380,31 380,31 C 388,33 400,29 408,38 C 408,38 409,35 409,35 C 409,35 419,41 419,41 C 425,45 426,57 418,61 C 413,63 401,62 394,64 C 394,64 401,68 401,68 C 401,68 399,73 399,73 C 399,73 403,78 403,78 C 403,78 416,84 416,84 C 416,76 418,77 408,73 C 413,67 418,72 424,73 C 426,74 432,73 435,73 C 435,73 424,64 424,64 C 424,64 434,59 434,59 C 434,59 444,63 444,63 C 445,57 444,55 439,53 C 441,45 436,40 428,38 C 433,36 446,34 449,40 C 450,44 446,47 449,50 C 453,54 460,52 465,51 C 463,45 461,44 466,40 C 466,40 464,36 464,36 C 464,36 502,19 502,19 C 502,19 499,23 499,23 C 499,23 497,26 497,26 C 496,29 496,32 500,31 C 503,30 503,26 509,25 C 509,25 518,22 518,22 C 518,22 526,20 526,20 C 529,19 532,20 534,17 C 537,14 536,10 535,7 C 546,4 555,4 566,7 C 574,9 575,11 586,13 C 586,13 623,18 623,18 C 623,18 631,21 631,21 C 635,10 632,15 631,8 C 631,6 632,3 630,1 C 628,0 624,0 622,0 C 622,0 568,0 568,0 C 568,0 343,0 343,0 Z M 453,17 C 465,22 460,30 457,31 C 453,32 449,26 450,22 C 450,21 452,18 453,17 Z" />
+		<path id="_bav" class="nopower" d="M 245,212 C 245,212 248,219 248,219 C 251,227 252,236 249,244 C 249,244 263,247 263,247 C 263,247 274,247 274,247 C 274,247 279,240 279,240 C 275,230 267,235 267,223 C 262,219 260,217 259,210 C 259,210 245,212 245,212 Z" />
+		<path id="_bay" class="water" d="M 133,270 C 132,264 133,261 137,257 C 137,252 138,249 142,245 C 137,236 140,240 139,233 C 139,233 138,228 138,228 C 133,224 127,218 122,216 C 118,215 116,216 112,217 C 96,223 97,232 94,247 C 93,251 88,265 90,268 C 91,270 94,271 96,272 C 104,276 103,274 109,276 C 112,278 114,280 119,281 C 127,282 125,274 133,270 Z" />
+		<path id="_boh" class="nopower" d="M 320,229 C 318,229 311,228 309,227 C 306,226 305,224 302,222 C 300,221 295,221 292,221 C 287,220 281,222 276,223 C 274,223 271,224 270,226 C 267,230 281,237 284,238 C 293,240 294,234 300,234 C 306,234 314,239 320,229 Z" />
+		<path id="_bor" class="water" d="M 304,163 C 301,165 297,165 294,167 C 288,170 286,175 279,173 C 276,173 275,172 273,169 C 273,169 267,169 267,169 C 267,169 266,174 266,174 C 266,174 269,179 269,179 C 269,179 273,178 273,178 C 273,178 271,183 271,183 C 278,185 289,179 292,180 C 297,180 299,186 302,188 C 305,189 313,187 316,186 C 314,177 311,171 306,163 C 306,163 304,163 304,163 Z" />
+		<path id="_bri" class="nopower" d="M 155,200 C 155,200 155,214 155,214 C 155,214 142,212 142,212 C 142,212 134,205 134,205 C 134,205 125,204 125,204 C 125,204 121,203 121,203 C 121,203 115,204 115,204 C 115,204 117,215 117,215 C 131,219 129,223 138,228 C 138,228 139,234 139,234 C 139,236 138,240 141,242 C 143,244 151,245 154,245 C 156,245 161,246 163,244 C 164,243 164,237 165,235 C 165,235 169,209 169,209 C 169,209 164,208 164,208 C 165,201 160,202 155,200 Z" />
+		<path id="_bru" class="nopower" d="M 210,188 C 206,188 205,188 201,189 C 196,190 191,190 191,196 C 190,198 190,201 192,202 C 195,204 199,204 203,205 C 208,208 217,219 221,209 C 221,209 222,205 222,205 C 223,203 224,201 224,199 C 223,196 220,196 217,195 C 213,193 211,192 210,188 Z" />
+		<path id="_bud" class="nopower" d="M 358,253 C 355,246 352,248 356,240 C 353,238 343,235 339,236 C 336,237 336,240 334,243 C 332,244 325,247 322,248 C 315,250 307,248 304,255 C 303,258 305,261 306,264 C 308,267 308,271 311,273 C 314,274 316,273 319,273 C 319,273 326,273 326,273 C 328,273 340,270 342,269 C 347,267 349,260 358,253 Z" />
+		<path id="_bul" class="nopower" d="M 368,300 C 368,300 367,310 367,310 C 370,313 372,314 367,317 C 367,317 371,329 371,329 C 371,329 380,325 380,325 C 387,322 401,321 409,322 C 409,320 409,319 410,317 C 412,315 419,312 422,312 C 424,312 426,313 428,313 C 426,309 426,309 422,308 C 422,308 426,297 426,297 C 423,296 420,295 416,295 C 416,295 405,296 405,296 C 405,296 397,299 397,299 C 387,302 378,304 368,300 Z" />
+		<path id="_cai" class="nopower" d="M 464,454 C 466,457 466,458 465,461 C 465,461 461,469 461,469 C 460,471 459,479 460,481 C 461,484 466,491 469,492 C 471,492 472,492 474,491 C 475,493 476,496 476,498 C 477,501 473,506 476,508 C 479,510 483,506 486,504 C 492,501 498,504 504,501 C 506,500 509,499 509,496 C 509,494 505,488 504,486 C 502,481 500,475 497,471 C 497,471 484,455 484,455 C 479,448 480,441 478,438 C 477,435 468,429 464,432 C 463,434 464,437 464,439 C 465,444 464,449 464,454 Z" />
+		<path id="_car" class="water" d="M 456,370 C 456,370 458,373 458,373 C 458,373 455,379 455,379 C 447,377 436,385 437,374 C 431,374 432,375 427,378 C 427,387 420,383 418,387 C 417,389 419,392 420,394 C 423,398 429,407 432,409 C 435,412 439,412 442,413 C 451,415 464,414 472,410 C 474,409 480,407 481,405 C 482,403 482,399 482,397 C 478,396 472,397 471,394 C 470,390 476,390 477,385 C 477,383 476,381 476,379 C 473,369 465,368 456,370 Z" />
+		<path id="_cat" class="nopower" d="M 93,331 C 95,337 101,335 106,333 C 119,327 119,317 132,321 C 137,316 148,313 155,311 C 157,311 160,311 162,310 C 164,308 167,305 168,302 C 168,302 156,303 156,303 C 156,303 144,296 144,296 C 144,296 137,296 137,296 C 137,296 131,295 131,295 C 131,295 124,302 124,302 C 124,302 111,319 111,319 C 111,319 93,331 93,331 Z" />
+		<path id="_cil" class="nopower" d="M 498,338 C 498,346 488,357 500,363 C 502,364 504,364 506,365 C 506,365 517,360 517,360 C 517,360 521,355 521,355 C 521,355 534,352 534,352 C 534,352 538,352 538,352 C 537,347 536,346 534,342 C 534,342 530,330 530,330 C 528,328 522,329 520,330 C 515,331 511,337 506,338 C 503,339 501,338 498,338 Z" />
+		<path id="_cir" class="nopower" d="M 523,281 C 532,281 531,284 537,284 C 537,284 550,281 550,281 C 550,281 564,281 564,281 C 567,281 571,279 573,280 C 578,281 576,287 580,290 C 584,293 602,296 607,296 C 607,296 606,293 606,293 C 610,290 609,288 606,284 C 601,276 598,275 596,265 C 596,265 586,264 586,264 C 587,256 587,240 580,236 C 577,233 557,229 552,228 C 548,227 544,227 542,225 C 539,222 539,217 538,214 C 538,214 524,213 524,213 C 524,213 511,211 511,211 C 509,211 507,211 506,213 C 504,216 508,219 510,221 C 513,224 516,228 518,230 C 518,230 528,235 528,235 C 530,237 530,240 533,242 C 536,245 545,243 545,249 C 546,251 545,253 544,255 C 541,270 533,266 523,281 Z" />
+		<path id="_cly" class="nopower" d="M 165,96 C 165,96 159,104 159,104 C 159,104 159,101 159,101 C 152,106 158,108 157,114 C 156,116 152,118 150,120 C 150,120 155,119 155,119 C 155,119 154,129 154,129 C 154,129 155,126 155,126 C 155,126 157,128 157,128 C 157,128 158,128 158,128 C 159,123 160,123 165,121 C 165,121 165,109 165,109 C 165,109 173,97 173,97 C 173,97 168,98 168,98 C 168,98 165,96 165,96 Z M 156,124 C 156,124 156,125 156,125 C 156,125 155,124 155,124 C 155,124 156,124 156,124 Z" />
+		<g id="_con" class="nopower">
+			<path d="M 411,317 C 411,326 414,329 404,334 C 406,338 408,338 412,337 C 412,337 405,342 405,342 C 406,342 406,343 407,343 C 410,343 421,334 423,331 C 427,330 427,329 431,328 C 437,326 439,328 441,320 C 435,317 431,315 424,314 C 421,313 414,316 411,317 Z" />
+			<path d="M 461,317 C 455,322 450,321 443,320 C 444,324 443,326 447,328 C 439,332 433,333 424,334 C 424,334 425,337 425,337 C 414,339 416,342 407,346 C 409,352 411,348 414,346 C 416,344 417,344 419,343 C 429,339 437,339 440,351 C 450,349 450,345 457,341 C 460,340 466,339 470,337 C 468,324 464,329 463,317 C 463,317 461,317 461,317 Z" />
+			<path class="water" d="M 441,321 C 437,328 436,326 430,328 C 427,329 426,330 423,331 C 418,336 408,340 406,347 C 406,347 425,337 425,337 C 425,337 424,334 424,334 C 433,334 438,332 447,329 C 447,329 443,321 443,321 C 443,321 441,321 441,321 Z" />
+		</g>
+		<path id="_cor" class="nopower" d="M 136,177 C 133,182 131,184 125,183 C 125,183 120,188 120,188 C 135,192 132,183 143,191 C 143,191 145,186 145,186 C 145,186 159,188 159,188 C 159,188 168,189 168,189 C 168,189 165,176 165,176 C 158,174 154,177 147,178 C 147,178 136,177 136,177 Z" />
+		<path id="_cro" class="nopower" d="M 285,265 C 289,274 279,280 280,286 C 280,288 281,289 282,291 C 282,291 287,286 287,286 C 287,286 289,293 289,293 C 297,284 299,286 310,286 C 313,286 318,285 320,286 C 323,288 326,292 330,294 C 330,294 327,274 327,274 C 327,274 313,274 313,274 C 313,274 310,272 310,272 C 310,272 304,263 304,263 C 304,263 297,264 297,264 C 297,264 285,265 285,265 Z" />
+		<path id="_cym" class="nopower" d="M 150,150 C 149,153 149,153 146,155 C 146,155 153,156 153,156 C 151,165 143,164 136,167 C 137,169 144,176 146,176 C 149,177 154,175 157,174 C 165,172 172,176 173,164 C 161,162 159,163 160,153 C 160,153 153,152 153,152 C 153,152 154,151 154,151 C 154,151 153,149 153,149 C 153,149 150,150 150,150 Z" />
+		<path id="_cyr" class="nopower" d="M 376,563 C 376,563 376,558 376,558 C 376,558 394,558 394,558 C 394,558 394,462 394,462 C 394,462 390,450 390,450 C 390,450 391,440 391,440 C 391,440 396,429 396,429 C 382,428 381,424 371,419 C 363,416 351,417 344,420 C 334,425 337,433 336,437 C 334,441 329,442 328,445 C 328,445 320,461 320,461 C 320,466 325,472 323,477 C 323,480 316,488 314,491 C 314,491 306,496 306,496 C 303,500 301,510 299,515 C 299,517 297,521 297,523 C 298,525 300,526 302,527 C 302,527 316,534 316,534 C 316,534 353,552 353,552 C 359,555 370,561 376,563 Z" />
+		<path id="_dam" class="nopower" d="M 513,388 C 513,388 515,400 515,400 C 508,404 510,407 508,414 C 517,415 524,424 529,422 C 533,420 532,410 532,406 C 532,406 530,400 530,400 C 530,397 532,395 531,393 C 529,390 516,388 513,388 Z" />
+		<path id="_del" class="water" d="M 512,401 C 504,398 501,397 493,400 C 487,402 482,406 476,409 C 474,410 470,411 469,413 C 468,415 468,418 469,420 C 469,425 469,433 475,435 C 478,436 481,435 484,435 C 493,434 500,434 505,425 C 509,417 507,411 512,401 Z" />
+		<g id="_den" class="nopower">
+			<path d="M 254,145 C 250,148 252,150 252,154 C 252,154 252,159 252,159 C 252,159 255,166 255,166 C 267,168 266,168 275,160 C 275,160 274,155 274,155 C 274,155 277,156 277,156 C 279,151 279,149 273,148 C 273,148 276,134 276,134 C 268,135 267,138 261,140 C 257,142 255,141 254,145 Z" />
+			<path d="M 288,154 C 282,157 280,162 279,169 C 279,169 277,165 277,165 C 269,172 277,175 284,173 C 284,173 283,169 283,169 C 291,167 292,160 288,154 Z" />
+			<path class="water" d="M 278,153 C 278,153 274,155 274,155 C 274,155 275,160 275,160 C 271,162 269,164 267,168 C 272,168 273,168 277,165 C 277,165 278,169 278,169 C 278,169 283,156 283,156 C 283,156 278,153 278,153 Z" />
+			<path class="water" d="M 289,153 C 290,159 291,167 283,169 C 283,169 284,173 284,173 C 293,168 298,161 289,153 Z" />
+		</g>
+		<path id="_dij" class="nopower" d="M 195,236 C 191,239 189,244 185,247 C 182,250 175,251 174,256 C 174,258 176,260 177,262 C 179,266 181,275 188,273 C 190,273 191,271 194,269 C 198,267 201,267 203,265 C 205,263 205,260 207,256 C 209,254 211,251 211,248 C 210,244 205,242 202,240 C 199,238 199,236 195,236 Z" />
+		<path id="_don" class="nopower" d="M 468,198 C 468,198 468,211 468,211 C 468,211 464,222 464,222 C 464,222 463,231 463,231 C 463,231 472,238 472,238 C 479,233 477,234 485,234 C 489,235 489,234 494,234 C 499,235 505,238 510,234 C 511,233 512,232 512,230 C 514,223 508,223 504,217 C 502,212 505,208 504,204 C 503,202 501,201 499,200 C 490,194 488,199 481,199 C 481,199 468,198 468,198 Z" />
+		<path id="_dub" class="nopower" d="M 120,131 C 120,131 120,136 120,136 C 117,137 117,139 118,142 C 113,144 102,154 111,158 C 114,160 117,158 120,158 C 120,158 135,160 135,160 C 136,157 137,157 137,155 C 137,155 138,150 138,150 C 140,143 140,143 136,137 C 128,139 130,134 120,131 Z M 119,142 C 119,142 119,143 119,143 C 119,143 118,142 118,142 C 118,142 119,142 119,142 Z M 120,143 C 120,143 120,144 120,144 C 120,144 119,143 119,143 C 119,143 120,143 120,143 Z" />
+		<path id="_ebs" class="water" d="M 512,241 C 503,250 498,246 493,256 C 489,253 487,255 485,259 C 485,259 483,258 483,258 C 483,258 479,263 479,263 C 484,264 493,266 498,265 C 497,272 495,270 490,272 C 488,273 481,277 480,279 C 478,282 480,287 481,290 C 482,296 482,300 482,306 C 490,304 492,300 495,305 C 495,305 501,303 501,303 C 502,304 503,305 504,306 C 504,306 518,310 518,310 C 520,310 531,306 533,305 C 538,301 543,296 540,289 C 538,284 531,282 526,281 C 526,281 510,273 510,273 C 508,272 504,271 503,269 C 499,264 505,258 509,256 C 509,256 502,251 502,251 C 502,251 515,245 515,245 C 515,245 514,241 514,241 C 514,241 512,241 512,241 Z" />
+		<path id="_ems" class="water" d="M 506,365 C 504,364 500,362 498,363 C 494,364 494,367 487,370 C 484,371 478,373 477,375 C 476,377 478,384 478,386 C 494,383 486,384 498,378 C 494,384 492,384 496,391 C 487,392 482,394 483,404 C 488,402 495,398 501,397 C 501,397 515,400 515,400 C 515,400 513,389 513,389 C 513,389 513,382 513,382 C 513,380 511,379 511,377 C 511,376 511,374 511,373 C 510,365 509,369 512,361 C 508,362 508,362 506,365 Z" />
+		<path id="_edi" class="nopower" d="M 181,136 C 177,129 176,131 176,122 C 179,121 186,116 184,111 C 182,108 173,108 178,103 C 178,103 180,101 180,101 C 180,101 180,99 180,99 C 172,97 167,104 166,111 C 165,117 169,131 173,134 C 175,136 178,136 181,136 Z" />
+		<path id="_egy" class="nopower" d="M 396,476 C 396,476 396,545 396,545 C 396,545 493,545 493,545 C 502,545 502,550 507,549 C 511,549 511,545 515,541 C 521,536 523,536 531,534 C 528,529 526,529 528,524 C 523,519 515,507 515,500 C 515,500 511,497 511,497 C 511,497 501,503 501,503 C 501,503 488,504 488,504 C 488,504 476,511 476,511 C 472,497 480,505 474,492 C 472,492 470,493 469,493 C 464,491 459,482 459,478 C 459,478 448,480 448,480 C 448,480 426,482 426,482 C 426,482 396,476 396,476 Z" />
+		<path id="_eng" class="water" d="M 145,186 C 145,186 143,191 143,191 C 136,184 133,189 124,189 C 117,189 105,193 98,195 C 98,195 116,203 116,203 C 116,203 125,205 125,205 C 125,205 132,205 132,205 C 132,205 141,212 141,212 C 141,212 155,214 155,214 C 155,214 155,200 155,200 C 161,203 165,202 164,208 C 170,210 171,210 178,209 C 178,209 173,208 173,208 C 177,201 182,203 188,199 C 190,198 191,194 193,191 C 187,184 183,190 176,190 C 176,190 160,187 160,187 C 160,187 152,187 152,187 C 152,187 145,186 145,186 Z" />
+		<path id="_est" class="nopower" d="M 67,307 C 68,316 68,312 65,319 C 65,319 63,326 63,326 C 63,326 82,340 82,340 C 82,340 93,335 93,335 C 91,327 87,330 85,323 C 83,316 88,312 89,305 C 89,297 89,299 91,292 C 86,292 81,290 77,294 C 72,300 74,307 67,307 Z" />
+		<path id="_fez" class="nopower" d="M 215,463 C 215,463 216,475 216,475 C 216,475 215,484 215,484 C 215,484 217,493 217,493 C 217,493 215,502 215,502 C 221,505 225,512 235,517 C 242,521 247,519 253,523 C 258,525 265,532 271,532 C 274,533 278,531 280,530 C 283,529 292,526 293,524 C 297,521 301,502 304,497 C 306,493 311,492 314,489 C 316,486 319,481 321,478 C 321,478 300,479 300,479 C 297,478 296,476 295,475 C 293,474 287,473 285,473 C 276,473 270,478 264,478 C 261,478 251,476 248,475 C 233,471 229,472 215,463 Z" />
+		<path id="_fin" class="nopower" d="M 352,32 C 352,34 353,36 352,38 C 350,40 341,40 338,39 C 335,37 333,35 331,35 C 329,35 327,38 326,40 C 326,40 337,46 337,46 C 340,48 345,61 345,65 C 345,65 350,67 350,67 C 363,74 347,84 345,91 C 343,94 345,98 346,101 C 347,106 347,115 351,119 C 353,120 355,121 357,122 C 372,130 374,121 388,120 C 390,114 395,104 395,98 C 394,85 386,82 380,73 C 378,70 375,63 374,60 C 374,60 371,51 371,51 C 369,49 367,47 365,44 C 365,44 363,36 363,36 C 360,32 357,31 352,32 Z" />
+		<path id="_fra" class="nopower" d="M 169,220 C 169,220 166,241 166,241 C 165,244 163,247 164,250 C 165,254 168,255 171,256 C 177,247 178,251 184,246 C 188,242 190,237 192,236 C 196,232 202,232 204,221 C 197,220 198,221 194,221 C 191,220 189,219 186,219 C 181,220 179,222 169,220 Z" />
+		<path id="_gal" class="nopower" d="M 313,226 C 313,226 325,228 325,228 C 325,228 335,233 335,233 C 335,233 349,235 349,235 C 349,235 358,238 358,238 C 358,238 366,223 366,223 C 362,222 350,220 346,220 C 346,220 330,223 330,223 C 324,223 321,217 315,223 C 315,223 313,226 313,226 Z" />
+		<path id="_gas" class="nopower" d="M 140,245 C 138,250 137,252 137,257 C 133,260 132,265 133,270 C 127,272 120,282 126,288 C 127,289 136,294 137,294 C 137,294 146,295 146,295 C 146,293 146,291 147,289 C 149,283 158,274 165,274 C 172,273 172,273 178,270 C 178,270 174,261 174,261 C 174,261 164,255 164,255 C 164,255 159,248 159,248 C 159,248 140,245 140,245 Z" />
+		<path id="_gda" class="nopower" d="M 302,188 C 302,188 301,203 301,203 C 308,202 316,206 320,205 C 324,204 324,200 329,198 C 334,195 338,198 339,188 C 339,188 325,183 325,183 C 325,183 302,188 302,188 Z" />
+		<path id="_geo" class="nopower" d="M 539,286 C 542,294 541,293 538,300 C 546,301 544,300 549,299 C 549,299 564,300 564,300 C 564,300 570,299 570,299 C 576,298 574,296 582,299 C 581,290 579,293 576,288 C 576,286 576,283 574,282 C 571,281 567,282 564,282 C 555,283 548,282 539,286 Z" />
+		<path id="_gib" class="nopower" d="M 62,326 C 62,326 58,328 58,328 C 58,328 57,334 57,334 C 57,334 61,334 61,334 C 62,338 64,341 68,342 C 68,345 71,352 75,353 C 78,353 82,350 84,349 C 84,349 81,340 81,340 C 78,335 67,329 62,326 Z" />
+		<path id="_gob" class="water" d="M 341,64 C 340,66 339,69 339,71 C 338,74 341,75 339,79 C 335,86 327,85 324,90 C 322,93 324,96 323,99 C 322,102 320,104 321,107 C 321,110 323,111 325,113 C 327,114 328,115 330,116 C 333,116 344,113 348,112 C 348,112 345,92 345,92 C 347,85 362,75 352,67 C 351,67 348,66 347,65 C 345,64 343,64 341,64 Z" />
+		<path id="_gol" class="water" d="M 162,311 C 168,312 173,315 178,319 C 178,319 186,327 186,327 C 188,329 192,329 195,330 C 202,332 203,335 211,336 C 211,336 210,331 210,331 C 210,331 211,330 211,330 C 212,330 214,331 215,331 C 225,330 219,319 220,312 C 212,309 207,311 202,308 C 194,303 195,298 192,296 C 189,292 183,291 178,292 C 176,292 174,291 172,292 C 170,294 169,298 168,301 C 168,301 162,311 162,311 Z" />
+		<path id="_hag" class="nopower" d="M 217,188 C 213,187 212,188 211,192 C 214,193 223,196 224,199 C 224,200 223,205 223,207 C 227,204 230,199 233,195 C 236,192 241,189 241,184 C 241,179 236,174 231,176 C 226,177 219,184 217,188 Z" />
+		<path id="_hel" class="water" d="M 231,175 C 233,175 238,176 240,175 C 242,175 244,173 246,173 C 248,173 250,176 252,176 C 254,176 256,174 254,171 C 256,162 253,163 253,158 C 252,152 253,154 251,147 C 249,147 244,146 241,147 C 239,148 238,152 237,154 C 234,162 231,166 231,175 Z" />
+		<path id="_hes" class="nopower" d="M 271,194 C 265,195 256,194 253,188 C 251,183 251,174 247,173 C 246,172 244,172 243,173 C 238,176 244,181 242,187 C 240,192 235,194 234,198 C 233,206 241,211 248,210 C 254,209 265,207 268,203 C 269,201 270,196 271,194 Z" />
+		<path id="_hol" class="nopower" d="M 254,169 C 256,177 248,188 261,192 C 263,192 264,192 266,192 C 268,192 271,191 273,191 C 273,191 271,183 271,183 C 274,181 273,181 273,178 C 273,178 269,179 269,179 C 269,179 266,174 266,174 C 266,174 267,168 267,168 C 267,168 254,169 254,169 Z" />
+		<path id="_ifn" class="water" d="M 0,355 C 0,355 0,410 0,410 C 0,410 6,395 6,395 C 6,395 15,387 15,387 C 15,387 24,379 24,379 C 24,379 40,375 40,375 C 39,357 14,355 0,355 Z" />
+		<path id="_ind" class="water" d="M 733,492 C 734,498 737,500 742,503 C 742,503 736,516 736,516 C 736,516 733,523 733,523 C 733,523 730,522 730,522 C 726,529 726,533 725,536 C 722,540 719,538 716,541 C 714,542 713,545 710,547 C 705,549 702,545 698,546 C 696,547 695,549 692,550 C 690,551 687,551 685,551 C 680,551 677,553 672,554 C 667,555 661,554 658,560 C 657,563 658,566 659,569 C 659,569 647,573 647,573 C 647,573 629,578 629,578 C 629,578 618,581 618,581 C 618,581 612,582 612,582 C 612,582 606,585 606,585 C 606,585 597,586 597,586 C 597,586 588,589 588,589 C 588,589 581,590 581,590 C 581,590 571,597 571,597 C 574,601 580,600 585,600 C 585,600 621,600 621,600 C 621,600 770,600 770,600 C 770,600 770,513 770,513 C 770,503 772,482 768,474 C 758,476 745,473 735,472 C 733,472 727,471 725,472 C 724,472 722,475 721,476 C 720,477 717,479 716,480 C 715,482 716,483 716,485 C 719,490 728,492 733,492 Z" />
+		<path id="_ion" class="water" d="M 317,359 C 317,359 313,377 313,377 C 313,377 315,387 315,387 C 315,387 361,380 361,380 C 361,380 357,373 357,373 C 366,370 363,372 372,372 C 369,367 358,366 353,364 C 350,362 342,353 340,349 C 340,349 324,354 324,354 C 324,354 317,359 317,359 Z" />
+		<path id="_ira" class="nopower" d="M 575,298 C 571,302 570,302 565,301 C 562,310 566,312 567,318 C 567,318 570,333 570,333 C 571,338 574,342 576,346 C 577,349 578,352 579,355 C 583,360 591,360 593,364 C 594,367 591,369 590,372 C 589,374 588,376 588,378 C 593,382 611,396 613,401 C 615,403 617,411 617,413 C 616,416 614,418 614,421 C 614,423 620,428 622,430 C 635,426 629,431 640,430 C 642,436 647,440 650,445 C 651,447 653,451 655,452 C 655,452 663,456 663,456 C 663,456 669,459 669,459 C 669,459 679,462 679,462 C 681,463 684,465 686,465 C 686,465 695,465 695,465 C 700,465 708,459 714,460 C 719,461 720,468 723,470 C 727,472 743,473 747,473 C 745,467 747,459 753,455 C 755,454 762,453 765,452 C 764,447 763,448 761,444 C 760,441 760,440 759,437 C 758,435 754,433 753,431 C 751,428 753,425 751,422 C 749,419 745,417 744,415 C 744,412 746,410 747,408 C 750,405 759,397 758,392 C 758,386 750,391 749,386 C 748,384 750,380 750,378 C 751,374 753,362 752,359 C 752,359 742,328 742,328 C 739,328 733,327 730,326 C 727,324 725,322 721,320 C 721,320 708,315 708,315 C 708,315 702,314 702,314 C 699,313 697,311 695,311 C 693,311 691,312 689,313 C 689,313 677,315 677,315 C 673,317 675,320 666,320 C 663,326 648,329 641,327 C 641,327 632,324 632,324 C 628,322 627,324 623,320 C 615,322 617,324 608,322 C 608,322 610,319 610,319 C 610,318 610,317 608,316 C 604,311 601,319 598,321 C 593,324 590,322 589,317 C 586,315 582,311 581,309 C 578,304 581,303 575,298 Z" />
+		<path id="_iri" class="water" d="M 139,141 C 140,151 136,155 135,160 C 131,159 123,158 119,158 C 99,159 86,170 71,183 C 75,188 90,194 96,194 C 99,194 105,192 108,191 C 116,189 119,190 124,183 C 130,186 134,182 136,177 C 136,177 150,178 150,178 C 150,178 136,167 136,167 C 136,167 144,165 144,165 C 150,163 152,164 153,156 C 153,156 146,156 146,156 C 149,154 150,154 150,150 C 150,150 153,149 153,149 C 153,149 153,152 153,152 C 153,152 162,155 162,155 C 163,152 166,148 165,145 C 164,142 161,142 159,141 C 159,141 144,140 144,140 C 142,140 141,140 139,141 Z" />
+		<path id="_jer" class="nopower" d="M 508,415 C 507,423 504,426 499,432 C 504,440 503,441 512,442 C 513,442 516,443 517,442 C 523,442 530,431 527,424 C 527,423 520,420 518,418 C 514,416 513,415 508,415 Z" />
+		<path id="_kar" class="nopower" d="M 471,146 C 474,146 476,145 479,146 C 482,147 485,151 488,150 C 491,149 493,145 497,142 C 500,140 508,137 510,135 C 513,133 513,128 514,125 C 514,125 517,117 517,117 C 517,115 515,107 514,105 C 512,102 509,100 506,98 C 504,96 495,88 493,85 C 488,77 491,71 489,67 C 487,64 482,62 479,60 C 475,58 467,52 463,51 C 461,51 460,52 458,52 C 455,53 448,51 448,48 C 448,45 451,43 449,39 C 445,34 434,36 428,37 C 434,42 440,43 439,53 C 444,56 444,57 444,63 C 433,57 435,58 424,64 C 424,64 435,73 435,73 C 435,73 424,73 424,73 C 419,72 412,66 408,73 C 417,78 415,76 416,84 C 416,84 403,78 403,78 C 402,74 402,74 399,73 C 399,73 401,68 401,68 C 401,68 394,65 394,65 C 401,61 411,64 418,61 C 426,58 425,45 421,41 C 419,40 411,36 409,35 C 409,35 408,38 408,38 C 407,36 406,35 405,34 C 400,31 388,32 382,31 C 377,31 375,28 373,29 C 371,30 367,38 367,40 C 365,46 371,47 373,51 C 375,54 373,57 377,65 C 385,81 386,77 390,82 C 392,85 393,89 396,91 C 399,94 407,93 411,94 C 411,94 433,102 433,102 C 438,103 440,100 448,103 C 454,105 455,109 460,110 C 466,113 473,111 476,119 C 478,124 472,139 471,146 Z M 391,60 C 391,60 394,63 394,63 C 391,64 390,63 388,60 C 388,60 391,60 391,60 Z" />
+		<g id="_kaz" class="nopower">
+			<path d="M 706,146 C 706,146 706,149 706,149 C 712,152 711,155 703,154 C 703,154 705,158 705,158 C 705,158 701,160 701,160 C 703,161 705,163 705,165 C 707,171 699,171 695,170 C 686,174 683,164 675,166 C 673,166 672,167 670,166 C 668,166 667,164 663,163 C 658,162 656,164 653,164 C 650,164 647,161 643,160 C 638,159 637,161 634,161 C 632,160 625,155 619,156 C 615,157 610,161 609,164 C 607,167 607,171 605,173 C 602,176 599,171 597,168 C 594,170 591,173 590,177 C 590,179 593,190 586,188 C 586,188 581,187 581,187 C 581,190 582,197 583,199 C 585,202 588,202 591,203 C 591,203 600,209 600,209 C 605,213 605,218 610,217 C 615,215 617,209 620,207 C 622,206 624,207 626,207 C 626,207 634,206 634,206 C 634,206 642,207 642,207 C 642,207 643,214 643,214 C 643,214 643,227 643,227 C 638,228 628,233 626,237 C 625,239 626,240 626,242 C 626,242 619,241 619,241 C 618,248 622,246 627,250 C 633,257 629,262 642,263 C 645,259 655,249 661,253 C 665,257 664,263 670,266 C 673,267 676,266 679,266 C 684,267 683,268 693,268 C 693,266 692,266 692,264 C 693,260 700,250 704,249 C 710,248 722,257 728,259 C 734,261 738,257 744,257 C 744,257 769,263 769,263 C 769,263 769,168 769,168 C 769,158 768,162 765,156 C 765,156 761,148 761,148 C 760,146 759,143 756,142 C 752,141 749,143 745,144 C 740,145 737,142 732,142 C 732,142 706,146 706,146 Z" />
+			<path class="water" d="M 711,196 C 710,198 707,201 708,203 C 709,207 714,209 717,209 C 717,209 713,216 713,216 C 712,219 715,222 709,222 C 708,225 708,225 705,226 C 705,226 701,232 701,232 C 701,232 698,228 698,228 C 698,228 691,228 691,228 C 690,226 688,224 688,221 C 687,216 689,206 693,204 C 695,204 696,204 697,204 C 697,204 698,199 698,199 C 698,199 699,199 699,199 C 699,199 701,201 701,201 C 701,201 700,198 700,198 C 700,198 711,196 711,196 Z" />
+		</g>
+		<path id="_kie" class="nopower" d="M 403,218 C 407,226 407,227 416,229 C 418,229 420,229 422,229 C 426,229 428,227 432,227 C 442,229 440,234 454,232 C 456,232 458,232 460,231 C 464,229 462,226 463,222 C 463,222 466,216 466,216 C 469,209 468,205 467,198 C 467,198 456,198 456,198 C 456,198 447,201 447,201 C 447,201 438,203 438,203 C 438,203 427,211 427,211 C 427,211 420,213 420,213 C 420,213 415,215 415,215 C 415,215 403,218 403,218 Z" />
+		<path id="_kub" class="nopower" d="M 514,230 C 511,238 506,237 504,247 C 504,247 514,241 514,241 C 514,241 515,245 515,245 C 515,245 502,251 502,251 C 504,255 505,255 509,255 C 505,257 498,265 503,269 C 504,271 509,273 511,274 C 514,275 519,278 522,277 C 524,277 527,273 529,271 C 537,265 540,265 543,255 C 543,253 544,250 543,249 C 541,246 535,246 532,244 C 529,242 529,238 526,236 C 525,234 516,231 514,230 Z" />
+		<path id="_lan" class="nopower" d="M 211,263 C 206,268 199,268 194,271 C 191,273 190,275 187,275 C 184,275 182,273 179,273 C 176,272 173,274 170,275 C 167,276 164,275 161,276 C 154,279 142,293 152,299 C 159,304 161,300 169,301 C 170,294 171,292 178,292 C 180,292 181,291 183,292 C 188,293 196,298 201,298 C 204,298 205,296 207,296 C 208,295 210,295 211,294 C 215,291 211,287 210,283 C 209,276 210,272 215,267 C 215,267 211,263 211,263 Z" />
+		<path id="_lap" class="nopower" d="M 305,62 C 312,56 308,52 317,49 C 317,49 316,46 316,46 C 319,45 321,45 323,43 C 325,41 326,35 330,33 C 334,32 335,36 338,37 C 341,38 347,37 351,38 C 351,36 351,34 351,32 C 354,27 362,30 365,37 C 365,37 372,26 372,26 C 372,26 361,26 361,26 C 363,20 360,20 355,18 C 355,18 353,22 353,22 C 353,22 351,18 351,18 C 351,18 348,23 348,23 C 343,17 343,18 337,21 C 337,21 331,23 331,23 C 322,27 315,35 307,41 C 304,44 299,49 299,52 C 298,57 302,59 305,62 Z" />
+		<path id="_lat" class="water" d="M 326,120 C 326,120 329,124 329,124 C 329,124 321,127 321,127 C 321,131 319,134 319,138 C 320,146 325,143 333,145 C 339,147 343,152 350,153 C 354,153 357,152 360,151 C 362,160 366,157 367,155 C 367,155 367,143 367,143 C 359,140 364,136 369,133 C 376,130 379,132 384,132 C 384,132 391,131 391,131 C 391,131 393,127 393,127 C 393,127 396,129 396,129 C 398,124 398,123 403,122 C 403,122 394,118 394,118 C 388,117 373,125 367,125 C 363,125 356,122 353,119 C 350,118 349,116 348,113 C 341,114 332,116 326,120 Z" />
+		<path id="_lem" class="nopower" d="M 365,230 C 362,233 362,234 360,237 C 358,240 354,243 355,247 C 356,251 370,256 375,253 C 382,248 376,230 365,230 Z" />
+		<path id="_lib" class="water" d="M 415,388 C 413,390 410,395 407,397 C 404,398 400,397 398,400 C 398,400 392,412 392,412 C 389,417 383,419 378,422 C 379,423 379,424 380,425 C 383,427 398,431 402,432 C 402,432 417,437 417,437 C 417,437 424,438 424,438 C 427,439 430,442 435,442 C 441,441 445,437 450,434 C 452,433 466,431 469,431 C 469,431 467,414 467,414 C 454,414 455,417 441,413 C 439,413 436,413 434,411 C 428,407 421,393 415,388 Z" />
+		<path id="_lig" class="water" d="M 194,295 C 195,298 196,302 198,305 C 202,308 216,311 221,310 C 224,309 226,308 228,306 C 230,314 226,318 228,322 C 228,324 231,325 233,326 C 241,328 249,324 255,320 C 251,316 247,312 244,307 C 240,300 245,300 235,293 C 234,292 232,291 230,291 C 227,290 223,292 220,293 C 220,293 207,295 207,295 C 205,296 203,297 201,297 C 199,297 196,296 194,295 Z" />
+		<path id="_liv" class="nopower" d="M 384,158 C 384,158 377,164 377,164 C 377,164 367,169 367,169 C 367,169 364,180 364,180 C 364,180 358,190 358,190 C 364,193 368,200 376,197 C 380,195 378,192 379,188 C 379,183 382,182 384,178 C 388,171 389,164 384,158 Z" />
+		<path id="_lor" class="nopower" d="M 209,211 C 209,217 206,222 204,227 C 203,229 200,233 200,236 C 201,239 205,240 208,243 C 208,243 212,248 212,248 C 218,243 217,240 224,240 C 225,237 228,232 227,229 C 226,226 223,224 220,222 C 216,217 218,215 209,211 Z" />
+		<path id="_mac" class="nopower" d="M 349,325 C 349,325 350,340 350,340 C 360,339 362,337 370,333 C 370,333 370,326 370,326 C 361,318 359,320 349,325 Z" />
+		<path id="_mal" class="water" d="M 304,348 C 304,348 300,356 300,356 C 305,359 308,365 304,368 C 302,370 297,369 295,369 C 293,373 286,382 282,382 C 280,382 278,381 276,380 C 276,380 277,375 277,375 C 270,377 271,383 269,389 C 260,386 263,386 258,384 C 256,382 253,383 250,381 C 241,375 246,373 233,375 C 232,380 231,381 227,383 C 227,383 225,388 225,388 C 227,393 229,396 226,401 C 224,406 219,408 221,412 C 222,413 225,415 227,416 C 231,418 241,422 246,423 C 246,423 252,423 252,423 C 257,423 268,429 273,428 C 276,427 279,424 283,421 C 283,421 295,416 295,416 C 304,410 309,406 320,401 C 320,401 313,380 313,380 C 313,380 316,359 316,359 C 316,359 308,348 308,348 C 308,348 304,348 304,348 Z M 267,399 C 262,399 260,398 259,393 C 264,394 265,394 267,399 Z" />
+		<path id="_mar" class="nopower" d="M 275,183 C 275,183 271,202 271,202 C 271,202 286,199 286,199 C 289,199 294,199 297,196 C 302,192 301,181 293,180 C 289,179 286,181 282,182 C 282,182 275,183 275,183 Z" />
+		<path id="_mas" class="nopower" d="M 350,165 C 350,165 350,183 350,183 C 346,182 343,182 344,187 C 344,187 340,187 340,187 C 340,187 338,196 338,196 C 350,201 356,194 361,184 C 363,181 365,173 363,170 C 361,166 354,165 350,165 Z" />
+		<path id="_mes" class="nopower" d="M 574,346 C 567,349 565,346 561,348 C 554,352 558,358 558,363 C 558,363 559,377 559,377 C 560,388 548,390 546,398 C 545,401 546,405 546,408 C 547,411 549,420 552,422 C 553,424 559,425 562,425 C 569,427 581,430 587,430 C 587,442 594,436 605,440 C 610,442 610,446 613,447 C 615,448 621,447 623,447 C 623,447 614,434 614,434 C 621,430 618,428 614,425 C 614,425 610,420 610,420 C 612,418 614,416 615,414 C 616,411 614,408 614,406 C 610,397 603,392 595,386 C 593,384 588,380 587,377 C 586,373 591,367 593,364 C 588,362 582,361 579,356 C 576,353 576,349 574,346 Z" />
+		<path id="_mid" class="water" d="M 0,170 C 0,170 0,266 0,266 C 0,266 13,267 13,267 C 13,267 24,267 24,267 C 24,267 34,268 34,268 C 34,268 58,266 58,266 C 58,266 70,266 70,266 C 76,266 76,264 79,264 C 82,264 85,267 87,265 C 89,264 91,256 91,254 C 93,248 96,231 99,226 C 101,223 104,220 107,218 C 113,215 121,215 116,206 C 114,203 109,201 106,199 C 106,199 82,191 82,191 C 70,185 56,173 51,171 C 47,169 43,168 39,168 C 22,165 17,167 0,170 Z" />
+		<path id="_min" class="water" d="M 146,140 C 146,140 164,141 164,141 C 164,141 163,135 163,135 C 163,135 155,136 155,136 C 155,136 163,122 163,122 C 159,123 159,124 158,128 C 156,127 156,127 155,129 C 155,129 155,119 155,119 C 155,119 150,120 150,120 C 152,118 156,116 157,114 C 158,108 153,107 159,101 C 159,101 159,104 159,104 C 165,101 168,87 169,81 C 169,81 140,85 140,85 C 136,86 128,87 125,89 C 117,94 115,112 120,119 C 121,122 124,125 127,125 C 130,126 145,121 146,134 C 146,134 146,140 146,140 Z" />
+		<path id="_mor" class="nopower" d="M 0,448 C 0,448 21,449 21,449 C 21,449 22,436 22,436 C 22,436 31,432 31,432 C 31,432 52,425 52,425 C 52,425 76,417 76,417 C 76,417 85,414 85,414 C 85,414 89,405 89,405 C 89,405 103,399 103,399 C 103,399 106,395 106,395 C 106,395 105,379 105,379 C 105,379 100,371 100,371 C 94,372 88,369 84,365 C 81,361 82,356 77,356 C 66,355 57,369 48,373 C 44,375 31,375 23,379 C 21,380 8,392 6,394 C 3,399 0,411 0,417 C 0,417 0,448 0,448 Z" />
+		<path id="_mus" class="nopower" d="M 390,167 C 390,167 386,178 386,178 C 386,178 381,186 381,186 C 381,186 381,197 381,197 C 381,197 377,210 377,210 C 377,210 403,215 403,215 C 410,216 414,213 420,211 C 423,210 424,211 427,209 C 430,208 432,204 436,202 C 439,200 443,200 447,199 C 447,199 456,196 456,196 C 459,195 461,197 464,196 C 467,197 469,196 474,196 C 478,197 483,198 487,196 C 490,193 491,185 491,181 C 493,168 498,162 486,153 C 485,152 481,149 480,148 C 476,146 459,150 453,151 C 447,151 447,150 437,151 C 431,152 431,154 426,156 C 426,156 411,159 411,159 C 403,161 399,166 390,167 Z" />
+		<path id="_nap" class="nopower" d="M 280,338 C 280,338 278,342 278,342 C 282,352 290,354 289,363 C 289,370 283,367 283,373 C 278,374 277,375 276,380 C 278,381 280,382 282,382 C 284,382 292,376 293,374 C 294,372 294,371 295,369 C 295,369 301,369 301,369 C 308,369 306,361 303,357 C 302,356 301,355 299,354 C 298,353 296,352 295,351 C 294,349 295,346 295,344 C 295,344 287,336 287,336 C 287,336 280,338 280,338 Z" />
+		<path id="_nmk" class="nopower" d="M 326,42 C 326,42 318,47 318,47 C 318,47 319,50 319,50 C 319,50 313,53 313,53 C 313,53 309,60 309,60 C 309,60 300,74 300,74 C 300,74 291,83 291,83 C 291,83 293,99 293,99 C 309,94 309,98 324,98 C 322,85 332,90 339,79 C 342,75 338,75 339,71 C 339,68 342,65 342,63 C 343,60 341,58 340,56 C 336,45 338,48 326,42 Z" />
+		<path id="_nao" class="water" d="M 0,0 C 0,0 0,169 0,169 C 17,167 27,163 45,168 C 54,171 55,174 62,178 C 64,180 68,182 70,182 C 74,182 81,174 84,172 C 87,169 97,163 100,162 C 100,162 110,158 110,158 C 105,151 108,150 112,147 C 115,144 115,144 118,142 C 118,139 117,138 120,136 C 120,136 120,131 120,131 C 120,131 128,132 128,132 C 128,132 128,131 128,131 C 128,131 126,129 126,129 C 126,129 129,128 129,128 C 124,124 122,124 119,118 C 116,113 116,110 117,105 C 118,101 119,96 121,92 C 127,85 145,84 154,82 C 157,82 168,81 170,78 C 172,76 172,70 171,67 C 171,67 158,41 158,41 C 147,45 137,41 128,43 C 128,43 113,27 113,27 C 113,27 114,26 114,26 C 114,26 123,28 123,28 C 123,28 119,26 119,26 C 119,26 119,24 119,24 C 119,24 123,23 123,23 C 123,23 117,18 117,18 C 122,17 124,18 128,21 C 128,21 133,19 133,19 C 131,16 127,14 124,12 C 116,4 116,0 104,0 C 104,0 0,0 0,0 Z" />
+		<path id="_nth" class="water" d="M 176,122 C 176,122 176,129 176,129 C 176,129 181,136 181,136 C 181,136 183,142 183,142 C 183,142 187,148 187,148 C 196,147 204,143 214,142 C 225,141 244,147 254,145 C 254,145 256,140 256,140 C 256,140 256,131 256,131 C 245,123 245,121 246,108 C 246,105 246,99 249,98 C 249,98 251,83 251,83 C 251,83 238,82 238,82 C 226,82 226,82 215,84 C 215,84 202,86 202,86 C 202,86 190,94 190,94 C 190,94 178,102 178,102 C 177,103 175,105 176,107 C 177,109 181,109 183,111 C 186,115 179,121 176,122 Z" />
+		<path id="_nwg" class="water" d="M 165,28 C 165,28 168,29 168,29 C 165,35 165,37 159,40 C 160,45 164,53 167,57 C 169,61 172,65 173,70 C 173,76 167,91 167,94 C 167,96 167,97 168,98 C 176,97 179,100 183,99 C 187,97 199,85 205,84 C 214,83 226,81 235,81 C 235,81 254,82 254,82 C 254,82 262,77 262,77 C 262,77 286,66 286,66 C 290,63 293,57 299,55 C 299,48 304,44 309,40 C 319,33 322,27 334,22 C 341,20 342,17 348,23 C 349,20 351,11 346,10 C 344,10 335,13 333,14 C 326,16 318,17 310,18 C 310,18 276,19 276,19 C 276,19 259,20 259,20 C 259,20 229,20 229,20 C 229,20 215,21 215,21 C 215,21 186,21 186,21 C 182,20 172,19 168,21 C 165,22 165,25 165,28 Z" />
+		<path id="_nwy" class="nopower" d="M 296,55 C 296,55 284,67 284,67 C 284,67 278,69 278,69 C 278,69 273,72 273,72 C 262,77 245,82 249,98 C 246,99 246,102 246,105 C 245,111 244,120 248,125 C 259,137 263,128 270,123 C 277,119 276,123 283,115 C 283,115 283,119 283,119 C 287,117 287,115 288,111 C 288,111 291,99 291,99 C 291,96 289,90 289,86 C 288,78 293,78 298,74 C 301,71 303,67 304,63 C 304,63 296,55 296,55 Z" />
+		<path id="_nov" class="nopower" d="M 396,94 C 397,104 393,109 391,118 C 391,118 403,121 403,121 C 398,123 397,124 396,129 C 396,129 393,127 393,127 C 393,127 391,131 391,131 C 391,131 388,130 388,130 C 385,140 389,146 389,149 C 390,152 388,154 388,156 C 387,159 388,162 389,165 C 399,165 402,161 410,157 C 410,157 425,154 425,154 C 425,154 435,150 435,150 C 441,148 446,149 452,149 C 452,149 469,147 469,147 C 470,140 476,125 474,119 C 471,112 464,115 458,111 C 451,107 452,102 437,104 C 431,104 425,100 420,99 C 409,95 407,96 396,94 Z" />
+		<path id="_ode" class="nopower" d="M 414,229 C 415,234 419,241 418,246 C 418,251 414,259 418,264 C 423,271 429,269 432,270 C 434,271 436,274 438,276 C 438,276 445,266 445,266 C 445,266 444,264 444,264 C 444,264 443,264 443,264 C 448,260 449,259 456,259 C 456,259 457,256 457,256 C 457,256 468,242 468,242 C 468,242 472,240 472,240 C 466,228 458,234 448,233 C 448,233 432,228 432,228 C 427,228 425,230 421,230 C 421,230 414,229 414,229 Z" />
+		<path id="_pal" class="nopower" d="M 244,374 C 247,382 252,381 257,384 C 262,386 259,387 269,389 C 269,389 274,375 274,375 C 274,375 274,372 274,372 C 271,373 262,373 259,373 C 251,373 251,369 244,374 Z" />
+		<path id="_per" class="water" d="M 614,434 C 617,440 630,455 635,460 C 635,460 642,465 642,465 C 646,470 648,474 650,476 C 650,476 654,480 654,480 C 654,480 658,488 658,488 C 658,488 661,472 661,472 C 667,476 667,483 666,489 C 666,489 677,487 677,487 C 677,487 686,488 686,488 C 686,488 697,487 697,487 C 697,487 713,466 713,466 C 716,474 714,472 714,480 C 717,479 720,477 722,474 C 724,470 719,462 716,460 C 710,457 701,464 696,465 C 696,465 685,465 685,465 C 690,466 666,457 670,459 C 670,459 664,456 664,456 C 660,453 657,454 655,451 C 653,450 651,446 650,444 C 650,444 640,430 640,430 C 632,430 633,428 629,428 C 624,428 618,432 614,434 Z" />
+		<path id="_pic" class="nopower" d="M 187,199 C 182,202 175,202 173,208 C 173,208 178,208 178,208 C 176,209 173,210 172,211 C 170,213 169,218 173,219 C 177,220 182,218 186,218 C 186,218 205,220 205,220 C 206,219 206,218 207,216 C 209,206 198,206 194,205 C 191,203 189,201 187,199 Z" />
+		<path id="_pie" class="nopower" d="M 242,262 C 242,262 242,269 242,269 C 242,269 229,264 229,264 C 229,264 217,267 217,267 C 217,267 212,271 212,271 C 212,271 212,283 212,283 C 212,283 215,293 215,293 C 223,294 234,288 241,284 C 241,275 247,275 249,271 C 252,265 247,263 242,262 Z" />
+		<path id="_pis" class="nopower" d="M 452,345 C 456,355 460,355 460,369 C 472,370 471,373 476,374 C 479,374 490,370 492,368 C 493,367 495,366 496,364 C 494,360 492,355 493,351 C 493,347 498,343 496,339 C 493,335 486,339 482,339 C 475,340 474,338 470,338 C 464,339 457,342 452,345 Z" />
+		<path id="_plm" class="water" d="M 184,328 C 181,318 167,311 157,311 C 152,311 146,314 141,315 C 135,318 130,319 127,325 C 122,332 133,340 144,337 C 144,337 160,331 160,331 C 165,329 165,331 169,331 C 169,331 184,328 184,328 Z" />
+		<path id="_pod" class="nopower" d="M 366,227 C 373,231 377,233 379,241 C 381,248 378,251 381,253 C 385,256 395,247 399,246 C 404,245 409,249 416,251 C 417,249 417,248 418,246 C 418,242 415,233 413,230 C 413,230 407,225 407,225 C 405,223 403,219 401,217 C 401,217 386,214 386,214 C 382,213 375,210 371,212 C 368,214 369,218 368,221 C 368,223 367,225 366,227 Z" />
+		<path id="_por" class="nopower" d="M 44,312 C 44,312 49,313 49,313 C 49,313 46,316 46,316 C 46,316 44,322 44,322 C 44,322 39,332 39,332 C 39,332 40,333 40,333 C 40,333 55,335 55,335 C 56,325 58,329 61,323 C 67,312 64,315 66,305 C 66,305 70,306 70,306 C 72,300 75,294 80,290 C 77,287 66,280 62,283 C 62,283 54,297 54,297 C 48,304 45,301 44,312 Z" />
+		<path id="_pyl" class="water" d="M 316,388 C 317,391 320,399 323,401 C 325,402 335,402 341,405 C 347,409 349,414 352,416 C 355,417 363,418 366,418 C 371,419 372,421 375,422 C 379,422 389,416 391,413 C 392,411 393,410 394,408 C 394,406 396,402 395,400 C 393,393 381,401 382,391 C 382,391 370,382 370,382 C 370,382 368,387 368,387 C 368,387 365,382 365,382 C 365,382 361,384 361,384 C 358,379 353,382 348,383 C 348,383 316,388 316,388 Z" />
+		<path id="_red" class="water" d="M 482,450 C 484,459 492,465 497,472 C 504,482 503,493 515,500 C 515,507 523,520 528,524 C 525,529 528,529 530,534 C 530,534 533,542 533,542 C 533,542 538,560 538,560 C 538,560 542,567 542,567 C 544,570 544,573 546,576 C 550,580 568,591 568,591 C 569,593 570,595 571,596 C 575,595 576,594 577,590 C 577,590 571,588 571,588 C 575,576 569,577 568,565 C 567,555 566,547 561,538 C 558,533 556,534 553,528 C 553,528 544,502 544,502 C 540,496 538,498 536,494 C 534,491 534,489 532,485 C 532,485 518,466 518,466 C 518,466 511,467 511,467 C 511,467 510,455 510,455 C 508,460 508,465 506,467 C 503,470 500,468 498,466 C 491,462 488,453 482,450 Z" />
+		<path id="_rig" class="nopower" d="M 367,143 C 367,143 367,155 367,155 C 365,158 362,156 361,154 C 361,154 360,151 360,151 C 351,153 350,155 350,164 C 358,165 360,167 363,168 C 366,168 369,167 372,165 C 372,165 379,163 379,163 C 383,160 388,153 389,148 C 384,144 385,138 385,132 C 378,131 374,130 367,134 C 362,137 360,142 367,143 Z" />
+		<path id="_rom" class="nopower" d="M 251,317 C 251,317 270,337 270,337 C 270,337 279,341 279,341 C 281,338 281,338 285,336 C 285,336 285,334 285,334 C 282,332 276,329 274,326 C 271,322 274,323 268,314 C 265,310 264,310 259,311 C 258,312 256,312 255,313 C 253,314 252,315 251,317 Z" />
+		<path id="_ruh" class="nopower" d="M 231,198 C 226,205 224,209 217,214 C 218,216 218,218 219,220 C 220,222 222,223 224,224 C 233,230 236,222 247,219 C 247,219 237,209 237,209 C 237,209 231,198 231,198 Z" />
+		<path id="_rum" class="nopower" d="M 368,256 C 368,258 368,260 369,262 C 371,265 381,271 380,280 C 380,287 375,287 370,290 C 368,292 366,294 367,297 C 369,300 374,301 377,301 C 386,301 395,297 404,294 C 409,293 411,295 414,292 C 417,293 424,295 426,293 C 428,291 427,288 426,286 C 426,286 428,276 428,276 C 434,282 434,274 433,273 C 431,271 428,272 425,271 C 423,271 422,270 421,269 C 414,264 414,261 415,253 C 415,253 401,247 401,247 C 401,247 385,255 385,255 C 385,255 368,256 368,256 Z" />
+		<path id="_sah" class="nopower" d="M 23,436 C 23,436 54,462 54,462 C 54,462 111,508 111,508 C 111,508 131,524 131,524 C 137,529 140,529 140,537 C 140,537 160,535 160,535 C 160,535 171,534 171,534 C 171,534 179,525 179,525 C 179,525 219,508 219,508 C 219,508 214,501 214,501 C 213,498 215,496 215,493 C 215,490 213,487 213,484 C 213,480 215,478 215,474 C 214,471 213,468 213,463 C 213,456 216,460 215,449 C 214,445 216,444 215,440 C 214,432 206,422 199,420 C 193,427 181,435 172,437 C 172,437 151,439 151,439 C 151,439 135,440 135,440 C 127,441 125,445 113,439 C 108,437 100,431 96,427 C 93,423 91,417 87,416 C 84,416 71,421 68,422 C 68,422 23,436 23,436 Z" />
+		<path id="_san" class="nopower" d="M 66,277 C 66,277 63,280 63,280 C 72,280 76,286 83,290 C 87,292 92,291 102,295 C 105,296 110,299 112,301 C 116,304 115,305 120,307 C 120,307 131,294 131,294 C 125,289 123,292 121,281 C 112,279 114,278 109,276 C 105,275 103,275 99,273 C 95,271 84,264 80,264 C 77,263 76,265 73,265 C 71,266 68,265 66,266 C 64,268 65,274 66,277 Z" />
+		<path id="_sar" class="nopower" d="M 221,327 C 217,331 216,331 211,330 C 211,330 210,331 210,331 C 210,331 210,348 210,348 C 212,352 214,352 216,348 C 216,348 221,349 221,349 C 222,346 226,333 225,330 C 224,328 223,328 221,327 Z" />
+		<path id="_sax" class="nopower" d="M 300,196 C 298,198 297,199 295,199 C 289,202 279,200 268,206 C 267,206 264,208 263,209 C 259,213 265,220 269,221 C 274,223 279,220 283,220 C 290,218 294,219 301,219 C 301,219 300,212 300,212 C 300,212 300,196 300,196 Z" />
+		<path id="_sch" class="nopower" d="M 220,241 C 215,249 208,254 207,264 C 207,264 211,260 211,260 C 211,260 221,264 221,264 C 221,264 229,262 229,262 C 229,262 241,266 241,266 C 239,257 248,262 252,263 C 253,252 250,255 243,250 C 241,247 241,245 237,244 C 234,243 232,245 229,245 C 227,245 222,242 220,241 Z" />
+		<path id="_ser" class="nopower" d="M 332,287 C 332,287 332,295 332,295 C 332,295 333,301 333,301 C 333,304 331,307 334,311 C 338,316 343,315 348,323 C 358,319 354,318 366,320 C 366,320 365,316 365,316 C 365,316 370,315 370,315 C 370,315 366,310 366,310 C 366,310 366,302 366,302 C 366,302 365,290 365,290 C 365,290 341,286 341,286 C 341,286 332,287 332,287 Z" />
+		<path id="_sib" class="nopower" d="M 630,0 C 632,6 630,4 630,8 C 631,15 634,9 631,21 C 629,20 627,18 624,18 C 624,18 586,13 586,13 C 574,11 576,9 567,7 C 557,4 545,3 535,7 C 536,11 537,14 534,17 C 531,20 530,18 526,19 C 526,19 515,23 515,23 C 515,23 506,25 506,25 C 504,26 504,27 502,29 C 501,30 498,32 497,30 C 496,28 501,21 502,19 C 502,19 477,31 477,31 C 477,31 464,36 464,36 C 464,36 466,40 466,40 C 461,43 462,47 466,50 C 472,55 488,62 491,68 C 492,71 490,77 493,83 C 497,91 508,96 514,102 C 518,107 517,111 520,113 C 521,115 525,115 529,116 C 529,116 542,123 542,123 C 549,126 556,127 562,131 C 567,135 578,148 581,153 C 584,157 583,160 586,163 C 586,163 593,168 593,168 C 598,167 599,168 601,173 C 607,171 604,167 608,162 C 612,156 621,153 628,156 C 628,156 636,160 636,160 C 643,154 647,161 653,162 C 658,163 662,157 670,166 C 679,161 678,164 685,168 C 688,169 690,169 693,170 C 693,170 694,167 694,167 C 696,168 697,170 700,169 C 703,169 705,166 702,164 C 701,162 698,162 696,161 C 696,161 702,158 702,158 C 702,158 702,156 702,156 C 702,156 699,155 699,155 C 703,152 703,152 708,153 C 707,152 705,150 705,148 C 704,143 715,143 718,142 C 718,142 733,140 733,140 C 733,140 743,142 743,142 C 747,142 750,140 753,140 C 756,140 758,140 761,141 C 761,141 761,144 761,144 C 761,144 766,156 766,156 C 766,156 769,158 769,158 C 769,158 769,0 769,0 C 769,0 687,0 687,0 C 687,0 669,0 669,0 C 669,0 661,2 661,2 C 661,2 662,10 662,10 C 671,9 671,8 679,12 C 677,18 677,22 683,26 C 675,26 674,21 672,15 C 672,15 661,15 661,15 C 661,17 662,22 662,24 C 661,30 651,32 648,37 C 643,36 641,37 637,33 C 640,33 644,33 647,32 C 652,30 658,20 658,14 C 658,9 655,5 654,0 C 654,0 630,0 630,0 Z" />
+		<path id="_sil" class="nopower" d="M 303,203 C 303,203 302,211 302,211 C 302,215 304,224 309,226 C 311,226 313,224 315,223 C 320,218 320,213 321,206 C 321,206 303,203 303,203 Z" />
+		<path id="_sin" class="nopower" d="M 481,435 C 483,447 483,451 492,461 C 494,464 501,471 505,468 C 508,466 509,458 509,455 C 509,455 510,458 510,458 C 517,457 516,455 519,444 C 519,444 506,441 506,441 C 506,441 498,434 498,434 C 498,434 481,435 481,435 Z" />
+		<path id="_ska" class="water" d="M 282,115 C 277,122 276,120 270,123 C 270,123 262,129 262,129 C 260,131 258,131 257,133 C 256,135 257,139 257,141 C 257,141 276,134 276,134 C 271,142 275,139 273,148 C 280,150 278,155 283,155 C 286,155 291,153 292,150 C 293,146 289,143 288,139 C 285,134 287,132 287,129 C 286,127 285,125 284,123 C 283,120 284,118 282,115 Z" />
+		<!-- <path id="_smy1" class="nopower" d="M 415,358 C 415,358 416,362 416,362 C 416,362 411,361 411,361 C 411,361 410,362 410,362 C 410,362 410,364 410,364 C 410,364 418,367 418,367 C 418,373 422,374 427,373 C 427,373 424,378 424,378 C 424,378 437,374 437,374 C 435,386 448,378 455,379 C 455,379 458,373 458,373 C 458,373 456,371 456,371 C 456,371 456,370 456,370 C 463,365 455,352 452,347 C 452,347 443,351 443,351 C 443,351 432,354 432,354 C 432,354 415,358 415,358 Z M 421,385 C 422,385 424,385 425,384 C 430,382 426,377 422,382 C 422,382 421,385 421,385 Z" /> -->
+		<g id="_smy" class="nopower">
+			<path d="M 415,358 C 415,358 416,362 416,362 C 416,362 411,361 411,361 C 411,361 410,362 410,362 C 410,362 410,364 410,364 C 410,364 418,367 418,367 C 418,373 422,374 427,373 C 427,373 424,378 424,378 C 424,378 437,374 437,374 C 435,386 448,378 455,379 C 455,379 458,373 458,373 C 458,373 456,371 456,371 C 456,371 456,370 456,370 C 463,365 455,352 452,347 C 452,347 443,351 443,351 C 443,351 432,354 432,354 C 432,354 415,358 415,358 Z" />
+			<path d="M 421,385 C 422,385 424,385 425,384 C 430,382 426,377 422,382 C 422,382 421,385 421,385 Z" />
+		</g>
+		<path id="_sao" class="water" d="M 0,267 C 0,267 0,354 0,354 C 14,354 39,357 41,375 C 41,375 47,374 47,374 C 47,374 67,359 67,359 C 67,359 69,348 69,348 C 69,348 68,342 68,342 C 64,340 62,338 61,334 C 61,334 40,333 40,333 C 40,333 39,332 39,332 C 39,332 46,317 46,317 C 46,317 49,314 49,314 C 49,314 44,312 44,312 C 45,310 45,307 46,305 C 48,302 52,301 55,296 C 55,296 59,289 59,289 C 62,283 60,282 66,277 C 66,273 66,268 62,267 C 59,266 44,269 40,269 C 40,269 21,268 21,268 C 21,268 0,267 0,267 Z" />
+		<path id="_swa" class="nopower" d="M 225,241 C 225,241 232,243 232,243 C 238,239 241,245 246,243 C 249,242 249,238 249,235 C 249,228 248,227 247,220 C 243,221 232,226 229,229 C 228,231 226,238 225,241 Z" />
+		<path id="_swe" class="nopower" d="M 283,121 C 283,121 286,129 286,129 C 287,132 285,134 287,139 C 290,145 295,147 290,152 C 290,152 296,165 296,165 C 296,165 304,165 304,165 C 304,165 307,162 307,162 C 307,162 306,156 306,156 C 306,156 316,156 316,156 C 321,146 319,145 320,136 C 320,132 321,132 321,127 C 321,127 329,124 329,124 C 329,124 326,121 326,121 C 333,113 323,113 321,108 C 321,105 322,102 323,100 C 315,100 299,96 292,102 C 288,106 293,118 283,121 Z" />
+		<path id="_syr" class="nopower" d="M 522,355 C 521,357 519,360 517,361 C 514,363 511,363 510,366 C 510,366 511,378 511,378 C 512,381 514,379 513,386 C 513,386 534,390 534,390 C 534,398 531,397 534,405 C 534,405 551,389 551,389 C 551,389 557,381 557,381 C 557,381 557,362 557,362 C 557,362 555,356 555,356 C 555,356 558,347 558,347 C 558,347 543,353 543,353 C 543,353 534,353 534,353 C 534,353 522,355 522,355 Z" />
+		<path id="_sze" class="nopower" d="M 348,263 C 346,267 344,269 340,271 C 337,272 330,272 328,275 C 327,278 329,282 330,285 C 330,285 342,284 342,284 C 342,284 359,287 359,287 C 361,282 362,273 357,269 C 357,269 348,263 348,263 Z" />
+		<path id="_tau" class="nopower" d="M 473,264 C 477,258 479,262 483,258 C 483,258 485,259 485,259 C 488,256 489,254 493,256 C 501,245 498,254 506,238 C 496,235 491,236 482,235 C 474,234 468,244 464,249 C 464,249 458,255 458,255 C 456,259 458,264 462,265 C 465,265 470,264 473,264 Z" />
+		<path id="_thr" class="nopower" d="M 381,326 C 381,326 380,330 380,330 C 380,341 388,335 393,334 C 399,334 404,336 409,330 C 414,325 406,323 402,323 C 402,323 395,324 395,324 C 395,324 389,324 389,324 C 389,324 381,326 381,326 Z" />
+		<path id="_tob" class="water" d="M 274,429 C 275,431 276,435 278,437 C 284,443 294,437 300,439 C 307,441 316,448 323,446 C 326,446 330,443 332,442 C 340,436 335,433 338,427 C 341,421 346,420 352,418 C 345,406 340,404 327,403 C 324,402 321,402 318,403 C 310,405 301,413 294,417 C 284,423 285,418 274,429 Z" />
+		<path id="_tol" class="nopower" d="M 118,307 C 118,307 112,301 112,301 C 109,299 97,293 94,293 C 91,294 90,298 89,301 C 89,303 90,304 89,307 C 88,313 83,319 86,326 C 90,331 96,329 100,326 C 100,326 109,321 109,321 C 112,318 117,311 118,307 Z" />
+		<path id="_tra" class="nopower" d="M 360,287 C 360,287 366,290 366,290 C 368,289 375,286 376,285 C 385,278 370,265 369,264 C 366,260 367,255 363,253 C 357,251 350,260 350,262 C 350,265 356,266 358,269 C 362,274 361,281 360,287 Z" />
+		<path id="_tri" class="nopower" d="M 233,419 C 232,424 229,430 226,434 C 223,438 220,438 217,444 C 214,451 220,451 215,459 C 216,461 217,462 218,463 C 224,468 243,472 251,474 C 254,475 262,477 265,477 C 270,476 277,471 284,471 C 286,471 293,472 295,473 C 297,474 298,477 300,477 C 302,478 305,477 307,477 C 314,477 314,478 322,475 C 322,475 318,462 318,462 C 318,462 324,447 324,447 C 324,447 300,439 300,439 C 300,439 282,439 282,439 C 282,439 272,429 272,429 C 272,429 254,423 254,423 C 254,423 246,423 246,423 C 246,423 233,419 233,419 Z" />
+		<path id="_tun" class="nopower" d="M 217,439 C 217,439 219,439 219,439 C 219,439 226,433 226,433 C 229,429 230,423 231,418 C 229,416 221,413 221,410 C 221,408 224,406 225,404 C 228,399 229,394 225,389 C 225,389 227,383 227,383 C 232,381 233,379 233,374 C 233,374 223,379 223,379 C 222,372 219,372 213,373 C 213,373 208,373 208,373 C 204,373 204,376 203,379 C 196,392 200,389 198,400 C 197,404 195,406 195,409 C 195,415 202,418 206,421 C 210,425 215,434 217,439 Z M 221,374 C 221,374 221,375 221,375 C 221,375 220,374 220,374 C 220,374 221,374 221,374 Z" />
+		<path id="_tur" class="nopower" d="M 702,250 C 702,250 694,264 694,264 C 694,264 696,267 696,267 C 688,273 687,269 679,268 C 675,268 672,270 667,266 C 661,260 663,254 657,254 C 655,254 652,256 650,257 C 638,265 641,276 651,284 C 651,284 649,276 649,276 C 648,271 653,269 656,270 C 658,271 660,276 663,280 C 665,282 668,283 667,285 C 666,289 658,290 655,291 C 655,291 653,287 653,287 C 650,293 653,295 654,301 C 655,301 657,300 658,300 C 660,300 661,300 663,302 C 669,306 666,312 665,318 C 675,318 671,315 677,313 C 677,313 689,311 689,311 C 691,310 693,309 695,309 C 698,309 699,311 702,312 C 702,312 708,313 708,313 C 708,313 722,318 722,318 C 726,320 727,322 730,324 C 733,326 739,325 742,327 C 745,329 744,335 749,337 C 752,338 766,341 768,338 C 769,337 769,332 769,330 C 769,330 769,273 769,273 C 769,271 769,267 768,266 C 767,264 763,264 761,263 C 761,263 745,259 745,259 C 739,259 734,262 728,261 C 721,259 717,253 702,250 Z" />
+		<path id="_tus" class="nopower" d="M 232,292 C 232,292 240,298 240,298 C 240,298 243,306 243,306 C 243,306 249,315 249,315 C 249,315 263,309 263,309 C 263,309 255,299 255,299 C 248,289 243,281 232,292 Z" />
+		<path id="_trl" class="nopower" d="M 276,250 C 276,250 263,249 263,249 C 263,249 243,246 243,246 C 247,252 255,252 254,260 C 254,263 253,264 251,265 C 251,265 251,272 251,272 C 262,276 261,268 268,265 C 271,263 286,263 290,263 C 290,263 286,251 286,251 C 286,251 287,240 287,240 C 279,240 276,242 276,250 Z" />
+		<path id="_tys" class="water" d="M 225,323 C 225,323 222,325 222,325 C 222,325 225,332 225,332 C 225,332 221,349 221,349 C 221,349 216,348 216,348 C 216,348 217,372 217,372 C 221,374 222,375 223,379 C 223,379 233,375 233,375 C 233,375 244,374 244,374 C 244,374 249,372 249,372 C 249,372 259,373 259,373 C 259,373 269,373 269,373 C 269,373 283,373 283,373 C 283,373 282,370 282,370 C 284,370 286,369 288,368 C 291,365 290,359 288,355 C 288,355 281,347 281,347 C 279,344 279,342 276,340 C 272,337 272,339 268,334 C 266,331 260,324 257,322 C 253,321 245,327 240,327 C 235,328 230,324 225,323 Z" />
+		<path id="_uls" class="nopower" d="M 126,129 C 126,129 125,132 125,132 C 129,136 130,138 136,136 C 136,136 140,141 140,141 C 152,136 147,126 136,124 C 131,124 129,126 126,129 Z" />
+		<path id="_umb" class="nopower" d="M 259,302 C 261,308 263,307 266,310 C 266,310 272,320 272,320 C 274,325 272,325 278,328 C 278,328 285,320 285,320 C 282,317 281,315 280,311 C 279,307 279,302 275,300 C 270,298 269,304 259,302 Z" />
+		<path id="_uti" class="water" d="M 177,333 C 175,332 174,331 172,332 C 169,332 165,337 165,340 C 164,344 167,347 165,354 C 165,357 161,368 162,370 C 164,373 169,371 172,372 C 172,372 177,372 177,372 C 177,372 185,372 185,372 C 185,372 202,374 202,374 C 202,374 209,373 209,373 C 211,373 212,373 214,373 C 216,371 217,368 217,365 C 217,354 212,352 211,347 C 210,345 211,339 211,337 C 202,335 184,323 177,333 Z" />
+		<path id="_val" class="nopower" d="M 119,346 C 119,346 118,343 118,343 C 121,342 127,340 128,337 C 129,334 126,331 126,329 C 126,326 128,323 130,321 C 117,319 115,331 102,335 C 98,336 87,336 84,340 C 83,342 83,343 83,344 C 85,349 89,347 93,348 C 93,348 99,349 99,349 C 101,349 104,351 106,351 C 108,351 109,348 111,347 C 111,347 119,346 119,346 Z" />
+		<path id="_ven" class="nopower" d="M 270,299 C 270,299 270,297 270,297 C 267,294 268,294 267,290 C 266,282 273,280 280,280 C 281,278 284,272 284,269 C 283,264 272,265 269,266 C 265,267 263,272 258,275 C 253,277 249,271 245,277 C 241,283 247,286 251,290 C 258,297 256,303 270,299 Z" />
+		<path id="_vol" class="nopower" d="M 520,116 C 520,116 516,125 516,125 C 515,129 515,133 512,137 C 509,139 502,141 498,143 C 495,145 492,149 489,152 C 489,152 495,162 495,162 C 495,162 491,195 491,195 C 495,196 504,200 506,204 C 506,206 506,207 506,209 C 506,209 526,211 526,211 C 529,211 535,211 538,213 C 542,216 539,223 545,225 C 545,225 552,226 552,226 C 552,226 570,230 570,230 C 574,231 578,232 582,235 C 585,238 586,241 587,245 C 592,241 592,240 591,234 C 604,227 599,227 605,220 C 602,213 599,209 592,206 C 588,203 585,204 582,200 C 580,198 578,187 582,186 C 583,185 587,187 588,188 C 591,181 588,182 588,177 C 589,174 592,172 591,169 C 590,166 586,166 583,162 C 583,162 580,154 580,154 C 577,149 564,135 560,132 C 560,132 541,125 541,125 C 531,121 531,117 520,116 Z" />
+		<path id="_war" class="nopower" d="M 320,219 C 320,219 329,222 329,222 C 329,222 349,219 349,219 C 349,219 367,222 367,222 C 367,222 368,213 368,213 C 368,213 375,207 375,207 C 375,207 379,197 379,197 C 374,198 371,199 367,197 C 363,195 362,192 359,192 C 356,192 353,197 347,199 C 342,200 340,197 336,197 C 322,197 321,208 320,219 Z" />
+		<path id="_wes" class="nopower" d="M 170,189 C 178,192 178,190 186,188 C 192,186 191,183 186,181 C 186,181 186,179 186,179 C 199,173 198,165 190,164 C 186,163 185,165 182,167 C 178,169 169,172 167,177 C 166,180 169,185 170,189 Z" />
+		<path id="_wbs" class="water" d="M 443,263 C 443,263 443,264 443,264 C 443,264 445,265 445,265 C 445,265 438,276 438,276 C 438,276 436,272 436,272 C 434,276 435,279 429,279 C 424,289 432,293 424,298 C 424,298 423,308 423,308 C 429,310 427,312 431,315 C 436,319 443,320 449,321 C 460,322 465,316 473,310 C 476,309 480,307 481,304 C 483,297 479,287 478,280 C 478,280 475,281 475,281 C 475,281 474,275 474,275 C 474,275 464,275 464,275 C 464,269 469,267 474,265 C 469,263 467,266 463,265 C 459,264 459,261 457,260 C 452,257 447,260 443,263 Z" />
+		<path id="_wms" class="water" d="M 144,342 C 140,339 135,337 130,337 C 126,338 122,341 118,343 C 118,343 119,346 119,346 C 119,346 111,347 111,347 C 111,347 105,351 105,351 C 105,351 96,348 96,348 C 96,348 84,347 84,347 C 80,351 75,356 72,349 C 68,351 67,353 68,358 C 70,357 75,356 78,356 C 81,358 81,362 83,365 C 85,367 91,371 94,371 C 94,371 108,374 108,374 C 110,375 113,376 116,375 C 120,375 123,371 126,370 C 126,370 139,368 139,368 C 145,368 157,372 161,367 C 162,366 163,361 163,359 C 165,352 166,345 163,338 C 158,329 148,335 144,342 Z" />
+		<path id="_yal" class="nopower" d="M 474,261 C 471,269 463,266 464,275 C 464,275 474,275 474,275 C 474,275 475,281 475,281 C 482,279 483,276 489,273 C 494,271 498,273 498,265 C 498,265 481,263 481,263 C 481,263 480,261 480,261 C 480,261 474,261 474,261 Z" />
+		<path id="_yor" class="nopower" d="M 177,138 C 177,138 174,152 174,152 C 174,152 175,167 175,167 C 177,167 179,166 181,165 C 191,161 188,157 187,153 C 187,153 187,148 187,148 C 187,148 182,138 182,138 C 182,138 177,138 177,138 Z" />
+		<path id="_zar" class="nopower" d="M 291,296 C 288,299 295,302 297,303 C 311,313 306,308 314,312 C 318,314 318,315 323,317 C 323,317 320,318 320,318 C 323,320 323,320 326,321 C 333,323 334,323 339,317 C 336,315 332,313 331,309 C 330,306 331,303 331,300 C 330,296 324,288 320,287 C 318,286 317,286 315,287 C 307,287 290,283 291,296 Z" />
+		<!-- channels -->
+		<path id="_ch1" class="channel" d="M 266,170 C 261,172 257,173 254,177 C 259,177 268,177 266,170 Z" />
+		<path id="_ch2" class="channel" d="M 466,265 C 471,263 470,261 476,258 C 482,255 485,258 488,253 C 478,253 467,252 466,265 Z" />
+		<path id="_ch3" class="channel" d="M 478,435 C 478,435 481,451 481,451 C 486,447 482,440 481,435 C 481,435 478,435 478,435 Z" />
+		<!-- <path id="_ch1" class="channel" d="M 266,170 C 261,172 257,173 254,177 C 259,177 268,177 266,170 Z" />
+		<path id="_ch2" class="channel" d="M 466,265 C 471,263 470,261 476,258 C 482,255 485,258 488,253 C 478,253 467,252 466,265 Z" />
+		<path id="_ch3" class="channel" d="M 478,435 C 478,435 481,451 481,451 C 486,447 482,440 481,435 C 481,435 478,435 478,435 Z" /> -->
+		<!-- decorations -->
+		<path id="_bar_i" class="nopower" d="M 453,17 C 452,18 450,21 450,22 C 449,26 453,32 457,31 C 460,30 465,22 453,17 Z" />
+		<path id="_cas" class="water" d="M 591,234 C 592,240 591,240 587,245 C 587,245 586,240 586,240 C 586,240 586,264 586,264 C 586,264 596,265 596,265 C 597,280 613,293 627,297 C 627,297 627,299 627,299 C 625,299 621,299 620,301 C 616,304 620,318 624,321 C 625,323 629,323 631,324 C 642,328 644,330 656,326 C 660,325 665,324 666,320 C 666,320 666,315 666,315 C 666,310 669,305 663,301 C 662,300 660,299 658,299 C 656,300 656,300 654,301 C 654,301 652,287 652,287 C 652,287 655,291 655,291 C 658,290 666,289 668,286 C 668,284 668,283 667,282 C 667,282 663,278 663,278 C 661,276 658,271 656,270 C 653,268 647,271 649,277 C 649,277 651,284 651,284 C 644,276 642,274 643,263 C 641,263 637,262 635,261 C 632,259 630,252 627,249 C 623,246 619,247 619,241 C 619,241 626,242 626,242 C 626,240 626,239 627,237 C 629,233 639,228 643,227 C 643,227 643,214 643,214 C 643,214 642,207 642,207 C 642,207 633,207 633,207 C 633,207 626,207 626,207 C 626,207 620,207 620,207 C 620,207 613,215 613,215 C 613,215 604,220 604,220 C 604,220 600,228 600,228 C 600,228 591,234 591,234 Z" />
+		<path id="_cre" class="nopower" d="M 382,391 C 380,399 386,396 390,397 C 390,397 396,399 396,399 C 398,399 400,398 402,398 C 407,397 409,398 411,392 C 411,392 404,394 404,394 C 400,390 392,394 382,391 Z" />
+		<path id="_crs" class="nopower" d="M 227,306 C 227,306 219,311 219,311 C 220,318 219,320 223,326 C 227,322 231,311 227,306 Z" />
+		<path id="_cyp" class="nopower" d="M 483,398 C 487,393 489,392 496,391 C 493,383 495,385 498,378 C 491,380 492,381 487,384 C 482,386 481,384 476,388 C 473,389 469,392 471,395 C 473,398 476,396 483,398 Z" />
+		<path id="_isl" class="nopower" d="M 139,5 C 139,5 135,13 135,13 C 135,13 134,6 134,6 C 134,6 123,8 123,8 C 123,8 122,9 122,9 C 125,15 128,15 133,19 C 130,19 130,18 128,21 C 124,18 122,17 117,18 C 117,18 123,22 123,22 C 123,22 119,24 119,24 C 119,24 119,26 119,26 C 119,26 123,27 123,27 C 119,29 118,27 114,26 C 114,26 113,27 113,27 C 113,27 115,30 115,30 C 115,30 120,34 120,34 C 120,34 128,43 128,43 C 128,43 141,43 141,43 C 141,43 159,42 159,42 C 166,35 164,39 168,29 C 168,29 165,28 165,28 C 165,28 168,19 168,19 C 163,17 161,18 156,19 C 156,19 155,16 155,16 C 155,16 151,18 151,18 C 151,18 150,14 150,14 C 150,14 147,17 147,17 C 147,17 145,13 145,13 C 145,13 143,18 143,18 C 143,18 138,19 138,19 C 141,13 146,10 139,5 Z M 129,21 C 129,21 129,22 129,22 C 129,22 128,21 128,21 C 128,21 129,21 129,21 Z" />
+		<path id="_mal_i" class="nopower" d="M 259,393 C 260,398 262,399 267,399 C 265,394 264,394 259,393 Z" />
+		<path id="_plm_i" class="nopower" d="M 156,332 C 161,337 165,340 169,332 C 163,329 162,330 156,332 Z M 173,330 C 173,330 177,333 177,333 C 177,333 178,330 178,330 C 178,330 173,330 173,330 Z M 140,338 C 140,338 144,342 144,342 C 144,342 148,336 148,336 C 148,336 140,338 140,338 Z" />
+		<path id="_sib_w" class="water" d="M 654,0 C 654,0 657,14 657,14 C 657,19 652,29 647,32 C 644,33 640,33 637,33 C 640,37 644,36 648,37 C 648,37 662,25 662,25 C 662,25 661,15 661,15 C 661,15 672,15 672,15 C 674,22 675,25 683,27 C 678,21 677,20 679,12 C 673,8 669,9 662,10 C 662,10 661,0 661,0 C 661,0 654,0 654,0 Z" />
+		<!-- impassable -->
+		<path id="_imp1" class="impassable" d="M 23,439 C 23,439 23,451 23,451 C 23,451 0,450 0,450 C 0,450 0,599 0,599 C 0,599 97,599 97,599 C 97,599 112,600 112,600 C 112,600 147,600 147,600 C 147,600 164,599 164,599 C 164,599 223,599 223,599 C 223,599 238,600 238,600 C 238,600 350,600 350,600 C 350,600 572,600 572,600 C 572,600 569,591 569,591 C 569,591 562,587 562,587 C 562,587 546,574 546,574 C 546,574 542,566 542,566 C 542,566 535,550 535,550 C 535,550 531,538 531,538 C 531,538 520,538 520,538 C 520,538 515,544 515,544 C 512,546 512,550 508,551 C 504,552 502,549 499,548 C 496,547 494,547 491,547 C 491,547 396,547 396,547 C 396,547 396,560 396,560 C 396,560 378,560 378,560 C 378,560 378,567 378,567 C 378,567 321,539 321,539 C 321,539 304,531 304,531 C 302,530 297,527 295,527 C 290,527 278,534 273,535 C 266,536 259,528 254,525 C 249,522 243,523 236,520 C 230,517 224,510 219,511 C 217,511 210,514 207,515 C 207,515 180,526 180,526 C 176,529 177,533 173,535 C 170,537 162,537 159,537 C 159,537 138,539 138,539 C 138,539 137,532 137,532 C 137,532 129,525 129,525 C 129,525 111,510 111,510 C 111,510 55,465 55,465 C 55,465 23,439 23,439 Z" />
+		<path id="_imp2" class="impassable" d="M 748,339 C 748,339 754,359 754,359 C 754,359 750,387 750,387 C 750,387 755,387 755,387 C 759,387 761,391 759,395 C 757,400 746,410 746,414 C 746,417 751,419 753,423 C 754,426 754,428 755,431 C 756,433 760,435 761,437 C 760,435 766,451 766,449 C 766,451 766,453 764,454 C 761,455 756,455 753,457 C 750,459 744,471 751,474 C 751,474 759,475 759,475 C 764,476 763,476 768,474 C 768,474 769,477 769,477 C 769,477 769,465 769,465 C 769,465 769,437 769,437 C 769,437 769,341 769,341 C 769,341 748,339 748,339 Z" />
+	</g>
+	
+	<!-- drawing layers -->
+	<g pointer-events="none">
+		<g id="SupplyCenterLayer"/>
+		<g id="OrderLayer"/>
+		<g id="UnitLayer"/>
+		<g id="DislodgedUnitLayer"/>
+		<g id="HighestOrderLayer"/>
+	</g>
+	
+	<g id="FullLabelLayer" class="fulllabeltext" visibility="hidden" pointer-events="none">
+	</g>
+	
+	<g id="BriefLabelLayer" class="brieflabeltext" visibility="hidden" pointer-events="none">
+		<text x="315.8" y="334.4">adr</text>
+		<text x="395.7" y="376.2">aeg</text>
+		<text x="423" y="352.8">ait</text>
+		<text x="414.2" y="461">ala</text>
+		<text x="341.4" y="343">alb</text>
+		<text x="167.2" y="142.3">alc</text>
+		<text x="129.6" y="422">alg</text>
+		<text x="502.9" y="326.5">ana</text>
+		<text x="209.2" y="172.7">ang</text>
+		<text x="300.2" y="341.4">apu</text>
+		<text x="614.1" y="520.5">ara</text>
+		<text x="235.9" y="14.6">arc</text>
+		<text x="546.8" y="322.6">arm</text>
+		<text x="368.4" y="353.8">ath</text>
+		<text x="303.3" y="250.4">aus</text>
+		<text x="601.4" y="309.9">aze</text>
+		<text x="332.1" y="171.1">bal</text>
+		<text x="392.8" y="18.5">bar</text>
+		<text x="263.7" y="234.1">bav</text>
+		<text x="115.1" y="255.9">bay</text>
+		<text x="294" y="234.9">boh</text>
+		<text x="296.3" y="178.9">bor</text>
+		<text x="150.9" y="232.6">bri</text>
+		<text x="214.7" y="205.3">bru</text>
+		<text x="332.1" y="266">bud</text>
+		<text x="392" y="315">bul</text>
+		<text x="447.4" y="398.6">car</text>
+		<text x="478.6" y="484.4">cai</text>
+		<text x="137.7" y="312.7">cat</text>
+		<text x="513.7" y="349.9">cil</text>
+		<text x="566.3" y="268">cir</text>
+		<text x="160.2" y="116.7">cly</text>
+		<text x="435.6" y="331.3">con</text>
+		<text x="154" y="182.8">cor</text>
+		<text x="301.8" y="280">cro</text>
+		<text x="158.7" y="169.6">cym</text>
+		<text x="357" y="490.8">cyr</text>
+		<text x="518.5" y="413.3">dam</text>
+		<text x="490.3" y="422">del</text>
+		<text x="273" y="150.1">den</text>
+		<text x="192.1" y="261.3">dij</text>
+		<text x="483.4" y="222.2">don</text>
+		<text x="128.3" y="153.2">dub</text>
+		<text x="507.8" y="297.3">ebs</text>
+		<text x="500" y="386">ems</text>
+		<text x="175" y="119">edi</text>
+		<text x="423" y="514.6">egy</text>
+		<text x="148.6" y="203">eng</text>
+		<text x="77" y="321.2">est</text>
+		<text x="245.6" y="502.9">fez</text>
+		<text x="371.8" y="103.4">fin</text>
+		<text x="182.8" y="239.6">fra</text>
+		<text x="346.9" y="230.2">gal</text>
+		<text x="151.7" y="270.7">gas</text>
+		<text x="319.7" y="197.6">gda</text>
+		<text x="554.6" y="294.4">geo</text>
+		<text x="71.6" y="342.2">gib</text>
+		<text x="337.6" y="106.6">gob</text>
+		<text x="193.7" y="319.7">gol</text>
+		<text x="227.1" y="192.9">hag</text>
+		<text x="245.8" y="164.9">hel</text>
+		<text x="251.2" y="203">hes</text>
+		<text x="266" y="189">hol</text>
+		<text x="11.7" y="379.2">ifn</text>
+		<text x="741.2" y="588.8">ind</text>
+		<text x="336.3" y="376.2">ion</text>
+		<text x="664.2" y="379.6">ira</text>
+		<text x="107.2" y="181.3">iri</text>
+		<text x="512.7" y="434.7">jer</text>
+		<text x="467.8" y="89.7">kar</text>
+		<text x="661.8" y="201.8">kaz</text>
+		<text x="448.4" y="220.3">kie</text>
+		<text x="520.5" y="265.1">kub</text>
+		<text x="183.6" y="289.3">lan</text>
+		<text x="343.8" y="34.2">lap</text>
+		<text x="346.9" y="138.4">lat</text>
+		<text x="366.3" y="248.1">lem</text>
+		<text x="430.8" y="428.9">lib</text>
+		<text x="221.7" y="303.3">lig</text>
+		<text x="373.3" y="185.1">liv</text>
+		<text x="217.8" y="237.2">lor</text>
+		<text x="359.3" y="332.1">mac</text>
+		<text x="267.1" y="414.2">mal</text>
+		<text x="282.3" y="198.3">mar</text>
+		<text x="352.3" y="189">mas</text>
+		<text x="579.9" y="413.3">mes</text>
+		<text x="39" y="231">mid</text>
+		<text x="138.4" y="113.6">min</text>
+		<text x="26.3" y="426.9">mor</text>
+		<text x="434.7" y="177.4">mus</text>
+		<text x="289.3" y="354.7">nap</text>
+		<text x="318.9" y="80.1">nmk</text>
+		<text x="53.6" y="76">nao</text>
+		<text x="220.3" y="122.8">nth</text>
+		<text x="273.8" y="97.2">nwy</text>
+		<text x="212.5" y="59.5">nwg</text>
+		<text x="431.8" y="126.7">nov</text>
+		<text x="440.6" y="251.5">ode</text>
+		<text x="264.4" y="381.9">pal</text>
+		<text x="659.6" y="469">per</text>
+		<text x="196" y="213.9">pic</text>
+		<text x="229.4" y="283.1">pie</text>
+		<text x="473.7" y="357.7">pis</text>
+		<text x="152.1" y="330.4">plm</text>
+		<text x="388.9" y="229.4">pod</text>
+		<text x="57.6" y="312.7">por</text>
+		<text x="362.6" y="403.5">pyl</text>
+		<text x="544.4" y="538.2">red</text>
+		<text x="373.3" y="157.9">rig</text>
+		<text x="262.9" y="322.8">rom</text>
+		<text x="232.6" y="217">ruh</text>
+		<text x="398.2" y="271.4">rum</text>
+		<text x="115" y="485.4">sah</text>
+		<text x="99.6" y="287">san</text>
+		<text x="217.8" y="343">sar</text>
+		<text x="286.2" y="217.8">sax</text>
+		<text x="227.9" y="259">sch</text>
+		<text x="350.8" y="306.4">ser</text>
+		<text x="669.6" y="91.6">sib</text>
+		<text x="310.3" y="220.1">sil</text>
+		<text x="496.1" y="453.2">sin</text>
+		<text x="277.7" y="133">ska</text>
+		<text x="443.5" y="366.5">smy</text>
+		<text x="21.4" y="323.6">sou</text>
+		<text x="240.3" y="237.2">swa</text>
+		<text x="301" y="137.7">swe</text>
+		<text x="532.2" y="378.2">syr</text>
+		<text x="343" y="280.8">sze</text>
+		<text x="477.6" y="251.5">tau</text>
+		<text x="394.3" y="332.9">thr</text>
+		<text x="319.7" y="428.9">tob</text>
+		<text x="101.1" y="310.3">tol</text>
+		<text x="366.3" y="275.3">tra</text>
+		<text x="294.4" y="462">tri</text>
+		<text x="210" y="410.7">tun</text>
+		<text x="735.9" y="299.2">tur</text>
+		<text x="245.8" y="303.3">tus</text>
+		<text x="271.4" y="261.3">trl</text>
+		<text x="250.5" y="358.7">tys</text>
+		<text x="137.7" y="132.2">uls</text>
+		<text x="274.6" y="313.4">umb</text>
+		<text x="192" y="356.7">uti</text>
+		<text x="111.2" y="341.4">val</text>
+		<text x="262.1" y="283.1">ven</text>
+		<text x="536.1" y="174.5">vol</text>
+		<text x="348.4" y="213.1">war</text>
+		<text x="179.7" y="182.8">wes</text>
+		<text x="450.3" y="300.2">wbs</text>
+		<text x="121.8" y="364.5">wms</text>
+		<text x="478.6" y="273.9">yal</text>
+		<text x="180.4" y="156.3">yor</text>
+		<text x="316.6" y="308.8">zar</text>
+   </g>
+	
+	<g id="MouseLayer" class="invisible">
+		<path id="adr" d="M 305,330 C 305,330 302,335 302,335 C 302,335 312,343 312,343 C 312,343 318,347 318,347 C 321,349 322,351 325,351 C 334,352 339,345 339,337 C 339,335 339,330 339,328 C 336,323 325,320 320,319 C 320,319 323,318 323,318 C 309,306 314,312 305,308 C 305,308 298,303 298,303 C 294,301 290,300 291,295 C 291,295 287,286 287,286 C 287,286 283,291 283,291 C 280,287 279,286 280,281 C 272,280 267,282 268,291 C 268,292 268,294 269,295 C 270,297 274,299 277,302 C 280,307 279,312 281,317 C 286,324 297,328 305,330 Z" />
+		<path id="aeg" d="M 380,336 C 380,336 376,342 376,342 C 376,342 381,345 381,345 C 381,345 378,346 378,346 C 378,346 380,351 380,351 C 380,351 378,349 378,349 C 378,349 377,349 377,349 C 377,349 376,352 376,352 C 373,349 371,348 371,344 C 371,344 367,344 367,344 C 367,344 367,353 367,353 C 367,353 373,356 373,356 C 373,356 371,361 371,361 C 377,363 386,366 385,374 C 385,374 380,369 380,369 C 380,369 381,374 381,374 C 381,374 375,373 375,373 C 375,373 378,375 378,375 C 378,375 378,377 378,377 C 378,377 371,377 371,377 C 374,381 375,382 375,387 C 379,389 383,392 388,393 C 394,393 398,390 404,394 C 413,391 419,385 426,379 C 426,379 424,377 424,377 C 424,377 427,373 427,373 C 422,373 419,372 418,367 C 418,367 410,364 410,364 C 410,364 410,362 410,362 C 410,362 411,361 411,361 C 411,361 416,362 416,362 C 416,362 413,349 413,349 C 412,349 411,349 410,349 C 409,349 407,348 407,347 C 404,343 409,341 412,337 C 408,337 407,337 404,334 C 404,334 392,334 392,334 C 392,334 380,336 380,336 Z M 382,346 C 382,346 382,347 382,347 C 382,347 381,346 381,346 C 381,346 382,346 382,346 Z" />
+		<path id="ait" d="M 439,351 C 438,348 438,344 435,342 C 431,340 417,343 414,347 C 412,349 411,355 416,357 C 419,357 424,356 427,355 C 427,355 439,351 439,351 Z" />
+		<path id="ala" d="M 396,475 C 396,475 425,481 425,481 C 425,481 446,480 446,480 C 446,480 458,476 458,476 C 458,476 460,469 460,469 C 460,469 466,455 466,455 C 466,455 463,454 463,454 C 463,454 464,445 464,445 C 464,445 464,439 464,439 C 462,431 458,432 452,433 C 445,435 440,443 432,441 C 432,441 424,438 424,438 C 424,438 419,437 419,437 C 419,437 410,435 410,435 C 405,433 402,430 398,433 C 392,438 393,440 393,445 C 393,447 392,448 393,450 C 394,454 396,453 396,462 C 396,462 396,475 396,475 Z" />
+		<path id="alb" d="M 335,326 C 337,327 338,328 339,330 C 339,330 339,333 339,333 C 338,343 339,339 336,348 C 336,348 341,353 341,353 C 341,353 343,353 343,353 C 345,350 348,346 348,343 C 348,343 348,336 348,336 C 347,333 348,332 348,329 C 346,319 340,315 335,326 Z" />
+		<path id="alc" d="M 163,122 C 163,122 155,136 155,136 C 155,136 163,135 163,135 C 163,135 165,148 165,148 C 165,148 160,161 160,161 C 160,161 173,163 173,163 C 173,163 172,152 172,152 C 172,152 175,139 175,139 C 175,139 169,130 169,130 C 169,130 166,122 166,122 C 166,122 163,122 163,122 Z" />
+		<path id="alg" d="M 104,373 C 105,375 107,378 107,380 C 108,383 108,394 107,397 C 104,402 100,403 95,404 C 93,405 89,405 89,407 C 88,409 90,413 90,415 C 91,417 92,418 93,420 C 93,420 98,427 98,427 C 101,431 112,437 117,439 C 130,443 127,439 135,438 C 135,438 152,437 152,437 C 166,437 177,436 189,427 C 191,426 194,423 195,422 C 199,417 193,414 193,409 C 193,407 195,404 196,401 C 197,397 195,391 197,385 C 199,381 203,377 201,375 C 200,373 196,372 194,372 C 194,372 185,371 185,371 C 185,371 177,371 177,371 C 177,371 172,371 172,371 C 172,371 166,371 166,371 C 166,371 160,370 160,370 C 160,370 139,368 139,368 C 139,368 125,370 125,370 C 122,371 119,374 116,375 C 114,376 107,374 104,373 Z" />
+		<path id="ana" d="M 530,326 C 530,326 529,307 529,307 C 529,307 518,309 518,309 C 518,309 505,306 505,306 C 505,306 501,303 501,303 C 501,303 495,305 495,305 C 493,299 490,303 485,305 C 479,307 468,310 466,317 C 464,322 468,325 470,329 C 471,331 471,334 473,335 C 477,340 486,336 491,335 C 496,335 502,338 506,337 C 506,337 519,328 519,328 C 522,327 527,326 530,326 Z" />
+		<path id="ang" d="M 184,163 C 187,164 191,164 194,166 C 199,171 189,177 186,179 C 186,179 186,181 186,181 C 186,181 194,189 194,189 C 194,189 204,188 204,188 C 204,188 217,188 217,188 C 220,184 225,179 230,177 C 230,162 237,157 239,145 C 222,145 219,141 200,145 C 197,146 190,148 189,149 C 185,152 188,155 188,158 C 187,161 186,161 184,163 Z" />
+		<path id="apu" d="M 286,321 C 286,321 278,330 278,330 C 288,335 296,340 295,352 C 295,352 300,354 300,354 C 300,354 304,348 304,348 C 304,348 308,348 308,348 C 309,351 316,359 319,358 C 322,358 323,354 324,352 C 324,352 320,348 320,348 C 320,348 302,335 302,335 C 302,335 305,330 305,330 C 294,326 297,328 286,321 Z" />
+		<path id="ara" d="M 542,400 C 540,403 536,406 535,409 C 534,412 534,415 534,418 C 534,418 531,425 531,425 C 531,425 529,433 529,433 C 527,438 524,440 521,444 C 517,452 521,459 510,460 C 510,460 511,467 511,467 C 511,467 518,466 518,466 C 521,473 527,479 531,485 C 534,489 533,491 535,494 C 537,498 540,496 543,502 C 549,512 549,521 554,530 C 556,533 558,534 560,537 C 564,543 568,556 568,563 C 568,571 571,576 572,580 C 573,583 572,585 571,588 C 579,592 578,590 583,590 C 586,589 587,590 590,589 C 593,588 595,586 598,586 C 598,586 606,586 606,586 C 606,586 613,582 613,582 C 613,582 620,581 620,581 C 620,581 659,569 659,569 C 659,567 658,563 658,561 C 661,555 666,555 671,554 C 671,554 683,551 683,551 C 683,551 691,551 691,551 C 696,550 696,546 701,547 C 704,547 706,549 710,548 C 713,546 714,543 716,541 C 720,539 722,540 724,537 C 724,537 730,522 730,522 C 730,522 731,525 731,525 C 736,522 734,519 736,515 C 739,510 741,510 742,503 C 737,500 735,498 733,492 C 725,491 717,489 715,480 C 713,474 718,475 713,466 C 708,469 699,481 697,487 C 697,487 686,487 686,487 C 686,487 680,487 680,487 C 680,487 666,489 666,489 C 667,483 668,475 661,472 C 658,479 658,481 659,488 C 659,488 654,480 654,480 C 654,480 650,476 650,476 C 650,476 643,465 643,465 C 643,465 635,459 635,459 C 635,459 626,450 626,450 C 626,450 612,449 612,449 C 612,449 607,443 607,443 C 607,443 585,439 585,439 C 585,439 585,432 585,432 C 585,432 560,427 560,427 C 557,426 552,426 550,423 C 545,418 545,406 542,400 Z" />
+		<path id="arc" d="M 113,0 C 121,9 123,10 134,6 C 134,6 135,13 135,13 C 135,13 138,12 138,12 C 138,12 139,5 139,5 C 145,11 141,12 138,19 C 138,19 143,18 143,18 C 143,18 144,13 144,13 C 144,13 146,17 146,17 C 146,17 150,14 150,14 C 150,14 151,18 151,18 C 151,18 155,16 155,16 C 155,16 156,19 156,19 C 156,19 164,18 164,18 C 164,18 170,19 170,19 C 170,19 179,19 179,19 C 179,19 191,20 191,20 C 191,20 215,20 215,20 C 215,20 230,19 230,19 C 230,19 261,19 261,19 C 261,19 277,18 277,18 C 277,18 312,17 312,17 C 312,17 347,9 347,9 C 344,2 343,0 335,0 C 335,0 290,0 290,0 C 290,0 113,0 113,0 Z" />
+		<path id="arm" d="M 540,352 C 540,352 557,345 557,345 C 557,345 573,345 573,345 C 572,341 570,337 567,334 C 568,326 565,318 563,311 C 562,308 562,304 560,303 C 558,301 555,301 553,301 C 548,301 534,301 532,306 C 530,310 532,315 532,319 C 532,319 532,325 532,325 C 532,325 534,337 534,337 C 534,337 540,352 540,352 Z" />
+		<path id="ath" d="M 379,327 C 370,332 373,332 367,336 C 367,336 352,342 352,342 C 351,344 349,347 347,349 C 344,353 343,354 347,359 C 353,367 365,365 372,372 C 365,371 364,370 357,373 C 357,373 361,384 361,384 C 361,384 365,382 365,382 C 365,382 367,387 367,387 C 367,387 370,382 370,382 C 370,382 376,385 376,385 C 376,385 371,377 371,377 C 371,377 378,377 378,377 C 378,377 378,375 378,375 C 378,375 375,374 375,374 C 375,374 381,374 381,374 C 381,374 380,369 380,369 C 380,369 385,374 385,374 C 387,365 378,363 371,361 C 371,361 373,356 373,356 C 373,356 367,353 367,353 C 367,353 367,344 367,344 C 367,344 371,344 371,344 C 371,349 375,353 377,349 C 377,349 379,351 379,351 C 379,351 380,351 380,351 C 380,351 381,348 381,348 C 381,348 378,347 378,347 C 378,347 381,346 381,346 C 381,346 376,342 376,342 C 381,338 380,333 379,327 Z M 378,367 C 378,367 378,368 378,368 C 378,368 377,367 377,367 C 377,367 378,367 378,367 Z" />
+		<path id="aus" d="M 302,261 C 302,260 302,257 302,256 C 304,246 315,248 322,246 C 330,244 333,242 336,235 C 332,234 327,230 324,231 C 319,231 320,236 310,237 C 301,238 300,232 291,240 C 283,247 290,260 293,261 C 295,262 300,261 302,261 Z" />
+		<path id="aze" d="M 611,290 C 611,290 608,294 608,294 C 608,294 608,295 608,295 C 608,295 610,297 610,297 C 603,299 590,295 583,293 C 583,293 583,301 583,301 C 583,301 579,300 579,300 C 579,300 581,308 581,308 C 581,308 591,316 591,316 C 591,316 590,320 590,320 C 590,320 598,321 598,321 C 603,310 606,311 613,319 C 613,319 610,320 610,320 C 614,322 620,321 620,316 C 620,314 617,306 619,302 C 621,300 624,300 627,299 C 627,299 627,297 627,297 C 627,297 611,290 611,290 Z" />
+		<path id="bal" d="M 319,144 C 319,144 316,156 316,156 C 316,156 306,156 306,156 C 307,167 312,169 317,186 C 320,185 324,183 327,184 C 330,185 332,188 335,188 C 337,189 342,187 344,187 C 344,182 346,183 350,183 C 350,183 351,173 351,173 C 351,164 348,165 352,154 C 352,154 336,147 336,147 C 336,147 319,144 319,144 Z" />
+		<path id="bar" d="M 343,0 C 343,0 353,22 353,22 C 353,22 355,18 355,18 C 359,20 361,20 361,25 C 367,30 369,23 371,28 C 371,28 380,31 380,31 C 388,33 400,29 408,38 C 408,38 409,35 409,35 C 409,35 419,41 419,41 C 425,45 426,57 418,61 C 413,63 401,62 394,64 C 394,64 401,68 401,68 C 401,68 399,73 399,73 C 399,73 403,78 403,78 C 403,78 416,84 416,84 C 416,76 418,77 408,73 C 413,67 418,72 424,73 C 426,74 432,73 435,73 C 435,73 424,64 424,64 C 424,64 434,59 434,59 C 434,59 444,63 444,63 C 445,57 444,55 439,53 C 441,45 436,40 428,38 C 433,36 446,34 449,40 C 450,44 446,47 449,50 C 453,54 460,52 465,51 C 463,45 461,44 466,40 C 466,40 464,36 464,36 C 464,36 502,19 502,19 C 502,19 499,23 499,23 C 499,23 497,26 497,26 C 496,29 496,32 500,31 C 503,30 503,26 509,25 C 509,25 518,22 518,22 C 518,22 526,20 526,20 C 529,19 532,20 534,17 C 537,14 536,10 535,7 C 546,4 555,4 566,7 C 574,9 575,11 586,13 C 586,13 623,18 623,18 C 623,18 631,21 631,21 C 635,10 632,15 631,8 C 631,6 632,3 630,1 C 628,0 624,0 622,0 C 622,0 568,0 568,0 C 568,0 343,0 343,0 Z M 453,17 C 465,22 460,30 457,31 C 453,32 449,26 450,22 C 450,21 452,18 453,17 Z" />
+		<path id="bav" d="M 245,212 C 245,212 248,219 248,219 C 251,227 252,236 249,244 C 249,244 263,247 263,247 C 263,247 274,247 274,247 C 274,247 279,240 279,240 C 275,230 267,235 267,223 C 262,219 260,217 259,210 C 259,210 245,212 245,212 Z" />
+		<path id="bay" d="M 133,270 C 132,264 133,261 137,257 C 137,252 138,249 142,245 C 137,236 140,240 139,233 C 139,233 138,228 138,228 C 133,224 127,218 122,216 C 118,215 116,216 112,217 C 96,223 97,232 94,247 C 93,251 88,265 90,268 C 91,270 94,271 96,272 C 104,276 103,274 109,276 C 112,278 114,280 119,281 C 127,282 125,274 133,270 Z" />
+		<path id="boh" d="M 320,229 C 318,229 311,228 309,227 C 306,226 305,224 302,222 C 300,221 295,221 292,221 C 287,220 281,222 276,223 C 274,223 271,224 270,226 C 267,230 281,237 284,238 C 293,240 294,234 300,234 C 306,234 314,239 320,229 Z" />
+		<path id="bor" d="M 304,163 C 301,165 297,165 294,167 C 288,170 286,175 279,173 C 276,173 275,172 273,169 C 273,169 267,169 267,169 C 267,169 266,174 266,174 C 266,174 269,179 269,179 C 269,179 273,178 273,178 C 273,178 271,183 271,183 C 278,185 289,179 292,180 C 297,180 299,186 302,188 C 305,189 313,187 316,186 C 314,177 311,171 306,163 C 306,163 304,163 304,163 Z" />
+		<path id="bri" d="M 155,200 C 155,200 155,214 155,214 C 155,214 142,212 142,212 C 142,212 134,205 134,205 C 134,205 125,204 125,204 C 125,204 121,203 121,203 C 121,203 115,204 115,204 C 115,204 117,215 117,215 C 131,219 129,223 138,228 C 138,228 139,234 139,234 C 139,236 138,240 141,242 C 143,244 151,245 154,245 C 156,245 161,246 163,244 C 164,243 164,237 165,235 C 165,235 169,209 169,209 C 169,209 164,208 164,208 C 165,201 160,202 155,200 Z" />
+		<path id="bru" d="M 210,188 C 206,188 205,188 201,189 C 196,190 191,190 191,196 C 190,198 190,201 192,202 C 195,204 199,204 203,205 C 208,208 217,219 221,209 C 221,209 222,205 222,205 C 223,203 224,201 224,199 C 223,196 220,196 217,195 C 213,193 211,192 210,188 Z" />
+		<path id="bud" d="M 358,253 C 355,246 352,248 356,240 C 353,238 343,235 339,236 C 336,237 336,240 334,243 C 332,244 325,247 322,248 C 315,250 307,248 304,255 C 303,258 305,261 306,264 C 308,267 308,271 311,273 C 314,274 316,273 319,273 C 319,273 326,273 326,273 C 328,273 340,270 342,269 C 347,267 349,260 358,253 Z" />
+		<path id="bul" d="M 368,300 C 368,300 367,310 367,310 C 370,313 372,314 367,317 C 367,317 371,329 371,329 C 371,329 380,325 380,325 C 387,322 401,321 409,322 C 409,320 409,319 410,317 C 412,315 419,312 422,312 C 424,312 426,313 428,313 C 426,309 426,309 422,308 C 422,308 426,297 426,297 C 423,296 420,295 416,295 C 416,295 405,296 405,296 C 405,296 397,299 397,299 C 387,302 378,304 368,300 Z" />
+		<path id="cai" d="M 464,454 C 466,457 466,458 465,461 C 465,461 461,469 461,469 C 460,471 459,479 460,481 C 461,484 466,491 469,492 C 471,492 472,492 474,491 C 475,493 476,496 476,498 C 477,501 473,506 476,508 C 479,510 483,506 486,504 C 492,501 498,504 504,501 C 506,500 509,499 509,496 C 509,494 505,488 504,486 C 502,481 500,475 497,471 C 497,471 484,455 484,455 C 479,448 480,441 478,438 C 477,435 468,429 464,432 C 463,434 464,437 464,439 C 465,444 464,449 464,454 Z" />
+		<path id="car" d="M 456,370 C 456,370 458,373 458,373 C 458,373 455,379 455,379 C 447,377 436,385 437,374 C 431,374 432,375 427,378 C 427,387 420,383 418,387 C 417,389 419,392 420,394 C 423,398 429,407 432,409 C 435,412 439,412 442,413 C 451,415 464,414 472,410 C 474,409 480,407 481,405 C 482,403 482,399 482,397 C 478,396 472,397 471,394 C 470,390 476,390 477,385 C 477,383 476,381 476,379 C 473,369 465,368 456,370 Z" />
+		<path id="cat" d="M 93,331 C 95,337 101,335 106,333 C 119,327 119,317 132,321 C 137,316 148,313 155,311 C 157,311 160,311 162,310 C 164,308 167,305 168,302 C 168,302 156,303 156,303 C 156,303 144,296 144,296 C 144,296 137,296 137,296 C 137,296 131,295 131,295 C 131,295 124,302 124,302 C 124,302 111,319 111,319 C 111,319 93,331 93,331 Z" />
+		<path id="cil" d="M 498,338 C 498,346 488,357 500,363 C 502,364 504,364 506,365 C 506,365 517,360 517,360 C 517,360 521,355 521,355 C 521,355 534,352 534,352 C 534,352 538,352 538,352 C 537,347 536,346 534,342 C 534,342 530,330 530,330 C 528,328 522,329 520,330 C 515,331 511,337 506,338 C 503,339 501,338 498,338 Z" />
+		<path id="cir" d="M 523,281 C 532,281 531,284 537,284 C 537,284 550,281 550,281 C 550,281 564,281 564,281 C 567,281 571,279 573,280 C 578,281 576,287 580,290 C 584,293 602,296 607,296 C 607,296 606,293 606,293 C 610,290 609,288 606,284 C 601,276 598,275 596,265 C 596,265 586,264 586,264 C 587,256 587,240 580,236 C 577,233 557,229 552,228 C 548,227 544,227 542,225 C 539,222 539,217 538,214 C 538,214 524,213 524,213 C 524,213 511,211 511,211 C 509,211 507,211 506,213 C 504,216 508,219 510,221 C 513,224 516,228 518,230 C 518,230 528,235 528,235 C 530,237 530,240 533,242 C 536,245 545,243 545,249 C 546,251 545,253 544,255 C 541,270 533,266 523,281 Z" />
+		<path id="cly" d="M 165,96 C 165,96 159,104 159,104 C 159,104 159,101 159,101 C 152,106 158,108 157,114 C 156,116 152,118 150,120 C 150,120 155,119 155,119 C 155,119 154,129 154,129 C 154,129 155,126 155,126 C 155,126 157,128 157,128 C 157,128 158,128 158,128 C 159,123 160,123 165,121 C 165,121 165,109 165,109 C 165,109 173,97 173,97 C 173,97 168,98 168,98 C 168,98 165,96 165,96 Z M 156,124 C 156,124 156,125 156,125 C 156,125 155,124 155,124 C 155,124 156,124 156,124 Z" />
+		<g id="con" class="nopower">
+			<path d="M 411,317 C 411,326 414,329 404,334 C 406,338 408,338 412,337 C 412,337 405,342 405,342 C 406,342 406,343 407,343 C 410,343 421,334 423,331 C 427,330 427,329 431,328 C 437,326 439,328 441,320 C 435,317 431,315 424,314 C 421,313 414,316 411,317 Z" />
+			<path d="M 461,317 C 455,322 450,321 443,320 C 444,324 443,326 447,328 C 439,332 433,333 424,334 C 424,334 425,337 425,337 C 414,339 416,342 407,346 C 409,352 411,348 414,346 C 416,344 417,344 419,343 C 429,339 437,339 440,351 C 450,349 450,345 457,341 C 460,340 466,339 470,337 C 468,324 464,329 463,317 C 463,317 461,317 461,317 Z" />
+			<path d="M 441,321 C 437,328 436,326 430,328 C 427,329 426,330 423,331 C 418,336 408,340 406,347 C 406,347 425,337 425,337 C 425,337 424,334 424,334 C 433,334 438,332 447,329 C 447,329 443,321 443,321 C 443,321 441,321 441,321 Z" />
+		</g>
+		<path id="cor" d="M 136,177 C 133,182 131,184 125,183 C 125,183 120,188 120,188 C 135,192 132,183 143,191 C 143,191 145,186 145,186 C 145,186 159,188 159,188 C 159,188 168,189 168,189 C 168,189 165,176 165,176 C 158,174 154,177 147,178 C 147,178 136,177 136,177 Z" />
+		<path id="cro" d="M 285,265 C 289,274 279,280 280,286 C 280,288 281,289 282,291 C 282,291 287,286 287,286 C 287,286 289,293 289,293 C 297,284 299,286 310,286 C 313,286 318,285 320,286 C 323,288 326,292 330,294 C 330,294 327,274 327,274 C 327,274 313,274 313,274 C 313,274 310,272 310,272 C 310,272 304,263 304,263 C 304,263 297,264 297,264 C 297,264 285,265 285,265 Z" />
+		<path id="cym" d="M 150,150 C 149,153 149,153 146,155 C 146,155 153,156 153,156 C 151,165 143,164 136,167 C 137,169 144,176 146,176 C 149,177 154,175 157,174 C 165,172 172,176 173,164 C 161,162 159,163 160,153 C 160,153 153,152 153,152 C 153,152 154,151 154,151 C 154,151 153,149 153,149 C 153,149 150,150 150,150 Z" />
+		<path id="cyr" d="M 376,563 C 376,563 376,558 376,558 C 376,558 394,558 394,558 C 394,558 394,462 394,462 C 394,462 390,450 390,450 C 390,450 391,440 391,440 C 391,440 396,429 396,429 C 382,428 381,424 371,419 C 363,416 351,417 344,420 C 334,425 337,433 336,437 C 334,441 329,442 328,445 C 328,445 320,461 320,461 C 320,466 325,472 323,477 C 323,480 316,488 314,491 C 314,491 306,496 306,496 C 303,500 301,510 299,515 C 299,517 297,521 297,523 C 298,525 300,526 302,527 C 302,527 316,534 316,534 C 316,534 353,552 353,552 C 359,555 370,561 376,563 Z" />
+		<path id="dam" d="M 513,388 C 513,388 515,400 515,400 C 508,404 510,407 508,414 C 517,415 524,424 529,422 C 533,420 532,410 532,406 C 532,406 530,400 530,400 C 530,397 532,395 531,393 C 529,390 516,388 513,388 Z" />
+		<path id="del" d="M 512,401 C 504,398 501,397 493,400 C 487,402 482,406 476,409 C 474,410 470,411 469,413 C 468,415 468,418 469,420 C 469,425 469,433 475,435 C 478,436 481,435 484,435 C 493,434 500,434 505,425 C 509,417 507,411 512,401 Z" />
+		<g id="den" class="nopower">
+			<path d="M 254,145 C 250,148 252,150 252,154 C 252,154 252,159 252,159 C 252,159 255,166 255,166 C 267,168 266,168 275,160 C 275,160 274,155 274,155 C 274,155 277,156 277,156 C 279,151 279,149 273,148 C 273,148 276,134 276,134 C 268,135 267,138 261,140 C 257,142 255,141 254,145 Z" />
+			<path d="M 288,154 C 282,157 280,162 279,169 C 279,169 277,165 277,165 C 269,172 277,175 284,173 C 284,173 283,169 283,169 C 291,167 292,160 288,154 Z" />
+			<path d="M 278,153 C 278,153 274,155 274,155 C 274,155 275,160 275,160 C 271,162 269,164 267,168 C 272,168 273,168 277,165 C 277,165 278,169 278,169 C 278,169 283,156 283,156 C 283,156 278,153 278,153 Z" />
+			<path d="M 289,153 C 290,159 291,167 283,169 C 283,169 284,173 284,173 C 293,168 298,161 289,153 Z" />
+		</g>
+		<path id="dij" d="M 195,236 C 191,239 189,244 185,247 C 182,250 175,251 174,256 C 174,258 176,260 177,262 C 179,266 181,275 188,273 C 190,273 191,271 194,269 C 198,267 201,267 203,265 C 205,263 205,260 207,256 C 209,254 211,251 211,248 C 210,244 205,242 202,240 C 199,238 199,236 195,236 Z" />
+		<path id="don" d="M 468,198 C 468,198 468,211 468,211 C 468,211 464,222 464,222 C 464,222 463,231 463,231 C 463,231 472,238 472,238 C 479,233 477,234 485,234 C 489,235 489,234 494,234 C 499,235 505,238 510,234 C 511,233 512,232 512,230 C 514,223 508,223 504,217 C 502,212 505,208 504,204 C 503,202 501,201 499,200 C 490,194 488,199 481,199 C 481,199 468,198 468,198 Z" />
+		<path id="dub" d="M 120,131 C 120,131 120,136 120,136 C 117,137 117,139 118,142 C 113,144 102,154 111,158 C 114,160 117,158 120,158 C 120,158 135,160 135,160 C 136,157 137,157 137,155 C 137,155 138,150 138,150 C 140,143 140,143 136,137 C 128,139 130,134 120,131 Z M 119,142 C 119,142 119,143 119,143 C 119,143 118,142 118,142 C 118,142 119,142 119,142 Z M 120,143 C 120,143 120,144 120,144 C 120,144 119,143 119,143 C 119,143 120,143 120,143 Z" />
+		<path id="ebs" d="M 512,241 C 503,250 498,246 493,256 C 489,253 487,255 485,259 C 485,259 483,258 483,258 C 483,258 479,263 479,263 C 484,264 493,266 498,265 C 497,272 495,270 490,272 C 488,273 481,277 480,279 C 478,282 480,287 481,290 C 482,296 482,300 482,306 C 490,304 492,300 495,305 C 495,305 501,303 501,303 C 502,304 503,305 504,306 C 504,306 518,310 518,310 C 520,310 531,306 533,305 C 538,301 543,296 540,289 C 538,284 531,282 526,281 C 526,281 510,273 510,273 C 508,272 504,271 503,269 C 499,264 505,258 509,256 C 509,256 502,251 502,251 C 502,251 515,245 515,245 C 515,245 514,241 514,241 C 514,241 512,241 512,241 Z" />
+		<path id="ems" d="M 506,365 C 504,364 500,362 498,363 C 494,364 494,367 487,370 C 484,371 478,373 477,375 C 476,377 478,384 478,386 C 494,383 486,384 498,378 C 494,384 492,384 496,391 C 487,392 482,394 483,404 C 488,402 495,398 501,397 C 501,397 515,400 515,400 C 515,400 513,389 513,389 C 513,389 513,382 513,382 C 513,380 511,379 511,377 C 511,376 511,374 511,373 C 510,365 509,369 512,361 C 508,362 508,362 506,365 Z" />
+		<path id="edi" d="M 181,136 C 177,129 176,131 176,122 C 179,121 186,116 184,111 C 182,108 173,108 178,103 C 178,103 180,101 180,101 C 180,101 180,99 180,99 C 172,97 167,104 166,111 C 165,117 169,131 173,134 C 175,136 178,136 181,136 Z" />
+		<path id="egy" d="M 396,476 C 396,476 396,545 396,545 C 396,545 493,545 493,545 C 502,545 502,550 507,549 C 511,549 511,545 515,541 C 521,536 523,536 531,534 C 528,529 526,529 528,524 C 523,519 515,507 515,500 C 515,500 511,497 511,497 C 511,497 501,503 501,503 C 501,503 488,504 488,504 C 488,504 476,511 476,511 C 472,497 480,505 474,492 C 472,492 470,493 469,493 C 464,491 459,482 459,478 C 459,478 448,480 448,480 C 448,480 426,482 426,482 C 426,482 396,476 396,476 Z" />
+		<path id="eng" d="M 145,186 C 145,186 143,191 143,191 C 136,184 133,189 124,189 C 117,189 105,193 98,195 C 98,195 116,203 116,203 C 116,203 125,205 125,205 C 125,205 132,205 132,205 C 132,205 141,212 141,212 C 141,212 155,214 155,214 C 155,214 155,200 155,200 C 161,203 165,202 164,208 C 170,210 171,210 178,209 C 178,209 173,208 173,208 C 177,201 182,203 188,199 C 190,198 191,194 193,191 C 187,184 183,190 176,190 C 176,190 160,187 160,187 C 160,187 152,187 152,187 C 152,187 145,186 145,186 Z" />
+		<path id="est" d="M 67,307 C 68,316 68,312 65,319 C 65,319 63,326 63,326 C 63,326 82,340 82,340 C 82,340 93,335 93,335 C 91,327 87,330 85,323 C 83,316 88,312 89,305 C 89,297 89,299 91,292 C 86,292 81,290 77,294 C 72,300 74,307 67,307 Z" />
+		<path id="fez" d="M 215,463 C 215,463 216,475 216,475 C 216,475 215,484 215,484 C 215,484 217,493 217,493 C 217,493 215,502 215,502 C 221,505 225,512 235,517 C 242,521 247,519 253,523 C 258,525 265,532 271,532 C 274,533 278,531 280,530 C 283,529 292,526 293,524 C 297,521 301,502 304,497 C 306,493 311,492 314,489 C 316,486 319,481 321,478 C 321,478 300,479 300,479 C 297,478 296,476 295,475 C 293,474 287,473 285,473 C 276,473 270,478 264,478 C 261,478 251,476 248,475 C 233,471 229,472 215,463 Z" />
+		<path id="fin" d="M 352,32 C 352,34 353,36 352,38 C 350,40 341,40 338,39 C 335,37 333,35 331,35 C 329,35 327,38 326,40 C 326,40 337,46 337,46 C 340,48 345,61 345,65 C 345,65 350,67 350,67 C 363,74 347,84 345,91 C 343,94 345,98 346,101 C 347,106 347,115 351,119 C 353,120 355,121 357,122 C 372,130 374,121 388,120 C 390,114 395,104 395,98 C 394,85 386,82 380,73 C 378,70 375,63 374,60 C 374,60 371,51 371,51 C 369,49 367,47 365,44 C 365,44 363,36 363,36 C 360,32 357,31 352,32 Z" />
+		<path id="fra" d="M 169,220 C 169,220 166,241 166,241 C 165,244 163,247 164,250 C 165,254 168,255 171,256 C 177,247 178,251 184,246 C 188,242 190,237 192,236 C 196,232 202,232 204,221 C 197,220 198,221 194,221 C 191,220 189,219 186,219 C 181,220 179,222 169,220 Z" />
+		<path id="gal" d="M 313,226 C 313,226 325,228 325,228 C 325,228 335,233 335,233 C 335,233 349,235 349,235 C 349,235 358,238 358,238 C 358,238 366,223 366,223 C 362,222 350,220 346,220 C 346,220 330,223 330,223 C 324,223 321,217 315,223 C 315,223 313,226 313,226 Z" />
+		<path id="gas" d="M 140,245 C 138,250 137,252 137,257 C 133,260 132,265 133,270 C 127,272 120,282 126,288 C 127,289 136,294 137,294 C 137,294 146,295 146,295 C 146,293 146,291 147,289 C 149,283 158,274 165,274 C 172,273 172,273 178,270 C 178,270 174,261 174,261 C 174,261 164,255 164,255 C 164,255 159,248 159,248 C 159,248 140,245 140,245 Z" />
+		<path id="gda" d="M 302,188 C 302,188 301,203 301,203 C 308,202 316,206 320,205 C 324,204 324,200 329,198 C 334,195 338,198 339,188 C 339,188 325,183 325,183 C 325,183 302,188 302,188 Z" />
+		<path id="geo" d="M 539,286 C 542,294 541,293 538,300 C 546,301 544,300 549,299 C 549,299 564,300 564,300 C 564,300 570,299 570,299 C 576,298 574,296 582,299 C 581,290 579,293 576,288 C 576,286 576,283 574,282 C 571,281 567,282 564,282 C 555,283 548,282 539,286 Z" />
+		<path id="gib" d="M 62,326 C 62,326 58,328 58,328 C 58,328 57,334 57,334 C 57,334 61,334 61,334 C 62,338 64,341 68,342 C 68,345 71,352 75,353 C 78,353 82,350 84,349 C 84,349 81,340 81,340 C 78,335 67,329 62,326 Z" />
+		<path id="gob" d="M 341,64 C 340,66 339,69 339,71 C 338,74 341,75 339,79 C 335,86 327,85 324,90 C 322,93 324,96 323,99 C 322,102 320,104 321,107 C 321,110 323,111 325,113 C 327,114 328,115 330,116 C 333,116 344,113 348,112 C 348,112 345,92 345,92 C 347,85 362,75 352,67 C 351,67 348,66 347,65 C 345,64 343,64 341,64 Z" />
+		<path id="gol" d="M 162,311 C 168,312 173,315 178,319 C 178,319 186,327 186,327 C 188,329 192,329 195,330 C 202,332 203,335 211,336 C 211,336 210,331 210,331 C 210,331 211,330 211,330 C 212,330 214,331 215,331 C 225,330 219,319 220,312 C 212,309 207,311 202,308 C 194,303 195,298 192,296 C 189,292 183,291 178,292 C 176,292 174,291 172,292 C 170,294 169,298 168,301 C 168,301 162,311 162,311 Z" />
+		<path id="hag" d="M 217,188 C 213,187 212,188 211,192 C 214,193 223,196 224,199 C 224,200 223,205 223,207 C 227,204 230,199 233,195 C 236,192 241,189 241,184 C 241,179 236,174 231,176 C 226,177 219,184 217,188 Z" />
+		<path id="hel" d="M 231,175 C 233,175 238,176 240,175 C 242,175 244,173 246,173 C 248,173 250,176 252,176 C 254,176 256,174 254,171 C 256,162 253,163 253,158 C 252,152 253,154 251,147 C 249,147 244,146 241,147 C 239,148 238,152 237,154 C 234,162 231,166 231,175 Z" />
+		<path id="hes" d="M 271,194 C 265,195 256,194 253,188 C 251,183 251,174 247,173 C 246,172 244,172 243,173 C 238,176 244,181 242,187 C 240,192 235,194 234,198 C 233,206 241,211 248,210 C 254,209 265,207 268,203 C 269,201 270,196 271,194 Z" />
+		<path id="hol" d="M 254,169 C 256,177 248,188 261,192 C 263,192 264,192 266,192 C 268,192 271,191 273,191 C 273,191 271,183 271,183 C 274,181 273,181 273,178 C 273,178 269,179 269,179 C 269,179 266,174 266,174 C 266,174 267,168 267,168 C 267,168 254,169 254,169 Z" />
+		<path id="ifn" d="M 0,355 C 0,355 0,410 0,410 C 0,410 6,395 6,395 C 6,395 15,387 15,387 C 15,387 24,379 24,379 C 24,379 40,375 40,375 C 39,357 14,355 0,355 Z" />
+		<path id="ind" d="M 733,492 C 734,498 737,500 742,503 C 742,503 736,516 736,516 C 736,516 733,523 733,523 C 733,523 730,522 730,522 C 726,529 726,533 725,536 C 722,540 719,538 716,541 C 714,542 713,545 710,547 C 705,549 702,545 698,546 C 696,547 695,549 692,550 C 690,551 687,551 685,551 C 680,551 677,553 672,554 C 667,555 661,554 658,560 C 657,563 658,566 659,569 C 659,569 647,573 647,573 C 647,573 629,578 629,578 C 629,578 618,581 618,581 C 618,581 612,582 612,582 C 612,582 606,585 606,585 C 606,585 597,586 597,586 C 597,586 588,589 588,589 C 588,589 581,590 581,590 C 581,590 571,597 571,597 C 574,601 580,600 585,600 C 585,600 621,600 621,600 C 621,600 770,600 770,600 C 770,600 770,513 770,513 C 770,503 772,482 768,474 C 758,476 745,473 735,472 C 733,472 727,471 725,472 C 724,472 722,475 721,476 C 720,477 717,479 716,480 C 715,482 716,483 716,485 C 719,490 728,492 733,492 Z" />
+		<path id="ion" d="M 317,359 C 317,359 313,377 313,377 C 313,377 315,387 315,387 C 315,387 361,380 361,380 C 361,380 357,373 357,373 C 366,370 363,372 372,372 C 369,367 358,366 353,364 C 350,362 342,353 340,349 C 340,349 324,354 324,354 C 324,354 317,359 317,359 Z" />
+		<path id="ira" d="M 575,298 C 571,302 570,302 565,301 C 562,310 566,312 567,318 C 567,318 570,333 570,333 C 571,338 574,342 576,346 C 577,349 578,352 579,355 C 583,360 591,360 593,364 C 594,367 591,369 590,372 C 589,374 588,376 588,378 C 593,382 611,396 613,401 C 615,403 617,411 617,413 C 616,416 614,418 614,421 C 614,423 620,428 622,430 C 635,426 629,431 640,430 C 642,436 647,440 650,445 C 651,447 653,451 655,452 C 655,452 663,456 663,456 C 663,456 669,459 669,459 C 669,459 679,462 679,462 C 681,463 684,465 686,465 C 686,465 695,465 695,465 C 700,465 708,459 714,460 C 719,461 720,468 723,470 C 727,472 743,473 747,473 C 745,467 747,459 753,455 C 755,454 762,453 765,452 C 764,447 763,448 761,444 C 760,441 760,440 759,437 C 758,435 754,433 753,431 C 751,428 753,425 751,422 C 749,419 745,417 744,415 C 744,412 746,410 747,408 C 750,405 759,397 758,392 C 758,386 750,391 749,386 C 748,384 750,380 750,378 C 751,374 753,362 752,359 C 752,359 742,328 742,328 C 739,328 733,327 730,326 C 727,324 725,322 721,320 C 721,320 708,315 708,315 C 708,315 702,314 702,314 C 699,313 697,311 695,311 C 693,311 691,312 689,313 C 689,313 677,315 677,315 C 673,317 675,320 666,320 C 663,326 648,329 641,327 C 641,327 632,324 632,324 C 628,322 627,324 623,320 C 615,322 617,324 608,322 C 608,322 610,319 610,319 C 610,318 610,317 608,316 C 604,311 601,319 598,321 C 593,324 590,322 589,317 C 586,315 582,311 581,309 C 578,304 581,303 575,298 Z" />
+		<path id="iri" d="M 139,141 C 140,151 136,155 135,160 C 131,159 123,158 119,158 C 99,159 86,170 71,183 C 75,188 90,194 96,194 C 99,194 105,192 108,191 C 116,189 119,190 124,183 C 130,186 134,182 136,177 C 136,177 150,178 150,178 C 150,178 136,167 136,167 C 136,167 144,165 144,165 C 150,163 152,164 153,156 C 153,156 146,156 146,156 C 149,154 150,154 150,150 C 150,150 153,149 153,149 C 153,149 153,152 153,152 C 153,152 162,155 162,155 C 163,152 166,148 165,145 C 164,142 161,142 159,141 C 159,141 144,140 144,140 C 142,140 141,140 139,141 Z" />
+		<path id="jer" d="M 508,415 C 507,423 504,426 499,432 C 504,440 503,441 512,442 C 513,442 516,443 517,442 C 523,442 530,431 527,424 C 527,423 520,420 518,418 C 514,416 513,415 508,415 Z" />
+		<path id="kar" d="M 471,146 C 474,146 476,145 479,146 C 482,147 485,151 488,150 C 491,149 493,145 497,142 C 500,140 508,137 510,135 C 513,133 513,128 514,125 C 514,125 517,117 517,117 C 517,115 515,107 514,105 C 512,102 509,100 506,98 C 504,96 495,88 493,85 C 488,77 491,71 489,67 C 487,64 482,62 479,60 C 475,58 467,52 463,51 C 461,51 460,52 458,52 C 455,53 448,51 448,48 C 448,45 451,43 449,39 C 445,34 434,36 428,37 C 434,42 440,43 439,53 C 444,56 444,57 444,63 C 433,57 435,58 424,64 C 424,64 435,73 435,73 C 435,73 424,73 424,73 C 419,72 412,66 408,73 C 417,78 415,76 416,84 C 416,84 403,78 403,78 C 402,74 402,74 399,73 C 399,73 401,68 401,68 C 401,68 394,65 394,65 C 401,61 411,64 418,61 C 426,58 425,45 421,41 C 419,40 411,36 409,35 C 409,35 408,38 408,38 C 407,36 406,35 405,34 C 400,31 388,32 382,31 C 377,31 375,28 373,29 C 371,30 367,38 367,40 C 365,46 371,47 373,51 C 375,54 373,57 377,65 C 385,81 386,77 390,82 C 392,85 393,89 396,91 C 399,94 407,93 411,94 C 411,94 433,102 433,102 C 438,103 440,100 448,103 C 454,105 455,109 460,110 C 466,113 473,111 476,119 C 478,124 472,139 471,146 Z M 391,60 C 391,60 394,63 394,63 C 391,64 390,63 388,60 C 388,60 391,60 391,60 Z" />
+		<g id="kaz" class="nopower">
+			<path d="M 706,146 C 706,146 706,149 706,149 C 712,152 711,155 703,154 C 703,154 705,158 705,158 C 705,158 701,160 701,160 C 703,161 705,163 705,165 C 707,171 699,171 695,170 C 686,174 683,164 675,166 C 673,166 672,167 670,166 C 668,166 667,164 663,163 C 658,162 656,164 653,164 C 650,164 647,161 643,160 C 638,159 637,161 634,161 C 632,160 625,155 619,156 C 615,157 610,161 609,164 C 607,167 607,171 605,173 C 602,176 599,171 597,168 C 594,170 591,173 590,177 C 590,179 593,190 586,188 C 586,188 581,187 581,187 C 581,190 582,197 583,199 C 585,202 588,202 591,203 C 591,203 600,209 600,209 C 605,213 605,218 610,217 C 615,215 617,209 620,207 C 622,206 624,207 626,207 C 626,207 634,206 634,206 C 634,206 642,207 642,207 C 642,207 643,214 643,214 C 643,214 643,227 643,227 C 638,228 628,233 626,237 C 625,239 626,240 626,242 C 626,242 619,241 619,241 C 618,248 622,246 627,250 C 633,257 629,262 642,263 C 645,259 655,249 661,253 C 665,257 664,263 670,266 C 673,267 676,266 679,266 C 684,267 683,268 693,268 C 693,266 692,266 692,264 C 693,260 700,250 704,249 C 710,248 722,257 728,259 C 734,261 738,257 744,257 C 744,257 769,263 769,263 C 769,263 769,168 769,168 C 769,158 768,162 765,156 C 765,156 761,148 761,148 C 760,146 759,143 756,142 C 752,141 749,143 745,144 C 740,145 737,142 732,142 C 732,142 706,146 706,146 Z" />
+			<path d="M 711,196 C 710,198 707,201 708,203 C 709,207 714,209 717,209 C 717,209 713,216 713,216 C 712,219 715,222 709,222 C 708,225 708,225 705,226 C 705,226 701,232 701,232 C 701,232 698,228 698,228 C 698,228 691,228 691,228 C 690,226 688,224 688,221 C 687,216 689,206 693,204 C 695,204 696,204 697,204 C 697,204 698,199 698,199 C 698,199 699,199 699,199 C 699,199 701,201 701,201 C 701,201 700,198 700,198 C 700,198 711,196 711,196 Z" />
+		</g>
+		<path id="kie" d="M 403,218 C 407,226 407,227 416,229 C 418,229 420,229 422,229 C 426,229 428,227 432,227 C 442,229 440,234 454,232 C 456,232 458,232 460,231 C 464,229 462,226 463,222 C 463,222 466,216 466,216 C 469,209 468,205 467,198 C 467,198 456,198 456,198 C 456,198 447,201 447,201 C 447,201 438,203 438,203 C 438,203 427,211 427,211 C 427,211 420,213 420,213 C 420,213 415,215 415,215 C 415,215 403,218 403,218 Z" />
+		<path id="kub" d="M 514,230 C 511,238 506,237 504,247 C 504,247 514,241 514,241 C 514,241 515,245 515,245 C 515,245 502,251 502,251 C 504,255 505,255 509,255 C 505,257 498,265 503,269 C 504,271 509,273 511,274 C 514,275 519,278 522,277 C 524,277 527,273 529,271 C 537,265 540,265 543,255 C 543,253 544,250 543,249 C 541,246 535,246 532,244 C 529,242 529,238 526,236 C 525,234 516,231 514,230 Z" />
+		<path id="lan" d="M 211,263 C 206,268 199,268 194,271 C 191,273 190,275 187,275 C 184,275 182,273 179,273 C 176,272 173,274 170,275 C 167,276 164,275 161,276 C 154,279 142,293 152,299 C 159,304 161,300 169,301 C 170,294 171,292 178,292 C 180,292 181,291 183,292 C 188,293 196,298 201,298 C 204,298 205,296 207,296 C 208,295 210,295 211,294 C 215,291 211,287 210,283 C 209,276 210,272 215,267 C 215,267 211,263 211,263 Z" />
+		<path id="lap" d="M 305,62 C 312,56 308,52 317,49 C 317,49 316,46 316,46 C 319,45 321,45 323,43 C 325,41 326,35 330,33 C 334,32 335,36 338,37 C 341,38 347,37 351,38 C 351,36 351,34 351,32 C 354,27 362,30 365,37 C 365,37 372,26 372,26 C 372,26 361,26 361,26 C 363,20 360,20 355,18 C 355,18 353,22 353,22 C 353,22 351,18 351,18 C 351,18 348,23 348,23 C 343,17 343,18 337,21 C 337,21 331,23 331,23 C 322,27 315,35 307,41 C 304,44 299,49 299,52 C 298,57 302,59 305,62 Z" />
+		<path id="lat" d="M 326,120 C 326,120 329,124 329,124 C 329,124 321,127 321,127 C 321,131 319,134 319,138 C 320,146 325,143 333,145 C 339,147 343,152 350,153 C 354,153 357,152 360,151 C 362,160 366,157 367,155 C 367,155 367,143 367,143 C 359,140 364,136 369,133 C 376,130 379,132 384,132 C 384,132 391,131 391,131 C 391,131 393,127 393,127 C 393,127 396,129 396,129 C 398,124 398,123 403,122 C 403,122 394,118 394,118 C 388,117 373,125 367,125 C 363,125 356,122 353,119 C 350,118 349,116 348,113 C 341,114 332,116 326,120 Z" />
+		<path id="lem" d="M 365,230 C 362,233 362,234 360,237 C 358,240 354,243 355,247 C 356,251 370,256 375,253 C 382,248 376,230 365,230 Z" />
+		<path id="lib" d="M 415,388 C 413,390 410,395 407,397 C 404,398 400,397 398,400 C 398,400 392,412 392,412 C 389,417 383,419 378,422 C 379,423 379,424 380,425 C 383,427 398,431 402,432 C 402,432 417,437 417,437 C 417,437 424,438 424,438 C 427,439 430,442 435,442 C 441,441 445,437 450,434 C 452,433 466,431 469,431 C 469,431 467,414 467,414 C 454,414 455,417 441,413 C 439,413 436,413 434,411 C 428,407 421,393 415,388 Z" />
+		<path id="lig" d="M 194,295 C 195,298 196,302 198,305 C 202,308 216,311 221,310 C 224,309 226,308 228,306 C 230,314 226,318 228,322 C 228,324 231,325 233,326 C 241,328 249,324 255,320 C 251,316 247,312 244,307 C 240,300 245,300 235,293 C 234,292 232,291 230,291 C 227,290 223,292 220,293 C 220,293 207,295 207,295 C 205,296 203,297 201,297 C 199,297 196,296 194,295 Z" />
+		<path id="liv" d="M 384,158 C 384,158 377,164 377,164 C 377,164 367,169 367,169 C 367,169 364,180 364,180 C 364,180 358,190 358,190 C 364,193 368,200 376,197 C 380,195 378,192 379,188 C 379,183 382,182 384,178 C 388,171 389,164 384,158 Z" />
+		<path id="lor" d="M 209,211 C 209,217 206,222 204,227 C 203,229 200,233 200,236 C 201,239 205,240 208,243 C 208,243 212,248 212,248 C 218,243 217,240 224,240 C 225,237 228,232 227,229 C 226,226 223,224 220,222 C 216,217 218,215 209,211 Z" />
+		<path id="mac" d="M 349,325 C 349,325 350,340 350,340 C 360,339 362,337 370,333 C 370,333 370,326 370,326 C 361,318 359,320 349,325 Z" />
+		<path id="mal" d="M 304,348 C 304,348 300,356 300,356 C 305,359 308,365 304,368 C 302,370 297,369 295,369 C 293,373 286,382 282,382 C 280,382 278,381 276,380 C 276,380 277,375 277,375 C 270,377 271,383 269,389 C 260,386 263,386 258,384 C 256,382 253,383 250,381 C 241,375 246,373 233,375 C 232,380 231,381 227,383 C 227,383 225,388 225,388 C 227,393 229,396 226,401 C 224,406 219,408 221,412 C 222,413 225,415 227,416 C 231,418 241,422 246,423 C 246,423 252,423 252,423 C 257,423 268,429 273,428 C 276,427 279,424 283,421 C 283,421 295,416 295,416 C 304,410 309,406 320,401 C 320,401 313,380 313,380 C 313,380 316,359 316,359 C 316,359 308,348 308,348 C 308,348 304,348 304,348 Z M 267,399 C 262,399 260,398 259,393 C 264,394 265,394 267,399 Z" />
+		<path id="mar" d="M 275,183 C 275,183 271,202 271,202 C 271,202 286,199 286,199 C 289,199 294,199 297,196 C 302,192 301,181 293,180 C 289,179 286,181 282,182 C 282,182 275,183 275,183 Z" />
+		<path id="mas" d="M 350,165 C 350,165 350,183 350,183 C 346,182 343,182 344,187 C 344,187 340,187 340,187 C 340,187 338,196 338,196 C 350,201 356,194 361,184 C 363,181 365,173 363,170 C 361,166 354,165 350,165 Z" />
+		<path id="mes" d="M 574,346 C 567,349 565,346 561,348 C 554,352 558,358 558,363 C 558,363 559,377 559,377 C 560,388 548,390 546,398 C 545,401 546,405 546,408 C 547,411 549,420 552,422 C 553,424 559,425 562,425 C 569,427 581,430 587,430 C 587,442 594,436 605,440 C 610,442 610,446 613,447 C 615,448 621,447 623,447 C 623,447 614,434 614,434 C 621,430 618,428 614,425 C 614,425 610,420 610,420 C 612,418 614,416 615,414 C 616,411 614,408 614,406 C 610,397 603,392 595,386 C 593,384 588,380 587,377 C 586,373 591,367 593,364 C 588,362 582,361 579,356 C 576,353 576,349 574,346 Z" />
+		<path id="mid" d="M 0,170 C 0,170 0,266 0,266 C 0,266 13,267 13,267 C 13,267 24,267 24,267 C 24,267 34,268 34,268 C 34,268 58,266 58,266 C 58,266 70,266 70,266 C 76,266 76,264 79,264 C 82,264 85,267 87,265 C 89,264 91,256 91,254 C 93,248 96,231 99,226 C 101,223 104,220 107,218 C 113,215 121,215 116,206 C 114,203 109,201 106,199 C 106,199 82,191 82,191 C 70,185 56,173 51,171 C 47,169 43,168 39,168 C 22,165 17,167 0,170 Z" />
+		<path id="min" d="M 146,140 C 146,140 164,141 164,141 C 164,141 163,135 163,135 C 163,135 155,136 155,136 C 155,136 163,122 163,122 C 159,123 159,124 158,128 C 156,127 156,127 155,129 C 155,129 155,119 155,119 C 155,119 150,120 150,120 C 152,118 156,116 157,114 C 158,108 153,107 159,101 C 159,101 159,104 159,104 C 165,101 168,87 169,81 C 169,81 140,85 140,85 C 136,86 128,87 125,89 C 117,94 115,112 120,119 C 121,122 124,125 127,125 C 130,126 145,121 146,134 C 146,134 146,140 146,140 Z" />
+		<path id="mor" d="M 0,448 C 0,448 21,449 21,449 C 21,449 22,436 22,436 C 22,436 31,432 31,432 C 31,432 52,425 52,425 C 52,425 76,417 76,417 C 76,417 85,414 85,414 C 85,414 89,405 89,405 C 89,405 103,399 103,399 C 103,399 106,395 106,395 C 106,395 105,379 105,379 C 105,379 100,371 100,371 C 94,372 88,369 84,365 C 81,361 82,356 77,356 C 66,355 57,369 48,373 C 44,375 31,375 23,379 C 21,380 8,392 6,394 C 3,399 0,411 0,417 C 0,417 0,448 0,448 Z" />
+		<path id="mus" d="M 390,167 C 390,167 386,178 386,178 C 386,178 381,186 381,186 C 381,186 381,197 381,197 C 381,197 377,210 377,210 C 377,210 403,215 403,215 C 410,216 414,213 420,211 C 423,210 424,211 427,209 C 430,208 432,204 436,202 C 439,200 443,200 447,199 C 447,199 456,196 456,196 C 459,195 461,197 464,196 C 467,197 469,196 474,196 C 478,197 483,198 487,196 C 490,193 491,185 491,181 C 493,168 498,162 486,153 C 485,152 481,149 480,148 C 476,146 459,150 453,151 C 447,151 447,150 437,151 C 431,152 431,154 426,156 C 426,156 411,159 411,159 C 403,161 399,166 390,167 Z" />
+		<path id="nap" d="M 280,338 C 280,338 278,342 278,342 C 282,352 290,354 289,363 C 289,370 283,367 283,373 C 278,374 277,375 276,380 C 278,381 280,382 282,382 C 284,382 292,376 293,374 C 294,372 294,371 295,369 C 295,369 301,369 301,369 C 308,369 306,361 303,357 C 302,356 301,355 299,354 C 298,353 296,352 295,351 C 294,349 295,346 295,344 C 295,344 287,336 287,336 C 287,336 280,338 280,338 Z" />
+		<path id="nmk" d="M 326,42 C 326,42 318,47 318,47 C 318,47 319,50 319,50 C 319,50 313,53 313,53 C 313,53 309,60 309,60 C 309,60 300,74 300,74 C 300,74 291,83 291,83 C 291,83 293,99 293,99 C 309,94 309,98 324,98 C 322,85 332,90 339,79 C 342,75 338,75 339,71 C 339,68 342,65 342,63 C 343,60 341,58 340,56 C 336,45 338,48 326,42 Z" />
+		<path id="nao" d="M 0,0 C 0,0 0,169 0,169 C 17,167 27,163 45,168 C 54,171 55,174 62,178 C 64,180 68,182 70,182 C 74,182 81,174 84,172 C 87,169 97,163 100,162 C 100,162 110,158 110,158 C 105,151 108,150 112,147 C 115,144 115,144 118,142 C 118,139 117,138 120,136 C 120,136 120,131 120,131 C 120,131 128,132 128,132 C 128,132 128,131 128,131 C 128,131 126,129 126,129 C 126,129 129,128 129,128 C 124,124 122,124 119,118 C 116,113 116,110 117,105 C 118,101 119,96 121,92 C 127,85 145,84 154,82 C 157,82 168,81 170,78 C 172,76 172,70 171,67 C 171,67 158,41 158,41 C 147,45 137,41 128,43 C 128,43 113,27 113,27 C 113,27 114,26 114,26 C 114,26 123,28 123,28 C 123,28 119,26 119,26 C 119,26 119,24 119,24 C 119,24 123,23 123,23 C 123,23 117,18 117,18 C 122,17 124,18 128,21 C 128,21 133,19 133,19 C 131,16 127,14 124,12 C 116,4 116,0 104,0 C 104,0 0,0 0,0 Z" />
+		<path id="nth" d="M 176,122 C 176,122 176,129 176,129 C 176,129 181,136 181,136 C 181,136 183,142 183,142 C 183,142 187,148 187,148 C 196,147 204,143 214,142 C 225,141 244,147 254,145 C 254,145 256,140 256,140 C 256,140 256,131 256,131 C 245,123 245,121 246,108 C 246,105 246,99 249,98 C 249,98 251,83 251,83 C 251,83 238,82 238,82 C 226,82 226,82 215,84 C 215,84 202,86 202,86 C 202,86 190,94 190,94 C 190,94 178,102 178,102 C 177,103 175,105 176,107 C 177,109 181,109 183,111 C 186,115 179,121 176,122 Z" />
+		<path id="nwg" d="M 165,28 C 165,28 168,29 168,29 C 165,35 165,37 159,40 C 160,45 164,53 167,57 C 169,61 172,65 173,70 C 173,76 167,91 167,94 C 167,96 167,97 168,98 C 176,97 179,100 183,99 C 187,97 199,85 205,84 C 214,83 226,81 235,81 C 235,81 254,82 254,82 C 254,82 262,77 262,77 C 262,77 286,66 286,66 C 290,63 293,57 299,55 C 299,48 304,44 309,40 C 319,33 322,27 334,22 C 341,20 342,17 348,23 C 349,20 351,11 346,10 C 344,10 335,13 333,14 C 326,16 318,17 310,18 C 310,18 276,19 276,19 C 276,19 259,20 259,20 C 259,20 229,20 229,20 C 229,20 215,21 215,21 C 215,21 186,21 186,21 C 182,20 172,19 168,21 C 165,22 165,25 165,28 Z" />
+		<path id="nwy" d="M 296,55 C 296,55 284,67 284,67 C 284,67 278,69 278,69 C 278,69 273,72 273,72 C 262,77 245,82 249,98 C 246,99 246,102 246,105 C 245,111 244,120 248,125 C 259,137 263,128 270,123 C 277,119 276,123 283,115 C 283,115 283,119 283,119 C 287,117 287,115 288,111 C 288,111 291,99 291,99 C 291,96 289,90 289,86 C 288,78 293,78 298,74 C 301,71 303,67 304,63 C 304,63 296,55 296,55 Z" />
+		<path id="nov" d="M 396,94 C 397,104 393,109 391,118 C 391,118 403,121 403,121 C 398,123 397,124 396,129 C 396,129 393,127 393,127 C 393,127 391,131 391,131 C 391,131 388,130 388,130 C 385,140 389,146 389,149 C 390,152 388,154 388,156 C 387,159 388,162 389,165 C 399,165 402,161 410,157 C 410,157 425,154 425,154 C 425,154 435,150 435,150 C 441,148 446,149 452,149 C 452,149 469,147 469,147 C 470,140 476,125 474,119 C 471,112 464,115 458,111 C 451,107 452,102 437,104 C 431,104 425,100 420,99 C 409,95 407,96 396,94 Z" />
+		<path id="ode" d="M 414,229 C 415,234 419,241 418,246 C 418,251 414,259 418,264 C 423,271 429,269 432,270 C 434,271 436,274 438,276 C 438,276 445,266 445,266 C 445,266 444,264 444,264 C 444,264 443,264 443,264 C 448,260 449,259 456,259 C 456,259 457,256 457,256 C 457,256 468,242 468,242 C 468,242 472,240 472,240 C 466,228 458,234 448,233 C 448,233 432,228 432,228 C 427,228 425,230 421,230 C 421,230 414,229 414,229 Z" />
+		<path id="pal" d="M 244,374 C 247,382 252,381 257,384 C 262,386 259,387 269,389 C 269,389 274,375 274,375 C 274,375 274,372 274,372 C 271,373 262,373 259,373 C 251,373 251,369 244,374 Z" />
+		<path id="per" d="M 614,434 C 617,440 630,455 635,460 C 635,460 642,465 642,465 C 646,470 648,474 650,476 C 650,476 654,480 654,480 C 654,480 658,488 658,488 C 658,488 661,472 661,472 C 667,476 667,483 666,489 C 666,489 677,487 677,487 C 677,487 686,488 686,488 C 686,488 697,487 697,487 C 697,487 713,466 713,466 C 716,474 714,472 714,480 C 717,479 720,477 722,474 C 724,470 719,462 716,460 C 710,457 701,464 696,465 C 696,465 685,465 685,465 C 690,466 666,457 670,459 C 670,459 664,456 664,456 C 660,453 657,454 655,451 C 653,450 651,446 650,444 C 650,444 640,430 640,430 C 632,430 633,428 629,428 C 624,428 618,432 614,434 Z" />
+		<path id="pic" d="M 187,199 C 182,202 175,202 173,208 C 173,208 178,208 178,208 C 176,209 173,210 172,211 C 170,213 169,218 173,219 C 177,220 182,218 186,218 C 186,218 205,220 205,220 C 206,219 206,218 207,216 C 209,206 198,206 194,205 C 191,203 189,201 187,199 Z" />
+		<path id="pie" d="M 242,262 C 242,262 242,269 242,269 C 242,269 229,264 229,264 C 229,264 217,267 217,267 C 217,267 212,271 212,271 C 212,271 212,283 212,283 C 212,283 215,293 215,293 C 223,294 234,288 241,284 C 241,275 247,275 249,271 C 252,265 247,263 242,262 Z" />
+		<path id="pis" d="M 452,345 C 456,355 460,355 460,369 C 472,370 471,373 476,374 C 479,374 490,370 492,368 C 493,367 495,366 496,364 C 494,360 492,355 493,351 C 493,347 498,343 496,339 C 493,335 486,339 482,339 C 475,340 474,338 470,338 C 464,339 457,342 452,345 Z" />
+		<path id="plm" d="M 184,328 C 181,318 167,311 157,311 C 152,311 146,314 141,315 C 135,318 130,319 127,325 C 122,332 133,340 144,337 C 144,337 160,331 160,331 C 165,329 165,331 169,331 C 169,331 184,328 184,328 Z" />
+		<path id="pod" d="M 366,227 C 373,231 377,233 379,241 C 381,248 378,251 381,253 C 385,256 395,247 399,246 C 404,245 409,249 416,251 C 417,249 417,248 418,246 C 418,242 415,233 413,230 C 413,230 407,225 407,225 C 405,223 403,219 401,217 C 401,217 386,214 386,214 C 382,213 375,210 371,212 C 368,214 369,218 368,221 C 368,223 367,225 366,227 Z" />
+		<path id="por" d="M 44,312 C 44,312 49,313 49,313 C 49,313 46,316 46,316 C 46,316 44,322 44,322 C 44,322 39,332 39,332 C 39,332 40,333 40,333 C 40,333 55,335 55,335 C 56,325 58,329 61,323 C 67,312 64,315 66,305 C 66,305 70,306 70,306 C 72,300 75,294 80,290 C 77,287 66,280 62,283 C 62,283 54,297 54,297 C 48,304 45,301 44,312 Z" />
+		<path id="pyl" d="M 316,388 C 317,391 320,399 323,401 C 325,402 335,402 341,405 C 347,409 349,414 352,416 C 355,417 363,418 366,418 C 371,419 372,421 375,422 C 379,422 389,416 391,413 C 392,411 393,410 394,408 C 394,406 396,402 395,400 C 393,393 381,401 382,391 C 382,391 370,382 370,382 C 370,382 368,387 368,387 C 368,387 365,382 365,382 C 365,382 361,384 361,384 C 358,379 353,382 348,383 C 348,383 316,388 316,388 Z" />
+		<path id="red" d="M 482,450 C 484,459 492,465 497,472 C 504,482 503,493 515,500 C 515,507 523,520 528,524 C 525,529 528,529 530,534 C 530,534 533,542 533,542 C 533,542 538,560 538,560 C 538,560 542,567 542,567 C 544,570 544,573 546,576 C 550,580 568,591 568,591 C 569,593 570,595 571,596 C 575,595 576,594 577,590 C 577,590 571,588 571,588 C 575,576 569,577 568,565 C 567,555 566,547 561,538 C 558,533 556,534 553,528 C 553,528 544,502 544,502 C 540,496 538,498 536,494 C 534,491 534,489 532,485 C 532,485 518,466 518,466 C 518,466 511,467 511,467 C 511,467 510,455 510,455 C 508,460 508,465 506,467 C 503,470 500,468 498,466 C 491,462 488,453 482,450 Z" />
+		<path id="rig" d="M 367,143 C 367,143 367,155 367,155 C 365,158 362,156 361,154 C 361,154 360,151 360,151 C 351,153 350,155 350,164 C 358,165 360,167 363,168 C 366,168 369,167 372,165 C 372,165 379,163 379,163 C 383,160 388,153 389,148 C 384,144 385,138 385,132 C 378,131 374,130 367,134 C 362,137 360,142 367,143 Z" />
+		<path id="rom" d="M 251,317 C 251,317 270,337 270,337 C 270,337 279,341 279,341 C 281,338 281,338 285,336 C 285,336 285,334 285,334 C 282,332 276,329 274,326 C 271,322 274,323 268,314 C 265,310 264,310 259,311 C 258,312 256,312 255,313 C 253,314 252,315 251,317 Z" />
+		<path id="ruh" d="M 231,198 C 226,205 224,209 217,214 C 218,216 218,218 219,220 C 220,222 222,223 224,224 C 233,230 236,222 247,219 C 247,219 237,209 237,209 C 237,209 231,198 231,198 Z" />
+		<path id="rum" d="M 368,256 C 368,258 368,260 369,262 C 371,265 381,271 380,280 C 380,287 375,287 370,290 C 368,292 366,294 367,297 C 369,300 374,301 377,301 C 386,301 395,297 404,294 C 409,293 411,295 414,292 C 417,293 424,295 426,293 C 428,291 427,288 426,286 C 426,286 428,276 428,276 C 434,282 434,274 433,273 C 431,271 428,272 425,271 C 423,271 422,270 421,269 C 414,264 414,261 415,253 C 415,253 401,247 401,247 C 401,247 385,255 385,255 C 385,255 368,256 368,256 Z" />
+		<path id="sah" d="M 23,436 C 23,436 54,462 54,462 C 54,462 111,508 111,508 C 111,508 131,524 131,524 C 137,529 140,529 140,537 C 140,537 160,535 160,535 C 160,535 171,534 171,534 C 171,534 179,525 179,525 C 179,525 219,508 219,508 C 219,508 214,501 214,501 C 213,498 215,496 215,493 C 215,490 213,487 213,484 C 213,480 215,478 215,474 C 214,471 213,468 213,463 C 213,456 216,460 215,449 C 214,445 216,444 215,440 C 214,432 206,422 199,420 C 193,427 181,435 172,437 C 172,437 151,439 151,439 C 151,439 135,440 135,440 C 127,441 125,445 113,439 C 108,437 100,431 96,427 C 93,423 91,417 87,416 C 84,416 71,421 68,422 C 68,422 23,436 23,436 Z" />
+		<path id="san" d="M 66,277 C 66,277 63,280 63,280 C 72,280 76,286 83,290 C 87,292 92,291 102,295 C 105,296 110,299 112,301 C 116,304 115,305 120,307 C 120,307 131,294 131,294 C 125,289 123,292 121,281 C 112,279 114,278 109,276 C 105,275 103,275 99,273 C 95,271 84,264 80,264 C 77,263 76,265 73,265 C 71,266 68,265 66,266 C 64,268 65,274 66,277 Z" />
+		<path id="sar" d="M 221,327 C 217,331 216,331 211,330 C 211,330 210,331 210,331 C 210,331 210,348 210,348 C 212,352 214,352 216,348 C 216,348 221,349 221,349 C 222,346 226,333 225,330 C 224,328 223,328 221,327 Z" />
+		<path id="sax" d="M 300,196 C 298,198 297,199 295,199 C 289,202 279,200 268,206 C 267,206 264,208 263,209 C 259,213 265,220 269,221 C 274,223 279,220 283,220 C 290,218 294,219 301,219 C 301,219 300,212 300,212 C 300,212 300,196 300,196 Z" />
+		<path id="sch" d="M 220,241 C 215,249 208,254 207,264 C 207,264 211,260 211,260 C 211,260 221,264 221,264 C 221,264 229,262 229,262 C 229,262 241,266 241,266 C 239,257 248,262 252,263 C 253,252 250,255 243,250 C 241,247 241,245 237,244 C 234,243 232,245 229,245 C 227,245 222,242 220,241 Z" />
+		<path id="ser" d="M 332,287 C 332,287 332,295 332,295 C 332,295 333,301 333,301 C 333,304 331,307 334,311 C 338,316 343,315 348,323 C 358,319 354,318 366,320 C 366,320 365,316 365,316 C 365,316 370,315 370,315 C 370,315 366,310 366,310 C 366,310 366,302 366,302 C 366,302 365,290 365,290 C 365,290 341,286 341,286 C 341,286 332,287 332,287 Z" />
+		<path id="sib" d="M 630,0 C 632,6 630,4 630,8 C 631,15 634,9 631,21 C 629,20 627,18 624,18 C 624,18 586,13 586,13 C 574,11 576,9 567,7 C 557,4 545,3 535,7 C 536,11 537,14 534,17 C 531,20 530,18 526,19 C 526,19 515,23 515,23 C 515,23 506,25 506,25 C 504,26 504,27 502,29 C 501,30 498,32 497,30 C 496,28 501,21 502,19 C 502,19 477,31 477,31 C 477,31 464,36 464,36 C 464,36 466,40 466,40 C 461,43 462,47 466,50 C 472,55 488,62 491,68 C 492,71 490,77 493,83 C 497,91 508,96 514,102 C 518,107 517,111 520,113 C 521,115 525,115 529,116 C 529,116 542,123 542,123 C 549,126 556,127 562,131 C 567,135 578,148 581,153 C 584,157 583,160 586,163 C 586,163 593,168 593,168 C 598,167 599,168 601,173 C 607,171 604,167 608,162 C 612,156 621,153 628,156 C 628,156 636,160 636,160 C 643,154 647,161 653,162 C 658,163 662,157 670,166 C 679,161 678,164 685,168 C 688,169 690,169 693,170 C 693,170 694,167 694,167 C 696,168 697,170 700,169 C 703,169 705,166 702,164 C 701,162 698,162 696,161 C 696,161 702,158 702,158 C 702,158 702,156 702,156 C 702,156 699,155 699,155 C 703,152 703,152 708,153 C 707,152 705,150 705,148 C 704,143 715,143 718,142 C 718,142 733,140 733,140 C 733,140 743,142 743,142 C 747,142 750,140 753,140 C 756,140 758,140 761,141 C 761,141 761,144 761,144 C 761,144 766,156 766,156 C 766,156 769,158 769,158 C 769,158 769,0 769,0 C 769,0 687,0 687,0 C 687,0 669,0 669,0 C 669,0 661,2 661,2 C 661,2 662,10 662,10 C 671,9 671,8 679,12 C 677,18 677,22 683,26 C 675,26 674,21 672,15 C 672,15 661,15 661,15 C 661,17 662,22 662,24 C 661,30 651,32 648,37 C 643,36 641,37 637,33 C 640,33 644,33 647,32 C 652,30 658,20 658,14 C 658,9 655,5 654,0 C 654,0 630,0 630,0 Z" />
+		<path id="sil" d="M 303,203 C 303,203 302,211 302,211 C 302,215 304,224 309,226 C 311,226 313,224 315,223 C 320,218 320,213 321,206 C 321,206 303,203 303,203 Z" />
+		<path id="sin" d="M 481,435 C 483,447 483,451 492,461 C 494,464 501,471 505,468 C 508,466 509,458 509,455 C 509,455 510,458 510,458 C 517,457 516,455 519,444 C 519,444 506,441 506,441 C 506,441 498,434 498,434 C 498,434 481,435 481,435 Z" />
+		<path id="ska" d="M 282,115 C 277,122 276,120 270,123 C 270,123 262,129 262,129 C 260,131 258,131 257,133 C 256,135 257,139 257,141 C 257,141 276,134 276,134 C 271,142 275,139 273,148 C 280,150 278,155 283,155 C 286,155 291,153 292,150 C 293,146 289,143 288,139 C 285,134 287,132 287,129 C 286,127 285,125 284,123 C 283,120 284,118 282,115 Z" />
+		<!-- <path id="smy1" d="M 415,358 C 415,358 416,362 416,362 C 416,362 411,361 411,361 C 411,361 410,362 410,362 C 410,362 410,364 410,364 C 410,364 418,367 418,367 C 418,373 422,374 427,373 C 427,373 424,378 424,378 C 424,378 437,374 437,374 C 435,386 448,378 455,379 C 455,379 458,373 458,373 C 458,373 456,371 456,371 C 456,371 456,370 456,370 C 463,365 455,352 452,347 C 452,347 443,351 443,351 C 443,351 432,354 432,354 C 432,354 415,358 415,358 Z M 421,385 C 422,385 424,385 425,384 C 430,382 426,377 422,382 C 422,382 421,385 421,385 Z" /> -->
+		<g id="smy" class="nopower">
+			<path d="M 415,358 C 415,358 416,362 416,362 C 416,362 411,361 411,361 C 411,361 410,362 410,362 C 410,362 410,364 410,364 C 410,364 418,367 418,367 C 418,373 422,374 427,373 C 427,373 424,378 424,378 C 424,378 437,374 437,374 C 435,386 448,378 455,379 C 455,379 458,373 458,373 C 458,373 456,371 456,371 C 456,371 456,370 456,370 C 463,365 455,352 452,347 C 452,347 443,351 443,351 C 443,351 432,354 432,354 C 432,354 415,358 415,358 Z" />
+			<path d="M 421,385 C 422,385 424,385 425,384 C 430,382 426,377 422,382 C 422,382 421,385 421,385 Z" />
+		</g>
+		<path id="sao" d="M 0,267 C 0,267 0,354 0,354 C 14,354 39,357 41,375 C 41,375 47,374 47,374 C 47,374 67,359 67,359 C 67,359 69,348 69,348 C 69,348 68,342 68,342 C 64,340 62,338 61,334 C 61,334 40,333 40,333 C 40,333 39,332 39,332 C 39,332 46,317 46,317 C 46,317 49,314 49,314 C 49,314 44,312 44,312 C 45,310 45,307 46,305 C 48,302 52,301 55,296 C 55,296 59,289 59,289 C 62,283 60,282 66,277 C 66,273 66,268 62,267 C 59,266 44,269 40,269 C 40,269 21,268 21,268 C 21,268 0,267 0,267 Z" />
+		<path id="swa" d="M 225,241 C 225,241 232,243 232,243 C 238,239 241,245 246,243 C 249,242 249,238 249,235 C 249,228 248,227 247,220 C 243,221 232,226 229,229 C 228,231 226,238 225,241 Z" />
+		<path id="swe" d="M 283,121 C 283,121 286,129 286,129 C 287,132 285,134 287,139 C 290,145 295,147 290,152 C 290,152 296,165 296,165 C 296,165 304,165 304,165 C 304,165 307,162 307,162 C 307,162 306,156 306,156 C 306,156 316,156 316,156 C 321,146 319,145 320,136 C 320,132 321,132 321,127 C 321,127 329,124 329,124 C 329,124 326,121 326,121 C 333,113 323,113 321,108 C 321,105 322,102 323,100 C 315,100 299,96 292,102 C 288,106 293,118 283,121 Z" />
+		<path id="syr" d="M 522,355 C 521,357 519,360 517,361 C 514,363 511,363 510,366 C 510,366 511,378 511,378 C 512,381 514,379 513,386 C 513,386 534,390 534,390 C 534,398 531,397 534,405 C 534,405 551,389 551,389 C 551,389 557,381 557,381 C 557,381 557,362 557,362 C 557,362 555,356 555,356 C 555,356 558,347 558,347 C 558,347 543,353 543,353 C 543,353 534,353 534,353 C 534,353 522,355 522,355 Z" />
+		<path id="sze" d="M 348,263 C 346,267 344,269 340,271 C 337,272 330,272 328,275 C 327,278 329,282 330,285 C 330,285 342,284 342,284 C 342,284 359,287 359,287 C 361,282 362,273 357,269 C 357,269 348,263 348,263 Z" />
+		<path id="tau" d="M 473,264 C 477,258 479,262 483,258 C 483,258 485,259 485,259 C 488,256 489,254 493,256 C 501,245 498,254 506,238 C 496,235 491,236 482,235 C 474,234 468,244 464,249 C 464,249 458,255 458,255 C 456,259 458,264 462,265 C 465,265 470,264 473,264 Z" />
+		<path id="thr" d="M 381,326 C 381,326 380,330 380,330 C 380,341 388,335 393,334 C 399,334 404,336 409,330 C 414,325 406,323 402,323 C 402,323 395,324 395,324 C 395,324 389,324 389,324 C 389,324 381,326 381,326 Z" />
+		<path id="tob" d="M 274,429 C 275,431 276,435 278,437 C 284,443 294,437 300,439 C 307,441 316,448 323,446 C 326,446 330,443 332,442 C 340,436 335,433 338,427 C 341,421 346,420 352,418 C 345,406 340,404 327,403 C 324,402 321,402 318,403 C 310,405 301,413 294,417 C 284,423 285,418 274,429 Z" />
+		<path id="tol" d="M 118,307 C 118,307 112,301 112,301 C 109,299 97,293 94,293 C 91,294 90,298 89,301 C 89,303 90,304 89,307 C 88,313 83,319 86,326 C 90,331 96,329 100,326 C 100,326 109,321 109,321 C 112,318 117,311 118,307 Z" />
+		<path id="tra" d="M 360,287 C 360,287 366,290 366,290 C 368,289 375,286 376,285 C 385,278 370,265 369,264 C 366,260 367,255 363,253 C 357,251 350,260 350,262 C 350,265 356,266 358,269 C 362,274 361,281 360,287 Z" />
+		<path id="tri" d="M 233,419 C 232,424 229,430 226,434 C 223,438 220,438 217,444 C 214,451 220,451 215,459 C 216,461 217,462 218,463 C 224,468 243,472 251,474 C 254,475 262,477 265,477 C 270,476 277,471 284,471 C 286,471 293,472 295,473 C 297,474 298,477 300,477 C 302,478 305,477 307,477 C 314,477 314,478 322,475 C 322,475 318,462 318,462 C 318,462 324,447 324,447 C 324,447 300,439 300,439 C 300,439 282,439 282,439 C 282,439 272,429 272,429 C 272,429 254,423 254,423 C 254,423 246,423 246,423 C 246,423 233,419 233,419 Z" />
+		<path id="tun" d="M 217,439 C 217,439 219,439 219,439 C 219,439 226,433 226,433 C 229,429 230,423 231,418 C 229,416 221,413 221,410 C 221,408 224,406 225,404 C 228,399 229,394 225,389 C 225,389 227,383 227,383 C 232,381 233,379 233,374 C 233,374 223,379 223,379 C 222,372 219,372 213,373 C 213,373 208,373 208,373 C 204,373 204,376 203,379 C 196,392 200,389 198,400 C 197,404 195,406 195,409 C 195,415 202,418 206,421 C 210,425 215,434 217,439 Z M 221,374 C 221,374 221,375 221,375 C 221,375 220,374 220,374 C 220,374 221,374 221,374 Z" />
+		<path id="tur" d="M 702,250 C 702,250 694,264 694,264 C 694,264 696,267 696,267 C 688,273 687,269 679,268 C 675,268 672,270 667,266 C 661,260 663,254 657,254 C 655,254 652,256 650,257 C 638,265 641,276 651,284 C 651,284 649,276 649,276 C 648,271 653,269 656,270 C 658,271 660,276 663,280 C 665,282 668,283 667,285 C 666,289 658,290 655,291 C 655,291 653,287 653,287 C 650,293 653,295 654,301 C 655,301 657,300 658,300 C 660,300 661,300 663,302 C 669,306 666,312 665,318 C 675,318 671,315 677,313 C 677,313 689,311 689,311 C 691,310 693,309 695,309 C 698,309 699,311 702,312 C 702,312 708,313 708,313 C 708,313 722,318 722,318 C 726,320 727,322 730,324 C 733,326 739,325 742,327 C 745,329 744,335 749,337 C 752,338 766,341 768,338 C 769,337 769,332 769,330 C 769,330 769,273 769,273 C 769,271 769,267 768,266 C 767,264 763,264 761,263 C 761,263 745,259 745,259 C 739,259 734,262 728,261 C 721,259 717,253 702,250 Z" />
+		<path id="tus" d="M 232,292 C 232,292 240,298 240,298 C 240,298 243,306 243,306 C 243,306 249,315 249,315 C 249,315 263,309 263,309 C 263,309 255,299 255,299 C 248,289 243,281 232,292 Z" />
+		<path id="trl" d="M 276,250 C 276,250 263,249 263,249 C 263,249 243,246 243,246 C 247,252 255,252 254,260 C 254,263 253,264 251,265 C 251,265 251,272 251,272 C 262,276 261,268 268,265 C 271,263 286,263 290,263 C 290,263 286,251 286,251 C 286,251 287,240 287,240 C 279,240 276,242 276,250 Z" />
+		<path id="tys" d="M 225,323 C 225,323 222,325 222,325 C 222,325 225,332 225,332 C 225,332 221,349 221,349 C 221,349 216,348 216,348 C 216,348 217,372 217,372 C 221,374 222,375 223,379 C 223,379 233,375 233,375 C 233,375 244,374 244,374 C 244,374 249,372 249,372 C 249,372 259,373 259,373 C 259,373 269,373 269,373 C 269,373 283,373 283,373 C 283,373 282,370 282,370 C 284,370 286,369 288,368 C 291,365 290,359 288,355 C 288,355 281,347 281,347 C 279,344 279,342 276,340 C 272,337 272,339 268,334 C 266,331 260,324 257,322 C 253,321 245,327 240,327 C 235,328 230,324 225,323 Z" />
+		<path id="uls" d="M 126,129 C 126,129 125,132 125,132 C 129,136 130,138 136,136 C 136,136 140,141 140,141 C 152,136 147,126 136,124 C 131,124 129,126 126,129 Z" />
+		<path id="umb" d="M 259,302 C 261,308 263,307 266,310 C 266,310 272,320 272,320 C 274,325 272,325 278,328 C 278,328 285,320 285,320 C 282,317 281,315 280,311 C 279,307 279,302 275,300 C 270,298 269,304 259,302 Z" />
+		<path id="uti" d="M 177,333 C 175,332 174,331 172,332 C 169,332 165,337 165,340 C 164,344 167,347 165,354 C 165,357 161,368 162,370 C 164,373 169,371 172,372 C 172,372 177,372 177,372 C 177,372 185,372 185,372 C 185,372 202,374 202,374 C 202,374 209,373 209,373 C 211,373 212,373 214,373 C 216,371 217,368 217,365 C 217,354 212,352 211,347 C 210,345 211,339 211,337 C 202,335 184,323 177,333 Z" />
+		<path id="val" d="M 119,346 C 119,346 118,343 118,343 C 121,342 127,340 128,337 C 129,334 126,331 126,329 C 126,326 128,323 130,321 C 117,319 115,331 102,335 C 98,336 87,336 84,340 C 83,342 83,343 83,344 C 85,349 89,347 93,348 C 93,348 99,349 99,349 C 101,349 104,351 106,351 C 108,351 109,348 111,347 C 111,347 119,346 119,346 Z" />
+		<path id="ven" d="M 270,299 C 270,299 270,297 270,297 C 267,294 268,294 267,290 C 266,282 273,280 280,280 C 281,278 284,272 284,269 C 283,264 272,265 269,266 C 265,267 263,272 258,275 C 253,277 249,271 245,277 C 241,283 247,286 251,290 C 258,297 256,303 270,299 Z" />
+		<path id="vol" d="M 520,116 C 520,116 516,125 516,125 C 515,129 515,133 512,137 C 509,139 502,141 498,143 C 495,145 492,149 489,152 C 489,152 495,162 495,162 C 495,162 491,195 491,195 C 495,196 504,200 506,204 C 506,206 506,207 506,209 C 506,209 526,211 526,211 C 529,211 535,211 538,213 C 542,216 539,223 545,225 C 545,225 552,226 552,226 C 552,226 570,230 570,230 C 574,231 578,232 582,235 C 585,238 586,241 587,245 C 592,241 592,240 591,234 C 604,227 599,227 605,220 C 602,213 599,209 592,206 C 588,203 585,204 582,200 C 580,198 578,187 582,186 C 583,185 587,187 588,188 C 591,181 588,182 588,177 C 589,174 592,172 591,169 C 590,166 586,166 583,162 C 583,162 580,154 580,154 C 577,149 564,135 560,132 C 560,132 541,125 541,125 C 531,121 531,117 520,116 Z" />
+		<path id="war" d="M 320,219 C 320,219 329,222 329,222 C 329,222 349,219 349,219 C 349,219 367,222 367,222 C 367,222 368,213 368,213 C 368,213 375,207 375,207 C 375,207 379,197 379,197 C 374,198 371,199 367,197 C 363,195 362,192 359,192 C 356,192 353,197 347,199 C 342,200 340,197 336,197 C 322,197 321,208 320,219 Z" />
+		<path id="wes" d="M 170,189 C 178,192 178,190 186,188 C 192,186 191,183 186,181 C 186,181 186,179 186,179 C 199,173 198,165 190,164 C 186,163 185,165 182,167 C 178,169 169,172 167,177 C 166,180 169,185 170,189 Z" />
+		<path id="wbs" d="M 443,263 C 443,263 443,264 443,264 C 443,264 445,265 445,265 C 445,265 438,276 438,276 C 438,276 436,272 436,272 C 434,276 435,279 429,279 C 424,289 432,293 424,298 C 424,298 423,308 423,308 C 429,310 427,312 431,315 C 436,319 443,320 449,321 C 460,322 465,316 473,310 C 476,309 480,307 481,304 C 483,297 479,287 478,280 C 478,280 475,281 475,281 C 475,281 474,275 474,275 C 474,275 464,275 464,275 C 464,269 469,267 474,265 C 469,263 467,266 463,265 C 459,264 459,261 457,260 C 452,257 447,260 443,263 Z" />
+		<path id="wms" d="M 144,342 C 140,339 135,337 130,337 C 126,338 122,341 118,343 C 118,343 119,346 119,346 C 119,346 111,347 111,347 C 111,347 105,351 105,351 C 105,351 96,348 96,348 C 96,348 84,347 84,347 C 80,351 75,356 72,349 C 68,351 67,353 68,358 C 70,357 75,356 78,356 C 81,358 81,362 83,365 C 85,367 91,371 94,371 C 94,371 108,374 108,374 C 110,375 113,376 116,375 C 120,375 123,371 126,370 C 126,370 139,368 139,368 C 145,368 157,372 161,367 C 162,366 163,361 163,359 C 165,352 166,345 163,338 C 158,329 148,335 144,342 Z" />
+		<path id="yal" d="M 474,261 C 471,269 463,266 464,275 C 464,275 474,275 474,275 C 474,275 475,281 475,281 C 482,279 483,276 489,273 C 494,271 498,273 498,265 C 498,265 481,263 481,263 C 481,263 480,261 480,261 C 480,261 474,261 474,261 Z" />
+		<path id="yor" d="M 177,138 C 177,138 174,152 174,152 C 174,152 175,167 175,167 C 177,167 179,166 181,165 C 191,161 188,157 187,153 C 187,153 187,148 187,148 C 187,148 182,138 182,138 C 182,138 177,138 177,138 Z" />
+		<path id="zar" d="M 291,296 C 288,299 295,302 297,303 C 311,313 306,308 314,312 C 318,314 318,315 323,317 C 323,317 320,318 320,318 C 323,320 323,320 326,321 C 333,323 334,323 339,317 C 336,315 332,313 331,309 C 330,306 331,303 331,300 C 330,296 324,288 320,287 C 318,286 317,286 315,287 C 307,287 290,283 291,296 Z" />
+	</g>
+	
+</svg>
