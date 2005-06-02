@@ -1,4 +1,6 @@
-	
+
+PERHAPS call next version 1.7.0 (when released)?
+
 jDip TODO list
 ==============
 
@@ -19,14 +21,23 @@ Cannot duplicate
 
 Bugs to be fixed
 ======================================================
-
-	1) ancient med map issues
-			supply centers don't show up
-			not clear why this happens
-			test as standalone SVG using Squiggle  
+		
+	1) maps / symbols
+		ancmed:
+			should now be fixed
+		
+		fix ancmed units
+			dislodged units are not correct
+			
+		aberrationV
+			stefano
+			a) FIX order symbols
+			b) FIX unit positions
 			
 	2) update help text
-	
+		add changelog, when complete
+		TEST
+		
 	3)  Menu doesn't match preferences for province-naming
 	  	e.g.: menu for province names lists 'none' if prefs
 		set to 'brief' names, and brief names are showing.
@@ -41,7 +52,53 @@ Bugs to be fixed
 		see what we can do about that
 		the current fix for general import may have broken that....
 		
-	5)	NO variants exception (on linux...)
+		if we are importing into an existing game:
+		
+		1) note last phase of existing game
+		2) ignore importing upto that phase OR start importing from that
+			phase...
+		3) or check judge position/orders against existing phase orders
+		 	to make sure we are OK
+			
+		perhaps: import (as a new game) then game is merged
+		
+		
+	6)	Mac OS X Issue ? 
+		** NEED MAC TESTING: mac os x : native file chooser used (FileDialog)
+		
+	7) BugReport:
+		need to report if we are webstart version or not
+	
+	8)	Windows
+		would be nice if we could do file associations....
+			1) double click on .jdip file opens in jdip
+			2) jdip command line opens jdip file
+			3) enable this in webstart (1.5.x)
+				    <association>
+					  <mime-type="application-x/swingset2-file"/>
+					  <extensions="swingset2"/> 
+					</association>
+					<related-content>
+				see:
+					http://java.sun.com/j2se/1.5.0/docs/guide/javaws/developersguide/syntax.html#application_desc
+				
+				see:
+					http://today.java.net/pub/a/today/2004/01/05/swing.html?page=3
+				installer will need to do this 
+				.jar installer (w/special instructions on windows)
+					http://openfacts.berlios.de/index-en.phtml?title=IzPack/ScriptExamples/Creating_File_Associations_in_Windows_XP/2000
+				.exe installer (windows-only)
+					CANNOT do it with installshield
+					look into NSIS installer.....
+					
+					
+				create a simple NSIS installer:
+					installs a single file
+					creates registry keys
+					does a java install (online)
+					
+				
+	9)	NO variants exception (on linux...)
 		
 		No variants found on path: /home/USERNAME/variants; <br>
 		No variants found on path: /home/USERNAME/variants; <br>
@@ -122,7 +179,30 @@ Bugs to be fixed
 						  
 						  return new File(path, filename);
 					}
-					
+	
+	*** MISC ISSUES
+		http://today.java.net/pub/a/today/2003/12/08/swing.html
+		http://today.java.net/pub/a/today/2004/01/05/swing.html?page=2
+		http://java.sun.com/developer/technicalArticles/JavaLP/JavaToMac/
+			a) file-type associations for os x
+				1) REQUIRES: custom listener using com.mac.* package
+				2) REQUIRES: 'plist' file (from installer / app bundle)
+			b) menu type application things
+				To set the name of our application, and have it appear at the top of the application menu, 
+				we use another system property, 
+					com.apple.mrj.application.apple.menu.about.name
+				You can put this on the command line with another -D argument. If you're using the
+				Project Builder IDE, you'll want to put all of these Java system properties in your Info.plist file, 
+				where they'll look like this:
+				
+				com.apple.mrj.application.growbox.intrudes=true
+
+
+	
+		
+		
+		
+	
 				
 Installer
 ======================================================
@@ -144,3 +224,9 @@ The installer would:
 	c) then install jDip. 
 
 
+FUTURE FEATURE
+==============
+	6) 'check for new JEdit version'
+		if so, display changes in a nonmodal dialog
+		allow user to point browser to download site
+	
