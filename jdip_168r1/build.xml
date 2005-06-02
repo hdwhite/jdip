@@ -303,6 +303,11 @@
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
+		<!-- Variant Package: Aberration V -->
+		<zip compress="true"   destfile="${variant.dir}/aberrationVariant.zip"
+				basedir="${resource.dir}/variants/aberration"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
 		<!-- SymbolPack: simple -->
 		<zip compress="true"   destfile="${variant.dir}/simpleSymbols.zip"
