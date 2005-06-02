@@ -49,8 +49,4 @@
 	<mapID target="cmd_options_htm" url="advanced/cmd_options.htm" />
 	<mapID target="save_game_format_htm" url="advanced/save_game_format.htm" />
 	<mapID target="advanced_creating_variant_plugins_htm" url="advanced/creating_variant_plugins.htm" />
-	<mapID target="advanced_variant_plugin_file_structure_htm" url="advanced/variant_plugin_file_structure.htm" />
-	<mapID target="advanced_variant_xml_file_format_htm" url="advanced/variant_xml_file_format.htm" />
-	<mapID target="adjacency_xml_file_format_htm" url="advanced/adjacency_xml_file_format.htm" />
-	<mapID target="advanced_svg_map_file_format_htm" url="advanced/svg_map_file_format.htm" />
 </map>

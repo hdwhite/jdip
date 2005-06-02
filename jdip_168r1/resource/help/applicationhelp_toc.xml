@@ -51,9 +51,5 @@
 		<tocitem text="Command Line (Startup) Options" target="cmd_options_htm"/>
 		<tocitem text="Save Game Format" target="save_game_format_htm"/>
 		<tocitem text="Creating Variant Plugins" target="advanced_creating_variant_plugins_htm"/>
-		<tocitem text="Variant Plugin File Structure" target="advanced_variant_plugin_file_structure_htm"/>
-		<tocitem text="Variant XML File Format" target="advanced_variant_xml_file_format_htm"/>
-		<tocitem text="Adjacency XML File Format" target="adjacency_xml_file_format_htm"/>
-		<tocitem text="SVG Map File Format" target="advanced_svg_map_file_format_htm"/>
 	</tocitem>
 </toc>
