@@ -87,13 +87,13 @@
 		
 		<symbol id="Army" viewBox="0 0 16 16" overflow="visible">
 			<g transform="translate(-8,-8)">
-				<path transform="translate(0,0)" class="symBorder" stroke-width="1" d="M 0,0 L 2,0 L 11,9 L 12,9 L 13,8 L 14,9 L 13,10 L 13,12 L 16,15 L 15,16 L 12,13 L 10,13 L 9,14 L 8,13 L 9,12 L 9,11 L 0,2 Z"/>
+				<path class="symBorder" stroke-width="1" d="M 0,0 L 2,0 L 11,9 L 12,9 L 13,8 L 14,9 L 13,10 L 13,12 L 16,15 L 15,16 L 12,13 L 10,13 L 9,14 L 8,13 L 9,12 L 9,11 L 0,2 Z"/>
 			</g>
 		</symbol>
 		
 		<symbol id="Fleet" viewBox="0 0 16 16" overflow="visible">
 			<g transform="translate(-8,-8)">
-				<path transform="translate(0,0)" class="symBorder" stroke-width="1" d="M 16,16 L 4,16 L 0,12 L 0,2 L 2,0 L 4,0 L 6,3 L 3,3 L 2,4 L 2,7 L 4,9 L 6,9 L 6,4 L 7,4 L 7,9 L 9,9 L 9,4 L 10,4 L 10,9 L 12,9 L 12,4 L 13,4 L 13,9 L 15,9 L 15,4 L 16,4 Z" />
+				<path class="symBorder" stroke-width="1" d="M 16,16 L 4,16 L 0,12 L 0,2 L 2,0 L 4,0 L 6,3 L 3,3 L 2,4 L 2,7 L 4,9 L 6,9 L 6,4 L 7,4 L 7,9 L 9,9 L 9,4 L 10,4 L 10,9 L 12,9 L 12,4 L 13,4 L 13,9 L 15,9 L 15,4 L 16,4 Z" />
 			</g>
 		</symbol>
 		
@@ -106,21 +106,15 @@
 			</g>
 		</symbol>
 		
-		<symbol id="DislodgedArmy" viewBox="0 0 10 10" overflow="visible">
-			<g transform="translate(-5,-5)">
-				<circle cx="70%" cy="70%" r="50%" stroke-width="3%" class="symDislodgedShadow"/>
-				<circle cx="50%" cy="50%" r="50%" stroke-width="3%" class="symDislodgedBorder"/>
-				<text stroke-width="0.1" font-family="sansserif" font-size="8" font-weight="lighter" text-anchor="middle" baseline-shift="-3" stroke="black" fill="black" x="50%" y="50%">A</text>
-			</g>
+		<symbol id="DislodgedArmy" viewBox="0 0 16 16" overflow="visible">
+			<path transform="translate(-3,-5)" class="symDislodgedShadow" stroke-width="1" d="M 0,0 L 2,0 L 11,9 L 12,9 L 13,8 L 14,9 L 13,10 L 13,12 L 16,15 L 15,16 L 12,13 L 10,13 L 9,14 L 8,13 L 9,12 L 9,11 L 0,2 Z"/>
+			<path transform="translate(-8,-8)" class="symBorder" stroke-width="1" d="M 0,0 L 2,0 L 11,9 L 12,9 L 13,8 L 14,9 L 13,10 L 13,12 L 16,15 L 15,16 L 12,13 L 10,13 L 9,14 L 8,13 L 9,12 L 9,11 L 0,2 Z"/>
 		</symbol>
 		
-		<symbol id="DislodgedFleet" viewBox="0 0 10 10" overflow="visible">
-			<g transform="translate(-5,-5)">
-				<rect x="20%" y="20%" width="100%" height="100%" stroke-width="1" class="symDislodgedShadow"/>
-				<rect x="0%" y="0%" width="100%" height="100%" stroke-width="3%" class="symDislodgedBorder"/>
-				<text stroke-width="0.1" font-family="sansserif" font-size="8" font-weight="lighter" text-anchor="middle" baseline-shift="-3" stroke="black" fill="black" x="50%" y="50%">F</text>
-			</g>
-		</symbol>		
+		<symbol id="DislodgedFleet" viewBox="0 0 16 16" overflow="visible">
+			<path transform="translate(-5,-5)" class="symDislodgedShadow" stroke-width="1" d="M 16,16 L 4,16 L 0,12 L 0,2 L 2,0 L 4,0 L 6,3 L 3,3 L 2,4 L 2,7 L 4,9 L 6,9 L 6,4 L 7,4 L 7,9 L 9,9 L 9,4 L 10,4 L 10,9 L 12,9 L 12,4 L 13,4 L 13,9 L 15,9 L 15,4 L 16,4 Z" />
+			<path transform="translate(-8,-8)" class="symBorder" stroke-width="1" d="M 16,16 L 4,16 L 0,12 L 0,2 L 2,0 L 4,0 L 6,3 L 3,3 L 2,4 L 2,7 L 4,9 L 6,9 L 6,4 L 7,4 L 7,9 L 9,9 L 9,4 L 10,4 L 10,9 L 12,9 L 12,4 L 13,4 L 13,9 L 15,9 L 15,4 L 16,4 Z" />
+		</symbol>
 	</defs>
 	
 	<!-- Example code: displays the symbols (3 main types) + SC -->
