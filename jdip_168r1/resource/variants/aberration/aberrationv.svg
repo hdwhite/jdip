@@ -175,15 +175,15 @@
 	
 	<jdipNS:ORDERDRAWING>
 		<jdipNS:POWERCOLORS>
-			<jdipNS:POWERCOLOR power="Burgundy" color="rgb(204,255,255)"/>
-			<jdipNS:POWERCOLOR power="Sicily" color="rgb(204,255,204)"/>
-			<jdipNS:POWERCOLOR power="Eire" color="rgb(243,243,243)"/>
-			<jdipNS:POWERCOLOR power="Hungary" color="rgb(255,217,192)"/>
-			<jdipNS:POWERCOLOR power="Israel" color="rgb(255,204,255)"/>
-			<jdipNS:POWERCOLOR power="Poland" color="rgb(255,255,230)"/>
-			<jdipNS:POWERCOLOR power="Spain" color="rgb(255,243,217)"/>
-			<jdipNS:POWERCOLOR power="Ukraine" color="rgb(217,204,192)"/>
-			<jdipNS:POWERCOLOR power="Byzantium" color="rgb(255,255,204)"/>
+			<jdipNS:POWERCOLOR power="Burgundy"  color="forestgreen"/>
+			<jdipNS:POWERCOLOR power="Sicily"    color="orange"/>
+			<jdipNS:POWERCOLOR power="Eire"      color="mediumvioletred"/>
+			<jdipNS:POWERCOLOR power="Hungary"   color="lightskyblue"/>
+			<jdipNS:POWERCOLOR power="Israel"    color="lime"/>
+			<jdipNS:POWERCOLOR power="Poland"    color="crimson"/>
+			<jdipNS:POWERCOLOR power="Spain"     color="chocolate"/>
+			<jdipNS:POWERCOLOR power="Ukraine"   color="lightgoldenrodyellow"/>
+			<jdipNS:POWERCOLOR power="Byzantium" color="plum"/>
 		</jdipNS:POWERCOLORS>
 		
 		<jdipNS:SYMBOLSIZE name="Fleet" width="20" height="20"/>
@@ -193,7 +193,7 @@
 		<jdipNS:SYMBOLSIZE name="DislodgedArmy" width="20" height="20"/>
 		<jdipNS:SYMBOLSIZE name="DislodgedWing" width="20" height="20"/>
 		<jdipNS:SYMBOLSIZE name="FailedOrder" width="15" height="15"/>
-		<jdipNS:SYMBOLSIZE name="SupplyCenter" width="10" height="10"/>
+		<jdipNS:SYMBOLSIZE name="SupplyCenter" width="8" height="8"/>
 		<jdipNS:SYMBOLSIZE name="BuildUnit" width="30" height="30"/>
 		<jdipNS:SYMBOLSIZE name="RemoveUnit" width="25" height="25"/>
 		<jdipNS:SYMBOLSIZE name="WaivedBuild" width="20" height="20"/>
@@ -202,167 +202,166 @@
 		<jdipNS:REMOVE deltaRadius="5"/>
 		<jdipNS:DISBAND deltaRadius="5"/>
 		<jdipNS:WAIVE deltaRadius="0"/>
-		<jdipNS:HOLD deltaRadius="5" strokeCSSStyle="varwidthorder" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="6,9,12,18" shadowWidths="10,15,20,25"/>
-		<jdipNS:MOVE deltaRadius="5" strokeCSSStyle="varwidthorder" markerID="arrow" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="6,9,12,18" shadowWidths="10,15,20,25"/>
+		<jdipNS:HOLD deltaRadius="5" strokeCSSStyle="varwidthorder" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="3,5,7,10" shadowWidths="5,7,9,12"/>
+		<jdipNS:MOVE deltaRadius="5" strokeCSSStyle="varwidthorder" markerID="arrow" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="3,5,7,10" shadowWidths="5,7,9,12"/>
 		<jdipNS:RETREAT deltaRadius="5" strokeCSSStyle="defaultorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadoworder"/>
 		<jdipNS:SUPPORT deltaRadius="10" strokeCSSStyle="supportorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadowdash"/>
 		<jdipNS:CONVOY deltaRadius="10" strokeCSSStyle="convoyorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadowdash"/>
 	</jdipNS:ORDERDRAWING>
 	
-	<jdipNS:PROVINCE_DATA dislodgedUnitOffset="10,10">
-		<jdipNS:PROVINCE name="adr"><jdipNS:UNIT x="306" y="400"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="aeg"><jdipNS:UNIT x="405" y="475"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ait"><jdipNS:UNIT x="425" y="450"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ala"><jdipNS:UNIT x="423" y="574"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="alb"><jdipNS:UNIT x="345" y="427"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="alg"><jdipNS:UNIT x="159" y="492"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ang"><jdipNS:UNIT x="214" y="243"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="apu"><jdipNS:UNIT x="309" y="421"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ara"><jdipNS:UNIT x="624" y="560"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="arc"><jdipNS:UNIT x="209" y="18"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="aze"><jdipNS:UNIT x="618" y="378"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bal"><jdipNS:UNIT x="338" y="219"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bar"><jdipNS:UNIT x="420" y="20"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bay"><jdipNS:UNIT x="122" y="334"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bor"><jdipNS:UNIT x="309" y="237"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="car"><jdipNS:UNIT x="452" y="507"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="cat"><jdipNS:UNIT x="147" y="391"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="cil"><jdipNS:UNIT x="515" y="445"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="cir"><jdipNS:UNIT x="563" y="340"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="cly"><jdipNS:UNIT x="165" y="175"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="cor"><jdipNS:UNIT x="157" y="263"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="cro"><jdipNS:UNIT x="301" y="359"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="cym"><jdipNS:UNIT x="160" y="245"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="del"><jdipNS:UNIT x="487" y="537"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="don"><jdipNS:UNIT x="495" y="280"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ebs"><jdipNS:UNIT x="519" y="380"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ems"><jdipNS:UNIT x="497" y="498"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="egy"><jdipNS:UNIT x="450" y="628"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="eng"><jdipNS:UNIT x="160" y="277"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="est"><jdipNS:UNIT x="82" y="400"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="fez"><jdipNS:UNIT x="275" y="615"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="fin"><jdipNS:UNIT x="386" y="132"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="fra"><jdipNS:UNIT x="185" y="315"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="gal"><jdipNS:UNIT x="352" y="311"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="gas"><jdipNS:UNIT x="160" y="355"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="gib"><jdipNS:UNIT x="72" y="435"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="gob"><jdipNS:UNIT x="343" y="145"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="gol"><jdipNS:UNIT x="213" y="402"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="hel"><jdipNS:UNIT x="247" y="236"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="hol"><jdipNS:UNIT x="265" y="251"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ifn"><jdipNS:UNIT x="12" y="461"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ind"><jdipNS:UNIT x="720" y="612"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ion"><jdipNS:UNIT x="339" y="464"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ira"><jdipNS:UNIT x="690" y="433"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="iri"><jdipNS:UNIT x="130" y="250"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="kar"><jdipNS:UNIT x="460" y="128"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="kaz"><jdipNS:UNIT x="673" y="232"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="kub"><jdipNS:UNIT x="531" y="337"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="lap"><jdipNS:UNIT x="338" y="51"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="lat"><jdipNS:UNIT x="354" y="184"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="lem"><jdipNS:UNIT x="390" y="321"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="lib"><jdipNS:UNIT x="419" y="538"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="lig"><jdipNS:UNIT x="246" y="397"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="liv"><jdipNS:UNIT x="389" y="240"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="lor"><jdipNS:UNIT x="215" y="318"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="mac"><jdipNS:UNIT x="361" y="412"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="mal"><jdipNS:UNIT x="285" y="500"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="mar"><jdipNS:UNIT x="293" y="254"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="mas"><jdipNS:UNIT x="353" y="250"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="mes"><jdipNS:UNIT x="630" y="470"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="mid"><jdipNS:UNIT x="58" y="294"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="min"><jdipNS:UNIT x="150" y="163"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nmk"><jdipNS:UNIT x="331" y="112"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nao"><jdipNS:UNIT x="75" y="140"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nth"><jdipNS:UNIT x="218" y="188"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nwy"><jdipNS:UNIT x="249" y="79"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="plm"><jdipNS:UNIT x="732" y="512"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="per"><jdipNS:UNIT x="192" y="290"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="pic"><jdipNS:UNIT x="239" y="365"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="pis"><jdipNS:UNIT x="171" y="411"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="pod"><jdipNS:UNIT x="413" y="310"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="pyl"><jdipNS:UNIT x="359" y="509"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="red"><jdipNS:UNIT x="527" y="622"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ruh"><jdipNS:UNIT x="239" y="290"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="sah"><jdipNS:UNIT x="139" y="560"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="sar"><jdipNS:UNIT x="233" y="431"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="sch"><jdipNS:UNIT x="238" y="342"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ser"><jdipNS:UNIT x="353" y="387"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="sib"><jdipNS:UNIT x="570" y="93"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="sil"><jdipNS:UNIT x="321" y="288"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="sin"><jdipNS:UNIT x="507" y="579"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ska"><jdipNS:UNIT x="278" y="193"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="sou"><jdipNS:UNIT x="25" y="392"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="swa"><jdipNS:UNIT x="243" y="318"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="syr"><jdipNS:UNIT x="555" y="465"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tau"><jdipNS:UNIT x="488" y="330"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="thr"><jdipNS:UNIT x="396" y="419"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tob"><jdipNS:UNIT x="328" y="542"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tra"><jdipNS:UNIT x="381" y="356"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tri"><jdipNS:UNIT x="290" y="566"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tus"><jdipNS:UNIT x="258" y="391"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tyr"><jdipNS:UNIT x="275" y="345"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tys"><jdipNS:UNIT x="260" y="442"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="uls"><jdipNS:UNIT x="142" y="204"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="umb"><jdipNS:UNIT x="286" y="399"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="uti"><jdipNS:UNIT x="200" y="445"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="vol"><jdipNS:UNIT x="550" y="215"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="wbs"><jdipNS:UNIT x="453" y="382"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="wms"><jdipNS:UNIT x="135" y="449"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="yor"><jdipNS:UNIT x="189" y="230"/></jdipNS:PROVINCE>
-		
-		<jdipNS:PROVINCE name="alc"><jdipNS:UNIT x="165" y="154"/><jdipNS:SUPPLY_CENTER x="165" y="154"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ana"><jdipNS:UNIT x="480" y="327"/><jdipNS:SUPPLY_CENTER x="480" y="327"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="arm"><jdipNS:UNIT x="555" y="333"/><jdipNS:SUPPLY_CENTER x="555" y="333"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ath"><jdipNS:UNIT x="372" y="364"/><jdipNS:SUPPLY_CENTER x="372" y="364"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="aus"><jdipNS:UNIT x="293" y="248"/><jdipNS:SUPPLY_CENTER x="293" y="248"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bav"><jdipNS:UNIT x="262" y="240"/><jdipNS:SUPPLY_CENTER x="262" y="240"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="boh"><jdipNS:UNIT x="280" y="225"/><jdipNS:SUPPLY_CENTER x="280" y="225"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bri"><jdipNS:UNIT x="124" y="209"/><jdipNS:SUPPLY_CENTER x="124" y="209"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bru"><jdipNS:UNIT x="204" y="192"/><jdipNS:SUPPLY_CENTER x="204" y="192"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bud"><jdipNS:UNIT x="329" y="253"/><jdipNS:SUPPLY_CENTER x="329" y="253"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bul"><jdipNS:UNIT x="375" y="317"/><jdipNS:SUPPLY_CENTER x="375" y="317"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="cai"><jdipNS:UNIT x="469" y="446"/><jdipNS:SUPPLY_CENTER x="469" y="446"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="con"><jdipNS:UNIT x="434" y="321"/><jdipNS:SUPPLY_CENTER x="434" y="321"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="cyr"><jdipNS:UNIT x="347" y="425"/><jdipNS:SUPPLY_CENTER x="347" y="425"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="dam"><jdipNS:UNIT x="523" y="395"/><jdipNS:SUPPLY_CENTER x="523" y="395"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="den"><jdipNS:UNIT x="280" y="160"/><jdipNS:SUPPLY_CENTER x="280" y="160"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="dij"><jdipNS:UNIT x="199" y="247"/><jdipNS:SUPPLY_CENTER x="199" y="247"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="dub"><jdipNS:UNIT x="133" y="146"/><jdipNS:SUPPLY_CENTER x="133" y="146"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="edi"><jdipNS:UNIT x="173" y="125"/><jdipNS:SUPPLY_CENTER x="173" y="125"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="gda"><jdipNS:UNIT x="331" y="185"/><jdipNS:SUPPLY_CENTER x="331" y="185"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="geo"><jdipNS:UNIT x="566" y="291"/><jdipNS:SUPPLY_CENTER x="566" y="291"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="hag"><jdipNS:UNIT x="219" y="188"/><jdipNS:SUPPLY_CENTER x="219" y="188"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="hes"><jdipNS:UNIT x="240" y="199"/><jdipNS:SUPPLY_CENTER x="240" y="199"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="jer"><jdipNS:UNIT x="513" y="423"/><jdipNS:SUPPLY_CENTER x="513" y="423"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="kie"><jdipNS:UNIT x="421" y="219"/><jdipNS:SUPPLY_CENTER x="421" y="219"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="lan"><jdipNS:UNIT x="196" y="291"/><jdipNS:SUPPLY_CENTER x="196" y="291"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="mor"><jdipNS:UNIT x="49" y="377"/><jdipNS:SUPPLY_CENTER x="49" y="377"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="mus"><jdipNS:UNIT x="470" y="160"/><jdipNS:SUPPLY_CENTER x="470" y="160"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nap"><jdipNS:UNIT x="284" y="343"/><jdipNS:SUPPLY_CENTER x="284" y="343"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nov"><jdipNS:UNIT x="408" y="133"/><jdipNS:SUPPLY_CENTER x="408" y="133"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="nwg"><jdipNS:UNIT x="275" y="109"/><jdipNS:SUPPLY_CENTER x="275" y="109"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ode"><jdipNS:UNIT x="445" y="257"/><jdipNS:SUPPLY_CENTER x="445" y="257"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="pal"><jdipNS:UNIT x="252" y="372"/><jdipNS:SUPPLY_CENTER x="252" y="372"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="pie"><jdipNS:UNIT x="218" y="275"/><jdipNS:SUPPLY_CENTER x="218" y="275"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="por"><jdipNS:UNIT x="48" y="306"/><jdipNS:SUPPLY_CENTER x="48" y="306"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="rig"><jdipNS:UNIT x="373" y="155"/><jdipNS:SUPPLY_CENTER x="373" y="155"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="rom"><jdipNS:UNIT x="260" y="321"/><jdipNS:SUPPLY_CENTER x="260" y="321"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="rum"><jdipNS:UNIT x="401" y="286"/><jdipNS:SUPPLY_CENTER x="401" y="286"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="san"><jdipNS:UNIT x="78" y="270"/><jdipNS:SUPPLY_CENTER x="78" y="270"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="sax"><jdipNS:UNIT x="291" y="208"/><jdipNS:SUPPLY_CENTER x="291" y="208"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="smy"><jdipNS:UNIT x="425" y="365"/><jdipNS:SUPPLY_CENTER x="425" y="365"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="swe"><jdipNS:UNIT x="320" y="117"/><jdipNS:SUPPLY_CENTER x="320" y="117"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="sze"><jdipNS:UNIT x="335" y="277"/><jdipNS:SUPPLY_CENTER x="335" y="277"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tol"><jdipNS:UNIT x="96" y="314"/><jdipNS:SUPPLY_CENTER x="96" y="314"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tun"><jdipNS:UNIT x="215" y="378"/><jdipNS:SUPPLY_CENTER x="215" y="378"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="tur"><jdipNS:UNIT x="671" y="294"/><jdipNS:SUPPLY_CENTER x="671" y="294"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="val"><jdipNS:UNIT x="119" y="333"/><jdipNS:SUPPLY_CENTER x="119" y="333"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="ven"><jdipNS:UNIT x="269" y="278"/><jdipNS:SUPPLY_CENTER x="269" y="278"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="war"><jdipNS:UNIT x="348" y="209"/><jdipNS:SUPPLY_CENTER x="348" y="209"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="wes"><jdipNS:UNIT x="177" y="179"/><jdipNS:SUPPLY_CENTER x="177" y="179"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="yal"><jdipNS:UNIT x="480" y="275"/><jdipNS:SUPPLY_CENTER x="480" y="275"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="zar"><jdipNS:UNIT x="294" y="295"/><jdipNS:SUPPLY_CENTER x="294" y="295"/></jdipNS:PROVINCE>
+	<jdipNS:PROVINCE_DATA dislodgedUnitOffset="7,7">
+		<jdipNS:PROVINCE name="adr"><jdipNS:UNIT x="301" y="315.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="aeg"><jdipNS:UNIT x="398.2" y="374.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ait"><jdipNS:UNIT x="425.4" y="349.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ala"><jdipNS:UNIT x="441" y="464.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="alb"><jdipNS:UNIT x="340.7" y="326.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="alc"><jdipNS:UNIT x="168.8" y="139.2"/><jdipNS:SUPPLY_CENTER x="167.8" y="156.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="alg"><jdipNS:UNIT x="150.9" y="399"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ana"><jdipNS:UNIT x="482.2" y="323.6"/><jdipNS:SUPPLY_CENTER x="500.9" y="311.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ang"><jdipNS:UNIT x="213.9" y="154.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="apu"><jdipNS:UNIT x="290.9" y="331.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ara"><jdipNS:UNIT x="593.4" y="486.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="arc"><jdipNS:UNIT x="196.8" y="8.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="arm"><jdipNS:UNIT x="553.8" y="332.9"/><jdipNS:SUPPLY_CENTER x="549.1" y="308.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ath"><jdipNS:UNIT x="357" y="359.3"/><jdipNS:SUPPLY_CENTER x="374.9" y="372.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="aus"><jdipNS:UNIT x="301" y="245.8"/><jdipNS:SUPPLY_CENTER x="324.3" y="238.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="aze"><jdipNS:UNIT x="607.4" y="305.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bal"><jdipNS:UNIT x="330.6" y="154.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bar"><jdipNS:UNIT x="429.3" y="19.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bav"><jdipNS:UNIT x="262.9" y="231.8"/><jdipNS:SUPPLY_CENTER x="253.6" y="218.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bay"><jdipNS:UNIT x="119" y="245.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="boh"><jdipNS:UNIT x="290.1" y="228.7"/><jdipNS:SUPPLY_CENTER x="279.2" y="228.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bor"><jdipNS:UNIT x="298.7" y="175.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bri"><jdipNS:UNIT x="137.7" y="217.8"/><jdipNS:SUPPLY_CENTER x="161.8" y="213.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bru"><jdipNS:UNIT x="210" y="201.4"/><jdipNS:SUPPLY_CENTER x="199.9" y="199.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bud"><jdipNS:UNIT x="339.1" y="250.4"/><jdipNS:SUPPLY_CENTER x="313.4" y="261.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bul"><jdipNS:UNIT x="384.2" y="313.4"/><jdipNS:SUPPLY_CENTER x="413.8" y="304.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="car"><jdipNS:UNIT x="455.8" y="397.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cai"><jdipNS:UNIT x="476" y="465.9"/><jdipNS:SUPPLY_CENTER x="471.7" y="440.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cat"><jdipNS:UNIT x="123.7" y="312.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cil"><jdipNS:UNIT x="505.6" y="353.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cir"><jdipNS:UNIT x="559.2" y="248.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cly"><jdipNS:UNIT x="157.9" y="109.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="con"><jdipNS:UNIT x="450.3" y="336.8"/><jdipNS:SUPPLY_CENTER x="420.1" y="324.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cor"><jdipNS:UNIT x="156.3" y="180.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cro"><jdipNS:UNIT x="301" y="278.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cym"><jdipNS:UNIT x="156.3" y="164.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cyr"><jdipNS:UNIT x="355.4" y="465.1"/><jdipNS:SUPPLY_CENTER x="352.8" y="430.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="dam"><jdipNS:UNIT x="524.2" y="409.1"/><jdipNS:SUPPLY_CENTER x="521.5" y="398.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="del"><jdipNS:UNIT x="491.6" y="413"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="den"><jdipNS:UNIT x="266" y="157.9"/><jdipNS:SUPPLY_CENTER x="258.2" y="148.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="dij"><jdipNS:UNIT x="197.6" y="246.6"/><jdipNS:SUPPLY_CENTER x="188.2" y="265.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="don"><jdipNS:UNIT x="489.2" y="209.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="dub"><jdipNS:UNIT x="126.8" y="144.7"/><jdipNS:SUPPLY_CENTER x="115.5" y="151.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ebs"><jdipNS:UNIT x="507.1" y="285.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ems"><jdipNS:UNIT x="500.9" y="388.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="edi"><jdipNS:UNIT x="173.4" y="120.6"/><jdipNS:SUPPLY_CENTER x="175.8" y="114.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="egy"><jdipNS:UNIT x="461.2" y="525.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="eng"><jdipNS:UNIT x="160.2" y="198.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="est"><jdipNS:UNIT x="77.8" y="308"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="fez"><jdipNS:UNIT x="273" y="504"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="fin"><jdipNS:UNIT x="371" y="80.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="fra"><jdipNS:UNIT x="177.3" y="228.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gal"><jdipNS:UNIT x="350" y="230.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gas"><jdipNS:UNIT x="151.7" y="255.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gda"><jdipNS:UNIT x="314.2" y="190.6"/><jdipNS:SUPPLY_CENTER x="308" y="196.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="geo"><jdipNS:UNIT x="550.7" y="288.6"/><jdipNS:SUPPLY_CENTER x="571.2" y="291.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gib"><jdipNS:UNIT x="71.6" y="336.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gob"><jdipNS:UNIT x="336" y="95.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="gol"><jdipNS:UNIT x="201.4" y="321.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="hag"><jdipNS:UNIT x="227.1" y="190.6"/><jdipNS:SUPPLY_CENTER x="231.8" y="183.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="hel"><jdipNS:UNIT x="244.2" y="164.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="hes"><jdipNS:UNIT x="255.9" y="198.3"/><jdipNS:SUPPLY_CENTER x="248.1" y="187.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="hol"><jdipNS:UNIT x="263.7" y="183.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ifn"><jdipNS:UNIT x="14.8" y="365.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ind"><jdipNS:UNIT x="714" y="574"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ion"><jdipNS:UNIT x="333.7" y="365.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ira"><jdipNS:UNIT x="669.7" y="398.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="iri"><jdipNS:UNIT x="119.8" y="171.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="jer"><jdipNS:UNIT x="516.4" y="431.7"/><jdipNS:SUPPLY_CENTER x="514.6" y="422"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="kar"><jdipNS:UNIT x="483.8" y="104.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="kaz"><jdipNS:UNIT x="666.6" y="226.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="kie"><jdipNS:UNIT x="429.3" y="219.3"/><jdipNS:SUPPLY_CENTER x="458.9" y="206.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="kub"><jdipNS:UNIT x="521.9" y="248.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lan"><jdipNS:UNIT x="199.1" y="281.6"/><jdipNS:SUPPLY_CENTER x="164.1" y="293.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lap"><jdipNS:UNIT x="343.8" y="28"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lat"><jdipNS:UNIT x="336" y="136.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lem"><jdipNS:UNIT x="366.3" y="241.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lib"><jdipNS:UNIT x="427" y="424.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lig"><jdipNS:UNIT x="226.3" y="302.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="liv"><jdipNS:UNIT x="374.9" y="175"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="lor"><jdipNS:UNIT x="212.3" y="231"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mac"><jdipNS:UNIT x="359.3" y="330.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mal"><jdipNS:UNIT x="286.2" y="395.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mar"><jdipNS:UNIT x="284.7" y="191.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mas"><jdipNS:UNIT x="356.2" y="178.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mes"><jdipNS:UNIT x="576.3" y="392.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mid"><jdipNS:UNIT x="42.8" y="214.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="min"><jdipNS:UNIT x="138.4" y="94.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mor"><jdipNS:UNIT x="55.2" y="402.1"/><jdipNS:SUPPLY_CENTER x="53.7" y="387.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="mus"><jdipNS:UNIT x="420" y="185.1"/><jdipNS:SUPPLY_CENTER x="472.9" y="161.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nap"><jdipNS:UNIT x="287.8" y="374.9"/><jdipNS:SUPPLY_CENTER x="298.7" y="363.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nmk"><jdipNS:UNIT x="322" y="64.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nao"><jdipNS:UNIT x="59.9" y="93.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nth"><jdipNS:UNIT x="217" y="113.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nwy"><jdipNS:UNIT x="266" y="108.9"/><jdipNS:SUPPLY_CENTER x="256.7" y="122.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nwg"><jdipNS:UNIT x="241.1" y="56"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="nov"><jdipNS:UNIT x="427" y="138.4"/><jdipNS:SUPPLY_CENTER x="403.7" y="113.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ode"><jdipNS:UNIT x="434.8" y="259.8"/><jdipNS:SUPPLY_CENTER x="458.9" y="241.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pal"><jdipNS:UNIT x="254.3" y="378"/><jdipNS:SUPPLY_CENTER x="263.7" y="381.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="per"><jdipNS:UNIT x="682.9" y="473.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pic"><jdipNS:UNIT x="184.3" y="211.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pie"><jdipNS:UNIT x="229.4" y="276.1"/><jdipNS:SUPPLY_CENTER x="217.8" y="274.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pis"><jdipNS:UNIT x="476.8" y="365.6"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="plm"><jdipNS:UNIT x="147" y="327.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pod"><jdipNS:UNIT x="390.4" y="238"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="por"><jdipNS:UNIT x="56" y="318.1"/><jdipNS:SUPPLY_CENTER x="63.8" y="297.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="pyl"><jdipNS:UNIT x="350.8" y="396.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="red"><jdipNS:UNIT x="532" y="509.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="rig"><jdipNS:UNIT x="374.9" y="143.9"/><jdipNS:SUPPLY_CENTER x="357" y="159.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="rom"><jdipNS:UNIT x="268.3" y="326.7"/><jdipNS:SUPPLY_CENTER x="275.3" y="334.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ruh"><jdipNS:UNIT x="231" y="215.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="rum"><jdipNS:UNIT x="399" y="283.1"/><jdipNS:SUPPLY_CENTER x="401.3" y="256.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sah"><jdipNS:UNIT x="151.7" y="482.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="san"><jdipNS:UNIT x="112.8" y="289.3"/><jdipNS:SUPPLY_CENTER x="73.9" y="275.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sar"><jdipNS:UNIT x="220.1" y="331.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sax"><jdipNS:UNIT x="286.2" y="210.8"/><jdipNS:SUPPLY_CENTER x="269.1" y="213.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sch"><jdipNS:UNIT x="227.9" y="255.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ser"><jdipNS:UNIT x="353.1" y="308.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sib"><jdipNS:UNIT x="626.9" y="91.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sil"><jdipNS:UNIT x="310.3" y="213.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sin"><jdipNS:UNIT x="500.9" y="455.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ska"><jdipNS:UNIT x="276.9" y="129.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="smy"><jdipNS:UNIT x="443.3" y="371"/><jdipNS:SUPPLY_CENTER x="426.9" y="364.5"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sou"><jdipNS:UNIT x="24.9" y="307.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="swa"><jdipNS:UNIT x="240.3" y="233.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="swe"><jdipNS:UNIT x="305.7" y="119.8"/><jdipNS:SUPPLY_CENTER x="299.4" y="154.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="syr"><jdipNS:UNIT x="539" y="366.3"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="sze"><jdipNS:UNIT x="347.7" y="278.4"/><jdipNS:SUPPLY_CENTER x="349.2" y="269.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tau"><jdipNS:UNIT x="486.9" y="243.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="thr"><jdipNS:UNIT x="394.3" y="329"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tob"><jdipNS:UNIT x="321.2" y="416.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tol"><jdipNS:UNIT x="101.9" y="308.8"/><jdipNS:SUPPLY_CENTER x="92.6" y="318.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tra"><jdipNS:UNIT x="365.6" y="276.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tri"><jdipNS:UNIT x="259.8" y="455"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tun"><jdipNS:UNIT x="211.6" y="394.3"/><jdipNS:SUPPLY_CENTER x="210.5" y="381.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tur"><jdipNS:UNIT x="700.8" y="292.4"/><jdipNS:SUPPLY_CENTER x="668.1" y="294.8"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tus"><jdipNS:UNIT x="248.9" y="307.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="trl"><jdipNS:UNIT x="271.4" y="258.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="tys"><jdipNS:UNIT x="242.7" y="341.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="uls"><jdipNS:UNIT x="139.2" y="133"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="umb"><jdipNS:UNIT x="278.4" y="313.4"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="uti"><jdipNS:UNIT x="185.9" y="347.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="val"><jdipNS:UNIT x="105.8" y="342.2"/><jdipNS:SUPPLY_CENTER x="121.3" y="328.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="ven"><jdipNS:UNIT x="259.8" y="289.3"/><jdipNS:SUPPLY_CENTER x="276.1" y="272.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="vol"><jdipNS:UNIT x="542.9" y="192.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="war"><jdipNS:UNIT x="334.4" y="209.2"/><jdipNS:SUPPLY_CENTER x="358.6" y="199.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="wes"><jdipNS:UNIT x="181.2" y="178.9"/><jdipNS:SUPPLY_CENTER x="187.6" y="170.1"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="wbs"><jdipNS:UNIT x="451.9" y="286.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="wms"><jdipNS:UNIT x="117.4" y="360.9"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="yal"><jdipNS:UNIT x="482.2" y="273.8"/><jdipNS:SUPPLY_CENTER x="476.8" y="265.2"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="yor"><jdipNS:UNIT x="180.4" y="151.7"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="zar"><jdipNS:UNIT x="308.8" y="297.1"/></jdipNS:PROVINCE>
 	</jdipNS:PROVINCE_DATA>                        
 	
 	<desc>Aberration V Map</desc>
@@ -387,26 +386,26 @@
 		.impassable	{fill:rgb(127,127,127);stroke:black;stroke-width:3}
 		
 		/* region coloring by power */
-		.burgundy	{fill:rgb(204,255,255);stroke:black;stroke-width:1}
-		.sicily		{fill:rgb(204,255,204);stroke:black;stroke-width:1}
-		.eire		{fill:rgb(243,243,243);stroke:black;stroke-width:1}
-		.hungary	{fill:rgb(255,217,192);stroke:black;stroke-width:1}
-		.israel		{fill:rgb(255,204,255);stroke:black;stroke-width:1}
-		.poland		{fill:rgb(255,255,230);stroke:black;stroke-width:1}
-		.spain		{fill:rgb(255,243,217);stroke:black;stroke-width:1}
-		.ukraine	{fill:rgb(217,204,192);stroke:black;stroke-width:1}
-		.byzantium	{fill:rgb(255,255,204);stroke:black;stroke-width:1}
+		.burgundy	{fill:forestgreen         ;stroke:black;stroke-width:1}
+		.sicily		{fill:orange              ;stroke:black;stroke-width:1}
+		.eire		{fill:mediumvioletred     ;stroke:black;stroke-width:1}
+		.hungary	{fill:lightskyblue        ;stroke:black;stroke-width:1}
+		.israel		{fill:lime                ;stroke:black;stroke-width:1}
+		.poland		{fill:crimson             ;stroke:black;stroke-width:1}
+		.spain		{fill:chocolate           ;stroke:black;stroke-width:1}
+		.ukraine	{fill:lightgoldenrodyellow;stroke:black;stroke-width:1}
+		.byzantium	{fill:plum		           ;stroke:black;stroke-width:1}
 		
 		/* unit colors fills, by power (units always have a power) */
-		.unitburgundy	{fill:rgb(204,255,255);fill-opacity:0.85}
-		.unitsicily	{fill:rgb(204,255,204);fill-opacity:0.85}
-		.uniteire	{fill:rgb(243,243,243);fill-opacity:0.85}
-		.unithungary	{fill:rgb(255,217,192);fill-opacity:0.85}
-		.unitisrael	{fill:rgb(255,204,255);fill-opacity:0.85}
-		.unitpoland	{fill:rgb(255,255,230);fill-opacity:0.85}
-		.unitspain	{fill:rgb(255,243,217);fill-opacity:0.85}
-		.unitukraine	{fill:rgb(217,204,192);fill-opacity:0.85}
-		.unitbyzantium	{fill:rgb(255,255,204);fill-opacity:0.85}
+		.unitburgundy	{fill:forestgreen         ;fill-opacity:0.85}
+		.unitsicily		{fill:orange              ;fill-opacity:0.85}
+		.uniteire		{fill:mediumvioletred     ;fill-opacity:0.85}
+		.unithungary	{fill:lightskyblue        ;fill-opacity:0.85}
+		.unitisrael		{fill:lime                ;fill-opacity:0.85}
+		.unitpoland		{fill:crimson             ;fill-opacity:0.85}
+		.unitspain		{fill:chocolate           ;fill-opacity:0.85}
+		.unitukraine	{fill:lightgoldenrodyellow;fill-opacity:0.85}
+		.unitbyzantium	{fill:plum		           ;fill-opacity:0.85}
 		               
 		/* supply center styles (nopower if supply center not owned) */
 		.scnopower	{fill:black;stroke:black;}
@@ -613,25 +612,25 @@
 		<path id="_yor" class="nopower" d="M 177,138 C 177,138 174,152 174,152 C 174,152 175,167 175,167 C 177,167 179,166 181,165 C 191,161 188,157 187,153 C 187,153 187,148 187,148 C 187,148 182,138 182,138 C 182,138 177,138 177,138 Z" />
 		<path id="_zar" class="nopower" d="M 291,296 C 288,299 295,302 297,303 C 311,313 306,308 314,312 C 318,314 318,315 323,317 C 323,317 320,318 320,318 C 323,320 323,320 326,321 C 333,323 334,323 339,317 C 336,315 332,313 331,309 C 330,306 331,303 331,300 C 330,296 324,288 320,287 C 318,286 317,286 315,287 C 307,287 290,283 291,296 Z" />
 		<!-- channels -->
-		<path id="_ch1" class="channel" d="M 266,170 C 261,172 257,173 254,177 C 259,177 268,177 266,170 Z" />
-		<path id="_ch2" class="channel" d="M 466,265 C 471,263 470,261 476,258 C 482,255 485,258 488,253 C 478,253 467,252 466,265 Z" />
-		<path id="_ch3" class="channel" d="M 478,435 C 478,435 481,451 481,451 C 486,447 482,440 481,435 C 481,435 478,435 478,435 Z" />
+		<path class="channel" d="M 266,170 C 261,172 257,173 254,177 C 259,177 268,177 266,170 Z" />
+		<path class="channel" d="M 466,265 C 471,263 470,261 476,258 C 482,255 485,258 488,253 C 478,253 467,252 466,265 Z" />
+		<path class="channel" d="M 478,435 C 478,435 481,451 481,451 C 486,447 482,440 481,435 C 481,435 478,435 478,435 Z" />
 		<!-- <path id="_ch1" class="channel" d="M 266,170 C 261,172 257,173 254,177 C 259,177 268,177 266,170 Z" />
 		<path id="_ch2" class="channel" d="M 466,265 C 471,263 470,261 476,258 C 482,255 485,258 488,253 C 478,253 467,252 466,265 Z" />
 		<path id="_ch3" class="channel" d="M 478,435 C 478,435 481,451 481,451 C 486,447 482,440 481,435 C 481,435 478,435 478,435 Z" /> -->
 		<!-- decorations -->
-		<path id="_bar_i" class="nopower" d="M 453,17 C 452,18 450,21 450,22 C 449,26 453,32 457,31 C 460,30 465,22 453,17 Z" />
-		<path id="_cas" class="water" d="M 591,234 C 592,240 591,240 587,245 C 587,245 586,240 586,240 C 586,240 586,264 586,264 C 586,264 596,265 596,265 C 597,280 613,293 627,297 C 627,297 627,299 627,299 C 625,299 621,299 620,301 C 616,304 620,318 624,321 C 625,323 629,323 631,324 C 642,328 644,330 656,326 C 660,325 665,324 666,320 C 666,320 666,315 666,315 C 666,310 669,305 663,301 C 662,300 660,299 658,299 C 656,300 656,300 654,301 C 654,301 652,287 652,287 C 652,287 655,291 655,291 C 658,290 666,289 668,286 C 668,284 668,283 667,282 C 667,282 663,278 663,278 C 661,276 658,271 656,270 C 653,268 647,271 649,277 C 649,277 651,284 651,284 C 644,276 642,274 643,263 C 641,263 637,262 635,261 C 632,259 630,252 627,249 C 623,246 619,247 619,241 C 619,241 626,242 626,242 C 626,240 626,239 627,237 C 629,233 639,228 643,227 C 643,227 643,214 643,214 C 643,214 642,207 642,207 C 642,207 633,207 633,207 C 633,207 626,207 626,207 C 626,207 620,207 620,207 C 620,207 613,215 613,215 C 613,215 604,220 604,220 C 604,220 600,228 600,228 C 600,228 591,234 591,234 Z" />
-		<path id="_cre" class="nopower" d="M 382,391 C 380,399 386,396 390,397 C 390,397 396,399 396,399 C 398,399 400,398 402,398 C 407,397 409,398 411,392 C 411,392 404,394 404,394 C 400,390 392,394 382,391 Z" />
-		<path id="_crs" class="nopower" d="M 227,306 C 227,306 219,311 219,311 C 220,318 219,320 223,326 C 227,322 231,311 227,306 Z" />
-		<path id="_cyp" class="nopower" d="M 483,398 C 487,393 489,392 496,391 C 493,383 495,385 498,378 C 491,380 492,381 487,384 C 482,386 481,384 476,388 C 473,389 469,392 471,395 C 473,398 476,396 483,398 Z" />
-		<path id="_isl" class="nopower" d="M 139,5 C 139,5 135,13 135,13 C 135,13 134,6 134,6 C 134,6 123,8 123,8 C 123,8 122,9 122,9 C 125,15 128,15 133,19 C 130,19 130,18 128,21 C 124,18 122,17 117,18 C 117,18 123,22 123,22 C 123,22 119,24 119,24 C 119,24 119,26 119,26 C 119,26 123,27 123,27 C 119,29 118,27 114,26 C 114,26 113,27 113,27 C 113,27 115,30 115,30 C 115,30 120,34 120,34 C 120,34 128,43 128,43 C 128,43 141,43 141,43 C 141,43 159,42 159,42 C 166,35 164,39 168,29 C 168,29 165,28 165,28 C 165,28 168,19 168,19 C 163,17 161,18 156,19 C 156,19 155,16 155,16 C 155,16 151,18 151,18 C 151,18 150,14 150,14 C 150,14 147,17 147,17 C 147,17 145,13 145,13 C 145,13 143,18 143,18 C 143,18 138,19 138,19 C 141,13 146,10 139,5 Z M 129,21 C 129,21 129,22 129,22 C 129,22 128,21 128,21 C 128,21 129,21 129,21 Z" />
-		<path id="_mal_i" class="nopower" d="M 259,393 C 260,398 262,399 267,399 C 265,394 264,394 259,393 Z" />
-		<path id="_plm_i" class="nopower" d="M 156,332 C 161,337 165,340 169,332 C 163,329 162,330 156,332 Z M 173,330 C 173,330 177,333 177,333 C 177,333 178,330 178,330 C 178,330 173,330 173,330 Z M 140,338 C 140,338 144,342 144,342 C 144,342 148,336 148,336 C 148,336 140,338 140,338 Z" />
-		<path id="_sib_w" class="water" d="M 654,0 C 654,0 657,14 657,14 C 657,19 652,29 647,32 C 644,33 640,33 637,33 C 640,37 644,36 648,37 C 648,37 662,25 662,25 C 662,25 661,15 661,15 C 661,15 672,15 672,15 C 674,22 675,25 683,27 C 678,21 677,20 679,12 C 673,8 669,9 662,10 C 662,10 661,0 661,0 C 661,0 654,0 654,0 Z" />
+		<path class="nopower" d="M 453,17 C 452,18 450,21 450,22 C 449,26 453,32 457,31 C 460,30 465,22 453,17 Z" />
+		<path class="water" d="M 591,234 C 592,240 591,240 587,245 C 587,245 586,240 586,240 C 586,240 586,264 586,264 C 586,264 596,265 596,265 C 597,280 613,293 627,297 C 627,297 627,299 627,299 C 625,299 621,299 620,301 C 616,304 620,318 624,321 C 625,323 629,323 631,324 C 642,328 644,330 656,326 C 660,325 665,324 666,320 C 666,320 666,315 666,315 C 666,310 669,305 663,301 C 662,300 660,299 658,299 C 656,300 656,300 654,301 C 654,301 652,287 652,287 C 652,287 655,291 655,291 C 658,290 666,289 668,286 C 668,284 668,283 667,282 C 667,282 663,278 663,278 C 661,276 658,271 656,270 C 653,268 647,271 649,277 C 649,277 651,284 651,284 C 644,276 642,274 643,263 C 641,263 637,262 635,261 C 632,259 630,252 627,249 C 623,246 619,247 619,241 C 619,241 626,242 626,242 C 626,240 626,239 627,237 C 629,233 639,228 643,227 C 643,227 643,214 643,214 C 643,214 642,207 642,207 C 642,207 633,207 633,207 C 633,207 626,207 626,207 C 626,207 620,207 620,207 C 620,207 613,215 613,215 C 613,215 604,220 604,220 C 604,220 600,228 600,228 C 600,228 591,234 591,234 Z" />
+		<path class="nopower" d="M 382,391 C 380,399 386,396 390,397 C 390,397 396,399 396,399 C 398,399 400,398 402,398 C 407,397 409,398 411,392 C 411,392 404,394 404,394 C 400,390 392,394 382,391 Z" />
+		<path class="nopower" d="M 227,306 C 227,306 219,311 219,311 C 220,318 219,320 223,326 C 227,322 231,311 227,306 Z" />
+		<path class="nopower" d="M 483,398 C 487,393 489,392 496,391 C 493,383 495,385 498,378 C 491,380 492,381 487,384 C 482,386 481,384 476,388 C 473,389 469,392 471,395 C 473,398 476,396 483,398 Z" />
+		<path class="nopower" d="M 139,5 C 139,5 135,13 135,13 C 135,13 134,6 134,6 C 134,6 123,8 123,8 C 123,8 122,9 122,9 C 125,15 128,15 133,19 C 130,19 130,18 128,21 C 124,18 122,17 117,18 C 117,18 123,22 123,22 C 123,22 119,24 119,24 C 119,24 119,26 119,26 C 119,26 123,27 123,27 C 119,29 118,27 114,26 C 114,26 113,27 113,27 C 113,27 115,30 115,30 C 115,30 120,34 120,34 C 120,34 128,43 128,43 C 128,43 141,43 141,43 C 141,43 159,42 159,42 C 166,35 164,39 168,29 C 168,29 165,28 165,28 C 165,28 168,19 168,19 C 163,17 161,18 156,19 C 156,19 155,16 155,16 C 155,16 151,18 151,18 C 151,18 150,14 150,14 C 150,14 147,17 147,17 C 147,17 145,13 145,13 C 145,13 143,18 143,18 C 143,18 138,19 138,19 C 141,13 146,10 139,5 Z M 129,21 C 129,21 129,22 129,22 C 129,22 128,21 128,21 C 128,21 129,21 129,21 Z" />
+		<path class="nopower" d="M 259,393 C 260,398 262,399 267,399 C 265,394 264,394 259,393 Z" />
+		<path class="nopower" d="M 156,332 C 161,337 165,340 169,332 C 163,329 162,330 156,332 Z M 173,330 C 173,330 177,333 177,333 C 177,333 178,330 178,330 C 178,330 173,330 173,330 Z M 140,338 C 140,338 144,342 144,342 C 144,342 148,336 148,336 C 148,336 140,338 140,338 Z" />
+		<path class="water" d="M 654,0 C 654,0 657,14 657,14 C 657,19 652,29 647,32 C 644,33 640,33 637,33 C 640,37 644,36 648,37 C 648,37 662,25 662,25 C 662,25 661,15 661,15 C 661,15 672,15 672,15 C 674,22 675,25 683,27 C 678,21 677,20 679,12 C 673,8 669,9 662,10 C 662,10 661,0 661,0 C 661,0 654,0 654,0 Z" />
 		<!-- impassable -->
-		<path id="_imp1" class="impassable" d="M 23,439 C 23,439 23,451 23,451 C 23,451 0,450 0,450 C 0,450 0,599 0,599 C 0,599 97,599 97,599 C 97,599 112,600 112,600 C 112,600 147,600 147,600 C 147,600 164,599 164,599 C 164,599 223,599 223,599 C 223,599 238,600 238,600 C 238,600 350,600 350,600 C 350,600 572,600 572,600 C 572,600 569,591 569,591 C 569,591 562,587 562,587 C 562,587 546,574 546,574 C 546,574 542,566 542,566 C 542,566 535,550 535,550 C 535,550 531,538 531,538 C 531,538 520,538 520,538 C 520,538 515,544 515,544 C 512,546 512,550 508,551 C 504,552 502,549 499,548 C 496,547 494,547 491,547 C 491,547 396,547 396,547 C 396,547 396,560 396,560 C 396,560 378,560 378,560 C 378,560 378,567 378,567 C 378,567 321,539 321,539 C 321,539 304,531 304,531 C 302,530 297,527 295,527 C 290,527 278,534 273,535 C 266,536 259,528 254,525 C 249,522 243,523 236,520 C 230,517 224,510 219,511 C 217,511 210,514 207,515 C 207,515 180,526 180,526 C 176,529 177,533 173,535 C 170,537 162,537 159,537 C 159,537 138,539 138,539 C 138,539 137,532 137,532 C 137,532 129,525 129,525 C 129,525 111,510 111,510 C 111,510 55,465 55,465 C 55,465 23,439 23,439 Z" />
-		<path id="_imp2" class="impassable" d="M 748,339 C 748,339 754,359 754,359 C 754,359 750,387 750,387 C 750,387 755,387 755,387 C 759,387 761,391 759,395 C 757,400 746,410 746,414 C 746,417 751,419 753,423 C 754,426 754,428 755,431 C 756,433 760,435 761,437 C 760,435 766,451 766,449 C 766,451 766,453 764,454 C 761,455 756,455 753,457 C 750,459 744,471 751,474 C 751,474 759,475 759,475 C 764,476 763,476 768,474 C 768,474 769,477 769,477 C 769,477 769,465 769,465 C 769,465 769,437 769,437 C 769,437 769,341 769,341 C 769,341 748,339 748,339 Z" />
+		<path class="impassable" d="M 23,439 C 23,439 23,451 23,451 C 23,451 0,450 0,450 C 0,450 0,599 0,599 C 0,599 97,599 97,599 C 97,599 112,600 112,600 C 112,600 147,600 147,600 C 147,600 164,599 164,599 C 164,599 223,599 223,599 C 223,599 238,600 238,600 C 238,600 350,600 350,600 C 350,600 572,600 572,600 C 572,600 569,591 569,591 C 569,591 562,587 562,587 C 562,587 546,574 546,574 C 546,574 542,566 542,566 C 542,566 535,550 535,550 C 535,550 531,538 531,538 C 531,538 520,538 520,538 C 520,538 515,544 515,544 C 512,546 512,550 508,551 C 504,552 502,549 499,548 C 496,547 494,547 491,547 C 491,547 396,547 396,547 C 396,547 396,560 396,560 C 396,560 378,560 378,560 C 378,560 378,567 378,567 C 378,567 321,539 321,539 C 321,539 304,531 304,531 C 302,530 297,527 295,527 C 290,527 278,534 273,535 C 266,536 259,528 254,525 C 249,522 243,523 236,520 C 230,517 224,510 219,511 C 217,511 210,514 207,515 C 207,515 180,526 180,526 C 176,529 177,533 173,535 C 170,537 162,537 159,537 C 159,537 138,539 138,539 C 138,539 137,532 137,532 C 137,532 129,525 129,525 C 129,525 111,510 111,510 C 111,510 55,465 55,465 C 55,465 23,439 23,439 Z" />
+		<path class="impassable" d="M 748,339 C 748,339 754,359 754,359 C 754,359 750,387 750,387 C 750,387 755,387 755,387 C 759,387 761,391 759,395 C 757,400 746,410 746,414 C 746,417 751,419 753,423 C 754,426 754,428 755,431 C 756,433 760,435 761,437 C 760,435 766,451 766,449 C 766,451 766,453 764,454 C 761,455 756,455 753,457 C 750,459 744,471 751,474 C 751,474 759,475 759,475 C 764,476 763,476 768,474 C 768,474 769,477 769,477 C 769,477 769,465 769,465 C 769,465 769,437 769,437 C 769,437 769,341 769,341 C 769,341 748,339 748,339 Z" />
 	</g>
 	
 	<!-- drawing layers -->
@@ -648,35 +647,35 @@
 	
 	<g id="BriefLabelLayer" class="brieflabeltext" visibility="hidden" pointer-events="none">
 		<text x="315.8" y="334.4">adr</text>
-		<text x="395.7" y="376.2">aeg</text>
+		<text x="395.1" y="358.6">aeg</text>
 		<text x="423" y="352.8">ait</text>
 		<text x="414.2" y="461">ala</text>
 		<text x="341.4" y="343">alb</text>
 		<text x="167.2" y="142.3">alc</text>
 		<text x="129.6" y="422">alg</text>
-		<text x="502.9" y="326.5">ana</text>
+		<text x="508.7" y="326.7">ana</text>
 		<text x="209.2" y="172.7">ang</text>
 		<text x="300.2" y="341.4">apu</text>
 		<text x="614.1" y="520.5">ara</text>
 		<text x="235.9" y="14.6">arc</text>
 		<text x="546.8" y="322.6">arm</text>
-		<text x="368.4" y="353.8">ath</text>
+		<text x="358.6" y="350.8">ath</text>
 		<text x="303.3" y="250.4">aus</text>
 		<text x="601.4" y="309.9">aze</text>
 		<text x="332.1" y="171.1">bal</text>
 		<text x="392.8" y="18.5">bar</text>
 		<text x="263.7" y="234.1">bav</text>
-		<text x="115.1" y="255.9">bay</text>
+		<text x="117.4" y="264.4">bay</text>
 		<text x="294" y="234.9">boh</text>
 		<text x="296.3" y="178.9">bor</text>
 		<text x="150.9" y="232.6">bri</text>
 		<text x="214.7" y="205.3">bru</text>
 		<text x="332.1" y="266">bud</text>
-		<text x="392" y="315">bul</text>
-		<text x="447.4" y="398.6">car</text>
+		<text x="396.7" y="309.6">bul</text>
+		<text x="436.3" y="391.2">car</text>
 		<text x="478.6" y="484.4">cai</text>
-		<text x="137.7" y="312.7">cat</text>
-		<text x="513.7" y="349.9">cil</text>
+		<text x="141.6" y="308.8">cat</text>
+		<text x="519.6" y="348.4">cil</text>
 		<text x="566.3" y="268">cir</text>
 		<text x="160.2" y="116.7">cly</text>
 		<text x="435.6" y="331.3">con</text>
@@ -685,99 +684,99 @@
 		<text x="158.7" y="169.6">cym</text>
 		<text x="357" y="490.8">cyr</text>
 		<text x="518.5" y="413.3">dam</text>
-		<text x="490.3" y="422">del</text>
+		<text x="482.2" y="429.3">del</text>
 		<text x="273" y="150.1">den</text>
 		<text x="192.1" y="261.3">dij</text>
 		<text x="483.4" y="222.2">don</text>
 		<text x="128.3" y="153.2">dub</text>
-		<text x="507.8" y="297.3">ebs</text>
-		<text x="500" y="386">ems</text>
+		<text x="518" y="302.6">ebs</text>
+		<text x="500.1" y="378">ems</text>
 		<text x="175" y="119">edi</text>
 		<text x="423" y="514.6">egy</text>
-		<text x="148.6" y="203">eng</text>
+		<text x="133" y="201.4">eng</text>
 		<text x="77" y="321.2">est</text>
 		<text x="245.6" y="502.9">fez</text>
 		<text x="371.8" y="103.4">fin</text>
 		<text x="182.8" y="239.6">fra</text>
 		<text x="346.9" y="230.2">gal</text>
-		<text x="151.7" y="270.7">gas</text>
+		<text x="146.2" y="272.2">gas</text>
 		<text x="319.7" y="197.6">gda</text>
 		<text x="554.6" y="294.4">geo</text>
 		<text x="71.6" y="342.2">gib</text>
 		<text x="337.6" y="106.6">gob</text>
-		<text x="193.7" y="319.7">gol</text>
+		<text x="184.3" y="311.9">gol</text>
 		<text x="227.1" y="192.9">hag</text>
 		<text x="245.8" y="164.9">hel</text>
 		<text x="251.2" y="203">hes</text>
 		<text x="266" y="189">hol</text>
-		<text x="11.7" y="379.2">ifn</text>
+		<text x="8.6" y="383.4">ifn</text>
 		<text x="741.2" y="588.8">ind</text>
-		<text x="336.3" y="376.2">ion</text>
+		<text x="325.9" y="381.1">ion</text>
 		<text x="664.2" y="379.6">ira</text>
-		<text x="107.2" y="181.3">iri</text>
+		<text x="98" y="183.6">iri</text>
 		<text x="512.7" y="434.7">jer</text>
 		<text x="467.8" y="89.7">kar</text>
-		<text x="661.8" y="201.8">kaz</text>
-		<text x="448.4" y="220.3">kie</text>
+		<text x="670.4" y="202.2">kaz</text>
+		<text x="452.7" y="221.7">kie</text>
 		<text x="520.5" y="265.1">kub</text>
 		<text x="183.6" y="289.3">lan</text>
 		<text x="343.8" y="34.2">lap</text>
 		<text x="346.9" y="138.4">lat</text>
 		<text x="366.3" y="248.1">lem</text>
-		<text x="430.8" y="428.9">lib</text>
-		<text x="221.7" y="303.3">lig</text>
+		<text x="409.1" y="414.6">lib</text>
+		<text x="238" y="322">lig</text>
 		<text x="373.3" y="185.1">liv</text>
 		<text x="217.8" y="237.2">lor</text>
 		<text x="359.3" y="332.1">mac</text>
-		<text x="267.1" y="414.2">mal</text>
+		<text x="266" y="417.7">mal</text>
 		<text x="282.3" y="198.3">mar</text>
 		<text x="352.3" y="189">mas</text>
 		<text x="579.9" y="413.3">mes</text>
-		<text x="39" y="231">mid</text>
-		<text x="138.4" y="113.6">min</text>
+		<text x="41.2" y="240.3">mid</text>
+		<text x="134.6" y="113.6">min</text>
 		<text x="26.3" y="426.9">mor</text>
 		<text x="434.7" y="177.4">mus</text>
 		<text x="289.3" y="354.7">nap</text>
 		<text x="318.9" y="80.1">nmk</text>
 		<text x="53.6" y="76">nao</text>
-		<text x="220.3" y="122.8">nth</text>
+		<text x="217" y="130.7">nth</text>
 		<text x="273.8" y="97.2">nwy</text>
 		<text x="212.5" y="59.5">nwg</text>
 		<text x="431.8" y="126.7">nov</text>
-		<text x="440.6" y="251.5">ode</text>
+		<text x="434" y="244.2">ode</text>
 		<text x="264.4" y="381.9">pal</text>
 		<text x="659.6" y="469">per</text>
 		<text x="196" y="213.9">pic</text>
 		<text x="229.4" y="283.1">pie</text>
 		<text x="473.7" y="357.7">pis</text>
-		<text x="152.1" y="330.4">plm</text>
+		<text x="162.6" y="322.8">plm</text>
 		<text x="388.9" y="229.4">pod</text>
 		<text x="57.6" y="312.7">por</text>
-		<text x="362.6" y="403.5">pyl</text>
+		<text x="374.9" y="409.1">pyl</text>
 		<text x="544.4" y="538.2">red</text>
 		<text x="373.3" y="157.9">rig</text>
 		<text x="262.9" y="322.8">rom</text>
 		<text x="232.6" y="217">ruh</text>
 		<text x="398.2" y="271.4">rum</text>
 		<text x="115" y="485.4">sah</text>
-		<text x="99.6" y="287">san</text>
+		<text x="92.6" y="283.9">san</text>
 		<text x="217.8" y="343">sar</text>
 		<text x="286.2" y="217.8">sax</text>
 		<text x="227.9" y="259">sch</text>
-		<text x="350.8" y="306.4">ser</text>
+		<text x="350" y="301">ser</text>
 		<text x="669.6" y="91.6">sib</text>
 		<text x="310.3" y="220.1">sil</text>
-		<text x="496.1" y="453.2">sin</text>
+		<text x="495.4" y="445.7">sin</text>
 		<text x="277.7" y="133">ska</text>
 		<text x="443.5" y="366.5">smy</text>
-		<text x="21.4" y="323.6">sou</text>
+		<text x="22.6" y="336.8">sou</text>
 		<text x="240.3" y="237.2">swa</text>
 		<text x="301" y="137.7">swe</text>
-		<text x="532.2" y="378.2">syr</text>
+		<text x="535.9" y="385">syr</text>
 		<text x="343" y="280.8">sze</text>
 		<text x="477.6" y="251.5">tau</text>
 		<text x="394.3" y="332.9">thr</text>
-		<text x="319.7" y="428.9">tob</text>
+		<text x="318.9" y="436.3">tob</text>
 		<text x="101.1" y="310.3">tol</text>
 		<text x="366.3" y="275.3">tra</text>
 		<text x="294.4" y="462">tri</text>
@@ -785,17 +784,17 @@
 		<text x="735.9" y="299.2">tur</text>
 		<text x="245.8" y="303.3">tus</text>
 		<text x="271.4" y="261.3">trl</text>
-		<text x="250.5" y="358.7">tys</text>
+		<text x="251.2" y="364">tys</text>
 		<text x="137.7" y="132.2">uls</text>
 		<text x="274.6" y="313.4">umb</text>
-		<text x="192" y="356.7">uti</text>
+		<text x="196.8" y="364.8">uti</text>
 		<text x="111.2" y="341.4">val</text>
 		<text x="262.1" y="283.1">ven</text>
 		<text x="536.1" y="174.5">vol</text>
 		<text x="348.4" y="213.1">war</text>
 		<text x="179.7" y="182.8">wes</text>
-		<text x="450.3" y="300.2">wbs</text>
-		<text x="121.8" y="364.5">wms</text>
+		<text x="451.1" y="304.9">wbs</text>
+		<text x="145.4" y="358.6">wms</text>
 		<text x="478.6" y="273.9">yal</text>
 		<text x="180.4" y="156.3">yor</text>
 		<text x="316.6" y="308.8">zar</text>
