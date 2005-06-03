@@ -289,8 +289,9 @@ public class PersistenceManager
 		setTitle(world);
 		GeneralPreferencePanel.setRecentFileName(file);
 		clientFrame.getClientMenu().setSelected(ClientMenu.EDIT_EDIT_MODE, false);
+		clientFrame.getClientMenu().setViewNames();
 		clientFrame.getClientMenu().updateRecentFiles();
-		
+
 		// this is for compatibility
 		// 
 		if( !(world.getGameSetup() instanceof GUIGameSetup) )
@@ -319,7 +320,7 @@ public class PersistenceManager
 				setChanged(false);
 				setSaveEnabled(true);
 				clientFrame.getClientMenu().setSelected(ClientMenu.EDIT_EDIT_MODE, false);
-				clientFrame.getClientMenu().setViewNamesNone();
+				clientFrame.getClientMenu().setViewNames();
 				setTitle(world);
 				
 				// set GameSetup object
@@ -352,7 +353,7 @@ public class PersistenceManager
 				setChanged(false);
 				setSaveEnabled(true);
 				clientFrame.getClientMenu().setSelected(ClientMenu.EDIT_EDIT_MODE, false);
-				clientFrame.getClientMenu().setViewNamesNone();
+				clientFrame.getClientMenu().setViewNames();
 				setTitle(world);
 				
 				// set GameSetup object
@@ -579,6 +580,7 @@ public class PersistenceManager
 						setChanged(true);
 						setSaveEnabled(true);
 						clientFrame.getClientMenu().setSelected(ClientMenu.EDIT_EDIT_MODE, false);
+						clientFrame.getClientMenu().setViewNames();
 						setTitle(world);
 					}
 				} else {

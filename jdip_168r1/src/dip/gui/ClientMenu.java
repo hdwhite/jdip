@@ -700,13 +700,28 @@ public class ClientMenu
 	
 
 	/**
-	 * Set the View->Names-> menu option to "None".  
-	 * This is needed after loading a new game because the map does not show names.
+	 * 	Set the View->Names-> menu option to "None", or whatever was set in
+	 * 	Preferences. This is needed after loading a new game because the map 
+	 *	does not show names.
 	 */
-	public void setViewNamesNone()
+	public void setViewNames()
 	{
-		((JRadioButtonMenuItem) getMenuItem(VIEW_NAMES_NONE)).setSelected(true);	
-	}
+		// get user pref setting
+		final String defaultLabelLevel = GeneralPreferencePanel.getMapLabelSetting();
+		
+		if(MapRenderer2.VALUE_LABELS_BRIEF.equals(defaultLabelLevel))
+		{
+			((JRadioButtonMenuItem) getMenuItem(VIEW_NAMES_SHORT)).setSelected(true);	
+		}
+		else if(MapRenderer2.VALUE_LABELS_FULL.equals(defaultLabelLevel))
+		{
+			((JRadioButtonMenuItem) getMenuItem(VIEW_NAMES_FULL)).setSelected(true);	
+		}
+		else
+		{
+			((JRadioButtonMenuItem) getMenuItem(VIEW_NAMES_NONE)).setSelected(true);	
+		}
+	}// setViewNames()
 	
 	
 	/** 
@@ -1166,7 +1181,7 @@ public class ClientMenu
 				debugOut(e);
 				if(e.getCause() != null)
 				{
-					ErrorDialog.displaySerious(null, e.getCause());
+					ErrorDialog.displaySerious(null, e);
 					e.getCause().printStackTrace();
 				}
 			}
