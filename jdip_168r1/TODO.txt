@@ -21,22 +21,9 @@ Cannot duplicate
 
 Bugs to be fixed
 ======================================================
-		
-	1) maps / symbols
-		ancmed:
-			should now be fixed
-		
-		fix ancmed units
-			dislodged units are not correct
-			
-		aberrationV
-			stefano
-			a) FIX order symbols
-			b) FIX unit positions
-			
+	
 	2) update help text
 		add changelog, when complete
-		TEST
 		
 	3)  Menu doesn't match preferences for province-naming
 	  	e.g.: menu for province names lists 'none' if prefs
@@ -68,36 +55,7 @@ Bugs to be fixed
 		
 	7) BugReport:
 		need to report if we are webstart version or not
-	
-	8)	Windows
-		would be nice if we could do file associations....
-			1) double click on .jdip file opens in jdip
-			2) jdip command line opens jdip file
-			3) enable this in webstart (1.5.x)
-				    <association>
-					  <mime-type="application-x/swingset2-file"/>
-					  <extensions="swingset2"/> 
-					</association>
-					<related-content>
-				see:
-					http://java.sun.com/j2se/1.5.0/docs/guide/javaws/developersguide/syntax.html#application_desc
-				
-				see:
-					http://today.java.net/pub/a/today/2004/01/05/swing.html?page=3
-				installer will need to do this 
-				.jar installer (w/special instructions on windows)
-					http://openfacts.berlios.de/index-en.phtml?title=IzPack/ScriptExamples/Creating_File_Associations_in_Windows_XP/2000
-				.exe installer (windows-only)
-					CANNOT do it with installshield
-					look into NSIS installer.....
-					
-					
-				create a simple NSIS installer:
-					installs a single file
-					creates registry keys
-					does a java install (online)
-					
-				
+		
 	9)	NO variants exception (on linux...)
 		
 		No variants found on path: /home/USERNAME/variants; <br>
@@ -199,9 +157,18 @@ Bugs to be fixed
 
 
 	
+can't fix
+---------
+	JSX2 console text with java 1.5 save/load. It works, though. 
+	We will move to xstream in the future.
 		
-		
-		
+preview 2 highlights
+--------------------
+ a) ancmed
+ b) aberration
+ c) judge importing
+ d) mac os x file dialogs
+ 
 	
 				
 Installer
