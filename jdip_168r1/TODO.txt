@@ -5,56 +5,11 @@ jDip TODO list
 ==============
 
 
-Cannot duplicate
-======================================================
-- [1051166] copying orders to clipboard
-  <HTML> is inserted in front of each line. 
-  we should use plain text.
-  *** CANNOT DUPLICATE on JDK 1.4.2 or 1.5.0
-  
-- [1116567 ] Map->Jpeg exports
-  *** CANNOT DUPLICATE on JDK 1.4.2 or 1.5.0
-  
-- [1084155] Errors in enter multiple orders breaks menu
-  *** CANNOT DUPLICATE on JDK 1.4.2 or 1.5.0
-
-
 Bugs to be fixed
 ======================================================
 	
 	2) update help text
 		add changelog, when complete
-		
-	3)  Menu doesn't match preferences for province-naming
-	  	e.g.: menu for province names lists 'none' if prefs
-		set to 'brief' names, and brief names are showing.
-		use 16_17 branch code
-		975594 / 1015353 ] Province Names and Order Sorting not retained
-		is related
-	 
-	4)	Judge Importing failures
-		MOSTLY fixed...
-		
-		test judge importing into existing games
-		see what we can do about that
-		the current fix for general import may have broken that....
-		
-		if we are importing into an existing game:
-		
-		1) note last phase of existing game
-		2) ignore importing upto that phase OR start importing from that
-			phase...
-		3) or check judge position/orders against existing phase orders
-		 	to make sure we are OK
-			
-		perhaps: import (as a new game) then game is merged
-		
-		
-	6)	Mac OS X Issue ? 
-		** NEED MAC TESTING: mac os x : native file chooser used (FileDialog)
-		
-	7) BugReport:
-		need to report if we are webstart version or not
 		
 	9)	NO variants exception (on linux...)
 		
@@ -108,6 +63,12 @@ Bugs to be fixed
 			Unix/Linux
 				use "user.home"
 				
+				make sure installer knows this?
+				first:
+					try to install to /usr/local/share/
+					
+				
+				
 		TO INVESTIGATE:
 		==============
 			See how other programs with 'plugins' do it:
@@ -138,30 +99,20 @@ Bugs to be fixed
 						  return new File(path, filename);
 					}
 	
-	*** MISC ISSUES
-		http://today.java.net/pub/a/today/2003/12/08/swing.html
-		http://today.java.net/pub/a/today/2004/01/05/swing.html?page=2
-		http://java.sun.com/developer/technicalArticles/JavaLP/JavaToMac/
-			a) file-type associations for os x
-				1) REQUIRES: custom listener using com.mac.* package
-				2) REQUIRES: 'plist' file (from installer / app bundle)
-			b) menu type application things
-				To set the name of our application, and have it appear at the top of the application menu, 
-				we use another system property, 
-					com.apple.mrj.application.apple.menu.about.name
-				You can put this on the command line with another -D argument. If you're using the
-				Project Builder IDE, you'll want to put all of these Java system properties in your Info.plist file, 
-				where they'll look like this:
-				
-				com.apple.mrj.application.growbox.intrudes=true
-
-
-	
+	10) ANT Web Start task
+		http://ant-jnlp-war.sourceforge.net/
+		
+		
+		
+		
+		
 can't fix
 ---------
 	JSX2 console text with java 1.5 save/load. It works, though. 
 	We will move to xstream in the future.
-		
+	Fixing this is impossible w/o a major loss in compatibility...
+	
+	
 preview 2 highlights
 --------------------
  a) ancmed
@@ -193,7 +144,25 @@ The installer would:
 
 FUTURE FEATURE
 ==============
-	6) 'check for new JEdit version'
+	a) 'check for new JEdit version'
 		if so, display changes in a nonmodal dialog
 		allow user to point browser to download site
 	
+	b) Mac OS X Integration issues:
+		http://today.java.net/pub/a/today/2003/12/08/swing.html
+		http://today.java.net/pub/a/today/2004/01/05/swing.html?page=2
+		http://java.sun.com/developer/technicalArticles/JavaLP/JavaToMac/
+			a) file-type associations for os x
+				1) REQUIRES: custom listener using com.mac.* package
+				2) REQUIRES: 'plist' file (from installer / app bundle)
+			b) menu type application things
+				To set the name of our application, and have it appear at the top of the application menu, 
+				we use another system property, 
+					com.apple.mrj.application.apple.menu.about.name
+				You can put this on the command line with another -D argument. If you're using the
+				Project Builder IDE, you'll want to put all of these Java system properties in your Info.plist file, 
+				where they'll look like this:
+				
+				com.apple.mrj.application.growbox.intrudes=true
+		
+		
