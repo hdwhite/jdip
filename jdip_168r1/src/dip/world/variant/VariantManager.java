@@ -26,6 +26,7 @@ import dip.world.variant.data.*;
 import dip.world.variant.parser.*;
 import dip.gui.dialog.ErrorDialog;
 import dip.misc.Log;
+import dip.misc.Utils;
 
 import java.util.*;
 import java.net.URLClassLoader;
@@ -809,7 +810,7 @@ public class VariantManager
 	{
 		variantMap = new HashMap(53);
 		symbolMap = new HashMap(17);
-		isInWebstart = isInWebstart();
+		isInWebstart = Utils.isInWebstart();
 	}// VariantManager()
 	
 	
@@ -912,24 +913,6 @@ public class VariantManager
 		
 		return false;
 	}// checkFileName()
-	
-	
-	
-	
-	/** See if we are running under Java Webstart */
-	private boolean isInWebstart()
-	{
-		// this is not the most optimal code.
-		try
-		{
-			ServiceManager.lookup("javax.jnlp.BasicService");
-			return true;
-		}
-		catch(Throwable e)
-		{
-			return false;
-		}
-	}// isInWebstart()
 	
 	
 	/** 

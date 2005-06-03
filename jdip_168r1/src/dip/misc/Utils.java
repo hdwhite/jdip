@@ -54,6 +54,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
 import java.util.Locale;
@@ -1668,6 +1669,28 @@ public class Utils
 	{
 		return isWindows;
 	}// isWindows()
+	
+	
+    /** Returns true if running within Web Start. */
+    public static boolean isInWebstart()
+	{
+		try
+		{
+			final Class service = Class.forName("javax.jnlp.ServiceManager");
+			final Method lookup = service.getMethod("lookup", new Class[] { String.class });
+			final Object basic = lookup.invoke(null, new Object[] { "javax.jnlp.BasicService" });
+			return true;
+		}
+		catch(Exception e)
+		{
+			// exception == false
+		}
+		return false;
+    }// isInWebstart()
+
+	
+	
+	
 	
 	/** Constructor */
 	private Utils()
