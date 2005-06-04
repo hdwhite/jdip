@@ -57,8 +57,7 @@ Section "MainSection" SEC01
   ; root dir
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "..\..\build\jardist\jdip.bat"
-  ; *** INCLUDE EXE from launch4j ***
+  File "..\..\build\jardist\jdip.exe"		; THIS MUST BE CREATED with launch4j
   File "..\..\build\jardist\HISTORY.TXT"
   File "..\..\build\jardist\CHANGELOG.TXT"
   File "..\..\build\jardist\README.TXT"
@@ -76,7 +75,8 @@ Section -AdditionalIcons
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
   CreateDirectory "$SMPROGRAMS\jDip"
   CreateShortCut "$SMPROGRAMS\jDip\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
-SectionEnd
+  CreateShortCut "$SMPROGRAMS\jDip\jDip.lnk" "$INSTDIR\jDip.exe" 
+SectionEnd                        
 
 Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
@@ -107,6 +107,7 @@ Section Uninstall
   Delete "$INSTDIR\${PRODUCT_NAME}.url"
   Delete "$INSTDIR\uninst.exe"
   Delete "$INSTDIR\jdip.jar"
+  Delete "$INSTDIR\jdip.exe"
   Delete "$INSTDIR\LICENSE.TXT"
   Delete "$INSTDIR\README.TXT"
   Delete "$INSTDIR\CHANGELOG.TXT"
@@ -119,6 +120,7 @@ Section Uninstall
 
   Delete "$SMPROGRAMS\jDip\Uninstall.lnk"
   Delete "$SMPROGRAMS\jDip\Website.lnk"
+  Delete "$SMPROGRAMS\jDip\jDip.lnk"
 
   RMDir "$SMPROGRAMS\jDip"
   RMDir "$INSTDIR"

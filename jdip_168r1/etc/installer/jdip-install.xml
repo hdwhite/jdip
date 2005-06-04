@@ -44,21 +44,23 @@
 		<!-- core -->
 		<res id="ImgPacksPanel.img.0"  src="images/detailed_thumb.png" />
 		
-		<res id="ImgPacksPanel.img.1"  src="images/ancmed-thumbnail.jpg" />
-		<res id="ImgPacksPanel.img.2"   src="images/asia_thumb.png" />
-        <res id="ImgPacksPanel.img.3"   src="images/chaos_thumb.png" />
+		<!-- optional -->
+		<res id="ImgPacksPanel.img.1"  src="images/aberration-thumbnail.png" />
+		<res id="ImgPacksPanel.img.2"  src="images/ancmed-thumbnail.jpg" />
+		<res id="ImgPacksPanel.img.3"   src="images/asia_thumb.png" />
         <res id="ImgPacksPanel.img.4"   src="images/chaos_thumb.png" />
-        <res id="ImgPacksPanel.img.5"   src="images/h31_h32_thumb.png" />
- 		<res id="ImgPacksPanel.img.6"   src="images/imperium_thumb.png"/>
-		<res id="ImgPacksPanel.img.7"   src="images/loeb9.gif" />
-		<res id="ImgPacksPanel.img.8"   src="images/milan_thumb.png" />
-        <res id="ImgPacksPanel.img.9"   src="images/modern_thumb.jpg" />
-		<res id="ImgPacksPanel.img.10"   src="images/octarine_thumb.png" />
- 		<res id="ImgPacksPanel.img.11"   src="images/pure_thumb.png" />
-		<res id="ImgPacksPanel.img.12"  src="images/egdipmap_thumb.png" />	<!-- renaissance -->
-        <res id="ImgPacksPanel.img.13"  src="images/rootz_thumb.png" />
-        <res id="ImgPacksPanel.img.14"  src="images/sailho_thumb.png" />
-		<res id="ImgPacksPanel.img.15"  src="images/youngstown_thumb.png" />
+        <res id="ImgPacksPanel.img.5"   src="images/chaos_thumb.png" />
+        <res id="ImgPacksPanel.img.6"   src="images/h31_h32_thumb.png" />
+ 		<res id="ImgPacksPanel.img.7"   src="images/imperium_thumb.png"/>
+		<res id="ImgPacksPanel.img.8"   src="images/loeb9.gif" />
+		<res id="ImgPacksPanel.img.9"   src="images/milan_thumb.png" />
+        <res id="ImgPacksPanel.img.10"   src="images/modern_thumb.jpg" />
+		<res id="ImgPacksPanel.img.11"   src="images/octarine_thumb.png" />
+ 		<res id="ImgPacksPanel.img.12"   src="images/pure_thumb.png" />
+		<res id="ImgPacksPanel.img.13"  src="images/egdipmap_thumb.png" />	<!-- renaissance -->
+        <res id="ImgPacksPanel.img.14"  src="images/rootz_thumb.png" />
+        <res id="ImgPacksPanel.img.15"  src="images/sailho_thumb.png" />
+		<res id="ImgPacksPanel.img.16"  src="images/youngstown_thumb.png" />
  		
      </resources>
     
@@ -91,9 +93,11 @@
             <file targetdir="$INSTALL_PATH/variants" src="variants/stdVariants.zip"/>
             
 			<file targetdir="$INSTALL_PATH/variants" src="variants/modernSymbols.zip"/>
-            <file targetdir="$INSTALL_PATH/variants" src="variants/periodSymbols.zip"/>
-            <file targetdir="$INSTALL_PATH/variants" src="variants/simpleSymbols.zip"/>
-            <file targetdir="$INSTALL_PATH/variants" src="variants/imperiumSymbols.zip"/>
+			<file targetdir="$INSTALL_PATH/variants" src="variants/periodSymbols.zip"/>
+			<file targetdir="$INSTALL_PATH/variants" src="variants/simpleSymbols.zip"/>
+			<file targetdir="$INSTALL_PATH/variants" src="variants/imperiumSymbols.zip"/>
+			<file targetdir="$INSTALL_PATH/variants" src="variants/ancmedSymbols.zip"/>
+			
 			
             <file os="windows" targetdir="$INSTALL_PATH" src="jdip.bat"/>
             <file os="unix" targetdir="$INSTALL_PATH" src="jdip.sh" keep="true"/>
@@ -104,6 +108,10 @@
 			<executable os="mac" targetfile="$INSTALL_PATH/jdip.sh" stage="never" failure="warn" type="bin"/>
          </pack>
 		
+		<pack name="Aberration" required="no" override="true">
+			<description>The Aberration V variant.</description>
+            <file targetdir="$INSTALL_PATH/variants" src="variants/aberrationVariant.zip"/>
+		</pack>
 		<pack name="Ancient Med" required="no" override="true">
 			<description>The Ancient Mediterranean variant.</description>
             <file targetdir="$INSTALL_PATH/variants" src="variants/ancmedVariant.zip"/>
