@@ -4,29 +4,22 @@ information about important changes and bug status.
 ===========================================================================
 
 
-Thanks to everyone who has submitted bug reports, either via the online 
-submission system or on SourceForge.
-
-Special thanks to James Thompson II, who helped fix many bugs for this
-release.
-
-
-jDip 1.6.9 Preview Release 2 Changelog
+jDip 1.7.0 PREVIEW RELEASE 1 Changelog
 ======================================
-For best results, it is recommended that Java 5 (1.5) is used to run jDip.
 
 - Bugs not yet fixed:
     + Variant directory issues on Linux
-	 
-	
-- New or Improved Features:
+     
+    
+- New or Improved Features:                     
     + Aberration V variant and symbols added (thanks to Stefano Costantini)
     + Ancient Med variant and symbols added (thanks to Stefano Costantini)
     + Renaissance variant added (thanks to Ian Scrivins)
-    + Size (smaller by more than 1 MB) and speed improvements
-	+ Mac OS X: better file chooser.
+    + New Windows installer
+	+ Size (smaller by more than 1 MB) and speed improvements
+    + Mac OS X: better file chooser.
     + Online bug reports (which occurs with severe jDip errors) is
-      are considerably more detailed. Thanks to everyone who submitted bugs.
+      are considerably more detailed.
     + Open dialogs now are closed when a new game is created or opened.
     + Splash screen changed to original pastel style.
     + New commandline option: "-defaultgui". This forces jDip to the default
@@ -42,10 +35,10 @@ For best results, it is recommended that Java 5 (1.5) is used to run jDip.
     + Adjudication error: No convoy, but bounce [1205531, 1116568, 1053458]
         - This is now fixed. As it turns out, one of the test cases 
           had an incorrect resolution that masked this bug in prior versions.
-	+ Incorrect importing of history files [1035292]
-		- Judge history import (from floc.net and text files) now works.
-		- Note that judge import only works for those variants which jDip 
-		  supports!
+    + Incorrect importing of history files [1035292]
+        - Judge history import (from floc.net and text files) now works.
+        - Note that judge import only works for those variants which jDip 
+          supports!
     + Importing from floc.net hangs indefinitely [1158290]
         - This cannot be reliable duplicated, but may occur if floc.net is 
           down or responding slowly.
@@ -64,22 +57,27 @@ For best results, it is recommended that Java 5 (1.5) is used to run jDip.
     + Map name/report discrepancy [1184073]
     + Loeb9, STP fleet should start NC not SC [1066690]
     + Cannot import - underscore not supported [1117835]
-     + Many subtle order parsing errors were fixed.
+    + Many subtle order parsing errors were fixed.
     + DPJudge Chaos map now works.
     + Many Face-to-Face (F2F) mode errors fixed.
     + Exceptions should no longer occur when jDip exits.
     + Hundred map fixes.
-	+ Map label (name) preferences and name menu should now correlate.
+    + Map label (name) preferences and name menu should now correlate.
     + NullPointerException occured with empty parenthetical coasts in 
       Coast.normalize().
-	+ Improved Web Start detection; also included in bug reports.
+    + Improved Web Start detection; also included in bug reports.
 - Compatibility:
     + Saved Face-to-Facd (F2F) games from previous versions cannot be opened
-	  in this version due to extensive fixes. All non-F2F games remain 
-	  compatible with this version.
+      in this version due to extensive fixes. All non-F2F games remain 
+      compatible with this version.
 - Known issues:
-	+ There may be diagnostic output when opening or saving games, if 
-	  Java 5 (1.5.x) is used. The library we use to help save and open games
-	  is no longer being updated. This will be replaced in a future version.
-	  Replacing it in this version would break save-game compatibility.
+    + There may be diagnostic output when opening or saving games, if 
+      Java 5 (1.5.x) is used. The library we use to help save and open games
+      is no longer being updated. This will be replaced in a future version.
+      Replacing it in this version would break save-game compatibility.
+- Acknowledgements:
+    + Thanks to James Thompson II, who helped fix many bugs for this release.
+    + Submitted online bug reports (either through Sourceforge, or from jDip 
+      error messages) are appreciated. Thanks to everyone who submitted 
+      bug reports!
 
