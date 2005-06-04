@@ -4,13 +4,23 @@ information about important changes and bug status.
 ===========================================================================
 
 
-jDip 1.7.0 PREVIEW RELEASE 1 Changelog
-======================================
-
+=============== NOTES =================
 - Bugs not yet fixed:
     + Variant directory issues on Linux
      
+- Features not fully tested:
+	+ New windows installer
+	+ OS X file dialogs
     
+- please report any issues to:
+	 jdip-developer [@] sourceforge.net
+	
+- floc.net importing should now work.
+=======================================
+
+
+jDip 1.7.0 PREVIEW RELEASE 1 Changelog
+======================================
 - New or Improved Features:                     
     + Aberration V variant and symbols added (thanks to Stefano Costantini)
     + Ancient Med variant and symbols added (thanks to Stefano Costantini)

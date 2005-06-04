@@ -1,9 +1,4 @@
 
-PERHAPS call next version 1.7.0 (when released)?
-
-jDip TODO list
-==============
-
 
 Bugs to be fixed
 ======================================================
@@ -15,17 +10,12 @@ Bugs to be fixed
 		launch4j : 
 			make sure it's included in windows installer
 			we may want both the .jar and the .exe
-			
+			PUT in etc/launcher
+				with comments...
+				
 		improve .ico file
 			multiple resolution icons 16, 32, 64 pixels
-	
-	2) update help text
-		*** add changelog, when complete
-		
-	3) ANT Web Start task
-		http://ant-jnlp-war.sourceforge.net/
-		
-		
+			
 	9)	NO variants exception (on linux...)
 		
 		No variants found on path: /home/USERNAME/variants; <br>
@@ -116,8 +106,8 @@ Bugs to be fixed
 	
 
 
-FUTURE FEATURE
-==============
+FUTURE FEATURES
+===============
 	a) 'check for new JEdit version'
 		if so, display changes in a nonmodal dialog
 		allow user to point browser to download site
