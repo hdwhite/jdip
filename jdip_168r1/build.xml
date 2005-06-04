@@ -133,6 +133,7 @@
 	</path>
 	
 	
+	
 	<!-- cleans the build directory -->
 	<target name="clean" description="Delete build/ directory">
 		<delete dir="${base.build.dir}"/>
@@ -308,7 +309,9 @@
 				basedir="${resource.dir}/variants/aberration"
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
-				
+		
+		
+		
 		<!-- SymbolPack: simple -->
 		<zip compress="true"   destfile="${variant.dir}/simpleSymbols.zip"
 				basedir="${resource.dir}/variants/symbols/simple"
@@ -334,7 +337,7 @@
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 		
 		<!-- SymbolPack: ancmed -->
-		<zip compress="true"   destfile="${variant.dir}/imperiumSymbols.zip"
+		<zip compress="true"   destfile="${variant.dir}/ancmedSymbols.zip"
 				basedir="${resource.dir}/variants/symbols/ancient_med"
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
@@ -1171,5 +1174,6 @@
 		</signjar>
 		
 	</target>
+	
 </project>
 
