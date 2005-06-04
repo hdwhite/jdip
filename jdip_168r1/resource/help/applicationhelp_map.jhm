@@ -6,6 +6,7 @@
 	
 	<mapID target="Welcome" url="welcome.htm" />                                                      
 	
+	<mapID target="ver170_htm" url="versions/ver170.htm"/>
 	<mapID target="ver168_htm" url="versions/ver168.htm"/>
 	<mapID target="ver167_htm" url="versions/ver167.htm"/>
 	<mapID target="ver160_htm" url="versions/ver160.htm"/>
