@@ -26,9 +26,6 @@ import dip.world.metadata.PlayerMetadata;
 import dip.world.metadata.GameMetadata;
 import dip.gui.undo.UndoRedoManager;
 
-import dip.net.message.PressStore;
-import dip.net.message.DefaultPressStore;
-
 import java.io.*;
 import java.util.*;
 import java.util.Map;
@@ -60,7 +57,6 @@ public class World implements Serializable
 	private static final String KEY_WORLD_METADATA = "_world_metadata_";
 	private static final String KEY_UNDOREDOMANAGER = "_undo_redo_manager_";
 	private static final String KEY_GAME_SETUP = "_game_setup_";
-	private static final String KEY_PRESS_STORE = "_press_store_";
 	private static final String KEY_VARIANT_INFO = "_variant_info_";
 	
 	// instance variables
@@ -454,20 +450,6 @@ public class World implements Serializable
 	{
 		return (GameSetup) nonTurnData.get(KEY_GAME_SETUP);
 	}// getGameSetup()
-	
-	
-	/** Get the PressStore object, which stores and retreives Press messages. */
-	public synchronized PressStore getPressStore()
-	{
-		// create on demand
-		if(nonTurnData.get(KEY_PRESS_STORE) == null)
-		{
-			nonTurnData.put(KEY_PRESS_STORE, new DefaultPressStore());
-		}
-		
-		return (PressStore) nonTurnData.get(KEY_PRESS_STORE);
-	}// getPressStore()
-	
 	
 	
 	/** Get the Variant Info object. This returns a Reference to the Variant information. */
