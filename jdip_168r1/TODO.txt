@@ -2,20 +2,57 @@
 
 Bugs to be fixed
 ======================================================
+	
+			
+	*** on final release
+		- mailing list (jdip-users & dev)
+		- web site (of course)
+		- rec.games.dip
+		- web site : 
+			make sure link to java install is OK
+			
+	0) make the 'maptool' plugin available for download
+		under 'jdip-tools'
+		
+		
 	1) NSIS installer....
 		DONE java check / install
 		DONE enable LZMA
 		DONE nicer java check page
 		
-		launch4j : 
-			make sure it's included in windows installer
-			we may want both the .jar and the .exe
-			PUT in etc/launcher
-				with comments...
-				
+		ensure we have launch4j script / settings in etc/ on release
+		and instructions for making the NSIS installer
+		
 		improve .ico file
 			multiple resolution icons 16, 32, 64 pixels
 			
+			http://www.axiomx.com/PixelToolbox/
+			
+			
+BUGS / TODO
+-----------
+	2) KNOWN ISSUES: (add...)
+			cannot import games using by-5 (some hundred games)
+			e.g.: USDP / hundredwar25
+			Phase A1424M is not recognized
+	3) KNOWN ISSUES: 
+			proxy / firewall
+			workaround
+			no change until 1.5
+	3) Thread bug
+		NullPointerException	
+		dip.gui.ClientFrame$MenuHandler.onFileNewStd(ClientFrame.java:1283)
+		dip.gui.PersistenceManager.newGame(PersistenceManager.java:301)
+		dip.gui.dialog.newgame.NewGameDialog.displayDialog(NewGameDialog.java:78)
+		dip.gui.dialog.newgame.NewGameDialog.displayDialog(NewGameDialog.java:96)
+			we create the dialog, but it's not ready yet. so we get an NPE here.
+			this is with 1.4.2_05-b04 / xp / 5.1 
+	4) NEW BUG:
+		Brief: java.io.IOException: Cannot validate order on second pass.
+		Cannot build a new unit where a unit already exists.		
+		
+		error importing: DEUS / npst336		(no world open)
+		error importing: USIN / vgnp3078		(world open)
 	9)	NO variants exception (on linux...)
 		
 		No variants found on path: /home/USERNAME/variants; <br>
@@ -129,4 +166,14 @@ FUTURE FEATURES
 				
 				com.apple.mrj.application.growbox.intrudes=true
 		
-		
+	c) Java 5: 
+		use proxy if needed for web requests!
+				ProxySelector.getDefault()
+			THIS IS THE BEST METHOD
+		Proxy(Proxy.Type type, SocketAddress sa) 
+			Proxy.Type:
+				HTTP
+				SOCKS
+				DIRECT (no proxy)
+				
+				
