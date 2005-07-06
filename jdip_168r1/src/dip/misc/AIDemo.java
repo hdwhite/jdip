@@ -10,18 +10,24 @@
 //
 package dip.misc;
 
-import dip.order.*;								// orders
-import dip.order.result.*;						// results of orders
-import dip.world.*;								// 'main' things (Units, Provinces, etc.)
-import dip.world.variant.VariantManager;		// Loads variants (maps, etc.)
-import dip.world.variant.data.*;				// variant data
-import dip.process.*;							// adjudication
-
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Iterator;
-import java.io.*;
+import java.util.List;
+
+import dip.order.OrderFactory;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Map;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.RuleOptions;
+import dip.world.Unit;
+import dip.world.World;
+import dip.world.WorldFactory;
+import dip.world.variant.VariantManager;
+import dip.world.variant.data.Variant;
 
 /**
 *	This class is meant to be an illustrative example of how to use

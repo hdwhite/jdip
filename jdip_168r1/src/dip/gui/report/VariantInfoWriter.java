@@ -23,21 +23,18 @@
 //
 package dip.gui.report;
 
-import dip.gui.ClientFrame;
-import dip.gui.dialog.TextViewer;
-
-import dip.world.World;
-import dip.world.RuleOptions;
-import dip.world.variant.VariantManager;
-import dip.world.variant.data.Variant;
-
-import dip.misc.Utils;
-import dip.misc.Help;
-
-import java.util.Set;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.JScrollPane;
+
+import dip.gui.ClientFrame;
+import dip.gui.dialog.TextViewer;
+import dip.misc.Utils;
+import dip.world.RuleOptions;
+import dip.world.World;
+import dip.world.variant.VariantManager;
+import dip.world.variant.data.Variant;
 
 
 /**

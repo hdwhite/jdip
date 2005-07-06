@@ -23,12 +23,8 @@
 package dip.tool;
 
 import dip.gui.ClientFrame;
-import dip.world.World;
 import dip.world.TurnState;
-import dip.order.Order;
-
-import javax.swing.JFrame;
-import java.beans.PropertyChangeListener;
+import dip.world.World;
 
 /**
 *

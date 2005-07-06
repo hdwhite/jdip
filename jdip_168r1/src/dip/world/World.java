@@ -22,18 +22,28 @@
 //
 package dip.world;
 
-import dip.world.metadata.PlayerMetadata;
-import dip.world.metadata.GameMetadata;
-import dip.gui.undo.UndoRedoManager;
-
-import java.io.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
-import java.net.*;
-import java.util.zip.*;
-
-import JSX.*;
+import dip.gui.undo.UndoRedoManager;
+import dip.world.metadata.GameMetadata;
+import dip.world.metadata.PlayerMetadata;
 
 
 /**

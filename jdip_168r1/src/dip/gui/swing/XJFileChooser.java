@@ -22,20 +22,17 @@
 //
 package dip.gui.swing;
 
-import dip.misc.Utils;
-import dip.misc.SimpleFileFilter;
-import dip.misc.Log;
-
-import java.awt.Component;
-
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
-import javax.swing.JDialog;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
-import java.awt.FileDialog;
-import java.awt.Frame;
+import dip.misc.Log;
+import dip.misc.SimpleFileFilter;
+import dip.misc.Utils;
 
 /**
 *	A simplified and extended JFileChooser for single-file (only!)

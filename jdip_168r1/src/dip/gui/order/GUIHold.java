@@ -22,33 +22,24 @@
 //
 package dip.gui.order;
 
-import dip.order.Hold;
-import dip.order.Orderable;
-import dip.order.ValidationOptions;
-
-import dip.gui.order.GUIOrder.MapInfo;
-
-import dip.misc.Utils;
-import dip.misc.Log;
-
-import dip.world.Position;
-import dip.world.Location;
-import dip.world.Province;
-import dip.world.Unit;
-import dip.world.Power;
-import dip.world.RuleOptions;
-
-import dip.process.Adjustment.AdjustmentInfoMap;
-
-import dip.gui.map.MapMetadata;
-
 import java.awt.geom.Point2D;
 
-import org.apache.batik.util.SVGConstants;
-import org.apache.batik.util.CSSConstants;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
-import org.w3c.dom.svg.*;
-import org.w3c.dom.*;
+import org.apache.batik.util.SVGConstants;
+import org.w3c.dom.svg.SVGElement;
+import org.w3c.dom.svg.SVGGElement;
+import org.w3c.dom.svg.SVGPolygonElement;
+
+import dip.gui.map.MapMetadata;
+import dip.misc.Log;
+import dip.misc.Utils;
+import dip.order.Hold;
+import dip.order.Orderable;
+import dip.world.Location;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.Unit;
 
 /**                        
 *

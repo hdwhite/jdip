@@ -21,16 +21,20 @@
 //
 package dip.order;
 
-import dip.world.*;
-
 import dip.misc.Log;
 import dip.misc.Utils;
-
 import dip.process.Adjudicator;
 import dip.process.OrderState;
 import dip.process.Tristate;
-import dip.process.Adjustment;
-import dip.process.Adjustment.AdjustmentInfo;
+import dip.world.Border;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.RuleOptions;
+import dip.world.TurnState;
+import dip.world.Unit;
 
 /**
 *

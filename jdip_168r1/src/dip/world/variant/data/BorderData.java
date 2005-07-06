@@ -22,7 +22,6 @@
 //
 package dip.world.variant.data;
 
-import java.util.List;
 
 /**
 

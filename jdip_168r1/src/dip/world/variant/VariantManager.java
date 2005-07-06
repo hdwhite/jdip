@@ -22,27 +22,34 @@
 //
 package dip.world.variant;
 
-import dip.world.variant.data.*;
-import dip.world.variant.parser.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import dip.gui.dialog.ErrorDialog;
 import dip.misc.Log;
 import dip.misc.Utils;
-
-import java.util.*;
-import java.net.URLClassLoader;
-import java.net.URL;
-import java.net.URI;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.io.*;
-import org.xml.sax.*;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.ParserConfigurationException;
-
-import javax.jnlp.*; 
-import java.util.*;
+import dip.world.variant.data.MapGraphic;
+import dip.world.variant.data.SymbolPack;
+import dip.world.variant.data.Variant;
+import dip.world.variant.parser.XMLSymbolParser;
+import dip.world.variant.parser.XMLVariantParser;
 
 
 /**

@@ -21,9 +21,9 @@
 //
 package dip.order.result;
 
-import dip.order.Orderable;
-
 import java.io.Serializable;
+
+import dip.order.Orderable;
 
 /**
 *	A message sent to a specific Power that refers to a specific order.

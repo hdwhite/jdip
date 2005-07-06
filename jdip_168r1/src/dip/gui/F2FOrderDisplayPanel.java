@@ -22,40 +22,38 @@
 //
 package dip.gui;
 
-import dip.order.*;
-import dip.world.*;
-import dip.gui.undo.*;
-import dip.gui.order.GUIOrder;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import cz.autel.dmi.HIGConstraints;
+import cz.autel.dmi.HIGLayout;
+import dip.gui.map.MapMetadata;
 import dip.gui.map.SVGColorParser;
 import dip.gui.swing.ColorRectIcon;
 import dip.misc.Utils;
 import dip.process.Adjustment;
-import dip.misc.Log;
-import dip.gui.map.MapMetadata;
-
-import dip.order.result.Result;
-import dip.order.result.OrderResult;
-
-import cz.autel.dmi.*;		// HIGLayout
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
-import javax.swing.undo.*;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.GridLayout;
-import java.awt.BorderLayout;       
-import java.awt.FlowLayout;
-import java.awt.Insets;
-import java.awt.Graphics;
-import java.awt.event.*;
-import java.util.*;
-import java.beans.*;
-import java.text.MessageFormat;
+import dip.world.Phase;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.TurnState;
 
 
 /**

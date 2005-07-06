@@ -22,8 +22,11 @@
 //
 package dip.gui;
 
-import java.util.*;
-import java.text.*;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
 *	Formats HTML text (or, really, any text) similar to MessageFormat but with

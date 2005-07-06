@@ -22,23 +22,13 @@
 //
 package dip.gui.order;
 
-import dip.order.DefineState;
-import dip.order.Orderable;
-import dip.order.ValidationOptions;
-import dip.order.OrderException;
-
-import dip.gui.order.GUIOrder.MapInfo;
-
 import dip.misc.Utils;
-
-import dip.world.Position;
+import dip.order.DefineState;
+import dip.order.OrderException;
+import dip.order.Orderable;
 import dip.world.Location;
-import dip.world.Province;
-import dip.world.Unit;
 import dip.world.Power;
-import dip.world.RuleOptions;
-
-import dip.process.Adjustment.AdjustmentInfoMap;
+import dip.world.Unit;
 
 /**
 *

@@ -22,37 +22,28 @@
 //
 package dip.gui.order;
 
-import dip.gui.map.DefaultMapRenderer2;
+import java.awt.geom.Point2D;
+
+import org.apache.batik.dom.svg.SVGDOMImplementation;
+import org.apache.batik.util.SVGConstants;
+import org.w3c.dom.svg.SVGElement;
+import org.w3c.dom.svg.SVGGElement;
+import org.w3c.dom.svg.SVGLineElement;
+import org.w3c.dom.svg.SVGPathElement;
+import org.w3c.dom.svg.SVGPolygonElement;
+
 import dip.gui.map.MapMetadata;
-import dip.gui.order.GUIOrder.MapInfo;
 import dip.misc.Utils;
-import dip.order.Move;
 import dip.order.Orderable;
 import dip.order.Support;
 import dip.order.ValidationOptions;
-import dip.process.Adjustment.AdjustmentInfoMap;
-import dip.process.RetreatChecker;
 import dip.world.Coast;
 import dip.world.Location;
 import dip.world.Path;
 import dip.world.Position;
 import dip.world.Power;
 import dip.world.Province;
-import dip.world.RuleOptions;
-import dip.world.TurnState;
 import dip.world.Unit;
-import java.awt.geom.Point2D;
-import org.apache.batik.dom.svg.SVGDOMImplementation;
-import org.apache.batik.dom.util.XLinkSupport;
-import org.apache.batik.util.CSSConstants;
-import org.apache.batik.util.SVGConstants;
-import org.w3c.dom.svg.SVGCircleElement;
-import org.w3c.dom.svg.SVGElement;
-import org.w3c.dom.svg.SVGLineElement;
-import org.w3c.dom.svg.SVGPathElement;
-import org.w3c.dom.svg.SVGPolygonElement;
-import org.w3c.dom.svg.*;
-import org.w3c.dom.*;
 
 /**
 *

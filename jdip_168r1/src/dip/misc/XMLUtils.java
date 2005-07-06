@@ -22,7 +22,8 @@
 //
 package dip.misc;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 
 /**

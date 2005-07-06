@@ -21,23 +21,27 @@
 //
 package dip.order;
 
-import dip.order.result.OrderResult.ResultType;
-import dip.order.result.DependentMoveFailedResult;
-import dip.order.result.ConvoyPathResult;
-
-import dip.world.*;
-
-import dip.process.Adjudicator;
-import dip.process.OrderState;
-import dip.process.Tristate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import dip.misc.Log;
 import dip.misc.Utils;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Collections;
+import dip.order.result.ConvoyPathResult;
+import dip.order.result.DependentMoveFailedResult;
+import dip.order.result.OrderResult.ResultType;
+import dip.process.Adjudicator;
+import dip.process.OrderState;
+import dip.process.Tristate;
+import dip.world.Border;
+import dip.world.Location;
+import dip.world.Path;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.RuleOptions;
+import dip.world.TurnState;
+import dip.world.Unit;
 
 
 /**

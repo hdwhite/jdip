@@ -22,47 +22,37 @@
 //
 package dip.gui.dialog;
 
-import dip.gui.swing.*;
-import dip.misc.Utils;
-import dip.gui.*;
-
-// HIGLayout
-import cz.autel.dmi.HIGConstraints;
-import cz.autel.dmi.HIGLayout;
-
-import java.awt.Container;
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Graphics;
-import java.awt.Paint;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
-import java.awt.Color;
 import java.awt.geom.Line2D;
-import java.awt.Insets;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Component;
-import java.util.Iterator;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.AbstractButton;
-import javax.swing.JSeparator;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JComponent;
-import javax.swing.border.EtchedBorder;
-import javax.swing.event.*;
-import javax.swing.text.Document;
-import javax.swing.text.html.HTMLDocument;
+import javax.swing.JSeparator;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.BorderFactory;
+import javax.swing.text.Document;
+import javax.swing.text.html.HTMLDocument;
+
+import dip.gui.swing.XJEditorPane;
+import dip.misc.Utils;
 
 
 /**

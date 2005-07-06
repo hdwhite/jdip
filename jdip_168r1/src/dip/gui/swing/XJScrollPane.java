@@ -22,10 +22,11 @@
 //
 package dip.gui.swing;
 
-import dip.misc.Utils;
-
 import java.awt.Component;
+
 import javax.swing.JScrollPane;
+
+import dip.misc.Utils;
 
 /**
 *	eXtended JScrollPane.

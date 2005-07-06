@@ -22,37 +22,56 @@
 //
 package dip.gui;
 
-import dip.order.*;
-import dip.world.*;
-import dip.gui.undo.*;
-import dip.gui.order.GUIOrder;
-import dip.gui.swing.XJScrollPane;
-import dip.gui.dialog.prefs.GeneralPreferencePanel;
-import dip.misc.Utils;
-import dip.process.Adjustment;
-import dip.misc.Log;
-
-import dip.order.result.Result;
-import dip.order.result.OrderResult;
-
-import cz.autel.dmi.*;		// HIGLayout
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
-import javax.swing.undo.*;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.GridLayout;
-import java.awt.BorderLayout;
-import java.awt.Insets;
+import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+
+import javax.swing.AbstractListModel;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
+import javax.swing.undo.CompoundEdit;
+
+import cz.autel.dmi.HIGConstraints;
+import cz.autel.dmi.HIGLayout;
+import dip.gui.dialog.prefs.GeneralPreferencePanel;
+import dip.gui.swing.XJScrollPane;
+import dip.gui.undo.UndoAddMultipleOrders;
+import dip.gui.undo.UndoAddOrder;
+import dip.gui.undo.UndoClearAll;
+import dip.gui.undo.UndoDeleteMultipleOrders;
+import dip.gui.undo.UndoDeleteOrder;
+import dip.gui.undo.UndoRedoManager;
+import dip.misc.Utils;
+import dip.order.OrderException;
+import dip.order.OrderParser;
+import dip.order.OrderWarning;
+import dip.order.Orderable;
+import dip.order.ValidationOptions;
+import dip.process.Adjustment;
+import dip.world.Phase;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.TurnState;
+import dip.world.World;
 
 /**
 *	The OrderDisplayPanel: displayer of orders.

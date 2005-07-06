@@ -22,37 +22,30 @@
 //
 package dip.gui.dialog.newgame;
 
-import dip.misc.Utils;
-import dip.world.variant.VariantManager;
-import dip.world.*;
-import dip.world.variant.data.MapGraphic;
-import dip.world.variant.data.Variant;
-import dip.world.variant.data.SymbolPack;
-import dip.gui.ClientFrame;
-import dip.gui.dialog.ErrorDialog;
-import dip.gui.swing.*;
-
-import cz.autel.dmi.HIGConstraints;
-import cz.autel.dmi.HIGLayout;
-
 import javax.swing.DefaultListModel;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JEditorPane;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.Component;
-import java.net.URI;
-import java.net.URL;
-import javax.swing.*;
-import java.awt.*;
+
+import cz.autel.dmi.HIGConstraints;
+import cz.autel.dmi.HIGLayout;
+import dip.gui.ClientFrame;
+import dip.gui.dialog.ErrorDialog;
+import dip.gui.swing.GradientJLabel;
+import dip.gui.swing.XJScrollPane;
+import dip.misc.Utils;
+import dip.world.InvalidWorldException;
+import dip.world.RuleOptions;
+import dip.world.World;
+import dip.world.WorldFactory;
+import dip.world.variant.VariantManager;
+import dip.world.variant.data.MapGraphic;
+import dip.world.variant.data.SymbolPack;
+import dip.world.variant.data.Variant;
 
 /**
 *	Panel for New Game Dialog that allows selection of a map / variant / map graphic.

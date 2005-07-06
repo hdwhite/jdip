@@ -22,63 +22,39 @@
 //
 package dip.gui.map;
 
-import dip.gui.ClientFrame;
-import dip.gui.ClientMenu;
-
-import dip.gui.order.GUIOrder;
-import dip.gui.order.GUIOrder.MapInfo;
-
-import dip.gui.map.RenderCommandFactory.RenderCommand;
-
-import dip.world.Province;
-import dip.world.Position;
-import dip.world.Power;
-import dip.world.Unit;
-import dip.world.Coast;
-import dip.world.Location;
-import dip.world.TurnState;
-import dip.world.Phase;
-import dip.order.Order;
-import dip.order.Orderable;
-import dip.order.result.OrderResult;
-import dip.world.variant.data.SymbolPack;
-
-import dip.misc.Log;
-
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Collections;
-import java.util.List;
-
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import org.w3c.dom.svg.SVGDocument;
-import org.w3c.dom.svg.SVGElement;
-
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.svg.*;
-
-import org.w3c.dom.events.EventTarget;
-import org.apache.batik.swing.JSVGCanvas;
+import org.apache.batik.dom.svg.SVGDOMImplementation;
+import org.apache.batik.util.CSSConstants;
 import org.apache.batik.util.RunnableQueue;
 import org.apache.batik.util.SVGConstants;
-import org.apache.batik.dom.svg.SVGOMGElement;
-import org.apache.batik.util.CSSConstants;
+import org.w3c.dom.Node;
+import org.w3c.dom.events.EventTarget;
+import org.w3c.dom.svg.SVGDocument;
+import org.w3c.dom.svg.SVGElement;
+import org.w3c.dom.svg.SVGGElement;
 
-import org.w3c.dom.css.*;
-import org.apache.batik.dom.svg.*;
-import org.apache.batik.css.engine.*;
-import org.apache.batik.bridge.CSSUtilities;
-
-import org.apache.batik.bridge.BridgeContext;
-import org.apache.batik.gvt.*;
+import dip.gui.ClientMenu;
+import dip.gui.map.RenderCommandFactory.RenderCommand;
+import dip.gui.order.GUIOrder;
+import dip.gui.order.GUIOrder.MapInfo;
+import dip.misc.Log;
+import dip.order.Orderable;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Phase;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.TurnState;
+import dip.world.Unit;
+import dip.world.variant.data.SymbolPack;
 
 
 /**

@@ -22,13 +22,14 @@
 //
 package dip.gui.swing;
 
-import dip.misc.Utils;
-
+import java.text.Collator;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.text.Collator;
-import javax.swing.JComboBox;
+
 import javax.swing.ComboBoxModel;
+import javax.swing.JComboBox;
+
+import dip.misc.Utils;
 
 /**
 *	This is an Associated JCombobox, which associates a set of objects with

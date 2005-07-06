@@ -22,9 +22,9 @@
 //
 package dip.gui.map;
 
-import dip.world.TurnState;
 import dip.world.Power;
 import dip.world.Province;
+import dip.world.TurnState;
 
 public abstract class RenderCommandFactory
 {

@@ -23,12 +23,12 @@
 
 package dip.gui;
 
-import dip.world.World;
+import java.util.Arrays;
+import java.util.Set;
+
 import dip.world.Phase;
 import dip.world.TurnState;
-
-import java.util.Set;
-import java.util.Arrays;
+import dip.world.World;
 
 /**
 *

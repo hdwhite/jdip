@@ -22,14 +22,13 @@
 //
 package dip.world;
 
-import dip.order.Order;
-import dip.misc.Utils;
-
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 import java.util.Arrays;
+import java.util.StringTokenizer;
+
+import dip.misc.Utils;
+import dip.order.Order;
 /**
 *
 *	A Border limits movement or support between 2 provinces.

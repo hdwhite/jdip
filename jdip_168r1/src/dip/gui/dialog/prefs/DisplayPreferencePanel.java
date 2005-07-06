@@ -23,36 +23,32 @@
 
 package dip.gui.dialog.prefs;
 
-import dip.gui.ClientFrame;
-import dip.gui.OrderDisplayPanel;
-import dip.gui.swing.GradientJLabel;
-import dip.order.OrderFormat;
-import dip.order.OrderFormatOptions;
-import dip.misc.SharedPrefs;
-import dip.misc.Utils;
-
-
-
-// HIGLayout
-import cz.autel.dmi.HIGConstraints;
-import cz.autel.dmi.HIGLayout;
-
-import java.util.prefs.Preferences;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
+
+import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import javax.swing.*;
-import java.awt.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-
-import java.awt.Component;
+import cz.autel.dmi.HIGConstraints;
+import cz.autel.dmi.HIGLayout;
+import dip.gui.ClientFrame;
+import dip.gui.OrderDisplayPanel;
+import dip.gui.swing.GradientJLabel;
+import dip.misc.SharedPrefs;
+import dip.misc.Utils;
+import dip.order.OrderFormat;
+import dip.order.OrderFormatOptions;
 
 /**
 *	Display preferences

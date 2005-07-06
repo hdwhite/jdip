@@ -23,9 +23,7 @@
 package dip.gui;
 
 import dip.world.GameSetup;
-import dip.world.TurnState;
 import dip.world.World;
-import dip.world.Power;
 
 /**
 *	The base class for all GUI GameSetup operations.

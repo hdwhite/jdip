@@ -22,16 +22,15 @@
 //
 package dip.world;
 
+import java.io.InvalidObjectException;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
 import dip.misc.Utils;
 import dip.world.variant.data.Variant;
-
-import java.io.Serializable;
-import java.io.ObjectStreamException;
-import java.io.InvalidObjectException;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.Iterator;
-import java.lang.reflect.*;
 
 /**
 *	RuleOptions is an object for storing Options and OptionValues that 

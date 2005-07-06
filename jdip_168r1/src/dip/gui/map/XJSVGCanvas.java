@@ -22,45 +22,28 @@
 //
 package dip.gui.map;
 
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+
+import javax.swing.ActionMap;
+import javax.swing.JFrame;
+
+import org.apache.batik.bridge.UserAgent;
+import org.apache.batik.bridge.ViewBox;
+import org.apache.batik.gvt.CanvasGraphicsNode;
+import org.apache.batik.swing.JSVGCanvas;
+import org.apache.batik.swing.gvt.GVTTreeRendererEvent;
+import org.apache.batik.swing.gvt.GVTTreeRendererListener;
+import org.apache.batik.swing.svg.SVGUserAgent;
+import org.w3c.dom.svg.SVGSVGElement;
+
 import dip.gui.StatusBar;
 import dip.gui.dialog.ErrorDialog;
 import dip.misc.Utils;
-
-
-import java.awt.Rectangle;
-import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.Container;
-import java.awt.Window;
-import java.awt.Cursor;
-
-import java.awt.geom.AffineTransform;
-
-import javax.swing.JFrame;
-import javax.swing.ActionMap;
-
-import org.apache.batik.swing.JSVGCanvas;
-import org.apache.batik.swing.svg.SVGUserAgent;
-import org.apache.batik.bridge.UserAgent;
-import org.apache.batik.bridge.BridgeContext;
-
-
-
-import java.awt.geom.AffineTransform;
-import java.awt.event.ActionEvent;
-import java.awt.Dimension;
-import org.apache.batik.*;
-import org.apache.batik.dom.*;
-import org.apache.batik.util.*;
-import org.w3c.dom.svg.*;
-import org.w3c.dom.svg.SVGSVGElement;
-
-import org.apache.batik.swing.gvt.GVTTreeRendererListener;
-import org.apache.batik.swing.gvt.GVTTreeRendererEvent;
-import org.apache.batik.bridge.ViewBox;
-import org.apache.batik.gvt.CanvasGraphicsNode;
 
 
 /**

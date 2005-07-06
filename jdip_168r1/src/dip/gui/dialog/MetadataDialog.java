@@ -23,22 +23,9 @@
 package dip.gui.dialog;
 
 
-import dip.world.Power;
-import dip.world.World;
-import dip.gui.ClientFrame;
-import dip.gui.AbstractCFPListener;
-import dip.gui.swing.XJTextPane;
-import dip.gui.swing.XJScrollPane;
-import dip.gui.swing.ColorRectIcon;
-import dip.gui.map.SVGColorParser;
-import dip.gui.map.MapMetadata;
-import dip.world.metadata.GameMetadata;
-import dip.world.metadata.PlayerMetadata;
-import dip.misc.Utils;
-
-// HIGLayout
-import cz.autel.dmi.HIGConstraints;
-import cz.autel.dmi.HIGLayout;
+import java.awt.Color;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -48,10 +35,20 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EtchedBorder;
-import java.net.URI;
-import java.net.URISyntaxException;
 
-import java.awt.*;
+import cz.autel.dmi.HIGConstraints;
+import cz.autel.dmi.HIGLayout;
+import dip.gui.AbstractCFPListener;
+import dip.gui.ClientFrame;
+import dip.gui.map.MapMetadata;
+import dip.gui.map.SVGColorParser;
+import dip.gui.swing.ColorRectIcon;
+import dip.gui.swing.XJScrollPane;
+import dip.misc.Utils;
+import dip.world.Power;
+import dip.world.World;
+import dip.world.metadata.GameMetadata;
+import dip.world.metadata.PlayerMetadata;
 
 /**
 *	Metadata Editing/Viewing dialog

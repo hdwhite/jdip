@@ -22,34 +22,20 @@
 //
 package dip.gui;
 
-import dip.order.*;
-import dip.world.*;
-import dip.gui.undo.*;
-import dip.gui.swing.*;
-import dip.gui.order.GUIOrder;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import cz.autel.dmi.HIGConstraints;
+import cz.autel.dmi.HIGLayout;
+import dip.gui.swing.XJPanel;
 import dip.misc.Utils;
-import dip.process.Adjustment;
-import dip.misc.Log;
-
-import dip.order.result.Result;
-import dip.order.result.OrderResult;
-
-import cz.autel.dmi.*;		// HIGLayout
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
-import javax.swing.undo.*;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.*;
-import java.util.*;
-import java.text.MessageFormat;
+import dip.order.Orderable;
+import dip.world.Phase;
+import dip.world.TurnState;
+import dip.world.World;
 
 /**
 *	OrderStatusPanel: contains a label that displays the current phase,

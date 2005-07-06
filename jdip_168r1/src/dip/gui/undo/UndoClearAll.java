@@ -22,12 +22,10 @@
 //
 package dip.gui.undo;
 
-import dip.order.Order;
-import dip.gui.OrderDisplayPanel;
-import dip.misc.Utils;
-
-import javax.swing.undo.*;
 import javax.swing.UIManager;
+import javax.swing.undo.CompoundEdit;
+
+import dip.misc.Utils;
 
 /**
 *	UndoClearAll

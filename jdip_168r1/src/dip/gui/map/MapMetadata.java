@@ -22,40 +22,21 @@
 //
 package dip.gui.map;
 
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.Coast;
-
-import dip.world.variant.data.Symbol;
-import dip.world.variant.data.SymbolPack;
-
-import dip.misc.Log;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.StringTokenizer;
-import java.util.NoSuchElementException;
-import java.util.Properties;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.StringReader;
-import java.io.IOException;
-
 import java.awt.geom.Point2D;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.svg.SVGDocument;
-import org.w3c.dom.svg.SVGElement;
 
-import org.apache.batik.util.SVGConstants;
+import dip.misc.Log;
+import dip.world.Coast;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.variant.data.Symbol;
+import dip.world.variant.data.SymbolPack;
 
 
 /**

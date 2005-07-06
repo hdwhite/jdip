@@ -22,10 +22,7 @@
 //
 package dip.gui.undo;
 
-import dip.order.Orderable;
-import dip.gui.OrderDisplayPanel;
-
-import javax.swing.undo.*;
+import javax.swing.undo.AbstractUndoableEdit;
 
 
 /**

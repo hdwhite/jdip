@@ -22,14 +22,18 @@
 //
 package dip.world;
 
-import dip.order.*;
-import dip.world.variant.data.*;
-
-import java.util.*;
-import java.io.*;
-import java.net.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import dip.misc.Utils;
+import dip.order.OrderException;
+import dip.world.variant.data.BorderData;
+import dip.world.variant.data.InitialState;
+import dip.world.variant.data.ProvinceData;
+import dip.world.variant.data.SupplyCenter;
+import dip.world.variant.data.Variant;
 
 
 /**

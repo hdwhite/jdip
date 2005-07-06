@@ -22,12 +22,12 @@
 //
 package dip.order;
 
-import dip.world.Power;
+import java.util.List;
+
 import dip.world.Location;
+import dip.world.Power;
 import dip.world.Province;
 import dip.world.Unit;
-
-import java.util.List;
 
 /**
 *	

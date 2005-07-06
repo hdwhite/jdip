@@ -21,11 +21,10 @@
 //
 package dip.order.result;
 
-import dip.order.OrderFormat;
+import java.io.Serializable;
+
 import dip.order.OrderFormatOptions;
 import dip.world.Power;
-
-import java.io.Serializable;
 
 /**
 *		A Result is a message that is sent from the adjudicator back to a power

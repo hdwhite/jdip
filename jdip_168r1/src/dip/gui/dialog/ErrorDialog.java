@@ -22,39 +22,32 @@
 //
 package dip.gui.dialog;
 
-import dip.misc.Utils;
-import dip.misc.Log;
-import dip.world.World;
-import dip.gui.*;
-
-import java.io.InvalidClassException;
+import java.awt.Dimension;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.BufferedReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
-import java.net.URL;
-import java.net.HttpURLConnection;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Properties;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import java.awt.Dimension;
-import java.awt.event.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.text.*;
-import javax.swing.text.html.*;
-import java.text.MessageFormat;
+
+import dip.gui.ClientFrame;
+import dip.misc.Log;
+import dip.misc.Utils;
+import dip.world.World;
 
 /**
 *	Various error dialogs, which use HTML templates to display errors.

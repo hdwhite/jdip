@@ -22,17 +22,13 @@
 //
 package dip.world;
 
-import dip.misc.Utils;
-
 import java.io.Serializable;
-import java.io.Externalizable;
-import java.io.IOException;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.StringTokenizer;
+
+import dip.misc.Utils;
 /**
 *
 *	A Phase object represents when a turn takes place, and contains the

@@ -21,16 +21,19 @@
 //
 package dip.order;
 
-import dip.world.*;
+import java.util.ArrayList;
+
+import dip.misc.Utils;
 import dip.process.Adjudicator;
 import dip.process.OrderState;
-import dip.misc.Utils;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import java.io.*;
+import dip.world.Location;
+import dip.world.Phase;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.RuleOptions;
+import dip.world.TurnState;
+import dip.world.Unit;
 
 /**
  *  This is the base class for all Order objects.

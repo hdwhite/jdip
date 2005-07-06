@@ -22,8 +22,8 @@
 //
 package dip.judge.parser;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
 /**
 *	Utilities & Constants used by the parser classes
 *

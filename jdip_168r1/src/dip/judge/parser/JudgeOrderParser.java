@@ -22,20 +22,21 @@
 //
 package dip.judge.parser;
 
-import dip.world.Phase.PhaseType;
-import dip.world.Map;
-import dip.world.Power;
-import dip.order.result.*;
-import dip.order.OrderFactory;
-import dip.order.OrderException;
-import dip.order.NJudgeOrderParser;
-import dip.order.NJudgeOrderParser.NJudgeOrder;
-import dip.misc.Utils;
-import dip.misc.Log;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
-import java.io.*;
-import java.util.regex.*;
-import java.util.*;
+import dip.misc.Log;
+import dip.order.NJudgeOrderParser;
+import dip.order.OrderException;
+import dip.order.OrderFactory;
+import dip.order.NJudgeOrderParser.NJudgeOrder;
+import dip.world.Phase.PhaseType;
 
 
 /**

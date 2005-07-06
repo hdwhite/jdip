@@ -22,43 +22,26 @@
 //
 package dip.gui.order;
 
+import java.awt.geom.Point2D;
+
+import org.apache.batik.dom.svg.SVGDOMImplementation;
+import org.apache.batik.util.SVGConstants;
+import org.w3c.dom.svg.SVGElement;
+import org.w3c.dom.svg.SVGGElement;
+
+import dip.gui.map.DefaultMapRenderer2;
+import dip.gui.map.MapMetadata;
+import dip.gui.map.SVGUtils;
+import dip.misc.Utils;
 import dip.order.Build;
 import dip.order.Orderable;
-import dip.order.ValidationOptions;
-
-import dip.gui.order.GUIOrder.MapInfo;
-
-import dip.misc.Utils;
-
-import dip.world.Position;
-import dip.world.Location;
-import dip.world.Province;
-import dip.world.Unit;
-import dip.world.Power;
-import dip.world.RuleOptions;
-
-import dip.process.Adjustment.AdjustmentInfoMap;
 import dip.process.Adjustment;
-
-import java.awt.geom.Point2D;
-
-import org.apache.batik.util.SVGConstants;
-import org.apache.batik.util.CSSConstants;
-import org.apache.batik.dom.svg.SVGDOMImplementation;
-import org.w3c.dom.svg.*;
-
-import dip.gui.map.MapMetadata;
-import dip.gui.map.DefaultMapRenderer2;
-import dip.gui.map.SVGUtils;
-
-import java.awt.geom.Point2D;
-
-import org.apache.batik.util.SVGConstants;
-import org.apache.batik.util.CSSConstants;
-import org.apache.batik.dom.svg.SVGDOMImplementation;
-import org.apache.batik.dom.util.XLinkSupport;
-import org.w3c.dom.svg.*;
-import org.w3c.dom.*;
+import dip.world.Location;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.RuleOptions;
+import dip.world.Unit;
 
 /**
 *	GUIOrder implementation of Build order.

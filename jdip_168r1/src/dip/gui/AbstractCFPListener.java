@@ -22,15 +22,15 @@
 //
 package dip.gui;
 
-import dip.world.World;
-import dip.world.TurnState;
-import dip.world.Power;
-import dip.order.Orderable;
-import dip.gui.map.MapMetadata;
-import dip.order.ValidationOptions;
-
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import dip.gui.map.MapMetadata;
+import dip.order.Orderable;
+import dip.order.ValidationOptions;
+import dip.world.Power;
+import dip.world.TurnState;
+import dip.world.World;
 
 
 /**

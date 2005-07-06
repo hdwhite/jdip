@@ -22,15 +22,15 @@
 //
 package dip.gui.map;
 
-import dip.world.Location;
-
 import java.awt.Insets;
 
 import javax.swing.JToolBar;
 import javax.swing.border.EtchedBorder;
 
-import org.w3c.dom.events.MouseEvent;
 import org.apache.batik.dom.events.DOMKeyEvent;
+import org.w3c.dom.events.MouseEvent;
+
+import dip.world.Location;
 
 
 /**

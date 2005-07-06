@@ -24,29 +24,35 @@
 
 package dip.gui.map;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
+
+import org.apache.batik.transcoder.Transcoder;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.JPEGTranscoder;
+import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.apache.batik.transcoder.print.PrintTranscoder;
+import org.apache.batik.transcoder.svg2svg.SVGTranscoder;
+import org.apache.fop.svg.PDFTranscoder;
+import org.w3c.dom.Document;
+
+import dip.gui.ClientFrame;
 import dip.gui.dialog.ErrorDialog;
 import dip.gui.dialog.prefs.ExportPreferencePanel;
 import dip.gui.dialog.prefs.GeneralPreferencePanel;
-import dip.misc.SimpleFileFilter;
 import dip.gui.swing.XJFileChooser;
-import dip.gui.ClientFrame;
+import dip.misc.SimpleFileFilter;
 import dip.misc.Utils;
-
-import java.awt.Component;
-import java.awt.Color;
-import java.io.*;
-import java.awt.event.ActionEvent;
-import javax.swing.Action;
-import java.awt.event.ActionListener;
-
-import org.w3c.dom.Document;
-import org.apache.batik.transcoder.*;
-import org.apache.batik.transcoder.print.PrintTranscoder;
-import org.apache.batik.transcoder.image.JPEGTranscoder;
-import org.apache.batik.transcoder.image.PNGTranscoder;
-import org.apache.batik.transcoder.svg2svg.SVGTranscoder;
-import org.apache.batik.transcoder.image.ImageTranscoder;
-import org.apache.fop.svg.PDFTranscoder;
 
 /**
 *

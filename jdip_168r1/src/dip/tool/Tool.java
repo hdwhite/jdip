@@ -22,8 +22,9 @@
 //
 package dip.tool;
 
-import javax.swing.JMenuItem;
 import java.net.URI;
+
+import javax.swing.JMenuItem;
 
 public interface Tool
 {

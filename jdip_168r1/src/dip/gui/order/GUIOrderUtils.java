@@ -22,40 +22,34 @@
 //
 package dip.gui.order;
 
+import java.awt.geom.Point2D;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.batik.util.CSSConstants;
+import org.apache.batik.util.SVGConstants;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.svg.SVGElement;
+import org.w3c.dom.svg.SVGGElement;
+import org.w3c.dom.svg.SVGUseElement;
+
+import dip.gui.map.DefaultMapRenderer2;
+import dip.gui.map.MapMetadata;
+import dip.gui.map.SVGUtils;
+import dip.gui.order.GUIOrder.MapInfo;
+import dip.misc.Utils;
+import dip.order.Hold;
+import dip.order.Move;
+import dip.order.Orderable;
+import dip.order.Support;
+import dip.world.Border;
 import dip.world.Location;
-import dip.world.Unit;
 import dip.world.Phase;
 import dip.world.Power;
 import dip.world.Province;
-import dip.world.Border;
-import dip.world.TurnState;
-
-import dip.order.Orderable;
-import dip.order.Move;
-import dip.order.Hold;
-import dip.order.Support;
-
-import dip.misc.Utils;
-
-import dip.gui.map.MapMetadata;
-import dip.gui.map.DefaultMapRenderer2;
-import dip.gui.map.SVGUtils;
-
-import dip.gui.order.GUIOrder.MapInfo;
-
-import java.awt.geom.Point2D;
-import java.util.List;
-import java.util.Iterator;
-
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-
-import org.apache.batik.util.SVGConstants;
-import org.apache.batik.util.CSSConstants;
-import org.apache.batik.dom.svg.SVGDOMImplementation;
-import org.apache.batik.dom.util.XLinkSupport;
-import org.w3c.dom.svg.*;
-import org.w3c.dom.*;
+import dip.world.Unit;
 
 /**
 *	Utility methods for GUIOrder subclasses.

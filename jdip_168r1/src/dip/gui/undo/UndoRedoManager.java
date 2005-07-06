@@ -30,7 +30,7 @@ import dip.misc.Log;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
-import java.io.*;
+
 import java.util.*;
 
 /**

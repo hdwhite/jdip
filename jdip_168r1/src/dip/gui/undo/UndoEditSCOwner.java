@@ -22,12 +22,13 @@
 //
 package dip.gui.undo;
 
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+
+import dip.misc.Utils;
+import dip.world.Position;
 import dip.world.Power;
 import dip.world.Province;
-import dip.world.Position;
-import dip.misc.Utils;
-
-import javax.swing.undo.*;
 
 
 /**

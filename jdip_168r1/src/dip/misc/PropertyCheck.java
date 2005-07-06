@@ -1,8 +1,11 @@
 
 package dip.misc;
 
-import java.util.*;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Properties;
 
 /**
 *	Given 2 or more .properties files, it compares them, and writes

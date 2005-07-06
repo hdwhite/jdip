@@ -22,8 +22,8 @@
 //
 package dip.world;
 
-import dip.order.OrderException;
 import dip.misc.Utils;
+import dip.order.OrderException;
 
 
 /**

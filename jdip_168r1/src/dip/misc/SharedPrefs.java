@@ -22,11 +22,9 @@
 //
 package dip.misc;
 
-import dip.gui.ClientFrame;
-
-import java.util.prefs.Preferences;
-import java.util.prefs.BackingStoreException;
 import java.awt.Color;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 
 /**

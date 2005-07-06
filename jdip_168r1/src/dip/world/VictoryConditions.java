@@ -22,19 +22,15 @@
 //
 package dip.world;
 
-import dip.world.Phase.PhaseType;
-import dip.world.Phase.SeasonType;
-
-import dip.process.Adjudicator;
-import dip.process.Adjustment;
-
-import dip.order.result.Result;
+import java.util.ArrayList;
+import java.util.List;
 
 import dip.misc.Utils;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+import dip.order.result.Result;
+import dip.process.Adjudicator;
+import dip.process.Adjustment;
+import dip.world.Phase.PhaseType;
+import dip.world.Phase.SeasonType;
 /**
 *
 *	Establishes the conditions required to determine who wins a game, and contains

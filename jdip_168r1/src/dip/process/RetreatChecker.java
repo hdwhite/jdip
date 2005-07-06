@@ -22,23 +22,18 @@
 //
 package dip.process;
 
-import dip.world.Location;
-import dip.world.TurnState;
-import dip.world.Position;
-import dip.world.World;
-
-import dip.order.Orderable;
-import dip.order.Move;
-import dip.order.result.Result;
-import dip.order.result.OrderResult;
-import dip.order.result.OrderResult.ResultType;
-import dip.misc.Log;
-
-import java.util.List;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import dip.order.Move;
+import dip.order.Orderable;
+import dip.order.result.OrderResult;
+import dip.world.Location;
+import dip.world.Position;
+import dip.world.TurnState;
+import dip.world.World;
 
 /**
 *	RetreatChecker analyzes the current TurnState and the results of the previous

@@ -22,34 +22,41 @@
 //
 package dip.world.variant.parser;
 
-import dip.world.variant.VariantManager;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
-import dip.world.variant.data.Variant;
-import dip.world.variant.data.SupplyCenter;
-import dip.world.variant.data.InitialState;
-import dip.world.variant.data.MapGraphic;
-import dip.world.variant.data.ProvinceData;
-import dip.world.variant.data.BorderData;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import dip.misc.LRUCache;
+import dip.misc.Log;
+import dip.misc.Utils;
+import dip.world.Coast;
 import dip.world.Phase;
 import dip.world.Power;
 import dip.world.Unit;
-import dip.world.Coast;
-
-import dip.misc.LRUCache;
-import dip.misc.Utils;
-import dip.misc.Log;
-
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.w3c.dom.*;
+import dip.world.variant.VariantManager;
+import dip.world.variant.data.BorderData;
+import dip.world.variant.data.InitialState;
+import dip.world.variant.data.MapGraphic;
+import dip.world.variant.data.ProvinceData;
+import dip.world.variant.data.SupplyCenter;
+import dip.world.variant.data.Variant;
 
 
 /**

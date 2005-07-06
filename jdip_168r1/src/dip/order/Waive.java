@@ -21,16 +21,16 @@
 //
 package dip.order;
 
-import dip.world.*;
-
 import dip.misc.Log;
 import dip.misc.Utils;
-
 import dip.process.Adjudicator;
 import dip.process.OrderState;
 import dip.process.Tristate;
-import dip.process.Adjustment;
-import dip.process.Adjustment.AdjustmentInfo;
+import dip.world.Location;
+import dip.world.Power;
+import dip.world.RuleOptions;
+import dip.world.TurnState;
+import dip.world.Unit;
 
 /**
 *	A Waive order; a power may explicitly choose not to build a unit.

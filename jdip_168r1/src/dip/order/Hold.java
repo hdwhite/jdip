@@ -21,17 +21,17 @@
 //
 package dip.order;
 
-import dip.world.*;
-
+import dip.misc.Log;
+import dip.misc.Utils;
 import dip.process.Adjudicator;
 import dip.process.OrderState;
 import dip.process.Tristate;
-
-import dip.misc.Log;
-import dip.misc.Utils;
-
-import java.util.List;
-import java.util.Iterator;
+import dip.world.Border;
+import dip.world.Location;
+import dip.world.Power;
+import dip.world.RuleOptions;
+import dip.world.TurnState;
+import dip.world.Unit;
 
 
 /**

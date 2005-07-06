@@ -22,12 +22,21 @@
 //
 package dip.order;
 
-import dip.world.*;
-import java.util.StringTokenizer;
-import java.util.Collection;
 import java.util.ArrayList;
-import dip.misc.Utils;
+import java.util.Collection;
+import java.util.StringTokenizer;
+
 import dip.misc.Log;
+import dip.misc.Utils;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Map;
+import dip.world.Phase;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.TurnState;
+import dip.world.Unit;
 
 /**
 *	Parses text to create an Order object.

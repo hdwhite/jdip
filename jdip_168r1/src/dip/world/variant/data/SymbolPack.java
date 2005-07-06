@@ -24,7 +24,6 @@ package dip.world.variant.data;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 
 /**

@@ -22,8 +22,8 @@
 //
 package dip.world.variant.parser;
 
-import dip.world.variant.data.ProvinceData;
 import dip.world.variant.data.BorderData;
+import dip.world.variant.data.ProvinceData;
 
 /**
 *	Interface for parsers; parsers must return ProvinceData and BorderData 

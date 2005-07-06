@@ -22,8 +22,8 @@
 //
 package dip.world.variant.data;
 
-import dip.world.Unit;
 import dip.world.Coast;
+import dip.world.Unit;
 
 /**
 

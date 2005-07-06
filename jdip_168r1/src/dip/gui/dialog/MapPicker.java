@@ -22,32 +22,14 @@
 //
 package dip.gui.dialog;
 
-import dip.misc.Utils;
 import dip.gui.ClientFrame;
+import dip.gui.dialog.newgame.NGDMapAndUnits;
+import dip.misc.Utils;
 import dip.world.World;
 import dip.world.variant.VariantManager;
 import dip.world.variant.data.MapGraphic;
-import dip.world.variant.data.Variant;
 import dip.world.variant.data.SymbolPack;
-import dip.gui.dialog.newgame.NGDMapAndUnits;
-
-import cz.autel.dmi.*;		// HIGLayout
-
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.*;
-import java.net.URL;
-import java.net.URI;
-import javax.swing.border.*;
-import javax.swing.text.*;
-import javax.swing.text.html.*;
+import dip.world.variant.data.Variant;
 
 
 /**

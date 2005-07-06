@@ -22,31 +22,23 @@
 //
 package dip.gui.map;
 
-import dip.gui.map.RenderCommandFactory.RenderCommand;
-
-import dip.gui.ClientFrame;
-import dip.gui.AbstractCFPListener;
-
-import dip.gui.order.GUIOrder;
-import dip.order.Orderable;
-
-import dip.misc.Log;
-
-import dip.world.Province;
-import dip.world.TurnState;
-import dip.world.Location;
-import dip.world.Power;
-import dip.world.Unit;
-
-import java.util.LinkedList;
 import java.util.Iterator;
-
-import org.w3c.dom.svg.SVGDocument;
+import java.util.LinkedList;
 
 import org.apache.batik.swing.JSVGCanvas;
 import org.apache.batik.util.RunnableQueue;
-import org.apache.batik.bridge.UpdateManagerListener;
-import org.apache.batik.bridge.UpdateManagerEvent;
+import org.w3c.dom.svg.SVGDocument;
+
+import dip.gui.AbstractCFPListener;
+import dip.gui.ClientFrame;
+import dip.gui.map.RenderCommandFactory.RenderCommand;
+import dip.gui.order.GUIOrder;
+import dip.misc.Log;
+import dip.order.Orderable;
+import dip.world.Location;
+import dip.world.Power;
+import dip.world.TurnState;
+import dip.world.Unit;
 
 /**
 *	Base class for the new MapRenderer.

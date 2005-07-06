@@ -22,39 +22,29 @@
 //
 package dip.gui.map;
 
-import dip.world.Province;
+import java.awt.Dimension;
+import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import com.dautelle.util.TypeFormat;
-
-import org.apache.batik.swing.svg.JSVGComponent;
+import org.apache.batik.dom.svg.SVGDOMImplementation;
+import org.apache.batik.dom.util.XLinkSupport;
 import org.apache.batik.swing.JSVGCanvas;
 import org.apache.batik.util.SVGConstants;
-import org.apache.batik.util.RunnableQueue;
-import org.apache.batik.bridge.UpdateManager;
-
-import org.apache.batik.dom.util.XLinkSupport;
-import org.apache.batik.dom.svg.SVGDOMImplementation;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.svg.SVGDocument;
 import org.w3c.dom.svg.SVGElement;
 import org.w3c.dom.svg.SVGUseElement;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.HashMap;
-import java.awt.geom.AffineTransform;
-import java.awt.*;
+import com.dautelle.util.TypeFormat;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import javax.swing.*;
+import dip.world.Province;
 
 
 

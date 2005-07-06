@@ -22,10 +22,9 @@
 //
 package dip.gui.map;
 
-import dip.misc.Log;
-
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+
 import javax.swing.JScrollBar;
 
 import org.apache.batik.swing.JSVGCanvas;

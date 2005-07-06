@@ -7,11 +7,12 @@
 
 package dip.gui.swing;
 
-import java.text.*;
-import java.util.*;
-import java.util.regex.*;
-import javax.swing.*;
-import javax.swing.text.*;
+import java.text.ParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import javax.swing.text.DefaultFormatter;
 
 /**
  * A regular expression based implementation of <code>AbstractFormatter</code>.

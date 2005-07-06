@@ -22,13 +22,18 @@
 //
 package dip.judge.parser;
 
-import dip.world.Phase;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import dip.misc.Utils;
 import dip.order.OrderFactory;
-
-import java.io.*;
-import java.util.regex.*;
-import java.util.*;
+import dip.world.Phase;
 /**
 *	First stage of Judge output parsing. Looks for the "::" line, determines 
 *	game name, judge name, and variant type.

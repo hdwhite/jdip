@@ -23,28 +23,22 @@
 
 package dip.gui.order;
 
+import org.w3c.dom.svg.SVGDocument;
+import org.w3c.dom.svg.SVGGElement;
+
 import dip.gui.ClientFrame;
 import dip.gui.map.MapMetadata;
-
-import dip.gui.order.GUIOrder.MapInfo;
-
 import dip.order.Orderable;
-import dip.order.Order;
 import dip.order.ValidationOptions;
-
-import dip.world.Position;
-import dip.world.Phase;
+import dip.process.RetreatChecker;
+import dip.process.Adjustment.AdjustmentInfoMap;
 import dip.world.Location;
+import dip.world.Phase;
+import dip.world.Position;
 import dip.world.Power;
 import dip.world.RuleOptions;
 import dip.world.TurnState;
 import dip.world.Unit;
-
-import dip.process.Adjustment.AdjustmentInfoMap;
-import dip.process.RetreatChecker;
-
-import org.w3c.dom.svg.SVGDocument;
-import org.w3c.dom.svg.SVGGElement;
 
 
 

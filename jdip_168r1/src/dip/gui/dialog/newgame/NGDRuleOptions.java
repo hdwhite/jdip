@@ -22,17 +22,11 @@
 //
 package dip.gui.dialog.newgame;
 
-import dip.world.RuleOptions.Option;
-import dip.world.RuleOptions.OptionValue;
-import dip.world.*;
-import dip.world.variant.data.Variant;
-import dip.gui.dialog.ErrorDialog;
-import dip.misc.Utils;
-import dip.gui.swing.*;
-
-// HIGLayout
-import cz.autel.dmi.HIGConstraints;
-import cz.autel.dmi.HIGLayout;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
@@ -41,18 +35,22 @@ import javax.swing.JEditorPane;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
-import java.util.Iterator;
-import java.util.Set;
+
+import cz.autel.dmi.HIGConstraints;
+import cz.autel.dmi.HIGLayout;
+import dip.gui.dialog.ErrorDialog;
+import dip.gui.swing.XJScrollPane;
+import dip.misc.Utils;
+import dip.world.InvalidWorldException;
+import dip.world.RuleOptions;
+import dip.world.RuleOptions.Option;
+import dip.world.RuleOptions.OptionValue;
+import dip.world.variant.data.Variant;
 
 /**
 *

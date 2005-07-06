@@ -22,18 +22,14 @@
 //
 package dip.gui.map;
 
-import dip.world.Location;
-
+import org.apache.batik.dom.events.DOMKeyEvent;
+import org.apache.batik.util.SVGConstants;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.MouseEvent;
-import org.apache.batik.dom.events.DOMKeyEvent;
-
-import org.apache.batik.util.SVGConstants;
 import org.w3c.dom.svg.SVGElement;
 
-// import for testing
-import org.w3c.dom.svg.*;
+import dip.world.Location;
 
 
 /**

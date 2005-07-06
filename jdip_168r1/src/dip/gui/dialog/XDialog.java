@@ -22,16 +22,6 @@
 //
 package dip.gui.dialog;
 
-import dip.gui.*;
-import dip.misc.Utils;
-import dip.misc.Help;
-import dip.world.World;
-
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JRootPane;
-import javax.swing.KeyStroke;
-import javax.swing.WindowConstants;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -40,7 +30,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JRootPane;
+import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
+
+import dip.gui.AbstractCFPListener;
+import dip.gui.ClientFrame;
+import dip.misc.Help;
+import dip.misc.Utils;
+import dip.world.World;
 /**
 *	Extended JDialog
 *	<p>

@@ -22,22 +22,35 @@
 //
 package dip.gui.dialog.newgame;
 
-import dip.misc.Utils;
-import dip.world.variant.*;
-import dip.world.*;
-import dip.world.variant.data.*;
-import dip.gui.ClientFrame;
-import dip.gui.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.net.URL;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import cz.autel.dmi.HIGConstraints;
 import cz.autel.dmi.HIGLayout;
-
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.net.*;
+import dip.gui.swing.GradientJLabel;
+import dip.gui.swing.XJScrollPane;
+import dip.misc.Utils;
+import dip.world.variant.VariantManager;
+import dip.world.variant.data.MapGraphic;
+import dip.world.variant.data.SymbolPack;
+import dip.world.variant.data.Variant;
 
 
 /**

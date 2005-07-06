@@ -22,18 +22,29 @@
 //
 package dip.gui.map;
 
-import dip.gui.order.*;
-import dip.misc.Utils;
-import dip.misc.Log;
-import dip.order.ValidationOptions;
-import dip.process.Adjustment;
-import dip.world.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JToggleButton;
+
 import org.apache.batik.dom.events.DOMKeyEvent;
 import org.w3c.dom.events.MouseEvent;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import dip.gui.order.GUIBuild;
+import dip.gui.order.GUIMove;
+import dip.gui.order.GUIOrder;
+import dip.gui.order.GUIOrderFactory;
+import dip.gui.order.GUIRetreat;
+import dip.misc.Log;
+import dip.misc.Utils;
+import dip.order.ValidationOptions;
+import dip.process.Adjustment;
+import dip.world.Location;
+import dip.world.Phase;
+import dip.world.Power;
+import dip.world.RuleOptions;
+import dip.world.Unit;
 
 
 /*

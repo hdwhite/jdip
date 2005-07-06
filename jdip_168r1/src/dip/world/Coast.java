@@ -22,11 +22,11 @@
 //
 package dip.world;
 
-import dip.order.OrderException;
-
 import java.io.InvalidObjectException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import dip.order.OrderException;
 /**
 *	Coasts are essential to determining connectivity between Provinces.
 *	<p>

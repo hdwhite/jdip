@@ -22,16 +22,14 @@
 //
 package dip.gui;
 
-import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
-import javax.swing.JTextField;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.CompoundBorder;
 
 /**
 *

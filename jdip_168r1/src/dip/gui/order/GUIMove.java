@@ -22,39 +22,28 @@
 //
 package dip.gui.order;
 
-import dip.gui.map.MapMetadata;
-import dip.gui.map.DefaultMapRenderer2;
-
-import dip.gui.order.GUIOrder.MapInfo;
-
-import dip.order.Orderable;
-import dip.order.Move;
-import dip.order.ValidationOptions;
-
-import dip.misc.Utils;
-
-import dip.world.Position;
-import dip.world.Location;
-import dip.world.Province;
-import dip.world.Coast;
-import dip.world.Path;
-import dip.world.Unit;
-import dip.world.Power;
-import dip.world.RuleOptions;
-
-import dip.process.Adjustment.AdjustmentInfoMap;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.awt.geom.Point2D;
+import java.util.List;
 
-import org.apache.batik.util.SVGConstants;
-import org.apache.batik.util.CSSConstants;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
-import org.apache.batik.dom.util.XLinkSupport;
-import org.w3c.dom.svg.*;
-import org.w3c.dom.*;
+import org.apache.batik.util.SVGConstants;
+import org.w3c.dom.svg.SVGElement;
+import org.w3c.dom.svg.SVGGElement;
+import org.w3c.dom.svg.SVGLineElement;
+import org.w3c.dom.svg.SVGUseElement;
+
+import dip.gui.map.MapMetadata;
+import dip.misc.Utils;
+import dip.order.Move;
+import dip.order.Orderable;
+import dip.order.ValidationOptions;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Path;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.Unit;
 
 /**
 *

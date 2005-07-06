@@ -22,14 +22,19 @@
 //
 package dip.world;
 
-import dip.order.Orderable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import dip.order.Convoy;
 import dip.order.Move;
+import dip.order.Orderable;
 import dip.process.Adjudicator;
 import dip.process.OrderState;
 import dip.process.Tristate;
-
-import java.util.*;
 
 /**
 *	Determines Convoy paths between points on a Map, and also minimum distances

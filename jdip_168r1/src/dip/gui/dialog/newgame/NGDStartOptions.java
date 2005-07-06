@@ -22,27 +22,26 @@
 //
 package dip.gui.dialog.newgame;
 
-import dip.world.*;
-import dip.world.variant.data.Variant;
-import dip.gui.swing.*;
-
-import dip.misc.Utils;
-
-import cz.autel.dmi.HIGConstraints;
-import cz.autel.dmi.HIGLayout;
+import java.awt.FlowLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.JSeparator;
-import java.awt.FlowLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import cz.autel.dmi.HIGConstraints;
+import cz.autel.dmi.HIGLayout;
+import dip.gui.swing.GradientJLabel;
+import dip.misc.Utils;
+import dip.world.Phase;
+import dip.world.variant.data.Variant;
 
 
 /**

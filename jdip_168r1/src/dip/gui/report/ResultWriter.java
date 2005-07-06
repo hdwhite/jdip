@@ -22,32 +22,27 @@
 //
 package dip.gui.report;
 
-import dip.gui.ClientFrame;
-import dip.gui.dialog.TextViewer;
-
-import dip.misc.Utils;
-import dip.misc.Help;
-
-import dip.world.World;
-import dip.world.Power;
-import dip.world.Phase;
-import dip.world.TurnState;
-import dip.world.Position;
-
-import dip.order.Orderable;
-import dip.order.result.Result;
-import dip.order.result.OrderResult;
-import dip.order.result.OrderResult.ResultType;
-import dip.order.OrderFormatOptions;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JScrollPane;
+
+import dip.gui.ClientFrame;
+import dip.gui.dialog.TextViewer;
+import dip.misc.Help;
+import dip.misc.Utils;
+import dip.order.OrderFormatOptions;
+import dip.order.Orderable;
+import dip.order.result.OrderResult;
+import dip.order.result.Result;
+import dip.order.result.OrderResult.ResultType;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.TurnState;
+import dip.world.World;
 
 /**
 *	Writes a summary of adjudication results in HTML format.

@@ -22,11 +22,10 @@
 //
 package dip.world.variant.data;
 
-import dip.world.Power;
-import dip.world.Phase;
-import dip.misc.Utils;
-
 import java.util.List;
+
+import dip.world.Phase;
+import dip.world.Power;
 
 /**
 

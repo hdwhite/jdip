@@ -23,12 +23,12 @@
 
 package dip.gui.map;
 
-import dip.gui.ClientFrame;
-import dip.gui.ClientMenu;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractButton;
 import javax.swing.JMenuItem;
-import java.awt.event.ActionListener;
+
+import dip.gui.ClientMenu;
 
 /**
 *	Controls the interaction between the menu (ClientMenu) and 

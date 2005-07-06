@@ -23,27 +23,26 @@
 
 package dip.judge.gui;
 
-import dip.judge.net.FlocImporter;
-import dip.judge.net.FlocImporter.FlocImportCallback;
-import dip.judge.parser.JudgeImport;
-
-import dip.world.World;
-import dip.gui.ClientFrame;
-import dip.gui.swing.RegexFormatter;
-import dip.gui.dialog.HeaderDialog;
-import dip.gui.dialog.ErrorDialog;
-import dip.misc.Utils;
-import dip.misc.SharedPrefs;
-import dip.misc.Help;
-
-import java.awt.BorderLayout;
-import javax.swing.*;
 import java.io.IOException;
 import java.util.prefs.Preferences;
-import javax.swing.JSeparator;
+
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTextField;
 
 import cz.autel.dmi.HIGConstraints;
 import cz.autel.dmi.HIGLayout;
+import dip.gui.ClientFrame;
+import dip.gui.dialog.ErrorDialog;
+import dip.gui.dialog.HeaderDialog;
+import dip.judge.net.FlocImporter;
+import dip.judge.net.FlocImporter.FlocImportCallback;
+import dip.misc.Help;
+import dip.misc.SharedPrefs;
+import dip.misc.Utils;
+import dip.world.World;
 
 
 

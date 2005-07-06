@@ -21,7 +21,6 @@
 //
 package dip.order;
 
-import dip.misc.Log;
 
 /**
 *	An OrderException indicates that an Order could not be created,

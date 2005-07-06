@@ -22,27 +22,27 @@
 //
 package dip.gui.dialog;
 
-import dip.misc.Utils;
-import dip.order.ValidationOptions;
-import dip.gui.ClientFrame;
-
-import cz.autel.dmi.HIGConstraints;
-import cz.autel.dmi.HIGLayout;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.ButtonGroup;
+
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JEditorPane;
-import javax.swing.JSeparator;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import cz.autel.dmi.HIGConstraints;
+import cz.autel.dmi.HIGLayout;
+import dip.gui.ClientFrame;
+import dip.misc.Utils;
+import dip.order.ValidationOptions;
 
 
 /**

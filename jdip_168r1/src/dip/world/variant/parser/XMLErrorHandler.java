@@ -22,11 +22,11 @@
 //
 package dip.world.variant.parser;
 
-import dip.gui.dialog.ErrorDialog;
-
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-import org.xml.sax.ErrorHandler;
+
+import dip.gui.dialog.ErrorDialog;
 
 /**
 *	A simple error handler for the XML parsers.

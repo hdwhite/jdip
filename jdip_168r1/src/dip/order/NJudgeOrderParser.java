@@ -21,33 +21,25 @@
 //
 package dip.order;
 
-import dip.order.result.Result;
-import dip.order.result.OrderResult;
-import dip.order.result.SubstitutedResult;
-import dip.order.result.DislodgedResult;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import dip.misc.Utils;
-import dip.misc.Log;
-
-import dip.world.*;
-
-
-
-import java.util.StringTokenizer;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
-
-// for testing
-import dip.world.variant.VariantManager;
-import dip.world.variant.data.*;
-import java.io.*;
+import dip.order.result.DislodgedResult;
+import dip.order.result.OrderResult;
+import dip.order.result.Result;
+import dip.order.result.SubstitutedResult;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Phase;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.Unit;
 
 /**
 *	Parses nJudge-format orders into Orders and Results

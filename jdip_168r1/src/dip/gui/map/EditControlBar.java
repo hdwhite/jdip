@@ -22,38 +22,37 @@
 //
 package dip.gui.map;
 
-import dip.world.Province;
-import dip.world.Position;
-import dip.world.TurnState;
-import dip.world.Location;
-import dip.world.Phase;
-import dip.world.Unit;
-import dip.world.Power;
-import dip.world.Coast;
-import dip.world.RuleOptions;
-
-import dip.order.result.TimeResult;
-
-import dip.gui.OrderDisplayPanel;
-import dip.gui.order.GUIOrder;
-import dip.gui.undo.*;
-
-import dip.misc.Utils;
-
-
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JToggleButton;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JToggleButton;
+
 import org.w3c.dom.events.MouseEvent;
-import org.apache.batik.dom.events.DOMKeyEvent;
+
+import dip.gui.OrderDisplayPanel;
+import dip.gui.order.GUIOrder;
+import dip.gui.undo.UndoEditAddUnit;
+import dip.gui.undo.UndoEditRemoveUnit;
+import dip.gui.undo.UndoEditSCOwner;
+import dip.gui.undo.UndoRedoManager;
+import dip.misc.Utils;
+import dip.order.result.TimeResult;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Phase;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.RuleOptions;
+import dip.world.TurnState;
+import dip.world.Unit;
 
 
 /**
