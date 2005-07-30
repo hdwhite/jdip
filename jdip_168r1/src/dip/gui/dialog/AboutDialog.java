@@ -113,6 +113,7 @@ public class AboutDialog extends HeaderDialog
 			}
 			else
 			{
+				Log.println("AboutDialog waiting...");
 				dialogInstance = (AboutDialog) loader.get();
 				loader = null;
 			}

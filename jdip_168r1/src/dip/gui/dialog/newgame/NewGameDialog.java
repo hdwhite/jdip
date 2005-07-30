@@ -140,6 +140,7 @@ public class NewGameDialog extends HeaderDialog
 			}
 			else
 			{
+				Log.println("NGD waiting...");
 				dialogInstance = (NewGameDialog) loader.get();
 				loader = null;
 			}
