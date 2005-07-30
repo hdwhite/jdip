@@ -1,0 +1,311 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE VARIANTS [
+	<!ELEMENT VARIANTS (DESCRIPTION, MAP_DEFINITION+, VARIANT+)>
+	
+	<!ELEMENT DESCRIPTION (#PCDATA)>
+	
+	<!ELEMENT MAP_DEFINITION (DESCRIPTION?)>
+	<!ATTLIST MAP_DEFINITION 
+		id ID #REQUIRED
+		title CDATA #REQUIRED
+		URI CDATA #REQUIRED
+		thumbURI CDATA #REQUIRED
+		preferredUnitStyle CDATA #IMPLIED
+		>
+	
+	<!ELEMENT VARIANT (DESCRIPTION, MAP, RULEOPTIONS?, POWER+, STARTINGTIME, VICTORYCONDITIONS, SUPPLYCENTER+, INITIALSTATE*)>
+	<!ATTLIST VARIANT
+			name CDATA #REQUIRED
+			default (true|false) "false"
+			version CDATA #REQUIRED
+			aliases CDATA #IMPLIED
+			>
+			
+	<!ELEMENT MAP (MAP_GRAPHIC*)>
+	<!ATTLIST MAP adjacencyURI CDATA #REQUIRED>
+	
+	<!ELEMENT MAP_GRAPHIC EMPTY>
+	<!ATTLIST MAP_GRAPHIC
+			ref IDREF #REQUIRED
+			default (true|false) "false"
+			preferredUnitStyle CDATA #IMPLIED
+			>
+	
+	<!ELEMENT RULEOPTIONS (RULEOPTION+)>
+	<!ELEMENT RULEOPTION EMPTY>
+	<!ATTLIST RULEOPTION	name CDATA #REQUIRED
+				value CDATA #REQUIRED>
+	
+	<!ELEMENT POWER EMPTY>
+	<!ATTLIST POWER name CDATA #REQUIRED
+			active (true|false) "true"
+			adjective CDATA #REQUIRED
+			altnames CDATA #IMPLIED
+			>
+	
+	<!ELEMENT STARTINGTIME EMPTY>
+	<!ATTLIST STARTINGTIME 	turn CDATA #REQUIRED
+				allowBCYears (true|false) "false"
+				>
+	
+	<!ELEMENT VICTORYCONDITIONS (WINNING_SUPPLY_CENTERS?, YEARS_WITHOUT_SC_CAPTURE?, GAME_LENGTH?)>
+	
+	<!ELEMENT WINNING_SUPPLY_CENTERS EMPTY>
+	<!ATTLIST WINNING_SUPPLY_CENTERS value CDATA #REQUIRED>
+	
+	<!ELEMENT YEARS_WITHOUT_SC_CAPTURE EMPTY>
+	<!ATTLIST YEARS_WITHOUT_SC_CAPTURE value CDATA #REQUIRED>
+	
+	<!ELEMENT GAME_LENGTH EMPTY>
+	<!ATTLIST GAME_LENGTH value CDATA #REQUIRED>
+	
+	<!ELEMENT SUPPLYCENTER EMPTY>
+	<!ATTLIST SUPPLYCENTER 	province CDATA #REQUIRED
+				homepower CDATA "none"
+				owner CDATA "none"
+				>
+				
+	<!ELEMENT INITIALSTATE EMPTY>
+	<!ATTLIST INITIALSTATE 	province CDATA #REQUIRED
+				power CDATA #REQUIRED
+				unit CDATA #REQUIRED
+				unitcoast CDATA #IMPLIED
+				>
+]>
+<!-- NOTE: it's very important that the name of the file will be variants.xml, in all lower case -->
+<!-- NOTE: for CDATA escapes, no space between tag and bracket!! -->
+<VARIANTS>
+	<DESCRIPTION><![CDATA[The 1900 variant for jDip]]></DESCRIPTION> 
+	
+	<MAP_DEFINITION id="standard" title="Outline" preferredUnitStyle="modern"
+		URI="1900_dipmap.svg" thumbURI="1900_dipmap_thumb.png">
+		<DESCRIPTION>
+		Outline map.
+		</DESCRIPTION>
+	</MAP_DEFINITION>
+	
+	<MAP_DEFINITION id="detailed" title="Detailed" preferredUnitStyle="modern"
+		URI="1900_bitmap.svg" thumbURI="1900_bitmap_thumb.png">
+		<DESCRIPTION>
+		A detailed version of the outline map. While this map has 
+		rich graphical detail, some features such as province highlighting 
+		are not available.
+		</DESCRIPTION>
+	</MAP_DEFINITION>
+	
+	<VARIANT name="1900" version="1.0" default="true">
+		<DESCRIPTION><![CDATA[
+		<p style="margin-top:0pt;">
+		The 1900 variant of Diplomacy is an attempt to take the
+		standard game and improve it by balancing the main powers
+		while increasing historical accuracy and player interaction.
+		</p>
+		<h2>Rules</h2>
+		<ol>
+		<li>
+			The rules of "standard" Diplomacy are valid, unless specifically
+			replaced or amended by these rules.
+		</li>
+		<li>
+			If a Great Power gains control of 18 SCs, the game ends and the 
+			player controlling that Great Power is declared the winner. 
+			With 39 SCs, though, it is now possible for two Great Powers to 
+			get 18 SCs on the same game-turn. Should this happen, the player 
+			representing the Great Power with the most SCs is the winner. 
+			If the two Great Powers each control the same number of SCs, play 
+			continues until one Great Power controls at least 18 SCs and that 
+			Great Power controls more SCs than any other Great Power.
+		</li>
+		<li>
+			Iceland, Ireland, and Switzerland are now passable.
+		</li>
+		<li>
+			Movement between Clyde and Ireland is allowed. This is true even 
+			if an enemy fleet is in the North Atlantic Ocean. A convoy is not 
+			required to move an army back and forth between Clyde and Ireland.
+		</li>
+		<li>
+			Army movement is allowed between Gibraltar and Morocco. No convoy 
+			is required in this case. Gibraltar is considered a sea space for 
+			convoy purposes.
+		</li>
+		<li>
+			None of the Great Powers can build new units in Africa even if 
+			they control a space in Africa at game-start.
+		</li>
+		<li>
+			The <b>Suez Canal Rules</b> go like this:
+			<ul>
+
+			<li>
+			A fleet may move back and forth between Egypt and Hejaz.
+			</li>
+			<li>
+			Movement between Egypt or Hejaz and the Mid-Atlantic Ocean is 
+			allowed. It is assumed the unit travels around the southern tip of 
+			Africa. A unit that moves in this manner does so at half strength. 
+			This means that a unit adjacent to Egypt or Hejaz succeeds in 
+			moving there if opposed only by a fleet moving from the 
+			Mid-Atlantic Ocean and a fleet adjacent to the Mid-Atlantic Ocean 
+			succeeds in moving there if opposed only by a fleet moving from 
+			Egypt or Hejaz.
+			</li>
+			<li>
+			A fleet in Egypt or Hejaz cannot support a unit holding in or 
+			moving to the Mid-Atlantic Ocean.  This is true even though the 
+			fleet in Egypt or Hejaz can itself move to the Mid-Atlantic Ocean. 
+			Likewise, a fleet in the Mid-Atlantic Ocean cannot support a unit 
+			holding in or moving to Egypt or Hejaz.
+			</li>
+			<li>
+			A fleet moving from Egypt or Hejaz to the Mid-Atlantic Ocean does 
+			not cut support being provided by a fleet already in the 
+			Mid-Atlantic Ocean unless the attack results in F Mid-Atlantic 
+			Ocean being dislodged. The opposite is equally true. A fleet moving 
+			from the Mid-Atlantic Ocean to Egypt or Hejaz does not cut support 
+			being provided by a unit already in Egypt or Hejaz unless the 
+			attack results in the unit being dislodged.
+			</li>
+			<li>
+			F Mid-Atlantic Ocean can convoy an army from or to Egypt or Hejaz. 
+			An army convoyed from Egypt or Hejaz attacks its destination space 
+			at full strength. An army convoyed to Egypt or Hejaz attacks at 
+			half strength.
+			</li>
+			<li>
+			If two units may retreat only to Egypt or Hejaz, or the Mid-Atlantic 
+			Ocean, and one of them must travel around the southern tip of 
+			Africa, the unit that does not travel around southern Africa may 
+			retreat while the other unit is disbanded. Similarly, if two units 
+			are retreating to Egypt or Hejaz, or the Mid-Atlantic Ocean, and 
+			one of them must travel around the southern tip of Africa, the unit 
+			that does not travel around southern Africa may retreat while the 
+			other unit is disbanded.
+			</li>
+			</ul>
+		</li>
+		<li>
+			The <b>Steamroller Rule</b> reflects the seemingly endless reserves 
+			of manpower that were available to the Tsar at the turn of the 
+			century. In game terms, Russia is allowed to have one additional 
+			unit while it controls at least one of the four Russian home SCs. 
+			If other Powers control of all four Russian home SCs, with control 
+			being determined after the Fall retreats, the ability to maintain 
+			an additional unit is lost and Russia may only field a number of 
+			units equal to the number of SCs it actually controls. Should 
+			Russia regain a home SC, it would again be eligible to field an 
+			additional unit, though this unit would need to be built in an open 
+			home SC as per normal build rules. Note that the additional unit 
+			does not appear at the start of the game, as there is no vacant 
+			home SC to put it in.
+		</li>
+		</ol>
+		
+		<h2>Credits</h2>
+		<p style="margin-top:0pt;">
+			Author: Baron M. Powell<br>
+		</p>
+		
+		<h2>GM Notes</h2>
+		<p style="margin-top:0pt;">
+			The Suez Canal Rules will have to be adjudicated manually as half 
+			strength attacks are not supported by the current version of jDip.
+		</p>
+		<p>
+			Russia is assigned an additional dummy Supply Centre to allow for 
+			the Steamroller rule. Should Russia lose all its home SCs, the 
+			additional unit will have to be deleted manually.
+		</p>
+		]]></DESCRIPTION> 
+		<MAP adjacencyURI="1900_adjacency.xml">
+			<MAP_GRAPHIC ref="standard" default="true" />
+			<MAP_GRAPHIC ref="detailed" />
+		</MAP>
+		<!-- this is the default, but it's here just as an example -->
+		<RULEOPTIONS>
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+		</RULEOPTIONS>
+		<POWER name="Austria" active="true" adjective="Austrian" altnames="Austria-Hungary" /> 
+		<POWER name="Britain" active="true" adjective="British" altnames="England" /> 
+		<POWER name="France" active="true" adjective="French" /> 
+		<POWER name="Germany" active="true" adjective="German" /> 
+		<POWER name="Italy" active="true" adjective="Italian" />
+		<POWER name="Russia" active="true" adjective="Russian" />
+		<POWER name="Turkey" active="true" adjective="Turkish" altnames="Ottoman Empire" /> 
+		<STARTINGTIME turn="Spring, 1900, Movement" />
+		<VICTORYCONDITIONS>
+			<WINNING_SUPPLY_CENTERS value="18" />
+			<YEARS_WITHOUT_SC_CAPTURE value="7" />
+			<GAME_LENGTH value="35" />
+		</VICTORYCONDITIONS>
+ 	 	<!-- supply centers -->
+		<SUPPLYCENTER province="alg" owner="france"/>
+		<SUPPLYCENTER province="ank" homepower="turkey" owner="turkey"/>
+		<SUPPLYCENTER province="bel" />
+		<SUPPLYCENTER province="ber" homepower="germany" owner="germany"/>
+	 	<SUPPLYCENTER province="bre" homepower="france" owner="france"/>
+		<SUPPLYCENTER province="bud" homepower="austria" owner="austria"/>
+		<SUPPLYCENTER province="bul" />
+		<SUPPLYCENTER province="col" homepower="germany" owner="germany"/>
+	 	<SUPPLYCENTER province="con" homepower="turkey" owner="turkey"/>
+	 	<SUPPLYCENTER province="dam" homepower="turkey" owner="turkey"/>
+		<SUPPLYCENTER province="den" />
+ 	 	<!-- dummy supply center for Russian steamroller rule -->
+	 	<SUPPLYCENTER province="dum" owner="russia"/>
+		<SUPPLYCENTER province="edi" homepower="britain" owner="britain"/>
+		<SUPPLYCENTER province="egy" owner="britain"/>
+		<SUPPLYCENTER province="gre" />
+		<SUPPLYCENTER province="kie" homepower="germany" owner="germany"/>
+		<SUPPLYCENTER province="lvp" homepower="britain" owner="britain"/>
+		<SUPPLYCENTER province="lon" homepower="britain" owner="britain"/>
+	 	<SUPPLYCENTER province="mar" homepower="france" owner="france"/>
+	 	<SUPPLYCENTER province="mil" homepower="italy" owner="italy"/>
+		<SUPPLYCENTER province="mor" />
+	 	<SUPPLYCENTER province="mos" homepower="russia" owner="russia"/>
+		<SUPPLYCENTER province="mun" homepower="germany" owner="germany"/>
+	 	<SUPPLYCENTER province="nap" homepower="italy" owner="italy"/>
+		<SUPPLYCENTER province="net" />
+		<SUPPLYCENTER province="nwy" />
+	 	<SUPPLYCENTER province="par" homepower="france" owner="france"/>
+		<SUPPLYCENTER province="por" />
+	 	<SUPPLYCENTER province="rom" homepower="italy" owner="italy"/>
+		<SUPPLYCENTER province="rum" />
+		<SUPPLYCENTER province="ser" />
+	 	<SUPPLYCENTER province="sev" homepower="russia" owner="russia"/>
+		<SUPPLYCENTER province="spa" />
+	 	<SUPPLYCENTER province="stp" homepower="russia" owner="russia"/>
+		<SUPPLYCENTER province="swe" />
+		<SUPPLYCENTER province="swi" />
+		<SUPPLYCENTER province="tri" homepower="austria" owner="austria"/>
+		<SUPPLYCENTER province="trp" />
+		<SUPPLYCENTER province="vie" homepower="austria" owner="austria"/>
+	 	<SUPPLYCENTER province="war" homepower="russia" owner="russia"/>
+		<!-- unit placement -->
+		<INITIALSTATE province="alg" power="france" unit="army" />
+		<INITIALSTATE province="ank" power="turkey" unit="fleet" />
+		<INITIALSTATE province="ber" power="germany" unit="army" />
+		<INITIALSTATE province="bre" power="france" unit="fleet" />
+		<INITIALSTATE province="bud" power="austria" unit="army" />
+		<INITIALSTATE province="col" power="germany" unit="army" />
+		<INITIALSTATE province="con" power="turkey" unit="army" />
+		<INITIALSTATE province="dam" power="turkey" unit="army" />
+		<INITIALSTATE province="edi" power="britain" unit="fleet" />
+		<INITIALSTATE province="egy" power="britain" unit="fleet" />
+		<INITIALSTATE province="gib" power="britain" unit="fleet" />
+		<INITIALSTATE province="kie" power="germany" unit="fleet" />
+		<INITIALSTATE province="lon" power="britain" unit="fleet" />
+		<INITIALSTATE province="mar" power="france" unit="army" />
+		<INITIALSTATE province="mil" power="italy" unit="army" />
+		<INITIALSTATE province="mos" power="russia" unit="army" />
+		<INITIALSTATE province="mun" power="germany" unit="army" />
+		<INITIALSTATE province="nap" power="italy" unit="fleet" />
+		<INITIALSTATE province="par" power="france" unit="army" />
+		<INITIALSTATE province="rom" power="italy" unit="army" />
+		<INITIALSTATE province="sev" power="russia" unit="fleet" />
+		<INITIALSTATE province="stp" power="russia" unit="fleet" unitcoast="sc" />
+		<INITIALSTATE province="tri" power="austria" unit="army" />
+		<INITIALSTATE province="vie" power="austria" unit="army" />
+		<INITIALSTATE province="war" power="russia" unit="army" />
+	</VARIANT>
+	
+</VARIANTS>

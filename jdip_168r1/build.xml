@@ -208,7 +208,13 @@
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 
-        <!-- Variant Package: SailHo! -->
+       <!-- Variant Package: 1900 -->
+		<zip  compress="true" destfile="${variant.dir}/1900Variants.zip"
+				basedir="${resource.dir}/variants/1900"
+				excludes="*~ *.zip"
+				includes="*.xml *.jpg *.png *.svg *.gif"/>
+
+         <!-- Variant Package: SailHo! -->
 		<zip compress="true"   destfile="${variant.dir}/sailhoVariants.zip"
 				basedir="${resource.dir}/variants/sailho"
 				excludes="*~ *.zip"
