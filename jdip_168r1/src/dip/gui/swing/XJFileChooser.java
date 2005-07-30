@@ -141,8 +141,9 @@ public class XJFileChooser
 				}
 				else
 				{
+					Log.println("XJFileChooser waiting()...");
 					instance = (XJFileChooser) loader.get();
-					instance = null;
+					loader = null;
 				}
 			}
 		}
