@@ -328,8 +328,16 @@ public class Support extends Order
 				throw new OrderException( Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()) );
 			}
 			
-			// destination validation (if applicable)
-			if(!isSupportingHold())
+			// support source (hold) destination (move) validation
+			if(isSupportingHold())
+			{
+				if( !src.isAdjacent(supSrc.getProvince()) )
+				{
+					throw new OrderException(Utils.getLocalString(SUPPORT_VAL_NOMOVE, 
+									src.toLongString(), supSrc.toLongString()));
+				}
+			}
+			else
 			{
 				// v.2: location validation
 				supDest = supDest.getValidated(supUnitType);

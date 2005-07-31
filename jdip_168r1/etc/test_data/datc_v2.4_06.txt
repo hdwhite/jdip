@@ -56,6 +56,27 @@ ORDERS
 POSTSTATE_SAME
 END
 
+# fleet cannot support inland
+CASE 6.A.3.fleet.support.inland
+PRESTATE_SETPHASE Spring 1901, Movement
+PRESTATE
+	Austria: F Trieste
+	Austria: A Budapest
+	Russia: A Galacia
+	Russia: A Rumania
+ORDERS
+	Austria: F Trieste S A Budapest
+	Austria: A Budapest H
+	Russia: A Galacia-Budapest
+	Russia: A Rumania S A Galacia-Budapest
+POSTSTATE
+	Austria: F Trieste
+	Russia: A Budapest	# succeeds unless illegal support actually worked
+	Russia: A Rumania
+POSTSTATE_DISLODGED
+	Austria: A Budapest
+END
+
 
 # move to same sector is illegal
 CASE 6.A.4
