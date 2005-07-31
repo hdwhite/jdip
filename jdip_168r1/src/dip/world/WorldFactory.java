@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import dip.misc.Utils;
+import dip.misc.Log;
 import dip.order.OrderException;
 import dip.world.variant.data.BorderData;
 import dip.world.variant.data.InitialState;
@@ -93,6 +94,8 @@ public class WorldFactory
 		{
 			throw new IllegalArgumentException();
 		}
+		
+		Log.println("WorldFactory.createWorld(): "+variant.getName());
 		
 		List provinces = new ArrayList(100);
 		HashMap provNameMap = new HashMap();	// mapping of names->provinces
