@@ -3,14 +3,10 @@ NOTE: This is a PREVIEW RELEASE. Please read the following for
 information about important changes and bug status.
 ===========================================================================
 
-
 =============== NOTES =================
-- Bugs not yet fixed:
-    + Variant directory issues on Linux
-     
 - Features not fully tested:
-	+ New windows installer
-	+ OS X file dialogs
+	+ New Windows installer
+	+ New OS X file dialogs
     
 - please report any issues to:
 	 jdip-developer [@] sourceforge.net
@@ -22,10 +18,12 @@ information about important changes and bug status.
 jDip 1.7.0 PREVIEW RELEASE 1 Changelog
 ======================================
 - New or Improved Features:                     
-    + Aberration V variant and symbols added (thanks to Stefano Costantini)
+	+ 1900 Variants added (thanks to Ian Scrivins)
+        - Please note caveats under "Known Issues" 
+	+ Aberration V variant and symbols added (thanks to Stefano Costantini)
     + Ancient Med variant and symbols added (thanks to Stefano Costantini)
     + Renaissance variant added (thanks to Ian Scrivins)
-    + New Windows installer
+    + New Windows installer, which an automatically download Java if needed
 	+ Size (smaller by more than 1 MB) and speed improvements
     + Mac OS X: better file chooser.
     + Online bug reports (which occurs with severe jDip errors) is
@@ -40,9 +38,10 @@ jDip 1.7.0 PREVIEW RELEASE 1 Changelog
       more helpful and detailed online bug reports.
     + Upgraded SVG rendering system to Batik 1.6.
     + Upgraded other dependencies to newer versions.
-- Fixed bugs
+- Fixed Bugs:
     + Deleting of single orders does not work [1005872, 1118742]
-    + Adjudication error: No convoy, but bounce [1205531, 1116568, 1053458]
+    + Hold Support could be issued to nonadjacent units [1231701]
+	+ Adjudication error: No convoy, but bounce [1205531, 1116568, 1053458]
         - This is now fixed. As it turns out, one of the test cases 
           had an incorrect resolution that masked this bug in prior versions.
     + Incorrect importing of history files [1035292]
@@ -81,6 +80,22 @@ jDip 1.7.0 PREVIEW RELEASE 1 Changelog
       in this version due to extensive fixes. All non-F2F games remain 
       compatible with this version.
 - Known issues:
+	+ 1900 Variant
+		- The Suez rule and Steamroller may have to be adjudicated manually, as
+		  jDip does not yet automatically support these features. Note that 
+		  this may cause imported games (e.g., from floc.net) to fail.
+	+ Network Proxy Support
+		- Built-in proxy detection and configuration will not be implemented
+		  in this version (for various reasons; it will be included in a future
+		  version). 
+		- There is a commandline workaround: 
+		     java -jar jdip.jar -Dhttp.proxyHost=<i>proxyhost</i>
+		          -Dhttp.proxyPort=<i>port</i>
+		  for example:
+		     java -jar jdip.jar -Dhttp.proxyHost=myproxy -Dhttp.proxyPort=8080
+    + Importing of Hundred games may not work when the phases are advanced by
+	  5 years (e.g., A1420, A1425) instead of following the conventional phase
+	  format. This will be addressed in a future version. 	
     + There may be diagnostic output when opening or saving games, if 
       Java 5 (1.5.x) is used. The library we use to help save and open games
       is no longer being updated. This will be replaced in a future version.

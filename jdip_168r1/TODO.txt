@@ -31,29 +31,9 @@ Bugs to be fixed
 			
 BUGS / TODO
 -----------
-	2) KNOWN ISSUES: (add...)
-			cannot import games using by-5 (some hundred games)
-			e.g.: USDP / hundredwar25
-			Phase A1424M is not recognized
-	3) KNOWN ISSUES: 
-			proxy / firewall
-			workaround
-			no change until 1.5
-	3) Thread bug
-		NullPointerException	
-		dip.gui.ClientFrame$MenuHandler.onFileNewStd(ClientFrame.java:1283)
-		dip.gui.PersistenceManager.newGame(PersistenceManager.java:301)
-		dip.gui.dialog.newgame.NewGameDialog.displayDialog(NewGameDialog.java:78)
-		dip.gui.dialog.newgame.NewGameDialog.displayDialog(NewGameDialog.java:96)
-			we create the dialog, but it's not ready yet. so we get an NPE here.
-			this is with 1.4.2_05-b04 / xp / 5.1 
-	4) NEW BUG:
-		Brief: java.io.IOException: Cannot validate order on second pass.
-		Cannot build a new unit where a unit already exists.		
-		
-		error importing: DEUS / npst336		(no world open)
-		error importing: USIN / vgnp3078		(world open)
-	9)	NO variants exception (on linux...)
+	0) statusbar color (bg) not correct [WHY?]
+
+	1)	NO variants exception (on linux...)
 		
 		No variants found on path: /home/USERNAME/variants; <br>
 		No variants found on path: /home/USERNAME/variants; <br>
@@ -69,83 +49,57 @@ BUGS / TODO
 		program home directory
 		etc.
 		
-		CURRENT CODE
-		============
-		if(System.getProperty("user.dir") == null)
-		{
-			variantDirPath = (variantDirPath == null) ? new File(".", VARIANT_DIR) : variantDirPath;
-			toolDirPath = new File(".", TOOL_DIR);
-		}
-		else
-		{
-			variantDirPath = (variantDirPath == null) ? new File(System.getProperty("user.dir"), VARIANT_DIR) : variantDirPath;
-			toolDirPath = new File(System.getProperty("user.dir"), TOOL_DIR );
-		}
+		NEW method:
+			look for variant directory
+			if not found / no variants
+				prompt (make sure there is read access)
+				store info in preferences
+				look in prefs, first
+				
+			use the directory chooser
+		 
+	5) NEW F2F BUG:
+		70.52.11.62 (toronto-HSE-ppp4192138.sympatico.ca) [jDip]
+		Jun 26 2005 05:47:49
+		Version: 1.7.0 (Preview Release 1) (English)
+		Brief: java.lang.ArrayIndexOutOfBoundsException: 7 >= 7
+			  dip.gui.ClientMenu$RecentFileListener.actionPerformed(ClientMenu.java:649)
+			  dip.gui.ClientFrame.createWorld(ClientFrame.java:625)
+			  dip.gui.F2FGUIGameSetup.setup(F2FGUIGameSetup.java:99)
+			  dip.gui.ClientFrame.fireTurnstateChanged(ClientFrame.java:730)
+			  java.awt.Component.firePropertyChange(Unknown Source)
+			  java.beans.PropertyChangeSupport.firePropertyChange(Unknown Source)
+			  dip.gui.AbstractCFPListener.propertyChange(AbstractCFPListener.java:74)
+			  dip.gui.F2FOrderDisplayPanel$F2FPropertyListener.actionTurnstateChanged(F2FOrderDisplayPanel.java:280)
+			  dip.gui.F2FOrderDisplayPanel.access$1500(F2FOrderDisplayPanel.java:67)
+			  dip.gui.F2FOrderDisplayPanel.createTabs(F2FOrderDisplayPanel.java:496)
+			  dip.gui.F2FOrderDisplayPanel.setupState(F2FOrderDisplayPanel.java:684)
+			  dip.gui.F2FOrderDisplayPanel.setTabEnabled(F2FOrderDisplayPanel.java:618)
+			  javax.swing.JTabbedPane.setEnabledAt(Unknown Source)
+			  java.util.Vector.elementAt(Unknown Source)		
+			  
+	6) NEW BUG:
+		Brief: java.io.IOException: Cannot validate order on second pass.
+		Cannot build a new unit where a unit already exists.		
 		
-		HERE is how jEdit does it:
-		http://cvs.sourceforge.net/viewcvs.py/jedit/jEdit/installer/OperatingSystem.java?rev=1.19&view=auto
-		=========================
-		(after checking for UNIX)
-		
-		String dir = "/usr/local/share/";
-		if(!new File(dir).canWrite())
-			dir = System.getProperty("user.home");
-		return new File(dir,name.toLowerCase() + "/" + version).getPath();
-		
-		String dir = "/usr/local/";
-		if(!new File(dir).canWrite())
-			dir = System.getProperty("user.home");
-		
-		return new File(dir,"bin").getPath();
-
-		SOLUTION
-		========
-			MacOS and Windows
-				leave as-is; appears to work OK
-			Unix/Linux
-				use "user.home"
-				
-				make sure installer knows this?
-				first:
-					try to install to /usr/local/share/
-					
-				
-				
-		TO INVESTIGATE:
-		==============
-			See how other programs with 'plugins' do it:
-				Eclipse
-				
-				Azureus
-					org.gudy.azureus2.pluginsimpl.local.PluginInitializer
-				finds directories in
-					File	user_dir = FileUtil.getUserFile("plugins");
-					File	app_dir	 = FileUtil.getApplicationFile("plugins");
-				
-				org.gudy.azureus2.core3.util.FileUtil;
-				org.gudy.azureus2.core3.util.SystemProperties;
-				
-					public static File getUserFile(String filename)
-					{
-						return new File(SystemProperties.getUserPath(), filename);
-					}
-					
-					public static File getApplicationFile(String filename)
-					{
-						String path = SystemProperties.getApplicationPath();
-						  
-						  if(Constants.isOSX) {
-							path = path + "/Azureus.app/Contents/";
-						  }
-						  
-						  return new File(path, filename);
-					}
+		error importing: DEUS / npst336		(no world open)
+			standard
+			Fall, 1908 (Adjustment);
+			Turkey: B F con; Cannot build a new unit where a unit already exists.
+			
+		error importing: USIN / vgnp3078		(world open)
+			standard
+			Spring, 1911 (Retreat);
+			Turkey: A sev-arm; Cannot create an order when there is no unit in province Sevastopol.
+			
+		both these are verified... 
 	
+
 
 
 FUTURE FEATURES
 ===============
-	a) 'check for new JEdit version'
+	a) 'check for new jDip version'
 		if so, display changes in a nonmodal dialog
 		allow user to point browser to download site
 	
