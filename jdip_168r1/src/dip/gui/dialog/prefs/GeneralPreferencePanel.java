@@ -40,8 +40,9 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
+import javax.swing.JSeparator;             
 import javax.swing.JTextField;
 
 import com.l2fprod.common.swing.JDirectoryChooser;
@@ -53,6 +54,7 @@ import dip.gui.OrderDisplayPanel;
 import dip.gui.map.MapRenderer2;
 import dip.gui.swing.AssocJComboBox;
 import dip.gui.swing.XJFileChooser;
+import dip.misc.Log;
 import dip.misc.LRUCache;
 import dip.misc.SharedPrefs;
 import dip.misc.Utils;
@@ -90,6 +92,9 @@ public class GeneralPreferencePanel extends PreferencePanel
 	
 	// map label preference 
 	public static final String NODE_MAP_LABEL_LEVEL			= "map.label.level";
+	
+	// variant dir
+	public static final String NODE_VARIANT_DIR 	= "variant.dir";
 	
 	// # of recent files to save
 	private static final int NUM_RECENT_FILES = 5;
@@ -131,7 +136,8 @@ public class GeneralPreferencePanel extends PreferencePanel
 	
 	
 	
-	private static final String DIALOG_TITLE		= "GPP.filedialog.title";
+	private static final String DIALOG_TITLE						= "GPP.filedialog.title";
+	private static final String SELECT_VARIANT_DIALOG_TITLE		= "GPP.selectvariantdir.title";
 	
 	
 	public GeneralPreferencePanel(final ClientFrame cf)
@@ -613,5 +619,60 @@ public class GeneralPreferencePanel extends PreferencePanel
 		return prefs.getBoolean(key, defaultValue);
 	}// getSetting()
 	
+	
+	/**
+	*	Gets the user-set variant directory, if set. If not set, returns null.
+	*	This will also return null if the variant directory is not actually a
+	*	directory.
+	*/
+	public static File getVariantDir()
+	{
+		Preferences prefs = SharedPrefs.getUserNode();
+		File file = null;
+		final String text = prefs.get(NODE_VARIANT_DIR, null);
+		if(text != null)
+		{
+			file = new File(text);
+			if(!file.isDirectory())
+			{
+				Log.println("GPP.getVariantDir(): not a directory : ", text);
+				return null;
+			}
+		}
+		
+		return file;
+	}// getVariantDir()
+	
+	/**
+	*	Sets the variant directory. This is a GUI-based set method, and can
+	*	be used outside of the preference panel. This will return the selected
+	*	file. Note that if 'immediateCommit' is true, the returned File will be
+	*	written immediately to the preferences backing store (this is useful
+	*	when not used within the Preference dialog, but does not allow for
+	*	the undo operation).
+	*	<p>
+	*	This will return null if no file was selected.
+	*/
+	public static File setVariantDir(JFrame frame, boolean immediateCommit)
+	{
+		JDirectoryChooser chooser = new JDirectoryChooser();
+		chooser.setMultiSelectionEnabled(false);
+		chooser.setDialogTitle(Utils.getLocalString(SELECT_VARIANT_DIALOG_TITLE));
+		
+		File file = null;
+		int choice = chooser.showDialog(frame, Utils.getLocalString(XJFileChooser.BTN_DIR_SELECT));
+		if(choice == JDirectoryChooser.APPROVE_OPTION)
+		{
+			file = chooser.getSelectedFile().getAbsoluteFile();
+			if(immediateCommit && file != null)
+			{
+				Preferences prefs = SharedPrefs.getUserNode();
+				prefs.put(NODE_VARIANT_DIR, file.toString());
+				try { prefs.sync(); } catch (BackingStoreException bse) {}
+			}
+		}
+		
+		return file;
+	}// setVariantDir()
 	
 }// class GeneralPreferencePanel

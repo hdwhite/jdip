@@ -33,31 +33,6 @@ BUGS / TODO
 -----------
 	0) statusbar color (bg) not correct [WHY?]
 
-	1)	NO variants exception (on linux...)
-		
-		No variants found on path: /home/USERNAME/variants; <br>
-		No variants found on path: /home/USERNAME/variants; <br>
-		
-		"user.dir" = user's current working directory
-		"user.home" = user's home directory
-		
-		** REALLY, we should use 'user.home'
-			'user.dir' : init at JVM startup
-			'user.home' : user home directory
-			
-		determine HOW we are finding user home directory
-		program home directory
-		etc.
-		
-		NEW method:
-			look for variant directory
-			if not found / no variants
-				prompt (make sure there is read access)
-				store info in preferences
-				look in prefs, first
-				
-			use the directory chooser
-		 
 	5) NEW F2F BUG:
 		70.52.11.62 (toronto-HSE-ppp4192138.sympatico.ca) [jDip]
 		Jun 26 2005 05:47:49

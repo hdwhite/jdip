@@ -38,6 +38,7 @@ jDip 1.7.0 PREVIEW RELEASE 1 Changelog
       more helpful and detailed online bug reports.
     + Upgraded SVG rendering system to Batik 1.6.
     + Upgraded other dependencies to newer versions.
+	+ Variant directory may be selected manually if not found at startup.
 - Fixed Bugs:
     + Deleting of single orders does not work [1005872, 1118742]
     + Hold Support could be issued to nonadjacent units [1231701]

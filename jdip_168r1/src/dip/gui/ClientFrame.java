@@ -300,10 +300,13 @@ public class ClientFrame extends JFrame
 		
 		// set exception handler
 		GUIExceptionHandler.registerHandler();
-
+		
+		
 		// get the variant and tool directories. 
 		// do not change the variantDirPath if it was set
 		// from the command line
+		// use the preferred path, if set, and not overridden from command line
+		variantDirPath = (variantDirPath == null) ? GeneralPreferencePanel.getVariantDir() : variantDirPath;
 		File toolDirPath = null;
 		if(System.getProperty("user.dir") == null)
 		{
@@ -316,20 +319,10 @@ public class ClientFrame extends JFrame
 			toolDirPath = new File(System.getProperty("user.dir"), TOOL_DIR );
 		}
 		
+		Log.println("Using variant directory: ", variantDirPath);
 		
 		// parse variants
-		try
-		{
-			VariantManager.init(new File[]{variantDirPath}, isValidating);
-		}
-		catch(javax.xml.parsers.ParserConfigurationException e)
-		{
-			ErrorDialog.displayFatal(this, e);
-		}
-		catch(dip.world.variant.NoVariantsException e)
-		{
-			ErrorDialog.displayFatal(this, e);
-		}
+		initVariantManager();
 		
 		dtime = Log.printDelta(dtime, "CF: variant setup time: ");
 		
@@ -1659,6 +1652,37 @@ public class ClientFrame extends JFrame
 		
 	}// inner class MenuHandler()
 	
+	
+	/** Handle variant parsing.... and initialize the variant manager */
+	private void initVariantManager()
+	{
+		try
+		{
+			VariantManager.init(new File[]{variantDirPath}, isValidating);
+		}
+		catch(javax.xml.parsers.ParserConfigurationException e)
+		{
+			ErrorDialog.displayFatal(this, e);
+		}
+		catch(dip.world.variant.NoVariantsException e)
+		{
+			// display informative message, as a popup
+			Utils.popupError(null, Utils.getLocalString("ClientFrame.error.novariants.dialog.title"), 
+				Utils.getText(Utils.getLocalString("ClientFrame.error.novariants.dialog.text.location")));
+				
+			// give the user a chance to set the variant dir path
+			final File file = GeneralPreferencePanel.setVariantDir(null, true);
+			if(file == null)
+			{
+				ErrorDialog.displayFatal(this, e);
+			}
+			else
+			{
+				variantDirPath = file;
+				initVariantManager();
+			}
+		}	
+	}// initVariantManager()
 	
 }// class ClientFrame
 
