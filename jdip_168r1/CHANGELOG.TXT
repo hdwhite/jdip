@@ -40,6 +40,7 @@ jDip 1.7.0 PREVIEW RELEASE 1 Changelog
     + Upgraded other dependencies to newer versions.
 	+ Variant directory may be selected manually if not found at startup.
 - Fixed Bugs:
+    + Aberration V bugs fixed [1283902, 1283893]
     + Deleting of single orders does not work [1005872, 1118742]
     + Hold Support could be issued to nonadjacent units [1231701]
 	+ Adjudication error: No convoy, but bounce [1205531, 1116568, 1053458]
