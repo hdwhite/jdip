@@ -75,7 +75,7 @@
 			<ADJACENCY type="xc" refs="arm ebs wbs con" />
 		</PROVINCE>
 		<PROVINCE shortname="ang" fullname="Anglican Sea">
-			<UNIQUENAME name="anglian" />
+			<UNIQUENAME name="anglicansea" />
 			<ADJACENCY type="xc" refs="nth hel eng hag bru wes yor" />
 		</PROVINCE>
 		<PROVINCE shortname="apu" fullname="Apulia">
@@ -90,8 +90,9 @@
 			<ADJACENCY type="xc" refs="mes sin per ind red" />
 		</PROVINCE>
 		<PROVINCE shortname="arc" fullname="Arctic Ocean">
-			<UNIQUENAME name="arctic" />
-			<UNIQUENAME name="artic" />
+			<UNIQUENAME name="artic ocean" />
+			<UNIQUENAME name="arcticocean" />
+			<UNIQUENAME name="articocean" />
 			<ADJACENCY type="xc" refs="bar nwg nao" />
 		</PROVINCE>
 		<PROVINCE shortname="arm" fullname="Armenia">
@@ -113,12 +114,12 @@
 			<ADJACENCY type="mv" refs="ira geo cir" />
 		</PROVINCE>
 		<PROVINCE shortname="bal" fullname="Baltic Sea">
-			<UNIQUENAME name="baltic" />
+			<UNIQUENAME name="balticsea" />
 			<ADJACENCY type="xc" refs="lat rig mas gda bor swe" />
 		</PROVINCE>
 		<PROVINCE shortname="bar" fullname="Barents Sea">
+			<UNIQUENAME name="barentssea" />
 			<UNIQUENAME name="barents" />
-			<UNIQUENAME name="barent" />
 			<ADJACENCY type="xc" refs="sib kar lap nwg arc" />
 		</PROVINCE>
 		<PROVINCE shortname="bav" fullname="Bavaria">
@@ -127,13 +128,14 @@
 		<PROVINCE shortname="bay" fullname="Bay of Biscay">
 			<UNIQUENAME name="bob" />
 			<UNIQUENAME name="biscay" />
+			<UNIQUENAME name="bayofbiscay" />
 			<ADJACENCY type="xc" refs="bri gas san mid" />
 		</PROVINCE>
 		<PROVINCE shortname="boh" fullname="Bohemia">
 			<ADJACENCY type="mv" refs="gal aus tyr bav sax sil" />
 		</PROVINCE>
 		<PROVINCE shortname="bor" fullname="Bornholm Sea">
-			<UNIQUENAME name="bornholm" />
+			<UNIQUENAME name="bornholmsea" />
 			<ADJACENCY type="xc" refs="bal gda mar hol den swe" />
 		</PROVINCE>
 		<PROVINCE shortname="bri" fullname="Brittany">
@@ -156,7 +158,7 @@
 			<ADJACENCY type="xc" refs="con rum wbs" />
 		</PROVINCE>
 		<PROVINCE shortname="car" fullname="Carian Sea">
-			<UNIQUENAME name="carian" />
+			<UNIQUENAME name="cariansea" />
 			<ADJACENCY type="xc" refs="ems del lib aeg smy pis" />
 		</PROVINCE>
 		<PROVINCE shortname="cai" fullname="Cairo">
@@ -206,7 +208,7 @@
 			<ADJACENCY type="xc" refs="syr jer ems del" />
 		</PROVINCE>
 		<PROVINCE shortname="del" fullname="Delta Sea">
-			<UNIQUENAME name="delta" />
+			<UNIQUENAME name="deltasea" />
 			<ADJACENCY type="xc" refs="ems dam jer sin cai lib car" />
 		</PROVINCE>
 		<PROVINCE shortname="den" fullname="Denmark">
@@ -226,12 +228,10 @@
 		<PROVINCE shortname="ebs" fullname="East Black Sea">
 			<UNIQUENAME name="east" />
 			<UNIQUENAME name="eab" />
-			<UNIQUENAME name="ebla" />
-			<UNIQUENAME name="easbla" />
-			<UNIQUENAME name="eastbla" />
-			<UNIQUENAME name="easblack" />
-			<UNIQUENAME name="eastblack" />
 			<UNIQUENAME name="ebl" />
+			<UNIQUENAME name="ebla" />
+			<UNIQUENAME name="easblacksea" />
+			<UNIQUENAME name="eastblacksea" />
 			<ADJACENCY type="xc" refs="geo arm ana wbs yal tau kub cir" />
 		</PROVINCE>
 		<PROVINCE shortname="ems" fullname="Eastern Mediterranean">
@@ -241,6 +241,7 @@
 			<UNIQUENAME name="emed" />
 			<UNIQUENAME name="eastmed" />
 			<UNIQUENAME name="eam" />
+			<UNIQUENAME name="easternmediterranean" />
 			<ADJACENCY type="xc" refs="pis cil syr dam del car" />
 		</PROVINCE>
 		<PROVINCE shortname="edi" fullname="Edinburgh">
@@ -383,7 +384,7 @@
 			<ADJACENCY type="xc" refs="del cai ala cyr pyl aeg car" />
 		</PROVINCE>
 		<PROVINCE shortname="lig" fullname="Ligurian Sea">
-			<UNIQUENAME name="ligurian" />
+			<UNIQUENAME name="liguriansea" />
 			<ADJACENCY type="xc" refs="tus rom tys gol lan pie" />
 		</PROVINCE>
 		<PROVINCE shortname="liv" fullname="Livonia">
@@ -395,34 +396,38 @@
 		<PROVINCE shortname="lor" fullname="Lorraine">
 			<ADJACENCY type="mv" refs="swa sch dij fra pic bru ruh" />
 		</PROVINCE>
-		<PROVINCE shortname="mac" fullname="fymacedonia">
+		<PROVINCE shortname="mac" fullname="Macedonia">
+			<UNIQUENAME name="fyrom" />
 			<ADJACENCY type="mv" refs="ath alb ser bul" />
 		</PROVINCE>
-		<PROVINCE shortname="mal" fullname="mamalta Sea">
+		<PROVINCE shortname="mal" fullname="Malta Sea">
+			<UNIQUENAME name="maltasea" />
 			<ADJACENCY type="xc" refs="ion pyl tob tri tun pal tys nap apu" />
 		</PROVINCE>
-		<PROVINCE shortname="mar" fullname=" ">
+		<PROVINCE shortname="mar" fullname="Mark">
 			<ADJACENCY type="mv" refs="gda sax hes hol" />
 			<ADJACENCY type="xc" refs="bor hol gda" />
 		</PROVINCE>
-		<PROVINCE shortname="mas" fullname="ria">
+		<PROVINCE shortname="mas" fullname="Masuria">
 			<ADJACENCY type="mv" refs="rig liv war gda" />
 			<ADJACENCY type="xc" refs="rig gda bal" />
 		</PROVINCE>
-		<PROVINCE shortname="mes" fullname="imesopotamia">
+		<PROVINCE shortname="mes" fullname="Mesopotamia">
 			<ADJACENCY type="mv" refs="ira arm syr ara" />
 			<ADJACENCY type="xc" refs="per ara ira" />
 		</PROVINCE>
-		<PROVINCE shortname="mid" fullname="Atlantic Ocean">
+		<PROVINCE shortname="mid" fullname="Mid-Atlantic Ocean">
 			<UNIQUENAME name="mao" />
 			<UNIQUENAME name="mat" />
-			<UNIQUENAME name="midatlanmid" />
+			<UNIQUENAME name="mid atlantic" />
+			<UNIQUENAME name="mid atlantic ocean" />
+			<UNIQUENAME name="midatlanticocean" />
 			<ADJACENCY type="xc" refs="nao iri eng bri bay san sou" />
 		</PROVINCE>
-		<PROVINCE shortname="min" fullname="h">
+		<PROVINCE shortname="min" fullname="Minch">
 			<ADJACENCY type="xc" refs="nwg cly alc iri uls nao" />
 		</PROVINCE>
-		<PROVINCE shortname="mor" fullname="oco">
+		<PROVINCE shortname="mor" fullname="Morroco">
 			<ADJACENCY type="mv" refs="alg sah" />
 			<ADJACENCY type="xc" refs="wms alg ifn sou" />
 		</PROVINCE>
@@ -452,6 +457,7 @@
 			<UNIQUENAME name="nts" />
 			<UNIQUENAME name="nsea" />
 			<UNIQUENAME name="nos" />
+			<UNIQUENAME name="northsea" />
 			<ADJACENCY type="xc" refs="nor ska den hel ang yor edi nwg" />
 		</PROVINCE>
 		<PROVINCE shortname="nwy" fullname="Norway">
@@ -523,6 +529,7 @@
 			<ADJACENCY type="xc" refs="tus nap lig tys" />
 		</PROVINCE>
 		<PROVINCE shortname="ruh" fullname="Ruhr">
+			<UNIQUENAME name="rur" />
 			<ADJACENCY type="mv" refs="hes bav swa lor bru hag" />
 		</PROVINCE>
 		<PROVINCE shortname="rum" fullname="Rumania">
@@ -572,7 +579,7 @@
 		</PROVINCE>
 		<PROVINCE shortname="sou" fullname="South Atlantic Ocean">
 			<UNIQUENAME name="sao" />
-			<UNIQUENAME name="southatlantic" />
+			<UNIQUENAME name="southatlanticocean" />
 			<UNIQUENAME name="south" />
 			<ADJACENCY type="xc" refs="mid san por gib mor ifn wms" />
 		</PROVINCE>
@@ -635,8 +642,7 @@
 			<ADJACENCY type="mv" refs="aus cro ven pie sch swa bav boh" />
 		</PROVINCE>
 		<PROVINCE shortname="tys" fullname="Tyrrhenian Sea">
-			<UNIQUENAME name="tyrr" />
-			<UNIQUENAME name="tyrrhenian" />
+			<UNIQUENAME name="tyrrheniansea" />
 			<UNIQUENAME name="tyn" />
 			<UNIQUENAME name="tyh" />
 			<ADJACENCY type="xc" refs="nap pal mal tun uti sar gol lig rom" />
@@ -682,15 +688,16 @@
 			<UNIQUENAME name="wesbla" />
 			<UNIQUENAME name="westbla" />
 			<UNIQUENAME name="wesblack" />
-			<UNIQUENAME name="westblack" />
+			<UNIQUENAME name="westblacksea" />
 			<UNIQUENAME name="wbl" />
 			<ADJACENCY type="xc" refs="ebs yal tau ode rum bul con ana" />
 		</PROVINCE>
-		<PROVINCE shortname="wms" fullname="Western Mediterranean+western">
+		<PROVINCE shortname="wms" fullname="Western Mediterranean">
 			<UNIQUENAME name="wme" />
 			<UNIQUENAME name="wmed" />
 			<UNIQUENAME name="westmed" />
 			<UNIQUENAME name="wem" />
+			<UNIQUENAME name="westernmediterranean" />
 			<ADJACENCY type="xc" refs="uti alg mor gib val plm sou" />
 		</PROVINCE>
 		<PROVINCE shortname="yal" fullname="Yalta">

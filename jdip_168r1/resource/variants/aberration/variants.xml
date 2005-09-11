@@ -278,6 +278,7 @@
 		<SUPPLYCENTER province="war" homepower="poland" owner="poland"/>
 		<SUPPLYCENTER province="wes" />
 		<SUPPLYCENTER province="yal" homepower="ukraine" owner="ukraine"/>
+		<SUPPLYCENTER province="zar" homepower="hungary" owner="hungary"/>
 		
 		<INITIALSTATE province="dij" power="burgundy" unit="army" />
 		<INITIALSTATE province="bru" power="burgundy" unit="army" />
