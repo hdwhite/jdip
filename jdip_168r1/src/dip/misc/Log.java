@@ -278,6 +278,34 @@ public final class Log
 		}
 	}// println()
 	
+	/** Print text followed by an array; comma-seperated array print; can be null */
+	public static void println(final Object s0, final Object[] arr)
+	{
+		if(isLogging)
+		{
+			StringBuffer sb = new StringBuffer(256);
+			sb.append(s0);
+			if(arr == null)
+			{
+				sb.append("null");
+			}
+			else
+			{
+				sb.append('[');
+				for(int i=0; i<arr.length; i++)
+				{
+					sb.append(arr[i]);
+					if(i<arr.length - 1)
+					{
+						sb.append(',');
+					}
+				}
+				sb.append(']');
+			}
+			println(sb);
+		}
+	}// println()
+	
 	/** Print text followed by an int */
 	public static void println(Object s0, int i0)
 	{
