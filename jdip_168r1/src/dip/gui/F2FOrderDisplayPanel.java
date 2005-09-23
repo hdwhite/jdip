@@ -25,6 +25,7 @@ package dip.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -80,9 +81,6 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	private static final String ENTER_ORDERS_TEXT	= "F2FODP.button.enterorders.text";
 	private static final String ENTER_ORDERS_TIP	= "F2FODP.button.enterorders.tooltip";
 	
-	// internal constant for 'all' tab
-	private static final String TAB_ALL 			= new String("_all_");
-	
 	// instance fields
 	private JTabbedPane tabPane = null;
 	private JPanel main = null;
@@ -93,7 +91,6 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	private MapMetadata mmd = null;
 	private TabListener tabListener = null;
 	private JPanel buttonPanel = null;				// holds submit/enter orders button
-	private final HashMap tabMap;
 	
 	// hold resolved and next TurnStates
 	private TurnState resolvedTS = null;
@@ -107,7 +104,6 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	public F2FOrderDisplayPanel(ClientFrame clientFrame)
 	{
 		super(clientFrame);
-		tabMap = new HashMap(11);
 		entryState = new F2FState();
 		makeF2FLayout();
 	}// F2FOrderDisplayPanel()
@@ -141,7 +137,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 			//
 			// a submission (really, just the first) disables the
 			// 'all' powers tab from being selected
-			setTabEnabled(TAB_ALL, false);
+			setTabEnabled(null, false);
 			
 			// filter out undo actions, so they are not seen by other powers.
 			// limit so that a power cannot undo the turn resolution once 
@@ -158,9 +154,9 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 			// we do this by checking which tabs are (or are not) enabled.
 			// when all tabs have been disabled, resolution takes place. Since
 			// eliminated powers don't have tabs, this works nicely.
-			int nextAvailable = selectNextRandomTab();
+			TabComponent nextAvailable = selectNextRandomTab();
 			
-			if(nextAvailable == -1)
+			if(nextAvailable == null)
 			{
 				saveEntryState();
 				clientFrame.resolveOrders();
@@ -168,7 +164,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 			else
 			{
 				setPowersDisplayed(nextAvailable);
-				tabPane.setSelectedIndex(nextAvailable);
+				tabPane.setSelectedComponent(nextAvailable);
 				saveEntryState();
 				setSubmitEnabled();
 			}
@@ -223,18 +219,17 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		private void update()
 		{
 			// set the panel
-			final int idx = tabPane.getSelectedIndex();
-			if(idx != -1)
+			final TabComponent tc = (TabComponent) tabPane.getSelectedComponent();
+			if(tc != null)
 			{
-				JPanel panel = (JPanel) tabPane.getComponentAt(idx);
-				panel.add(main, BorderLayout.CENTER);
+				tc.add(main, BorderLayout.CENTER);
 			}
 			
 			// set what we can and cannot display
 			if(turnState != null)
 			{
 				setSubmitEnabled();
-				setPowersDisplayed(idx);
+				setPowersDisplayed(tc);
 				saveEntryState();
 			}
 		}// update()
@@ -329,17 +324,15 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	{
 		if(mmd != null)
 		{
-			final Power[] powers = world.getMap().getPowers();
-			for(int i=0; i<powers.length; i++)
+			for(int i=0; i<tabPane.getTabCount(); i++)
 			{
-				final Power power = powers[i];
-				final int tabIdx = getTabIndex(power);
-				if(tabIdx > 0)
+				final TabComponent tc = (TabComponent) tabPane.getComponentAt(i);
+				if(tc.getPower() != null)
 				{
-					Color color = SVGColorParser.parseColor(mmd.getPowerColor(power));
-					tabPane.setIconAt(tabIdx, new ColorRectIcon(12,12, color));
+					final Color color = SVGColorParser.parseColor(mmd.getPowerColor(tc.getPower()));
+					tabPane.setIconAt(i, new ColorRectIcon(12,12, color));
 				}
-           }
+			}
 		}
 	}// setTabIcons()
 	
@@ -382,10 +375,16 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	*	Fires which powers are displayable for the given tab.
 	*	Handles the All tab appropriately. (index 0). 
 	*/
-	private void setPowersDisplayed(int tabIdx)
+	private void setPowersDisplayed(final TabComponent tc)
 	{
-		if(tabIdx == 0)
+		if(tc == null)
 		{
+			return;
+		}
+		
+		if(tc.getPower() == null)
+		{
+			// "all powers"
 			final Power[] powers = world.getMap().getPowers();
 			clientFrame.fireDisplayablePowersChanged(clientFrame.getDisplayablePowers(), powers);
 			clientFrame.fireOrderablePowersChanged(clientFrame.getOrderablePowers(), Power.EMPTY_ARRAY);
@@ -394,8 +393,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		{
 			// need to match by tab name, since if a power was eliminated 
 			// the index will not correspond to Map.getPowers()
-			final Power selectedPower = world.getMap().getPower( tabPane.getTitleAt(tabIdx) );
-			final Power[] powerArray = new Power[]  { selectedPower };
+			final Power[] powerArray = new Power[]  { tc.getPower() };
 			clientFrame.fireDisplayablePowersChanged(clientFrame.getDisplayablePowers(), powerArray);
 			clientFrame.fireOrderablePowersChanged(clientFrame.getOrderablePowers(), powerArray);
 		}
@@ -419,14 +417,12 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		
 		// remove old tabs (except for 'all' tab)
 		tabPane.removeAll();
-		tabMap.clear();
 		
 		// create ALL_POWERS tab
-		tabPane.addTab(Utils.getLocalString(ALLPOWERS_TAB_LABEL), new JPanel(new BorderLayout()));
-		tabMap.put(TAB_ALL, new Integer(0));
+		tabPane.addTab(Utils.getLocalString(ALLPOWERS_TAB_LABEL), new TabComponent(null));
 		
 		// appropriately enable the ALL_POWERS tab.
-		setTabEnabled(TAB_ALL, turnState.isResolved());
+		setTabEnabled(null, turnState.isResolved());
 		
 		// create new power tabs
 		// disable tabs for powers that don't require orders during
@@ -442,32 +438,31 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 			final Power power = powers[i];
 			if( !pos.isEliminated(power) && power.isActive() )
 			{
-				// first tab added is at index 1 (0 is TAB_ALL)
-				final int tabIdx = (i+1);
+				// create icon, if possible
 				Icon icon = null;
-				
 				if(mmd != null)
 				{
 					Color color = SVGColorParser.parseColor(mmd.getPowerColor(power));
 					icon = new ColorRectIcon(12,12, color);
 				}
 				
-				tabMap.put(power, new Integer(tabIdx));
-				tabPane.addTab(power.getName(), icon, new JPanel(new BorderLayout()), "");
+				// create tab
+				tabPane.addTab(power.getName(), icon, new TabComponent(power), "");
 				
+				// disable tabs if appropriate
 				Adjustment.AdjustmentInfo adjInfo = f2fAdjMap.get(power);
 				if(turnState.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT)
 				{
 					if(adjInfo.getAdjustmentAmount() == 0)
 					{
-						tabPane.setEnabledAt(tabIdx, false);
+						setTabEnabled(power, false);
 					}
 				}
 				else if(turnState.getPhase().getPhaseType() == Phase.PhaseType.RETREAT)
 				{
 					if(adjInfo.getDislodgedUnitCount() == 0)
 					{
-						tabPane.setEnabledAt(tabIdx, false);
+						setTabEnabled(power, false);
 					}
 				}
 			}
@@ -480,10 +475,16 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		// that is not disabled. Otherwise, we will select the 'all' tab.
 		if(turnState.isResolved())
 		{
-			// at this point, tabPane.getSelectedIndex() == 0; thus if we set the
-			// index to 0, no 'changeevent' will be fired. We must force an update.
-			//
-			tabPane.setSelectedIndex(0);	// doesn't force an update...
+			// when resolved, we want to view 'all' orders. We do not want to 
+			// view individual power orders.
+			tabPane.setSelectedIndex(0);
+			
+			// disable individual power orders
+			for(int i=1; i<tabPane.getTabCount(); i++)
+			{
+				tabPane.setEnabledAt(i, false);
+			}
+			
 			tabListener.forceUpdate();		// but this will
 		}
 		else
@@ -496,7 +497,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 			else
 			{
 				// select a random power (not "all") tab
-				tabPane.setSelectedIndex(selectNextRandomTab());
+				tabPane.setSelectedComponent(selectNextRandomTab());
 			}
 		}
 	}// createTabs()
@@ -507,9 +508,9 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
      * Get the index of an unselected Power tab in a random way.
      *
      * @param tabPane the JTabbedPane containing the tabs
-     * @return the index of the selected tab, or -1 if no next random tab is available.
+     * @return the index of the selected tab, or null if no next random tab is available.
      */
-    private int selectNextRandomTab()
+    private TabComponent selectNextRandomTab()
 	{
  		// find Power tabs that are not disabled
 		final Power[] powers = world.getMap().getPowers();
@@ -517,23 +518,22 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
  		
 		for(int i=0; i<powers.length; i++)
 		{
-			final Power power = powers[i];
-			final int tabIdx = getTabIndex(power);
-			if(tabIdx >= 0 && tabPane.isEnabledAt(tabIdx))
+			TabComponent tc = getTabComponent(powers[i]);
+			if( tabPane.isEnabledAt(tabPane.indexOfComponent(tc)) )
 			{
-				tabSelectionOrderList.add(power);
+				tabSelectionOrderList.add(tc);
 			}
-	   }
+		}
 	   
-	   if(!tabSelectionOrderList.isEmpty())
+	   if(tabSelectionOrderList.isEmpty())
 	   {
-		   // shuffle, return first on list.
-		   Collections.shuffle(tabSelectionOrderList);
-		   return getTabIndex((Power) tabSelectionOrderList.get(0));
+		   return null; // no tabs left!
 	   }
 	   else
 	   {
-		   return -1;
+		   // shuffle, return first on list.
+		   Collections.shuffle(tabSelectionOrderList);
+		   return (TabComponent) tabSelectionOrderList.get(0);
 	   }
     }// selectNextRandomTab()
 
@@ -599,22 +599,13 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	
 	
 	/** 
-	*	Enables/Disables a given tab. Obj must be a Power or the 
-	*	internal constant TAB_ALL.
+	*	Enables/Disables a given tab. Obj must be a Power or 
+	*	null, which corresponds to the "All" tab.
 	*/
-	private void setTabEnabled(Object obj, boolean value)
+	private void setTabEnabled(final Power p, final boolean value)
 	{
-		// sanity check
-		if(obj != TAB_ALL && !(obj instanceof Power))
-		{
-			throw new IllegalArgumentException();
-		}
-		
-		final int idx = getTabIndex(obj);
-		if(idx >= 0)
-		{
-			tabPane.setEnabledAt(idx, value);
-		}
+		final TabComponent tc = getTabComponent(p);
+		tabPane.setEnabledAt(tabPane.indexOfComponent(tc), value);
 	}// setTabEnabled()
 	
 	
@@ -622,45 +613,33 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	*	Checks if a tab is Enabled/Disabled. Obj must be a Power or 
 	*	internal constant TAB_ALL.
 	*/
-	private boolean isTabEnabled(Object obj)
+	private boolean isTabEnabled(final Power p)
 	{
-		// sanity check
-		if(obj != TAB_ALL && !(obj instanceof Power))
-		{
-			throw new IllegalArgumentException();
-		}
-		
-		final int idx = getTabIndex(obj);
-		if(idx >= 0)
-		{
-			return tabPane.isEnabledAt(idx);
-		}
-		
-		return false;
+		final TabComponent tc = getTabComponent(p);
+		return tabPane.isEnabledAt(tabPane.indexOfComponent(tc));
 	}// isTabEnabled()
 	
 	
 	/**
-	*	Get the index of a tab. Obj must be a Power or 
-	*	internal constant TAB_ALL. If the tab is not found,
-	*	-1 is returned.
+	*	Gets a TabComponent for the given Power; does not return null
 	*/
-	private int getTabIndex(Object obj)
+	private TabComponent getTabComponent(final Power p)
 	{
-		// sanity check
-		if(obj != TAB_ALL && !(obj instanceof Power))
+		for(int i=0; i<tabPane.getTabCount(); i++)
 		{
-			throw new IllegalArgumentException();
+			TabComponent tc = (TabComponent) tabPane.getComponentAt(i);
+			if(tc == null)
+			{
+				throw new IllegalStateException("null TabComponent set for power: "+p);
+			}
+			else if(Utils.areEqual(p, tc.getPower()))
+			{
+				return tc;
+			}
 		}
 		
-		Integer i = (Integer) tabMap.get(obj);
-		return (i == null) ? -1 : i.intValue();
-	}// getTabIndex()
-	
-	
-	
-	
-	
+		throw new IllegalStateException("power "+p+" is not in the tabpane");
+	}// getTabComponent()
 	
 	
 	
@@ -684,7 +663,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 			
 			// set TAB_ALL enabled (if aSubmit == true, at least one turn
 			// was submitted, and thus we must disable)
-			setTabEnabled(TAB_ALL, !aSubmit);
+			setTabEnabled(null, !aSubmit);
 			
 			// set selected tab
 			if(state.getCurrentPower() == null)
@@ -693,16 +672,17 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 				// select a random tab.
 				if(turnState.isResolved())
 				{
-					tabPane.setSelectedIndex(getTabIndex(TAB_ALL));
+					// set to index 0 : TAB_ALL
+					tabPane.setSelectedIndex(0);
 				}
 				else
 				{
-					tabPane.setSelectedIndex(selectNextRandomTab());
+					tabPane.setSelectedComponent(selectNextRandomTab());
 				}
 			}
 			else
 			{
-				tabPane.setSelectedIndex( getTabIndex(state.getCurrentPower()) );
+				tabPane.setSelectedComponent( getTabComponent(state.getCurrentPower()) );
 			}
 		}
 	}// setupState()
@@ -721,16 +701,20 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		else
 		{
 			entryState.setCurrentPower(null);
-			final int selectedIdx = tabPane.getSelectedIndex();
 			final Power[] powers = world.getMap().getPowers();
+			
+			// set submitted
 			for(int i=0; i<powers.length; i++)
 			{
 				final Power power = powers[i];
 				entryState.setSubmitted(power, !isTabEnabled(power));
-				if(selectedIdx >= 0 && selectedIdx == getTabIndex(power))
-				{
-					entryState.setCurrentPower(power);
-				}
+			}
+			
+			// set current power
+			final TabComponent tc = (TabComponent) tabPane.getSelectedComponent();
+			if(tc.getPower() != null)
+			{
+				entryState.setCurrentPower(tc.getPower());
 			}
 		}
 	}// saveEntryState()
@@ -831,6 +815,26 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 			return copy.submittedMap.entrySet().iterator();
 		}// iterator()
 	}// nested class F2FState
+	
+	
+	/** The component of a Tab. Has a BorderLayout. */
+	class TabComponent extends JPanel
+	{
+		private final Power power;
+		
+		public TabComponent(Power power)
+		{
+			super();
+			this.power = power;
+			setLayout(new BorderLayout());
+		}// TabComponent()
+		
+		/** Gets a Power associated with a component, or null if the 'all' tab */
+		public Power getPower()
+		{
+			return power;
+		}// get()
+	}// class TabComponent
 	
 }// class F2FOrderDisplayPanel
 
