@@ -1691,6 +1691,13 @@ public class Utils
     }// isInWebstart()
 
 	
+	/**
+	* 	Null-safe object comparison.
+	*/
+	public static boolean areEqual(Object obj1, Object obj2)
+	{
+		return (obj1 == null) ? (obj2 == null) : obj1.equals(obj2);
+	}// areEqual()
 	
 	
 	
