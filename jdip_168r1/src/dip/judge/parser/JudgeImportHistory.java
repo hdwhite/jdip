@@ -519,7 +519,9 @@ final class JudgeImportHistory
 				}
 				catch(OrderException e)
 				{
-					Log.println("JIH::procMove():OrderException! using loose validation....");
+					Log.println("  *** JIH::procMove():OrderException while processing order: ", order);
+					Log.println("      error: ", e);
+					Log.println("      Retesting with loose validation");
 					
 					//Try loosening the validation object
 					valOpts.setOption(ValidationOptions.KEY_GLOBAL_PARSING, ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE);
@@ -588,6 +590,7 @@ final class JudgeImportHistory
 						} else {
 							unit.setCoast(order.getSource().getCoast());
 							position.setDislodgedUnit(order.getSource().getProvince(), unit);
+							Log.println("     unit dislodged: ", order.getSource().getProvince());
 						}					
 					}
 					else if( ordResult.getResultType() == OrderResult.ResultType.SUCCESS
@@ -769,6 +772,7 @@ final class JudgeImportHistory
 							unit.setCoast(move.getSource().getCoast());
 							position.setDislodgedUnit(move.getSource().getProvince(), unit);
 							position.setLastOccupier(move.getSource().getProvince(), move.getPower());
+							Log.println("     unit dislodged: ", move.getSource().getProvince());
 						} else {
 							unit.setCoast(move.getDest().getCoast());
 							position.setUnit(move.getDest().getProvince(), unit);
@@ -783,6 +787,7 @@ final class JudgeImportHistory
 						if(!positionPlacement) {
 							unit.setCoast(order.getSource().getCoast());
 							position.setDislodgedUnit(order.getSource().getProvince(), unit);
+							Log.println("     unit dislodged: ", order.getSource().getProvince());
 						}
 					}
 				}
@@ -1049,7 +1054,7 @@ final class JudgeImportHistory
 			{
 				Unit newUnit = (Unit) unit.clone();
 				newPos.setUnit(p, newUnit);
-				Log.println("  cloned unit from/into: ", p);
+				Log.println("  cloned unit from/into: ", p, " - ", unit.getPower());
 			}
 			
 			unit = oldPos.getDislodgedUnit(p);
@@ -1057,7 +1062,7 @@ final class JudgeImportHistory
 			{
 				Unit newUnit = (Unit) unit.clone();
 				newPos.setDislodgedUnit(p, newUnit);
-				Log.println("  cloned dislodged unit from/into: ", p);
+				Log.println("  cloned dislodged unit from/into: ", p, " - ", unit.getPower());
 			}
 			
 			// clone any lastOccupied info as well.
@@ -1202,6 +1207,7 @@ final class JudgeImportHistory
 		DislodgedParser.DislodgedInfo[] dislodgedInfo, boolean positionPlacement)
 	throws IOException
 	{
+		Log.println("JIH::makeDislodgedResults() [", phase, "]");
 		ListIterator iter = results.listIterator();
 		while(iter.hasNext())
 		{
@@ -1211,6 +1217,7 @@ final class JudgeImportHistory
 				OrderResult orderResult = (OrderResult) result;
 				if(OrderResult.ResultType.DISLODGED.equals(orderResult.getResultType()))
 				{
+					Log.println("  failed order: ", orderResult.getOrder());
 					String[] retreatLocNames = null;
 					for(int i=0; i<dislodgedInfo.length; i++)
 					{
@@ -1247,6 +1254,8 @@ final class JudgeImportHistory
 								retreatLocations[i] = retreatLocations[i].getValidated(orderResult.getOrder().getSourceUnitType());
 							}
 							
+							Log.println("    possible retreats: ", retreatLocations);
+							
 							// remove old dislodged result, replacing with the new dislodged result
 							iter.set(new DislodgedResult(orderResult.getOrder(), retreatLocations));
 							
@@ -1266,8 +1275,6 @@ final class JudgeImportHistory
 								else {	unit = position.getUnit(province);	}
 								
 								position.setDislodgedUnit(province, null);
-								
-								// System.out.println(" ** DESTROYING unit: "+unit+" at "+province);
 								
 								// send result
 								iter.add(new Result(unit.getPower(), Utils.getLocalString(STDADJ_MV_UNIT_DESTROYED, unit.getType().getFullName(), province)));
