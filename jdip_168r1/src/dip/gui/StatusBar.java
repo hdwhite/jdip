@@ -48,6 +48,8 @@ public class StatusBar extends JPanel
 	public StatusBar()
 	{
 		super(new BorderLayout());
+		setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+		
 		text = new JTextField(INITIAL_MESSAGE)
 		{
 			public boolean isFocusable()
@@ -59,9 +61,12 @@ public class StatusBar extends JPanel
 		text.setEditable(false);
 		text.setBorder(new EmptyBorder(3,3,3,3));
 		text.setHighlighter(null);
+		text.setOpaque(false);
 		add(text, BorderLayout.CENTER);
-		setBorder(new EtchedBorder(EtchedBorder.LOWERED));
 		
+		//text.setOpaque(false);
+		System.out.println("txt bg: "+text.getBackground());
+		System.out.println("panel bg: "+this.getBackground());
 		
 		mode = new JTextField("", 8)
 		{
@@ -73,6 +78,7 @@ public class StatusBar extends JPanel
 		mode.setHorizontalAlignment(JTextField.RIGHT);
 		mode.setEditable(false);
 		mode.setHighlighter(null);
+		mode.setOpaque(false);
 		mode.setBorder(new EmptyBorder(3,3,3,3));
 		mode.setMinimumSize(new Dimension(45, (int)text.getPreferredSize().getHeight()));
 		mode.setMaximumSize(mode.getMinimumSize());
