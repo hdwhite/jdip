@@ -208,17 +208,17 @@
 		</MAP>
 
 		<RULEOPTIONS>
-			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_HOME_ONLY" />
+			<RULEOPTION name="OPTION_BUILDS" value="VALUE_BUILDS_ANY_IF_HOME_OWNED" />
 		</RULEOPTIONS>
 		
 		<POWER name="Burgundy" active="true" adjective="Burgundian" />
 		<POWER name="Sicily" active="true" adjective="Sicilian" />
 		<POWER name="Eire" active="true" adjective="Irish" />
 		<POWER name="Hungary" active="true" adjective="Hungarian" />
-		<POWER name="Israel" active="true" adjective="Israeli" />
+		<POWER name="Israel" active="true" adjective="Israelite" />
 		<POWER name="Poland" active="true" adjective="Polish" />
 		<POWER name="Spain" active="true" adjective="Spanish" />
-		<POWER name="Ukraine" active="true" adjective="Ukrainian" />
+		<POWER name="Ukraine" active="true" adjective="Ukranian" />
 		<POWER name="Byzantium" active="true" adjective="Byzantine" />
 		<STARTINGTIME turn="Spring, 1901, Movement" />
 		<VICTORYCONDITIONS>
