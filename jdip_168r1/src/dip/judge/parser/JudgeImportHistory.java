@@ -643,16 +643,8 @@ final class JudgeImportHistory
 		// process dislodged unit info, to determine retreat paths
 		// correct dislodged results are created here, and the old dislodged 
 		// results are removed
-		if(!positionPlacement)
-		{
-			DislodgedParser dislodgedParser = new DislodgedParser(ts.getPhase(), turn.getText());
-			makeDislodgedResults(ts.getPhase(), results, position, dislodgedParser.getDislodgedInfo(), false);
-		}
-		else
-		{
-			DislodgedParser dislodgedParser = new DislodgedParser(ts.getPhase(), turn.getText());
-			makeDislodgedResults(ts.getPhase(), results, position, dislodgedParser.getDislodgedInfo(), true);
-		}
+		DislodgedParser dislodgedParser = new DislodgedParser(ts.getPhase(), turn.getText());
+		makeDislodgedResults(ts.getPhase(), results, position, dislodgedParser.getDislodgedInfo(), positionPlacement);
 		
 		// process adjustment info ownership info (if any)
 		//
@@ -1208,6 +1200,7 @@ final class JudgeImportHistory
 	throws IOException
 	{
 		Log.println("JIH::makeDislodgedResults() [", phase, "]");
+		Log.println("  # results: ", results.size());
 		ListIterator iter = results.listIterator();
 		while(iter.hasNext())
 		{
@@ -1218,6 +1211,7 @@ final class JudgeImportHistory
 				if(OrderResult.ResultType.DISLODGED.equals(orderResult.getResultType()))
 				{
 					Log.println("  failed order: ", orderResult.getOrder());
+					
 					String[] retreatLocNames = null;
 					for(int i=0; i<dislodgedInfo.length; i++)
 					{

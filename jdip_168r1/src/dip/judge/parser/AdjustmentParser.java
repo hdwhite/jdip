@@ -369,12 +369,19 @@ public class AdjustmentParser
 				final String[] provs = sb.toString().split("[\\,]");
 				
 				// clean up province tokens
+				// remove parentheses (put on blockaded SC in games with Wings)
 				for(int pi=0; pi<provs.length; pi++)
 				{
 					provs[pi] = provs[pi].trim();
-					if(provs[pi].endsWith("."))
+					if(provs[pi].endsWith(".") || provs[pi].endsWith(")"))
 					{
 						provs[pi] = provs[pi].substring(0, provs[pi].length()-1);
+					}
+					
+					
+					if(provs[pi].startsWith("("))
+					{
+						provs[pi] = provs[pi].substring(1);
 					}
 				}
 				

@@ -1286,7 +1286,7 @@ public class NJudgeOrderParser
 			}
 		}
 		
-		// if no result created, create a succes result.
+		// if no result created, create a success result.
 		if(results.isEmpty())
 		{
 			results.add(new OrderResult(order, OrderResult.ResultType.SUCCESS, null));

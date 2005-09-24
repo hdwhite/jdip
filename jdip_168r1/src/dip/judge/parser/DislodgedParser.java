@@ -32,6 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dip.world.Phase;
+import dip.misc.Log;
 /**
 	Parses the Dislodged block
 */	
@@ -68,7 +69,8 @@ public class DislodgedParser
 	*	Lines are trimmed prior to parsing.<br>
 	*	"in" or "over" used (Wing units are "over" provinces; armies/fleets "in")<br>
 	*/
-	public static final String DESTROYED_REGEX = "(?i)^the\\s+(\\p{Graph}*)\\s+(\\p{Graph}*)\\s*(?:in|over)\\s+(?:the)?\\s*(([\\p{Graph}\\p{Blank}]*))with\\s+no\\s+valid\\s+retreats.*\\.";
+	public static final String DESTROYED_REGEX_1 = "(?i)^the\\s+(\\p{Graph}*)\\s+(\\p{Graph}*)\\s*(?:in|over)\\s+(?:the)?\\s*(([\\p{Graph}\\p{Blank}]*))with\\s+no\\s+valid\\s+retreats.*\\.";
+	public static final String DESTROYED_REGEX_2 = "(?i)^the\\s+(\\p{Graph}*)\\s+(\\p{Graph}*)\\s*(?:in|over)\\s+(?:the)?\\s*(([\\p{Graph}\\p{Blank}]*))was\\s+destroyed\\.";
 	
 	
 	// INSTANCE VARIABLES
@@ -207,6 +209,8 @@ public class DislodgedParser
 	private void parseInput(String input)
 	throws IOException
 	{
+		Log.println("DislodgedParser::parseInput()");
+		
 		// Create HEADER_REGEX pattern, HEADER_END_REGEX pattern 
 		Pattern header = Pattern.compile(HEADER_REGEX);
 		Pattern endHeader = Pattern.compile(HEADER_END_REGEX);
@@ -283,17 +287,21 @@ public class DislodgedParser
 		line = null;
 		header = null;
 		
-		//System.out.println("(DislodgedParser) text:");
-		//System.out.println("||>>"+accum.toString()+"<<||");
-		//System.out.println("-----");
+		/*
+		System.out.println("(DislodgedParser) text:");
+		System.out.println("||>>"+accum.toString()+"<<||");
+		System.out.println("-----");
+		*/
 		
 		// create a list of Dislodged units
 		List disList = new LinkedList();
 		
 		// Create patterns
-		Pattern destroyed = Pattern.compile(DESTROYED_REGEX);
-		Pattern dislodged = Pattern.compile(DISLODGED_REGEX);
+		Pattern[] destroyeds = new Pattern[2];
+		destroyeds[0] = Pattern.compile(DESTROYED_REGEX_1);
+		destroyeds[1] = Pattern.compile(DESTROYED_REGEX_2);
 		
+		Pattern dislodged = Pattern.compile(DISLODGED_REGEX);
 		
 		// parse accum line-by-line, looking for DESTROYED_REGEX and
 		// DISLODGED_REGEX.
@@ -305,18 +313,27 @@ public class DislodgedParser
 			
 			//System.out.println("LINE: "+line);
 			
-			Matcher m = destroyed.matcher(line);
-			if(m.lookingAt())
+			boolean foundMatch = false;
+			
+			for(int i=0; i<destroyeds.length; i++)
 			{
-				disList.add(new DislodgedInfo( 
-					m.group(1),
-					m.group(2),
-					ParserUtils.filter( m.group(3).trim() ),
-					null));
+				Matcher m = destroyeds[i].matcher(line);
+				if(m.lookingAt())
+				{
+					disList.add(new DislodgedInfo( 
+						m.group(1),
+						m.group(2),
+						ParserUtils.filter( m.group(3).trim() ),
+						null));
+					
+					foundMatch = true;
+					break;
+				}
 			}
-			else
+			
+			if(!foundMatch)
 			{
-				m = dislodged.matcher(line);
+				Matcher m = dislodged.matcher(line);
 				if(m.lookingAt())
 				{
 					// parse location-list predicate
@@ -331,17 +348,21 @@ public class DislodgedParser
 						m.group(2),
 						ParserUtils.filter(m.group(3).trim()),
 						retreatLocs));
+					foundMatch = true;
 				}
 			}
-		}
+			
+			if(!foundMatch)
+			{
+				throw new IOException("Could not parse dislodged order: \""+line+"\"");
+			}
+		}// while()
 		
 		dislodgedInfo = (DislodgedInfo[]) disList.toArray(new DislodgedInfo[disList.size()]);
 	}// parseInput()
 		
-	
-	
-	
-}// class RetreatParser
+
+}// class DislodgedParser
 	
 	
 	
