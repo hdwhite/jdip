@@ -661,9 +661,9 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 				setTabEnabled(power, !value);
 			}
 			
-			// set TAB_ALL enabled (if aSubmit == true, at least one turn
-			// was submitted, and thus we must disable)
-			setTabEnabled(null, !aSubmit);
+			// TAB_ALL is enabled iff the turn has been resolved. Otherwise,
+			// it is disabled.
+			setTabEnabled(null, turnState.isResolved());
 			
 			// set selected tab
 			if(state.getCurrentPower() == null)
