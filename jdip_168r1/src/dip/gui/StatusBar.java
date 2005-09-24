@@ -48,7 +48,8 @@ public class StatusBar extends JPanel
 	public StatusBar()
 	{
 		super(new BorderLayout());
-		setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+		
+		add(new javax.swing.JSeparator(), BorderLayout.NORTH);
 		
 		text = new JTextField(INITIAL_MESSAGE)
 		{
@@ -63,10 +64,6 @@ public class StatusBar extends JPanel
 		text.setHighlighter(null);
 		text.setOpaque(false);
 		add(text, BorderLayout.CENTER);
-		
-		//text.setOpaque(false);
-		System.out.println("txt bg: "+text.getBackground());
-		System.out.println("panel bg: "+this.getBackground());
 		
 		mode = new JTextField("", 8)
 		{

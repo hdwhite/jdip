@@ -26,6 +26,7 @@ import java.awt.Insets;
 
 import javax.swing.JToolBar;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 
 import org.apache.batik.dom.events.DOMKeyEvent;
 import org.w3c.dom.events.MouseEvent;
@@ -50,7 +51,10 @@ public abstract class ControlBar extends JToolBar implements DOMUIEventHandler
 		setMargin(new Insets(5,5,5,5));
 		setFloatable(false);
 		setRollover(true);
-		setBorder(new EtchedBorder(EtchedBorder.LOWERED)); 
+		// TODO: we need just a 'top' border, no bottom border, and even a top
+		// border doesn't look right when the scrollbar is in place.
+		//setBorder(new EtchedBorder(EtchedBorder.LOWERED)); 
+		setBorder(new LineBorder(getBackground().darker()));
 		this.mapPanel = mp;
 	}// ControlBar()
 	
