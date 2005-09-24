@@ -89,8 +89,7 @@ public class XJFileChooser
 	*/
 	
 	// class variables
-	private static XJFileChooser instance = null;
-	private static SwingWorker loader = null;
+	private static final XJFileChooser instance = new XJFileChooser();
 	private static int refcount = 0;
 	
 	// instance variables
@@ -114,40 +113,11 @@ public class XJFileChooser
 	*	Can be used to initialize the XJFileChooser when called
 	*	to provide faster response later
 	*/
-	public static synchronized void init()
+	public synchronized static void init()
 	{
-		if(instance == null)
-		{
-			if(Utils.isOSX())
-			{
-				instance = new XJFileChooser();
-			}
-			else
-			{
-				if(loader == null)
-				{
-					loader = new SwingWorker()
-					{
-						public Object construct()
-						{
-							long time = System.currentTimeMillis();
-							XJFileChooser xjf = new XJFileChooser();
-							Log.printTimed(time, "XJFileChooser construct() complete: ");
-							return xjf;
-						}// construct()
-					};
-					
-					loader.start(Thread.MIN_PRIORITY);
-				}
-				else
-				{
-					Log.println("XJFileChooser waiting()...");
-					instance = (XJFileChooser) loader.get();
-					loader = null;
-				}
-			}
-		}
+		// does nothing; no longer needed
 	}// init()
+	
 	
 	/**
 	*	Gets the XJFileChooser (only one exists -- this must be 
@@ -157,19 +127,14 @@ public class XJFileChooser
 	*	means that (usually) only the AcceptAll file filter 
 	*	(which is not a SimpleFileFilter) remains.
 	*/
-	public static synchronized XJFileChooser getXJFileChooser()
+	public synchronized static XJFileChooser getXJFileChooser()
 	{
-		if(instance == null)
-		{
-			instance = new XJFileChooser();
-		}
-		
 		refcount++;
 		if(refcount > 1)
 		{
 			throw new IllegalStateException("cannot re-use getXJFileChooser(): "+refcount);
 		}
-		
+	
 		instance.reset();
 		return instance;
 	}// getXJFileChooser()
@@ -629,7 +594,6 @@ public class XJFileChooser
 			return null;
 		}// display()
 	}// class CheckedJFileChooser
-
 		
 }// class XJFileChooser
 
