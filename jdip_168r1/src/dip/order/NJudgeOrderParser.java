@@ -433,20 +433,8 @@ public class NJudgeOrderParser
 			sb.append(this.getClass().getName());
 			sb.append("[");
 			sb.append(getOrder());
-			sb.append(";");
-			if(results != null)
-			{
-				Iterator iter = results.iterator();
-				while(iter.hasNext())
-				{
-					Result result = (Result) iter.next();
-					sb.append(result);
-					if(iter.hasNext())
-					{
-						sb.append(",");
-					}
-				}
-			}
+			
+			sb.append(";results=");
 			sb.append(results);
 			
 			sb.append(",isAdjust=");

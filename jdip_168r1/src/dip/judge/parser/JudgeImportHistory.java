@@ -307,16 +307,20 @@ final class JudgeImportHistory
 	private void procTurn(Turn turn, Turn prevTurn, Turn thirdTurn, boolean positionPlacement)
 	throws IOException
 	{
+		Log.println("JIH:procTurn():METHOD ENTRY");
 		Phase phase = turn.getPhase();
 		if(phase != null)
 		{
 			Phase.PhaseType phaseType = phase.getPhaseType();
 			if(phaseType == Phase.PhaseType.MOVEMENT)
 			{
+				Log.println("JIH:procTurn():MOVEMENT START");
 				procMove(turn, positionPlacement);
+				Log.println("JIH:procTurn():MOVEMENT END");
 			}
 			else if(phaseType == Phase.PhaseType.RETREAT)
 			{
+				Log.println("JIH:procTurn():RETREAT START");
 					/*
 					 * Set the proper positionPlacement value depending on if the turn being
 					 * processed is the final turn. Set it back again when done. 
@@ -328,9 +332,11 @@ final class JudgeImportHistory
 					
 					if(!finalTurn)	{	procMove(prevTurn, positionPlacement);	}
 					else			{ 	procMove(prevTurn, !positionPlacement);	}
+				Log.println("JIH:procTurn():RETREAT END");
 			}
 			else if(phaseType == Phase.PhaseType.ADJUSTMENT)
 			{
+				Log.println("JIH:procTurn():ADJUSTMENT START");
 				Phase.PhaseType prevPhaseType = Phase.PhaseType.MOVEMENT; // dummy
 				if (prevTurn != null) {
 					Phase phase_p = prevTurn.getPhase();
@@ -372,12 +378,14 @@ final class JudgeImportHistory
 						procMove(thirdTurn, !positionPlacement);
 					}
 				}
+				Log.println("JIH:procTurn():ADJUSTMENT END");
 			}
 			else
 			{
 				throw new IllegalStateException("unknown phase type");
 			}
 		}
+		Log.println("JIH:procTurn():METHOD EXIT");
 	}// procTurn()
 	
 	
@@ -414,17 +422,33 @@ final class JudgeImportHistory
 	}// makeTurnState()
 	
 	
-	
-	/** Process a Movement phase turn */
-	private void procMove(Turn turn, boolean positionPlacement)
+	/** Old method */
+	private void procMove(Turn turn, final boolean positionPlacement)
 	throws IOException
 	{
-		if (turn == null) return;
+		procMove(turn, positionPlacement, false);
+	}// procMove()
+	
+	
+	/** Process a Movement phase turn */
+	private void procMove(Turn turn, final boolean positionPlacement, final boolean isRetreatMoveProcessing)
+	throws IOException
+	{
+		Log.println("JIH::procMove():METHOD ENTRY");
+		Log.println("  positionPlacement = ", positionPlacement);
+		Log.println("  isRetreatMoveProcessing = ", isRetreatMoveProcessing);
+		if (turn == null)
+		{
+			return;
+		}
+		
 		// create TurnState
+		Log.println("  Turn.getPhase() = ", turn.getPhase());
+		
 		TurnState ts = makeTurnState(turn, positionPlacement);
 		List results = ts.getResultList();
 		
-		Log.println("JIH::procMove(): ", ts.getPhase(), "; positionPlacement: ", String.valueOf(positionPlacement));
+		Log.println("  Turnstate created. Phase: ", ts.getPhase());
 		
 		// copy previous lastOccupier information into current turnstate.
 		copyPreviousLastOccupierInfo(ts);
@@ -433,8 +457,11 @@ final class JudgeImportHistory
 		final JudgeOrderParser jop = new JudgeOrderParser(map, orderFactory, turn.getText());
 		final NJudgeOrder[] nJudgeOrders = jop.getNJudgeOrders();
 		
-		// get Position
+		// get Position. Remember, this position contains no units.
 		Position position = ts.getPosition();
+		
+		Log.println("  :Creating start positions; # NJudgeOrders = ", nJudgeOrders.length);
+		Log.println("  :getResultList().size() = ", results.size());
 		
 		// create units from start position
 		for(int i=0; i<nJudgeOrders.length; i++)
@@ -465,16 +492,43 @@ final class JudgeImportHistory
 			}
 			
 			// create unit, and add to Position
+			// we may have to add the unit in a dislodged position.
+			// We must first check for a 'dislodged' indicator.
+			boolean isUnitDislodged = false;
+			if(isRetreatMoveProcessing)
+			{
+				Iterator iter = njo.getResults().iterator();
+				while(iter.hasNext())
+				{
+					final Result r = (Result) iter.next();
+					if(r instanceof OrderResult)
+					{
+						if( ((OrderResult) r).getResultType().equals(OrderResult.ResultType.DISLODGED) )
+						{
+							isUnitDislodged = true;
+							break;
+						}
+					}
+				}
+			}
+			
 			Unit unit = new Unit(order.getPower(), unitType);
 			unit.setCoast(loc.getCoast());
-			position.setUnit(loc.getProvince(), unit);
 			position.setLastOccupier(loc.getProvince(), power);
+			
+			if(isUnitDislodged)
+			{
+				position.setDislodgedUnit(loc.getProvince(), unit);
+				Log.println("  :created dislodged unit: ", unit, " at ", loc);
+			}
+			else
+			{
+				position.setUnit(loc.getProvince(), unit);
+				Log.println("  :created unit: ", unit, " at ", loc);
+			}
 			
 			// if we found a Wing unit, make sure Wing units are enabled.
 			checkAndEnableWings(unitType);
-			
-			// debug
-			//System.out.println("  "+location+"; "+unit);
 		}
 		
 		
@@ -484,11 +538,11 @@ final class JudgeImportHistory
 		// note that we only need to set the last occupier for changing (moving)
 		// units, but we will do it for all units for consistency
 		//
-		{	
+		{
 			// create orderMap, which maps powers to their respective order list
 			Power[] powers = map.getPowers();
 			
-			Log.println("JIH::procMove():CREATING POWER->ORDER MAP");
+			Log.println("  :created power->order mapping");
 			
 			HashMap orderMap = new HashMap(powers.length);
 			for(int i=0; i<powers.length; i++)
@@ -659,6 +713,7 @@ final class JudgeImportHistory
 		
 		// add to world
 		world.setTurnState(ts);
+		Log.println("JIH::procMove(): METHOD EXIT");
 	}// procMove()
 	
 	
@@ -667,6 +722,7 @@ final class JudgeImportHistory
 	private void procRetreat(Turn turn, boolean positionPlacement)
 	throws IOException
 	{
+		Log.println("JIH::procRetreat(): METHOD START");
 		if (turn == null) return;
 		// create TurnState
 		final TurnState ts = makeTurnState(turn, positionPlacement);
@@ -674,7 +730,7 @@ final class JudgeImportHistory
 		final List results = ts.getResultList();
 		final RuleOptions ruleOpts = world.getRuleOptions();
 		
-		Log.println("JIH::procRetreat(): ", ts.getPhase(), "; positionPlacement: ", String.valueOf(positionPlacement));
+		Log.println("  :procRetreat(): ", ts.getPhase(), "; positionPlacement: ", String.valueOf(positionPlacement));
 		
 		// parse orders, and create orders for each unit
 		JudgeOrderParser jop = new JudgeOrderParser(map, orderFactory, turn.getText());
@@ -804,6 +860,7 @@ final class JudgeImportHistory
 		
 		// add to world
 		world.setTurnState(ts);
+		Log.println("JIH::procRetreat(): METHOD EXIT");
 	}// procRetreat()
 	
 	
