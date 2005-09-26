@@ -3,28 +3,30 @@ NOTE: This is a PREVIEW RELEASE. Please read the following for
 information about important changes and bug status.
 ===========================================================================
 
-=============== NOTES =================
-- Features not fully tested:
-	+ New Windows installer
-	+ New OS X file dialogs
-    
+================= NOTES =======================
+- floc.net importing improvements (see below)
+
 - please report any issues to:
-	 jdip-developer [@] sourceforge.net
-	
+     
+    
 - floc.net importing should now work.
 =======================================
 
 
-jDip 1.7.0 PREVIEW RELEASE 1 Changelog
+jDip 1.7.0 PREVIEW RELEASE 2 Changelog
 ======================================
+- This is a PREVIEW RELEASE. There have been many bug fixes and improvements
+  since the prior release; however, some bug fixes are still in progress.
+  Please report any issues to "jdip-developer [at] sourceforge.net"
+  
 - New or Improved Features:                     
-	+ 1900 Variants added (thanks to Ian Scrivins)
+    + 1900 Variants added (thanks to Ian Scrivins)
         - Please note caveats under "Known Issues" 
-	+ Aberration V variant and symbols added (thanks to Stefano Costantini)
+    + Aberration V variant and symbols added (thanks to Stefano Costantini)
     + Ancient Med variant and symbols added (thanks to Stefano Costantini)
     + Renaissance variant added (thanks to Ian Scrivins)
     + New Windows installer, which an automatically download Java if needed
-	+ Size (smaller by more than 1 MB) and speed improvements
+    + Size (smaller by more than 1 MB) and speed improvements
     + Mac OS X: better file chooser.
     + Online bug reports (which occurs with severe jDip errors) is
       are considerably more detailed.
@@ -38,12 +40,14 @@ jDip 1.7.0 PREVIEW RELEASE 1 Changelog
       more helpful and detailed online bug reports.
     + Upgraded SVG rendering system to Batik 1.6.
     + Upgraded other dependencies to newer versions.
-	+ Variant directory may be selected manually if not found at startup.
+    + Variant directory may be selected manually if not found at startup.
+    + Face to Face mode: now, only the "All" tab is available when reviewing
+      orders from a just-adjudiated (resolved) turn. 
 - Fixed Bugs:
     + Aberration V bugs fixed [1283902, 1283893]
     + Deleting of single orders does not work [1005872, 1118742]
     + Hold Support could be issued to nonadjacent units [1231701]
-	+ Adjudication error: No convoy, but bounce [1205531, 1116568, 1053458]
+    + Adjudication error: No convoy, but bounce [1205531, 1116568, 1053458]
         - This is now fixed. As it turns out, one of the test cases 
           had an incorrect resolution that masked this bug in prior versions.
     + Incorrect importing of history files [1035292]
@@ -70,7 +74,7 @@ jDip 1.7.0 PREVIEW RELEASE 1 Changelog
     + Cannot import - underscore not supported [1117835]
     + Many subtle order parsing errors were fixed.
     + DPJudge Chaos map now works.
-    + Many Face-to-Face (F2F) mode errors fixed.
+    + Face-to-Face (F2F) mode errors fixed.
     + Exceptions should no longer occur when jDip exits.
     + Hundred map fixes.
     + Map label (name) preferences and name menu should now correlate.
@@ -82,26 +86,34 @@ jDip 1.7.0 PREVIEW RELEASE 1 Changelog
       in this version due to extensive fixes. All non-F2F games remain 
       compatible with this version.
 - Known issues:
-	+ 1900 Variant
-		- The Suez rule and Steamroller may have to be adjudicated manually, as
-		  jDip does not yet automatically support these features. Note that 
-		  this may cause imported games (e.g., from floc.net) to fail.
-	+ Network Proxy Support
-		- Built-in proxy detection and configuration will not be implemented
-		  in this version (for various reasons; it will be included in a future
-		  version). 
-		- There is a commandline workaround: 
-		     java -jar jdip.jar -Dhttp.proxyHost=<i>proxyhost</i>
-		          -Dhttp.proxyPort=<i>port</i>
-		  for example:
-		     java -jar jdip.jar -Dhttp.proxyHost=myproxy -Dhttp.proxyPort=8080
+    + 1900 Variant
+        - The Suez rule and Steamroller may have to be adjudicated manually, as
+          jDip does not yet support these features. This will cause imported 
+		  games from floc.net to fail.
+    + Network Proxy Support
+        - Built-in proxy detection and configuration will not be implemented
+          in this version (for various reasons; it will be included in a future
+          version). 
+        - There is a commandline workaround: 
+             java -jar jdip.jar -Dhttp.proxyHost=<i>proxyhost</i>
+                  -Dhttp.proxyPort=<i>port</i>
+          for example:
+             java -jar jdip.jar -Dhttp.proxyHost=myproxy -Dhttp.proxyPort=8080
     + Importing of Hundred games may not work when the phases are advanced by
-	  5 years (e.g., A1420, A1425) instead of following the conventional phase
-	  format. This will be addressed in a future version. 	
+      5 years (e.g., A1420, A1425) instead of following the conventional phase
+      format. This will be addressed in a future version.   
     + There may be diagnostic output when opening or saving games, if 
       Java 5 (1.5.x) is used. The library we use to help save and open games
       is no longer being updated. This will be replaced in a future version.
       Replacing it in this version would break save-game compatibility.
+- Issues with floc.net importing
+    + jDip may report an error importing certain floc.net games. Some floc.net
+      games have missing or incomplete data. Examples include:
+         - USDP agitar2: there is no game history data
+         - USDP aardvark: an illegal build occurs (French Fleet in Portugal).
+                        note that illegal but judge-acceptable orders may be 
+                         allowed in a future version of jDip.
+         - USIN vgnp3078: there are no Fall 1911 movement phase orders
 - Acknowledgements:
     + Thanks to James Thompson II, who helped fix many bugs for this release.
     + Submitted online bug reports (either through Sourceforge, or from jDip 
