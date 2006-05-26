@@ -240,7 +240,7 @@
 			<ADJACENCY type="mv" refs="sah lep mar bay cir num" />
 		</PROVINCE>
 		<PROVINCE shortname="pun" fullname="Punic Sea">
-			<ADJACENCY type="mv" refs="ber tyn car sic sad tha aus got" />
+			<ADJACENCY type="xc" refs="ber tyn car sic sad tha aus got" />
 		</PROVINCE>
 		<PROVINCE shortname="rav" fullname="Ravenna">
 			<ADJACENCY type="mv" refs="apu rom etr ven" />
