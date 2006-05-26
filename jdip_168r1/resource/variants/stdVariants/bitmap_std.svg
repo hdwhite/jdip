@@ -297,7 +297,7 @@
 		<jdipNS:PROVINCE name="war"><jdipNS:UNIT x="682" y="513"/><jdipNS:DISLODGED_UNIT x="694" y="494"/><jdipNS:SUPPLY_CENTER x="715" y="512"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="wes"><jdipNS:UNIT x="337" y="831"/><jdipNS:DISLODGED_UNIT x="371" y="824"/><jdipNS:SUPPLY_CENTER x="0 " y="0 "/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="yor"><jdipNS:UNIT x="363" y="410"/><jdipNS:DISLODGED_UNIT x="374" y="446"/><jdipNS:SUPPLY_CENTER x="355" y="439"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="bul-ec"><jdipNS:UNIT x="818" y="775"/><jdipNS:DISLODGED_UNIT x="821" y="725"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="bul-ec"><jdipNS:UNIT x="818" y="755"/><jdipNS:DISLODGED_UNIT x="821" y="735"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="bul-sc"><jdipNS:UNIT x="779" y="807"/><jdipNS:DISLODGED_UNIT x="755" y="789"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="spa-nc"><jdipNS:UNIT x="218" y="697"/><jdipNS:DISLODGED_UNIT x="225" y="673"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="spa-sc"><jdipNS:UNIT x="235" y="801"/><jdipNS:DISLODGED_UNIT x="261" y="779"/></jdipNS:PROVINCE>
