@@ -234,7 +234,7 @@
 		<jdipNS:PROVINCE name="cir"><jdipNS:UNIT x="248" y="452"/><jdipNS:SUPPLY_CENTER x="264" y="445.1"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="cor"><jdipNS:UNIT x="319" y="225"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="cre"><jdipNS:UNIT x="662" y="392"/><jdipNS:SUPPLY_CENTER x="679.9" y="394"/></jdipNS:PROVINCE>
-		<jdipNS:PROVINCE name="cyp"><jdipNS:UNIT x="842" y="378"/><jdipNS:SUPPLY_CENTER x="407" y="672"/></jdipNS:PROVINCE>
+		<jdipNS:PROVINCE name="cyp"><jdipNS:UNIT x="842" y="378"/><jdipNS:SUPPLY_CENTER x="817" y="388"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="cyr"><jdipNS:UNIT x="637" y="518"/><jdipNS:SUPPLY_CENTER x="597.9" y="476"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="dac"><jdipNS:UNIT x="633" y="148"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="dal"><jdipNS:UNIT x="514" y="188"/><jdipNS:SUPPLY_CENTER x="463.8" y="150.3"/></jdipNS:PROVINCE>
