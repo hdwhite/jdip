@@ -263,19 +263,19 @@
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
 		<!-- Variant Package: Chaos (nJudge compatible) -->
-		<zip compress="true"   destfile="${variant.dir}/chaosNJudgeVariant.zip"
+		<zip compress="true"   destfile="${variant.dir}/ChaosNJudgeVariant.zip"
 				basedir="${resource.dir}/variants/chaos"
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
 		<!-- Variant Package: Chaos (DPJudge compatible) -->
-		<zip compress="true"   destfile="${variant.dir}/chaosDPJudgeVariant.zip"
+		<zip compress="true"   destfile="${variant.dir}/ChaosDPJudgeVariant.zip"
 				basedir="${resource.dir}/variants/chaos_dp"
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
 		<!-- Variant Package: Imperium -->
-		<zip compress="true"   destfile="${variant.dir}/imperiumVariants.zip"
+		<zip compress="true"   destfile="${variant.dir}/ImperiumVariants.zip"
 				basedir="${resource.dir}/variants/imperium"
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
@@ -287,7 +287,7 @@
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
 		<!-- Variant Package: Asia -->
-		<zip compress="true"   destfile="${variant.dir}/asiaVariants.zip"
+		<zip compress="true"   destfile="${variant.dir}/AsiaVariants.zip"
 				basedir="${resource.dir}/variants/asia"
 				excludes="*~ *.zip"
 				includes="*.xml *.jpg *.png *.svg *.gif"/>
