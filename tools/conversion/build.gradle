@@ -1,0 +1,56 @@
+apply plugin: 'java'
+
+repositories {
+
+    jcenter()
+}
+
+// This is really the important part
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+        resources {
+            srcDirs = ['resources']
+        }
+        // add tests sources here (this project didn't have them!)
+    }
+}
+
+
+jar {
+    baseName = "judgeconvert"
+    manifest {
+        attributes 'Main-Class': 'jdip.tool.conversion.MapConvert'
+    }
+}
+
+// this project builds two jars with different manifest
+task jar1(type: Jar) {
+    baseName = "rpconvert"
+    manifest {
+        attributes 'Main-Class': 'jdip.tool.conversion.RPConvert'
+    }
+    // add all classes and resources produced from main source set
+    from(sourceSets.main.output)
+}
+
+task zipDist( type: Zip) {
+    baseName = "conversion-tools"
+    from  configurations.runtime.allArtifacts.files
+    from fileTree('etc') {
+        exclude '*manifest*'
+    }
+}
+artifacts {
+    archives zipDist
+    runtime jar1 //only jar1 is mentioned, jar is included by default
+}
+
+
+dependencies {
+
+    // Add all the jar dependencies from the lib folder. 
+    compile fileTree(dir: 'lib', include: ['*.jar'])
+}

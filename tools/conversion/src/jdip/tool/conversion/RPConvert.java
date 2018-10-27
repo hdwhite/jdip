@@ -33,12 +33,13 @@ import java.util.*;
 	e.g., <code>java dip.misc.RPConvert [input-file]</code>
 	</p>
 	<p>
-	This will create, with the exception of graphical map information, 
+	This will create, with the exception of graphical map information,
 	a fully-specified "variants.xml" file and a fully-specified adjacency
 	data file.
 	</p>
 	<p>
 	This fully supports:
+    </p>
 	<ul>
 		<li>Convoyable coasts</li>
 		<li>Ice provinces</li>
@@ -46,20 +47,19 @@ import java.util.*;
 		<li>The 'mx' modifier (e.g., in Loeb9); movement with one less support</li>
 		<li>Provinces defined but without connectivity (e.g., Switzerland)</li>
 	</ul>
-	</p>
 	<p>
 	This does <b>not</b> yet support:
-	<ul>
+    </p>
+    <ul>
 		<li>SVG Map creation from Realpolitik maps</li>
 	</ul>
-	</p>
 */
 public class RPConvert
 {
 	private static final String VARIANT_TEMPLATE 	= "jdip/tool/conversion/VariantXMLTemplate.txt";
 	private static final String UNKNOWN_DATA = "_UNKNOWN_";
-	
-	
+
+
 	public static void main(String args[])
 	{
 		if(args.length != 1)
@@ -73,15 +73,15 @@ public class RPConvert
 			System.err.println("\nThe created variants.xml file will be nearly-completely specified.");
 			System.exit(1);
 		}
-		
+
 		String in = args[0];
 		if(!in.endsWith(".var"))
 		{
 			System.err.println("Variant files must end with \".var\"");
 			System.exit(1);
 		}
-		
-		
+
+
 		try
 		{
 			File inFile = new File(in);
@@ -102,48 +102,48 @@ public class RPConvert
 			t.printStackTrace();
 			System.exit(1);
 		}
-		
+
 		System.out.println("Conversion successful.");
 	}// main()
-	
-	
+
+
 	public RPConvert(File variantFile)
 	throws IOException
 	{
 		// read Variant (.var)
 		Variant variant = new Variant(variantFile);
 		System.out.println("Variant file read OK. ("+variantFile.getName()+")");
-		
+
 		// read Countries (.cnt)
 		Country[] countries = Country.makeCountries(variant.getCountryFile());
 		System.out.println("Country file read OK. ("+variant.getCountryFile().getName()+")");
-		
+
 		// read Game file (.gam)
 		parseGameFile(variant, countries);
 		System.out.println("Game file read OK. ("+variant.getGameFile().getName()+")");
-		
+
 		// read info file (.txt, .info)
 		String info = infoToHTML(variant.getInfoFile());
 		System.out.println("Description file read OK. ("+variant.getInfoFile().getName()+")");
 		variant.setInfo(info);
-		
+
 		// get variant name prefix.
 		final String variantName = variant.getName();
-		
+
 		// parse .map file (use MapConvert) and create adjacency
-		// 
+		//
 		File adjFile = new File(variantName+"_adjacency.xml");
 		MapConvert mc = new MapConvert(variant.getMapFile(), adjFile);
 		System.out.println("Map file read successfully");
 		System.out.println("jDip Adjacency file created.");
-		
+
 		// create variant.xml file
 		makeVariantXMLFile(mc, variant, countries);
 		System.out.println("jdip variants.xml file created.");
-		
+
 	}// RPConvert()
-	
-	
+
+
 	private void makeVariantXMLFile(MapConvert mc, Variant variant, Country[] countries)
 	throws IOException
 	{
@@ -151,18 +151,18 @@ public class RPConvert
 		{
 			throw new IllegalArgumentException();
 		}
-			
+
 		final ClassLoader cl = this.getClass().getClassLoader();
 		final Template variantTemplate = new Template(
 			cl.getResourceAsStream(VARIANT_TEMPLATE) );
-		
+
 		File out = new File("variants.xml");
-		
+
 		BufferedWriter bw = null;
 		try
 		{
 			bw = new BufferedWriter(new FileWriter(out));
-			
+
 			// write adjacency data
 			HashMap templateData = new HashMap();
 			makeVariantXMLTemplateData(templateData, mc, variant, countries);
@@ -177,8 +177,8 @@ public class RPConvert
 			}
 		}
 	}// makeVariantXMLFile()
-	
-	private void makeVariantXMLTemplateData(HashMap td, MapConvert mc, 
+
+	private void makeVariantXMLTemplateData(HashMap td, MapConvert mc,
 		Variant variant, Country[] countries)
 	throws IOException
 	{
@@ -187,18 +187,18 @@ public class RPConvert
 		td.put("mapThumbURI", UNKNOWN_DATA);
 		td.put("mapURI", UNKNOWN_DATA);
 		td.put("mapDescription", UNKNOWN_DATA);
-		
-		
+
+
 		// simple data
 		td.put("variantName", variant.getName());
 		td.put("variantDescription", variant.getInfo());
-		td.put("startingtime", 
+		td.put("startingtime",
 			"\t\t<STARTINGTIME turn=\""+variant.getStartingPhase()+"\" />\n"
 		);
-		
+
 		// adjacency file name (NO path info!)
 		td.put("adjacencyURI", variant.getName()+"_adjacency.xml");
-		
+
 		// winning SC
 		int winningSC = variant.getWinningSCCount();
 		if(winningSC == 0)
@@ -213,16 +213,16 @@ public class RPConvert
 					scCount++;
 				}
 			}
-			
+
 			winningSC = (scCount / 2) + 1;
 		}
-		
-		td.put("victoryconditions", 
+
+		td.put("victoryconditions",
 			"\t\t<VICTORYCONDITIONS>\n"+
 				"\t\t\t<WINNING_SUPPLY_CENTERS value=\""+winningSC+"\" />\n"+
 			"\t\t</VICTORYCONDITIONS>\n"
 		);
-		
+
 		// power (countries)
 		StringBuffer sb = new StringBuffer();
 		for(int i=0; i<countries.length; i++)
@@ -233,9 +233,9 @@ public class RPConvert
 			sb.append("\" active=\"true\" adjective=\"");
 			sb.append(country.getAdjective());
 			sb.append("\"/>\n");
-		}	
+		}
 		td.put("powers", sb.toString());
-		
+
 		// rule options (only build rule is currently set)
 		String buildType = "VALUE_BUILDS_HOME_ONLY";
 		if(variant.getBuildType() == Variant.BUILD_CHAOS)
@@ -246,26 +246,26 @@ public class RPConvert
 		{
 			buildType = "VALUE_BUILDS_ANY_IF_HOME_OWNED";
 		}
-		
-		td.put("ruleoptions", 
+
+		td.put("ruleoptions",
 			"\t\t<RULEOPTION name=\"OPTION_BUILDS\" value=\""+buildType+"\"/>"
 		);
 
-		
+
 		// create mapping of Country initials to Country
 		final HashMap i2cMap = new HashMap();
 		for(int i=0; i<countries.length; i++)
 		{
 			i2cMap.put(countries[i].getInitial(), countries[i]);
 		}
-		
+
 		// SC
 		sb = new StringBuffer();
 		Iterator iter = mc.getProvObjList().iterator();
 		while(iter.hasNext())
 		{
 			ProvObj po = (ProvObj) iter.next();
-			
+
 			if(po.isNeutralSC())
 			{
 				sb.append("\t\t<SUPPLYCENTER province=\"");
@@ -276,17 +276,17 @@ public class RPConvert
 			{
 				sb.append("\t\t<SUPPLYCENTER province=\"");
 				sb.append(po.getSN());
-				
+
 				// find country
 				Country c = (Country) i2cMap.get(po.getHomeSC());
 				if(c == null)
 				{
 					throw new IOException("Cannot find a Country for initial "+po.getHomeSC()+".\n");
 				}
-				
+
 				sb.append("\" homepower=\"");
 				sb.append(c.getName());
-				
+
 				// if owned, set owner
 				for(int i=0; i<countries.length; i++)
 				{
@@ -302,12 +302,12 @@ public class RPConvert
 						}
 					}
 				}
-				
+
 				sb.append("\"/>\n");
 			}
 		}
 		td.put("supplycenters", sb.toString());
-		
+
 		// initial unit positions
 		// (this is not known)
 		sb = new StringBuffer();
@@ -317,11 +317,11 @@ public class RPConvert
 				<INITIALSTATE province="stp" power="russia" unit="fleet" unitcoast="sc" />
 			*/
 			Country country = countries[i];
-			iter = country.getUnits().iterator(); 
+			iter = country.getUnits().iterator();
 			while(iter.hasNext())
 			{
 				Unit unit = (Unit) iter.next();
-				
+
 				sb.append("\t\t<INITIALSTATE province=\"");
 				sb.append(unit.getLoc().getShortName());
 				sb.append("\" power=\"");
@@ -335,13 +335,13 @@ public class RPConvert
 				}
 				sb.append("\"/>\n");
 			}
-		}	
+		}
 		td.put("initialstate", sb.toString());
-		
+
 	}// makeVariantXMLTemplateData()
-	
-	
-	/** 
+
+
+	/**
 	*	Finds a non-comment line to process; returns data
 	*	after the ":", trimmed. Null if no remaining data
 	*	lines left; throws exception if nullOK is 'false')
@@ -365,10 +365,10 @@ public class RPConvert
 					throw new IOException("No \":\" found in line. Invalid line.");
 				}
 			}
-			
+
 			line = lnr.readLine();
 		}
-		
+
 		if(nullOK)
 		{
 			return null;
@@ -378,9 +378,9 @@ public class RPConvert
 			throw new EOFException();
 		}
 	}// getNextAssignmentLine()
-	
-	
-	/** 
+
+
+	/**
 	*	Finds a non-comment line to process; that line after it is trimmed().
 	*/
 	private static String getNextDataLine(LineNumberReader lnr)
@@ -394,17 +394,17 @@ public class RPConvert
 			{
 				return line;
 			}
-			
+
 			line = lnr.readLine();
 		}
-		
+
 		throw new EOFException();
-	}// getNextDataLine()	
-	
-	
-	
+	}// getNextDataLine()
+
+
+
 	/**
-	*	Converts a description file (.info, .txt)to appropriate 
+	*	Converts a description file (.info, .txt)to appropriate
 	*	jdip-compatable description HTML. This basically puts
 	*	paragraph markers around paragraphs.
 	*/
@@ -415,16 +415,16 @@ public class RPConvert
 		{
 			throw new IllegalArgumentException();
 		}
-		
+
 		StringBuffer sb = new StringBuffer(4096);
 		BufferedReader br = null;
-		
+
 		try
 		{
 			br = new BufferedReader(new FileReader(file));
-			
+
 			sb.append("\t\t<p>\n");
-			
+
 			String line = br.readLine();
 			while(line != null)
 			{
@@ -439,10 +439,10 @@ public class RPConvert
 					sb.append(line);
 					sb.append("\n");
 				}
-				
+
 				line = br.readLine();
 			}
-			
+
 			sb.append("\t\t</p>\n");
 		}
 		finally
@@ -452,11 +452,11 @@ public class RPConvert
 				br.close();
 			}
 		}
-		
+
 		return sb.toString();
 	}// infoToHTML()
-	
-	
+
+
 	/**
 	*	Parses the .gam file, and adds appropriate data to the Variant
 	*	or Country object.
@@ -468,17 +468,17 @@ public class RPConvert
 			{
 				throw new IllegalArgumentException();
 			}
-			
+
 			boolean isDislodgedPhase = false;
 			boolean isAdjustmentPhase = false;
 			String startingPhase = null;
-			
-			LineNumberReader lnr = null; 
+
+			LineNumberReader lnr = null;
 			try
 			{
 				lnr = new LineNumberReader(new BufferedReader(
 					new FileReader(variant.getGameFile())));
-				
+
 				String value = null;
 				// VERSION
 				value = getNextDataLine(lnr);
@@ -486,10 +486,10 @@ public class RPConvert
 				{
 					throw new IOException("Only version 1 game (.gam) files can be read.");
 				}
-			
+
 				// GAME NAME (ignored)
 				value = getNextDataLine(lnr);
-				
+
 				// VARIANT NAME
 				value = getNextDataLine(lnr);
 				if(!variant.getName().equalsIgnoreCase(value))
@@ -500,17 +500,17 @@ public class RPConvert
 						"   .gam variant name: "+value+"\n"
 					);
 				}
-					
+
 				// START TIME
 				startingPhase = getNextDataLine(lnr);
-				
+
 				// # OF ADJUSTMENTS
 				value = getNextDataLine(lnr);
 				if( Integer.parseInt(value) > 0 )
 				{
 					isAdjustmentPhase = true;
 				}
-				
+
 				// # OF COUNTRIES
 				value = getNextDataLine(lnr);
 				int nCountries = Integer.parseInt(value);
@@ -522,15 +522,15 @@ public class RPConvert
 						"   number of countries specified in .gam file: "+value+"\n"
 					);
 				}
-				
-				
+
+
 				// read each country (assume order is same as Countries[] array)
 				//
 				for(int i=0; i<countries.length; i++)
 				{
 					// we don't care about adjustments
 					value = getNextDataLine(lnr);
-					
+
 					// HOME SC
 					value = getNextDataLine(lnr);
 					StringTokenizer st = new StringTokenizer(value, " ;,\n\r");
@@ -539,28 +539,28 @@ public class RPConvert
 						final Loc loc = Loc.makeLoc(st.nextToken(), null);
 						countries[i].addSC(loc);
 					}
-					
+
 					// UNITS
 					value = getNextDataLine(lnr);
 					Unit[] units = Unit.makeUnits(value);
 					countries[i].addUnits(units);
 				}
-				
+
 				// # OF DISLODGES
 				value = getNextDataLine(lnr);
 				if( Integer.parseInt(value) > 0 )
 				{
 					isDislodgedPhase = true;
 				}
-				
+
 				// phase-check
 				if(isDislodgedPhase && isAdjustmentPhase)
 				{
 					throw new IOException("Adjustments and dislodges cannot coexist!");
 				}
-				
+
 				// set starting phase in Variant
-				// 
+				//
 				if(isDislodgedPhase)
 				{
 					startingPhase += " Retreat";
@@ -573,7 +573,7 @@ public class RPConvert
 				{
 					startingPhase += " Movement";
 				}
-				
+
 				variant.setStartingPhase(startingPhase);
 			}
 			catch(Exception e)
@@ -597,14 +597,14 @@ public class RPConvert
 				}
 			}
 	}// parseGameFile()
-	
-	
+
+
 	static class Variant
 	{
 		public static final String BUILD_STANDARD		= "Standard";
 		public static final String BUILD_ABERRATION	= "Aberration";
 		public static final String BUILD_CHAOS			= "Chaos";
-		
+
 		private File mapFile;
 		private File countryFile;
 		private File gameFile;
@@ -614,11 +614,11 @@ public class RPConvert
 		private String buildType;
 		private int sc;
 		private File variantFile;
-		
+
 		// data filled in later
 		private String startingPhase;
 		private String info;
-		
+
 		/**
 		*	Parses the .var file. This does not check the
 		*	file extension.
@@ -630,13 +630,13 @@ public class RPConvert
 			{
 				throw new IllegalArgumentException();
 			}
-			
+
 			variantFile = file;
-			LineNumberReader lnr = null; 
+			LineNumberReader lnr = null;
 			try
 			{
 				lnr = new LineNumberReader(new BufferedReader(new FileReader(file)));
-				
+
 				String value = null;
 				// VERSION
 				value = getNextAssignmentLine(lnr, false);
@@ -644,36 +644,36 @@ public class RPConvert
 				{
 					throw new IOException("Only version 1 Variant (.var) files can be read.");
 				}
-			
+
 				// NAME
 				name = getNextAssignmentLine(lnr, false);
-				
+
 				// MAP DATA
 				value = getNextAssignmentLine(lnr, false);
 				mapFile = makeFile(value);
-				
+
 				// COUNTRIES
 				value = getNextAssignmentLine(lnr, false);
 				countryFile = makeFile(value);
-				
-				// GAME 
+
+				// GAME
 				value = getNextAssignmentLine(lnr, false);
 				gameFile = makeFile(value);
-				
+
 				// BWMAP (ignored)
 				value = getNextAssignmentLine(lnr, false);
-				
+
 				// COLORMAP (ignored)
 				value = getNextAssignmentLine(lnr, false);
-				
+
 				// REGIONS
 				value = getNextAssignmentLine(lnr, false);
 				regionFile = makeFile(value);
-				
+
 				// INFO
 				value = getNextAssignmentLine(lnr, false);
 				infoFile = makeFile(value);
-				
+
 				// BUILD
 				value = getNextAssignmentLine(lnr, false);
 				if(BUILD_STANDARD.equalsIgnoreCase(value))
@@ -692,11 +692,11 @@ public class RPConvert
 				{
 					throw new IOException("Illegal build type: "+value);
 				}
-				
+
 				// CENTERS
 				value = getNextAssignmentLine(lnr, false);
 				sc = Integer.parseInt(value);
-				
+
 				// FLAGS (ignored)
 				value = getNextAssignmentLine(lnr, false);
 			}
@@ -721,56 +721,56 @@ public class RPConvert
 				}
 			}
 		}// pareFromFile()
-		
+
 		public void setStartingPhase(String value)
 		{
 			startingPhase = value;
 		}
-		
+
 		public String getStartingPhase()	{ return startingPhase; }
-		
+
 		public void setInfo(String value)
 		{
 			info = value;
 		}
-		
+
 		public String getInfo()	{ return info; }
-		
+
 		/** Gets the name */
 		public String getName()		{ return name; }
-		
+
 		/** Returns the .map file */
 		public File getMapFile()		{ return mapFile; }
-		
+
 		/** Returns the .cnt file */
 		public File getCountryFile()		{ return countryFile; }
-		
+
 		/** Returns the .gam file */
 		public File getGameFile()		{ return gameFile; }
-		
+
 		/** Returns the .rgn file */
 		public File getRegionFile()		{ return regionFile; }
-		
+
 		/** Returns the .info file */
 		public File getInfoFile()		{ return infoFile; }
-		
+
 		/** Returns the build type constant */
 		public String getBuildType()		{ return buildType; }
-		
-		/** 
+
+		/**
 		*	Supply Centers required to win. This may return 0; if so,
 		*	Need to calculate winning SC based on: <br>
 		*		(totalSC / 2) + 1; rounding down.
 		*/
 		public int getWinningSCCount()		{ return sc; }
-		
-		
-		
+
+
+
 		/**
 		*	Ensures that the file is normalized. RP files can
-		*	refer to other files within the directory "Variant Files", 
+		*	refer to other files within the directory "Variant Files",
 		*	so we need to ensure that we have at least 2 directories
-		*	above if that's the case. Otherwise, we use the file 
+		*	above if that's the case. Otherwise, we use the file
 		*	specified in the current directory.
 		*/
 		private File makeFile(String value)
@@ -781,7 +781,7 @@ public class RPConvert
 			{
 				isReferenced = true;
 			}
-			
+
 			// relative file.
 			//
 			File root = variantFile.getParentFile();
@@ -795,7 +795,7 @@ public class RPConvert
 						return new File(root, value);
 					}
 				}
-				
+
 				throw new IOException(
 					"Reference to file: \""+value+"\" cannot be made.\n"+
 					"Make sure your directory structure is correct!\n"+
@@ -813,8 +813,8 @@ public class RPConvert
 			}
 		}// makeFile()
 	}// class Variant
-	
-	
+
+
 	static class Country
 	{
 		private String name;
@@ -822,56 +822,56 @@ public class RPConvert
 		private String initial;
 		private String patternName;
 		private String colorName;
-		
+
 		private List sc;
 		private List units;
 		private List dislodgedUnits;
-		
+
 		private Country()
 		{
 			sc = new LinkedList();
 			units = new LinkedList();
 			dislodgedUnits = new LinkedList();
 		}
-		
-		
+
+
 		public List getUnits()		{ return units; }
 		public List getSC()			{ return sc; }
-		
-		
+
+
 		/** Parses all Country data from a .cnt file; */
 		public static Country[] makeCountries(File file)
 		throws IOException
 		{
 			ArrayList al = new ArrayList();
-			
+
 			if(file == null)
 			{
 				throw new IllegalArgumentException();
 			}
-			
-			LineNumberReader lnr = null; 
+
+			LineNumberReader lnr = null;
 			try
 			{
 				lnr = new LineNumberReader(new BufferedReader(new FileReader(file)));
-				
+
 				String value = null;
-				
+
 				// VERSION
 				value = getNextDataLine(lnr);
 				if(!"1".equals(value))
 				{
 					throw new IOException("Only version 1 Country (.cnt) files can be read.");
 				}
-				
+
 				// # of countries
 				value = getNextDataLine(lnr);
 				final int nCountries = Integer.parseInt(value);
-				
+
 				for(int i=0; i<nCountries; i++)
 				{
 					value = getNextDataLine(lnr);
-					
+
 					StringTokenizer st = new StringTokenizer(value, " ");
 					Country country = new Country();
 					String tokName = null;
@@ -892,7 +892,7 @@ public class RPConvert
 					{
 						throw new Exception("Counry data error: Could not find: "+tokName);
 					}
-					
+
 					al.add(country);
 				}
 			}
@@ -916,19 +916,19 @@ public class RPConvert
 					lnr.close();
 				}
 			}
-			
+
 			assert (al.size() > 0);
 			return (Country[]) al.toArray(new Country[al.size()]);
 		}// makeCountries()
-		
-		
+
+
 		public String getName()			{ return name; }
 		public String getAdjective()	{ return adjective; }
 		public String getInitial()		{ return initial; }
 		public String getPatternName()	{ return patternName; }
 		public String getColorName()	{ return colorName; }
-		
-		
+
+
 		public void addSC(Loc loc)
 		{
 			if(loc == null)
@@ -937,27 +937,27 @@ public class RPConvert
 			}
 			sc.add(loc);
 		}// addSC()
-		
+
 		public void addUnit(Unit unit)
 		{
 			if(unit == null)
 			{
 				throw new IllegalArgumentException();
 			}
-			
+
 			units.add(unit);
 		}// addUnit()
-		
+
 		public void addUnits(Unit[] units)
 		{
 			if(units == null)
 			{
 				throw new IllegalArgumentException();
 			}
-			
+
 			this.units.addAll(Arrays.asList(units));
 		}// addUnits()
-		
+
 		public void addDislodgedUnit(Unit unit)
 		{
 			if(unit == null)
@@ -967,17 +967,17 @@ public class RPConvert
 			dislodgedUnits.add(unit);
 		}// addDislodgedUnit()
 	}// makeCountry()
-	
+
 	/** A Unit has a unit type and a location. */
 	static class Unit
 	{
 		public final static String UNIT_WING	= "wing";
 		public final static String UNIT_FLEET	= "fleet";
 		public final static String UNIT_ARMY	= "army";
-		
+
 		private String type;
 		private Loc location;
-		
+
 		/** TYPE must be a constant defined by this class */
 		public Unit(String type, Loc location)
 		{
@@ -985,31 +985,31 @@ public class RPConvert
 			{
 				throw new IllegalArgumentException();
 			}
-			
-			if(type != UNIT_WING && type != UNIT_FLEET && type 
+
+			if(type != UNIT_WING && type != UNIT_FLEET && type
 				!= UNIT_ARMY)
 			{
 				throw new IllegalArgumentException("invalid type");
 			}
-			
-			
+
+
 			this.type = type;
 			this.location = location;
 		}// Unit()
-		
-		
+
+
 		public String getType()
 		{
 			return type;
 		}// getType()
-		
-		
+
+
 		public Loc getLoc()
 		{
 			return location;
 		}// getLoc()
-		
-		/** 
+
+		/**
 		*	Parses text into a Unit: e.g.:<br>
 		*	x yyy<br>
 		*	where 'x' is the unit type (single letter)<br>
@@ -1023,12 +1023,12 @@ public class RPConvert
 		throws IOException
 		{
 			ArrayList al = new ArrayList(10);
-			
+
 			StringTokenizer st = new StringTokenizer(input, " \t\n\r,;");
 			while(st.hasMoreTokens())
 			{
 				String unitType = null;
-				
+
 				if(st.hasMoreTokens())
 				{
 					final String tok = st.nextToken().toLowerCase();
@@ -1053,9 +1053,9 @@ public class RPConvert
 				{
 					throw new IOException("Expected unit type (a, f, w)");
 				}
-				
+
 				Loc unitLoc = null;
-				
+
 				if(st.hasMoreTokens())
 				{
 					final String tok = st.nextToken().toLowerCase();
@@ -1065,15 +1065,15 @@ public class RPConvert
 				{
 					throw new IOException("Expected unit location following unit type!");
 				}
-				
+
 				assert (unitLoc != null);
 				assert (unitType != null);
 				al.add(new Unit(unitType, unitLoc));
 			}
-			
+
 			return (Unit[]) al.toArray(new Unit[al.size()]);
 		}// makeUnit()
 	}// Unit
-	
-	
+
+
 }// class RPConvert
