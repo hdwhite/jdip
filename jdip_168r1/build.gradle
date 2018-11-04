@@ -12,6 +12,23 @@ dependencies {
 
     // Add all the jar dependencies from the lib folder.
     compile fileTree(dir: 'lib', include: ['*.jar'])
+
+    testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    testImplementation(
+            'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    )
+    testRuntimeOnly(
+            'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+    )
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.3.1'
+
+
+}
+
+test {
+    useJUnitPlatform()
 }
 
 jar {
@@ -28,10 +45,11 @@ configurations.create('variants')
 //instead of creating one task for each variant we can loop throw filesystem and create them dynamically
 file('resource/variants').eachDirMatch(~/(?!symbols).*/) { dir ->
     def taskName = "${dir.name}Variants"
-    tasks.create(name: taskName, type: Zip) {
+    def task = tasks.create(name: taskName, type: Zip) {
         baseName = taskName
         from fileTree(dir)
     }
+    test.dependsOn(task)
     artifacts {
         variants tasks.findByName(taskName)
     }
@@ -40,10 +58,11 @@ file('resource/variants').eachDirMatch(~/(?!symbols).*/) { dir ->
 configurations.create('symbols')
 file('resource/variants/symbols').eachDir { dir ->
     def taskName = "${dir.name}Symbols"
-    tasks.create(name: taskName, type: Zip) {
+    def task = tasks.create(name: taskName, type: Zip) {
         baseName = taskName
         from fileTree(dir)
     }
+    test.dependsOn(task)
     artifacts {
         symbols tasks.findByName(taskName)
     }

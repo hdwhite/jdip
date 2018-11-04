@@ -22,7 +22,10 @@ build:
 test:
   stage: test
   script:
-    - echo "TBD"
+    - ./gradlew test
+  artifacts:
+    reports:
+      junit: jdip_168r1/build/test-results/test/TEST-*.xml
 
 package:
   stage: package
