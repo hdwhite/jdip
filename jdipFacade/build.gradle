@@ -1,0 +1,17 @@
+apply plugin: 'java'
+
+repositories {
+
+    jcenter()
+}
+
+dependencies {
+
+    // Add all the jar dependencies from the lib folder.
+    compile project(':jdip_168r1')
+}
+
+
+jar {
+    baseName = "jdipFacade"
+}
