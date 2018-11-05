@@ -20,40 +20,18 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.plugin.maptool;
 
-import dip.gui.*;
-import dip.gui.dialog.TextViewer;
+import dip.gui.ClientFrame;
 import dip.gui.map.*;
-import dip.gui.map.RenderCommandFactory.RenderCommand;
 import dip.gui.map.MapMetadata.InfoEntry;
-import dip.misc.*;
+import dip.gui.map.RenderCommandFactory.RenderCommand;
+import dip.misc.Log;
 import dip.world.*;
+import org.w3c.dom.svg.SVGDocument;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import javax.swing.*;
-import java.util.*;
-import java.awt.event.*;
-import java.net.URI;
-import java.text.*;
-
-import org.w3c.dom.*;                  
-
-import org.apache.batik.swing.JSVGCanvas; 
-import org.w3c.dom.events.MouseEvent;
-import org.apache.batik.dom.events.DOMKeyEvent;
-
-import org.apache.batik.util.CSSConstants;
-import org.apache.batik.*;
-import org.apache.batik.dom.*;
-import org.apache.batik.util.*;
-import org.w3c.dom.svg.*;
-import org.apache.batik.dom.svg.*;
-import org.apache.batik.swing.svg.*;
-import org.apache.batik.util.*;
-import org.apache.batik.bridge.*;
+import java.awt.geom.Point2D;
+import java.text.DecimalFormat;
+import java.util.HashMap;
 
 /**
 *	Outputs placement, label data properly XML (SVG) formatted.

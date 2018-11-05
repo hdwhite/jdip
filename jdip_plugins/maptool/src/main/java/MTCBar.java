@@ -20,38 +20,29 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.plugin.maptool;
 
-import dip.world.*;
-
-import dip.misc.*;
-import dip.gui.*;
-import dip.gui.map.*;
-import dip.gui.order.*;
+import dip.gui.map.DOMUIEventListener;
+import dip.gui.map.MapPanel;
+import dip.gui.map.MapRenderer2;
 import dip.gui.map.RenderCommandFactory.RenderCommand;
+import dip.gui.map.ViewControlBar;
+import dip.gui.order.GUIOrder;
+import dip.misc.Log;
+import dip.misc.Utils;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Province;
+import org.apache.batik.swing.JSVGCanvas;
+import org.w3c.dom.events.MouseEvent;
+import org.w3c.dom.svg.SVGMatrix;
+import org.w3c.dom.svg.SVGPoint;
+import org.w3c.dom.svg.SVGSVGElement;
 
 import javax.swing.*;
-import java.awt.event.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import javax.swing.border.*;
-import org.apache.batik.swing.*;
-import java.awt.geom.AffineTransform;
 import java.awt.event.ActionEvent;
-import java.awt.Dimension;
-import java.text.*;
-
-import org.apache.batik.swing.JSVGCanvas; 
-import org.w3c.dom.events.MouseEvent;
-import org.apache.batik.dom.events.DOMKeyEvent;
-
-import org.apache.batik.*;
-import org.apache.batik.dom.*;
-import org.apache.batik.util.*;
-import org.w3c.dom.svg.*;
-import org.apache.batik.dom.svg.SVGOMPoint;
-import org.w3c.dom.*;
-
-import org.w3c.dom.svg.SVGUseElement;
+import java.awt.event.ActionListener;
 
 
 /**

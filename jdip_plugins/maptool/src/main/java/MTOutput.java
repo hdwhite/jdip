@@ -19,38 +19,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
-//  
-package jdip.plugin.maptool;
+//
 
-import dip.gui.*;
+import dip.gui.ClientFrame;
 import dip.gui.dialog.TextViewer;
-import dip.gui.map.*;
-import dip.misc.*;
-import dip.world.*;
+import dip.gui.map.MapMetadata;
+import dip.gui.map.MapPanel;
+import dip.world.Coast;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.World;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.awt.*;
-import java.awt.geom.*;
-
-import java.text.*;
-
-import javax.swing.*;
-import java.awt.event.*;
-import java.net.URI;
-import org.apache.batik.swing.JSVGCanvas; 
-import org.w3c.dom.events.MouseEvent;
-import org.apache.batik.dom.events.DOMKeyEvent;
-
-import org.w3c.dom.*;
-
-import org.apache.batik.util.CSSConstants;
-import org.apache.batik.*;
-import org.apache.batik.dom.*;
-import org.apache.batik.util.*;
-import org.w3c.dom.svg.*;
-import org.apache.batik.dom.svg.*;
-import org.apache.batik.swing.svg.*;
-import org.apache.batik.util.*;
-import org.apache.batik.bridge.*;
+import java.awt.geom.Point2D;
 
 
 /**
