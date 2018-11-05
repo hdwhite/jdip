@@ -22,14 +22,6 @@
 //
 package dip.gui.report;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import javax.swing.JScrollPane;
-
 import dip.gui.ClientFrame;
 import dip.gui.dialog.TextViewer;
 import dip.misc.Help;
@@ -37,12 +29,15 @@ import dip.misc.Utils;
 import dip.order.OrderFormatOptions;
 import dip.order.Orderable;
 import dip.order.result.OrderResult;
-import dip.order.result.Result;
 import dip.order.result.OrderResult.ResultType;
+import dip.order.result.Result;
 import dip.world.Position;
 import dip.world.Power;
 import dip.world.TurnState;
 import dip.world.World;
+
+import javax.swing.*;
+import java.util.*;
 
 /**
 *	Writes a summary of adjudication results in HTML format.
@@ -154,7 +149,7 @@ public class ResultWriter
 		
 		// we want only results with a 'null' power.
 		// these results are addressed to all.
-		List generalResults = new ArrayList(32);
+		List<Result> generalResults = new ArrayList<>(32);
 		Iterator iter = resultList.iterator();
 		while(iter.hasNext())
 		{
@@ -197,8 +192,8 @@ public class ResultWriter
 	private String getPerPowerResults()
 	{
 		// Seperate results into OrderResults and 'regular' Results
-		List orderResults = new ArrayList(128);
-		List otherResults = new ArrayList(64);
+		List<Result> orderResults = new ArrayList<>(128);
+		List<Result> otherResults = new ArrayList<>(64);
 		
 		List resultList = turnState.getResultList();
 		Iterator iter = resultList.iterator();
@@ -290,8 +285,8 @@ public class ResultWriter
 	{
 		// create a mapping of orders -> a list of results. As we find results, add
 		// it to the map.
-		LinkedHashMap ordMap = new LinkedHashMap(17);
-		ArrayList substList = new ArrayList();
+		LinkedHashMap<Orderable, List<OrderResult>> ordMap = new LinkedHashMap<>(17);
+		ArrayList<OrderResult> substList = new ArrayList<>();
 		
 		Iterator iter = results.iterator();
 		while(iter.hasNext())
@@ -312,14 +307,14 @@ public class ResultWriter
 					if(!ordMap.containsKey(order))
 					{
 						// create the entry
-						List list = new ArrayList();
+						List<OrderResult> list = new ArrayList<>();
 						list.add(or);
 						ordMap.put(order, list);
 					}
 					else
 					{
 						// add to the list
-						List list = (List) ordMap.get(order);
+						List<OrderResult> list = ordMap.get(order);
 						list.add(or);
 					}
 				}
@@ -400,7 +395,7 @@ public class ResultWriter
 			// 
 			// make a list of non-empty messages. (strings)
 			//
-			List nonEmptyList = new ArrayList(list.size());
+			List<String> nonEmptyList = new ArrayList<>(list.size());
 			it = list.iterator();
 			while(it.hasNext())
 			{

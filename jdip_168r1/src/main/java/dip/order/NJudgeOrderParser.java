@@ -21,25 +21,16 @@
 //
 package dip.order;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import dip.misc.Utils;
 import dip.order.result.DislodgedResult;
 import dip.order.result.OrderResult;
 import dip.order.result.Result;
 import dip.order.result.SubstitutedResult;
-import dip.world.Coast;
-import dip.world.Location;
-import dip.world.Phase;
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.Unit;
+import dip.world.*;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
 *	Parses nJudge-format orders into Orders and Results
@@ -95,10 +86,10 @@ public class NJudgeOrderParser
 	};
 	
 	// class variables
-	private static final Pattern ADJUSTMENT_PATTERN = Pattern.compile(ADJUSTMENT_REGEX);;
-	private static final Pattern ALTERNATE_ADJUSTMENT_PATTERN = Pattern.compile(ALTERNATE_ADJUSTMENT_REGEX);;
-	
-	
+	private static final Pattern ADJUSTMENT_PATTERN = Pattern.compile(ADJUSTMENT_REGEX);
+	private static final Pattern ALTERNATE_ADJUSTMENT_PATTERN = Pattern.compile(ALTERNATE_ADJUSTMENT_REGEX);
+
+
 	// TEST harness
 	/*
 	public static void main(String args[])
@@ -228,7 +219,7 @@ public class NJudgeOrderParser
 	public static class NJudgeOrder
 	{
 		private final Orderable order;
-		private final List results;
+		private final List<Result> results;
 		private final boolean isAdjustment;
 		private final Power specialAdjustmentPower;
 		private final boolean isWaive;
@@ -239,8 +230,8 @@ public class NJudgeOrderParser
 		*	Create an NJudgeOrder, which is an Orderable with
 		*	a dip.order.Result result(s).
 		*/
-		public NJudgeOrder(Orderable order, List results, 
-			boolean isAdjustmentPhase)
+		public NJudgeOrder(Orderable order, List<Result> results,
+						   boolean isAdjustmentPhase)
 		{
 			this(order, results, isAdjustmentPhase, null, false, 0, 0);
 		}// NJudgeOrder()
@@ -297,9 +288,9 @@ public class NJudgeOrderParser
 		/**
 		*	Create an NJudgeOrder
 		*/
-		private NJudgeOrder(Orderable order, List results, boolean isAdjustment,
-			Power power, boolean isWaive,
-			int unusedPendingBuilds, int unusedPendingWaives)
+		private NJudgeOrder(Orderable order, List<Result> results, boolean isAdjustment,
+							Power power, boolean isWaive,
+							int unusedPendingBuilds, int unusedPendingWaives)
 		{
 			if(results == null)
 			{
@@ -307,7 +298,7 @@ public class NJudgeOrderParser
 			}
 			
 			this.order = order;
-			this.results = Collections.unmodifiableList(new ArrayList(results));
+			this.results = Collections.unmodifiableList(new ArrayList<>(results));
 			this.isAdjustment = isAdjustment;
 			this.specialAdjustmentPower = power;
 			this.isWaive = isWaive;
@@ -326,7 +317,7 @@ public class NJudgeOrderParser
 		*	Returns the Results of the order. Each item in the list
 		*	is a subclass of dip.order.Result.
 		*/
-		public List getResults()
+		public List<Result> getResults()
 		{
 			return results;
 		}// getResults()
@@ -474,7 +465,7 @@ public class NJudgeOrderParser
 		final ParseContext pc = new ParseContext(map, orderFactory, phaseType, line);
 		
 		// parse results. This also removes the trailing '.' from the order
-		final ArrayList resultList = new ArrayList(5);
+		final ArrayList<String> resultList = new ArrayList<>(5);
 		final String newOrderLine = removeTrailingDot(
 			parseResults(pc, resultList) );
 		
@@ -494,7 +485,7 @@ public class NJudgeOrderParser
 			Orderable order = parsePredicate(pc, prefix, tokens);
 			
 			// parse text results into real results
-			List results = createResults(pc, order, resultList);
+			List<Result> results = createResults(pc, order, resultList);
 			
 			// create NJudgeOrder
 			return new NJudgeOrder(order, results, pc.isAdjustmentPhase());
@@ -511,9 +502,8 @@ public class NJudgeOrderParser
 	
 	
 	/** Creates a List with a single result */
-	private static List createResultList(Result aResult)
-	{
-		List list = new ArrayList(1);
+	private static List<Result> createResultList(Result aResult) {
+		List<Result> list = new ArrayList<>(1);
 		list.add(aResult);
 		return list;
 	}// createResultList()
@@ -753,10 +743,8 @@ public class NJudgeOrderParser
 	*	<p>
 	*	Format: [prefix] (HOLD || DISBAND).
 	*/
-	private Orderable parseHoldOrDisband(ParseContext pc, OrderPrefix op, 
-		final String[] tokens, final String type)
-	throws OrderException
-	{
+	private Orderable parseHoldOrDisband(ParseContext pc, OrderPrefix op,
+										 final String[] tokens, final String type) {
 		// NO additional parsing
 		//
 		if(type == ORDER_HOLD)
@@ -794,8 +782,8 @@ public class NJudgeOrderParser
 			if we have more than one, we'll add them to a list
 			and then add that to the order Move order.
 		*/
-		
-		LinkedList pathList = new LinkedList();
+
+		LinkedList<Province> pathList = new LinkedList<>();
 		int idx = op.tokenIndex;
 		int movTokIdx = findNextMoveToken(idx, tokens);
 		
@@ -835,8 +823,8 @@ public class NJudgeOrderParser
 			
 			// add source location at beginning of move list
 			pathList.addFirst(op.location.getProvince());
-			
-			final Province[] route = (Province[]) pathList.toArray(
+
+			final Province[] route = pathList.toArray(
 				new Province[pathList.size()]);
 				
 			return pc.orderFactory.createMove(op.power, op.location, 
@@ -1123,8 +1111,8 @@ public class NJudgeOrderParser
 				return null;
 			}
 		}
-		
-		ArrayList al = new ArrayList(3);
+
+		ArrayList<String> al = new ArrayList<>(3);
 		al.add(tok);
 		
 		boolean foundDelim = false;
@@ -1158,7 +1146,7 @@ public class NJudgeOrderParser
 		}
 		
 		assert (!al.isEmpty());
-		return (String[]) al.toArray(new String[al.size()]);
+		return al.toArray(new String[al.size()]);
 	}// getTokenUpto()
 	
 	
@@ -1173,7 +1161,7 @@ public class NJudgeOrderParser
 	*	Returns the cleaned-up order text.
 	*
 	*/
-	private String parseResults(final ParseContext pc, final List results)
+	private String parseResults(final ParseContext pc, final List<String> results)
 	throws OrderException
 	{
 		final String line = pc.orderText;
@@ -1220,10 +1208,10 @@ public class NJudgeOrderParser
 	*	</ul>
 	*	The given results are returned in the List.
 	*/
-	private List createResults(ParseContext pc, Orderable order, final List stringResults)
+	private List<Result> createResults(ParseContext pc, Orderable order, final List stringResults)
 	throws OrderException
 	{
-		List results = new ArrayList(stringResults.size());
+		List<Result> results = new ArrayList<>(stringResults.size());
 		
 		Iterator iter = stringResults.iterator();
 		while(iter.hasNext())

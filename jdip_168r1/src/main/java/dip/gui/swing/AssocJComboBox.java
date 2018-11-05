@@ -40,7 +40,7 @@ import dip.misc.Utils;
 *	
 *	
 */
-public class AssocJComboBox extends JComboBox
+public class AssocJComboBox extends JComboBox<AssocJComboBox.AssociatedObj>
 {
 	
 	/** Create an AssocJComboBox */
@@ -66,7 +66,8 @@ public class AssocJComboBox extends JComboBox
 			}
 		}
 		
-		setPrototypeDisplayValue(longestAO+"M");
+//		setPrototypeDisplayValue(longestAO+"M");  todo: not sure what the M is for, but at least we compile now
+		setPrototypeDisplayValue(longestAO);
 	 }// AssocJComboBox()
 	
 	
@@ -88,7 +89,7 @@ public class AssocJComboBox extends JComboBox
 	*	Add an AssociatedObj. Other objects are not allowed to be
 	*	added, and will throw an exception.
 	*/
-	public void addItem(final Object obj)
+	public void addItem(final AssociatedObj obj)
 	{
 		if(obj instanceof AssociatedObj)
 		{
@@ -261,7 +262,7 @@ public class AssocJComboBox extends JComboBox
 		/**
 		*	Collate internal display strings
 		*/
-		private static class AssocObjComparator implements Comparator
+		private static class AssocObjComparator implements Comparator<AssociatedObj>
 		{
 			private final Collator c;
 			
@@ -270,10 +271,10 @@ public class AssocJComboBox extends JComboBox
 				this.c = c;
 			}// AssocObjComparator()
 			
-			public int compare(Object o1, Object o2)
+			public int compare(AssociatedObj o1, AssociatedObj o2)
 			{
-				String display1 = ((AssociatedObj) o1).getDisplay();
-				String display2 = ((AssociatedObj) o2).getDisplay();
+				String display1 = o1.getDisplay();
+				String display2 = o2.getDisplay();
 				return c.compare(display1, display2);
 			}// compare()
 			

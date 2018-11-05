@@ -317,18 +317,18 @@ public class Adjustment
 	*/
 	public static class AdjustmentInfoMap
 	{
-		private HashMap map;
+		private HashMap<Power,AdjustmentInfo> map;
 		
 		/** Create an AdjustmentInfoMap */
 		public AdjustmentInfoMap()
 		{
-			map = new HashMap(13);
+			map = new HashMap<>(13);
 		}// AdjustmentInfoMap()
 		
 		/** Create an AdjustmentInfoMap */
 		public AdjustmentInfoMap(int size)
 		{
-			map = new HashMap(size);
+			map = new HashMap<>(size);
 		}// AdjustmentInfoMap()
 		
 		/** Set AdjustmentInfo for a power. */

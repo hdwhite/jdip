@@ -22,10 +22,10 @@
 //
 package dip.world.variant.data;
 
-import java.util.List;
-
 import dip.world.Phase;
 import dip.world.Power;
+
+import java.util.List;
 
 /**
 
@@ -33,7 +33,7 @@ A Variant.
 
 
 */
-public class Variant implements Cloneable, Comparable
+public class Variant implements Cloneable, Comparable<Variant>
 {
 	// the arrays in general should not be null. They are defined as null initially
 	// to make it more apparent should a field not be initialized properly.
@@ -155,33 +155,28 @@ public class Variant implements Cloneable, Comparable
 	
 	
 	/** Sets the MapGraphics, from a List */
-	public void setMapGraphics(List mgList)
-	{
-		mapGraphics = (MapGraphic[]) mgList.toArray(new MapGraphic[mgList.size()]); 			
+	public void setMapGraphics(List<MapGraphic> mgList) {
+		mapGraphics = mgList.toArray(new MapGraphic[mgList.size()]);
 	}// setPowers()
 	
 	/** Sets the Powers, from a List */
-	public void setPowers(List powerList)
-	{
-		powers = (Power[]) powerList.toArray(new Power[powerList.size()]); 			
+	public void setPowers(List<Power> powerList) {
+		powers = powerList.toArray(new Power[powerList.size()]);
 	}// setPowers()
 	
 	/** Sets the InitialStates, from a List */
-	public void setInitialStates(List stateList) 			
-	{ 
-		istate = (InitialState[]) stateList.toArray(new InitialState[stateList.size()]); 
+	public void setInitialStates(List<InitialState> stateList) {
+		istate = stateList.toArray(new InitialState[stateList.size()]);
 	}// setInitialStates()
 	
 	/** Sets the supply centers, from a List */
-	public void setSupplyCenters(List supplyCenterList) 	
-	{ 
-		supplyCenters = (SupplyCenter[]) supplyCenterList.toArray(new SupplyCenter[supplyCenterList.size()]); 
+	public void setSupplyCenters(List<SupplyCenter> supplyCenterList) {
+		supplyCenters = supplyCenterList.toArray(new SupplyCenter[supplyCenterList.size()]);
 	}// setSupplyCenters()
 	
 	/** Sets the RuleOptions (as a List of name-value pairs) associated with this Variant */
-	public void setRuleOptionNVPs(List nvpList)
-	{
-		roNVPs = (NameValuePair[])  nvpList.toArray(new NameValuePair[nvpList.size()]); 
+	public void setRuleOptionNVPs(List<NameValuePair> nvpList) {
+		roNVPs = nvpList.toArray(new NameValuePair[nvpList.size()]);
 	}// setRuleOptionNVPs()
 	
 	
@@ -210,9 +205,8 @@ public class Variant implements Cloneable, Comparable
 	/** 
 		Compares based on Name
 	*/
-	public int compareTo(Object o) 
-	{
-		return this.getName().compareTo( ((Variant) o).getName() );
+	public int compareTo(Variant o) {
+		return this.getName().compareTo(o.getName());
 	}// compareTo()
 	
 	

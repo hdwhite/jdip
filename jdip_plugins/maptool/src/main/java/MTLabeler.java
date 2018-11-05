@@ -54,7 +54,7 @@ public class MTLabeler
 	private static final Point2D.Float ORIGIN = new Point2D.Float(0,0);
 	
 	// fields
-	private final java.util.Map map;
+	private final java.util.Map<Province, TIMapEntry> map;
 	private final dip.world.Map gameMap;
 	private final MapMetadata mmd;
 	private final DefaultMapRenderer2 dmr2;
@@ -67,7 +67,7 @@ public class MTLabeler
 	/** Create a MT (MapTool) Labeler object */
 	public MTLabeler(ClientFrame cf, MTCBar toolBar)
 	{
-		map = Collections.synchronizedMap(new HashMap(111));
+		map = Collections.synchronizedMap(new HashMap<>(111));
 		gameMap = cf.getWorld().getMap();
 		dmr2 = (DefaultMapRenderer2) cf.getMapPanel().getMapRenderer();
 		mmd = dmr2.getMapMetadata();

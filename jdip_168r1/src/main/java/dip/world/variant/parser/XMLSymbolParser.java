@@ -22,35 +22,20 @@
 //
 package dip.world.variant.parser;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.CDATASection;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
 import dip.misc.Log;
 import dip.misc.XMLUtils;
 import dip.world.variant.VariantManager;
 import dip.world.variant.data.Symbol;
 import dip.world.variant.data.SymbolPack;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
+import java.net.URL;
+import java.util.*;
 
 
 /**
@@ -166,7 +151,7 @@ public class XMLSymbolParser implements SymbolParser
 		// setup a hashmap: maps symbol names (case-preserved) to 
 		// scale factors (Float). If hashmap is empty, we have no
 		// scaling factors to worry about
-		HashMap scaleMap = new HashMap();
+		HashMap<String, Float> scaleMap = new HashMap<>();
 		
 		// is SCALING element present? if so, parse it.
 		NodeList scalingNodes = root.getElementsByTagName(EL_SCALING);
@@ -253,7 +238,7 @@ public class XMLSymbolParser implements SymbolParser
 		HashMap map = elementMapper(svgDoc.getDocumentElement(), ATT_ID);
 		
 		// List of Symbols
-		ArrayList list = new ArrayList(15);
+		ArrayList<Symbol> list = new ArrayList<>(15);
 		
 		// iterate over hashmap finding all symbols with IDs
 		Iterator iter = map.entrySet().iterator();
@@ -264,7 +249,7 @@ public class XMLSymbolParser implements SymbolParser
 			final Float scale = (Float) scaleMap.get(name);
 			list.add(new Symbol(
 				name,
-				(scale == null) ? Symbol.IDENTITY_SCALE : scale.floatValue(),
+					(scale == null) ? Symbol.IDENTITY_SCALE : scale,
 				(Element) me.getValue() ));
 		}
 		
@@ -325,14 +310,14 @@ public class XMLSymbolParser implements SymbolParser
 	private HashMap elementMapper(Element start, String attrName)
 	throws IOException
 	{
-		HashMap map = new HashMap(31);
+		HashMap<String, Node> map = new HashMap<>(31);
 		elementMapperWalker(map, start, attrName);
 		return map;
 	}// elementMapper()
 	
 	
 	/** Recursive portion of elementMapper */
-	private void elementMapperWalker(final HashMap map, final Node node, final String attrName)
+	private void elementMapperWalker(final HashMap<String, Node> map, final Node node, final String attrName)
 	throws IOException
 	{
 		if(node.getNodeType() == Node.ELEMENT_NODE)
@@ -356,8 +341,8 @@ public class XMLSymbolParser implements SymbolParser
 							throw new IOException("The "+attrName+" attribute has duplicate "+
 								"values: "+attrValue);
 						}
-						
-						map.put(attrValue, (Element) node);
+
+						map.put(attrValue, node);
 					}
 				}
 			}
@@ -406,7 +391,7 @@ public class XMLSymbolParser implements SymbolParser
 	private SymbolPack.CSSStyle[] parseCSS(String input)
 	throws IOException
 	{
-		List cssStyles = new ArrayList(20);
+		List<SymbolPack.CSSStyle> cssStyles = new ArrayList<>(20);
 		
 		// break input into lines
 		BufferedReader br = new BufferedReader(new StringReader(input));
@@ -469,8 +454,8 @@ public class XMLSymbolParser implements SymbolParser
 			
 			line = br.readLine();
 		}
-		
-		return (SymbolPack.CSSStyle[]) cssStyles.toArray(new SymbolPack.CSSStyle[cssStyles.size()]);
+
+		return cssStyles.toArray(new SymbolPack.CSSStyle[cssStyles.size()]);
 	}// parseCSS()
 	
 	

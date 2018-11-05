@@ -22,15 +22,6 @@
 //
 package dip.gui.dialog.newgame;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JEditorPane;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import cz.autel.dmi.HIGConstraints;
 import cz.autel.dmi.HIGLayout;
 import dip.gui.ClientFrame;
@@ -46,6 +37,10 @@ import dip.world.variant.VariantManager;
 import dip.world.variant.data.MapGraphic;
 import dip.world.variant.data.SymbolPack;
 import dip.world.variant.data.Variant;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
 *	Panel for New Game Dialog that allows selection of a map / variant / map graphic.
@@ -70,9 +65,9 @@ public class NGDVariantSelect extends JPanel implements NewGameDialog.NGDTabPane
 	private ClientFrame 			parent;
 	private NewGameDialog			ngd;
 	private boolean 				isLoading = false;
-	
-	private DefaultListModel 		listModel;
-	private JList 					variantList;
+
+	private DefaultListModel<String> listModel;
+	private JList<String> variantList;
 	private JEditorPane 			textPanel;
 	private String					description;
 	private Variant					defaultVariant = null;
@@ -95,9 +90,9 @@ public class NGDVariantSelect extends JPanel implements NewGameDialog.NGDTabPane
 		}
 		
 		// variant list (based on map)
-		listModel = new DefaultListModel();
+		listModel = new DefaultListModel<>();
 		makeVariantList();
-		variantList = new JList(listModel);
+		variantList = new JList<>(listModel);
 		variantList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		variantList.setPrototypeCellValue("MMMMMMMMMMMMMM");
 		variantList.addListSelectionListener(new ListSelectionListener() 

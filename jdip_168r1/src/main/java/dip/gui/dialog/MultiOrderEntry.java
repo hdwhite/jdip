@@ -22,6 +22,15 @@
 //
 package dip.gui.dialog;
 
+import dip.gui.ClientFrame;
+import dip.gui.OrderDisplayPanel;
+import dip.misc.Log;
+import dip.misc.Utils;
+import dip.order.OrderException;
+import dip.world.Map;
+import dip.world.World;
+
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -30,16 +39,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.JScrollPane;
-
-import dip.gui.ClientFrame;
-import dip.gui.OrderDisplayPanel;
-import dip.misc.Log;
-import dip.misc.Utils;
-import dip.order.OrderException;
-import dip.world.Map;
-import dip.world.World;
 
 /**
 *
@@ -151,8 +150,8 @@ public class MultiOrderEntry
 	private boolean process(String text)
 	{
 		int nOrders = 0;
-		List exList = new ArrayList();
-		List failList = new ArrayList();
+		List<String> exList = new ArrayList<>();
+		List<String> failList = new ArrayList<>();
 		
 		try
 		{
@@ -357,14 +356,14 @@ public class MultiOrderEntry
 	/** Converts input to token array */
 	private String[] toTokens(String input)
 	{
-		ArrayList list = new ArrayList(10);
+		ArrayList<String> list = new ArrayList<>(10);
 		StringTokenizer st = new StringTokenizer(input);
 		while(st.hasMoreTokens())
 		{
 			list.add( st.nextToken() );
 		}
-		
-		return (String[]) list.toArray(new String[list.size()]);
+
+		return list.toArray(new String[list.size()]);
 	}// toTokens()
 	
 	

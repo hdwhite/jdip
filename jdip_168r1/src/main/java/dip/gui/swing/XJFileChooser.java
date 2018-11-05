@@ -22,17 +22,14 @@
 //
 package dip.gui.swing;
 
-import java.awt.FileDialog;
-import java.awt.Frame;
-import java.io.File;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
-
 import dip.misc.Log;
 import dip.misc.SimpleFileFilter;
 import dip.misc.Utils;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.awt.*;
+import java.io.File;
 
 /**
 *	A simplified and extended JFileChooser for single-file (only!)
@@ -363,12 +360,17 @@ public class XJFileChooser
 	/** FileChooser interface */
 	private interface FileChooser
 	{
-		public void reset();
-		public void addFileFilter(SimpleFileFilter filter);
-		public void setFileFilter(SimpleFileFilter filter);
-		public void setCurrentDirectory(File file);
-		public void setSelectedFile(File file);
-		public File display(Frame parent, String title, String acceptButtonText, int type, int mode);
+        void reset();
+
+        void addFileFilter(SimpleFileFilter filter);
+
+        void setFileFilter(SimpleFileFilter filter);
+
+        void setCurrentDirectory(File file);
+
+        void setSelectedFile(File file);
+
+        File display(Frame parent, String title, String acceptButtonText, int type, int mode);
 	}// interface FileChooser
 	
 	
@@ -403,7 +405,7 @@ public class XJFileChooser
 		
 		public void setCurrentDirectory(File file)
 		{
-			selectedDir = (file.isDirectory()) ? file.toString() : file.getPath().toString();
+            selectedDir = (file.isDirectory()) ? file.toString() : file.getPath();
 		}// setCurrentDirectory()
 		
 		public void setSelectedFile(File file)
@@ -449,8 +451,8 @@ public class XJFileChooser
 			{
 				fd.setFile(selectedFile);
 			}
-			
-			fd.show();
+
+            fd.setVisible(true);
 			fd.dispose();
 			
 			if(fd.getFile() != null)

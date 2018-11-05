@@ -22,26 +22,17 @@
 //
 package dip.gui.dialog.newgame;
 
-import java.awt.FlowLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-
 import cz.autel.dmi.HIGConstraints;
 import cz.autel.dmi.HIGLayout;
 import dip.gui.swing.GradientJLabel;
 import dip.misc.Utils;
 import dip.world.Phase;
 import dip.world.variant.data.Variant;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 /**
@@ -71,7 +62,7 @@ public class NGDStartOptions extends JPanel implements NewGameDialog.NGDTabPane
 	private Variant original = null;
 	
 	// GUI controls
-	private JComboBox 	phaseBox;
+	private JComboBox<String> phaseBox;
 	private BCSpinner	year;
 	private JSpinner	vcSC;
 	private JSpinner	vcSCChange;
@@ -84,7 +75,7 @@ public class NGDStartOptions extends JPanel implements NewGameDialog.NGDTabPane
 	public NGDStartOptions()
 	{
 		// create GUI controls
-		phaseBox = new JComboBox();
+		phaseBox = new JComboBox<>();
 		phaseBox.setEditable(false);
 		
 		year = new BCSpinner(1, 1, 9999);

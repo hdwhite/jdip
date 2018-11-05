@@ -22,6 +22,8 @@
 //
 package dip.tool;
 
+import dip.misc.Log;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -31,8 +33,6 @@ import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-
-import dip.misc.Log;
 
 /**
 *
@@ -74,7 +74,7 @@ public class ToolManager
 			// attempt file-to-URL conversion
 			try
 			{
-				foundToolURLs[i] = foundToolFiles[i].toURL();
+				foundToolURLs[i] = foundToolFiles[i].toURI().toURL();
 			}
 			catch(java.net.MalformedURLException e)
 			{
@@ -106,7 +106,7 @@ public class ToolManager
 		
 		// for each Tool, attempt to load its main class (same as the file name, without the 
 		// file extension) and add it to the Tool array
-		ArrayList list = new ArrayList();
+		ArrayList<Tool> list = new ArrayList<>();
 		for(int i=0; i<foundToolURLs.length; i++)
 		{
 			if(mainClassNames[i] != null && foundToolURLs[i] != null)
@@ -122,8 +122,8 @@ public class ToolManager
 				}
 			}
 		}
-		
-		tm.tools = (Tool[]) list.toArray(new Tool[list.size()]);
+
+		tm.tools = list.toArray(new Tool[list.size()]);
 	}// init()
 	
 	
@@ -148,7 +148,7 @@ public class ToolManager
 	/** Searches the paths for plugins, and returns the URL to each. */
 	private File[] searchForFiles(File[] searchPaths)
 	{
-		List fileList = new ArrayList();
+		List<File> fileList = new ArrayList<>();
 		
 		for(int spIdx=0; spIdx<searchPaths.length; spIdx++)
 		{
@@ -170,8 +170,8 @@ public class ToolManager
 				}
 			}
 		}
-		
-		return (File[]) fileList.toArray(new File[fileList.size()]);
+
+		return fileList.toArray(new File[fileList.size()]);
 	}// searchForFiles()
 	
 	/** (Singleton) Constructor */

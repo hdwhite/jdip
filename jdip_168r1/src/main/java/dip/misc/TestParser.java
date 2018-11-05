@@ -22,51 +22,16 @@
 //
 package dip.misc;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.LineNumberReader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.StringTokenizer;
-
-import jcmdline.BooleanParam;
-import jcmdline.CmdLineHandler;
-import jcmdline.FileParam;
-import jcmdline.HelpCmdLineHandler;
-import jcmdline.Parameter;
-import jcmdline.VersionCmdLineHandler;
-import dip.order.Build;
-import dip.order.Convoy;
-import dip.order.DefineState;
-import dip.order.Disband;
-import dip.order.Move;
-import dip.order.Order;
-import dip.order.OrderException;
-import dip.order.OrderFactory;
-import dip.order.OrderParser;
-import dip.order.Remove;
-import dip.order.Retreat;
-import dip.order.Support;
-import dip.order.ValidationOptions;
-import dip.world.Location;
-import dip.world.Phase;
-import dip.world.Position;
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.RuleOptions;
-import dip.world.TurnState;
-import dip.world.Unit;
-import dip.world.World;
-import dip.world.WorldFactory;
+import dip.order.*;
+import dip.world.*;
 import dip.world.Phase.PhaseType;
 import dip.world.Phase.SeasonType;
 import dip.world.variant.VariantManager;
 import dip.world.variant.data.Variant;
+import jcmdline.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
 *	A test harness that allows testing of the Order Parser (OrderParser.java). 
@@ -103,7 +68,7 @@ public class TestParser
 	World world = null;
 	TurnState turnState = null;	// the first & only TurnState in the World object
 	dip.world.Map map = null;
-	List cases = null;			// a List of ORPairs
+	List<ORPair> cases = null;            // a List of ORPairs
 	OrderParser op = null;
 	boolean isLogging = false;	// OrderParser internal logging enabled
 	ValidationOptions valOpts = null;	// validation options
@@ -220,7 +185,7 @@ public class TestParser
 	{
 		// list of failed case descriptions.
 		int numprocessed = 0;
-		List failedCases = new LinkedList();
+		List<String> failedCases = new LinkedList<>();
 		
 		
 		// set the validation options; lenient -- we only care about syntax!
@@ -313,7 +278,7 @@ public class TestParser
 			while(iter.hasNext())
 			{
 				System.out.println(iter.next());
-				System.out.println("");
+				System.out.println();
 			}
 		}
 		
@@ -337,7 +302,7 @@ public class TestParser
 	*	Originally, reflection was to be used but this is much easier, 
 	*	though less flexible.
 	*/
-	private void checkORP(ORPair orp, Order o, List failedCases)
+	private void checkORP(ORPair orp, Order o, List<String> failedCases)
 	{
 		String[] toks = getORPTokens(orp.getResult());
 		if(toks.length == 0)
@@ -476,7 +441,7 @@ public class TestParser
 	
 	
 	/** Validate basic params -- for all orders; always 3 params */
-	private boolean valBasicParams(ORPair orp, Order o, String[] toks, List failedCases)
+	private boolean valBasicParams(ORPair orp, Order o, String[] toks, List<String> failedCases)
 	{
 		boolean isOK = valPower(orp, o.getPower(), toks[1], failedCases);
 		
@@ -497,7 +462,7 @@ public class TestParser
 	
 	
 	/** Validate a Power */
-	private boolean valPower(ORPair orp, Power thePower, String tok, List failedCases)
+	private boolean valPower(ORPair orp, Power thePower, String tok, List<String> failedCases)
 	{
 		// is tok a valid Power name? if not, error-exit
 		Power power = map.getPower(tok);
@@ -527,7 +492,7 @@ public class TestParser
 	
 	
 	/** Validate a Location */
-	private boolean valLocation(ORPair orp, Location theLoc, String tok, List failedCases)
+	private boolean valLocation(ORPair orp, Location theLoc, String tok, List<String> failedCases)
 	{
 		// is tok a valid Power name? if not, error-exit
 		Location loc = map.parseLocation(tok);
@@ -566,7 +531,7 @@ public class TestParser
 	}// valPower()
 	
 	/** Validate a Unit Type */
-	private boolean valUnitType(ORPair orp, Unit.Type theUnitType, String tok, List failedCases)
+	private boolean valUnitType(ORPair orp, Unit.Type theUnitType, String tok, List<String> failedCases)
 	{
 		// is tok a valid Power name? if not, error-exit
 		Unit.Type ut = Unit.Type.parse(tok);
@@ -602,7 +567,7 @@ public class TestParser
 	}// valPower()
 	
 	/** Validate a Boolean */
-	private boolean valBoolean(ORPair orp, boolean theBoolean, String tok, List failedCases)
+	private boolean valBoolean(ORPair orp, boolean theBoolean, String tok, List<String> failedCases)
 	{
 		// is tok a valid Power name? if not, error-exit
 		boolean bool = false;
@@ -652,7 +617,7 @@ public class TestParser
 	/** Get tokens from an order result (non-failure) as a string array */
 	private String[] getORPTokens(String in)
 	{
-		ArrayList al = new ArrayList(10);
+		ArrayList<String> al = new ArrayList<>(10);
 		
 		// parse result.
 		// format is like xxxx(a, b, c, d)
@@ -661,8 +626,8 @@ public class TestParser
 		{
 			al.add(st.nextToken().trim());
 		}
-		
-		return (String[]) al.toArray(new String[al.size()]);
+
+		return al.toArray(new String[al.size()]);
 	}// getORPTokens()
 	
 
@@ -784,8 +749,8 @@ public class TestParser
 		try
 		{
 			boolean setupDone = false;
-			List accum = null;
-			cases = new ArrayList(200);
+			List<String> accum = null;
+			cases = new ArrayList<>(200);
 			ORPair currentCase = null;
 			List posList = null;
 			List dislodgedPosList = null;
@@ -827,8 +792,8 @@ public class TestParser
 						{
 							lnrErrorExit(lnr, "SETUP block already defined.");
 						}
-						
-						accum = new ArrayList(50);
+
+						accum = new ArrayList<>(50);
 					}
 					else if(key == KEY_END)
 					{
@@ -866,8 +831,8 @@ public class TestParser
 						{
 							lnrErrorExit(lnr, "SETUPDISLODGED block already defined.");
 						}
-						
-						accum = new ArrayList(50);
+
+						accum = new ArrayList<>(50);
 					}
 					else if(key == KEY_ORDER)
 					{

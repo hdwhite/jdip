@@ -22,6 +22,13 @@
 //
 package dip.judge.parser;
 
+import dip.misc.Log;
+import dip.order.NJudgeOrderParser;
+import dip.order.NJudgeOrderParser.NJudgeOrder;
+import dip.order.OrderException;
+import dip.order.OrderFactory;
+import dip.world.Phase.PhaseType;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -30,13 +37,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import dip.misc.Log;
-import dip.order.NJudgeOrderParser;
-import dip.order.OrderException;
-import dip.order.OrderFactory;
-import dip.order.NJudgeOrderParser.NJudgeOrder;
-import dip.world.Phase.PhaseType;
 
 
 /**
@@ -137,7 +137,7 @@ public class JudgeOrderParser
 		Pattern ha = Pattern.compile(ADJUSTMENT_ORDER_HEADER);
 		
 		// create List
-		List orderList = new ArrayList(64);
+		List<NJudgeOrder> orderList = new ArrayList<>(64);
 		
 		BufferedReader br = new BufferedReader(new StringReader(input));
 		String line = ParserUtils.getNextLongLine(br);
@@ -174,15 +174,15 @@ public class JudgeOrderParser
 		br.close();
 		
 		// create array
-		nJudgeOrders = (NJudgeOrder[]) orderList.toArray(new NJudgeOrder[orderList.size()]);
+		nJudgeOrders = orderList.toArray(new NJudgeOrder[orderList.size()]);
 	}// parseInput()
 	
 	
 	
 	
 	/** Parse move and retreat orders */
-	private void parseOrders(BufferedReader br, 
-		PhaseType phaseType, List orderList)
+	private void parseOrders(BufferedReader br,
+							 PhaseType phaseType, List<NJudgeOrder> orderList)
 	throws IOException, PatternSyntaxException
 	{
 		final Pattern prefix = Pattern.compile(ORDER_PREFIX);
@@ -210,8 +210,7 @@ public class JudgeOrderParser
 		}
 		catch(OrderException oe)
 		{
-			IOException ioe = new IOException(oe.getMessage());
-			ioe.initCause(oe);
+			IOException ioe = new IOException(oe.getMessage(), oe);
 			throw ioe;
 		}
 	}// moveAndRetreatParser()

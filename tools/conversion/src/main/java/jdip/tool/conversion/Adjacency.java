@@ -34,7 +34,7 @@ class Adjacency
 	// 
 	
 	final private Loc loc;				// initial Loc
-	final private LinkedList adjLocs;		// list of Loc objects
+	final private LinkedList<Loc> adjLocs;		// list of Loc objects
 	private boolean hasMX = false;
 	
 	private Adjacency(Loc initial)
@@ -45,7 +45,7 @@ class Adjacency
 		}
 		
 		loc = initial;
-		adjLocs = new LinkedList();
+		adjLocs = new LinkedList<>();
 	}// Adjacency
 	
 	

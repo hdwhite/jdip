@@ -23,15 +23,6 @@
 
 package dip.judge.gui;
 
-import java.io.IOException;
-import java.util.prefs.Preferences;
-
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextField;
-
 import cz.autel.dmi.HIGConstraints;
 import cz.autel.dmi.HIGLayout;
 import dip.gui.ClientFrame;
@@ -43,6 +34,10 @@ import dip.misc.Help;
 import dip.misc.SharedPrefs;
 import dip.misc.Utils;
 import dip.world.World;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.util.prefs.Preferences;
 
 
 
@@ -75,7 +70,7 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 	// vars
 	private ClientFrame			clientFrame;
 	private World				world = null;
-	private JComboBox			cbJudges;
+	private JComboBox<String> cbJudges;
 	private JTextField			tfGameName;
 	private JProgressBar		progressBar = null;
 	private FlocImporter		fi = null;
@@ -108,7 +103,7 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 		
 		// component creation
 		tfGameName = Utils.createWordTextField(25);
-		cbJudges = new JComboBox( Utils.getCommonStringArray(JUDGE_NAMES) );
+		cbJudges = new JComboBox<>(Utils.getCommonStringArray(JUDGE_NAMES));
 		cbJudges.setPrototypeDisplayValue("MMMMM");	// wide enough for any 4-letter judge
 		cbJudges.setEditable(true);
 		cbJudges.setSelectedIndex(0);	// default, if setSelectedItem() fails
@@ -285,7 +280,7 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
 			Utils.getLocalString(NOT_REGISTERED_TITLE),
 			Utils.getLocalString(NOT_REGISTERED_TEXT, 
 				tfGameName.getText().trim(),
-				(String) cbJudges.getSelectedItem()) );
+					cbJudges.getSelectedItem()));
 		
 		clientFrame.getStatusBar().clearText(); 
 		

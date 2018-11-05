@@ -671,10 +671,10 @@ public class OrderParser
 		// 		province. A move specifier ('m') *MUST* occur before each province.
 		// (2) "via convoy" or "by convoy" checking
 		// 		
-		ArrayList al = null;
+		ArrayList<Province> al = null;
 		if(st.hasMoreTokens())
 		{
-			al = new ArrayList();
+			al = new ArrayList<>();
 			al.add(srcLoc.getProvince());
 			// parse first destination (and add to array list)
 			al.add( parseLocation(map, destName).getProvince() );
@@ -1008,7 +1008,7 @@ public class OrderParser
 		Coast coast = Coast.parse(locName);	// will return Coast.UNDEFINED at worst
 		
 		// parse the province. if there are 'ties', we return the result.
-		final Collection col = map.getProvincesMatchingClosest(locName);
+		final Collection<Province> col = map.getProvincesMatchingClosest(locName);
 		final Province[] provinces = (Province[]) col.toArray(new Province[col.size()]);
 		
 		

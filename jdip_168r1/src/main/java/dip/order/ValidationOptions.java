@@ -21,10 +21,10 @@
 //
 package dip.order;
 
+import dip.misc.Utils;
+
 import java.io.Serializable;
 import java.util.Hashtable;
-
-import dip.misc.Utils;
 
 /**
 *
@@ -61,7 +61,7 @@ public class ValidationOptions implements Serializable, Cloneable
 			
 	
 	// instance variables
-	protected Hashtable map = new Hashtable(5);
+	protected Hashtable<String, Object> map = new Hashtable<>(5);
 	protected Option[] options = null; 			// subclasses should modify as appropriate in constructor
 	
 	

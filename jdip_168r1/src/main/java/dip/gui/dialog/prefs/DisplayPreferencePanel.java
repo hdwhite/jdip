@@ -23,23 +23,6 @@
 
 package dip.gui.dialog.prefs;
 
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
-
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import cz.autel.dmi.HIGConstraints;
 import cz.autel.dmi.HIGLayout;
 import dip.gui.ClientFrame;
@@ -49,6 +32,15 @@ import dip.misc.SharedPrefs;
 import dip.misc.Utils;
 import dip.order.OrderFormat;
 import dip.order.OrderFormatOptions;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 /**
 *	Display preferences
@@ -101,7 +93,7 @@ public class DisplayPreferencePanel extends PreferencePanel
 	
 	private JCheckBox cbPossessive;
 	private JCheckBox cbDot;
-	private JComboBox arrowBox;
+	private JComboBox<String> arrowBox;
 	
 	private JLabel example;
 	
@@ -289,8 +281,8 @@ public class DisplayPreferencePanel extends PreferencePanel
 		cbDot = new JCheckBox(Utils.getLocalString(I18N_LABLE_END_DOT));
 		cbDot.setSelected(orderFormat.getEndWithDot());
 		cbDot.addChangeListener(ecl);
-		
-		arrowBox = new JComboBox(OrderFormatOptions.ARROWS);
+
+		arrowBox = new JComboBox<>(OrderFormatOptions.ARROWS);
 		arrowBox.setEditable(false);
 		arrowBox.setPrototypeDisplayValue("MMM");
 		arrowBox.setSelectedItem(orderFormat.getArrow());
@@ -346,7 +338,7 @@ public class DisplayPreferencePanel extends PreferencePanel
 		private ButtonGroup bg;
 		private JRadioButton brief;
 		private JRadioButton full;
-		private JComboBox styleBox;
+		private JComboBox<String> styleBox;
 		private JLabel label;
 		private JCheckBox checkBox = null;
 		private boolean allowPlural = false;
@@ -383,7 +375,7 @@ public class DisplayPreferencePanel extends PreferencePanel
 			label = new JLabel(labelText);
 			
 			// combobox 
-			styleBox = new JComboBox((String[]) Utils.parseCSV(
+			styleBox = new JComboBox<>(Utils.parseCSV(
 				Utils.getLocalString(I18N_STYLE_NAMES)));
 			styleBox.setPrototypeDisplayValue("MMMMMMMMMM");
 			styleBox.setEditable(false);

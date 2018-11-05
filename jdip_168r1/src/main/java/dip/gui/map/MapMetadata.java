@@ -22,21 +22,20 @@
 //
 package dip.gui.map;
 
-import java.awt.geom.Point2D;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import dip.misc.Log;
 import dip.world.Coast;
 import dip.world.Power;
 import dip.world.Province;
 import dip.world.variant.data.Symbol;
 import dip.world.variant.data.SymbolPack;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.awt.geom.Point2D;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 
 /**
@@ -150,8 +149,8 @@ public class MapMetadata
 	
 	
 	// instance variables
-	private Map infoMap;				// placement info
-	private HashMap displayProps;		// display info
+	private Map<Province, InfoEntry> infoMap;                // placement info
+	private HashMap<Object, Object> displayProps;        // display info Todo: this map is very strangely used
 	private final MapPanel mp;
 	private Point2D.Float dislodgedUnitOffset = null;
 	private boolean supressPlacementErrors = false;
@@ -183,8 +182,8 @@ public class MapMetadata
 		this.mp = mp;
 		this.sp = sp;
 		this.supressPlacementErrors = supressPlacementErrors;
-		infoMap = new HashMap(113);
-		displayProps = new HashMap(47);
+		infoMap = new HashMap<>(113);
+		displayProps = new HashMap<>(47);
 		
 		Element root = mp.getSVGDocument().getRootElement();
 		parseDisplayMetadata(root);
@@ -205,7 +204,7 @@ public class MapMetadata
 	/** Get an InfoEntry */
 	public InfoEntry getInfoEntry(Province key)
 	{
-		return (InfoEntry) infoMap.get(key);
+		return infoMap.get(key);
 	}// getInfoEntry()
 	
 	/** 
@@ -244,8 +243,8 @@ public class MapMetadata
 		private final Point2D.Float unit;
 		private final Point2D.Float dislodgedUnit;
 		private final Point2D.Float sc;
-		private Map unitCoasts;
-		private Map dislodgedUnitCoasts;
+		private Map<Coast, Point2D.Float> unitCoasts;
+		private Map<Coast, Point2D.Float> dislodgedUnitCoasts;
 		
 		/** Create an InfoEntry object; if directional coasts, use setCoastMapings as well. */
 		public InfoEntry(Point2D.Float unit, Point2D.Float dislodgedUnit, 
@@ -264,7 +263,7 @@ public class MapMetadata
 		
 		
 		/** Sets coast data maps for multi-coastal provinces; if not set, default placement data is used. */
-		public void setCoastMappings(Map unitCoasts, Map dislodgedUnitCoasts)
+		public void setCoastMappings(Map<Coast, Point2D.Float> unitCoasts, Map<Coast, Point2D.Float> dislodgedUnitCoasts)
 		{
 			this.unitCoasts = unitCoasts;
 			this.dislodgedUnitCoasts = dislodgedUnitCoasts;	
@@ -281,12 +280,12 @@ public class MapMetadata
 			
 			if(unitCoasts == null)
 			{
-				unitCoasts = new HashMap(3);
+				unitCoasts = new HashMap<>(3);
 			}
 			
 			if(dislodgedUnitCoasts == null)
 			{
-				dislodgedUnitCoasts = new HashMap(3);
+				dislodgedUnitCoasts = new HashMap<>(3);
 			}
 			
 			unitCoasts.put(coast, unitPt);
@@ -300,8 +299,8 @@ public class MapMetadata
 			{
 				return makePt(unit);
 			}
-			
-			Point2D.Float pt = (Point2D.Float) unitCoasts.get(coast);
+
+			Point2D.Float pt = unitCoasts.get(coast);
 			return (pt == null) ? makePt(unit) : makePt(pt);
 		}// getUnitPt()
 		
@@ -312,8 +311,8 @@ public class MapMetadata
 			{
 				return makePt(dislodgedUnit);
 			}
-			
-			Point2D.Float pt = (Point2D.Float) dislodgedUnitCoasts.get(coast);
+
+			Point2D.Float pt = dislodgedUnitCoasts.get(coast);
 			return (pt == null) ? makePt(dislodgedUnit) : makePt(pt);
 		}// getDislodgedUnitPt()
 		
@@ -598,7 +597,7 @@ public class MapMetadata
 				}
 				else
 				{
-					InfoEntry ie = (InfoEntry) infoMap.get(province);
+					InfoEntry ie = infoMap.get(province);
 					if(ie == null)
 					{
 						throw new MapException("Error in PROVINCE: "+provinceName+"; province metadata with coast must succeed those without; e.g., stp-sc must come AFTER stp");
@@ -843,9 +842,7 @@ public class MapMetadata
 	
 	
 	/** Helper method: set an order parameter, but if it doesn't exist, don't complain. */
-	private void putOptionalOrderParam(String el, String att, Object value)
-	throws MapException
-	{
+	private void putOptionalOrderParam(String el, String att, Object value) {
 		if(el == null || att == null)
 		{
 			throw new IllegalArgumentException();

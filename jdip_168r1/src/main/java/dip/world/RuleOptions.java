@@ -22,15 +22,15 @@
 //
 package dip.world;
 
+import dip.misc.Utils;
+import dip.world.variant.data.Variant;
+
 import java.io.InvalidObjectException;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
-
-import dip.misc.Utils;
-import dip.world.variant.data.Variant;
 
 /**
 *	RuleOptions is an object for storing Options and OptionValues that 
@@ -123,7 +123,7 @@ public class RuleOptions implements Serializable
 	
 	
 	// instance variables
-	protected HashMap optionMap = null;
+	protected HashMap<Option, OptionValue> optionMap = null;
 	
 	
 	/**
@@ -303,7 +303,7 @@ public class RuleOptions implements Serializable
 	/** Creates a new RuleOptions object, which stores various Rule options. */
 	public RuleOptions()
 	{
-		optionMap = new HashMap(31);
+		optionMap = new HashMap<>(31);
 	}// RuleOptions()
 	
 	
@@ -342,8 +342,8 @@ public class RuleOptions implements Serializable
 		{
 			throw new IllegalArgumentException("null Option");
 		}
-		
-		OptionValue value = (OptionValue) optionMap.get(option);
+
+		OptionValue value = optionMap.get(option);
 		if(value == null)
 		{
 			return option.getDefault();
@@ -354,7 +354,7 @@ public class RuleOptions implements Serializable
 	
 	
 	/** Returns a Set of all Options. */
-	public Set getAllOptions()
+	public Set<Option> getAllOptions()
 	{
 		return optionMap.keySet();
 	}// getAllOptions()

@@ -87,7 +87,7 @@ public abstract class OrderFactory
 	
 	/** Creates a Move order */
 	public abstract Move createMove(Power power, Location src, 
-		Unit.Type srcUnitType, Location dest, List routes);
+		Unit.Type srcUnitType, Location dest, List<Province[]> routes);
 	
 	/** Creates a Support order, to Support a unit staying in place. */
 	public abstract Support createSupport(Power power, Location src, 
@@ -171,7 +171,7 @@ public abstract class OrderFactory
 		
 		/** Creates a Move order */
 		public Move createMove(Power power, Location src, 
-			Unit.Type srcUnitType, Location dest, List routes)
+			Unit.Type srcUnitType, Location dest, List<Province[]> routes)
 		{
 			return new Move(power, src, srcUnitType, dest, routes);
 		}// createMove()

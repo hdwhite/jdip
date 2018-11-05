@@ -20,23 +20,10 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.plugin.export; 
+package jdip.plugin.export;
 
-import dip.tool.*;
-import dip.gui.*;
-import dip.gui.swing.*;
-import dip.gui.map.*;
-import dip.misc.*;
-import dip.world.*;
-import dip.process.*;
-import dip.order.*;
-import dip.order.result.*;
-
-import javax.swing.*;
-import java.awt.event.*;
-import java.net.URI;
-import java.io.*;
-import java.util.*;
+import dip.misc.Utils;
+import dip.world.TurnState;
 
 
 /**

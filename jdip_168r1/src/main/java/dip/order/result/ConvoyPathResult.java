@@ -21,13 +21,13 @@
 //
 package dip.order.result;
 
-import java.util.List;
-
 import dip.misc.Utils;
 import dip.order.OrderFormat;
 import dip.order.OrderFormatOptions;
 import dip.order.Orderable;
 import dip.world.Province;
+
+import java.util.List;
 /**
 *	
 *	An OrderResult that contains the path taken by a successfully 
@@ -45,9 +45,8 @@ public class ConvoyPathResult extends OrderResult
 	
 	
 	/** Create a ConvoyPathResult */
-	public ConvoyPathResult(Orderable order, List path)
-	{
-		this(order, (Province[]) path.toArray(new Province[path.size()]));
+	public ConvoyPathResult(Orderable order, List<Province> path) {
+		this(order, path.toArray(new Province[path.size()]));
 	}// ConvoyPathResult()
 	
 	/** Create a ConvoyPathResult */

@@ -507,7 +507,7 @@ public class PersistenceManager
 						{
 							// rewind current game
 							Iterator iter = currentWorld.getPhaseSet().iterator();
-							LinkedList l = new LinkedList();
+							LinkedList<Phase> l = new LinkedList<>();
 							while(iter.hasNext())
 							{
 								Phase p = (Phase) iter.next();

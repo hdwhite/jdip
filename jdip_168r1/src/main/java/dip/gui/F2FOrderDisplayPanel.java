@@ -22,28 +22,6 @@
 //
 package dip.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import cz.autel.dmi.HIGConstraints;
 import cz.autel.dmi.HIGLayout;
 import dip.gui.map.MapMetadata;
@@ -55,6 +33,15 @@ import dip.world.Phase;
 import dip.world.Position;
 import dip.world.Power;
 import dip.world.TurnState;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
+import java.util.List;
 
 
 /**
@@ -514,7 +501,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	{
  		// find Power tabs that are not disabled
 		final Power[] powers = world.getMap().getPowers();
-		List tabSelectionOrderList = new ArrayList(powers.length);
+		List<TabComponent> tabSelectionOrderList = new ArrayList<>(powers.length);
  		
 		for(int i=0; i<powers.length; i++)
 		{
@@ -533,7 +520,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	   {
 		   // shuffle, return first on list.
 		   Collections.shuffle(tabSelectionOrderList);
-		   return (TabComponent) tabSelectionOrderList.get(0);
+		   return tabSelectionOrderList.get(0);
 	   }
     }// selectNextRandomTab()
 
@@ -657,7 +644,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 			{
 				final Power power = powers[i];
 				boolean value = state.getSubmitted(power);
-				aSubmit = (value) ? true : aSubmit;
+				aSubmit = (value) || aSubmit;
 				setTabEnabled(power, !value);
 			}
 			
@@ -750,13 +737,13 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 	/** The F2F Statekeeping object, for saving */
 	public static class F2FState
 	{
-		private final HashMap submittedMap;
+		private final HashMap<Power, Boolean> submittedMap;
 		private Power currentPower;
 		
 		/** Create an F2FState object */
 		public F2FState()
 		{
-			submittedMap = new HashMap(11);
+			submittedMap = new HashMap<>(11);
 		}// F2FState()
 		
 		/** Create an F2FState object from an existing F2FState object */
@@ -796,7 +783,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel
 		public synchronized void setSubmitted(Power power, boolean value)
 		{
 			if(power == null) { throw new IllegalArgumentException(); }
-			submittedMap.put(power, Boolean.valueOf(value)); 
+			submittedMap.put(power, value);
 		}// setSubmitted()
 		
 		/** Reset all powers to "not submitted" state. */

@@ -110,7 +110,7 @@ public class MapConvert
 		LineNumberReader lnr = null;
 		try
 		{
-			ArrayList tmpLines = new ArrayList(500);
+            ArrayList<FileLine> tmpLines = new ArrayList<>(500);
 			lnr = new LineNumberReader(new BufferedReader(new FileReader(input)));
 			String line = lnr.readLine();
 			int lineNum = lnr.getLineNumber();
@@ -126,8 +126,8 @@ public class MapConvert
 				line = lnr.readLine();
 				lineNum = lnr.getLineNumber();
 			}
-			
-			lines = (FileLine[]) tmpLines.toArray(new FileLine[tmpLines.size()]);
+
+            lines = tmpLines.toArray(new FileLine[tmpLines.size()]);
 			System.out.println("Read "+lineNum+" lines from "+input);
 		}
 		finally
@@ -205,7 +205,7 @@ public class MapConvert
 			makeXMLData(sb, pmap.getList());
 			
 			// write adjacency data
-			HashMap templateData = new HashMap();
+            HashMap<String, String> templateData = new HashMap<>();
 			templateData.put("xmldata", sb.toString());
 			bw.write( adjacencyTemplate.parse(templateData) );
 			System.out.println("File created: "+adjacencyOutput);
@@ -306,7 +306,7 @@ public class MapConvert
 				// HashMap is used to keep track of borders, so we don't
 				// create dupes.
 				//
-				HashMap borderMap = new HashMap();
+                HashMap<String, Boolean> borderMap = new HashMap<>();
 						
 				iter = provinces.iterator();
 				while(iter.hasNext())
@@ -361,7 +361,7 @@ public class MapConvert
 			bw = new BufferedWriter(new FileWriter(out));
 			
 			// write adjacency data
-			HashMap templateData = new HashMap();
+            HashMap<String, String> templateData = new HashMap<>();
 			makeVariantXMLTemplateData(templateData, provList, adjacencyFile);
 			bw.write( variantTemplate.parse(templateData) );
 			System.out.println("File created: "+out);
@@ -375,9 +375,9 @@ public class MapConvert
 		}
 		
 	}// makeVariantFile()
-	
-	
-	private void makeVariantXMLTemplateData(HashMap td, List provList, File adjacencyFile)
+
+
+    private void makeVariantXMLTemplateData(HashMap<String, String> td, List provList, File adjacencyFile)
 	{
 		// DEFAULT unknown data
 		td.put("mapTitle", UNKNOWN_DATA);
@@ -409,7 +409,7 @@ public class MapConvert
 		// these are derived from the chars
 		StringBuffer sb = new StringBuffer();
 		Iterator iter = provList.iterator();
-		HashMap powerMap = new HashMap();
+        HashMap<String, Boolean> powerMap = new HashMap<>();
 		while(iter.hasNext())
 		{
 			ProvObj po = (ProvObj) iter.next();
@@ -470,14 +470,14 @@ public class MapConvert
 	/** Maps provinces to short names. Also keeps an iterable list. */
 	class PMap
 	{
-		private final HashMap map;
-		private final LinkedList list;
+        private final HashMap<String, ProvObj> map;
+        private final LinkedList<ProvObj> list;
 		
 		
 		public PMap()
 		{
-			map = new HashMap(211);
-			list = new LinkedList();
+            map = new HashMap<>(211);
+            list = new LinkedList<>();
 		}// PMap()
 		
 		
@@ -500,8 +500,8 @@ public class MapConvert
 			{
 				throw new IllegalArgumentException();
 			}
-			
-			ProvObj po = (ProvObj) map.get(name.toLowerCase());
+
+            ProvObj po = map.get(name.toLowerCase());
 			if(po == null)
 			{
 				// search thru list

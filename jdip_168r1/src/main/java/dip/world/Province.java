@@ -22,11 +22,11 @@
 //
 package dip.world;
 
+import dip.order.Order;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import dip.order.Order;
 
 
 /**
@@ -68,7 +68,7 @@ import dip.order.Order;
 *	be handled as a separate object within the Province.
 *
 */
-public class Province implements java.io.Serializable, Comparable
+public class Province implements java.io.Serializable, Comparable<Province>
 {
 	
 	// immutable persistent fields
@@ -93,14 +93,14 @@ public class Province implements java.io.Serializable, Comparable
 	*/
 	protected static class Adjacency implements java.io.Serializable
 	{
-		private final HashMap adjLoc;
+		private final HashMap<Coast, Location[]> adjLoc;
 		
 		/**
 		* Creates a new Adjacency object.
 		*/
 		private Adjacency()
 		{
-			adjLoc = new HashMap(7);
+			adjLoc = new HashMap<>(7);
 		}// Adjacency()
 		
 		/** 
@@ -121,7 +121,7 @@ public class Province implements java.io.Serializable, Comparable
 		*/
 		protected Location[] getLocations(Coast coast)
 		{
-			Location[] locations = (Location[]) adjLoc.get(coast);
+			Location[] locations = adjLoc.get(coast);
 			
 			if(locations == null)
 			{
@@ -139,8 +139,8 @@ public class Province implements java.io.Serializable, Comparable
 		*/
 		protected void createWingCoasts()
 		{
-			HashSet 	provSet = new HashSet(11);
-			ArrayList 	locList = new ArrayList(11);
+			HashSet<Province> provSet = new HashSet<>(11);
+			ArrayList<Location> locList = new ArrayList<>(11);
 			for(int i=0; i<Coast.ALL_COASTS.length; i++)
 			{
 				Location[] locs = getLocations(Coast.ALL_COASTS[i]);
@@ -155,7 +155,7 @@ public class Province implements java.io.Serializable, Comparable
 			}
 			
 			provSet.clear();
-			setLocations(Coast.WING, (Location[]) locList.toArray(new Location[locList.size()]));
+			setLocations(Coast.WING, locList.toArray(new Location[locList.size()]));
 		}// createWingCoasts()
 		
 		
@@ -213,12 +213,7 @@ public class Province implements java.io.Serializable, Comparable
 			}
 			
 			// check convoyable coasts
-			if(p.isConvoyableCoast() && (!isLand || (!isSingle && !isDirectional)) )
-			{
-				return false;
-			}
-			
-			return true;
+			return !p.isConvoyableCoast() || (isLand && (isSingle || isDirectional));
 		}// validate()		
 	}// inner class Adjacency()
 	
@@ -309,8 +304,8 @@ public class Province implements java.io.Serializable, Comparable
 	*/
 	public Location[] getAllAdjacent()
 	{
-		HashSet 	locSet = new HashSet(13);
-		ArrayList 	locList = new ArrayList(13);
+		HashSet<Location> locSet = new HashSet<>(13);
+		ArrayList<Location> locList = new ArrayList<>(13);
 		for(int i=0; i<Coast.ALL_COASTS.length; i++)
 		{
 			Location[] locs = adjacency.getLocations(Coast.ALL_COASTS[i]);
@@ -323,8 +318,8 @@ public class Province implements java.io.Serializable, Comparable
 				}
 			}
 		}
-		
-		return (Location[]) locList.toArray(new Location[locList.size()]);
+
+		return locList.toArray(new Location[locList.size()]);
 	}// getAllAdjacent()
 	
 	
@@ -532,7 +527,7 @@ public class Province implements java.io.Serializable, Comparable
 	{
 		if(adjacency.getLocations(Coast.SEA) == Location.EMPTY)
 		{
-			ArrayList dir = new ArrayList(4);
+			ArrayList<Coast> dir = new ArrayList<>(4);
 			
 			for(int i=0; i<Coast.ANY_DIRECTIONAL.length; i++)
 			{
@@ -541,8 +536,8 @@ public class Province implements java.io.Serializable, Comparable
 					dir.add(Coast.ANY_DIRECTIONAL[i]);
 				}
 			}
-			
-			return (Coast[]) dir.toArray(new Coast[dir.size()]);
+
+			return dir.toArray(new Coast[dir.size()]);
 		}
 		
 		return new Coast[0];
@@ -552,12 +547,7 @@ public class Province implements java.io.Serializable, Comparable
 	/** Determines if specified coast is allowed for this Province */
 	public boolean isCoastValid(Coast coast)
 	{
-		if(adjacency.getLocations(coast) == Location.EMPTY)
-		{
-			return false;
-		};
-		
-		return true;
+		return adjacency.getLocations(coast) != Location.EMPTY;
 	}// isCoastValid()
 	
 	
@@ -685,9 +675,8 @@ public class Province implements java.io.Serializable, Comparable
 	
 	
 	/** Compares this province to another, by the full name, ignoring case */
-	public int compareTo(Object obj)
-	{
-		return fullName.compareToIgnoreCase( ((Province) obj).fullName );
+	public int compareTo(Province obj) {
+		return fullName.compareToIgnoreCase(obj.fullName);
 	}// compareTo()
 	
 }// class Province

@@ -21,14 +21,10 @@
 //
 package dip.order;
 
-import java.util.StringTokenizer;
-
 import dip.misc.Log;
-import dip.world.Coast;
-import dip.world.Location;
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.Unit;
+import dip.world.*;
+
+import java.util.StringTokenizer;
 
 /**
 *	OrderFormat formats orders according to the specified format string. 
@@ -229,7 +225,7 @@ public class OrderFormat
 			// if not all words, loop no more.
 			if(!allWords)
 			{
-				sb.append(input.substring(i+1, input.length()));
+				sb.append(input.substring(i + 1));
 				break;
 			}
 		}
@@ -629,8 +625,7 @@ public class OrderFormat
 		{
 			try
 			{
-				return cls.getMethod(name.substring(0, name.length()-2), 
-					null).invoke(order, null);
+				return cls.getMethod(name.substring(0, name.length() - 2)).invoke(order);
 			}
 			catch(Exception e)
 			{
@@ -692,7 +687,7 @@ public class OrderFormat
 				// only show possessive power if it is not the same as the
 				// source power AND we are set to show posessive powers.
 				if( ofo.getShowPossessivePower()
-					&& !order.getPower().equals((Power) input) )
+						&& !order.getPower().equals(input))
 				{
 					return input;
 				}

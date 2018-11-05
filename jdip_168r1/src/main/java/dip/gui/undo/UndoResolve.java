@@ -22,15 +22,15 @@
 //
 package dip.gui.undo;
 
-import java.util.LinkedList;
-import java.util.List;
+import dip.misc.Utils;
+import dip.order.result.Result;
+import dip.world.TurnState;
+import dip.world.World;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
-
-import dip.misc.Utils;
-import dip.world.TurnState;
-import dip.world.World;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -47,7 +47,7 @@ public class UndoResolve extends XAbstractUndoableEdit
 	private final static String PRESENTATION_NAME_PREFIX = "Undo.resolve";
 	private TurnState resolvedTS;
 	private TurnState nextTS;
-	private List resolvedTSResults;
+	private List<Result> resolvedTSResults;
 	
 	
 	/**  Create an UndoResolve object. */
@@ -118,7 +118,7 @@ public class UndoResolve extends XAbstractUndoableEdit
 			//
 			// clear resolved results 
 			// set as unresolved
-			resolvedTS.setResultList(new LinkedList());
+			resolvedTS.setResultList(new LinkedList<>());
 			resolvedTS.setResolved(false);
 			
 			// nextTS:

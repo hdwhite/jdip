@@ -61,9 +61,8 @@ public class ProvinceData
 	public void setAdjacentProvinceTypes(String[] values) 	{ adj_types = values; }
 	
 	/** Set all short (abbreviated) names, from a List. */
-	public void setShortNames(List list) 				
-	{ 
-		shortNames = (String[]) list.toArray(new String[list.size()]); 
+	public void setShortNames(List<String> list) {
+		shortNames = list.toArray(new String[list.size()]);
 	}// setShortNames()
 	
 	/** Sets whether this Province is a convoyable coastal province. */
@@ -73,9 +72,8 @@ public class ProvinceData
 	public boolean getConvoyableCoast() 			{ return isConvoyableCoast; }
 	
 	/** Sets the Border ID names for this province (if any) */
-	public void setBorders(List list)
-	{
-		borders = (String[]) list.toArray(new String[list.size()]); 
+	public void setBorders(List<String> list) {
+		borders = list.toArray(new String[list.size()]);
 	}// setBorders()
 	
 	/** Gets the Border ID names for this province (if any) */

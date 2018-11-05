@@ -22,26 +22,6 @@
 //
 package dip.world.variant;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import dip.gui.dialog.ErrorDialog;
 import dip.misc.Log;
 import dip.misc.Utils;
@@ -50,6 +30,17 @@ import dip.world.variant.data.SymbolPack;
 import dip.world.variant.data.Variant;
 import dip.world.variant.parser.XMLSymbolParser;
 import dip.world.variant.parser.XMLVariantParser;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.*;
 
 
 /**
@@ -95,8 +86,8 @@ public class VariantManager
 	
 	// instance variables
 	private final boolean isInWebstart;
-	private HashMap variantMap = null;	// map of lowercased Variant names to MapRec objects (which contain VRecs)
-	private HashMap symbolMap = null;	// lowercase symbol names to MapRec objects (which contain SPRecs)
+	private HashMap<String, MapRec> variantMap = null;    // map of lowercased Variant names to MapRec objects (which contain VRecs)
+	private HashMap<String, MapRec> symbolMap = null;    // lowercase symbol names to MapRec objects (which contain SPRecs)
 	
 	// cached variables to enhance performance of getResource() methods
 	private transient Variant[] variants = new Variant[0];			// The sorted Variant list
@@ -425,8 +416,8 @@ public class VariantManager
 			// note that we need to avoid putting duplicates
 			// into the array.
 			//
-			ArrayList list = new ArrayList();		// list of variants
-			Set set = new HashSet();				// a set of MapRecs
+			ArrayList<Variant> list = new ArrayList<>();        // list of variants
+			Set<MapRec> set = new HashSet<>();                // a set of MapRecs
 			set.addAll(vm.variantMap.values());
 			
 			// fill variant list with variants.
@@ -440,7 +431,7 @@ public class VariantManager
 			}
 			
 			Collections.sort(list);
-			vm.variants = (Variant[]) list.toArray(new Variant[list.size()]);
+			vm.variants = list.toArray(new Variant[list.size()]);
 		}
 		
 		return vm.variants;
@@ -458,8 +449,8 @@ public class VariantManager
 		if(vm.symbolPacks.length != vm.symbolMap.size())
 		{
 			// avoid putting duplicates into the array.
-			ArrayList list = new ArrayList();		// list of SymbolPacks
-			Set set = new HashSet();				// a set of MapRecs
+			ArrayList<SymbolPack> list = new ArrayList<>();        // list of SymbolPacks
+			Set<MapRec> set = new HashSet<>();                // a set of MapRecs
 			set.addAll(vm.symbolMap.values());
 			
 			// fill variant list with variants.
@@ -473,7 +464,7 @@ public class VariantManager
 			}
 			
 			Collections.sort(list);
-			vm.symbolPacks = (SymbolPack[]) list.toArray(new SymbolPack[list.size()]);
+			vm.symbolPacks = list.toArray(new SymbolPack[list.size()]);
 		}
 		
 		return vm.symbolPacks;
@@ -491,10 +482,10 @@ public class VariantManager
 	public static synchronized Variant getVariant(String name, float version)
 	{
 		checkVM();
-		MapRec mr = (MapRec) vm.variantMap.get(name.toLowerCase());
+		MapRec mr = vm.variantMap.get(name.toLowerCase());
 		if(mr != null)
 		{
-			return (Variant) ((VRec) mr.get(version)).getVariant();
+			return ((VRec) mr.get(version)).getVariant();
 		}
 		
 		return null;
@@ -516,11 +507,11 @@ public class VariantManager
 		{
 			return null;
 		}
-		
-		MapRec mr = (MapRec) vm.symbolMap.get(name.toLowerCase());
+
+		MapRec mr = vm.symbolMap.get(name.toLowerCase());
 		if(mr != null)
 		{
-			return (SymbolPack) ((SPRec) mr.get(version)).getSymbolPack();
+			return ((SPRec) mr.get(version)).getSymbolPack();
 		}
 		
 		return null;
@@ -601,7 +592,7 @@ public class VariantManager
 	public synchronized static float[] getVariantVersions(final String name)
 	{
 		checkVM();
-		MapRec mr = (MapRec) vm.variantMap.get(name.toLowerCase());
+		MapRec mr = vm.variantMap.get(name.toLowerCase());
 		if(mr != null)
 		{
 			return ( mr.getVersions() );
@@ -617,7 +608,7 @@ public class VariantManager
 	public synchronized static float[] getSymbolPackVersions(String name)
 	{
 		checkVM();
-		MapRec mr = (MapRec) vm.symbolMap.get(name.toLowerCase());
+		MapRec mr = vm.symbolMap.get(name.toLowerCase());
 		if(mr != null)
 		{
 			return ( mr.getVersions() );
@@ -815,8 +806,8 @@ public class VariantManager
 	/** Singleton */
 	private VariantManager()
 	{
-		variantMap = new HashMap(53);
-		symbolMap = new HashMap(17);
+		variantMap = new HashMap<>(53);
+		symbolMap = new HashMap<>(17);
 		isInWebstart = Utils.isInWebstart();
 	}// VariantManager()
 	
@@ -828,7 +819,7 @@ public class VariantManager
 	*/
 	private URL[] searchForFiles(final File[] searchPaths, final String[] extensions)
 	{
-		List urlList = new LinkedList();
+		List<URL> urlList = new LinkedList<>();
 		
 		for(int spIdx=0; spIdx<searchPaths.length; spIdx++)
 		{
@@ -848,7 +839,7 @@ public class VariantManager
 						{
 							try
 							{
-								urlList.add(list[i].toURL());
+								urlList.add(list[i].toURI().toURL());
 							}
 							catch(java.net.MalformedURLException e)
 							{
@@ -859,8 +850,8 @@ public class VariantManager
 				}
 			}
 		}
-		
-		return (URL[]) urlList.toArray(new URL[urlList.size()]);
+
+		return urlList.toArray(new URL[urlList.size()]);
 	}// searchForFiles()
 	
 	
@@ -889,7 +880,7 @@ public class VariantManager
 	private static String getFile(URL url)
 	{
 		String s = url.toString();
-		return s.substring(s.lastIndexOf("/")+1, s.length());
+		return s.substring(s.lastIndexOf("/") + 1);
 	}// getFile()
 	
 	/** Get the webstart plugin name */
@@ -1068,7 +1059,7 @@ public class VariantManager
 		
 		// see if we are mapped to a MapRec already.
 		//
-		MapRec mapRec = (MapRec) vm.variantMap.get(vName);
+		MapRec mapRec = vm.variantMap.get(vName);
 		if(mapRec == null)
 		{
 			// not yet mapped! let's map it.
@@ -1106,7 +1097,7 @@ public class VariantManager
 			if( !"".equals(aliases[idx]) )
 			{
 				final String alias = aliases[idx].toLowerCase();
-				MapRec testMapRec = (MapRec) vm.variantMap.get(alias);
+				MapRec testMapRec = vm.variantMap.get(alias);
 				if(testMapRec == null)
 				{
 					// add alias
@@ -1154,7 +1145,7 @@ public class VariantManager
 		
 		// see if we are mapped to a MapRec already.
 		//
-		MapRec mapRec = (MapRec) vm.symbolMap.get(spName);
+		MapRec mapRec = vm.symbolMap.get(spName);
 		if(mapRec == null)
 		{
 			// not yet mapped! let's map it.
@@ -1191,7 +1182,7 @@ public class VariantManager
 	/** Gets the VRec associated with a Variant (via name and version) */
 	private static VRec getVRec(Variant v)
 	{
-		MapRec mapRec = (MapRec) vm.variantMap.get(v.getName().toLowerCase());
+		MapRec mapRec = vm.variantMap.get(v.getName().toLowerCase());
 		return (VRec) mapRec.get(v.getVersion());
 	}// getVRec()
 	
@@ -1199,14 +1190,14 @@ public class VariantManager
 	/** Gets the SPRec associated with a SymbolPack (via name and version) */
 	private static SPRec getSPRec(SymbolPack sp)
 	{
-		MapRec mapRec = (MapRec) vm.symbolMap.get(sp.getName().toLowerCase());
+		MapRec mapRec = vm.symbolMap.get(sp.getName().toLowerCase());
 		return (SPRec) mapRec.get(sp.getVersion());
 	}// getSPRec()
 	
 	/** The value which is stored within the name mapping */
 	private static class MapRec
 	{
-		private ArrayList list = new ArrayList(2);
+		private ArrayList<MapRecObj> list = new ArrayList<>(2);
 		
 		// this constructor prevents us from having an empty list.
 		public MapRec(MapRecObj obj)
@@ -1226,7 +1217,7 @@ public class VariantManager
 		{ 
 			for(int i=0; i<list.size(); i++)
 			{
-				MapRecObj temp = (MapRecObj) list.get(i);
+				MapRecObj temp = list.get(i);
 				if(temp.getVersion() == obj.getVersion())
 				{
 					return false;
@@ -1243,7 +1234,7 @@ public class VariantManager
 			final float[] versions = new float[list.size()];
 			for(int i=0; i<list.size(); i++)
 			{
-				MapRecObj mro = (MapRecObj) list.get(i);
+				MapRecObj mro = list.get(i);
 				versions[i] = mro.getVersion();
 			}
 			
@@ -1264,13 +1255,13 @@ public class VariantManager
 			// typical-case
 			if(size == 1 && (version == VERSION_OLDEST || version == VERSION_NEWEST))
 			{
-				return (MapRecObj) list.get(0);
+				return list.get(0);
 			}
 			
 			MapRecObj selected = null;
 			for(int i=0; i<size; i++)
 			{
-				MapRecObj mro = (MapRecObj) list.get(i);
+				MapRecObj mro = list.get(i);
 				selected = (selected == null) ? mro : selected;
 				
 				if(	(version == VERSION_OLDEST && mro.getVersion() < selected.getVersion()) ||

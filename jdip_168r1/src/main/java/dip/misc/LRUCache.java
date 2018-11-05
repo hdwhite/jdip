@@ -32,7 +32,7 @@ import java.util.Map;
 *
 *
 */
-public class LRUCache extends LinkedHashMap 
+public class LRUCache<K, V> extends LinkedHashMap<K, V>
 {
 	private int maxsize;
 	
@@ -47,9 +47,9 @@ public class LRUCache extends LinkedHashMap
 		super( (maxsize*4/3) + 1, 0.75f, true);
 		this.maxsize = maxsize;
 	}// LRUCache()
-	
-	
-	public Object put(Object key, Object value)
+
+
+	public V put(K key, V value)
 	{
 		return super.put(key, value);
 	}

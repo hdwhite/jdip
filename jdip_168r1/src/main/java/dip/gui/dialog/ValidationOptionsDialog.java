@@ -22,27 +22,19 @@
 //
 package dip.gui.dialog;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JEditorPane;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSeparator;
-import javax.swing.ListSelectionModel;
-import javax.swing.border.EtchedBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import cz.autel.dmi.HIGConstraints;
 import cz.autel.dmi.HIGLayout;
 import dip.gui.ClientFrame;
 import dip.misc.Utils;
 import dip.order.ValidationOptions;
+
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 /**
@@ -205,7 +197,7 @@ public class ValidationOptionsDialog extends HeaderDialog
 			if(i < nButtons)
 			{
 				radioButtons[i].setText(bText[i]);
-				radioButtons[i].setSelected(((oVals[i].equals(value)) ? true : false));
+                radioButtons[i].setSelected((oVals[i].equals(value)));
 				radioButtons[i].setToolTipText(bTips[i]);
 				radioButtons[i].setActionCommand(String.valueOf(i));
 				radioButtons[i].setVisible(true);
@@ -251,8 +243,8 @@ public class ValidationOptionsDialog extends HeaderDialog
 		{
 			options[i] = dopts[i].getDisplayName();
 		}
-		
-		optionList = new JList(options);
+
+        optionList = new JList<>(options);
 		optionList.setBorder(new EtchedBorder());
 		optionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		optionList.addListSelectionListener(new ListSelectionListener()

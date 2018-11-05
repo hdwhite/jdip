@@ -208,7 +208,7 @@ public class Border implements Serializable
 	throws InvalidBorderException
 	{
 		StringTokenizer st = new StringTokenizer(in, ", ");
-		ArrayList list = new ArrayList();
+		ArrayList<Phase.SeasonType> list = new ArrayList<>();
 		while(st.hasMoreTokens())
 		{
 			String tok = st.nextToken().trim();
@@ -235,7 +235,7 @@ public class Border implements Serializable
 	throws InvalidBorderException
 	{
 		StringTokenizer st = new StringTokenizer(in, ", ");
-		ArrayList list = new ArrayList();
+		ArrayList<Phase.PhaseType> list = new ArrayList<>();
 		while(st.hasMoreTokens())
 		{
 			String tok = st.nextToken().trim();
@@ -358,7 +358,7 @@ public class Border implements Serializable
 	private Unit.Type[] parseUnitTypes(String in)
 	throws InvalidBorderException
 	{
-		ArrayList list = new ArrayList(10);
+		ArrayList<Unit.Type> list = new ArrayList<>(10);
 		StringTokenizer st = new StringTokenizer(in,", ");
 		while(st.hasMoreTokens())
 		{
@@ -386,7 +386,7 @@ public class Border implements Serializable
 	private Class[] parseOrders(String in)
 	throws InvalidBorderException
 	{
-		final Class[] classes = parseClasses2Objs(in, "dip.order.Order");
+		final Class[] classes = parseClasses2Objs(in);
 		
 		if(classes.length == 0)
 		{
@@ -398,41 +398,32 @@ public class Border implements Serializable
 	
 	
 	/** Internal parser helper method */
-	private Class[] parseClasses2Objs(String in, String superClassName)
+	private Class[] parseClasses2Objs(String in)
 	throws InvalidBorderException
 	{
-		Class superClass = null;
-		try
-		{
-			superClass = Class.forName(superClassName);
-		}
-		catch(ClassNotFoundException e)
-		{
-			throw new InvalidBorderException(Utils.getLocalString("Border.error.internal", "parseClasses2Objs()", e.getMessage()));
-		}
-		
-		ArrayList list = new ArrayList(10);
+
+		ArrayList<Class> list = new ArrayList<>(10);
 		StringTokenizer st = new StringTokenizer(in,", ");
 		while(st.hasMoreTokens())
 		{
 			String tok = st.nextToken();
-			Class cls = null;
+			Class<?> cls = null;
 			
 			try
 			{
 				cls = Class.forName(tok);
+				if( !Order.class.isAssignableFrom(cls) )
+				{
+					throw new InvalidBorderException(Utils.getLocalString("Border.error.badderivation", id, cls.getName(), Order.class.getName()));
+				}
+				list.add(cls);
 			}
 			catch(ClassNotFoundException cnfe)
 			{
 				throw new InvalidBorderException(Utils.getLocalString("Border.error.badclass", id, tok));
 			}
-			
-			if( !superClass.isAssignableFrom(cls) )
-			{
-				throw new InvalidBorderException(Utils.getLocalString("Border.error.badderivation", id, cls.getName(), superClass.getName()));
-			}
-			
-			list.add(cls);
+
+
 		}
 		
 		return (Class[]) list.toArray(new Class[list.size()]);

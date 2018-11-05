@@ -10,24 +10,16 @@
 //
 package dip.misc;
 
+import dip.order.Order;
+import dip.order.OrderFactory;
+import dip.world.*;
+import dip.world.variant.VariantManager;
+import dip.world.variant.data.Variant;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import dip.order.OrderFactory;
-import dip.world.Coast;
-import dip.world.Location;
-import dip.world.Map;
-import dip.world.Position;
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.RuleOptions;
-import dip.world.Unit;
-import dip.world.World;
-import dip.world.WorldFactory;
-import dip.world.variant.VariantManager;
-import dip.world.variant.data.Variant;
 
 /**
 *	This class is meant to be an illustrative example of how to use
@@ -289,7 +281,7 @@ public class AIDemo
 		// 	A war S lvn-pru
 		// 	A lvn-pru
 		//	A mos-lvn
-		List russianOrders = new ArrayList();
+		List<Order> russianOrders = new ArrayList<>();
 		russianOrders.add(orderFactory.createSupport(russia, 
 						  makeLocation(pos, map.getProvince("war")),
 						  Unit.Type.ARMY,
@@ -312,14 +304,14 @@ public class AIDemo
 		
 		// we're just making 2 sets of german orders
 		//
-		List[] germanOrders = new List[2];
+		List<Order>[] germanOrders = new List[2];
 		
 		// German Orders: 1
 		// ================
 		// 	A pru-war
 		// 	A sil S A pru-war
 		//	A gal S A pru-war
-		germanOrders[0] = new ArrayList();
+		germanOrders[0] = new ArrayList<>();
 		germanOrders[0].add(orderFactory.createMove(
 							germany,
 						  	makeLocation(pos, map.getProvince("pru")),
@@ -351,7 +343,7 @@ public class AIDemo
 		// 	A pru S A sil-war
 		// 	A sil-war
 		//	A gal S A sil-war
-		germanOrders[1] = new ArrayList();
+		germanOrders[1] = new ArrayList<>();
 		germanOrders[1].add(orderFactory.createSupport(
 							germany, 
 						  	makeLocation(pos, map.getProvince("pru")),
@@ -380,10 +372,10 @@ public class AIDemo
 		
 		// create combined orders sets for all powers
 		//
-		List[] orderLists = new List[2];
+		List<Order>[] orderLists = new List[2];
 		for(int i=0; i<orderLists.length; i++)
 		{
-			orderLists[i] = new ArrayList();
+			orderLists[i] = new ArrayList<>();
 			orderLists[i].addAll(russianOrders);
 			orderLists[i].addAll(germanOrders[i]);
 		}

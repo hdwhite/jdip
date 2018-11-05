@@ -78,7 +78,7 @@ public class GUIMoveExplicit extends Move implements GUIOrder
 	private transient static final int REQ_LOC = 2;
 	private transient boolean isConvoyableArmy = false;
 	private transient boolean isComplete = false;
-	private transient LinkedList tmpConvoyPath = null;
+	private transient LinkedList<Province> tmpConvoyPath = null;
 	private transient int currentLocNum = 0;
 	private transient int numSupports = -9999;
 	private transient Point2D.Float failPt = null;
@@ -108,7 +108,7 @@ public class GUIMoveExplicit extends Move implements GUIOrder
 	
 	
 	/** Creates a GUIMoveExplicit */
-	protected GUIMoveExplicit(Power power, Location src, Unit.Type srcUnitType, Location dest, List routes)
+	protected GUIMoveExplicit(Power power, Location src, Unit.Type srcUnitType, Location dest, List<Province[]> routes)
 	{
 		super(power, src, srcUnitType, dest, routes);
 	}// GUIMoveExplicit()
@@ -402,7 +402,7 @@ public class GUIMoveExplicit extends Move implements GUIOrder
 				if(isConvoyableArmy)
 				{
 					assert (tmpConvoyPath == null);
-					tmpConvoyPath = new LinkedList();
+					tmpConvoyPath = new LinkedList<>();
 					tmpConvoyPath.add( getSource().getProvince() );
 				}
 				
@@ -463,7 +463,7 @@ public class GUIMoveExplicit extends Move implements GUIOrder
 		{
 			final Province[] provinceRoute = (Province[]) tmpConvoyPath.toArray(
 				new Province[tmpConvoyPath.size()]);
-			convoyRoutes = new ArrayList(1);
+			convoyRoutes = new ArrayList<>(1);
 			convoyRoutes.add(provinceRoute);
 		}
 	}// updateConvoyPath()

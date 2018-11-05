@@ -31,7 +31,7 @@ import java.util.List;
 *
 *
 */
-public class SymbolPack implements Comparable
+public class SymbolPack implements Comparable<SymbolPack>
 {
 	private String 		name = null;
 	private float 		version = 0.0f;
@@ -91,7 +91,9 @@ public class SymbolPack implements Comparable
 	/** Set the Symbols */
 	public void setSymbols(Symbol[] symbols)		{ this.symbols = symbols; }
 	/** Set the Symbols */
-	public void setSymbols(List list)				{ this.symbols = (Symbol[]) list.toArray(new Symbol[list.size()]); }
+	public void setSymbols(List<Symbol> list) {
+		this.symbols = list.toArray(new Symbol[list.size()]);
+	}
 	
 	/** Find the Symbol with the given Name (case sensitive); returns null if name not found. */
 	public Symbol getSymbol(String name)
@@ -108,9 +110,8 @@ public class SymbolPack implements Comparable
 	}// getSymbol()
 	
 	/** Comparison, based on Name. Only compares to other SymbolPack objects. */
-	public int compareTo(Object o) 
-	{
-		return this.getName().compareTo( ((SymbolPack) o).getName() );
+	public int compareTo(SymbolPack o) {
+		return this.getName().compareTo(o.getName());
 	}// compareTo()
 	
 	/** Make a URI from a String */

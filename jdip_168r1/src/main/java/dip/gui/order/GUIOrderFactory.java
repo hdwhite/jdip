@@ -165,7 +165,7 @@ public class GUIOrderFactory extends OrderFactory
 	
 	/** Creates a GUIMove order */
 	public Move createMove(Power power, Location src, Unit.Type srcUnitType, 
-		Location dest, List routes)
+		Location dest, List<Province[]> routes)
 	{
 		return new GUIMove(power, src, srcUnitType, dest, routes);
 	}// createMove()

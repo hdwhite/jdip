@@ -31,8 +31,8 @@ class ProvObj implements Comparable
 	public static final String BORDER_NAME_PREFIX = "mxFrom";
 	
 	private String 		fullName = null;
-	private ArrayList 	shortNames;       	// contains strings
-	private ArrayList	adjList;          	// contains 'Adj' objects
+	private ArrayList<String> 	shortNames;       	// contains strings
+	private ArrayList<Adjacency>	adjList;          	// contains 'Adj' objects
 	private String 		type = null;		// e.g.: "l", "lw", "Aw", etc.
 	private boolean 	hasMX = false;		// if contains an 'mx' coast.
 	
@@ -46,8 +46,8 @@ class ProvObj implements Comparable
 	
 	private ProvObj()
 	{
-		shortNames = new ArrayList(10);
-		adjList = new ArrayList(5);
+		shortNames = new ArrayList<>(10);
+		adjList = new ArrayList<>(5);
 	}// ProvObj()
 	
 	
@@ -398,7 +398,7 @@ class ProvObj implements Comparable
 	*/
 	private String makeBorderNames()
 	{
-		ArrayList borders = new ArrayList();
+		ArrayList<String> borders = new ArrayList<>();
 		
 		for(int i=0; i<adjList.size(); i++)
 		{
@@ -442,7 +442,7 @@ class ProvObj implements Comparable
 	*/
 	List getMXProvs()
 	{
-		LinkedList mxList = new LinkedList();
+		LinkedList<String> mxList = new LinkedList<>();
 		
 		for(int i=0; i<adjList.size(); i++)
 		{

@@ -20,24 +20,26 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.plugin.export; 
+package jdip.plugin.export;
 
-import dip.tool.*;
-import dip.gui.*;
-import dip.gui.swing.*;
-import dip.gui.dialog.*;
-import dip.gui.map.*;
-import dip.misc.*;
-import dip.world.*;
-import dip.process.*;
+import dip.gui.ClientFrame;
+import dip.gui.dialog.ErrorDialog;
+import dip.gui.swing.XJFileChooser;
+import dip.tool.Tool;
+import dip.tool.ToolProxy;
+import dip.world.TurnState;
 
 import javax.swing.*;
-import java.awt.event.*;
-import java.net.URI;
-import java.io.*;
-import java.util.*;
-import java.beans.PropertyChangeListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URI;
+import java.util.List;
 
 
 public class Exporter implements Tool
@@ -75,7 +77,7 @@ public class Exporter implements Tool
 			{
 				XJFileChooser xjfc = XJFileChooser.getXJFileChooser();
 				File file = xjfc.displaySaveAs(clientFrame);
-				xjfc.dispose();
+				XJFileChooser.dispose();
 				if(file != null)
 				{
 					TurnState ts = clientFrame.getTurnState();
@@ -92,11 +94,11 @@ public class Exporter implements Tool
 			{
 				XJFileChooser xjfc = XJFileChooser.getXJFileChooser();
 				File file = xjfc.displaySaveAs(clientFrame);
-				xjfc.dispose();
+				XJFileChooser.dispose();
 				if(file != null)
 				{
-					List tsList = clientFrame.getWorld().getAllTurnStates();
-					TurnState[] ts = (TurnState[]) tsList.toArray(new TurnState[tsList.size()]);
+					List<TurnState> tsList = clientFrame.getWorld().getAllTurnStates();
+					TurnState[] ts = (TurnState[]) tsList.toArray(new TurnState[0]);
 					exportToFile(file, ts);
 				}
 			}
@@ -126,14 +128,13 @@ public class Exporter implements Tool
 			public void propertyChange(PropertyChangeEvent evt)
 			{
 				final String evtName = evt.getPropertyName();
-				
-				if(evtName == ClientFrame.EVT_WORLD_CREATED)
+
+				if (evtName.equals(ClientFrame.EVT_WORLD_CREATED))
 				{
 					// activate menu items
 					exportAll.setEnabled(true);
 					exportCurrent.setEnabled(true);
-				}
-				else if(evtName == ClientFrame.EVT_WORLD_DESTROYED)
+				} else if (evtName.equals(ClientFrame.EVT_WORLD_DESTROYED))
 				{
 					// deactivate menu items
 					exportAll.setEnabled(false);
@@ -155,7 +156,7 @@ public class Exporter implements Tool
 			
 			for(int i=0; i<turnStates.length; i++)
 			{
-				bw.write( XMLExport.export(turnStates[i], "") );
+				bw.write(jdip.plugin.export.XMLExport.export(turnStates[i], ""));
 			}
 		}
 		catch(IOException e)

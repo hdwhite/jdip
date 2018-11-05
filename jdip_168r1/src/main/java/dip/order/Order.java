@@ -21,19 +21,12 @@
 //
 package dip.order;
 
-import java.util.ArrayList;
-
 import dip.misc.Utils;
 import dip.process.Adjudicator;
 import dip.process.OrderState;
-import dip.world.Location;
-import dip.world.Phase;
-import dip.world.Position;
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.RuleOptions;
-import dip.world.TurnState;
-import dip.world.Unit;
+import dip.world.*;
+
+import java.util.ArrayList;
 
 /**
  *  This is the base class for all Order objects.
@@ -210,8 +203,8 @@ public abstract class Order extends Object implements Orderable, java.io.Seriali
 	protected final void addSupportsOfAndMovesToSource(Adjudicator adjudicator)
 	{
 		OrderState thisOS = adjudicator.findOrderStateBySrc(getSource());
-		ArrayList depMTS = null;
-		ArrayList depSup = null;
+		ArrayList<OrderState> depMTS = null;
+		ArrayList<OrderState> depSup = null;
 		
 		OrderState[] orderStates = adjudicator.getOrderStates();
 		for(int osIdx=0; osIdx<orderStates.length; osIdx++)
@@ -224,7 +217,9 @@ public abstract class Order extends Object implements Orderable, java.io.Seriali
 				if( order instanceof Move
 					&& ((Move) order).getDest().isProvinceEqual(this.getSource()) )
 				{
-					if(depMTS == null) { depMTS = new ArrayList(5); }
+					if (depMTS == null) {
+						depMTS = new ArrayList<>(5);
+					}
 					depMTS.add(dependentOS);
 				}
 				else if(order instanceof Support)
@@ -236,7 +231,9 @@ public abstract class Order extends Object implements Orderable, java.io.Seriali
 					if(	support.isSupportingHold()
 						&& support.getSupportedSrc().isProvinceEqual(this.getSource()) )
 					{
-						if(depSup == null) { depSup = new ArrayList(5); }
+						if (depSup == null) {
+							depSup = new ArrayList<>(5);
+						}
 						depSup.add(dependentOS);
 					}
 				}
@@ -438,13 +435,10 @@ public abstract class Order extends Object implements Orderable, java.io.Seriali
 		else if(obj instanceof Order)
 		{
 			Order o = (Order) obj;
-			
-			if(	power.equals(o.power) &&
-				src.equals(o.src) &&
-				srcUnitType.equals(o.srcUnitType) )
-			{
-				return true;
-			}
+
+			return power.equals(o.power) &&
+					src.equals(o.src) &&
+					srcUnitType.equals(o.srcUnitType);
 		}
 		
 		return false;

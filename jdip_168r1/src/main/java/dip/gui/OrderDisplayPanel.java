@@ -22,56 +22,24 @@
 //
 package dip.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import javax.swing.AbstractListModel;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
-import javax.swing.undo.CompoundEdit;
-
 import cz.autel.dmi.HIGConstraints;
 import cz.autel.dmi.HIGLayout;
 import dip.gui.dialog.prefs.GeneralPreferencePanel;
 import dip.gui.swing.XJScrollPane;
-import dip.gui.undo.UndoAddMultipleOrders;
-import dip.gui.undo.UndoAddOrder;
-import dip.gui.undo.UndoClearAll;
-import dip.gui.undo.UndoDeleteMultipleOrders;
-import dip.gui.undo.UndoDeleteOrder;
-import dip.gui.undo.UndoRedoManager;
+import dip.gui.undo.*;
 import dip.misc.Utils;
-import dip.order.OrderException;
-import dip.order.OrderParser;
-import dip.order.OrderWarning;
-import dip.order.Orderable;
-import dip.order.ValidationOptions;
+import dip.order.*;
 import dip.process.Adjustment;
-import dip.world.Phase;
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.TurnState;
-import dip.world.World;
+import dip.world.*;
+
+import javax.swing.*;
+import javax.swing.undo.CompoundEdit;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.MessageFormat;
+import java.util.*;
+import java.util.List;
 
 /**
 *	The OrderDisplayPanel: displayer of orders.
@@ -150,7 +118,7 @@ public class OrderDisplayPanel extends JPanel
 	private UndoRedoManager undoManager = null;
 	
 	// GUI component instance variables 
-	private JList orderList;
+	private JList<DisplayOrder> orderList;
 	protected JScrollPane orderListScrollPane;
 	
 	
@@ -169,7 +137,7 @@ public class OrderDisplayPanel extends JPanel
 		
 		// order list basic setup
 		orderListModel = new OrderListModel();
-		orderList = new JList(orderListModel);
+		orderList = new JList<>(orderListModel);
 		orderList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		orderList.setDragEnabled(false);
 		orderList.setCellRenderer(new OrderListRenderer());
@@ -436,9 +404,9 @@ public class OrderDisplayPanel extends JPanel
 			throw new IllegalStateException("not in editable state");
 		}
 		
-		LinkedHashMap map = new LinkedHashMap(19);
-		ArrayList ordersAdded = new ArrayList(orders.length);
-		ArrayList ordersDeleted = new ArrayList(orders.length);
+		LinkedHashMap<Orderable,OrderException> map = new LinkedHashMap<>(19);
+		ArrayList<Orderable> ordersAdded = new ArrayList<>(orders.length);
+		ArrayList<Orderable> ordersDeleted = new ArrayList<>(orders.length);
 		
 		for(int i=0; i<orders.length; i++)
 		{
@@ -558,7 +526,7 @@ public class OrderDisplayPanel extends JPanel
 	public synchronized boolean removeOrders(Orderable[] orders, boolean undoable)
 	{
 		int count = 0;
-		ArrayList deletedOrderList = new ArrayList(orders.length);
+		ArrayList<Orderable> deletedOrderList = new ArrayList<>(orders.length);
 		
 		for(int i=0; i<orders.length; i++)
 		{
@@ -611,10 +579,10 @@ public class OrderDisplayPanel extends JPanel
 		{
 			// clear the orders from the turnstate.
 			// keep cleared orders in a temporary arraylist
-			ArrayList deletedOrders = new ArrayList(100);
+			ArrayList<Orderable> deletedOrders = new ArrayList<>(100);
 			for(int i=0; i<orderablePowers.length; i++)
 			{
-				List orders = turnState.getOrders(orderablePowers[i]);
+				List<Orderable> orders = turnState.getOrders(orderablePowers[i]);
 				if(orders.size() > 0)
 				{
 					deletedOrders.addAll(orders);
@@ -661,19 +629,18 @@ public class OrderDisplayPanel extends JPanel
 	*/
 	public synchronized void removeSelected()
 	{
-		Object[] selected = orderList.getSelectedValues();
-		if(selected.length == 0)
+		List selected = orderList.getSelectedValuesList();
+		if (selected.size() == 0)
 		{
 			return;
 		}
-		
-		Orderable[] selectedOrders = new Orderable[selected.length];
+
+		Orderable[] selectedOrders = new Orderable[selected.size()];
 		
 		// selected objects correspond to those in the order list
 		// they should all be DisplayOrder objects.
-		for(int i=0; i<selected.length; i++)
-		{
-			selectedOrders[i] = ((DisplayOrder) selected[i]).getOrder();
+		for (int i = 0; i < selected.size(); i++) {
+			selectedOrders[i] = ((DisplayOrder) selected.get(i)).getOrder();
 			assert(removeOrderFromTS(selectedOrders[i]));
 		}
 		
@@ -835,7 +802,7 @@ public class OrderDisplayPanel extends JPanel
 		
 		//synchronized(clientFrame.getLock())
 		{
-			List orders = turnState.getOrders(order.getPower());
+			List<Orderable> orders = turnState.getOrders(order.getPower());
 			Iterator iter = orders.iterator();
 			while(iter.hasNext())
 			{
@@ -925,7 +892,7 @@ public class OrderDisplayPanel extends JPanel
 			if(numOrders >= max)
 			{
 				String dlgtext = MessageFormat.format( Utils.getText(Utils.getLocalString(DLG_TOOMANY_TEXT_LOCATION)),
-													new Object[] {power, new Integer(max)} );
+						power, max);
 				
 				throw new OrderException(dlgtext);
 			}
@@ -1068,15 +1035,15 @@ public class OrderDisplayPanel extends JPanel
 	*	duplicate DisplayOrders occurs here. However, we do take the
 	*	displayablePowers into account.
 	*/
-	private class OrderListModel extends AbstractListModel
+	private class OrderListModel extends AbstractListModel<DisplayOrder>
 	{
-		private ArrayList list;
+		private ArrayList<DisplayOrder> list;
 		private DOComparator comparator;
 		
 		/** Create an OrderListModel object */
 		public OrderListModel()
 		{
-			list = new ArrayList(50);
+			list = new ArrayList<>(50);
 			comparator = new DOSortProvince();	// default comparator 
 		}// OrderListModel()
 		
@@ -1087,7 +1054,7 @@ public class OrderDisplayPanel extends JPanel
 		}// getSize()
 		
 		/** Returns the object (DisplayOrder) at the given index. */
-		public Object getElementAt(int index)
+		public DisplayOrder getElementAt(int index)
 		{
 			return list.get(index);
 		}// getElementAt()
@@ -1389,7 +1356,7 @@ public class OrderDisplayPanel extends JPanel
 			if(!f.canDisplay('\u2192'))
 			{
 				// search for unicode-arrow; replace with "->"
-				String text = ((JLabel) this).getText();
+				String text = this.getText();
 				if(text != null)
 				{
 					StringBuffer buffer = new StringBuffer(text);
@@ -1409,7 +1376,7 @@ public class OrderDisplayPanel extends JPanel
 					
 					if(isChanged)
 					{
-						((JLabel) this).setText(buffer.toString());
+						this.setText(buffer.toString());
 					}
 				}
 			}
@@ -1497,7 +1464,7 @@ public class OrderDisplayPanel extends JPanel
 	
 	
 	/** DOComparator class offers highlight-marking support */
-	private abstract class DOComparator implements Comparator
+	private abstract class DOComparator implements Comparator<DisplayOrder>
 	{
 		private boolean isAscending = true;
 		
@@ -1511,9 +1478,8 @@ public class OrderDisplayPanel extends JPanel
 		*	The compare method. This essentially returns the result of
 		*	compareDisplayOrders() unless the sort is reversed.
 		*/
-		public final int compare(Object o1, Object o2)
-		{
-			final int result = compareDisplayOrders((DisplayOrder) o1, (DisplayOrder) o2);
+		public final int compare(DisplayOrder o1, DisplayOrder o2) {
+			final int result = compareDisplayOrders(o1, o2);
 			return ((isAscending) ? result : -result);
 		}// compare()
 		
@@ -1696,7 +1662,7 @@ public class OrderDisplayPanel extends JPanel
 		JLabel label = new JLabel(Utils.getLocalString(LABEL_SORT));
 		
 		// combobox
-		JComboBox sortCombo = new JComboBox();
+		JComboBox<String> sortCombo = new JComboBox<>();
 		sortCombo.setEditable(false);
 		sortCombo.addItem(Utils.getLocalString(LABEL_SORT_POWER));
 		sortCombo.addItem(Utils.getLocalString(LABEL_SORT_PROVINCE));

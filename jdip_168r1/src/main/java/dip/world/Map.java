@@ -60,11 +60,11 @@ public class Map implements Serializable
 	// the above (serialized) data.
 	//
 	// Province-related
-	private transient HashMap nameMap = null; 	// map of all (short & full) names to a province; names in lower case
+	private transient HashMap<String,Province> nameMap = null; 	// map of all (short & full) names to a province; names in lower case
 	private transient String[] names = null;	// list of all province names [short & full]; names in lower case
 	
 	// Power-related
-	private transient HashMap powerNameMap = null;		// created by createMappings()
+	private transient HashMap<String,Power> powerNameMap = null;		// created by createMappings()
 	
 	// fields created on first-use (by a method)
 	private transient String[] lcPowerNames = null;		// lower case power names & adjectives
@@ -115,7 +115,7 @@ public class Map implements Serializable
 	private void createMappings()
 	{
 		// create powerNameMap
-		powerNameMap = new HashMap(POWER_SIZE);
+		powerNameMap = new HashMap<>(POWER_SIZE);
 		for(int i=0; i<powers.length; i++)
 		{
 			Power power = powers[i];
@@ -134,8 +134,8 @@ public class Map implements Serializable
 		
 		// province-related namemap
 		//
-		nameMap = new HashMap(MAP_SIZE);
-		ArrayList namesAL = new ArrayList(MAP_SIZE);
+		nameMap = new HashMap<>(MAP_SIZE);
+		ArrayList<String> namesAL = new ArrayList<>(MAP_SIZE);
 		for(int i=0; i<provinces.length; i++)
 		{
 			Province province = provinces[i];
@@ -402,7 +402,7 @@ public class Map implements Serializable
 		}
 		
 		// tie list. Use a Set so that we get no dupes
-		Set ties = new HashSet();
+		Set<Province> ties = new HashSet<>();
 		
 		// compute Levenshteins on the match
 		// if there are ties, keep them.. for now
@@ -458,12 +458,12 @@ public class Map implements Serializable
 	*	<p>
 	*	
 	*/
-	public Collection getProvincesMatchingClosest(String input)
+	public Collection<Province> getProvincesMatchingClosest(String input)
 	{
 		// return empty list
 		if(input == null || input.length() == 0)
 		{
-			return new ArrayList(1);
+			return new ArrayList<>(1);
 		}
 		
 		// first, try exact match.
@@ -471,7 +471,7 @@ public class Map implements Serializable
 		Province province = getProvince(input);
 		if(province != null)
 		{
-			ArrayList matches = new ArrayList(1);
+			ArrayList<Province> matches = new ArrayList<>(1);
 			matches.add(province);
 			return matches;
 		}
@@ -480,12 +480,12 @@ public class Map implements Serializable
 		input = input.toLowerCase().trim();
 		
 		// tie list. Use a Set so that we get no dupes
-		Set ties = new HashSet();
+		Set<Province> ties = new HashSet<>();
 		
 		// if 2 or less, do no processing
 		if(input.length() <= 2)
 		{
-			return new ArrayList(1);
+			return new ArrayList<>(1);
 		}
 		else if(input.length() == 3)
 		{
@@ -580,7 +580,7 @@ public class Map implements Serializable
 		// create the whitespace list, if it doesn't exist.
 		if(wsNames == null)
 		{
-			List list = new ArrayList(50);
+			List<String> list = new ArrayList<>(50);
 			for(int i=0; i<names.length; i++)
 			{
 				String name = names[i];
@@ -593,14 +593,12 @@ public class Map implements Serializable
 			
 			// sort array from longest entries to shortest. This 
 			// eliminates errors in partial replacements.
-			Arrays.sort(wsNames, new Comparator()
+			Arrays.sort(wsNames, new Comparator<String>()
 			{
 				// longer strings are more negative, thus rise to top
-				public int compare(Object o1, Object o2)
+				public int compare(String o1, String o2)
 				{
-					String s1 = (String) o1;
-					String s2 = (String) o2;
-					return (s2.length() - s1.length());
+					return (o2.length() - o1.length());
 				}// compare()
 				
 				public boolean equals(Object obj) { return false; }
@@ -838,7 +836,7 @@ public class Map implements Serializable
 	*/
 	private void createLCPowerNameList()
 	{
-		List tmpNames = new ArrayList(powers.length);
+		List<String> tmpNames = new ArrayList<>(powers.length);
 		
 		for(int i=0; i<powers.length; i++)
 		{
@@ -855,8 +853,7 @@ public class Map implements Serializable
 		// sort collection, in reverse alpha order.
 		// Why? because we need to ensure power names (and adjectives) like
 		// "Russian" come before "Russia"; otherwise, the replacement will be f'd up.
-		Comparator reverseComp = Collections.reverseOrder();
-		Collections.sort( tmpNames, reverseComp );
+		tmpNames.sort(Collections.reverseOrder());
 		
 		lcPowerNames = (String[]) tmpNames.toArray(new String[tmpNames.size()]);
 	}// createLCPowerNameList()
@@ -924,9 +921,9 @@ public class Map implements Serializable
 	*	<p>
 	*	THIS METHOD REPLACES getCloseness() FOR PROVINCE MATCHING.
 	*/
-	private List findPartialProvinceMatch(String input)
+	private List<Province> findPartialProvinceMatch(String input)
 	{
-		HashSet ties = new HashSet(41);
+		HashSet<Province> ties = new HashSet<>(41);
 		
 		for(int i=0; i<lcPowerNames.length; i++)
 		{
@@ -938,7 +935,7 @@ public class Map implements Serializable
 			}
 		}
 		
-		ArrayList al = new ArrayList(ties.size());
+		ArrayList<Province> al = new ArrayList<>(ties.size());
 		al.addAll(ties);
 		return al;
 	}// findClosestProvince()
@@ -949,9 +946,9 @@ public class Map implements Serializable
 	*	
 	*	THIS METHOD REPLACES getCloseness() FOR POWER MATCHING.
 	*/
-	private List findPartialPowerMatch(String input)
+	private List<Power> findPartialPowerMatch(String input)
 	{
-		HashSet ties = new HashSet(41);
+		HashSet<Power> ties = new HashSet<>(41);
 		
 		for(int i=0; i<lcPowerNames.length; i++)
 		{
@@ -963,7 +960,7 @@ public class Map implements Serializable
 			}
 		}
 		
-		ArrayList al = new ArrayList(ties.size());
+		ArrayList<Power> al = new ArrayList<>(ties.size());
 		al.addAll(ties);
 		return al;
 	}// findPartialPowerMatch()

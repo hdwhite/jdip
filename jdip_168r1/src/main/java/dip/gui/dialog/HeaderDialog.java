@@ -22,37 +22,19 @@
 //
 package dip.gui.dialog;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Paint;
+import dip.gui.swing.XJEditorPane;
+import dip.misc.Utils;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.Document;
+import javax.swing.text.html.HTMLDocument;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.Document;
-import javax.swing.text.html.HTMLDocument;
-
-import dip.gui.swing.XJEditorPane;
-import dip.misc.Utils;
 
 
 /**
@@ -98,7 +80,7 @@ public class HeaderDialog extends XDialog
 	private JComponent		separator = null;
 	private Container		content = new JPanel();
 	private JPanel 			btnPanelHolder = null;	// holds btnPanel, and separator (if present)
-	private ArrayList		btnList = null;
+	private ArrayList<Component> btnList = null;
 	protected JEditorPane 	header = null;
 	
 	
@@ -114,7 +96,7 @@ public class HeaderDialog extends XDialog
 		btnPanel = new JPanel();
 		btnPanel.setLayout( new BoxLayout(btnPanel, BoxLayout.X_AXIS) );
 		btnPanel.setBorder(BorderFactory.createEmptyBorder(BTN_BAR_EDGE,BTN_BAR_EDGE,BTN_BAR_EDGE,BTN_BAR_EDGE));
-		btnList = new ArrayList();
+		btnList = new ArrayList<>();
 		
 		// do layout
 		makeLayout();
@@ -249,25 +231,17 @@ public class HeaderDialog extends XDialog
 	/** Convenience method: check if action command is OK or Accept */
 	public boolean isOKorAccept(String actionCommand)
 	{
-		if( actionCommand.equals(ACTION_OK) || 
-			actionCommand.equals(ACTION_ACCEPT) )
-		{
-			return true;
-		}
-		
-		return false;
+		return actionCommand.equals(ACTION_OK) ||
+				actionCommand.equals(ACTION_ACCEPT);
+
 	}// isOKorAccept()
 	
 	/** Convenience method: check if action command is Close or Cancel */
 	public boolean isCloseOrCancel(String actionCommand)
 	{
-		if( actionCommand.equals(ACTION_CLOSE) || 
-			actionCommand.equals(ACTION_CANCEL) )
-		{
-			return true;
-		}
-		
-		return false;
+		return actionCommand.equals(ACTION_CLOSE) ||
+				actionCommand.equals(ACTION_CANCEL);
+
 	}// isCloseOrCancel()
 	
 	

@@ -22,6 +22,9 @@
 //
 package dip.judge.parser;
 
+import dip.misc.Log;
+import dip.world.Phase;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -30,9 +33,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import dip.world.Phase;
-import dip.misc.Log;
 /**
 	Parses the Dislodged block
 */	
@@ -294,7 +294,7 @@ public class DislodgedParser
 		*/
 		
 		// create a list of Dislodged units
-		List disList = new LinkedList();
+		List<DislodgedInfo> disList = new LinkedList<>();
 		
 		// Create patterns
 		Pattern[] destroyeds = new Pattern[2];
@@ -357,8 +357,8 @@ public class DislodgedParser
 				throw new IOException("Could not parse dislodged order: \""+line+"\"");
 			}
 		}// while()
-		
-		dislodgedInfo = (DislodgedInfo[]) disList.toArray(new DislodgedInfo[disList.size()]);
+
+		dislodgedInfo = disList.toArray(new DislodgedInfo[disList.size()]);
 	}// parseInput()
 		
 

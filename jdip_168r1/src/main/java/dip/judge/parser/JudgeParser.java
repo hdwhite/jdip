@@ -22,6 +22,10 @@
 //
 package dip.judge.parser;
 
+import dip.misc.Utils;
+import dip.order.OrderFactory;
+import dip.world.Phase;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -30,10 +34,6 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import dip.misc.Utils;
-import dip.order.OrderFactory;
-import dip.world.Phase;
 /**
 *	First stage of Judge output parsing. Looks for the "::" line, determines 
 *	game name, judge name, and variant type.
@@ -191,8 +191,8 @@ public class JudgeParser
 			Matcher m = pattern.matcher(line);
 			if(m.find())
 			{
-				LinkedList names = new LinkedList();
-				LinkedList email = new LinkedList();
+				LinkedList<String> names = new LinkedList<>();
+				LinkedList<String> email = new LinkedList<>();
 				
 				// now read each player UNTIL we get an empty line (or of length < 4)
 				line = reader.readLine();
@@ -228,9 +228,9 @@ public class JudgeParser
 					
 					line = reader.readLine();
 				}
-				
-				playerNames = (String[]) names.toArray(new String[names.size()]);
-				playerEmails = (String[]) email.toArray(new String[email.size()]);
+
+				playerNames = names.toArray(new String[names.size()]);
+				playerEmails = email.toArray(new String[email.size()]);
 				return;
 			}
 			

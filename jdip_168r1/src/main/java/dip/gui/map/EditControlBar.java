@@ -22,20 +22,6 @@
 //
 package dip.gui.map;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JToggleButton;
-
-import org.w3c.dom.events.MouseEvent;
-
 import dip.gui.OrderDisplayPanel;
 import dip.gui.order.GUIOrder;
 import dip.gui.undo.UndoEditAddUnit;
@@ -44,15 +30,15 @@ import dip.gui.undo.UndoEditSCOwner;
 import dip.gui.undo.UndoRedoManager;
 import dip.misc.Utils;
 import dip.order.result.TimeResult;
-import dip.world.Coast;
-import dip.world.Location;
-import dip.world.Phase;
-import dip.world.Position;
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.RuleOptions;
-import dip.world.TurnState;
-import dip.world.Unit;
+import dip.world.*;
+import org.w3c.dom.events.MouseEvent;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 
 /**
@@ -119,7 +105,7 @@ public class EditControlBar extends ViewControlBar
 	private String defaultAction = null;
 
 	// GUI elements
-	private JComboBox		powerBox;
+	private JComboBox<Object> powerBox;  //todo: this should not be so generic...
 	private JToggleButton	bSC;
 	private JToggleButton	bArmy;
 	private JToggleButton	bFleet;
@@ -151,7 +137,7 @@ public class EditControlBar extends ViewControlBar
 		// create power label, and create combo box with all powers + "none"
 		add(new JLabel(Utils.getLocalString(POWER_LABEL)));
 		addSeparator(new Dimension(5,0));
-		powerBox = new JComboBox(mapPanel.getClientFrame().getWorld().getMap().getPowers());
+		powerBox = new JComboBox<>(mapPanel.getClientFrame().getWorld().getMap().getPowers());
 		powerBox.insertItemAt(POWER_NONE, 0);
 		powerBox.setEditable(false);
 		powerBox.addItemListener(new ItemListener()

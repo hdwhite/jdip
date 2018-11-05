@@ -22,19 +22,15 @@
 //
 package dip.world;
 
+import dip.misc.Log;
+import dip.misc.Utils;
+import dip.order.OrderException;
+import dip.world.variant.data.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import dip.misc.Utils;
-import dip.misc.Log;
-import dip.order.OrderException;
-import dip.world.variant.data.BorderData;
-import dip.world.variant.data.InitialState;
-import dip.world.variant.data.ProvinceData;
-import dip.world.variant.data.SupplyCenter;
-import dip.world.variant.data.Variant;
 
 
 /**
@@ -96,9 +92,9 @@ public class WorldFactory
 		}
 		
 		Log.println("WorldFactory.createWorld(): "+variant.getName());
-		
-		List provinces = new ArrayList(100);
-		HashMap provNameMap = new HashMap();	// mapping of names->provinces
+
+		List<Province> provinces = new ArrayList<>(100);
+		HashMap<String, Province> provNameMap = new HashMap<>();    // mapping of names->provinces
 		
 		// gather all province data, and create provinces
 		ProvinceData[] provinceDataArray = variant.getProvinceData();
@@ -133,7 +129,7 @@ public class WorldFactory
 		// gather all adjacency data
 		// parse adjacency data for all provinces
 		// keep a list of the locations parsed below
-		ArrayList locationList = new ArrayList(16);
+		ArrayList<Location> locationList = new ArrayList<>(16);
 		for(int i=0; i<provinceDataArray.length; i++)
 		{
 			ProvinceData provinceData = provinceDataArray[i];
@@ -147,7 +143,7 @@ public class WorldFactory
 			}
 			
 			// get the Province to which this adjacency data refers
-			Province province = (Province) provNameMap.get(provinceData.getFullName().toLowerCase());
+			Province province = provNameMap.get(provinceData.getFullName().toLowerCase());
 			
 			// get the Adjacency data structure from the Province
 			Province.Adjacency adjacency = province.getAdjacency();
@@ -173,7 +169,7 @@ public class WorldFactory
 				}
 				
 				// add data to adjacency table after unwrapping collection
-				Location[] locations = (Location[]) locationList.toArray(new Location[locationList.size()]);
+				Location[] locations = locationList.toArray(new Location[locationList.size()]);
 				adjacency.setLocations(coast, locations);
 			}
 			
@@ -190,7 +186,7 @@ public class WorldFactory
 		
 		// Process BorderData. This requires the Provinces to be known and
 		// successfully parsed. They are mapped to the ID name, stored in the borderMap.
-		HashMap borderMap = new HashMap(11);
+		HashMap<String, Border> borderMap = new HashMap<>(11);
 		try
 		{
 			BorderData[] borderDataArray = variant.getBorderData();
@@ -214,18 +210,18 @@ public class WorldFactory
 		
 		// set the Border data (if any) for each province.
 		{
-			ArrayList list = new ArrayList(10);
+			ArrayList<Border> list = new ArrayList<>(10);
 			
 			for(int i=0; i<provinceDataArray.length; i++)
 			{
 				list.clear();
 				ProvinceData provinceData = provinceDataArray[i];
-				Province province = (Province) provNameMap.get(provinceData.getFullName().toLowerCase());
+				Province province = provNameMap.get(provinceData.getFullName().toLowerCase());
 				
 				String[] borderNames = provinceData.getBorders();
 				for(int bIdx=0; bIdx<borderNames.length; bIdx++)
 				{
-					Border border = (Border) borderMap.get( borderNames[bIdx] );
+					Border border = borderMap.get(borderNames[bIdx]);
 					if(border == null)
 					{
 						throw new InvalidWorldException(Utils.getLocalString(WF_BAD_BORDER_NAME, province.getShortName(), borderNames[bIdx]));
@@ -236,16 +232,16 @@ public class WorldFactory
 				
 				if( !list.isEmpty() )
 				{
-					province.setBorders( (Border[]) list.toArray(new Border[list.size()]) );
+					province.setBorders(list.toArray(new Border[list.size()]));
 				}
 			}
 		}
 		
 		// Now that we know the variant, we know the powers, and can
 		// create the Map.
-		dip.world.Map map = new dip.world.Map(	
-					variant.getPowers(), 
-					(Province[]) provinces.toArray(new Province[provinces.size()]) );
+		dip.world.Map map = new dip.world.Map(
+				variant.getPowers(),
+				provinces.toArray(new Province[provinces.size()]));
 		
 		// create the World object as well, now that we have the Map
 		World world = new World(map);
@@ -460,7 +456,7 @@ public class WorldFactory
 	private Location[] makeBorderLocations(String in, HashMap provNameMap)
 	throws InvalidWorldException
 	{
-		ArrayList al = new ArrayList(6);
+		ArrayList<Location> al = new ArrayList<>(6);
 		
 		StringTokenizer st = new StringTokenizer(in.trim(), ";, ");
 		while(st.hasMoreTokens())
@@ -483,7 +479,7 @@ public class WorldFactory
 		}
 		else
 		{
-			return (Location[]) al.toArray(new Location[al.size()]);
+			return al.toArray(new Location[al.size()]);
 		}
 	}// makeBorderLocation()
 	

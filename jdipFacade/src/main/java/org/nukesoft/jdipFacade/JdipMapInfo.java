@@ -57,7 +57,7 @@ public class JdipMapInfo
 	public String[] getAllProvinceNames(int nameLength)
 	{
 		Province[] provinces = world.getMap().getProvinces();
-		LinkedList provWithCoast = new LinkedList();
+		LinkedList<String> provWithCoast = new LinkedList<>();
 		for(int i = 0; i < provinces.length; i++)
 		{
 			if(provinces[i].isCoastal())
@@ -154,7 +154,7 @@ public class JdipMapInfo
 	{
 		Province centeralProvince = getProvinceObject(provinceShortName);
 		Location[] adjacentLocations = centeralProvince.getAdjacentLocations(Coast.TOUCHING);
-		LinkedList provsWithCoasts = new LinkedList();
+		LinkedList<String> provsWithCoasts = new LinkedList<>();
 		for(int i = 0; i < adjacentLocations.length; i++)
 		{
 			Province p = adjacentLocations[i].getProvince();
@@ -200,7 +200,7 @@ public class JdipMapInfo
 	public String[] getConvoyEndpointProvinces(int nameLength)
 	{
 		Province[] allProvinces = world.getMap().getProvinces();
-		LinkedList convoyableProvinces = new LinkedList();
+		LinkedList<Province> convoyableProvinces = new LinkedList<>();
 		for(int i = 0; i < allProvinces.length; i++)
 		{
 			if(allProvinces[i].isCoastal())

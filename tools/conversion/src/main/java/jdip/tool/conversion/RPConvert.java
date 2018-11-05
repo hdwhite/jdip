@@ -163,7 +163,7 @@ public class RPConvert
 			bw = new BufferedWriter(new FileWriter(out));
 
 			// write adjacency data
-			HashMap templateData = new HashMap();
+            HashMap<String, String> templateData = new HashMap<>();
 			makeVariantXMLTemplateData(templateData, mc, variant, countries);
 			bw.write( variantTemplate.parse(templateData) );
 			System.out.println("File created: "+out);
@@ -177,8 +177,8 @@ public class RPConvert
 		}
 	}// makeVariantXMLFile()
 
-	private void makeVariantXMLTemplateData(HashMap td, MapConvert mc,
-		Variant variant, Country[] countries)
+    private void makeVariantXMLTemplateData(HashMap<String, String> td, MapConvert mc,
+                                            Variant variant, Country[] countries)
 	throws IOException
 	{
 		// DEFAULT unknown data
@@ -252,7 +252,7 @@ public class RPConvert
 
 
 		// create mapping of Country initials to Country
-		final HashMap i2cMap = new HashMap();
+        final HashMap<String, Country> i2cMap = new HashMap<>();
 		for(int i=0; i<countries.length; i++)
 		{
 			i2cMap.put(countries[i].getInitial(), countries[i]);
@@ -277,7 +277,7 @@ public class RPConvert
 				sb.append(po.getSN());
 
 				// find country
-				Country c = (Country) i2cMap.get(po.getHomeSC());
+                Country c = i2cMap.get(po.getHomeSC());
 				if(c == null)
 				{
 					throw new IOException("Cannot find a Country for initial "+po.getHomeSC()+".\n");
@@ -822,27 +822,32 @@ public class RPConvert
 		private String patternName;
 		private String colorName;
 
-		private List sc;
-		private List units;
-		private List dislodgedUnits;
+        private List<Loc> sc;
+        private List<Unit> units;
+        private List<Unit> dislodgedUnits;
 
 		private Country()
 		{
-			sc = new LinkedList();
-			units = new LinkedList();
-			dislodgedUnits = new LinkedList();
+            sc = new LinkedList<>();
+            units = new LinkedList<>();
+            dislodgedUnits = new LinkedList<>();
 		}
 
 
-		public List getUnits()		{ return units; }
-		public List getSC()			{ return sc; }
+        public List<Unit> getUnits() {
+            return units;
+        }
+
+        public List<Loc> getSC() {
+            return sc;
+        }
 
 
 		/** Parses all Country data from a .cnt file; */
 		public static Country[] makeCountries(File file)
 		throws IOException
 		{
-			ArrayList al = new ArrayList();
+            ArrayList<Country> al = new ArrayList<>();
 
 			if(file == null)
 			{
@@ -917,7 +922,7 @@ public class RPConvert
 			}
 
 			assert (al.size() > 0);
-			return (Country[]) al.toArray(new Country[al.size()]);
+            return al.toArray(new Country[al.size()]);
 		}// makeCountries()
 
 
@@ -1021,7 +1026,7 @@ public class RPConvert
 		public static Unit[] makeUnits(String input)
 		throws IOException
 		{
-			ArrayList al = new ArrayList(10);
+            ArrayList<Unit> al = new ArrayList<>(10);
 
 			StringTokenizer st = new StringTokenizer(input, " \t\n\r,;");
 			while(st.hasMoreTokens())
@@ -1070,7 +1075,7 @@ public class RPConvert
 				al.add(new Unit(unitType, unitLoc));
 			}
 
-			return (Unit[]) al.toArray(new Unit[al.size()]);
+            return al.toArray(new Unit[al.size()]);
 		}// makeUnit()
 	}// Unit
 

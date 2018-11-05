@@ -22,26 +22,6 @@
 //
 package dip.gui.dialog.newgame;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.net.URL;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import cz.autel.dmi.HIGConstraints;
 import cz.autel.dmi.HIGLayout;
 import dip.gui.swing.GradientJLabel;
@@ -51,6 +31,13 @@ import dip.world.variant.VariantManager;
 import dip.world.variant.data.MapGraphic;
 import dip.world.variant.data.SymbolPack;
 import dip.world.variant.data.Variant;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.net.URL;
 
 
 /**
@@ -263,7 +250,7 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane
 	private class SelectorPanel extends JPanel implements ListSelectionListener
 	{
 		private final GradientJLabel 	label;
-		private final JList 			list;
+		private final JList<ListItem> list;
 		private final JEditorPane		description;
 		private final JPanel			underDesc;
 		private final JScrollPane		jsp;
@@ -273,8 +260,8 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane
 		public SelectorPanel()
 		{
 			label = new GradientJLabel("");
-			
-			list = new JList(new ListItem[0]);
+
+			list = new JList<>(new ListItem[0]);
 			list.setCellRenderer(new GraphicJListCellRenderer());
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			list.setVisibleRowCount(1);
@@ -305,7 +292,7 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane
 		/** Get the selected item. */
 		public ListItem getSelectedItem()
 		{
-			return (ListItem) list.getSelectedValue();
+			return list.getSelectedValue();
 		}// getSelectedItem()
 		
 		
@@ -536,7 +523,7 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane
 	
 	
 	/** Graphic cell renderer for JList ListItems */
-	private static class GraphicJListCellRenderer extends JLabel implements ListCellRenderer 
+	private static class GraphicJListCellRenderer extends JLabel implements ListCellRenderer<ListItem>
 	{ 
 		private static final Dimension MIN_SIZE = new Dimension(LIST_LABEL_WIDTH, LIST_LABEL_HEIGHT);
 		
@@ -550,18 +537,16 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane
 			this.setVerticalAlignment(SwingConstants.CENTER);
 			this.setOpaque(true);
 		}// GraphicJListCellRenderer()
-		
-		
-		public Component getListCellRendererComponent(JList list, Object value, int index,
-														boolean isSelected, boolean cellHasFocus) 
-		{ 
-			ListItem item = (ListItem) value;
-			
-			setText( item.getLabel() );
-			
-			if(item.getIcon() != null)
+
+
+		public Component getListCellRendererComponent(JList list, ListItem value, int index,
+													  boolean isSelected, boolean cellHasFocus) {
+
+			setText(value.getLabel());
+
+			if (value.getIcon() != null)
 			{
-				setIcon( item.getIcon() );
+				setIcon(value.getIcon());
 			}
 			
 			setEnabled(list.isEnabled());

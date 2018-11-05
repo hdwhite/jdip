@@ -22,25 +22,23 @@
 //
 package dip.world.variant.parser;
 
+import dip.misc.Log;
+import dip.world.variant.data.BorderData;
+import dip.world.variant.data.ProvinceData;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import dip.misc.Log;
-import dip.world.variant.data.BorderData;
-import dip.world.variant.data.ProvinceData;
 
 /**
 *	Parses an XML ProvinceData description.
@@ -81,8 +79,8 @@ public class XMLProvinceParser implements ProvinceParser
 	// instance variables
 	private Document doc = null;
 	private DocumentBuilder docBuilder = null;
-	private List provinceList = null;
-	private List borderList = null;
+	private List<ProvinceData> provinceList = null;
+	private List<BorderData> borderList = null;
 	
 	
 	/** Create an XMLProvinceParser */
@@ -92,9 +90,9 @@ public class XMLProvinceParser implements ProvinceParser
 		docBuilder = dbf.newDocumentBuilder();
 		docBuilder.setErrorHandler(new XMLErrorHandler());
 		FastEntityResolver.attach(docBuilder);
-		
-		provinceList = new ArrayList(100);
-		borderList = new ArrayList(10);
+
+		provinceList = new ArrayList<>(100);
+		borderList = new ArrayList<>(10);
 	}// XMLProvinceParser()
 	
 	
@@ -123,21 +121,19 @@ public class XMLProvinceParser implements ProvinceParser
 	/** Returns the ProvinceData objects, or an empty list. */
 	public ProvinceData[] getProvinceData()
 	{
-		return (ProvinceData[]) provinceList.toArray(new ProvinceData[provinceList.size()]); 			
+		return provinceList.toArray(new ProvinceData[provinceList.size()]);
 	}// getProvinceData()
 	
 	/** Returns the BorderData objects, or an empty list. */
 	public BorderData[] getBorderData()
 	{
-		return (BorderData[]) borderList.toArray(new BorderData[borderList.size()]); 			
+		return borderList.toArray(new BorderData[borderList.size()]);
 	}// getBorderData()
 	
 	
 	
 	/** Parse the XML */
-	private void procProvinceData()
-	throws IOException, SAXException
-	{
+	private void procProvinceData() {
 		// find root element
 		Element root = doc.getDocumentElement();
 	
@@ -168,18 +164,18 @@ public class XMLProvinceParser implements ProvinceParser
 			ProvinceData provinceData = new ProvinceData();
 			
 			// create short/unique name list
-			List nameList = new LinkedList();
+			List<String> nameList = new LinkedList<>();
 			
 			// region attributes
 			provinceData.setFullName( elProvince.getAttribute(ATT_FULLNAME) );
 			nameList.add( elProvince.getAttribute(ATT_SHORTNAME) );
 			
 			// convoyable coast
-			provinceData.setConvoyableCoast( Boolean.valueOf(elProvince.getAttribute(ATT_CONVOYABLE_COAST)).booleanValue() );
+			provinceData.setConvoyableCoast(Boolean.valueOf(elProvince.getAttribute(ATT_CONVOYABLE_COAST)));
 			
 			// borders data (optional); a list of references, seperated by commas/spaces
 			String borders = elProvince.getAttribute(ATT_BORDERS).trim();
-			List borderList = new ArrayList();
+			List<String> borderList = new ArrayList<>();
 			StringTokenizer st = new StringTokenizer(borders, ", ");
 			
 			while(st.hasMoreTokens())

@@ -23,8 +23,21 @@
 
 package dip.gui.dialog.prefs;
 
-import java.awt.Component;
-import java.awt.FlowLayout;
+import com.l2fprod.common.swing.JDirectoryChooser;
+import cz.autel.dmi.HIGConstraints;
+import cz.autel.dmi.HIGLayout;
+import dip.gui.ClientFrame;
+import dip.gui.OrderDisplayPanel;
+import dip.gui.map.MapRenderer2;
+import dip.gui.swing.AssocJComboBox;
+import dip.gui.swing.XJFileChooser;
+import dip.misc.LRUCache;
+import dip.misc.Log;
+import dip.misc.SharedPrefs;
+import dip.misc.Utils;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -35,29 +48,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;             
-import javax.swing.JTextField;
-
-import com.l2fprod.common.swing.JDirectoryChooser;
-
-import cz.autel.dmi.HIGConstraints;
-import cz.autel.dmi.HIGLayout;
-import dip.gui.ClientFrame;
-import dip.gui.OrderDisplayPanel;
-import dip.gui.map.MapRenderer2;
-import dip.gui.swing.AssocJComboBox;
-import dip.gui.swing.XJFileChooser;
-import dip.misc.Log;
-import dip.misc.LRUCache;
-import dip.misc.SharedPrefs;
-import dip.misc.Utils;
 
 /**
 *	General preferences.
@@ -100,7 +90,7 @@ public class GeneralPreferencePanel extends PreferencePanel
 	private static final int NUM_RECENT_FILES = 5;
 	
 	// LRU cache of files
-	private static LRUCache fileCache = null;
+    private static LRUCache<String, File> fileCache = null;
 	private static Collator collator = null;
 	
 	// UI Elements
@@ -440,7 +430,7 @@ public class GeneralPreferencePanel extends PreferencePanel
 			Preferences prefs = SharedPrefs.getUserNode();
 			
 			// get files
-			ArrayList al = new ArrayList(NUM_RECENT_FILES);
+            ArrayList<File> al = new ArrayList<>(NUM_RECENT_FILES);
 			for(int i=0; i<NUM_RECENT_FILES; i++)
 			{
 				String s = prefs.get(NODE_RECENT_FILE+String.valueOf(i), "");
@@ -456,11 +446,11 @@ public class GeneralPreferencePanel extends PreferencePanel
 			}
 			
 			// add to cache & create a String of just the name
-			fileCache = new LRUCache(NUM_RECENT_FILES);
+            fileCache = new LRUCache<>(NUM_RECENT_FILES);
 			String[] s = new String[al.size()];
 			for(int i=0; i<al.size(); i++)
 			{
-				File file = (File) al.get(i);
+                File file = al.get(i);
 				fileCache.put(file.getName(), file);
 				s[i] = file.getName();
 			}
@@ -483,7 +473,7 @@ public class GeneralPreferencePanel extends PreferencePanel
 	{
 		if(fileCache != null)
 		{
-			return (File) fileCache.get(name);
+            return fileCache.get(name);
 		}
 		return null;
 	}// getFileFromName()
@@ -495,19 +485,19 @@ public class GeneralPreferencePanel extends PreferencePanel
 		if(fileCache != null)
 		{
 			// load from cache; sort and check for file existence before returning
-			ArrayList names = new ArrayList(NUM_RECENT_FILES);
-			Iterator iter = fileCache.entrySet().iterator();
+            ArrayList<String> names = new ArrayList<>(NUM_RECENT_FILES);
+            Iterator<Map.Entry<String, File>> iter = fileCache.entrySet().iterator();
 			while(iter.hasNext())
 			{
-				Map.Entry mapEntry = (Map.Entry) iter.next();
-				File 	file = (File) mapEntry.getValue();
+                Map.Entry<String, File> mapEntry = iter.next();
+                File file = mapEntry.getValue();
 				if(file.exists())
 				{
 					names.add( mapEntry.getKey() );
 				}
 			}
-			
-			String[] fileNames = (String[]) names.toArray(new String[names.size()]);
+
+            String[] fileNames = names.toArray(new String[names.size()]);
 			Arrays.sort(fileNames, collator);
 			return fileNames;		
 		}

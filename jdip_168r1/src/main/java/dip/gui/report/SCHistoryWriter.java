@@ -22,26 +22,17 @@
 //
 package dip.gui.report;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.JScrollPane;
-
 import dip.gui.ClientFrame;
 import dip.gui.dialog.TextViewer;
 import dip.gui.map.MapMetadata;
 import dip.gui.map.SVGColorParser;
 import dip.misc.Utils;
-import dip.world.Phase;
-import dip.world.Position;
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.TurnState;
-import dip.world.World;
+import dip.world.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 
 /**
@@ -123,7 +114,7 @@ public class SCHistoryWriter
 		}
 		
 		// find all provinces w/supply centers
-		List scList = new ArrayList();
+		List<Province> scList = new ArrayList<>();
 		final Province[] provs = w.getMap().getProvinces();
 		for(int i=0; i<provs.length; i++)
 		{
@@ -134,12 +125,11 @@ public class SCHistoryWriter
 		}
 		
 		// sort list by alphabetical order of the short name (abbreviation)
-		Collections.sort(scList, new Comparator()
-		{
-			public int compare(Object o1, Object o2)
+		Collections.sort(scList, new Comparator<Province>() {
+			public int compare(Province o1, Province o2)
 			{
-				Province p1 = (Province) o1;
-				Province p2 = (Province) o2;
+				Province p1 = o1;
+				Province p2 = o2;
 				return p1.getShortName().compareTo(p2.getShortName());
 			}
 			
@@ -148,8 +138,8 @@ public class SCHistoryWriter
 				return false;
 			}
 		});
-		
-		this.scProvs = (Province[]) scList.toArray(new Province[scList.size()]);
+
+		this.scProvs = scList.toArray(new Province[scList.size()]);
 	}// SCHistoryWriter()
 	
 	
@@ -247,7 +237,7 @@ public class SCHistoryWriter
 	{
 		// cols: # of appropriate turns + 1 (first column is the province name)
 		//
-		ArrayList turnList = new ArrayList(100);	// array of TurnStates
+		ArrayList<TurnState> turnList = new ArrayList<>(100);    // array of TurnStates
 		
 		// add initial phase
 		turnList.add(world.getInitialTurnState());
@@ -296,14 +286,14 @@ public class SCHistoryWriter
 		array[0][1] = Utils.getLocalString(LABEL_INITIAL);
 		for(int i=2; i<cols; i++)
 		{
-			array[0][i] = ((TurnState) turnList.get(i-1)).getPhase().getYearType();
+			array[0][i] = turnList.get(i - 1).getPhase().getYearType();
 		}
 		
 		// 'the rest': fill in with power or null (un-owned)
 		// we will fill by columns.
 		for(int i=1; i<cols; i++)
 		{
-			final TurnState ts = (TurnState) turnList.get(i-1);
+			final TurnState ts = turnList.get(i - 1);
 			final Position pos = ts.getPosition();
 			
 			for(int scIdx=0; scIdx<scProvs.length; scIdx++)

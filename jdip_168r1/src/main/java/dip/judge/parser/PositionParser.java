@@ -22,6 +22,9 @@
 //
 package dip.judge.parser;
 
+import dip.misc.Utils;
+import dip.world.Phase;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -30,9 +33,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import dip.misc.Utils;
-import dip.world.Phase;
 /**
 *
 *	Parses static position list, if present. This is in game listings and also 
@@ -196,7 +196,7 @@ public class PositionParser
 		Pattern pp2 = Pattern.compile(HEADER_REGEX_2);
 		
 		// init
-		List posList = new LinkedList();
+		List<PositionInfo> posList = new LinkedList<>();
 		BufferedReader br = new BufferedReader(new StringReader(input));
 		
 		// header parse loop
@@ -224,12 +224,12 @@ public class PositionParser
 		
 		// cleanup & create array
 		br.close();
-		posInfo = (PositionInfo[]) posList.toArray(new PositionInfo[posList.size()]);
+		posInfo = posList.toArray(new PositionInfo[posList.size()]);
 	}// parseInput()
 	
 	
 	/** Parses the positions. */
-	private void parsePositions(BufferedReader br, List posList)
+	private void parsePositions(BufferedReader br, List<PositionInfo> posList)
 	throws IOException, PatternSyntaxException
 	{
 		Pattern mrp = Pattern.compile(PARSE_REGEX);

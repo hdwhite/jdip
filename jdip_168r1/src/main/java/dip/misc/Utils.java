@@ -22,52 +22,25 @@
 //
 package dip.misc;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.MediaTracker;
-import java.awt.Point;
-import java.awt.Toolkit;
+import dip.gui.dialog.ErrorDialog;
+import dip.gui.swing.XJEditorPane;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.*;
+import javax.swing.text.html.HTMLDocument;
+import java.awt.*;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageProducer;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.DocumentFilter;
-import javax.swing.text.html.HTMLDocument;
-
-import dip.gui.dialog.ErrorDialog;
-import dip.gui.swing.XJEditorPane;
 
 
 /**
@@ -476,7 +449,7 @@ public class Utils
 	 ********************************************************************/	
 	public static String getText(String name, Object arg1)
 	{
-		return MessageFormat.format(getText(name), new Object[] {arg1});
+		return MessageFormat.format(getText(name), arg1);
 	}// getText()
 	
 	/********************************************************************
@@ -709,7 +682,7 @@ public class Utils
 	 ********************************************************************/	
 	public static String getLocalString(String key, Object arg1)
 	{
-		return MessageFormat.format(getLocalString(key), new Object[] {arg1});
+		return MessageFormat.format(getLocalString(key), arg1);
 	}// getLocalString()
 	
 	
@@ -724,7 +697,7 @@ public class Utils
 	 ********************************************************************/	
 	public static String getLocalString(String key, Object arg1, Object arg2)
 	{
-		return MessageFormat.format(getLocalString(key), new Object[] {arg1, arg2});
+		return MessageFormat.format(getLocalString(key), arg1, arg2);
 	}// getLocalString()
 	
 
@@ -739,7 +712,7 @@ public class Utils
 	 ********************************************************************/	
 	public static String getLocalString(String key, Object arg1, Object arg2, Object arg3)
 	{
-		return MessageFormat.format(getLocalString(key), new Object[] {arg1, arg2, arg3});
+		return MessageFormat.format(getLocalString(key), arg1, arg2, arg3);
 	}// getLocalString()
 	
 
@@ -793,7 +766,7 @@ public class Utils
 			}
 			else
 			{
-				text = MessageFormat.format(text, new Object[] {resourceKey, e.getMessage()});
+				text = MessageFormat.format(text, resourceKey, e.getMessage());
 			}
 			
 			popupError(null, title, text);
@@ -1275,12 +1248,8 @@ public class Utils
 				}
 				
 				// check misc chars
-				if(c == '_')
-				{
-					return true;
-				}
-				
-				return false;
+				return c == '_';
+
 			}// checkValid()
 		});
 		
@@ -1456,7 +1425,7 @@ public class Utils
    public static String[] parseCSV(String input)
    {
 		Matcher m = REAL_COMMAS.matcher( input );
-		ArrayList matchList = new ArrayList();
+	   ArrayList<String> matchList = new ArrayList<>();
 		
 		// find all matches (except last)
 		// we trim extra whitespace from ends (no effect if within quotes)
@@ -1468,11 +1437,11 @@ public class Utils
 		}
 		
 		// find last match
-		matchList.add( input.substring(start, input.length()).trim() );
+	   matchList.add(input.substring(start).trim());
 		
 		// convert to array
 		// final: because array length doesn't change. Contents might, though.
-		final String[] matches = (String[]) matchList.toArray(new String[matchList.size()]);
+	   final String[] matches = matchList.toArray(new String[matchList.size()]);
 		
 		// cleanup
 		for(int i=0; i<matches.length; i++)
@@ -1679,8 +1648,8 @@ public class Utils
 		try
 		{
 			final Class service = Class.forName("javax.jnlp.ServiceManager");
-			final Method lookup = service.getMethod("lookup", new Class[] { String.class });
-			final Object basic = lookup.invoke(null, new Object[] { "javax.jnlp.BasicService" });
+			final Method lookup = service.getMethod("lookup", String.class);
+			final Object basic = lookup.invoke(null, "javax.jnlp.BasicService");
 			return true;
 		}
 		catch(Exception e)

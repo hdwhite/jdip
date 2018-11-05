@@ -22,15 +22,15 @@
 //
 package dip.world;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import dip.misc.Utils;
 import dip.order.result.Result;
 import dip.process.Adjudicator;
 import dip.process.Adjustment;
 import dip.world.Phase.PhaseType;
 import dip.world.Phase.SeasonType;
+
+import java.util.ArrayList;
+import java.util.List;
 /**
 *
 *	Establishes the conditions required to determine who wins a game, and contains
@@ -52,7 +52,7 @@ public class VictoryConditions implements java.io.Serializable
 	protected final int initialYear;			// starting game year
 	
 	// transient variables
-	protected transient List evalResults = null;
+	protected transient List<Result> evalResults = null;
 	
 	/** VictoryConditions constructor */
 	public VictoryConditions(int numSCForVictory, int maxYearsNoSCChange, int maxGameTimeYears,
@@ -93,7 +93,7 @@ public class VictoryConditions implements java.io.Serializable
 	*	Returns the Result(s) of evaluate(). This will return an empty list if
 	*	evaluate() has not been called or returned false.
 	*/
-	public List getEvaluationResults()
+	public List<Result> getEvaluationResults()
 	{
 		return evalResults;
 	}// getEvaluationResults()
@@ -129,7 +129,7 @@ public class VictoryConditions implements java.io.Serializable
 		
 		if(evalResults == null)
 		{
-			evalResults = new ArrayList(5);
+			evalResults = new ArrayList<>(5);
 		}
 		else
 		{
@@ -151,7 +151,7 @@ public class VictoryConditions implements java.io.Serializable
 		{
 			if( (currentYear - initialYear + 1) >= maxGameTimeYears )
 			{
-				evalResults.add(new Result(null, Utils.getLocalString(VC_MAX_GAME_TIME, new Integer(maxGameTimeYears))));
+				evalResults.add(new Result(null, Utils.getLocalString(VC_MAX_GAME_TIME, maxGameTimeYears)));
 				evalResults.add(new Result(null, Utils.getLocalString(VC_DRAW, getRemainingPowers(turnState, powers, adjInfo)) ));
 				return true;
 			}
@@ -165,10 +165,10 @@ public class VictoryConditions implements java.io.Serializable
 			{
 				if(adjInfo[i].getSupplyCenterCount() >= numSCForVictory)
 				{
-					evalResults.add(	new Result(null, 
-											Utils.getLocalString(VC_WIN_SINGLE, powers[i], 
-											new Integer(adjInfo[i].getSupplyCenterCount()),
-											new Integer(numSCForVictory)) ));
+					evalResults.add(	new Result(null,
+							Utils.getLocalString(VC_WIN_SINGLE, powers[i],
+									adjInfo[i].getSupplyCenterCount(),
+									numSCForVictory)));
 					return true;
 				}
 			}

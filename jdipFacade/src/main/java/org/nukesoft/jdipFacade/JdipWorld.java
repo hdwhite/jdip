@@ -16,14 +16,19 @@
  */
 package org.nukesoft.jdipFacade;
 
-import java.util.*;
-
-import org.nukesoft.jdipFacade.exception.*;
-
 import dip.order.*;
 import dip.order.result.Result;
-import dip.world.*;
 import dip.world.Phase.PhaseType;
+import dip.world.Power;
+import dip.world.TurnState;
+import dip.world.World;
+import org.nukesoft.jdipFacade.exception.JdipException;
+import org.nukesoft.jdipFacade.exception.PowerNotFoundException;
+import org.nukesoft.jdipFacade.exception.StateError;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -98,7 +103,7 @@ public class JdipWorld
 			throw new PowerNotFoundException();
 		}
 		//parse the orders
-		ArrayList orders = new ArrayList();
+		ArrayList<Orderable> orders = new ArrayList<>();
 		OrderParser parser = OrderParser.getInstance();
 		OrderFactory of = strategy.getOrderFactory();
 		try
@@ -128,7 +133,7 @@ public class JdipWorld
 		
 		TurnState state = world.getPreviousTurnState(world.getLastTurnState());
 		List allResults = state.getResultList();
-		ArrayList generalResults = new ArrayList();
+		ArrayList<JdipResult> generalResults = new ArrayList<>();
 		Iterator it = allResults.iterator();
 		
 		while (it.hasNext())
@@ -156,7 +161,7 @@ public class JdipWorld
 		
 		TurnState state = world.getPreviousTurnState(world.getLastTurnState());
 		List allResults = state.getResultList();
-		ArrayList generalResults = new ArrayList();
+		ArrayList<JdipResult> generalResults = new ArrayList<>();
 		Iterator it = allResults.iterator();
 		
 		while (it.hasNext())

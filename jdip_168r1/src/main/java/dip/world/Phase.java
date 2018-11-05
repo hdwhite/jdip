@@ -22,13 +22,13 @@
 //
 package dip.world;
 
+import dip.misc.Utils;
+
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-
-import dip.misc.Utils;
 /**
 *
 *	A Phase object represents when a turn takes place, and contains the
@@ -143,13 +143,9 @@ public class Phase implements java.io.Serializable, Comparable
 	public boolean equals(Object obj)
 	{
 		Phase phase = (Phase) obj;
-		if( yearType.equals(phase.yearType)
-			&& seasonType.equals(phase.seasonType)
-			&& phaseType.equals(phase.phaseType) )
-		{
-			return true;
-		}
-		return false;
+		return yearType.equals(phase.yearType)
+				&& seasonType.equals(phase.seasonType)
+				&& phaseType.equals(phase.phaseType);
 	}// equals()
 	
 	/** 
@@ -283,7 +279,7 @@ public class Phase implements java.io.Serializable, Comparable
 			String lcIn = in.toLowerCase();
 			
 			// our token list (should be 3 or 4; whitespace/punctuation is ignored)
-			ArrayList tokList = new ArrayList(10);
+			ArrayList<String> tokList = new ArrayList<>(10);
 			
 			// get all tokens, ignoring ANY whitespace or punctuation; StringTokenizer is ideal for this
 			StringTokenizer st = new StringTokenizer(lcIn, " ,:;[](){}-_|/\\\"\'\t\n\r", false);

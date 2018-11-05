@@ -22,51 +22,16 @@
 //
 package dip.process;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import dip.misc.Log;
 import dip.misc.Utils;
-import dip.order.Build;
-import dip.order.Convoy;
-import dip.order.Disband;
-import dip.order.Hold;
-import dip.order.Move;
-import dip.order.Order;
-import dip.order.OrderException;
-import dip.order.OrderFactory;
-import dip.order.OrderFormatOptions;
-import dip.order.OrderWarning;
-import dip.order.Orderable;
-import dip.order.Remove;
-import dip.order.Retreat;
-import dip.order.Support;
-import dip.order.ValidationOptions;
-import dip.order.result.BouncedResult;
-import dip.order.result.DislodgedResult;
-import dip.order.result.OrderResult;
-import dip.order.result.Result;
-import dip.order.result.SubstitutedResult;
-import dip.order.result.TimeResult;
+import dip.order.*;
+import dip.order.result.*;
 import dip.order.result.OrderResult.ResultType;
-import dip.world.Location;
-import dip.world.Path;
-import dip.world.Phase;
-import dip.world.Position;
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.RuleOptions;
-import dip.world.TurnState;
-import dip.world.Unit;
-import dip.world.VictoryConditions;
-import dip.world.World;
+import dip.world.*;
+
+import java.text.MessageFormat;
+import java.util.*;
+import java.util.Map;
 
 /**
 *
@@ -130,9 +95,9 @@ public class StdAdjudicator implements Adjudicator
 	private final Position position;
 	private final World world;
 	private final RuleOptions ruleOpts;
-	private final List resultList;
-	private final Map osMap;
-	private final ArrayList substOrders;
+	private final List<Result> resultList;
+	private final Map<Province, OrderState> osMap;
+	private final ArrayList<OrderState> substOrders;
 	
 	private OrderState[] orderStates = null;
 	private boolean isUnRezParadox = false;
@@ -155,8 +120,8 @@ public class StdAdjudicator implements Adjudicator
 		this.world = ts.getWorld();
 		this.ruleOpts = world.getRuleOptions();
 		this.resultList = ts.getResultList();
-		this.osMap = new HashMap(119);
-		this.substOrders = new ArrayList(16);
+		this.osMap = new HashMap<>(119);
+		this.substOrders = new ArrayList<>(16);
 	}// StdAdjudicator()
 	
 	
@@ -238,7 +203,7 @@ public class StdAdjudicator implements Adjudicator
 	*/
 	public final OrderState findOrderStateBySrc(Location location)
 	{
-		return (OrderState) osMap.get(location.getProvince());
+		return osMap.get(location.getProvince());
 	}// findOrderStateBySrc()
 	
 	
@@ -248,7 +213,7 @@ public class StdAdjudicator implements Adjudicator
 	*/
 	public final OrderState findOrderStateBySrc(Province src)
 	{
-		return (OrderState) osMap.get(src);
+		return osMap.get(src);
 	}// findOrderStateBySrc()
 	
 	/**
@@ -267,13 +232,10 @@ public class StdAdjudicator implements Adjudicator
 		{
 			Support support = (Support) os.getOrder();
 			OrderState destOS = findOrderStateBySrc(support.getSupportedDest());
-			
-			if(	!support.isSupportingHold()
-				&& destOS != null 
-				&& destOS.getPower() == os.getPower() )
-			{
-				return true;
-			}
+
+			return !support.isSupportingHold()
+					&& destOS != null
+					&& destOS.getPower() == os.getPower();
 		}
 		
 		return false;
@@ -378,7 +340,7 @@ public class StdAdjudicator implements Adjudicator
 		// If an order exists for a province without a unit, the order is deleted.
 		List orderList = turnState.getAllOrders();
 		// temporary list for holding orders; ASSUME that we won't be adding too many orders.
-		ArrayList osList = new ArrayList(orderList.size());
+		ArrayList<OrderState> osList = new ArrayList<>(orderList.size());
 		
 		Iterator iter = orderList.iterator();
 		while(iter.hasNext())
@@ -390,7 +352,7 @@ public class StdAdjudicator implements Adjudicator
 			// check that a unit exists for this order
 			if( position.hasUnit(province) )
 			{
-				OrderState oldOS = (OrderState) osMap.get(province);
+				OrderState oldOS = osMap.get(province);
 				if(oldOS != null)
 				{
 					addResult( new OrderResult(oldOS.getOrder(), 
@@ -432,7 +394,7 @@ public class StdAdjudicator implements Adjudicator
 		}
 		
 		// set OrderStates from our temporary list
-		orderStates = (OrderState[]) osList.toArray(new OrderState[osList.size()]);
+		orderStates = osList.toArray(new OrderState[osList.size()]);
 		
 		// null out unitList & orderList -- we don't need them (and shouldn't use them)
 		// (we'll get an NPE if we accidentaly use them later)
@@ -785,8 +747,8 @@ public class StdAdjudicator implements Adjudicator
 			// nextTurnState:
 			nextTurnState.setEnded(true);
 			nextTurnState.setResolved(true);
-			
-			List nextResults = nextTurnState.getResultList();
+
+			List<Result> nextResults = nextTurnState.getResultList();
 			nextResults.addAll(vc.getEvaluationResults());
 			nextResults.add(completed);
 			
@@ -1173,7 +1135,7 @@ public class StdAdjudicator implements Adjudicator
 		// 
 		// during the retreat phase, we are only concerned with dislodged units.
 		List orderList = turnState.getAllOrders();
-		ArrayList osList = new ArrayList(orderList.size());
+		ArrayList<OrderState> osList = new ArrayList<>(orderList.size());
 		
 		Iterator iter = orderList.iterator();
 		while(iter.hasNext())
@@ -1185,7 +1147,7 @@ public class StdAdjudicator implements Adjudicator
 			// check that a unit exists for this order
 			if( position.hasDislodgedUnit(province) )
 			{
-				OrderState oldOS = (OrderState) osMap.get(province);
+				OrderState oldOS = osMap.get(province);
 				if(oldOS != null)
 				{
 					addResult(new OrderResult(oldOS.getOrder(),
@@ -1224,7 +1186,7 @@ public class StdAdjudicator implements Adjudicator
 		}
 		
 		// set OrderStates from our temporary list
-		orderStates = (OrderState[]) osList.toArray(new OrderState[osList.size()]);
+		orderStates = osList.toArray(new OrderState[osList.size()]);
 		
 		// null out unitList & orderList -- we don't need them (and shouldn't use them)
 		// (we'll get an NPE if we use them later)
@@ -1439,13 +1401,13 @@ public class StdAdjudicator implements Adjudicator
 		// use the most strict validation options
 		ValidationOptions valOpts = new ValidationOptions();
 		valOpts.setOption(ValidationOptions.KEY_GLOBAL_PARSING, ValidationOptions.VALUE_GLOBAL_PARSING_STRICT);
-		
-		ArrayList osList = new ArrayList(32);
+
+		ArrayList<OrderState> osList = new ArrayList<>(32);
 		
 		for(int i=0; i<powers.length; i++)
 		{
 			Power power = powers[i];
-			Adjustment.AdjustmentInfo ai = (Adjustment.AdjustmentInfo) adjustmentMap.get(power);
+			Adjustment.AdjustmentInfo ai = adjustmentMap.get(power);
 			int orderCount = 0;
 			final int adjAmount = ai.getAdjustmentAmount();
 			
@@ -1529,7 +1491,7 @@ public class StdAdjudicator implements Adjudicator
 		}// for(power)
 		
 		// set OrderStates from our temporary list
-		orderStates = (OrderState[]) osList.toArray(new OrderState[osList.size()]);
+		orderStates = osList.toArray(new OrderState[osList.size()]);
 		osList = null;	// prevent accidental re-use
 		
 		assert(osMap.size() == orderStates.length);
@@ -1566,9 +1528,9 @@ public class StdAdjudicator implements Adjudicator
 				osMap.remove(os);
 				
 				// safe... can't use an index...
-				List list = Arrays.asList(orderStates);
+				List<OrderState> list = Arrays.asList(orderStates);
 				list.remove(os);
-				orderStates = (OrderState[]) list.toArray(new OrderState[list.size()]);
+				orderStates = list.toArray(new OrderState[list.size()]);
 			}
 		}
 		
@@ -1652,7 +1614,7 @@ public class StdAdjudicator implements Adjudicator
 		for(int i=0; i<powers.length; i++)
 		{
 			// get adjustment information
-			Adjustment.AdjustmentInfo ai = (Adjustment.AdjustmentInfo) adjustmentMap.get(powers[i]);
+			Adjustment.AdjustmentInfo ai = adjustmentMap.get(powers[i]);
 			
 			// check for player elimination
 			if(ai.getSupplyCenterCount() == 0)
@@ -1694,7 +1656,7 @@ public class StdAdjudicator implements Adjudicator
 		<p>
 		This is not a high-performance method.....
 	*/
-	private void createRemoveOrders(List osList, Power power, int ordersToMake)
+	private void createRemoveOrders(List<OrderState> osList, Power power, int ordersToMake)
 	{
 		Path path = new Path(position);
 		
@@ -1716,7 +1678,7 @@ public class StdAdjudicator implements Adjudicator
 		
 		for(int i=0; i<ordersToMake; i++)
 		{
-			LinkedList ties = new LinkedList();
+			LinkedList<Province> ties = new LinkedList<>();
 			int maxDist = 0;
 			
 			Province[] provinces = position.getProvinces();
@@ -1786,7 +1748,7 @@ public class StdAdjudicator implements Adjudicator
 				
 				if(!foundFleet)
 				{
-					createDisbandOrder(osList, (Province) ties.getFirst() );
+					createDisbandOrder(osList, ties.getFirst());
 				}
 			}
 		}
@@ -1794,7 +1756,7 @@ public class StdAdjudicator implements Adjudicator
 	
 	
 	/** Creates a valid Disband order; adds to internal hashmap and given order list. */
-	private void createDisbandOrder(List osList, Province province)
+	private void createDisbandOrder(List<OrderState> osList, Province province)
 	{
 		Unit unit = position.getUnit(province);
 		Remove remove = orderFactory.createRemove(unit.getPower(), new Location(province, unit.getCoast()), unit.getType());
@@ -1921,7 +1883,7 @@ public class StdAdjudicator implements Adjudicator
 	*/
 	private List findMovesTo(Province moveDest)
 	{
-		ArrayList list = new ArrayList(6);
+		ArrayList<Order> list = new ArrayList<>(6); //todo: i kind of feel this method should return this list
 		
 		for(int i=0; i<orderStates.length; i++)
 		{
@@ -1977,9 +1939,8 @@ public class StdAdjudicator implements Adjudicator
 	*	Returns a list of all orderStates for this power.
 	*
 	*/
-	private List findOrderStatesForPower(Power power)
-	{
-		ArrayList list = new ArrayList(32);
+	private List<OrderState> findOrderStatesForPower(Power power) {
+		ArrayList<OrderState> list = new ArrayList<>(32);
 		
 		for(int i=0; i<orderStates.length; i++)
 		{
@@ -2002,7 +1963,7 @@ public class StdAdjudicator implements Adjudicator
 	*/
 	private List getConvoyList(Move move)
 	{
-		ArrayList list = new ArrayList(8);
+		ArrayList<OrderState> list = new ArrayList<>(8);
 		
 		for(int i=0; i<orderStates.length; i++)
 		{
@@ -2043,8 +2004,8 @@ public class StdAdjudicator implements Adjudicator
 	*/
 	private int markCircularMoves()
 	{
-		List movesToCheck = new LinkedList();
-		LinkedList chain = new LinkedList();	// we'll be using this as a Stack; it will be cleared if chain is not complete.
+		List<OrderState> movesToCheck = new LinkedList<>();
+		LinkedList<OrderState> chain = new LinkedList<>();    // we'll be using this as a Stack; it will be cleared if chain is not complete.
 		boolean isChainCircular = false;		// 'true' if chain contains a list of circular moves.
 		int chainCount = 0;
 		

@@ -21,10 +21,10 @@
 //
 package dip.order.result;
 
-import java.io.Serializable;
-
 import dip.order.OrderFormatOptions;
 import dip.world.Power;
+
+import java.io.Serializable;
 
 /**
 *		A Result is a message that is sent from the adjudicator back to a power
@@ -34,7 +34,7 @@ import dip.world.Power;
 *		for debugging. To obtain a properly-formatted localized message, use
 *		getMessage().
 */
-public class Result extends Object implements Serializable, Comparable
+public class Result extends Object implements Serializable, Comparable<Result>
 {
 	// constants
 	private static final OrderFormatOptions DEFAULT_OFO = OrderFormatOptions.createDefault();
@@ -130,32 +130,28 @@ public class Result extends Object implements Serializable, Comparable
 	*	If power is null, it will be first in ascending order.
 	* 	If message may be empty, but never is null.
 	*/
-	public int compareTo(Object o)
-	{
-		Result result = (Result) o;
-		
+	public int compareTo(Result o) {
+
 		// first: compare powers
 		int compareResult = 0;
-		if(result.power == null && this.power == null)
+		if (o.power == null && this.power == null)
 		{
 			compareResult = 0;
-		}
-		else if(this.power == null && result.power != null)
+		} else if (this.power == null && o.power != null)
 		{
 			return -1;
-		}
-		else if(this.power != null && result.power == null)
+		} else if (this.power != null && o.power == null)
 		{
 			return +1;
 		}
 		else
 		{
 			// if these are equal, could be 0
-			compareResult = this.power.compareTo(result.power);
+			compareResult = this.power.compareTo(o.power);
 		}
 		
 		// finally: compare messages
-		return ((compareResult != 0) ? compareResult : message.compareTo(result.message));
+		return ((compareResult != 0) ? compareResult : message.compareTo(o.message));
 	}// compareTo()
 	
 	

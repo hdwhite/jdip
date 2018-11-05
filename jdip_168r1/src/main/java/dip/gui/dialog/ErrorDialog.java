@@ -22,32 +22,20 @@
 //
 package dip.gui.dialog;
 
-import java.awt.Dimension;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
 import dip.gui.ClientFrame;
 import dip.misc.Log;
 import dip.misc.Utils;
 import dip.world.World;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.util.*;
+import java.util.List;
 
 /**
 *	Various error dialogs, which use HTML templates to display errors.
@@ -796,7 +784,7 @@ public class ErrorDialog extends TextViewer
 	*/
 	public static class BugReportInfo
 	{
-		private final List list;
+		private final List<String> list;
 		private final Throwable t;
 		private String memoryLogData;
 		
@@ -812,8 +800,8 @@ public class ErrorDialog extends TextViewer
 			{
 				throw new IllegalArgumentException();
 			}
-			
-			list = new LinkedList();
+
+			list = new LinkedList<>();
 			this.t = t;
 			this.memoryLogData = Log.getMemoryBuffer();
 		}// BugInfo()
@@ -932,7 +920,7 @@ public class ErrorDialog extends TextViewer
 			sb.append(Utils.isInWebstart());
 
 			// ArrayList of strings
-			ArrayList list = new ArrayList();
+			ArrayList<String> list = new ArrayList<>();
 			try
 			{
 				Properties props = System.getProperties();

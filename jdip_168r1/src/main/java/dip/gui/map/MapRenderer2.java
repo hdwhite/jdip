@@ -22,13 +22,6 @@
 //
 package dip.gui.map;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
-import org.apache.batik.swing.JSVGCanvas;
-import org.apache.batik.util.RunnableQueue;
-import org.w3c.dom.svg.SVGDocument;
-
 import dip.gui.AbstractCFPListener;
 import dip.gui.ClientFrame;
 import dip.gui.map.RenderCommandFactory.RenderCommand;
@@ -39,6 +32,12 @@ import dip.world.Location;
 import dip.world.Power;
 import dip.world.TurnState;
 import dip.world.Unit;
+import org.apache.batik.swing.JSVGCanvas;
+import org.apache.batik.util.RunnableQueue;
+import org.w3c.dom.svg.SVGDocument;
+
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
 *	Base class for the new MapRenderer.
@@ -83,7 +82,7 @@ public abstract class MapRenderer2
 	// instance variables
 	//
 	private boolean isReady = false;		// internal flag indicating if turnstate has been set
-	private LinkedList tempQueue = null;
+	private LinkedList<RenderCommand> tempQueue = null;
 	protected final MapPanel mapPanel;
 	protected CFPropertyListener propListener = null;
 	protected final JSVGCanvas svgCanvas;
@@ -94,9 +93,7 @@ public abstract class MapRenderer2
 	*	Default Constructor
 	*	JSVGCanvas and SVGDocument of MapPanel <b>must not be null</b>
 	*/
-	public MapRenderer2(MapPanel mp)
-	throws MapException
-	{
+	public MapRenderer2(MapPanel mp) {
 		Log.printTimed(mp.startTime, "MR2 constructor start");
 		mapPanel = mp;
 		
@@ -105,8 +102,8 @@ public abstract class MapRenderer2
 		
 		propListener = new CFPropertyListener();
 		mapPanel.getClientFrame().addPropertyChangeListener(propListener);
-		
-		tempQueue = new LinkedList();
+
+		tempQueue = new LinkedList<>();
 		
 		Log.printTimed(mp.startTime, "MR2 constructor end");
 	}// MapRenderer()

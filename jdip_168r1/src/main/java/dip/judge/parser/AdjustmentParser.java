@@ -22,6 +22,9 @@
 //
 package dip.judge.parser;
 
+import dip.world.Map;
+import dip.world.Power;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -31,9 +34,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import dip.world.Map;
-import dip.world.Power;
 /**
 *	Parses the Adjustment information block. 
 *	<br>
@@ -64,9 +64,9 @@ public class AdjustmentParser
 	
 	// INSTANCE VARIABLES
 	private dip.world.Map map = null;
-	
-	private List ownerList = null;
-	private List adjustList = null;
+
+	private List<OwnerInfo> ownerList = null;
+	private List<AdjustInfo> adjustList = null;
 	private Pattern regexAdjust = null;
 	
 	private OwnerInfo[] ownerInfo = null;
@@ -264,8 +264,8 @@ public class AdjustmentParser
 	throws IOException
 	{
 		// create lists
-		ownerList = new LinkedList();
-		adjustList = new LinkedList();
+		ownerList = new LinkedList<>();
+		adjustList = new LinkedList<>();
 		
 		// create patterns
 		regexAdjust = Pattern.compile(ADJUST_REGEX);
@@ -293,8 +293,8 @@ public class AdjustmentParser
 		
 		
 		// create the output array
-		ownerInfo = (OwnerInfo[]) ownerList.toArray(new OwnerInfo[ownerList.size()]);
-		adjustInfo = (AdjustInfo[]) adjustList.toArray(new AdjustInfo[adjustList.size()]);
+		ownerInfo = ownerList.toArray(new OwnerInfo[ownerList.size()]);
+		adjustInfo = adjustList.toArray(new AdjustInfo[adjustList.size()]);
 		
 		// cleanup
 		br.close();
@@ -314,7 +314,7 @@ public class AdjustmentParser
 	throws IOException
 	{
 		// map of Powers to StringBuffers
-		HashMap pmap = new HashMap();
+		HashMap<Power, StringBuffer> pmap = new HashMap<>();
 		
 		// parse and re-formulate
 		// into a new string
@@ -348,7 +348,7 @@ public class AdjustmentParser
 			{
 				if(currentPower != null)
 				{
-					StringBuffer sb = (StringBuffer) pmap.get(currentPower);
+					StringBuffer sb = pmap.get(currentPower);
 					sb.append(tok);
 					sb.append(" ");
 				}
@@ -363,7 +363,7 @@ public class AdjustmentParser
 		final Power[] allPowers = map.getPowers();
 		for(int i=0; i<allPowers.length; i++)
 		{
-			StringBuffer sb = (StringBuffer) pmap.get(allPowers[i]);
+			StringBuffer sb = pmap.get(allPowers[i]);
 			if(sb != null)
 			{
 				final String[] provs = sb.toString().split("[\\,]");

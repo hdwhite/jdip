@@ -22,44 +22,23 @@
 //
 package dip.judge.parser;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
 import dip.judge.parser.TurnParser.Turn;
 import dip.misc.Log;
 import dip.misc.Utils;
-import dip.order.Build;
-import dip.order.Disband;
-import dip.order.Move;
-import dip.order.OrderException;
-import dip.order.OrderFactory;
-import dip.order.Orderable;
-import dip.order.Remove;
-import dip.order.ValidationOptions;
+import dip.order.*;
 import dip.order.NJudgeOrderParser.NJudgeOrder;
 import dip.order.result.DislodgedResult;
 import dip.order.result.OrderResult;
 import dip.order.result.Result;
 import dip.order.result.SubstitutedResult;
 import dip.process.Adjustment;
-import dip.world.Location;
-import dip.world.Phase;
-import dip.world.Position;
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.RuleOptions;
-import dip.world.TurnState;
-import dip.world.Unit;
-import dip.world.VictoryConditions;
-import dip.world.World;
+import dip.world.*;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 /**
 *
 *	Processes an entire game history to create a world. 
@@ -188,7 +167,7 @@ final class JudgeImportHistory
 		// get home supply center information from the oldPosition object
 		// and store it in HSCInfo object array, so that it can be set during each successive 
 		// turn.
-		ArrayList hscList = new ArrayList(50);
+		ArrayList<HSCInfo> hscList = new ArrayList<>(50);
 		Province[] provinces = map.getProvinces();
 		for(int i=0; i<provinces.length; i++)
 		{
@@ -198,7 +177,7 @@ final class JudgeImportHistory
 				hscList.add(new HSCInfo(provinces[i], power));
 			}
 		}
-		homeSCInfo = (HSCInfo[]) hscList.toArray(new HSCInfo[hscList.size()]);
+		homeSCInfo = hscList.toArray(new HSCInfo[hscList.size()]);
 
 		// process all but the final phase
 		for(int i=firstMovePhase; i<turns.length-1; i++)
@@ -247,7 +226,7 @@ final class JudgeImportHistory
 			RuleOptions ruleOpts = world.getRuleOptions();
 			Adjustment.AdjustmentInfoMap adjMap = Adjustment.getAdjustmentInfo(ts, ruleOpts, world.getMap().getPowers());
 			vc.evaluate(ts,adjMap);
-			List evalResults = ts.getResultList();
+			List<Result> evalResults = ts.getResultList();
 			evalResults.addAll(vc.getEvaluationResults());
 			ts.setResultList(evalResults);
 			ts.setEnded(true);
@@ -268,7 +247,7 @@ final class JudgeImportHistory
 		// get home supply center information from the oldPosition object
 		// and store it in HSCInfo object array, so that it can be set during each successive 
 		// turn.
-		ArrayList hscList = new ArrayList(50);
+		ArrayList<HSCInfo> hscList = new ArrayList<>(50);
 		Province[] provinces = map.getProvinces();
 		for(int i=0; i<provinces.length; i++)
 		{
@@ -278,7 +257,7 @@ final class JudgeImportHistory
 				hscList.add(new HSCInfo(provinces[i], power));
 			}
 		}
-		homeSCInfo = (HSCInfo[]) hscList.toArray(new HSCInfo[hscList.size()]);
+		homeSCInfo = hscList.toArray(new HSCInfo[hscList.size()]);
 
 		// process the turn
 		procTurn(turn, null, null, false);
@@ -446,7 +425,7 @@ final class JudgeImportHistory
 		Log.println("  Turn.getPhase() = ", turn.getPhase());
 		
 		TurnState ts = makeTurnState(turn, positionPlacement);
-		List results = ts.getResultList();
+		List<Result> results = ts.getResultList();
 		
 		Log.println("  Turnstate created. Phase: ", ts.getPhase());
 		
@@ -543,11 +522,11 @@ final class JudgeImportHistory
 			Power[] powers = map.getPowers();
 			
 			Log.println("  :created power->order mapping");
-			
-			HashMap orderMap = new HashMap(powers.length);
+
+			HashMap<Power, List<Orderable>> orderMap = new HashMap<>(powers.length);
 			for(int i=0; i<powers.length; i++)
 			{
-				orderMap.put(powers[i], new LinkedList());
+				orderMap.put(powers[i], new LinkedList<>());
 			}
 			
 			// process all orders
@@ -563,8 +542,8 @@ final class JudgeImportHistory
 				try
 				{
 					order.validate(ts, valOpts, ruleOpts);
-					
-					List list = (LinkedList) orderMap.get(order.getPower());
+
+					List<Orderable> list = orderMap.get(order.getPower());
 					list.add(order);
 					
 					results.addAll(njo.getResults());
@@ -588,8 +567,8 @@ final class JudgeImportHistory
 					try 
 					{
 						order.validate(ts, valOpts, ruleOpts);
-						
-						List list = (LinkedList) orderMap.get(order.getPower());
+
+						List<Orderable> list = orderMap.get(order.getPower());
 						list.add(order);
 						
 						results.addAll(njo.getResults());
@@ -690,7 +669,7 @@ final class JudgeImportHistory
 			// set orders in turnstate
 			for(int i=0; i<powers.length; i++)
 			{
-				ts.setOrders(powers[i], (LinkedList) orderMap.get(powers[i]));
+				ts.setOrders(powers[i], orderMap.get(powers[i]));
 			}
 		}
 		
@@ -727,7 +706,7 @@ final class JudgeImportHistory
 		// create TurnState
 		final TurnState ts = makeTurnState(turn, positionPlacement);
 		final Position position = ts.getPosition();
-		final List results = ts.getResultList();
+		final List<Result> results = ts.getResultList();
 		final RuleOptions ruleOpts = world.getRuleOptions();
 		
 		Log.println("  :procRetreat(): ", ts.getPhase(), "; positionPlacement: ", String.valueOf(positionPlacement));
@@ -746,10 +725,10 @@ final class JudgeImportHistory
 		{	
 			// create orderMap, which maps powers to their respective order list
 			Power[] powers = map.getPowers();
-			HashMap orderMap = new HashMap(powers.length);
+			HashMap<Power, List<Orderable>> orderMap = new HashMap<>(powers.length);
 			for(int i=0; i<powers.length; i++)
 			{
-				orderMap.put(powers[i], new LinkedList());
+				orderMap.put(powers[i], new LinkedList<>());
 			}
 			
 			// validate all parsed orders
@@ -769,8 +748,8 @@ final class JudgeImportHistory
 				try
 				{
 					order.validate(ts, valOpts, ruleOpts);
-					
-					List list = (LinkedList) orderMap.get(order.getPower());
+
+					List<Orderable> list = orderMap.get(order.getPower());
 					list.add(order);
 					
 					results.addAll(njo.getResults());
@@ -844,7 +823,7 @@ final class JudgeImportHistory
 			// set orders in turnstate
 			for(int i=0; i<powers.length; i++)
 			{
-				ts.setOrders(powers[i], (LinkedList) orderMap.get(powers[i]));
+				ts.setOrders(powers[i], orderMap.get(powers[i]));
 			}
 		}
 		
@@ -876,7 +855,7 @@ final class JudgeImportHistory
 		
 		// create TurnState
 		final TurnState ts = makeTurnState(turn, positionPlacement);
-		final List results = ts.getResultList();
+		final List<Result> results = ts.getResultList();
 		final RuleOptions ruleOpts = world.getRuleOptions();
 		
 		Log.println("JIH::procAdjust(): ", ts.getPhase());
@@ -909,10 +888,10 @@ final class JudgeImportHistory
 			
 			// create orderMap, which maps powers to their respective order list
 			Power[] powers = map.getPowers();
-			HashMap orderMap = new HashMap(powers.length);
+			HashMap<Power, List<Orderable>> orderMap = new HashMap<>(powers.length);
 			for(int i=0; i<powers.length; i++)
 			{
-				orderMap.put(powers[i], new LinkedList());
+				orderMap.put(powers[i], new LinkedList<>());
 			}
 			
 			// parse all orders
@@ -929,8 +908,8 @@ final class JudgeImportHistory
 					throw new IOException("Internal error: JIH:procAdjustments(): "+
 						"getResults() != 1");
 				}
-				
-				final Result result = (Result) njo.getResults().get(0);
+
+				final Result result = njo.getResults().get(0);
 				
 				// if result is a substituted result, the player defaulted,
 				// and the Judge inserted a Disband order
@@ -965,7 +944,7 @@ final class JudgeImportHistory
 						
 						if(!isDefaulted)
 						{
-							List list = (LinkedList) orderMap.get(newOrder.getPower());
+							List<Orderable> list = orderMap.get(newOrder.getPower());
 							list.add(newOrder);
 						}
 						
@@ -1015,7 +994,7 @@ final class JudgeImportHistory
 			// set orders in turnstate
 			for(int i=0; i<powers.length; i++)
 			{
-				ts.setOrders(powers[i], (LinkedList) orderMap.get(powers[i]));
+				ts.setOrders(powers[i], orderMap.get(powers[i]));
 			}
 		}
 		
@@ -1252,16 +1231,16 @@ final class JudgeImportHistory
 	*	<p>
 	*	old Dislodged results are discarded.
 	*/
-	private void makeDislodgedResults(Phase phase, List results, Position position, 
-		DislodgedParser.DislodgedInfo[] dislodgedInfo, boolean positionPlacement)
+	private void makeDislodgedResults(Phase phase, List<Result> results, Position position,
+									  DislodgedParser.DislodgedInfo[] dislodgedInfo, boolean positionPlacement)
 	throws IOException
 	{
 		Log.println("JIH::makeDislodgedResults() [", phase, "]");
 		Log.println("  # results: ", results.size());
-		ListIterator iter = results.listIterator();
+		ListIterator<Result> iter = results.listIterator();
 		while(iter.hasNext())
 		{
-			Result result = (Result) iter.next();
+			Result result = iter.next();
 			if(result instanceof OrderResult)
 			{
 				OrderResult orderResult = (OrderResult) result;

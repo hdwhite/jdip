@@ -51,7 +51,7 @@ public class Position implements java.io.Serializable, Cloneable
 	private static final int POWER_SIZE = 17;
 	
 	// instance variables
-	protected final Map powerMap = new HashMap(POWER_SIZE);
+	protected final Map<Power, PowerData> powerMap = new HashMap<>(POWER_SIZE);
 	protected final ProvinceData[] provArray;
 	protected final dip.world.Map map;
 	private transient Province[] tmpProvArray = null;
@@ -106,7 +106,7 @@ public class Position implements java.io.Serializable, Cloneable
 	*/
 	public void setEliminationStatus(final Power[] powers)
 	{
-		HashMap pmap = new HashMap(19);
+		HashMap<Power,Object> pmap = new HashMap<>(19);
 		for(int i=0; i<powers.length; i++)
 		{
 			pmap.put(powers[i], null);

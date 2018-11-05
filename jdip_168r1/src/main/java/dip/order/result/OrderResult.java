@@ -21,9 +21,9 @@
 //
 package dip.order.result;
 
-import java.io.Serializable;
-
 import dip.order.Orderable;
+
+import java.io.Serializable;
 
 /**
 *	A message sent to a specific Power that refers to a specific order.
@@ -112,7 +112,7 @@ public class OrderResult extends Result
 	*	If power is null, it will be first in ascending order.
 	* 	If message may be empty, but never is null.
 	*/
-	public int compareTo(Object o)
+	public int compareTo(Result o)
 	{
 		if(o instanceof OrderResult)
 		{
@@ -189,7 +189,7 @@ public class OrderResult extends Result
 	*	
 	*	
 	*/
-	public static class ResultType implements Serializable, Comparable
+	public static class ResultType implements Serializable, Comparable<ResultType>
 	{
 		// key constants
 		private static final String KEY_VALIDATION_FAILURE = "VALIDATION_FAILURE";
@@ -247,9 +247,8 @@ public class OrderResult extends Result
 		}// toString()
 		
 		/** Sorts the result type */
-		public int compareTo(Object obj)
-		{
-			ResultType rt = (ResultType) obj;
+		public int compareTo(ResultType obj) {
+			ResultType rt = obj;
 			return (ordering - rt.ordering);
 		}// compareTo()
 		

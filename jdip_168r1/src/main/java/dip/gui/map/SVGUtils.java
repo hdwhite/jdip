@@ -22,14 +22,8 @@
 //
 package dip.gui.map;
 
-import java.awt.Dimension;
-import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import com.dautelle.util.TypeFormat;
+import dip.world.Province;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.dom.util.XLinkSupport;
 import org.apache.batik.swing.JSVGCanvas;
@@ -42,9 +36,10 @@ import org.w3c.dom.svg.SVGDocument;
 import org.w3c.dom.svg.SVGElement;
 import org.w3c.dom.svg.SVGUseElement;
 
-import com.dautelle.util.TypeFormat;
-
-import dip.world.Province;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.util.*;
+import java.util.List;
 
 
 
@@ -272,7 +267,7 @@ public class SVGUtils
 	public static Map tagFinderSVG(List lookList, Node root, boolean anySVGElement)
 	{
 		List list = new ArrayList(lookList);
-		Map map = new HashMap( (4 * lookList.size())/3 );
+		Map<Object, Node> map = new HashMap<>((4 * lookList.size()) / 3);
 		
 		// recursively walk tree from root
 		nodeWalker(root, list, map, anySVGElement);
@@ -303,7 +298,7 @@ public class SVGUtils
 	}// tagFinderSVG
 	
 	/** As above but allows any SVG element to be returned */
-	public static void tagFinderSVG(Map map, List lookList, Node root, boolean anySVGElement)
+	public static void tagFinderSVG(Map<Object, Node> map, List lookList, Node root, boolean anySVGElement)
 	{
 		List list = new ArrayList(lookList);
 		
@@ -319,9 +314,9 @@ public class SVGUtils
 	*/
 	public static SVGElement[] idFinderSVG(Node root)
 	{
-		List list = new ArrayList(150);
+		List<SVGElement> list = new ArrayList<>(150);
 		idNodeWalker(root, list, true);
-		return (SVGElement[]) list.toArray(new SVGElement[list.size()]);
+		return list.toArray(new SVGElement[list.size()]);
 	}// idFinderSVG()
 	
 	
@@ -330,7 +325,7 @@ public class SVGUtils
 	*	All non-G or non-SYMBOL elements are ignored, if anySVGElement flag is false
 	*
 	*/
-	private static void nodeWalker(Node node, List list, Map map, boolean anySVGElement)
+	private static void nodeWalker(Node node, List list, Map<Object, Node> map, boolean anySVGElement)
 	{
 		if( node.getNodeType() == Node.ELEMENT_NODE 
 			&& ((anySVGElement && node instanceof org.w3c.dom.svg.SVGElement)
@@ -366,7 +361,7 @@ public class SVGUtils
 	*	Looks for any ELEMENT with an ID value.
 	*
 	*/
-	private static void idNodeWalker(Node node, List list, boolean isRoot)
+	private static void idNodeWalker(Node node, List<SVGElement> list, boolean isRoot)
 	{
 		if(node.getNodeType() == Node.ELEMENT_NODE && !isRoot)
 		{
@@ -395,7 +390,7 @@ public class SVGUtils
 	*	list. If it does, the element is added to map, and removed from the list.
 	*
 	*/
-	private static void nodeChecker(Node attributeNode, Node parentNode, List list, Map map)
+	private static void nodeChecker(Node attributeNode, Node parentNode, List list, Map<Object, Node> map)
 	{
 		String nodeValue = attributeNode.getNodeValue();
 		Iterator iter = list.iterator();

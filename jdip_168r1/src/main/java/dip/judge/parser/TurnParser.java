@@ -22,6 +22,9 @@
 //
 package dip.judge.parser;
 
+import dip.misc.Utils;
+import dip.world.Phase;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -29,9 +32,6 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import dip.misc.Utils;
-import dip.world.Phase;
 /**
 *	Parses the Turns of a History file.
 *	<p>
@@ -103,9 +103,9 @@ public class TurnParser
 		Pattern subjPhasePattern = Pattern.compile(SUBJ_PHASE_REGEX);
 		Pattern subjPhasePatternOld = Pattern.compile(SUBJ_PHASE_REGEX_OLD);
 		Pattern isResultsPattern = Pattern.compile(RESULT_SUBJ_REGEX);
-		
-		
-		LinkedList turnList = new LinkedList();
+
+
+		LinkedList<Turn> turnList = new LinkedList<>();
 		BufferedReader reader = new BufferedReader(new StringReader(input));
 		
 		String line = reader.readLine();
@@ -188,7 +188,7 @@ public class TurnParser
 		}
 		
 		// convert to array
-		turns = (Turn[]) turnList.toArray(new Turn[turnList.size()]);
+		turns = turnList.toArray(new Turn[turnList.size()]);
 	}// parseTurns()
 	
 	

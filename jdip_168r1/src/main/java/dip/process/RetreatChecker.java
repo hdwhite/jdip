@@ -30,10 +30,7 @@ import java.util.List;
 import dip.order.Move;
 import dip.order.Orderable;
 import dip.order.result.OrderResult;
-import dip.world.Location;
-import dip.world.Position;
-import dip.world.TurnState;
-import dip.world.World;
+import dip.world.*;
 
 /**
 *	RetreatChecker analyzes the current TurnState and the results of the previous
@@ -161,7 +158,7 @@ public class RetreatChecker
 	*/
 	public Location[] getValidLocations(Location from)
 	{
-		List retreatLocations = new ArrayList(8);
+		List<Location> retreatLocations = new ArrayList<>(8);
 		
 		Location[] adjacent = from.getProvince().getAdjacentLocations(from.getCoast());
 		
@@ -274,8 +271,8 @@ public class RetreatChecker
 	*/
 	private ArrayList makeFMRList(List turnStateResults)
 	{
-		ArrayList mrList = new ArrayList(64);
-		HashMap map = new HashMap(119);	// key: move source province; value: RCMoveResult
+		ArrayList<RCMoveResult> mrList = new ArrayList<>(64);
+		HashMap<Province,RCMoveResult> map = new HashMap<>(119);	// key: move source province; value: RCMoveResult
 		
 		Iterator iter = turnStateResults.iterator();
 		while(iter.hasNext())

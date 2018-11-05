@@ -22,43 +22,21 @@
 //
 package dip.misc;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import dip.order.DefineState;
-import dip.order.Move;
-import dip.order.Order;
-import dip.order.OrderException;
-import dip.order.OrderFactory;
-import dip.order.OrderParser;
+import dip.order.*;
 import dip.order.result.ConvoyPathResult;
 import dip.order.result.OrderResult;
 import dip.order.result.Result;
 import dip.process.StdAdjudicator;
-import dip.world.Location;
-import dip.world.Phase;
-import dip.world.Position;
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.RuleOptions;
-import dip.world.TurnState;
-import dip.world.Unit;
-import dip.world.World;
-import dip.world.WorldFactory;
+import dip.world.*;
 import dip.world.variant.VariantManager;
 import dip.world.variant.data.Variant;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+import java.util.Map;
 
 
 
@@ -206,7 +184,7 @@ public final class TestSuite
 	private static float parseTime = -1;
 	private static final String VARIANT_DIR				= "variants";
 
-	private Map keyMap = null;
+	private Map<String, List<String>> keyMap = null;
 	
 	
 	private static boolean isAdjudicatorLogged = true;
@@ -220,7 +198,7 @@ public final class TestSuite
 	private World world = null;
 	private TurnState templateTurnState;
 	private StdAdjudicator stdJudge = null;
-	private List failedCaseNames = new ArrayList(10);
+	private List<String> failedCaseNames = new ArrayList<>(10);
 	private static int benchTimes = 1;
 	
 	// VARIANT_ALL name 
@@ -322,7 +300,7 @@ public final class TestSuite
 		System.out.println("  -perftest:n     no logging or statistics; repeat all cases n times");
 		System.out.println("  -brief          disable internal adjudicator logging");
 		System.out.println("  -regress        run test cases in infinite loop; no logging or stats.");
-		System.out.println("");
+		System.out.println();
 		System.out.println("  Examples:");
 		System.out.println("      java dip.misc.TestSuite datc.txt >out");
 		System.out.println("      java dip.misc.TestSuite -brief datc.txt >out");
@@ -394,13 +372,13 @@ public final class TestSuite
 		int nPass = 0;
 		int nFail = 0;
 		int nCases = 0;
-		
-		List unRezParadoxes = new LinkedList();
+
+		List<String> unRezParadoxes = new LinkedList<>();
 		
 		long startMillis = System.currentTimeMillis();	// start timing!
 		
 		// all cases in an array
-		final Case[] allCases = (Case[]) cases.toArray(new Case[cases.size()]);
+		final Case[] allCases = cases.toArray(new Case[cases.size()]);
 		
 		if(isRegression)
 		{
@@ -587,7 +565,7 @@ public final class TestSuite
 		iter = unRezParadoxes.iterator();
 		while(iter.hasNext())
 		{
-			println("   " + ((String) iter.next()) );
+			println("   " + iter.next());
 		}
 		println("   [total: ", unRezParadoxes.size(), "]");
 		
@@ -770,7 +748,7 @@ public final class TestSuite
 		
 		// create set of resolvedUnits
 		//
-		Set resolvedUnits = new HashSet();
+		Set<UnitPos> resolvedUnits = new HashSet<>();
 		
 		Province[] provs = pos.getUnitProvinces();
 		for(int i=0; i<provs.length; i++)
@@ -796,7 +774,7 @@ public final class TestSuite
 		
 		// create set of caseUnits
 		//
-		Set caseUnits = new HashSet();
+		Set<UnitPos> caseUnits = new HashSet<>();
 		
 		DefineState[] dsOrds = c.getPostState();
 		for(int i=0; i<dsOrds.length; i++)
@@ -824,14 +802,14 @@ public final class TestSuite
 		// first, we must make a duplicate of one set.
 		// these are the units that are in the correct position (intersection)
 		//
-		Set intersection = new HashSet(caseUnits);
+		Set<UnitPos> intersection = new HashSet<>(caseUnits);
 		intersection.retainAll(resolvedUnits);
 		
 		// now, create subtraction sets
-		Set added = new HashSet(resolvedUnits);
+		Set<UnitPos> added = new HashSet<>(resolvedUnits);
 		added.removeAll(caseUnits);
-		
-		Set missing = new HashSet(caseUnits);
+
+		Set<UnitPos> missing = new HashSet<>(caseUnits);
 		missing.removeAll(resolvedUnits);
 		
 		// if subtraction sets have no units, we are done. Otherwise, we must print
@@ -884,7 +862,7 @@ public final class TestSuite
 	}
 
 	public Case getTestCase(int testCase) {
-		return (Case) cases.get(testCase);
+		return cases.get(testCase);
 	}
 
 	public World getWorld() {
@@ -952,12 +930,9 @@ public final class TestSuite
 			if(obj instanceof UnitPos)
 			{
 				UnitPos up = (UnitPos) obj;
-				if( isDislodged == up.isDislodged
-				    && province == up.province
-				    && unit.equals(up.unit) )
-				{
-					return true;
-				}
+				return isDislodged == up.isDislodged
+						&& province == up.province
+						&& unit.equals(up.unit);
 			}
 			
 			return false;
@@ -1000,7 +975,7 @@ public final class TestSuite
 					List postDislodgedList, List orderResultList)
 		{
 			this.name = name;
-			List temp = new ArrayList(50);
+			List<Object> temp = new ArrayList<>(50); //todo: this one is used for too much stuff...
 			Iterator iter = null;
 			of = OrderParser.getInstance();
 			
@@ -1040,7 +1015,7 @@ public final class TestSuite
 				Order order = parseOrder(line, currentTS, true);
 				temp.add(order);
 			}
-			preState = (DefineState[]) temp.toArray(new DefineState[temp.size()]);
+			preState = temp.toArray(new DefineState[temp.size()]);
 			
 			
 			// ord
@@ -1052,7 +1027,7 @@ public final class TestSuite
 				Order order = parseOrder(line, currentTS, false);
 				temp.add(order);
 			}
-			orders = (Order[]) temp.toArray(new Order[temp.size()]);
+			orders = temp.toArray(new Order[temp.size()]);
 			
 			
 			// post
@@ -1064,7 +1039,7 @@ public final class TestSuite
 				Order order = parseOrder(line, currentTS, true);
 				temp.add(order);
 			}
-			postState = (DefineState[]) temp.toArray(new DefineState[temp.size()]);
+			postState = temp.toArray(new DefineState[temp.size()]);
 			
 			// prestate dislodged
 			if(preDislodgedList != null)
@@ -1077,7 +1052,7 @@ public final class TestSuite
 					Order order = parseOrder(line, currentTS, true);
 					temp.add(order);
 				}
-				this.preDislodged = (DefineState[]) temp.toArray(new DefineState[temp.size()]);
+				this.preDislodged = temp.toArray(new DefineState[temp.size()]);
 			}
 			
 			// poststate dislodged
@@ -1091,7 +1066,7 @@ public final class TestSuite
 					Order order = parseOrder(line, currentTS, true);
 					temp.add(order);
 				}
-				this.postDislodged = (DefineState[]) temp.toArray(new DefineState[temp.size()]);
+				this.postDislodged = temp.toArray(new DefineState[temp.size()]);
 			}
 			
 			// supply-center owners
@@ -1105,7 +1080,7 @@ public final class TestSuite
 					Order order = parseOrder(line, currentTS, true);
 					temp.add(order);
 				}
-				this.supplySCOwners = (DefineState[]) temp.toArray(new DefineState[temp.size()]);
+				this.supplySCOwners = temp.toArray(new DefineState[temp.size()]);
 			}
 			
 			
@@ -1118,7 +1093,7 @@ public final class TestSuite
 			// 
 			if(orderResultList != null)
 			{
-				temp.clear();
+				List<OrderResult> orderResults = new ArrayList<>();
 				iter = orderResultList.iterator();
 				while(iter.hasNext())
 				{
@@ -1160,18 +1135,18 @@ public final class TestSuite
 							path[0] = mv.getSource().getProvince();
 							path[1] = path[0];
 							path[2] = mv.getDest().getProvince();
-							temp.add(new ConvoyPathResult(order, path));
+							orderResults.add(new ConvoyPathResult(order, path));
 						}
 					}
 					
 					
 					// create/add order result
-					temp.add(new OrderResult(order, ordResultType, " (prestate)"));
+					orderResults.add(new OrderResult(order, ordResultType, " (prestate)"));
 				}
-				this.results = (OrderResult[]) temp.toArray(new OrderResult[temp.size()]);
+				this.results = orderResults.toArray(new OrderResult[orderResults.size()]);
 				
 				// add results to previous turnstate
-				previousTS.setResultList(new ArrayList(temp));
+				previousTS.setResultList(new ArrayList<>(orderResults));
 				
 				// add positions/ownership/orders to current turnstate
 				//
@@ -1179,7 +1154,7 @@ public final class TestSuite
 				currentTS.clearAllOrders();
 				for(int i=0; i<orders.length; i++)
 				{
-					List orderList = currentTS.getOrders(orders[i].getPower());
+					List<Orderable> orderList = currentTS.getOrders(orders[i].getPower());
 					orderList.add(orders[i]);
 					currentTS.setOrders(orders[i].getPower(), orderList);
 				}
@@ -1413,7 +1388,7 @@ public final class TestSuite
 							if(currentKey.equals(POSTSTATE_SAME))
 							{
 								// just copy prestate data
-								List list = getListForKeyType(POSTSTATE);
+								List<String> list = getListForKeyType(POSTSTATE);
 								list.addAll( getListForKeyType(PRESTATE) );
 							}
 							else if(currentKey.equals(PRESTATE_SETPHASE))
@@ -1424,7 +1399,7 @@ public final class TestSuite
 							else if(key == null) // important: we don't want to add key lines to the lists
 							{
 								// we need to get a list.
-								List list = getListForKeyType(currentKey);
+								List<String> list = getListForKeyType(currentKey);
 								list.add(line);
 							}
 						}
@@ -1519,14 +1494,14 @@ public final class TestSuite
 	{
 		if(keyMap == null)
 		{
-			keyMap = new HashMap(23);
+			keyMap = new HashMap<>(23);
 		}
 		
 		keyMap.clear();
 		
 		for(int i=0; i<KEY_TYPES_WITH_LIST.length; i++)
 		{
-			keyMap.put(KEY_TYPES_WITH_LIST[i], new LinkedList());
+			keyMap.put(KEY_TYPES_WITH_LIST[i], new LinkedList<>());
 		}
 	}// setupKeyMap()
 	
@@ -1563,11 +1538,10 @@ public final class TestSuite
 		
 		return null;
 	}// getKeyType()
-	
-	
-	private List getListForKeyType(String keyType)
-	{
-		return (List) keyMap.get(keyType);
+
+
+	private List<String> getListForKeyType(String keyType) {
+		return keyMap.get(keyType);
 	}// getListForKeyType()
 	
 	

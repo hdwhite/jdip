@@ -22,20 +22,7 @@
 //
 package dip.gui;
 
-import java.awt.Button;
-import java.awt.Canvas;
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Label;
-import java.awt.MediaTracker;
-import java.awt.Panel;
-import java.awt.Toolkit;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -87,7 +74,7 @@ public final class splash
 		try
 		{
 			Class cf = Class.forName("dip.gui.ClientFrame");
-			Method m = cf.getMethod("main", new Class[] {String[].class});
+			Method m = cf.getMethod("main", String[].class);
 			Object[] params = new Object[] { args };
 			m.invoke(null, params);
 			//time = (System.currentTimeMillis() - time);
@@ -132,8 +119,8 @@ public final class splash
 		private Image img = null;
 		
 		public void destroy()
-		{ 
-			win.hide();
+		{
+			win.setVisible(false);
 			win.dispose();
 			frame.dispose();
 			img.flush();
@@ -209,7 +196,7 @@ public final class splash
 				win.setBounds(0,0,w,h);
 				win.pack();
 				win.setLocation((screenSize.width - w)/2, (screenSize.height - h)/2);
-				win.show();
+				win.setVisible(true);
 				win.repaint();
 				win.toFront();
 			}
@@ -249,7 +236,7 @@ public final class splash
 			System.err.println("The detected Java version is: "+version+", by "+vendor);
 			System.err.println("An updated version of Java may be obtained from:");
 			System.err.println("   http://www.java.com");
-			System.err.println("");
+			System.err.println();
 			
 			
 			// use an AWT to prevent loading of swing classes just to display a 
@@ -267,7 +254,7 @@ public final class splash
 				{
 					public void windowClosing(WindowEvent e)
 					{
-						dlg.hide();
+						dlg.setVisible(false);
 						dlg.dispose();
 						dlgFrame.dispose();
 					}
@@ -279,7 +266,7 @@ public final class splash
 				{
 					public void actionPerformed(ActionEvent e)
 					{
-						dlg.hide();
+						dlg.setVisible(false);
 						dlg.dispose();
 						dlgFrame.dispose();
 					}
@@ -303,7 +290,7 @@ public final class splash
 				Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 				Dimension dlgSize = dlg.getSize();		
 				dlg.setLocation((screenSize.width - dlgSize.width)/2, (screenSize.height - dlgSize.height)/2);
-				dlg.show();
+				dlg.setVisible(true);
 			}
 			catch(Throwable t)
 			{
