@@ -27,6 +27,5 @@ package:
     - ./gradlew assemble
   artifacts:
     paths:
-      - ./**/distributions
-      - ./**/libs
+      - ./**/build
     expire_in: 1 week
