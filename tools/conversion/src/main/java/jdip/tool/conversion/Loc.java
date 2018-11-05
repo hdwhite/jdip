@@ -22,9 +22,7 @@
 //
 package jdip.tool.conversion;
 
-import java.lang.*;
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
 
 
 
@@ -92,7 +90,7 @@ class Loc
 			}
 			else if(idx+1 < text.length())
 			{
-				coast = text.substring(idx+1, text.length());
+                coast = text.substring(idx + 1);
 			}
 			else
 			{

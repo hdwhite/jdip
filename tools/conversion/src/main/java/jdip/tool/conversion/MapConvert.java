@@ -22,7 +22,6 @@
 //
 package jdip.tool.conversion;
 
-import java.lang.*;
 import java.io.*;
 import java.util.*;
 
@@ -51,9 +50,7 @@ public class MapConvert
 	PMap pmap = null;
 	
 	/** Convert a Judge map to jDip Adjacency format. */
-	public static void main(String args[])
-	throws Exception
-	{
+    public static void main(String args[]) {
 		if(args.length != 2)
 		{
 			System.err.println("\njudgeconvert: converts judge-style variant map files to jDip format.");
