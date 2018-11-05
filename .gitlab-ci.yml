@@ -2,6 +2,8 @@ image: openjdk:8
 
 stages:
   - build
+  - test
+  - package
 
 build:
   stage: build
@@ -11,3 +13,20 @@ build:
     paths:
       - ./**/build
     expire_in: 1 day
+
+test:
+  stage: test
+  script:
+    - echo "TBD"
+
+package:
+  stage: package
+  dependencies:
+    - build
+  script:
+    - ./gradlew assemble
+  artifacts:
+    paths:
+      - ./**/*.zip
+      - ./**/*.jar
+    expire_in: 1 week
