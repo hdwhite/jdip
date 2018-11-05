@@ -6,7 +6,7 @@ stages:
 build:
   stage: build
   script:
-    - gradlew compileJava
+    - ./gradlew compileJava
   artifacts:
     paths:
       - ./**/build
