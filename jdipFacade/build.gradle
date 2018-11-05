@@ -6,8 +6,6 @@ repositories {
 }
 
 dependencies {
-
-    // Add all the jar dependencies from the lib folder.
     compile project(':jdip_168r1')
 }
 
