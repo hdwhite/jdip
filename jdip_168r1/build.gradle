@@ -1,0 +1,80 @@
+apply plugin: 'java'
+
+repositories {
+
+    jcenter()
+}
+
+//version = '1.7.0 Preview Release 1'
+
+
+dependencies {
+
+    // Add all the jar dependencies from the lib folder.
+    compile fileTree(dir: 'lib', include: ['*.jar'])
+}
+
+jar {
+    baseName = "jdip"
+    manifest {
+        attributes(
+                'Main-Class': 'dip.gui.splash',
+                "Class-Path": configurations.compile.collect { 'lib/' + it.getName() }.join(' ')
+        )
+    }
+}
+
+configurations.create('variants')
+//instead of creating one task for each variant we can loop throw filesystem and create them dynamically
+file('resource/variants').eachDirMatch(~/(?!symbols).*/) { dir ->
+    def taskName = "${dir.name}Variants"
+    tasks.create(name: taskName, type: Zip) {
+        baseName = taskName
+        from fileTree(dir)
+    }
+    artifacts {
+        variants tasks.findByName(taskName)
+    }
+}
+// symbols need different handling
+configurations.create('symbols')
+file('resource/variants/symbols').eachDir { dir ->
+    def taskName = "${dir.name}Symbols"
+    tasks.create(name: taskName, type: Zip) {
+        baseName = taskName
+        from fileTree(dir)
+    }
+    artifacts {
+        symbols tasks.findByName(taskName)
+    }
+}
+
+task zipDist(type: Zip) {
+    baseName = "jdip"
+    from configurations.runtime.allArtifacts.files
+    from(configurations.runtime) {
+        into 'lib'
+    }
+    from(configurations.variants.allArtifacts.files) {
+        into 'variants'
+    }
+    from(configurations.symbols.allArtifacts.files) {
+        into 'variants'
+    }
+    from('etc/scripts') {
+        include 'jdip.bat'
+        include 'jdip.sh'
+    }
+    from('.') {
+        include 'README.TXT'
+        include 'LICENSE.TXT'
+        include 'HISTORY.TXT'
+        include 'CHANGELOG.TXT'
+    }
+}
+
+artifacts {
+    archives zipDist
+}
+
+

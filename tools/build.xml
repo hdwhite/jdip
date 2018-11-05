@@ -80,7 +80,7 @@
 		
 		<!-- copy resource files -->
 		<copy todir="${class.dir}/conversion/">
-			<fileset dir="${conversion.dir}/src/">
+			<fileset dir="${conversion.dir}/resources/">
 				<include name="**/*.txt"/>
 				<include name="**/*.xml"/>
 				<include name="**/*.properties"/>

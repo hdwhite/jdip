@@ -39,7 +39,7 @@ import dip.gui.swing.SwingWorker;
 */
 public class Help
 {
-	private static final String HELP_FILE_NAME = "help/applicationhelp.hs";
+	private static final String HELP_FILE_NAME = "resources/resource/help/applicationhelp.hs";
 	private static HKeeper 		hk = null;
 	private static SwingWorker	loaderThread = null;
 	
