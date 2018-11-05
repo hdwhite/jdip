@@ -1,0 +1,13 @@
+image: openjdk:8
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - gradlew compileJava
+  artifacts:
+    paths:
+      - ./**/build
+    expire_in: 1 day
