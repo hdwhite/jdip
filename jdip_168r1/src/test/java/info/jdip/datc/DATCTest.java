@@ -8,15 +8,13 @@ import dip.world.Position;
 import dip.world.Province;
 import dip.world.TurnState;
 import dip.world.World;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.File;
 import java.util.*;
 
 import static java.time.Duration.ofSeconds;
-import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,7 +30,8 @@ public abstract class DATCTest {
         return testSuite.getAllCases();
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}] {0}")
+    @DisplayName("DATC parametrized cases")
     @MethodSource("sourceOfCases")
     void withValueSource(TestSuite.Case testCase) {
         assertTimeoutPreemptively(ofSeconds(2), () -> {
@@ -151,27 +150,7 @@ public abstract class DATCTest {
         // if subtraction sets have no units, we are done. Otherwise, we must print
         // the differences.
         //
-        if(!missing.isEmpty() || !added.isEmpty())
-        {
-//            println("  CompareState: FAILED: unit positions follow.");
-
-            // print adds
-//            printSet(added, "+");
-
-            // print subtracts
-//            printSet(missing, "-");
-
-            // print units in correct position
-//            printSet(intersection, "=");
-
-            return false;
-        }
-//        else
-//        {
-//            println("  CompareState: PASSED");
-//        }
-
-        return true;
+        return missing.isEmpty() && added.isEmpty();
     }// compareState()
 
 }
