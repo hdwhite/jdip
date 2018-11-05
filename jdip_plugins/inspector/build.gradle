@@ -10,9 +10,9 @@ dependencies {
 }
 
 jar {
-    baseName = "ExportTool"
+    baseName = "InspectorTool"
     manifest {
-        attributes 'Main-Class': 'jdip.plugin.export.Exporter'
+        attributes 'Main-Class': 'jdip.plugin.inspector.Inspector'
     }
 }
 

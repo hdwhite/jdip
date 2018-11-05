@@ -20,21 +20,25 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.plugin.inspector;
 
-import dip.tool.*;
-import dip.gui.*;
-import dip.misc.*;
+import dip.gui.ClientFrame;
+import dip.gui.dialog.TextViewer;
+import dip.order.OrderFormatOptions;
+import dip.order.Orderable;
+import dip.order.result.OrderResult;
+import dip.tool.Tool;
+import dip.tool.ToolProxy;
 import dip.world.*;
-import dip.gui.dialog.*;
-import dip.order.*;
-import dip.order.result.*;
 
-import java.util.*;
 import javax.swing.*;
-import java.awt.Font;
-import java.awt.event.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
 *	Tool that aides debugging by looking at various 

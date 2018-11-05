@@ -1,2 +1,2 @@
 rootProject.name = 'jdip'
-include 'tools:conversion','jdip_168r1','jdipFacade', 'jdip_plugins:exporter'
+include 'tools:conversion','jdip_168r1','jdipFacade', 'jdip_plugins:exporter', 'jdip_plugins:inspector'
