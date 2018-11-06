@@ -216,7 +216,7 @@ public final class TestSuite
 	
 	private static String inFileName = null;
 	
-	private List cases = new ArrayList(10);
+	private List<TestSuite.Case> cases = new ArrayList<>(10);
 	private World world = null;
 	private TurnState templateTurnState;
 	private StdAdjudicator stdJudge = null;
@@ -224,9 +224,18 @@ public final class TestSuite
 	private static int benchTimes = 1;
 	
 	// VARIANT_ALL name 
-	private static String variantName = null;
-	
-	
+	private String variantName = null;
+	private File variantsDir;
+
+	public TestSuite(File variantsDir) {
+		this.variantsDir = variantsDir;
+	}
+
+	public TestSuite() {
+
+	}
+
+
 	/** Start the TestSuite */
 	public static void main(String args[])
 	{
@@ -300,7 +309,7 @@ public final class TestSuite
 		ts.parseCases(file);
 		parseTime = (System.currentTimeMillis() - startTime) / 1000f; 
 		println("  initialization complete.");
-		println("  variant: ", variantName);
+//		println("  variant: ", variantName);
 		
 		ts.evaluate();
 	}// main()
@@ -342,31 +351,15 @@ public final class TestSuite
 		return n;
 	}// getTimes()
 	
-	
-	
-	private TestSuite()
-	{
-	}// TestSuite()
-	
-	
+
 	
 	private void initVariant()
 	{
 		try
 		{
-			// get default variant directory. 
-			File defaultVariantSearchDir = null;
-			if(System.getProperty("user.dir") == null)
-			{
-				defaultVariantSearchDir = new File(".", VARIANT_DIR);
-			}
-			else
-			{
-				defaultVariantSearchDir = new File(System.getProperty("user.dir"), VARIANT_DIR );
-			}
 			
 			// parse variants
-			VariantManager.init(new File[]{defaultVariantSearchDir}, false);
+			VariantManager.init(new File[]{variantsDir}, false);
 			
 			// load the default variant (Standard)
 			// error if it cannot be found!!
@@ -389,13 +382,13 @@ public final class TestSuite
 		{
 			println("Init error: ", e);
 			e.printStackTrace();
-			System.exit(1);
+			throw new RuntimeException(e);
 		}
 	}// init()
 	
 	
 	
-	private void evaluate()
+	public void evaluate()
 	{
 		int nOrders = 0;
 		int nPass = 0;
@@ -885,14 +878,30 @@ public final class TestSuite
 			println(sb.toString());
 		}
 	}// printSet()
-	
-	
+
+	public int getNumberOfCases() {
+		return cases.size();
+	}
+
+	public Case getTestCase(int testCase) {
+		return (Case) cases.get(testCase);
+	}
+
+	public World getWorld() {
+		return world;
+	}
+
+	public List<TestSuite.Case> getAllCases() {
+		return cases;
+	}
+
+
 	/** 
 	*	Private inner class, usually contained in Sets, that 
 	*	is comparable, for determining if the end-state is
 	*	in fact correct.
 	*/
-	private class UnitPos
+	public static class UnitPos
 	{
 		private final Unit 			unit;			// owner/type/coast
 		private final Province		province;		// position
@@ -963,7 +972,7 @@ public final class TestSuite
 	
 	
 	/** Holds a Case */
-	private final class Case
+	public final class Case
 	{
 		private DefineState[] preState = null;
 		private DefineState[] postState = null;
@@ -978,7 +987,12 @@ public final class TestSuite
 		private OrderParser of = null;
 		private TurnState currentTS = null;
 		private TurnState previousTS = null;
-		
+
+		@Override
+		public String toString() {
+			return name;
+		}
+
 		// tsTemplate: template turnstate to create the current, and (if needed) previous
 		// turnstates.
 		public Case(String name, String phaseName, List pre, List ord, 
@@ -999,7 +1013,7 @@ public final class TestSuite
 				{
 					System.out.println("ERROR: case "+name);
 					System.out.println("ERROR: cannot parse phase "+phaseName);
-					System.exit(1);
+					throw new IllegalStateException("cannot parse phase: "+phaseName);
 				}
 			}
 			
@@ -1126,7 +1140,7 @@ public final class TestSuite
 						System.out.println("case: "+name);
 						System.out.println("line: "+line);
 						System.out.println("PRESTATE_RESULTS: must prepend orders with \"SUCCESS:\" or \"FAILURE:\".");
-						System.exit(1);
+						throw new RuntimeException("PRESTATE_RESULTS: must prepend orders with \"SUCCESS:\" or \"FAILURE:\".");
 					}
 					
 					// remove after first colon, and parse the order
@@ -1221,6 +1235,7 @@ public final class TestSuite
 					}		
 				}
 			}
+
 		}// Case()
 		
 		
@@ -1268,10 +1283,9 @@ public final class TestSuite
 				System.out.println("ERROR");
 				System.out.println("parseOrder() OrderException: "+e);
 				System.out.println("Case: "+name);
-				System.out.println("failure line: "+s);
-				System.exit(1);
-			}	
-			return null;
+				System.out.println("failure line: " + s);
+				throw new RuntimeException(e);
+			}
 		}// parseOrder()
 		
 	}// class Case
@@ -1282,7 +1296,7 @@ public final class TestSuite
 	
 	
 	// NEW case parser
-	private void parseCases(File caseFile)
+	public void parseCases(File caseFile)
 	{
 		BufferedReader br = null;
 		
@@ -1300,7 +1314,7 @@ public final class TestSuite
 		{
 			System.out.println("ERROR: I/O error opening case file \""+caseFile+"\"");
 			System.out.println("EXCEPTION: "+e);
-			System.exit(1);
+			throw new RuntimeException(e);
 		}
 		
 		try
@@ -1327,7 +1341,7 @@ public final class TestSuite
 						// this can occur if a key is missing.
 						System.out.println("ERROR: missing a required key");
 						System.out.println("Line "+lineCount+": "+rawLine);
-						System.exit(1);
+						throw new IllegalStateException("Missing required key");
 					}
 					else if(currentKey.equals(VARIANT_ALL))
 					{
@@ -1340,14 +1354,14 @@ public final class TestSuite
 						{
 							System.out.println("ERROR: before cases are defined, the variant must");
 							System.out.println("       be set with the VARIANT_ALL flag.");
-							System.exit(1);
+							throw new IllegalStateException("ERROR: before cases are defined, the variant must be set with the VARIANT_ALL flag.");
 						}
 						
 						// make sure we are not in a case!
 						if(inCase)
 						{
 							System.out.println("ERROR: VARIANT_ALL cannot be used within a CASE.");
-							System.exit(1);
+							throw new IllegalStateException("ERROR: VARIANT_ALL cannot be used within a CASE.");
 						}
 						
 						// attempt to initialize the variant
@@ -1372,7 +1386,7 @@ public final class TestSuite
 						{
 							System.out.println("ERROR: before cases are defined, the variant must");
 							System.out.println("       be set with the VARIANT_ALL flag.");
-							System.exit(1);
+							throw new IllegalStateException("ERROR: before cases are defined, the variant must be set with the VARIANT_ALL flag.");
 						}
 					}
 					else if(currentKey.equals(END))
@@ -1417,8 +1431,8 @@ public final class TestSuite
 						else
 						{
 							System.out.println("ERROR: line not enclosed within a CASE.");
-							System.out.println("Line "+lineCount+": "+rawLine);
-							System.exit(1);
+							System.out.println("Line " + lineCount + ": " + rawLine);
+							throw new IllegalStateException("ERROR: line not enclosed within a CASE. " + "Line " + lineCount + ": " + rawLine);
 						}
 					}
 				}
@@ -1431,7 +1445,7 @@ public final class TestSuite
 		{
 			println("ERROR: I/O error reading case file \"", caseFile, "\"");
 			println("EXCEPTION: ", e);
-			System.exit(1);
+			throw new RuntimeException(e);
 		}
 		finally
 		{

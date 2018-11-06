@@ -2078,14 +2078,25 @@ public class StdAdjudicator implements Adjudicator
 				chain.addLast(moveOS);
 				OrderState nextMoveOS = findMoveFrom(firstMove.getDest().getProvince());
 				
-				while(nextMoveOS != null && !isChainCircular)
+				boolean subChainCircular = false;
+
+				while(nextMoveOS != null && !isChainCircular && !subChainCircular)
 				{
 					if( !nextMoveOS.isCircular() )
 					{
 						chain.addLast(nextMoveOS);
 						
 						Move nextMove = (Move) nextMoveOS.getOrder();
-						
+
+						// Uwe Plonus: This is a dirty hack to let the test case 6.e.4 pass
+						for (Iterator it = chain.iterator(); it.hasNext();) {
+							OrderState nm = (OrderState) it.next();
+							if (nextMove.getDest().isProvinceEqual(nm.getSource())) {
+								// we've found the move that completes the (sub-)chain.
+								subChainCircular = true;
+							}
+						}
+
 						if( nextMove.getDest().isProvinceEqual(firstMove.getSource()) )
 						{
 							// we've found the move that completes the chain.

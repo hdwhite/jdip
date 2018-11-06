@@ -1,0 +1,44 @@
+#############################################################
+#
+# Set the Variant for all cases.
+#
+#############################################################
+VARIANT_ALL Standard
+
+# non-dislodged loser still has effect
+CASE 6.E.4
+PRESTATE_SETPHASE Spring 1901, Movement
+PRESTATE
+	Germany: F hel
+	Germany: F hol
+	Germany: F ska
+	France: F nth
+	France: F bel
+	England: F edi
+	England: F yor
+	England: F nrg
+	Austria: A kie
+	Austria: A ruh
+ORDERS
+	Germany: F hol-nth
+	Germany: F hel S F hol-nth
+	Germany: F ska S F hol-nth
+	France: F nth-hol
+	France: F bel S F nth-hol
+	England: F edi S F nrg-nth
+	England: F yor S F nrg-nth
+	England: F nrg-nth
+	Austria: A kie S A ruh-hol
+	Austria: A ruh-hol
+POSTSTATE
+	Germany: F hol
+	Germany: F hel
+	Germany: F ska
+	France: F nth
+	France: F bel
+	England: F edi
+	England: F yor
+	England: F nrg
+	Austria: A kie
+	Austria: A ruh
+END
