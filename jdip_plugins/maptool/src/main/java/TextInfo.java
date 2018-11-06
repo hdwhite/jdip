@@ -20,40 +20,16 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.plugin.maptool;
 
-import dip.gui.*;
-import dip.gui.dialog.TextViewer;
-import dip.gui.map.*;
-import dip.gui.map.RenderCommandFactory.RenderCommand;
-import dip.gui.map.MapMetadata.InfoEntry;
-import dip.misc.*;
-import dip.world.*;
+import dip.world.Province;
+import org.apache.batik.dom.svg.SVGDOMImplementation;
+import org.apache.batik.util.SVGConstants;
+import org.w3c.dom.Node;
+import org.w3c.dom.svg.SVGDocument;
+import org.w3c.dom.svg.SVGMatrix;
+import org.w3c.dom.svg.SVGTextElement;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import javax.swing.*;
-import java.util.*;
-import java.awt.event.*;
-import java.net.URI;
-import java.text.*;
-
-import org.w3c.dom.*;                  
-
-import org.apache.batik.swing.JSVGCanvas; 
-import org.w3c.dom.events.MouseEvent;
-import org.apache.batik.dom.events.DOMKeyEvent;
-
-import org.apache.batik.util.CSSConstants;
-import org.apache.batik.*;
-import org.apache.batik.dom.*;
-import org.apache.batik.util.*;
-import org.w3c.dom.svg.*;
-import org.apache.batik.dom.svg.*;
-import org.apache.batik.swing.svg.*;
-import org.apache.batik.util.*;
-import org.apache.batik.bridge.*;
+import java.awt.geom.Point2D;
 
 
 /**
@@ -204,7 +180,7 @@ class TextInfo
 					// transform present? if so, parsing is different.
 					// (we parse the transform instead)
 					//
-					SVGMatrix mat = el.getTransformToElement((SVGElement) doc.getRootElement());
+                    SVGMatrix mat = el.getTransformToElement(doc.getRootElement());
 					
 					/*   
 					   a	cos(angle) 

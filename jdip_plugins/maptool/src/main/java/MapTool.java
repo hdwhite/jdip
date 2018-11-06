@@ -20,15 +20,16 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.plugin.maptool;
 
-import dip.tool.*;
-import dip.gui.*;
-import dip.gui.map.*;
-import dip.misc.*;
+import dip.gui.ClientFrame;
+import dip.gui.map.MapPanel;
+import dip.misc.Utils;
+import dip.tool.Tool;
+import dip.tool.ToolProxy;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URI;
 
 public class MapTool implements Tool

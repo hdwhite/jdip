@@ -22,9 +22,7 @@
 //
 package jdip.tool.conversion;
 
-import java.lang.*;
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
 
 
 /** 
