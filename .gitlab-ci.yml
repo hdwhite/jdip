@@ -31,6 +31,10 @@ test:
 
 package:
   stage: package
+  only:
+    refs:
+      - master
+      - /^bugfix.*$/
   dependencies:
     - build
   script:
