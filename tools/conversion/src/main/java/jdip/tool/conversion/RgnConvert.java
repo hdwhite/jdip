@@ -22,11 +22,6 @@
 //
 package jdip.tool.conversion;
 
-import java.lang.*;
-import java.io.*;
-import java.util.*;
-import java.awt.*;
-
 /**
 	
 	VERY early rp-rgn file to svg converter.
