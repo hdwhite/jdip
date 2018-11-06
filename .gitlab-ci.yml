@@ -22,16 +22,19 @@ build:
 test:
   stage: test
   script:
+    - find . -name build -print0 | xargs -0 -I{.} find {.} -exec touch {} +
     - ./gradlew test
   artifacts:
     reports:
       junit: jdip_168r1/build/test-results/test/TEST-*.xml
+    expire_in: 1 day
 
 package:
   stage: package
   dependencies:
     - build
   script:
+    - find . -name build -print0 | xargs -0 -I{.} find {.} -exec touch {} +
     - ./gradlew assemble
   artifacts:
     paths:
