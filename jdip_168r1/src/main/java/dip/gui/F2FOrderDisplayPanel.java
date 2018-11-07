@@ -255,7 +255,6 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
     /**
      * Get the index of an unselected Power tab in a random way.
      *
-     * @param tabPane the JTabbedPane containing the tabs
      * @return the index of the selected tab, or null if no next random tab is available.
      */
     private TabComponent selectNextRandomTab() {

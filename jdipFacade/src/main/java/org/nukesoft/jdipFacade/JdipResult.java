@@ -40,7 +40,6 @@ public class JdipResult {
      *
      * @param result
      * @param format
-     * @param t
      */
     JdipResult(Result result, OrderFormatOptions format) {
         this.result = result;

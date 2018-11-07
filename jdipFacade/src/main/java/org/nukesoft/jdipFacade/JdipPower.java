@@ -49,7 +49,6 @@ public class JdipPower {
     /**
      * Gets an <code>AdjustmentInfo</code> object for a given power
      *
-     * @param power
      * @return
      */
     private Adjustment.AdjustmentInfo getAdjustmentInfo() {
