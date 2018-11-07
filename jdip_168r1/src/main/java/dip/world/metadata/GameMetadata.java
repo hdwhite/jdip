@@ -24,92 +24,158 @@ package dip.world.metadata;
 
 import java.io.Serializable;
 import java.net.URI;
+
 /**
-*	Contains MetaData about the entire game.
-*	<p>
-*	Only one GameMetadata object exists for an entire game.
-*	
-*	
-*	
-*	
-*/
-public class GameMetadata implements Serializable
-{
-	// constants
-	private static final String EMPTY = "";
-	
-	// MetaData
-	private String comment = EMPTY;
-	private String gameName = EMPTY;
-	private String moderator = null;
-	private String moderatorEmail = null;
-	private URI moderatorURI = null;
-	private String judgeName = null;
-	private URI gameURI = null;
-	private String notes = EMPTY;
-	private String id = EMPTY;		
-	
-	/** Create a GameMetadata object */
-	public GameMetadata()
-	{
-	}// GameMetadata()
-	
-	
-	/** Gets game comment. Never null. May be empty. */
-	public String getComment()						{ return comment; }
-	
-	/** Gets game name. Never null, may be empty. */
-	public String getGameName()						{ return gameName; }
-	
-	/** Gets moderator name; may be null. */
-	public String getModeratorName()				{ return moderator; }
-		
-	/** Gets moderator email address; may be null. */
-	public String getModeratorEmail()				{ return moderatorEmail; }
-	
-	/** Gets moderator URI; may be null. */
-	public URI getModeratorURI()					{ return moderatorURI; }
-	
-	/** Gets textual notes. Never null, but may be empty. */
-	public String getNotes()						{ return notes; }
-	
-	/** Gets the Judge name; may be null */
-	public String getJudgeName()					{ return judgeName; }
-	
-	/** Gets the game URI; may be null */
-	public URI getGameURI()							{ return gameURI; }
-	
-	/** Gets the game ID: e.g., Boardman, Miller, or EPNum. Never null.*/
-	public String getGameID()						{ return id; }
-	
-	
-	
-	
-	/** Sets game comment. Never null. May be empty. */
-	public void setComment(String value)			{ comment = (value == null) ? EMPTY : value; }
-	
-	/** Sets game name. Never null, may be empty. */
-	public void setGameName(String value)			{ gameName = (value == null) ? EMPTY : value; }
-	
-	/** Sets moderator name; may be null. */
-	public void setModeratorName(String value)		{ moderator = value; }
-		
-	/** Sets moderator email address; may be null. */
-	public void setModeratorEmail(String value)		{ moderatorEmail = value; }
-	
-	/** Sets moderator URI; may be null. */
-	public void setModeratorURI(URI value)			{ moderatorURI = value; }
-	
-	/** Sets textual notes. Never null, but may be empty. */
-	public void setNotes(String value)				{ notes = (value == null) ? EMPTY : value; }
-	
-	/** Sets the Judge name; may be null */
-	public void setJudgeName(String value)			{ judgeName = value; }
-	
-	/** Sets the game URI; may be null */
-	public void setGameURI(URI value)				{ gameURI = value; }
-	
-	/** Sets the game ID: e.g., Boardman, Miller, or EPNum. Never null. */
-	public void setGameID(String value)				{ id = (value == null) ? EMPTY : value; }
-	
+ * Contains MetaData about the entire game.
+ * <p>
+ * Only one GameMetadata object exists for an entire game.
+ */
+public class GameMetadata implements Serializable {
+    // constants
+    private static final String EMPTY = "";
+
+    // MetaData
+    private String comment = EMPTY;
+    private String gameName = EMPTY;
+    private String moderator = null;
+    private String moderatorEmail = null;
+    private URI moderatorURI = null;
+    private String judgeName = null;
+    private URI gameURI = null;
+    private String notes = EMPTY;
+    private String id = EMPTY;
+
+    /**
+     * Create a GameMetadata object
+     */
+    public GameMetadata() {
+    }// GameMetadata()
+
+
+    /**
+     * Gets game comment. Never null. May be empty.
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * Sets game comment. Never null. May be empty.
+     */
+    public void setComment(String value) {
+        comment = (value == null) ? EMPTY : value;
+    }
+
+    /**
+     * Gets game name. Never null, may be empty.
+     */
+    public String getGameName() {
+        return gameName;
+    }
+
+    /**
+     * Sets game name. Never null, may be empty.
+     */
+    public void setGameName(String value) {
+        gameName = (value == null) ? EMPTY : value;
+    }
+
+    /**
+     * Gets moderator name; may be null.
+     */
+    public String getModeratorName() {
+        return moderator;
+    }
+
+    /**
+     * Sets moderator name; may be null.
+     */
+    public void setModeratorName(String value) {
+        moderator = value;
+    }
+
+    /**
+     * Gets moderator email address; may be null.
+     */
+    public String getModeratorEmail() {
+        return moderatorEmail;
+    }
+
+    /**
+     * Sets moderator email address; may be null.
+     */
+    public void setModeratorEmail(String value) {
+        moderatorEmail = value;
+    }
+
+    /**
+     * Gets moderator URI; may be null.
+     */
+    public URI getModeratorURI() {
+        return moderatorURI;
+    }
+
+    /**
+     * Sets moderator URI; may be null.
+     */
+    public void setModeratorURI(URI value) {
+        moderatorURI = value;
+    }
+
+    /**
+     * Gets textual notes. Never null, but may be empty.
+     */
+    public String getNotes() {
+        return notes;
+    }
+
+    /**
+     * Sets textual notes. Never null, but may be empty.
+     */
+    public void setNotes(String value) {
+        notes = (value == null) ? EMPTY : value;
+    }
+
+    /**
+     * Gets the Judge name; may be null
+     */
+    public String getJudgeName() {
+        return judgeName;
+    }
+
+    /**
+     * Sets the Judge name; may be null
+     */
+    public void setJudgeName(String value) {
+        judgeName = value;
+    }
+
+    /**
+     * Gets the game URI; may be null
+     */
+    public URI getGameURI() {
+        return gameURI;
+    }
+
+    /**
+     * Sets the game URI; may be null
+     */
+    public void setGameURI(URI value) {
+        gameURI = value;
+    }
+
+    /**
+     * Gets the game ID: e.g., Boardman, Miller, or EPNum. Never null.
+     */
+    public String getGameID() {
+        return id;
+    }
+
+    /**
+     * Sets the game ID: e.g., Boardman, Miller, or EPNum. Never null.
+     */
+    public void setGameID(String value) {
+        id = (value == null) ? EMPTY : value;
+    }
+
 }// class GameMetadata

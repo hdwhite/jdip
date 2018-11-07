@@ -23,102 +23,85 @@
 
 package dip.gui.dialog.prefs;
 
-import java.awt.Dimension;
-
-import javax.swing.JTabbedPane;
-
 import dip.gui.ClientFrame;
 import dip.gui.dialog.HeaderDialog;
 import dip.misc.Utils;
 
+import javax.swing.*;
+import java.awt.*;
+
 
 /**
-*
-*	Creates a Preferences Dialog.
-*	<p>
-*	Loads PreferencePanels, displays on a page.
-*	<p>
-*	In the future, these will be loadable at run-time.
-*
-*
-*/
-public class PreferenceDialog extends HeaderDialog
-{
-	// constants
-	private static final String TITLE = "PreferenceDialog.title";
-	private static final String HEADER_LOCATION = "PreferenceDialog.header";
-	
-	// GUI
-	private ClientFrame			parent;
-	private JTabbedPane 		tabPane;
-	private PreferencePanel[]	tabbedPanels;		// make static, & create just once?
-	
-	
-	
-	
-	/** Show the Preferences dialog. */
-	public static void displayDialog(ClientFrame parent)
-	{
-		PreferenceDialog pd = new PreferenceDialog(parent);
-		pd.createPanels();
-		pd.pack();		
-		pd.setSize(new Dimension(450, 550));
-		Utils.centerInScreen(pd);
-		pd.setVisible(true);
-	}// displayDialog()
-	
-	
-	
-	private PreferenceDialog(ClientFrame parent)
-	{
-		super(parent, Utils.getLocalString(TITLE), true);
-		this.parent = parent;
-		
-		tabPane = new JTabbedPane(JTabbedPane.TOP);
-		
-		setHeaderText( Utils.getText(Utils.getLocalString(HEADER_LOCATION)) );
-		setContentPane(tabPane);
-		createDefaultContentBorder(tabPane);
-		addTwoButtons( makeCancelButton(), makeOKButton(), false, true );
-		setHelpID(dip.misc.Help.HelpID.Preferences);
-	}// AboutDialog()
-	
-	
-	private void createPanels()
-	{
-		tabbedPanels = new PreferencePanel[3];
-		tabbedPanels[0] = new GeneralPreferencePanel(parent);
-		tabbedPanels[1] = new DisplayPreferencePanel(parent);
-		tabbedPanels[2] = new ExportPreferencePanel(parent);
-		
-		for(int i=0; i<tabbedPanels.length; i++)
-		{
-			tabPane.addTab(tabbedPanels[i].getName(), tabbedPanels[i]);
-		}
-	}// createPanels()
-	
-	
-	/** Apply or Cancel settings after closing dialog */
-	public void close(String actionCommand)
-	{
-		super.close(actionCommand);
-		
-		if(isCloseOrCancel(actionCommand))
-		{
-			for(int i=0; i<tabbedPanels.length; i++)
-			{
-				tabbedPanels[i].cancel();
-			}
-		}
-		else
-		{
-			for(int i=0; i<tabbedPanels.length; i++)
-			{
-				tabbedPanels[i].apply();
-			}
-		}
-	}// close()
-	
-	
-	
+ * Creates a Preferences Dialog.
+ * <p>
+ * Loads PreferencePanels, displays on a page.
+ * <p>
+ * In the future, these will be loadable at run-time.
+ */
+public class PreferenceDialog extends HeaderDialog {
+    // constants
+    private static final String TITLE = "PreferenceDialog.title";
+    private static final String HEADER_LOCATION = "PreferenceDialog.header";
+
+    // GUI
+    private ClientFrame parent;
+    private JTabbedPane tabPane;
+    private PreferencePanel[] tabbedPanels;        // make static, & create just once?
+
+
+    private PreferenceDialog(ClientFrame parent) {
+        super(parent, Utils.getLocalString(TITLE), true);
+        this.parent = parent;
+
+        tabPane = new JTabbedPane(JTabbedPane.TOP);
+
+        setHeaderText(Utils.getText(Utils.getLocalString(HEADER_LOCATION)));
+        setContentPane(tabPane);
+        createDefaultContentBorder(tabPane);
+        addTwoButtons(makeCancelButton(), makeOKButton(), false, true);
+        setHelpID(dip.misc.Help.HelpID.Preferences);
+    }// AboutDialog()
+
+    /**
+     * Show the Preferences dialog.
+     */
+    public static void displayDialog(ClientFrame parent) {
+        PreferenceDialog pd = new PreferenceDialog(parent);
+        pd.createPanels();
+        pd.pack();
+        pd.setSize(new Dimension(450, 550));
+        Utils.centerInScreen(pd);
+        pd.setVisible(true);
+    }// displayDialog()
+
+    private void createPanels() {
+        tabbedPanels = new PreferencePanel[3];
+        tabbedPanels[0] = new GeneralPreferencePanel(parent);
+        tabbedPanels[1] = new DisplayPreferencePanel(parent);
+        tabbedPanels[2] = new ExportPreferencePanel(parent);
+
+        for (int i = 0; i < tabbedPanels.length; i++) {
+            tabPane.addTab(tabbedPanels[i].getName(), tabbedPanels[i]);
+        }
+    }// createPanels()
+
+
+    /**
+     * Apply or Cancel settings after closing dialog
+     */
+    public void close(String actionCommand) {
+        super.close(actionCommand);
+
+        if (isCloseOrCancel(actionCommand)) {
+            for (int i = 0; i < tabbedPanels.length; i++) {
+                tabbedPanels[i].cancel();
+            }
+        } else {
+            for (int i = 0; i < tabbedPanels.length; i++) {
+                tabbedPanels[i].apply();
+            }
+        }
+    }// close()
+
+
 }// class PreferenceDialog

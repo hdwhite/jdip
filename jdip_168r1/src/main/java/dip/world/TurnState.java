@@ -85,6 +85,13 @@ public class TurnState implements Serializable {
     }// TurnState()
 
     /**
+     * Gets the World object associated with this TurnState. Never should be null.
+     */
+    public World getWorld() {
+        return world;
+    }// getWorld()
+
+    /**
      * Set the World object associated with this TurnState.
      * A <code>null</code> World is not permitted.
      */
@@ -95,14 +102,6 @@ public class TurnState implements Serializable {
 
         this.world = world;
     }// setWorld()
-
-
-    /**
-     * Gets the World object associated with this TurnState. Never should be null.
-     */
-    public World getWorld() {
-        return world;
-    }// getWorld()
 
     /**
      * Returns the current Phase
@@ -244,13 +243,6 @@ public class TurnState implements Serializable {
     }// setOrders()
 
     /**
-     * Set if game has ended for any reason
-     */
-    public void setEnded(boolean value) {
-        isEnded = value;
-    }
-
-    /**
      * Returns <code>true</code> if game has ended
      */
     public boolean isEnded() {
@@ -258,10 +250,10 @@ public class TurnState implements Serializable {
     }
 
     /**
-     * Set if the turn has been adjudicated.
+     * Set if game has ended for any reason
      */
-    public void setResolved(boolean value) {
-        isResolved = value;
+    public void setEnded(boolean value) {
+        isEnded = value;
     }
 
     /**
@@ -269,6 +261,13 @@ public class TurnState implements Serializable {
      */
     public boolean isResolved() {
         return isResolved;
+    }
+
+    /**
+     * Set if the turn has been adjudicated.
+     */
+    public void setResolved(boolean value) {
+        isResolved = value;
     }
 
     /**

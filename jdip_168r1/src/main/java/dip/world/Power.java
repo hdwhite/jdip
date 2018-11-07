@@ -24,118 +24,123 @@ package dip.world;
 
 
 /**
-*	A Power represents player in the game.
-*
-*/
-public class Power implements Comparable, java.io.Serializable
-{
-	/** An empty array of Power objects. */
-	public static final Power[] EMPTY_ARRAY = new Power[0];
-	
-	// constants for name array; always stored in this order.
-	private static final int FULL_NAME	= 0;	// required
+ * A Power represents player in the game.
+ */
+public class Power implements Comparable, java.io.Serializable {
+    /**
+     * An empty array of Power objects.
+     */
+    public static final Power[] EMPTY_ARRAY = new Power[0];
 
-	
-	// immutable fields
-	private final String[] names;		// length >= 1
-	private final boolean isActive;
-	private final String adjective;
-	
-	
-	// transient fields
-	private transient int hashCode = 0;
-	
-	/**
-	*	Create a new Power.
-	*	<p>
-	*	The first name in the names array (index position 0) must be the full display
-	*	name of the power. Names beyond index 0 are optional, and are "alternate" names
-	*	(e.g., "Britain" instead of "England").
-	*	<p>
-	*	All fields are required and <b>must</b> be non-null/non-zero-length;
-	*	Names (not adjectives) should not contain whitespace, and must not 
-	*	be empty ("") or null.
-	*	<p>
-	*	This should generally not be used, except for when a game is first created. Note that
-	*	Power uses instance equality, so two Power() objects created with the same arguments
-	*	will NOT be the same.
-	*/
-	public Power(String[] names, String adjective, boolean isActive)
-	{
-		if(names == null || adjective == null)
-		{
-			throw new IllegalArgumentException("null argument(s)");
-		}
-		
-		if(names.length == 0)
-		{
-			throw new IllegalArgumentException("no names");
-		}
-		
-		if(adjective.length() == 0)
-		{
-			throw new IllegalArgumentException("empty adjective");
-		}
-		
-		this.names = names;
-		this.adjective = adjective;
-		this.isActive = isActive;
-	}// Power()
-	
-	
-	/** Returns the name of the power. Never returns null. */
-	public String getName()
-	{
-		return names[FULL_NAME];
-	}// getName()
-	
-	/** Returns the adjective of the power (e.g., power France, adjective is French) */
-	public String getAdjective()
-	{
-		return adjective;
-	}// getAdjective()
-	
-	/** Get all names. There is always at least one. Does not include adjectives. */
-	public String[] getNames()
-	{
-		return names;
-	}// getAllNames()
-	
-	
-	/** Determines if this power is active. Only active powers can order units. */
-	public boolean isActive()						{ return isActive; }
-	
-	
-	/** Implementation of Object.hashCode() */
-	public int hashCode()
-	{
-		if(hashCode == 0)
-		{
-			hashCode = getName().hashCode();
-		}
-		
-		return hashCode;
-	}// hashCode()
+    // constants for name array; always stored in this order.
+    private static final int FULL_NAME = 0;    // required
+
+
+    // immutable fields
+    private final String[] names;        // length >= 1
+    private final boolean isActive;
+    private final String adjective;
+
+
+    // transient fields
+    private transient int hashCode = 0;
+
+    /**
+     * Create a new Power.
+     * <p>
+     * The first name in the names array (index position 0) must be the full display
+     * name of the power. Names beyond index 0 are optional, and are "alternate" names
+     * (e.g., "Britain" instead of "England").
+     * <p>
+     * All fields are required and <b>must</b> be non-null/non-zero-length;
+     * Names (not adjectives) should not contain whitespace, and must not
+     * be empty ("") or null.
+     * <p>
+     * This should generally not be used, except for when a game is first created. Note that
+     * Power uses instance equality, so two Power() objects created with the same arguments
+     * will NOT be the same.
+     */
+    public Power(String[] names, String adjective, boolean isActive) {
+        if (names == null || adjective == null) {
+            throw new IllegalArgumentException("null argument(s)");
+        }
+
+        if (names.length == 0) {
+            throw new IllegalArgumentException("no names");
+        }
+
+        if (adjective.length() == 0) {
+            throw new IllegalArgumentException("empty adjective");
+        }
+
+        this.names = names;
+        this.adjective = adjective;
+        this.isActive = isActive;
+    }// Power()
+
+
+    /**
+     * Returns the name of the power. Never returns null.
+     */
+    public String getName() {
+        return names[FULL_NAME];
+    }// getName()
+
+    /**
+     * Returns the adjective of the power (e.g., power France, adjective is French)
+     */
+    public String getAdjective() {
+        return adjective;
+    }// getAdjective()
+
+    /**
+     * Get all names. There is always at least one. Does not include adjectives.
+     */
+    public String[] getNames() {
+        return names;
+    }// getAllNames()
+
+
+    /**
+     * Determines if this power is active. Only active powers can order units.
+     */
+    public boolean isActive() {
+        return isActive;
+    }
+
+
+    /**
+     * Implementation of Object.hashCode()
+     */
+    public int hashCode() {
+        if (hashCode == 0) {
+            hashCode = getName().hashCode();
+        }
+
+        return hashCode;
+    }// hashCode()
 	
 	
 	/* 	
 		Implementation of Object.equals()
 	 	NOTE: we just use default referential equality, since these objects are immutable!
 	*/
-	
-	/** Implementation of Object.toString() */
-	public String toString()
-	{
-		return getName();
-	}// toString()
-	
-	
-	/** Implementation of Comparable interface */
-	public int compareTo(Object obj)
-	{
-		Power power = (Power) obj;
-		return getName().compareTo(power.getName());
-	}// compareTo()
-	
-	
+
+    /**
+     * Implementation of Object.toString()
+     */
+    public String toString() {
+        return getName();
+    }// toString()
+
+
+    /**
+     * Implementation of Comparable interface
+     */
+    public int compareTo(Object obj) {
+        Power power = (Power) obj;
+        return getName().compareTo(power.getName());
+    }// compareTo()
+
+
 }// class Power

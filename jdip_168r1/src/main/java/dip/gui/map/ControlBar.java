@@ -22,55 +22,74 @@
 //
 package dip.gui.map;
 
-import java.awt.Insets;
-
-import javax.swing.JToolBar;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
-
+import dip.world.Location;
 import org.apache.batik.dom.events.DOMKeyEvent;
 import org.w3c.dom.events.MouseEvent;
 
-import dip.world.Location;
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
 
 
 /**
-*	All ControlBars must extend this Control bar.
-*	Implements all DOMUIEventHandler methods with empty methods.
-*
-*/
-public abstract class ControlBar extends JToolBar implements DOMUIEventHandler
-{
-	protected final MapPanel mapPanel;
-	
-	
-	/** Create a ControlBar */
-	public ControlBar(MapPanel mp)
-	{
-		super();
-		setMargin(new Insets(5,5,5,5));
-		setFloatable(false);
-		setRollover(true);
-		// TODO: we need just a 'top' border, no bottom border, and even a top
-		// border doesn't look right when the scrollbar is in place.
-		//setBorder(new EtchedBorder(EtchedBorder.LOWERED)); 
-		setBorder(new LineBorder(getBackground().darker()));
-		this.mapPanel = mp;
-	}// ControlBar()
-	
-	
-	/** Key Pressed event. Does Nothing by default. */
-	public void keyPressed(DOMKeyEvent ke, Location loc)	{}
-	/** Mouse Over event: Mouse over a province. Does Nothing by default. */
-	public void mouseOver(MouseEvent me, Location loc)	{}
-	/** Mouse Out event: Mouse out of a province. Does Nothing by default. */
-	public void mouseOut(MouseEvent me, Location loc)	{}
-	/** Mouse clicked. Does Nothing by default. */
-	public void mouseClicked(MouseEvent me, Location loc)	{}
-	/** Mouse button pressed. Does Nothing by default. */
-	public void mouseDown(MouseEvent me, Location loc)	{}
-	/** Mouse button released. Does Nothing by default. */
-	public void mouseUp(MouseEvent me, Location loc)	{}
-	
+ * All ControlBars must extend this Control bar.
+ * Implements all DOMUIEventHandler methods with empty methods.
+ */
+public abstract class ControlBar extends JToolBar implements DOMUIEventHandler {
+    protected final MapPanel mapPanel;
+
+
+    /**
+     * Create a ControlBar
+     */
+    public ControlBar(MapPanel mp) {
+        super();
+        setMargin(new Insets(5, 5, 5, 5));
+        setFloatable(false);
+        setRollover(true);
+        // TODO: we need just a 'top' border, no bottom border, and even a top
+        // border doesn't look right when the scrollbar is in place.
+        //setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+        setBorder(new LineBorder(getBackground().darker()));
+        this.mapPanel = mp;
+    }// ControlBar()
+
+
+    /**
+     * Key Pressed event. Does Nothing by default.
+     */
+    public void keyPressed(DOMKeyEvent ke, Location loc) {
+    }
+
+    /**
+     * Mouse Over event: Mouse over a province. Does Nothing by default.
+     */
+    public void mouseOver(MouseEvent me, Location loc) {
+    }
+
+    /**
+     * Mouse Out event: Mouse out of a province. Does Nothing by default.
+     */
+    public void mouseOut(MouseEvent me, Location loc) {
+    }
+
+    /**
+     * Mouse clicked. Does Nothing by default.
+     */
+    public void mouseClicked(MouseEvent me, Location loc) {
+    }
+
+    /**
+     * Mouse button pressed. Does Nothing by default.
+     */
+    public void mouseDown(MouseEvent me, Location loc) {
+    }
+
+    /**
+     * Mouse button released. Does Nothing by default.
+     */
+    public void mouseUp(MouseEvent me, Location loc) {
+    }
+
 }// class ControlBar	
 

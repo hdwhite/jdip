@@ -22,77 +22,66 @@
 //
 package dip.gui.undo;
 
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
-
 import dip.misc.Utils;
 import dip.world.Position;
 import dip.world.Province;
 import dip.world.Unit;
 
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+
 
 /**
-*
-*	UndoEditAddUnit is created any time a unit is added in Edit mode.
-*	
-*/	
-public class UndoEditAddUnit extends XAbstractUndoableEdit
-{
-	private static final String PRESENTATION_NAME = "Undo.edit.addunit";
-	
-	// instance variables
-	private Position position;
-	private Unit unit;
-	private boolean isDislodged;
-	private Province province;
-	
-	public UndoEditAddUnit(UndoRedoManager urm, Position position, Province province, Unit unit, boolean isDislodged)
-	{
-		super(urm);
-		this.position = position;
-		this.unit = unit;
-		this.province = province;
-		this.isDislodged = isDislodged;
-	}// UndoEditAddUnit()
-	
-	public String getPresentationName()
-	{
-		return Utils.getLocalString(PRESENTATION_NAME, unit.getType().getFullName(), province.getShortName());
-	}// getPresentationName()
-	
-	public void redo()
-	throws CannotRedoException
-	{
-		super.redo();
-		UndoEditAddUnit.addUnit(undoRedoManager, position, province, unit, isDislodged);
-	}// redo()
-	
-	public void undo()
-	throws CannotUndoException
-	{
-		super.undo();
-		UndoEditRemoveUnit.removeUnit(undoRedoManager, position, province, isDislodged);
-	}// undo()
- 	
-	
-	/** helper method: add unit to position */
-	static void addUnit(UndoRedoManager urm, Position position, Province province, Unit unit, boolean isDislodged)
-	{
-		if(isDislodged)
-		{
-			position.setDislodgedUnit(province, unit);
-		}
-		else
-		{
-			position.setUnit(province, unit);
-		}
-		
-		urm.getClientFrame().fireStateModified();
-		urm.getClientFrame().getMapPanel().updateProvince(province);
-		urm.getOrderDisplayPanel().revalidateAllOrders();
-	}// addUnit()
-	
-	
-	
+ * UndoEditAddUnit is created any time a unit is added in Edit mode.
+ */
+public class UndoEditAddUnit extends XAbstractUndoableEdit {
+    private static final String PRESENTATION_NAME = "Undo.edit.addunit";
+
+    // instance variables
+    private Position position;
+    private Unit unit;
+    private boolean isDislodged;
+    private Province province;
+
+    public UndoEditAddUnit(UndoRedoManager urm, Position position, Province province, Unit unit, boolean isDislodged) {
+        super(urm);
+        this.position = position;
+        this.unit = unit;
+        this.province = province;
+        this.isDislodged = isDislodged;
+    }// UndoEditAddUnit()
+
+    /**
+     * helper method: add unit to position
+     */
+    static void addUnit(UndoRedoManager urm, Position position, Province province, Unit unit, boolean isDislodged) {
+        if (isDislodged) {
+            position.setDislodgedUnit(province, unit);
+        } else {
+            position.setUnit(province, unit);
+        }
+
+        urm.getClientFrame().fireStateModified();
+        urm.getClientFrame().getMapPanel().updateProvince(province);
+        urm.getOrderDisplayPanel().revalidateAllOrders();
+    }// addUnit()
+
+    public String getPresentationName() {
+        return Utils.getLocalString(PRESENTATION_NAME, unit.getType().getFullName(), province.getShortName());
+    }// getPresentationName()
+
+    public void redo()
+            throws CannotRedoException {
+        super.redo();
+        UndoEditAddUnit.addUnit(undoRedoManager, position, province, unit, isDislodged);
+    }// redo()
+
+    public void undo()
+            throws CannotUndoException {
+        super.undo();
+        UndoEditRemoveUnit.removeUnit(undoRedoManager, position, province, isDislodged);
+    }// undo()
+
+
 }// class UndoEditAddUnit
 

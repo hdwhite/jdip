@@ -33,50 +33,49 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 /**
-	Parses the Dislodged block
-*/	
-public class DislodgedParser
-{
-	// CONSTANTS
-	// empty string
-	private static final String[] EMPTY = new String[0];
-	
-	/** Header text to look for */
-	public static final String HEADER_REGEX = "(?i)the following units were dislodged:";
-	
-	/** End of header text to look for */
-	public static final String HEADER_END_REGEX = "(?i)the next phase of";
-	
-	/** Dislodged line start text; all dislodged lines must start with this. Lowercase. NOT a REGEX!. */
-	public static final String DISLODGED_LINE_START = "the";
-	
-	/**
-	*	capture groups: 1:power, 2:unit, 3:unit location, 4:retreat list predicate (example: "xxx or yyy or zzz") w/o trailing '.'<br>
-	*	the location list predicate is split by the DISLODGED_SPLIT_REGEX<br> 
-	*	Lines are trimmed prior to parsing.<br>
-	*	"in" or "over" used (Wing units are "over" provinces; armies/fleets "in")<br>
-	*/
-	public static final String DISLODGED_REGEX = "(?i)^the\\s+(\\p{Graph}*)\\s+(\\p{Graph}*)\\s*(?:in|over)\\s+(?:the)?\\s*([\\p{Graph}\\p{Blank}]*)\\s*can\\s+retreat\\s+to\\s+((.*))\\.$";
-	
-	/** splits the retreat list predicate; must be suitable for String.split() */
-	public static final String DISLODGED_SPLIT_REGEX = "\\s+or\\s+";
-	
-	
-	/**
-	*	capture groups: 1:power, 2:unit, 3:unit location (may be multi-word, needs to be trim()'d)<br>
-	*	NOTE: this may span >1 line; it ends with the period ('.')<br>
-	*	Lines are trimmed prior to parsing.<br>
-	*	"in" or "over" used (Wing units are "over" provinces; armies/fleets "in")<br>
-	*/
-	public static final String DESTROYED_REGEX_1 = "(?i)^the\\s+(\\p{Graph}*)\\s+(\\p{Graph}*)\\s*(?:in|over)\\s+(?:the)?\\s*(([\\p{Graph}\\p{Blank}]*))with\\s+no\\s+valid\\s+retreats.*\\.";
-	public static final String DESTROYED_REGEX_2 = "(?i)^the\\s+(\\p{Graph}*)\\s+(\\p{Graph}*)\\s*(?:in|over)\\s+(?:the)?\\s*(([\\p{Graph}\\p{Blank}]*))was\\s+destroyed\\.";
-	
-	
-	// INSTANCE VARIABLES
-	private DislodgedInfo[] dislodgedInfo = null;
-	private Phase phase = null;
-	private String inputText = null;
+ * Parses the Dislodged block
+ */
+public class DislodgedParser {
+    /**
+     * Header text to look for
+     */
+    public static final String HEADER_REGEX = "(?i)the following units were dislodged:";
+    /**
+     * End of header text to look for
+     */
+    public static final String HEADER_END_REGEX = "(?i)the next phase of";
+    /**
+     * Dislodged line start text; all dislodged lines must start with this. Lowercase. NOT a REGEX!.
+     */
+    public static final String DISLODGED_LINE_START = "the";
+    /**
+     * capture groups: 1:power, 2:unit, 3:unit location, 4:retreat list predicate (example: "xxx or yyy or zzz") w/o trailing '.'<br>
+     * the location list predicate is split by the DISLODGED_SPLIT_REGEX<br>
+     * Lines are trimmed prior to parsing.<br>
+     * "in" or "over" used (Wing units are "over" provinces; armies/fleets "in")<br>
+     */
+    public static final String DISLODGED_REGEX = "(?i)^the\\s+(\\p{Graph}*)\\s+(\\p{Graph}*)\\s*(?:in|over)\\s+(?:the)?\\s*([\\p{Graph}\\p{Blank}]*)\\s*can\\s+retreat\\s+to\\s+((.*))\\.$";
+    /**
+     * splits the retreat list predicate; must be suitable for String.split()
+     */
+    public static final String DISLODGED_SPLIT_REGEX = "\\s+or\\s+";
+    /**
+     * capture groups: 1:power, 2:unit, 3:unit location (may be multi-word, needs to be trim()'d)<br>
+     * NOTE: this may span >1 line; it ends with the period ('.')<br>
+     * Lines are trimmed prior to parsing.<br>
+     * "in" or "over" used (Wing units are "over" provinces; armies/fleets "in")<br>
+     */
+    public static final String DESTROYED_REGEX_1 = "(?i)^the\\s+(\\p{Graph}*)\\s+(\\p{Graph}*)\\s*(?:in|over)\\s+(?:the)?\\s*(([\\p{Graph}\\p{Blank}]*))with\\s+no\\s+valid\\s+retreats.*\\.";
+    public static final String DESTROYED_REGEX_2 = "(?i)^the\\s+(\\p{Graph}*)\\s+(\\p{Graph}*)\\s*(?:in|over)\\s+(?:the)?\\s*(([\\p{Graph}\\p{Blank}]*))was\\s+destroyed\\.";
+    // CONSTANTS
+    // empty string
+    private static final String[] EMPTY = new String[0];
+    // INSTANCE VARIABLES
+    private DislodgedInfo[] dislodgedInfo = null;
+    private Phase phase = null;
+    private String inputText = null;
 	
 	/*	// TEST PATTERN: DO NOT DELETE
 	public static void main(String args[])
@@ -128,239 +127,239 @@ public class DislodgedParser
 		}
 	}
 	*/
-	
-	
-	/** Creates a DislodgedParser object, which parses the given input for a Dislodged (retreat) information block */
-	public DislodgedParser(Phase phase, String input)
-	throws IOException
-	{
-		this.phase = phase;
-		this.inputText = input;
-		parseInput(input);
-	}// DislodgedParser()
-	
-	
-	/** Returns the dislodged units, or a zero-length array if no units were dislodged */
-	public DislodgedInfo[] getDislodgedInfo()
-	{
-		return dislodgedInfo;
-	}// getRetreatInfo()
-	
-	
-	
-	/**
-	*	A DislodgedInfo object is created for each dislodged unit.
-	*	<p>
-	*	Dislodged units may be destroyed (and have no valid retreat locations) or 
-	*	may have a retreat location
-	*
-	*
-	*/
-	public static class DislodgedInfo
-	{
-		private final String power;
-		private final String src;
-		private final String unit;
-		private final String[] retreatLocs;	// zero-length if destroyed 
-		
-		/** Create a DislodgedInfo object */
-		public DislodgedInfo(String power, String unit, String src, String[] retreatLocs)
-		{
-			this.power = power;
-			this.unit = unit;
-			this.src = src;
-			this.retreatLocs = (retreatLocs == null) ? EMPTY : retreatLocs;
-		}// DislodgedInfo()
-		
-		/** Name of the Power */
-		public String getPowerName()				{ return power; }
-		/** Location of the unit */
-		public String getSourceName()				{ return src; }
-		/** Type Name of the unit (e.g., "Fleet") */
-		public String getUnitName()					{ return unit; }
-		/** Names of valid retreat locations; zero-length if no valid retreats */
-		public String[] getRetreatLocationNames()	{ return retreatLocs; }
-		/** Indicates if unit was destroyed */
-		public boolean isDestroyed() 				{ return (retreatLocs.length == 0); }
-		
-		
-		/** String output for debugging; may change between versions. */
-		public String toString()
-		{
-			StringBuffer sb = new StringBuffer();
-			sb.append("DislodgedInfo[power=");
-			sb.append(power);
-			sb.append(", src=");
-			sb.append(src);
-			sb.append(", unit=");
-			sb.append(unit);
-			sb.append(", locNames=");
-			for(int i=0; i<retreatLocs.length; i++)
-			{
-				sb.append(retreatLocs[i]);
-				sb.append(',');
-			}
-			sb.append(']');
-			return sb.toString();
-		}// toString()
-	}// nested class DislodgedInfo
-	
-	
-	private void parseInput(String input)
-	throws IOException
-	{
-		Log.println("DislodgedParser::parseInput()");
-		
-		// Create HEADER_REGEX pattern, HEADER_END_REGEX pattern 
-		Pattern header = Pattern.compile(HEADER_REGEX);
-		Pattern endHeader = Pattern.compile(HEADER_END_REGEX);
-		
-		// search for HEADER_REGEX
-		// keep searching until we find an empty line, or HEADER_END_REGEX.
-		//
-		BufferedReader br = new BufferedReader(new StringReader(input));
-		StringBuffer accum = new StringBuffer(2048);
-		
-		String line = br.readLine();
-		while(line != null)
-		{
-			Matcher m = header.matcher(line);
-			if(m.lookingAt())
-			{
-				boolean inBlock = false;
-				line = br.readLine();
-				while(line != null)
-				{
-					line = line.trim().toLowerCase();
-					if(line.length() > 0)
-					{
-						// if we are 'end header regex', we end
-						// though typically having a zero-length trimmed line will do that too
-						//
-						Matcher endM = endHeader.matcher(line);
-						if(endM.lookingAt())
-						{
-							break;
-						}
-						
-						// If a trimmed line doesn't start with "the" (DISLODGED_LINE_START) (ignoring case) 
-						// then add it to the line above. Otherwise, start a new line.
-						// this makes regex matching MUCH easier, since all lines are 
-						// 'normalized'; recognized patterns are not split
-						if(line.startsWith(DISLODGED_LINE_START))
-						{
-							accum.append('\n');
-						}
-						else
-						{
-							accum.append(' ');
-						}
-						
-						accum.append(line);
-					}
-					else
-					{
-						if(inBlock)
-						{
-							inBlock = false;
-							break;	// escape inner while
-						}
-						else
-						{
-							inBlock = true;
-						}
-					}
-					
-					line = br.readLine();
-				}
-				
-				accum.append('\n');	// end-of-text newline
-				
-				break;	// escape outer while
-			}
-			
-			line = br.readLine();
-		}
-		
-		// cleanup
-		br.close();
-		line = null;
-		header = null;
-		
+
+
+    /**
+     * Creates a DislodgedParser object, which parses the given input for a Dislodged (retreat) information block
+     */
+    public DislodgedParser(Phase phase, String input)
+            throws IOException {
+        this.phase = phase;
+        this.inputText = input;
+        parseInput(input);
+    }// DislodgedParser()
+
+
+    /**
+     * Returns the dislodged units, or a zero-length array if no units were dislodged
+     */
+    public DislodgedInfo[] getDislodgedInfo() {
+        return dislodgedInfo;
+    }// getRetreatInfo()
+
+    private void parseInput(String input)
+            throws IOException {
+        Log.println("DislodgedParser::parseInput()");
+
+        // Create HEADER_REGEX pattern, HEADER_END_REGEX pattern
+        Pattern header = Pattern.compile(HEADER_REGEX);
+        Pattern endHeader = Pattern.compile(HEADER_END_REGEX);
+
+        // search for HEADER_REGEX
+        // keep searching until we find an empty line, or HEADER_END_REGEX.
+        //
+        BufferedReader br = new BufferedReader(new StringReader(input));
+        StringBuffer accum = new StringBuffer(2048);
+
+        String line = br.readLine();
+        while (line != null) {
+            Matcher m = header.matcher(line);
+            if (m.lookingAt()) {
+                boolean inBlock = false;
+                line = br.readLine();
+                while (line != null) {
+                    line = line.trim().toLowerCase();
+                    if (line.length() > 0) {
+                        // if we are 'end header regex', we end
+                        // though typically having a zero-length trimmed line will do that too
+                        //
+                        Matcher endM = endHeader.matcher(line);
+                        if (endM.lookingAt()) {
+                            break;
+                        }
+
+                        // If a trimmed line doesn't start with "the" (DISLODGED_LINE_START) (ignoring case)
+                        // then add it to the line above. Otherwise, start a new line.
+                        // this makes regex matching MUCH easier, since all lines are
+                        // 'normalized'; recognized patterns are not split
+                        if (line.startsWith(DISLODGED_LINE_START)) {
+                            accum.append('\n');
+                        } else {
+                            accum.append(' ');
+                        }
+
+                        accum.append(line);
+                    } else {
+                        if (inBlock) {
+                            inBlock = false;
+                            break;    // escape inner while
+                        } else {
+                            inBlock = true;
+                        }
+                    }
+
+                    line = br.readLine();
+                }
+
+                accum.append('\n');    // end-of-text newline
+
+                break;    // escape outer while
+            }
+
+            line = br.readLine();
+        }
+
+        // cleanup
+        br.close();
+        line = null;
+        header = null;
+
 		/*
 		System.out.println("(DislodgedParser) text:");
 		System.out.println("||>>"+accum.toString()+"<<||");
 		System.out.println("-----");
 		*/
-		
-		// create a list of Dislodged units
-		List<DislodgedInfo> disList = new LinkedList<>();
-		
-		// Create patterns
-		Pattern[] destroyeds = new Pattern[2];
-		destroyeds[0] = Pattern.compile(DESTROYED_REGEX_1);
-		destroyeds[1] = Pattern.compile(DESTROYED_REGEX_2);
-		
-		Pattern dislodged = Pattern.compile(DISLODGED_REGEX);
-		
-		// parse accum line-by-line, looking for DESTROYED_REGEX and
-		// DISLODGED_REGEX.
-		//
-		StringTokenizer st = new StringTokenizer(accum.toString(), "\n");
-		while(st.hasMoreTokens())
-		{
-			line = st.nextToken();
-			
-			//System.out.println("LINE: "+line);
-			
-			boolean foundMatch = false;
-			
-			for(int i=0; i<destroyeds.length; i++)
-			{
-				Matcher m = destroyeds[i].matcher(line);
-				if(m.lookingAt())
-				{
-					disList.add(new DislodgedInfo( 
-						m.group(1),
-						m.group(2),
-						ParserUtils.filter( m.group(3).trim() ),
-						null));
-					
-					foundMatch = true;
-					break;
-				}
-			}
-			
-			if(!foundMatch)
-			{
-				Matcher m = dislodged.matcher(line);
-				if(m.lookingAt())
-				{
-					// parse location-list predicate
-					String[] retreatLocs = m.group(4).split(DISLODGED_SPLIT_REGEX);
-					for(int i=0; i<retreatLocs.length; i++)
-					{
-						retreatLocs[i] = ParserUtils.filter(retreatLocs[i]);
-					}
-					
-					disList.add(new DislodgedInfo( 
-						m.group(1),
-						m.group(2),
-						ParserUtils.filter(m.group(3).trim()),
-						retreatLocs));
-					foundMatch = true;
-				}
-			}
-			
-			if(!foundMatch)
-			{
-				throw new IOException("Could not parse dislodged order: \""+line+"\"");
-			}
-		}// while()
 
-		dislodgedInfo = disList.toArray(new DislodgedInfo[disList.size()]);
-	}// parseInput()
-		
+        // create a list of Dislodged units
+        List<DislodgedInfo> disList = new LinkedList<>();
+
+        // Create patterns
+        Pattern[] destroyeds = new Pattern[2];
+        destroyeds[0] = Pattern.compile(DESTROYED_REGEX_1);
+        destroyeds[1] = Pattern.compile(DESTROYED_REGEX_2);
+
+        Pattern dislodged = Pattern.compile(DISLODGED_REGEX);
+
+        // parse accum line-by-line, looking for DESTROYED_REGEX and
+        // DISLODGED_REGEX.
+        //
+        StringTokenizer st = new StringTokenizer(accum.toString(), "\n");
+        while (st.hasMoreTokens()) {
+            line = st.nextToken();
+
+            //System.out.println("LINE: "+line);
+
+            boolean foundMatch = false;
+
+            for (int i = 0; i < destroyeds.length; i++) {
+                Matcher m = destroyeds[i].matcher(line);
+                if (m.lookingAt()) {
+                    disList.add(new DislodgedInfo(
+                            m.group(1),
+                            m.group(2),
+                            ParserUtils.filter(m.group(3).trim()),
+                            null));
+
+                    foundMatch = true;
+                    break;
+                }
+            }
+
+            if (!foundMatch) {
+                Matcher m = dislodged.matcher(line);
+                if (m.lookingAt()) {
+                    // parse location-list predicate
+                    String[] retreatLocs = m.group(4).split(DISLODGED_SPLIT_REGEX);
+                    for (int i = 0; i < retreatLocs.length; i++) {
+                        retreatLocs[i] = ParserUtils.filter(retreatLocs[i]);
+                    }
+
+                    disList.add(new DislodgedInfo(
+                            m.group(1),
+                            m.group(2),
+                            ParserUtils.filter(m.group(3).trim()),
+                            retreatLocs));
+                    foundMatch = true;
+                }
+            }
+
+            if (!foundMatch) {
+                throw new IOException("Could not parse dislodged order: \"" + line + "\"");
+            }
+        }// while()
+
+        dislodgedInfo = disList.toArray(new DislodgedInfo[disList.size()]);
+    }// parseInput()
+
+    /**
+     * A DislodgedInfo object is created for each dislodged unit.
+     * <p>
+     * Dislodged units may be destroyed (and have no valid retreat locations) or
+     * may have a retreat location
+     */
+    public static class DislodgedInfo {
+        private final String power;
+        private final String src;
+        private final String unit;
+        private final String[] retreatLocs;    // zero-length if destroyed
+
+        /**
+         * Create a DislodgedInfo object
+         */
+        public DislodgedInfo(String power, String unit, String src, String[] retreatLocs) {
+            this.power = power;
+            this.unit = unit;
+            this.src = src;
+            this.retreatLocs = (retreatLocs == null) ? EMPTY : retreatLocs;
+        }// DislodgedInfo()
+
+        /**
+         * Name of the Power
+         */
+        public String getPowerName() {
+            return power;
+        }
+
+        /**
+         * Location of the unit
+         */
+        public String getSourceName() {
+            return src;
+        }
+
+        /**
+         * Type Name of the unit (e.g., "Fleet")
+         */
+        public String getUnitName() {
+            return unit;
+        }
+
+        /**
+         * Names of valid retreat locations; zero-length if no valid retreats
+         */
+        public String[] getRetreatLocationNames() {
+            return retreatLocs;
+        }
+
+        /**
+         * Indicates if unit was destroyed
+         */
+        public boolean isDestroyed() {
+            return (retreatLocs.length == 0);
+        }
+
+
+        /**
+         * String output for debugging; may change between versions.
+         */
+        public String toString() {
+            StringBuffer sb = new StringBuffer();
+            sb.append("DislodgedInfo[power=");
+            sb.append(power);
+            sb.append(", src=");
+            sb.append(src);
+            sb.append(", unit=");
+            sb.append(unit);
+            sb.append(", locNames=");
+            for (int i = 0; i < retreatLocs.length; i++) {
+                sb.append(retreatLocs[i]);
+                sb.append(',');
+            }
+            sb.append(']');
+            return sb.toString();
+        }// toString()
+    }// nested class DislodgedInfo
+
 
 }// class DislodgedParser
 	

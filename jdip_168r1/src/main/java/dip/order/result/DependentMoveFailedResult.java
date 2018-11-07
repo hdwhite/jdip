@@ -27,68 +27,62 @@ import dip.order.Orderable;
 
 
 /**
-*	
-*	An OrderResult that applies specifically to Move orders that
-*	fail because they depend upon another Move to succeed (and 
-*	that move did not succeed).
-*	<p>
-*	This will print out the Order that caused the failure.
-*	<p>
-*
-*/
-public class DependentMoveFailedResult extends OrderResult
-{
-	// instance fields
-	private Orderable dependentOrder = null;
-	
-	
-	public DependentMoveFailedResult(Orderable order, Orderable dependentOrder)
-	{
-		super(order, OrderResult.ResultType.FAILURE, null);
-		if(dependentOrder == null) { throw new IllegalArgumentException(); }
-		this.dependentOrder = dependentOrder;
-	}// DependentMoveFailedResult()
-	
-	
-	/**
-	*	Returns the order on which this was dependent.
-	*/
-	public Orderable getDependentOrder()
-	{
-		return dependentOrder;
-	}// getDependentOrder()
-	
-	
-	/**
-	*	Creates an appropriate internationalized text 
-	*	message given the set and unset parameters.
-	*/
-	public String getMessage(OrderFormatOptions ofo)
-	{
+ * An OrderResult that applies specifically to Move orders that
+ * fail because they depend upon another Move to succeed (and
+ * that move did not succeed).
+ * <p>
+ * This will print out the Order that caused the failure.
+ * <p>
+ */
+public class DependentMoveFailedResult extends OrderResult {
+    // instance fields
+    private Orderable dependentOrder = null;
+
+
+    public DependentMoveFailedResult(Orderable order, Orderable dependentOrder) {
+        super(order, OrderResult.ResultType.FAILURE, null);
+        if (dependentOrder == null) {
+            throw new IllegalArgumentException();
+        }
+        this.dependentOrder = dependentOrder;
+    }// DependentMoveFailedResult()
+
+
+    /**
+     * Returns the order on which this was dependent.
+     */
+    public Orderable getDependentOrder() {
+        return dependentOrder;
+    }// getDependentOrder()
+
+
+    /**
+     * Creates an appropriate internationalized text
+     * message given the set and unset parameters.
+     */
+    public String getMessage(OrderFormatOptions ofo) {
 		/*
 		{0} : the dependent order, formatted with OrderFormat
 		*/
-		
-		// return formatted message
-		return Utils.getLocalString("DependentMoveFailedResult.message", 
-			dependentOrder.toFormattedString(ofo));
-	}// getMessage()
-	
-	
-	/**
-	*	Primarily for debugging.
-	*/
-	public String toString()
-	{
-		StringBuffer sb = new StringBuffer(256);
-		sb.append(super.toString());
-		
-		sb.append("Dependent Order: ");
-		sb.append(dependentOrder);
-		
-		return sb.toString();
-	}// toString()
-	
-	
-	
+
+        // return formatted message
+        return Utils.getLocalString("DependentMoveFailedResult.message",
+                dependentOrder.toFormattedString(ofo));
+    }// getMessage()
+
+
+    /**
+     * Primarily for debugging.
+     */
+    public String toString() {
+        StringBuffer sb = new StringBuffer(256);
+        sb.append(super.toString());
+
+        sb.append("Dependent Order: ");
+        sb.append(dependentOrder);
+
+        return sb.toString();
+    }// toString()
+
+
 }// class DependentMoveFailedResult

@@ -34,43 +34,37 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-/**
-*	Parses the Adjustment information block. 
-*	<br>
-*	This includes both supply center ownership, and build/removes.
-*
-*
-*
-*/
-public class AdjustmentParser
-{
-	// CONSTANTS
-	// empty string
-	private static final String[] EMPTY = new String[0];
-	
-	/** Header text to look for */
-	public static final String HEADER_REGEX = "(?i)ownership of supply centers:";
-	
-	/** Adjustment regex
-	*	Capture groups: 1:power 2:# supply centers 3:#units 4:# to build or remove
-	*	This is always fed a trimmed string, and assumed that it is always on one line. But we search a whole block.
-	*	case-insensitive. Power names: alphanumeric + "-" and "_" supported.
-	* 	Parsed on a per-line basis.
-	*/
-	public static final String ADJUST_REGEX = "(?i)([\\p{Alnum}\\-_]*):\\D*(\\d+)\\D+(\\d+)\\D+((\\d+)).*\\.";
-	
-	
-	
-	
-	// INSTANCE VARIABLES
-	private dip.world.Map map = null;
 
-	private List<OwnerInfo> ownerList = null;
-	private List<AdjustInfo> adjustList = null;
-	private Pattern regexAdjust = null;
-	
-	private OwnerInfo[] ownerInfo = null;
-	private AdjustInfo[] adjustInfo = null;
+/**
+ * Parses the Adjustment information block.
+ * <br>
+ * This includes both supply center ownership, and build/removes.
+ */
+public class AdjustmentParser {
+    /**
+     * Header text to look for
+     */
+    public static final String HEADER_REGEX = "(?i)ownership of supply centers:";
+    /**
+     * Adjustment regex
+     * Capture groups: 1:power 2:# supply centers 3:#units 4:# to build or remove
+     * This is always fed a trimmed string, and assumed that it is always on one line. But we search a whole block.
+     * case-insensitive. Power names: alphanumeric + "-" and "_" supported.
+     * Parsed on a per-line basis.
+     */
+    public static final String ADJUST_REGEX = "(?i)([\\p{Alnum}\\-_]*):\\D*(\\d+)\\D+(\\d+)\\D+((\\d+)).*\\.";
+    // CONSTANTS
+    // empty string
+    private static final String[] EMPTY = new String[0];
+    // INSTANCE VARIABLES
+    private dip.world.Map map = null;
+
+    private List<OwnerInfo> ownerList = null;
+    private List<AdjustInfo> adjustList = null;
+    private Pattern regexAdjust = null;
+
+    private OwnerInfo[] ownerInfo = null;
+    private AdjustInfo[] adjustInfo = null;
 	
 	/*
 	// TEST
@@ -130,295 +124,287 @@ public class AdjustmentParser
 	}// main()
 	
 	*/
-	
-	/** Creates a AdjustmentParser object, which parses the given input for an Ownership and Adjustment info blocks */
-	public AdjustmentParser(Map map, String input)
-	throws IOException
-	{
-		if(map == null || input == null)
-		{
-			throw new IllegalArgumentException();
-		}
-		
-		this.map = map;
-		parseInput(input);
-	}// AdjustmentParser()
-	
-	
-	/** Returns an array of OwnerInfo objects; this never returns null. */
-	public OwnerInfo[] getOwnership()
-	{
-		return ownerInfo;
-	}// getOwnership()
-	
-	/** Returns an array of AdjustInfo objects; this never returns null. */
-	public AdjustInfo[] getAdjustments()
-	{
-		return adjustInfo;
-	}// getAdjustments()
-	
-	
-	/**
-	*	An OwnerInfo object is created for each power.
-	*	<p>
-	*
-	*/
-	public static class OwnerInfo
-	{
-		private final String power;
-		private final String[] locations;
-		
-		/** Create a OwnerInfo object */
-		public OwnerInfo(String power, String[] locations)
-		{
-			this.power = power;
-			this.locations = (locations == null) ? EMPTY : locations;
-		}// OwnerInfo()
-		
-		/** Name of the Power */
-		public String getPowerName()					{ return power; }
-		
-		/** Names of provinces with owned supply centers */
-		public String[] getProvinces()					{ return locations; }
-		
-		/** String output for debugging; may change between versions. */
-		public String toString()
-		{
-			StringBuffer sb = new StringBuffer();
-			sb.append("OwnerInfo[power=");
-			sb.append(power);
-			sb.append(", locations=");
-			for(int i=0; i<locations.length; i++)
-			{
-				sb.append(locations[i]);
-				sb.append(',');
-			}
-			sb.append(']');
-			return sb.toString();
-		}// toString()
-	}// nested class OwnerInfo
-	
-	
-	/**
-	*	An AdjustInfo object is created for each power, and contains adjustment information
-	*	<p>
-	*
-	*/
-	public static class AdjustInfo
-	{
-		private final String power;
-		private final int numSC;
-		private final int numUnits;
-		private final int toBuildOrRemove;
-		
-		/** Create an AdjustInfo object */
-		public AdjustInfo(String power, int numSC, int numUnits, int toBuildOrRemove)
-		{
-			if(numSC < 0 || numUnits < 0 || toBuildOrRemove < 0 || power == null)
-			{
-				throw new IllegalArgumentException("bad arguments");
-			}
-			
-			this.power = power;
-			this.numSC = numSC;
-			this.numUnits = numUnits;
-			this.toBuildOrRemove = toBuildOrRemove;
-		}// AdjustInfo()
-		
-		/** Name of the Power */
-		public String getPowerName()					{ return power; }
-		
-		/** Current number of supply centers */
-		public int getNumSupplyCenters()				{ return numSC; }
-		
-		/** Current number of units */
-		public int getNumUnits()						{ return numUnits; }
-		
-		/** Number of units to build or remove */
-		public int getNumBuildOrRemove()				{ return toBuildOrRemove; }
-		
-		/** String output for debugging; may change between versions. */
-		public String toString()
-		{
-			StringBuffer sb = new StringBuffer();
-			sb.append("AdjustInfo[power=");
-			sb.append(power);
-			sb.append(", SC=");
-			sb.append(numSC);
-			sb.append(", units=");
-			sb.append(numUnits);
-			sb.append(", change=");
-			sb.append(toBuildOrRemove);
-			sb.append(']');
-			return sb.toString();
-		}// toString()
-	}// nested class AdjustInfo
-	
-	
-	
-	
-	
-	
-	/** Parse the input, and create the appropriate Info objects (or a zero-length arrays) */
-	private void parseInput(String input)
-	throws IOException
-	{
-		// create lists
-		ownerList = new LinkedList<>();
-		adjustList = new LinkedList<>();
-		
-		// create patterns
-		regexAdjust = Pattern.compile(ADJUST_REGEX);
-		
-		// Create HEADER_REGEX pattern
-		Pattern header = Pattern.compile(HEADER_REGEX);
-		
-		// search for HEADER_REGEX
-		// create a block of text                      
-		BufferedReader br = new BufferedReader(new StringReader(input));
-		
-		String line = br.readLine();
-		while(line != null)
-		{
-			Matcher m = header.matcher(line);
-			if(m.lookingAt())
-			{
-				parseOwnerBlock( ParserUtils.parseBlock(br) );
-				parseAdjustmentBlock( ParserUtils.parseBlock(br) );
-				break;
-			}
-			
-			line = br.readLine();
-		}
-		
-		
-		// create the output array
-		ownerInfo = ownerList.toArray(new OwnerInfo[ownerList.size()]);
-		adjustInfo = adjustList.toArray(new AdjustInfo[adjustList.size()]);
-		
-		// cleanup
-		br.close();
-		ownerList.clear();
-		adjustList.clear();
-		ownerList = null;
-		adjustList = null;
-		regexAdjust = null;
-	}// parseInput()
-	
-	
-	
-	/** 
-	*	Given a trimmed block, determines ownership
-	*/
-	private void parseOwnerBlock(String text)
-	throws IOException
-	{
-		// map of Powers to StringBuffers
-		HashMap<Power, StringBuffer> pmap = new HashMap<>();
-		
-		// parse and re-formulate
-		// into a new string
-		//
-		Power currentPower = null;
-		StringTokenizer st = new StringTokenizer(text, " \f\t\n\r");
-		while(st.hasMoreTokens())
-		{
-			String tok = st.nextToken();
-			if(tok.equalsIgnoreCase("unowned:"))
-			{
-				// we don't process unowned SC yet. I'm not sure that
-				// all judges support this??
-				currentPower = null;
-			}
-			else if(tok.endsWith(":"))
-			{
-				// should be a Power
-				//
-				Power p = map.getPower(tok.substring(0, tok.length() - 1));
-				if(p == null)
-				{
-					throw new IOException("Adjustment Block: Power "+tok+" not recognized.");
-				}
-				
-				// toss into the map
-				currentPower = p;
-				pmap.put(p, new StringBuffer());
-			}
-			else
-			{
-				if(currentPower != null)
-				{
-					StringBuffer sb = pmap.get(currentPower);
-					sb.append(tok);
-					sb.append(" ");
-				}
-			}
-		}
-		
-		// now, iterate through the powers
-		// parse the province
-		// there may be a "." on the end of some
-		// which should be eliminated.
-		//
-		final Power[] allPowers = map.getPowers();
-		for(int i=0; i<allPowers.length; i++)
-		{
-			StringBuffer sb = pmap.get(allPowers[i]);
-			if(sb != null)
-			{
-				final String[] provs = sb.toString().split("[\\,]");
-				
-				// clean up province tokens
-				// remove parentheses (put on blockaded SC in games with Wings)
-				for(int pi=0; pi<provs.length; pi++)
-				{
-					provs[pi] = provs[pi].trim();
-					if(provs[pi].endsWith(".") || provs[pi].endsWith(")"))
-					{
-						provs[pi] = provs[pi].substring(0, provs[pi].length()-1);
-					}
-					
-					
-					if(provs[pi].startsWith("("))
-					{
-						provs[pi] = provs[pi].substring(1);
-					}
-				}
-				
-				// create OwnerInfo
-				ownerList.add( new OwnerInfo(allPowers[i].getName(), provs) );
-			}
-		}
-	}// parseOwnerBlock()
-	
-	
-	/** 
-	*	Given a trimmed block, determines adjustment
-	*/
-	private void parseAdjustmentBlock(String text)
-	{
-		String[] lines = text.split("\\n");
-		
-		for(int i=0; i<lines.length; i++)
-		{
-			Matcher m = regexAdjust.matcher(lines[i]);
-			
-			if(m.find())
-			{
-				adjustList.add(new AdjustInfo( 
-						m.group(1),
-						Integer.parseInt(m.group(2)),
-						Integer.parseInt(m.group(3)),
-						Integer.parseInt(m.group(4)) ));
-			}
-			else
-			{
-				break;
-			}
-		}
-	}// parseAdjustmentBlock()
-	
-	
 
-	
+    /**
+     * Creates a AdjustmentParser object, which parses the given input for an Ownership and Adjustment info blocks
+     */
+    public AdjustmentParser(Map map, String input)
+            throws IOException {
+        if (map == null || input == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.map = map;
+        parseInput(input);
+    }// AdjustmentParser()
+
+
+    /**
+     * Returns an array of OwnerInfo objects; this never returns null.
+     */
+    public OwnerInfo[] getOwnership() {
+        return ownerInfo;
+    }// getOwnership()
+
+    /**
+     * Returns an array of AdjustInfo objects; this never returns null.
+     */
+    public AdjustInfo[] getAdjustments() {
+        return adjustInfo;
+    }// getAdjustments()
+
+    /**
+     * Parse the input, and create the appropriate Info objects (or a zero-length arrays)
+     */
+    private void parseInput(String input)
+            throws IOException {
+        // create lists
+        ownerList = new LinkedList<>();
+        adjustList = new LinkedList<>();
+
+        // create patterns
+        regexAdjust = Pattern.compile(ADJUST_REGEX);
+
+        // Create HEADER_REGEX pattern
+        Pattern header = Pattern.compile(HEADER_REGEX);
+
+        // search for HEADER_REGEX
+        // create a block of text
+        BufferedReader br = new BufferedReader(new StringReader(input));
+
+        String line = br.readLine();
+        while (line != null) {
+            Matcher m = header.matcher(line);
+            if (m.lookingAt()) {
+                parseOwnerBlock(ParserUtils.parseBlock(br));
+                parseAdjustmentBlock(ParserUtils.parseBlock(br));
+                break;
+            }
+
+            line = br.readLine();
+        }
+
+
+        // create the output array
+        ownerInfo = ownerList.toArray(new OwnerInfo[ownerList.size()]);
+        adjustInfo = adjustList.toArray(new AdjustInfo[adjustList.size()]);
+
+        // cleanup
+        br.close();
+        ownerList.clear();
+        adjustList.clear();
+        ownerList = null;
+        adjustList = null;
+        regexAdjust = null;
+    }// parseInput()
+
+    /**
+     * Given a trimmed block, determines ownership
+     */
+    private void parseOwnerBlock(String text)
+            throws IOException {
+        // map of Powers to StringBuffers
+        HashMap<Power, StringBuffer> pmap = new HashMap<>();
+
+        // parse and re-formulate
+        // into a new string
+        //
+        Power currentPower = null;
+        StringTokenizer st = new StringTokenizer(text, " \f\t\n\r");
+        while (st.hasMoreTokens()) {
+            String tok = st.nextToken();
+            if (tok.equalsIgnoreCase("unowned:")) {
+                // we don't process unowned SC yet. I'm not sure that
+                // all judges support this??
+                currentPower = null;
+            } else if (tok.endsWith(":")) {
+                // should be a Power
+                //
+                Power p = map.getPower(tok.substring(0, tok.length() - 1));
+                if (p == null) {
+                    throw new IOException("Adjustment Block: Power " + tok + " not recognized.");
+                }
+
+                // toss into the map
+                currentPower = p;
+                pmap.put(p, new StringBuffer());
+            } else {
+                if (currentPower != null) {
+                    StringBuffer sb = pmap.get(currentPower);
+                    sb.append(tok);
+                    sb.append(" ");
+                }
+            }
+        }
+
+        // now, iterate through the powers
+        // parse the province
+        // there may be a "." on the end of some
+        // which should be eliminated.
+        //
+        final Power[] allPowers = map.getPowers();
+        for (int i = 0; i < allPowers.length; i++) {
+            StringBuffer sb = pmap.get(allPowers[i]);
+            if (sb != null) {
+                final String[] provs = sb.toString().split("[\\,]");
+
+                // clean up province tokens
+                // remove parentheses (put on blockaded SC in games with Wings)
+                for (int pi = 0; pi < provs.length; pi++) {
+                    provs[pi] = provs[pi].trim();
+                    if (provs[pi].endsWith(".") || provs[pi].endsWith(")")) {
+                        provs[pi] = provs[pi].substring(0, provs[pi].length() - 1);
+                    }
+
+
+                    if (provs[pi].startsWith("(")) {
+                        provs[pi] = provs[pi].substring(1);
+                    }
+                }
+
+                // create OwnerInfo
+                ownerList.add(new OwnerInfo(allPowers[i].getName(), provs));
+            }
+        }
+    }// parseOwnerBlock()
+
+    /**
+     * Given a trimmed block, determines adjustment
+     */
+    private void parseAdjustmentBlock(String text) {
+        String[] lines = text.split("\\n");
+
+        for (int i = 0; i < lines.length; i++) {
+            Matcher m = regexAdjust.matcher(lines[i]);
+
+            if (m.find()) {
+                adjustList.add(new AdjustInfo(
+                        m.group(1),
+                        Integer.parseInt(m.group(2)),
+                        Integer.parseInt(m.group(3)),
+                        Integer.parseInt(m.group(4))));
+            } else {
+                break;
+            }
+        }
+    }// parseAdjustmentBlock()
+
+    /**
+     * An OwnerInfo object is created for each power.
+     * <p>
+     */
+    public static class OwnerInfo {
+        private final String power;
+        private final String[] locations;
+
+        /**
+         * Create a OwnerInfo object
+         */
+        public OwnerInfo(String power, String[] locations) {
+            this.power = power;
+            this.locations = (locations == null) ? EMPTY : locations;
+        }// OwnerInfo()
+
+        /**
+         * Name of the Power
+         */
+        public String getPowerName() {
+            return power;
+        }
+
+        /**
+         * Names of provinces with owned supply centers
+         */
+        public String[] getProvinces() {
+            return locations;
+        }
+
+        /**
+         * String output for debugging; may change between versions.
+         */
+        public String toString() {
+            StringBuffer sb = new StringBuffer();
+            sb.append("OwnerInfo[power=");
+            sb.append(power);
+            sb.append(", locations=");
+            for (int i = 0; i < locations.length; i++) {
+                sb.append(locations[i]);
+                sb.append(',');
+            }
+            sb.append(']');
+            return sb.toString();
+        }// toString()
+    }// nested class OwnerInfo
+
+    /**
+     * An AdjustInfo object is created for each power, and contains adjustment information
+     * <p>
+     */
+    public static class AdjustInfo {
+        private final String power;
+        private final int numSC;
+        private final int numUnits;
+        private final int toBuildOrRemove;
+
+        /**
+         * Create an AdjustInfo object
+         */
+        public AdjustInfo(String power, int numSC, int numUnits, int toBuildOrRemove) {
+            if (numSC < 0 || numUnits < 0 || toBuildOrRemove < 0 || power == null) {
+                throw new IllegalArgumentException("bad arguments");
+            }
+
+            this.power = power;
+            this.numSC = numSC;
+            this.numUnits = numUnits;
+            this.toBuildOrRemove = toBuildOrRemove;
+        }// AdjustInfo()
+
+        /**
+         * Name of the Power
+         */
+        public String getPowerName() {
+            return power;
+        }
+
+        /**
+         * Current number of supply centers
+         */
+        public int getNumSupplyCenters() {
+            return numSC;
+        }
+
+        /**
+         * Current number of units
+         */
+        public int getNumUnits() {
+            return numUnits;
+        }
+
+        /**
+         * Number of units to build or remove
+         */
+        public int getNumBuildOrRemove() {
+            return toBuildOrRemove;
+        }
+
+        /**
+         * String output for debugging; may change between versions.
+         */
+        public String toString() {
+            StringBuffer sb = new StringBuffer();
+            sb.append("AdjustInfo[power=");
+            sb.append(power);
+            sb.append(", SC=");
+            sb.append(numSC);
+            sb.append(", units=");
+            sb.append(numUnits);
+            sb.append(", change=");
+            sb.append(toBuildOrRemove);
+            sb.append(']');
+            return sb.toString();
+        }// toString()
+    }// nested class AdjustInfo
+
+
 }// class AdjustmentParser

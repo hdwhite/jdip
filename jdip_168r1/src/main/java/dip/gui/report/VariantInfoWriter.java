@@ -1,4 +1,3 @@
-
 //
 //  @(#)VariantInfoWriter.java		5/2004
 //
@@ -23,11 +22,6 @@
 //
 package dip.gui.report;
 
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.swing.JScrollPane;
-
 import dip.gui.ClientFrame;
 import dip.gui.dialog.TextViewer;
 import dip.misc.Utils;
@@ -36,109 +30,102 @@ import dip.world.World;
 import dip.world.variant.VariantManager;
 import dip.world.variant.data.Variant;
 
+import javax.swing.*;
+import java.util.Iterator;
+import java.util.Set;
+
 
 /**
-*
-*	Writes information about the current Variant as HTML, and, also
-*	displays the current rule settings (RuleOptions).
-*
-*/
-public class VariantInfoWriter
-{
-	// i18n constants
-	private static final String TEMPLATE_LOCATION 	= "VariantInfoWriter.template.location";
-	private static final String DIALOG_TITLE 		= "VariantInfoWriter.dialog.title";
-	
-	// instance fields
-	private World world = null;
-	
-	
-	/**
-	*	Gets information about the variant and current rule
-	*	options. Result is in HTML.
-	*/
-	public static String variantInfoToHTML(World w)
-	{
-		VariantInfoWriter viw = new VariantInfoWriter(w);
-		return viw.getInfoAsHTML();
-	}// stateToHTML()
-	
-	
-	
-	/**
-	*	Returns the HTML-encoded variant information inside a dialog.
-	*/
-	public static void displayDialog(final ClientFrame clientFrame, 
-		final World w)
-	{
-		TextViewer tv = new TextViewer(clientFrame);
-		tv.setEditable(false);
-		tv.addSingleButton( tv.makeOKButton() );
-		tv.setTitle(Utils.getLocalString(DIALOG_TITLE));
-		tv.setHeaderVisible(false);
-		tv.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
-		tv.lazyLoadDisplayDialog(new TextViewer.TVRunnable()
-		{
-			public void run()
-			{
-				setText(variantInfoToHTML(w));
-			}
-		});
-	}// displayDialog()
-	
-	
-	/** StateWriter constructor */
-	private VariantInfoWriter(World w)
-	{
-		this.world = w;
-	}// VariantInfoWriter()
-	
-	
-	/** Writes info as HTML */
-	private String getInfoAsHTML()
-	{
-		// get template
-		String template = Utils.getText(  Utils.getLocalString(TEMPLATE_LOCATION) ); 
-		if(template == null)
-		{
-			template = "ERROR: missing template resource "+ Utils.getLocalString(TEMPLATE_LOCATION);
-		}
-		
-		// get selcted variant
-		World.VariantInfo vi = world.getVariantInfo();
-		Variant variant = VariantManager.getVariant(vi.getVariantName(), vi.getVariantVersion());
-		
-		// get 8 main arguments
-		Object[] oldArgs = variant.getHTMLSummaryArguments();
-		
-		// make extra space
-		Object[] newArgs = new Object[oldArgs.length + 1];
-		System.arraycopy(oldArgs, 0, newArgs, 0, oldArgs.length);
-		
-		// make 9th argument: 'rules settings'
-		StringBuffer sb = new StringBuffer(256);
-		
-		RuleOptions ro = world.getRuleOptions();
-		Set allOpts = ro.getAllOptions();
-		Iterator iter = allOpts.iterator();
-		while(iter.hasNext())
-		{
-			RuleOptions.Option opt = (RuleOptions.Option) iter.next();
-			RuleOptions.OptionValue optVal = ro.getOptionValue(opt);
-			
-			sb.append("<p><b>");
-			sb.append(opt.getNameI18N());
-			sb.append(":</b> ");
-			sb.append(optVal.getNameI18N());
-			sb.append('\n');
-		}
-		
-		newArgs[newArgs.length - 1] = sb.toString();
-		
-		// return text.
-		return Utils.format(template, newArgs);
-	}// getInfoAsHTML()	
-	
-	
+ * Writes information about the current Variant as HTML, and, also
+ * displays the current rule settings (RuleOptions).
+ */
+public class VariantInfoWriter {
+    // i18n constants
+    private static final String TEMPLATE_LOCATION = "VariantInfoWriter.template.location";
+    private static final String DIALOG_TITLE = "VariantInfoWriter.dialog.title";
+
+    // instance fields
+    private World world = null;
+
+
+    /**
+     * StateWriter constructor
+     */
+    private VariantInfoWriter(World w) {
+        this.world = w;
+    }// VariantInfoWriter()
+
+    /**
+     * Gets information about the variant and current rule
+     * options. Result is in HTML.
+     */
+    public static String variantInfoToHTML(World w) {
+        VariantInfoWriter viw = new VariantInfoWriter(w);
+        return viw.getInfoAsHTML();
+    }// stateToHTML()
+
+    /**
+     * Returns the HTML-encoded variant information inside a dialog.
+     */
+    public static void displayDialog(final ClientFrame clientFrame,
+                                     final World w) {
+        TextViewer tv = new TextViewer(clientFrame);
+        tv.setEditable(false);
+        tv.addSingleButton(tv.makeOKButton());
+        tv.setTitle(Utils.getLocalString(DIALOG_TITLE));
+        tv.setHeaderVisible(false);
+        tv.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        tv.lazyLoadDisplayDialog(new TextViewer.TVRunnable() {
+            public void run() {
+                setText(variantInfoToHTML(w));
+            }
+        });
+    }// displayDialog()
+
+    /**
+     * Writes info as HTML
+     */
+    private String getInfoAsHTML() {
+        // get template
+        String template = Utils.getText(Utils.getLocalString(TEMPLATE_LOCATION));
+        if (template == null) {
+            template = "ERROR: missing template resource " + Utils.getLocalString(TEMPLATE_LOCATION);
+        }
+
+        // get selcted variant
+        World.VariantInfo vi = world.getVariantInfo();
+        Variant variant = VariantManager.getVariant(vi.getVariantName(), vi.getVariantVersion());
+
+        // get 8 main arguments
+        Object[] oldArgs = variant.getHTMLSummaryArguments();
+
+        // make extra space
+        Object[] newArgs = new Object[oldArgs.length + 1];
+        System.arraycopy(oldArgs, 0, newArgs, 0, oldArgs.length);
+
+        // make 9th argument: 'rules settings'
+        StringBuffer sb = new StringBuffer(256);
+
+        RuleOptions ro = world.getRuleOptions();
+        Set allOpts = ro.getAllOptions();
+        Iterator iter = allOpts.iterator();
+        while (iter.hasNext()) {
+            RuleOptions.Option opt = (RuleOptions.Option) iter.next();
+            RuleOptions.OptionValue optVal = ro.getOptionValue(opt);
+
+            sb.append("<p><b>");
+            sb.append(opt.getNameI18N());
+            sb.append(":</b> ");
+            sb.append(optVal.getNameI18N());
+            sb.append('\n');
+        }
+
+        newArgs[newArgs.length - 1] = sb.toString();
+
+        // return text.
+        return Utils.format(template, newArgs);
+    }// getInfoAsHTML()
+
+
 }// class VariantInfoWriter

@@ -27,25 +27,29 @@ import dip.world.TurnState;
 import dip.world.World;
 
 /**
-*
-*	Proxy object which facilitates communication between a Tool and jDip 
-*	internal data structures.
-*	<p>
-*	This API has not yet been defined, and remains in flux.
-*
-*/
-public interface ToolProxy
-{
-	// basic methods
-	//
-	/** Gets the current World object, if any. May return null. */
-	public World getWorld();
-	
-	/** Convenience method: gets the current TurnState from the current World, or null */
-	public TurnState getCurrentTurnState();
-	
-	/** Gets the ClientFrame (JFrame) instance */
-	public ClientFrame getClient();
-	
-	
+ * Proxy object which facilitates communication between a Tool and jDip
+ * internal data structures.
+ * <p>
+ * This API has not yet been defined, and remains in flux.
+ */
+public interface ToolProxy {
+    // basic methods
+    //
+
+    /**
+     * Gets the current World object, if any. May return null.
+     */
+    public World getWorld();
+
+    /**
+     * Convenience method: gets the current TurnState from the current World, or null
+     */
+    public TurnState getCurrentTurnState();
+
+    /**
+     * Gets the ClientFrame (JFrame) instance
+     */
+    public ClientFrame getClient();
+
+
 }// interface ToolProxy

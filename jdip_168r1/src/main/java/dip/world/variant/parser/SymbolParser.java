@@ -25,13 +25,13 @@ package dip.world.variant.parser;
 import dip.world.variant.data.SymbolPack;
 
 /**
-*	Parses a SymbolPack description.
-*
-*/
-public interface SymbolParser
-{
-	
-	/** Returns the SymbolPack */
-	public SymbolPack getSymbolPack();
-	
+ * Parses a SymbolPack description.
+ */
+public interface SymbolParser {
+
+    /**
+     * Returns the SymbolPack
+     */
+    public SymbolPack getSymbolPack();
+
 }// interface SymbolParser

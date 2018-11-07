@@ -22,44 +22,38 @@
 //
 package dip.gui.map;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.Box;
-import javax.swing.JButton;
-
 import dip.misc.Utils;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+
 /**
-*	Does nothing, except take up space.
-*	
-*/
-public class EmptyControlBar extends ControlBar
-{
-	// same icon as used by 'best fit' in ViewControlBar 
-	private static final String ICON_ZOOM_FIT	= "resource/common/icons/24x24/Refresh24.gif";
-	
-	/** Create an EmptyControlBar */
-	public EmptyControlBar(MapPanel mp)
-	{
-		super(mp);
-		
-		// create a button to get the size
-		// we do this to make sure the JButton characteristics 
-		// are that of a toolbar button.
-		JButton fit = add(new AbstractAction()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				// nothing here!
-			}
- 		});
-		fit.setIcon(Utils.getIcon(ICON_ZOOM_FIT));
-		
-		Dimension size = fit.getPreferredSize();
-		add(Box.createVerticalStrut(size.height));
-		remove(fit);
-	}// EmptyControlBar()
+ * Does nothing, except take up space.
+ */
+public class EmptyControlBar extends ControlBar {
+    // same icon as used by 'best fit' in ViewControlBar
+    private static final String ICON_ZOOM_FIT = "resource/common/icons/24x24/Refresh24.gif";
+
+    /**
+     * Create an EmptyControlBar
+     */
+    public EmptyControlBar(MapPanel mp) {
+        super(mp);
+
+        // create a button to get the size
+        // we do this to make sure the JButton characteristics
+        // are that of a toolbar button.
+        JButton fit = add(new AbstractAction() {
+            public void actionPerformed(ActionEvent evt) {
+                // nothing here!
+            }
+        });
+        fit.setIcon(Utils.getIcon(ICON_ZOOM_FIT));
+
+        Dimension size = fit.getPreferredSize();
+        add(Box.createVerticalStrut(size.height));
+        remove(fit);
+    }// EmptyControlBar()
 }// class EmptyControlBar	
 

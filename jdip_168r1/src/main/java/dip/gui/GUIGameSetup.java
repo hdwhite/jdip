@@ -26,26 +26,23 @@ import dip.world.GameSetup;
 import dip.world.World;
 
 /**
-*	The base class for all GUI GameSetup operations.
-*	
-*/
-public interface GUIGameSetup extends GameSetup
-{
-	
-	/** 
-	*	Setup the game. This method is always called
-	*	before any other method.
-	*	
-	*/
-	public void setup(ClientFrame cf, World world);
-	
-	
-	/**
-	*	Called by the persistance manager just prior to 
-	*	a save. This allows serialization of any needed
-	*	data to permit proper restoration.
-	*/
-	public void save(ClientFrame cf);
-	
-	
+ * The base class for all GUI GameSetup operations.
+ */
+public interface GUIGameSetup extends GameSetup {
+
+    /**
+     * Setup the game. This method is always called
+     * before any other method.
+     */
+    public void setup(ClientFrame cf, World world);
+
+
+    /**
+     * Called by the persistance manager just prior to
+     * a save. This allows serialization of any needed
+     * data to permit proper restoration.
+     */
+    public void save(ClientFrame cf);
+
+
 }// interface GUIGameSetup

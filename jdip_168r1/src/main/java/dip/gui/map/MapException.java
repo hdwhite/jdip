@@ -23,34 +23,35 @@
 package dip.gui.map;
 
 
-public class MapException extends java.lang.Exception
-{
-	/** Constructs a new exception with null as its detail message. */
-	public MapException()
-	{
-		super();
-	}// MapException()
-	
-	/** Constructs a new exception with the specified detail message. */
-	public MapException(String message)
-	{
-		super(message);
-	}// MapException()
-	
-	/**  Constructs a new exception with the specified detail message and cause. */
-	public MapException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}// MapException()
-	
-	/** 
-	*	Constructs a new exception with the specified cause and a detail message of 
-	*	(cause==null ? null : cause.toString()) (which typically contains the class 
-	*	and detail message of cause).
-	*/
-	public MapException(Throwable cause)
-	{
-		super(cause);
-	}// MapException()
-	
+public class MapException extends java.lang.Exception {
+    /**
+     * Constructs a new exception with null as its detail message.
+     */
+    public MapException() {
+        super();
+    }// MapException()
+
+    /**
+     * Constructs a new exception with the specified detail message.
+     */
+    public MapException(String message) {
+        super(message);
+    }// MapException()
+
+    /**
+     * Constructs a new exception with the specified detail message and cause.
+     */
+    public MapException(String message, Throwable cause) {
+        super(message, cause);
+    }// MapException()
+
+    /**
+     * Constructs a new exception with the specified cause and a detail message of
+     * (cause==null ? null : cause.toString()) (which typically contains the class
+     * and detail message of cause).
+     */
+    public MapException(Throwable cause) {
+        super(cause);
+    }// MapException()
+
 }// class MapException()

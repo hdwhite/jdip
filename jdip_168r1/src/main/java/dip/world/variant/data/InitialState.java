@@ -26,61 +26,89 @@ import dip.world.Coast;
 import dip.world.Unit;
 
 /**
+ * Sets the Initial State (position) for a province.
+ * <p>
+ */
+public class InitialState {
+    private String provinceName = null;
+    private String power = null;
+    private Unit.Type unit = null;
+    private Coast coast = null;
 
-Sets the Initial State (position) for a province.
-<p>
+    /**
+     * Name of province to which this InitialState refers.
+     */
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    /**
+     * Set the Province name
+     */
+    public void setProvinceName(String value) {
+        provinceName = value;
+    }
+
+    /**
+     * Power of unit owner
+     */
+    public String getPowerName() {
+        return power;
+    }
+
+    /**
+     * Set the Power name
+     */
+    public void setPowerName(String value) {
+        power = value;
+    }
+
+    /**
+     * Type of unit
+     */
+    public Unit.Type getUnitType() {
+        return unit;
+    }
+
+    /**
+     * Sets the unit type.
+     */
+    public void setUnitType(Unit.Type value) {
+        unit = value;
+    }
+
+    /**
+     * Coast of unit
+     */
+    public Coast getCoast() {
+        return coast;
+    }
+
+    /**
+     * Sets the coast for the unit.
+     */
+    public void setCoast(Coast value) {
+        coast = value;
+    }
 
 
-
-*/	
-public class InitialState
-{
-	private String provinceName = null;
-	private String power = null;
-	private Unit.Type unit = null;
-	private Coast coast = null;
-	
-	/** Name of province to which this InitialState refers. */
-	public String getProvinceName() 	{ return provinceName; }
-	
-	/** Power of unit owner */
-	public String getPowerName() 		{ return power; }
-	
-	/** Type of unit */
-	public Unit.Type getUnitType() 		{ return unit; }
-	
-	/** Coast of unit */
-	public Coast getCoast() 		{ return coast; }
-	
-	/** Set the Province name */
-	public void setProvinceName(String value) 	{ provinceName = value; }
-	
-	/** Set the Power name */
-	public void setPowerName(String value) 		{ power = value; }
-	
-	/** Sets the unit type. */
-	public void setUnitType(Unit.Type value) 	{ unit = value; }
-	
-	/** Sets the coast for the unit. */
-	public void setCoast(Coast value) 		{ coast = value; }
-	
-	
-	/** For debugging only! */
-	public String toString()
-	{
-		StringBuffer sb = new StringBuffer(256);
-		sb.append(this.getClass().getName());
-		sb.append('[');
-		sb.append("provinceName=");
-		sb.append(provinceName);
-		sb.append(",power=");
-		sb.append(power);
-		sb.append(",unit=");
-		sb.append(unit);
-		sb.append(",coast=");
-		sb.append(coast);
-		sb.append(']');
-		return sb.toString();
-	}// toString()
+    /**
+     * For debugging only!
+     */
+    public String toString() {
+        StringBuffer sb = new StringBuffer(256);
+        sb.append(this.getClass().getName());
+        sb.append('[');
+        sb.append("provinceName=");
+        sb.append(provinceName);
+        sb.append(",power=");
+        sb.append(power);
+        sb.append(",unit=");
+        sb.append(unit);
+        sb.append(",coast=");
+        sb.append(coast);
+        sb.append(']');
+        return sb.toString();
+    }// toString()
 }// nested class InitialState
 

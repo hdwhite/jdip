@@ -26,29 +26,23 @@ import javax.swing.undo.AbstractUndoableEdit;
 
 
 /**
-*
-*	XAbstractUndoableEdit is the base class for all jDip undoable edits.
-*	it provides base functionality and ensures serialization goes smoothly.
-*	
-*/	
-public abstract class XAbstractUndoableEdit extends AbstractUndoableEdit implements java.io.Serializable
-{
-	protected UndoRedoManager undoRedoManager = null;
-	
-	/**
-	*	Constructs an XAbstractUndoableEdit object.<p>
-	*	UndoRedoManager must not be null.
-	*
-	*/
-	public XAbstractUndoableEdit(UndoRedoManager urm)
-	{
-		if(urm == null)
-		{
-			throw new IllegalArgumentException();
-		}
-		
-		undoRedoManager = urm;
-	}// XAbstractUndoableEdit()
+ * XAbstractUndoableEdit is the base class for all jDip undoable edits.
+ * it provides base functionality and ensures serialization goes smoothly.
+ */
+public abstract class XAbstractUndoableEdit extends AbstractUndoableEdit implements java.io.Serializable {
+    protected UndoRedoManager undoRedoManager = null;
+
+    /**
+     * Constructs an XAbstractUndoableEdit object.<p>
+     * UndoRedoManager must not be null.
+     */
+    public XAbstractUndoableEdit(UndoRedoManager urm) {
+        if (urm == null) {
+            throw new IllegalArgumentException();
+        }
+
+        undoRedoManager = urm;
+    }// XAbstractUndoableEdit()
 	
 	/*
 	

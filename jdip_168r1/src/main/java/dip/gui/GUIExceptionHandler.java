@@ -25,65 +25,57 @@ package dip.gui;
 import dip.gui.dialog.ErrorDialog;
 
 /**
-*	Handles uncaught exceptions from an AWT event thread. Note that this class does NOT handle
-*	uncaught exceptions from non-AWT event threads!
-*	<p>
-*	This is an effective but nonportable (it will not work on non-Sun JVMs, 
-*	and may not work in future Java versions) of handling uncaught exceptions.
-*	<p>
-*	This code was derived from <a href="http://forum.java.sun.com/thread.jsp?forum=52&thread=92316">
-*	a Java Developer Forum</a> post.
-*	<h3>Usage</h3>
-*	At the beginning of your application set the System property
-*	to the name of your exception handler class:<br>
-	<pre>
-	System.setProperty("sun.awt.exception.handler" ,"dip.gui.GUIExceptionHandler");
-	</pre>
-*	Alternatively, this can be done transparently with the registerHandler() method.
-*	
-*	<p>
-*	When an uncaught exception occurs in the EventDispatchThread, it
-*	will check the value of "sun.awt.exception.handler", create an
-*	instance of the class and call its <code>handle</code> method.
-*	
-*	
-*/
-public class GUIExceptionHandler
-{
-	
-	/** Default Constructor */
-	public GUIExceptionHandler()
-	{
-	}// GUIExceptionHandler()
-	
-	/**
-	*	Registers this GUIExceptionHandler for uncaught Exceptions.
-	*	This will return <code>false</code> if the handler could 
-	*	not be registered.
-	*/
-	public static boolean registerHandler()
-	{
-		try
-		{
-			System.setProperty("sun.awt.exception.handler", GUIExceptionHandler.class.getName());
-			return true;
-		}
-		catch(Exception e)
-		{
-			return false;
-		}
-	}// registerHandler()
-	
-	
-	/**
-	*	Handles the thrown Exception, from an AWT event thread
-	*
-	*/
-	public void handle(Throwable thrown)
-	{
-		ErrorDialog.displaySerious(null, thrown);
-	}// handle()
-	
-	
+ * Handles uncaught exceptions from an AWT event thread. Note that this class does NOT handle
+ * uncaught exceptions from non-AWT event threads!
+ * <p>
+ * This is an effective but nonportable (it will not work on non-Sun JVMs,
+ * and may not work in future Java versions) of handling uncaught exceptions.
+ * <p>
+ * This code was derived from <a href="http://forum.java.sun.com/thread.jsp?forum=52&thread=92316">
+ * a Java Developer Forum</a> post.
+ * <h3>Usage</h3>
+ * At the beginning of your application set the System property
+ * to the name of your exception handler class:<br>
+ * <pre>
+ * System.setProperty("sun.awt.exception.handler" ,"dip.gui.GUIExceptionHandler");
+ * </pre>
+ * Alternatively, this can be done transparently with the registerHandler() method.
+ *
+ * <p>
+ * When an uncaught exception occurs in the EventDispatchThread, it
+ * will check the value of "sun.awt.exception.handler", create an
+ * instance of the class and call its <code>handle</code> method.
+ */
+public class GUIExceptionHandler {
+
+    /**
+     * Default Constructor
+     */
+    public GUIExceptionHandler() {
+    }// GUIExceptionHandler()
+
+    /**
+     * Registers this GUIExceptionHandler for uncaught Exceptions.
+     * This will return <code>false</code> if the handler could
+     * not be registered.
+     */
+    public static boolean registerHandler() {
+        try {
+            System.setProperty("sun.awt.exception.handler", GUIExceptionHandler.class.getName());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }// registerHandler()
+
+
+    /**
+     * Handles the thrown Exception, from an AWT event thread
+     */
+    public void handle(Throwable thrown) {
+        ErrorDialog.displaySerious(null, thrown);
+    }// handle()
+
+
 }// class GUIExceptionHandler
 

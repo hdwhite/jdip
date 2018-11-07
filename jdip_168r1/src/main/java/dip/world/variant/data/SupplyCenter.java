@@ -27,58 +27,77 @@ package dip.world.variant.data;
 
 
 
-*/	
-public class SupplyCenter
-{
-	private String provinceName = null;
-	private String powerName = null;	
-	private String ownerName = null;	
-	
-	/** Get name of the home supply center; if "none" if none, "any" if any. */
-	public String getHomePowerName()				{ return powerName; }
-	
-	/** Sets the name of the home supply center. */
-	public void setHomePowerName(String value) 		{ powerName = value; }
-	
-	
-	/** Get the province name of this supply center. */
-	public String getProvinceName() 				{ return provinceName; }
-	
-	/** Set the province name of this supply center. */
-	public void setProvinceName(String value) 		{ provinceName = value; }
-	
-	
-	/** Get the name of the Power that owns this supply center. */
-	public String getOwnerName() 				{ return ownerName; }
-	
-	/** Set the name of the Power that owns this supply center. 
-		<p>
-		"none" is acceptable, but "any" is not.
-	*/
-	public void setOwnerName(String value) 		
-	{ 
-		if("any".equalsIgnoreCase(value))
-		{
-			throw new IllegalArgumentException();
-		}
-		
-		ownerName = value; 
-	}// setOwnerName()
-	
-	/** For debugging only! */
-	public String toString()
-	{
-		StringBuffer sb = new StringBuffer(256);
-		sb.append(this.getClass().getName());
-		sb.append('[');
-		sb.append("provinceName=");
-		sb.append(provinceName);
-		sb.append(",powerName=");
-		sb.append(powerName);
-		sb.append(",ownerName=");
-		sb.append(ownerName);
-		sb.append(']');
-		return sb.toString();
-	}// toString()
+ */
+public class SupplyCenter {
+    private String provinceName = null;
+    private String powerName = null;
+    private String ownerName = null;
+
+    /**
+     * Get name of the home supply center; if "none" if none, "any" if any.
+     */
+    public String getHomePowerName() {
+        return powerName;
+    }
+
+    /**
+     * Sets the name of the home supply center.
+     */
+    public void setHomePowerName(String value) {
+        powerName = value;
+    }
+
+
+    /**
+     * Get the province name of this supply center.
+     */
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    /**
+     * Set the province name of this supply center.
+     */
+    public void setProvinceName(String value) {
+        provinceName = value;
+    }
+
+
+    /**
+     * Get the name of the Power that owns this supply center.
+     */
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    /**
+     * Set the name of the Power that owns this supply center.
+     * <p>
+     * "none" is acceptable, but "any" is not.
+     */
+    public void setOwnerName(String value) {
+        if ("any".equalsIgnoreCase(value)) {
+            throw new IllegalArgumentException();
+        }
+
+        ownerName = value;
+    }// setOwnerName()
+
+    /**
+     * For debugging only!
+     */
+    public String toString() {
+        StringBuffer sb = new StringBuffer(256);
+        sb.append(this.getClass().getName());
+        sb.append('[');
+        sb.append("provinceName=");
+        sb.append(provinceName);
+        sb.append(",powerName=");
+        sb.append(powerName);
+        sb.append(",ownerName=");
+        sb.append(ownerName);
+        sb.append(']');
+        return sb.toString();
+    }// toString()
 }// nested class SupplyCenter
 

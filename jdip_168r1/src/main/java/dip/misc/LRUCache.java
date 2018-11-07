@@ -26,42 +26,32 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
-*	Implements an LRU Cache; based on LinkedHashMap from JDK1.4
-*
-*
-*
-*
-*/
-public class LRUCache<K, V> extends LinkedHashMap<K, V>
-{
-	private int maxsize;
-	
-	
-	/**
-	*	Creates an LRUCache with the given size.
-	*
-	*
-	*/
-	public LRUCache(int maxsize)
-	{
-		super( (maxsize*4/3) + 1, 0.75f, true);
-		this.maxsize = maxsize;
-	}// LRUCache()
+ * Implements an LRU Cache; based on LinkedHashMap from JDK1.4
+ */
+public class LRUCache<K, V> extends LinkedHashMap<K, V> {
+    private int maxsize;
 
 
-	public V put(K key, V value)
-	{
-		return super.put(key, value);
-	}
-	
-	
-	/**
-	*	Override to enable elimination of oldest entries
-	*/
-	protected boolean removeEldestEntry(Map.Entry eldest)
-	{
-		return (size() > maxsize); 
-	}// removeEldestEntry()
-	
-	
+    /**
+     * Creates an LRUCache with the given size.
+     */
+    public LRUCache(int maxsize) {
+        super((maxsize * 4 / 3) + 1, 0.75f, true);
+        this.maxsize = maxsize;
+    }// LRUCache()
+
+
+    public V put(K key, V value) {
+        return super.put(key, value);
+    }
+
+
+    /**
+     * Override to enable elimination of oldest entries
+     */
+    protected boolean removeEldestEntry(Map.Entry eldest) {
+        return (size() > maxsize);
+    }// removeEldestEntry()
+
+
 }// class LRUCache

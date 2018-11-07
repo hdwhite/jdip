@@ -22,39 +22,52 @@
 //
 package dip.gui.map;
 
+import dip.world.Location;
 import org.apache.batik.dom.events.DOMKeyEvent;
 import org.w3c.dom.events.MouseEvent;
 
-import dip.world.Location;
 /**
-*
-*	Handles MapPanel DOM UI Events, such as 
-*	<code>KeyEvent</code>s and <code>MouseEvent</code>s.
-*	<p>
-*	NOTE: <code>Location</code> objects may be null
-*
-*/
-public interface DOMUIEventHandler
-{
-	
-	/** Key Pressed event */
-	public void keyPressed(DOMKeyEvent ke, Location loc);
-	
-	
-	/** Mouse Over event: Mouse over a province */
-	public void mouseOver(MouseEvent me, Location loc);
-	/** Mouse Out event: Mouse out of a province */
-	public void mouseOut(MouseEvent me, Location loc);
-	/** Mouse clicked */
-	public void mouseClicked(MouseEvent me, Location loc);
-	/** Mouse button pressed */
-	public void mouseDown(MouseEvent me, Location loc);
-	/** Mouse button released */
-	public void mouseUp(MouseEvent me, Location loc);
+ * Handles MapPanel DOM UI Events, such as
+ * <code>KeyEvent</code>s and <code>MouseEvent</code>s.
+ * <p>
+ * NOTE: <code>Location</code> objects may be null
+ */
+public interface DOMUIEventHandler {
+
+    /**
+     * Key Pressed event
+     */
+    public void keyPressed(DOMKeyEvent ke, Location loc);
+
+
+    /**
+     * Mouse Over event: Mouse over a province
+     */
+    public void mouseOver(MouseEvent me, Location loc);
+
+    /**
+     * Mouse Out event: Mouse out of a province
+     */
+    public void mouseOut(MouseEvent me, Location loc);
+
+    /**
+     * Mouse clicked
+     */
+    public void mouseClicked(MouseEvent me, Location loc);
+
+    /**
+     * Mouse button pressed
+     */
+    public void mouseDown(MouseEvent me, Location loc);
+
+    /**
+     * Mouse button released
+     */
+    public void mouseUp(MouseEvent me, Location loc);
 	
 	/* Mouse moved 
 	public void mouseMoved(MouseEvent me, Location loc)
 	*/
-	
-	
+
+
 }// interface DOMUIEventHandler

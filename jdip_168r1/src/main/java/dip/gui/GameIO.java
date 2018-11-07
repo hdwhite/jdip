@@ -23,70 +23,58 @@
 package dip.gui;
 
 /**
-*
-*
-*
-*
-*
-*
-*/
-public class GameIO
-{
-	
-	
-	
-	
-	public static class WriteGameThread implements Runnable
-	{
-		
-		/** run() */
-		public void run()
-		{
-			
-			
-		}// run()
-		
-		
-		
-		
-		
-	}// nested class WriteGameThread
-	
-	public static class ReadGameThread implements Runnable
-	{
-		/** Create a ReadGameThread */
-		public ReadGameThread(ClientFrame cf)
-		{
-			
-			
-			
-		}// ReadGameThread()
-		
-		
-		/** run() */
-		public void run()
-		{
-			
-			
-		}// run()
-		
-		
-		protected void setup()
-		{
-		}// ()
-		
-		protected void cleanup()
-		{
-		}// ()
-		
-		 
-		
-		
-	}// nested class ReadGameThread
-	
-	
-	
-	
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+public class GameIO {
+
+
+    public static class WriteGameThread implements Runnable {
+
+        /**
+         * run()
+         */
+        public void run() {
+
+
+        }// run()
+
+
+    }// nested class WriteGameThread
+
+    public static class ReadGameThread implements Runnable {
+        /**
+         * Create a ReadGameThread
+         */
+        public ReadGameThread(ClientFrame cf) {
+
+
+        }// ReadGameThread()
+
+
+        /**
+         * run()
+         */
+        public void run() {
+
+
+        }// run()
+
+
+        protected void setup() {
+        }// ()
+
+        protected void cleanup() {
+        }// ()
+
+
+    }// nested class ReadGameThread
+
+
 }// class GameIO
 
 

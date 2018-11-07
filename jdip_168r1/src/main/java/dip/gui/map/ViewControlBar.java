@@ -22,13 +22,9 @@
 //
 package dip.gui.map;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.geom.AffineTransform;
-
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-
+import dip.gui.order.GUIOrder;
+import dip.misc.Utils;
+import dip.world.Location;
 import org.apache.batik.bridge.ViewBox;
 import org.apache.batik.dom.events.DOMKeyEvent;
 import org.apache.batik.gvt.CanvasGraphicsNode;
@@ -36,148 +32,139 @@ import org.apache.batik.swing.JSVGCanvas;
 import org.w3c.dom.events.MouseEvent;
 import org.w3c.dom.svg.SVGSVGElement;
 
-import dip.gui.order.GUIOrder;
-import dip.misc.Utils;
-import dip.world.Location;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.geom.AffineTransform;
 
 
 /**
-*	View Control Bar
-*	<p>
-*	This is the control bar that implements basic zooming and revert capability.
-*	<p>
-*	Typically, it is used when not in edit mode, and when no orders can be entered.
-*
-*/
-public class ViewControlBar extends ControlBar
-{
-	// i18n resources
-	private static final String I18N_ZOOMIN_TIP		= "ViewConBar.button.zoomin.tooltip";
-	private static final String I18N_ZOOMOUT_TIP	= "ViewConBar.button.zoomout.tooltip";
-	private static final String I18N_FIT_TIP		= "ViewConBar.button.fit.tooltip";
-	
-	// key descriptors
-	private static final char KEY_ZOOM_IN		= '+';
-	private static final char KEY_ZOOM_OUT		= '-';
-	private static final char KEY_FIT			= '=';
-	
-	// icons
-	private static final String ICON_ZOOM_IN 	= "resource/common/icons/24x24/stock_zoom_in_24.png";
-	private static final String ICON_ZOOM_OUT 	= "resource/common/icons/24x24/stock_zoom_out_24.png";
-	private static final String ICON_ZOOM_FIT	= "resource/common/icons/24x24/stock_zoom_fit_24.png";
-	
-	
-	
-	// instance variables
-	private JButton fit;
-	private JButton zoomIn;
-	private JButton zoomOut;
-	private final int keyFit;
-	private final int keyZoomIn;
-	private final int keyZoomOut;
-	
-	/** Creates the View control bar. */
-	public ViewControlBar(MapPanel mp)
-	{
-		super(mp);
-		makeLayout();
-		
-		// NULL test when we actually do IL8N
-		keyFit = KEY_FIT;
-		keyZoomIn = KEY_ZOOM_IN;
-		keyZoomOut = KEY_ZOOM_OUT;
-	}// ViewControlBar()
-	
-	/** Called when the mouse pointer enters a province */
-	public void mouseOver(MouseEvent me, Location loc)
-	{
-		if(loc == null)
-		{
-			mapPanel.statusBarUtils.setText( Utils.getLocalString(GUIOrder.NOT_IN_PROVINCE) );
-		}
-		else
-		{
-			mapPanel.statusBarUtils.displayProvinceInfo(loc);
-		}
-	}// mouseOver()
-	
-	/** Called when the mouse pointer leaves a province */
-	public void mouseOut(MouseEvent me, Location loc)
-	{
-		mapPanel.statusBarUtils.clearText();
-	}// mouseOut()
-	
-	
-	/** Handles ZoomIn / ZoomOut / Revert key functionality. */
-	public void keyPressed(DOMKeyEvent ke, Location loc)
-	{
-		int charCode = ke.getCharCode();	// note: getKeyCode() DOES NOT WORK
-		if(charCode == keyZoomIn)
-		{
-				zoomIn.doClick();
-		}
-		else if(charCode == keyZoomOut)
-		{
-				zoomOut.doClick();
-		}
-		else if(charCode == keyFit)
-		{
-				fit.doClick();
-		}
-	}// keyPressed()
-	
-	/** Add control bar icons */
-	private void makeLayout()
-	{
-		// set Zoom scale factor -- BEFORE we get the resulting actions.
-		final XJSVGCanvas canvas = mapPanel.getXJSVGCanvas();
-		canvas.setZoomScaleFactor(mapPanel.getScaleFactor());
-		
-		// This is the be-all end-all of reset transforms. It accounts
-		// for everything, and will never fail (famous last words)
-		// 
-		fit = add(new AbstractAction()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				JSVGCanvas canvas = mapPanel.getJSVGCanvas();
-				if(canvas != null)	// we are being very defensive
-				{
-					AffineTransform iat = canvas.getInitialTransform();
-					SVGSVGElement elt = canvas.getSVGDocument().getRootElement();
-					if(iat != null || elt == null) // very very defensive... but iat null check is important
-					{
-						// rescale viewbox transform to reflect viewbox size
-						Dimension vbSize = mapPanel.getScrollerSize();	// size of the canvas' scrolling container (don't include scroll bars)
-						CanvasGraphicsNode cgn = canvas.getCanvasGraphicsNode(); 
-						
-						// ViewBox.getViewTransform is essential for calculating the correct transform,
-						// AND accounting for any viewBox attribute of the root SVG element, if present.
-						AffineTransform vt = ViewBox.getViewTransform
-							(canvas.getFragmentIdentifier(), elt, vbSize.width, vbSize.height);
-						cgn.setViewingTransform(vt);
-						
-						// set rendering transform to 'unscaled'
-						AffineTransform t = AffineTransform.getScaleInstance(1,1);
-						mapPanel.getJSVGCanvas().setRenderingTransform(t);
-					}
-				}
-			}
- 		});
-		
-		fit.setIcon(Utils.getIcon(ICON_ZOOM_FIT));
-		fit.setToolTipText(Utils.getLocalString(I18N_FIT_TIP));
-		
-		addSeparator();
-		
-		zoomOut = add(canvas.getActionMap().get(JSVGCanvas.ZOOM_OUT_ACTION));
-		zoomOut.setIcon(Utils.getIcon(ICON_ZOOM_OUT));
-		zoomOut.setToolTipText(Utils.getLocalString(I18N_ZOOMOUT_TIP));
-		
-		zoomIn = add(canvas.getActionMap().get(JSVGCanvas.ZOOM_IN_ACTION));
-		zoomIn.setIcon(Utils.getIcon(ICON_ZOOM_IN));
-		zoomIn.setToolTipText(Utils.getLocalString(I18N_ZOOMIN_TIP));
-		
-	}// makeLayout()
-	
+ * View Control Bar
+ * <p>
+ * This is the control bar that implements basic zooming and revert capability.
+ * <p>
+ * Typically, it is used when not in edit mode, and when no orders can be entered.
+ */
+public class ViewControlBar extends ControlBar {
+    // i18n resources
+    private static final String I18N_ZOOMIN_TIP = "ViewConBar.button.zoomin.tooltip";
+    private static final String I18N_ZOOMOUT_TIP = "ViewConBar.button.zoomout.tooltip";
+    private static final String I18N_FIT_TIP = "ViewConBar.button.fit.tooltip";
+
+    // key descriptors
+    private static final char KEY_ZOOM_IN = '+';
+    private static final char KEY_ZOOM_OUT = '-';
+    private static final char KEY_FIT = '=';
+
+    // icons
+    private static final String ICON_ZOOM_IN = "resource/common/icons/24x24/stock_zoom_in_24.png";
+    private static final String ICON_ZOOM_OUT = "resource/common/icons/24x24/stock_zoom_out_24.png";
+    private static final String ICON_ZOOM_FIT = "resource/common/icons/24x24/stock_zoom_fit_24.png";
+    private final int keyFit;
+    private final int keyZoomIn;
+    private final int keyZoomOut;
+    // instance variables
+    private JButton fit;
+    private JButton zoomIn;
+    private JButton zoomOut;
+
+    /**
+     * Creates the View control bar.
+     */
+    public ViewControlBar(MapPanel mp) {
+        super(mp);
+        makeLayout();
+
+        // NULL test when we actually do IL8N
+        keyFit = KEY_FIT;
+        keyZoomIn = KEY_ZOOM_IN;
+        keyZoomOut = KEY_ZOOM_OUT;
+    }// ViewControlBar()
+
+    /**
+     * Called when the mouse pointer enters a province
+     */
+    public void mouseOver(MouseEvent me, Location loc) {
+        if (loc == null) {
+            mapPanel.statusBarUtils.setText(Utils.getLocalString(GUIOrder.NOT_IN_PROVINCE));
+        } else {
+            mapPanel.statusBarUtils.displayProvinceInfo(loc);
+        }
+    }// mouseOver()
+
+    /**
+     * Called when the mouse pointer leaves a province
+     */
+    public void mouseOut(MouseEvent me, Location loc) {
+        mapPanel.statusBarUtils.clearText();
+    }// mouseOut()
+
+
+    /**
+     * Handles ZoomIn / ZoomOut / Revert key functionality.
+     */
+    public void keyPressed(DOMKeyEvent ke, Location loc) {
+        int charCode = ke.getCharCode();    // note: getKeyCode() DOES NOT WORK
+        if (charCode == keyZoomIn) {
+            zoomIn.doClick();
+        } else if (charCode == keyZoomOut) {
+            zoomOut.doClick();
+        } else if (charCode == keyFit) {
+            fit.doClick();
+        }
+    }// keyPressed()
+
+    /**
+     * Add control bar icons
+     */
+    private void makeLayout() {
+        // set Zoom scale factor -- BEFORE we get the resulting actions.
+        final XJSVGCanvas canvas = mapPanel.getXJSVGCanvas();
+        canvas.setZoomScaleFactor(mapPanel.getScaleFactor());
+
+        // This is the be-all end-all of reset transforms. It accounts
+        // for everything, and will never fail (famous last words)
+        //
+        fit = add(new AbstractAction() {
+            public void actionPerformed(ActionEvent evt) {
+                JSVGCanvas canvas = mapPanel.getJSVGCanvas();
+                if (canvas != null)    // we are being very defensive
+                {
+                    AffineTransform iat = canvas.getInitialTransform();
+                    SVGSVGElement elt = canvas.getSVGDocument().getRootElement();
+                    if (iat != null || elt == null) // very very defensive... but iat null check is important
+                    {
+                        // rescale viewbox transform to reflect viewbox size
+                        Dimension vbSize = mapPanel.getScrollerSize();    // size of the canvas' scrolling container (don't include scroll bars)
+                        CanvasGraphicsNode cgn = canvas.getCanvasGraphicsNode();
+
+                        // ViewBox.getViewTransform is essential for calculating the correct transform,
+                        // AND accounting for any viewBox attribute of the root SVG element, if present.
+                        AffineTransform vt = ViewBox.getViewTransform
+                                (canvas.getFragmentIdentifier(), elt, vbSize.width, vbSize.height);
+                        cgn.setViewingTransform(vt);
+
+                        // set rendering transform to 'unscaled'
+                        AffineTransform t = AffineTransform.getScaleInstance(1, 1);
+                        mapPanel.getJSVGCanvas().setRenderingTransform(t);
+                    }
+                }
+            }
+        });
+
+        fit.setIcon(Utils.getIcon(ICON_ZOOM_FIT));
+        fit.setToolTipText(Utils.getLocalString(I18N_FIT_TIP));
+
+        addSeparator();
+
+        zoomOut = add(canvas.getActionMap().get(JSVGCanvas.ZOOM_OUT_ACTION));
+        zoomOut.setIcon(Utils.getIcon(ICON_ZOOM_OUT));
+        zoomOut.setToolTipText(Utils.getLocalString(I18N_ZOOMOUT_TIP));
+
+        zoomIn = add(canvas.getActionMap().get(JSVGCanvas.ZOOM_IN_ACTION));
+        zoomIn.setIcon(Utils.getIcon(ICON_ZOOM_IN));
+        zoomIn.setToolTipText(Utils.getLocalString(I18N_ZOOMIN_TIP));
+
+    }// makeLayout()
+
 }// class ViewControlBar
