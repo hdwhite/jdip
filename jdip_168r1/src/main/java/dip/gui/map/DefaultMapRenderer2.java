@@ -178,7 +178,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     protected final HashMap<String, Node> layerMap;        // layers to which we render; keyed by LAYER; includes label layers
     private final HashMap<Object, Object> renderSettings;    // control rendering options.
     private final HashMap<String, Location> locMap;            // maps multicoastal province ids -> Location objects for multicoastal provinces
-    private final HashMap<Power, SVGElement>[] powerOrderMap;
+    private final ArrayList<HashMap<Power, SVGElement>> powerOrderMaps;
     private final dip.world.Map worldMap;    // World Map reference
     private final Province[] provinces;
     private final Power[] powers;
@@ -211,9 +211,9 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
         locMap = new HashMap<>(17);
 
         // power order hashmap (now with z-axis) setup
-        powerOrderMap = new HashMap[Z_LAYER_NAMES.length];
-        for (int i = 0; i < powerOrderMap.length; i++) {
-            powerOrderMap[i] = new HashMap<>(11);
+        powerOrderMaps = new ArrayList<>();
+        for (int i = 0; i < Z_LAYER_NAMES.length; i++) {
+            powerOrderMaps.add(new HashMap<>(11));
         }
 
         // set default render settings
@@ -525,7 +525,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     /**
      * Creates SVG G elements (one for each power) under the OrderLayer
      * SVG G element layer. Maps each Power to the SVGGElement that
-     * corresponds, in powerOrderMap.
+     * corresponds, in powerOrderMaps.
      */
     private void createDOMOrderTree() {
         RunnableQueue rq = getRunnableQueue();
@@ -534,7 +534,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
                 public void run() {
                     SVGGElement orderLayer = (SVGGElement) layerMap.get(LAYER_ORDERS);
 
-                    for (int z = (powerOrderMap.length - 1); z >= 0; z--) {
+                    for (int z = (powerOrderMaps.size() - 1); z >= 0; z--) {
                         // determine which order layer we should use.
                         if (z == 0) {
                             // special case: this has its own explicit group in the SVG file
@@ -573,7 +573,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
 
                             gElement.setAttributeNS(null, SVGConstants.SVG_ID_ATTRIBUTE, sb.toString());
                             orderLayer.appendChild(gElement);
-                            powerOrderMap[z].put(powers[i], gElement);
+                            powerOrderMaps.get(z).put(powers[i], gElement);
                         }
                     }
                 }
@@ -602,7 +602,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
      * then given z-order. z : [0,2]
      */
     private SVGGElement getPowerSVGGElement(Power p, int z) {
-        return (SVGGElement) powerOrderMap[z].get(p);
+        return (SVGGElement) powerOrderMaps.get(z).get(p);
     }// getPowerSVGGElement()
 
 
@@ -611,7 +611,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
      * This manipulates all layers for a given power.
      */
     private void setPowerOrderVisibility(Power p, boolean isVisible) {
-        for (int i = 0; i < powerOrderMap.length; i++) {
+        for (int i = 0; i < powerOrderMaps.size(); i++) {
             setElementVisibility(getPowerSVGGElement(p, i), isVisible);
         }
     }// setPowerOrderVisibility()
@@ -645,7 +645,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
      * Power layer G parent elements remain unaltered.
      */
     protected void unsyncRemoveAllOrdersFromDOM() {
-        for (int z = 0; z < powerOrderMap.length; z++) {
+        for (int z = 0; z < powerOrderMaps.size(); z++) {
             for (int i = 0; i < powers.length; i++) {
                 SVGGElement powerNode = getPowerSVGGElement(powers[i], z);
 
