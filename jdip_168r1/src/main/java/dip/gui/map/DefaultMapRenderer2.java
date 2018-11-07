@@ -28,7 +28,14 @@ import dip.gui.order.GUIOrder;
 import dip.gui.order.GUIOrder.MapInfo;
 import dip.misc.Log;
 import dip.order.Orderable;
-import dip.world.*;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Phase;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.TurnState;
+import dip.world.Unit;
 import dip.world.variant.data.SymbolPack;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.util.CSSConstants;
@@ -41,7 +48,11 @@ import org.w3c.dom.svg.SVGElement;
 import org.w3c.dom.svg.SVGGElement;
 
 import java.awt.geom.Point2D;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 
@@ -211,7 +222,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
         locMap = new HashMap<>(17);
 
         // power order hashmap (now with z-axis) setup
-        powerOrderMaps = new ArrayList<>();
+        powerOrderMaps = new ArrayList<>(Z_LAYER_NAMES.length);
         for (int i = 0; i < Z_LAYER_NAMES.length; i++) {
             powerOrderMaps.add(new HashMap<>(11));
         }
