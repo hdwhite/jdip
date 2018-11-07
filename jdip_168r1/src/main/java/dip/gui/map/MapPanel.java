@@ -694,7 +694,7 @@ public class MapPanel extends JPanel {
      * the variant-pack jar's actually works. This fixes bug #900714.
      */
     private Document transform(final Document inDoc, final String uri)
-            throws TransformerException, TransformerConfigurationException, IOException {
+            throws TransformerException, IOException {
         TransformerFactory tFactory = TransformerFactory.newInstance();
 
         Transformer transformer = tFactory.newTransformer();
