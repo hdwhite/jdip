@@ -66,12 +66,11 @@ public class ValidationOptions implements Serializable, Cloneable {
         clearOptions();
     }// ValidationOptions()
 
-    /**
-     * Copy constructor
-     */
-    public ValidationOptions(ValidationOptions oldOpts) {
-        this();
-        this.map = new Hashtable<>(oldOpts.map);
+
+    public ValidationOptions copy() {
+        ValidationOptions copy = new ValidationOptions();
+        copy.map = new Hashtable<>(this.map);
+        return copy;
     }
 
 
