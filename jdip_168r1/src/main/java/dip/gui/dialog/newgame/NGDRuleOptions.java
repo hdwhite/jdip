@@ -303,7 +303,7 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
     /**
      * Private class to encapsulate an Option and have it display the il8n name in a JList
      */
-    private class OptListItem extends Object {
+    private class OptListItem {
         private Option option;
 
         public OptListItem(Option option) {

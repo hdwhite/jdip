@@ -34,7 +34,7 @@ import java.io.Serializable;
  * for debugging. To obtain a properly-formatted localized message, use
  * getMessage().
  */
-public class Result extends Object implements Serializable, Comparable<Result> {
+public class Result implements Serializable, Comparable<Result> {
     // constants
     private static final OrderFormatOptions DEFAULT_OFO = OrderFormatOptions.createDefault();
 

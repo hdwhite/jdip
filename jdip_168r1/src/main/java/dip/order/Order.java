@@ -60,7 +60,7 @@ import java.util.ArrayList;
  * which can be used to 'upgrade' objects as needed. These fields
  * are for future use, but their presence enables future upgradibility.
  */
-public abstract class Order extends Object implements Orderable, java.io.Serializable {
+public abstract class Order implements Orderable, java.io.Serializable {
     protected static final String ORD_VAL_BORDER = "ORD_VAL_BORDER";
     // resource keys
     private static final String ORD_VAL_NOUNIT = "ORD_VAL_NOUNIT";

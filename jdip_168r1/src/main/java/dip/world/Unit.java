@@ -146,7 +146,7 @@ public class Unit implements java.io.Serializable, Cloneable {
      * Type constans should be used; new Type objects should not be created
      * unless the game concepts are being extended.
      */
-    public static class Type extends Object implements java.io.Serializable {
+    public static class Type implements java.io.Serializable {
         // internal i18n key constants
         private static final String UNIT_TYPE_PREFIX = "unit.type.";
         private static final String UNIT_TYPE_BRIEF_SUFFIX = ".brief";

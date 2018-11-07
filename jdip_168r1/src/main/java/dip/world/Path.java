@@ -43,7 +43,7 @@ import java.util.List;
  * This class is undergoing a transition, and most of the current method will probably
  * be replaced by the static methods based on findAllSeaPaths().
  */
-public class Path extends Object {
+public class Path {
 
     private final Position position;
     private final Adjudicator adjudicator;
