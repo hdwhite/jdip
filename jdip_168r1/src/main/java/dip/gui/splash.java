@@ -74,7 +74,7 @@ public final class splash {
         // hence the loose coupling.
         try {
             Class cf = Class.forName("dip.gui.ClientFrame");
-            Method m = cf.getMethod("main", String[].class);
+            @SuppressWarnings("unchecked") Method m = cf.getMethod("main", String[].class);
             Object[] params = new Object[]{args};
             m.invoke(null, params);
             //time = (System.currentTimeMillis() - time);
