@@ -86,17 +86,11 @@ public class RPConvert
 			File inFile = new File(in);
 			new RPConvert(inFile);
 		}
-		catch(IOException e)
+		catch(IOException | NumberFormatException e)
 		{
 			System.err.println(e.getMessage());
 			System.exit(1);
-		}
-		catch(NumberFormatException e2)
-		{
-			System.err.println(e2.getMessage());
-			System.exit(1);
-		}
-		catch(Throwable t)
+		} catch(Throwable t)
 		{
 			t.printStackTrace();
 			System.exit(1);

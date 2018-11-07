@@ -74,12 +74,9 @@ public abstract class FileDropTargetListener extends DropTargetAdapter {
                     dtde.dropComplete(true);
                     return;
                 }
-            } catch (UnsupportedFlavorException e) {
+            } catch (UnsupportedFlavorException | IOException e) {
                 // fail silently
                 System.out.println(e);
-            } catch (IOException e2) {
-                // fail silently
-                System.out.println(e2);
             }
         }
 
