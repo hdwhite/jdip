@@ -263,7 +263,7 @@ public class GUIMove extends Move implements GUIOrder {
     public void setParam(Parameter param, Object value) {
         if (param == BY_CONVOY) {
             if (value instanceof Boolean) {
-                _isViaConvoy = ((Boolean) value).booleanValue();
+                _isViaConvoy = (Boolean) value;
             } else {
                 throw new IllegalArgumentException();
             }
@@ -278,7 +278,7 @@ public class GUIMove extends Move implements GUIOrder {
      */
     public Object getParam(Parameter param) {
         if (param == BY_CONVOY) {
-            return Boolean.valueOf(isViaConvoy());
+            return isViaConvoy();
         } else {
             throw new IllegalArgumentException();
         }

@@ -470,7 +470,7 @@ public class OrderFormat {
                 if (tokens[1].startsWith("?")) {
                     boolean isTrue = false;
                     if (out instanceof Boolean) {
-                        isTrue = ((Boolean) out).booleanValue();
+                        isTrue = (Boolean) out;
                     } else {
                         isTrue = (out != null);
                     }

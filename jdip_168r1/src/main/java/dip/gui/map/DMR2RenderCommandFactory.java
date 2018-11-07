@@ -261,7 +261,7 @@ public class DMR2RenderCommandFactory extends RenderCommandFactory {
         public void execute() {
             Log.println("DMR2RCF::RCSetDisplaySC()");
             DefaultMapRenderer2 dmr2 = (DefaultMapRenderer2) mr;
-            dmr2.setRenderSetting(MapRenderer2.KEY_SHOW_SUPPLY_CENTERS, Boolean.valueOf(value));
+            dmr2.setRenderSetting(MapRenderer2.KEY_SHOW_SUPPLY_CENTERS, value);
             dmr2.setElementVisibility((SVGElement) dmr2.layerMap.get(DefaultMapRenderer2.LAYER_SC), value);
             dmr2.unsyncUpdateAllProvinces();    // update provinces, but not orders
         }// execute()
@@ -276,7 +276,7 @@ public class DMR2RenderCommandFactory extends RenderCommandFactory {
         public void execute() {
             Log.println("DMR2RCF::RCSetDisplayUnits()");
             DefaultMapRenderer2 dmr2 = (DefaultMapRenderer2) mr;
-            dmr2.setRenderSetting(MapRenderer2.KEY_SHOW_UNITS, Boolean.valueOf(value));
+            dmr2.setRenderSetting(MapRenderer2.KEY_SHOW_UNITS, value);
             dmr2.setElementVisibility((SVGElement) dmr2.layerMap.get(DefaultMapRenderer2.LAYER_UNITS), value);
         }// execute()
     }// nested class RCSetDisplayUnits
@@ -290,7 +290,7 @@ public class DMR2RenderCommandFactory extends RenderCommandFactory {
         public void execute() {
             Log.println("DMR2RCF::RCSetDisplayDislodgedUnits()");
             DefaultMapRenderer2 dmr2 = (DefaultMapRenderer2) mr;
-            dmr2.setRenderSetting(MapRenderer2.KEY_SHOW_DISLODGED_UNITS, Boolean.valueOf(value));
+            dmr2.setRenderSetting(MapRenderer2.KEY_SHOW_DISLODGED_UNITS, value);
             dmr2.setElementVisibility((SVGElement) dmr2.layerMap.get(DefaultMapRenderer2.LAYER_DISLODGED_UNITS), value);
         }// execute()
     }// nested class RCSetDisplayDislodgedUnits
@@ -304,7 +304,7 @@ public class DMR2RenderCommandFactory extends RenderCommandFactory {
         public void execute() {
             Log.println("DMR2RCF::RCSetDisplayUnordered()");
             DefaultMapRenderer2 dmr2 = (DefaultMapRenderer2) mr;
-            dmr2.setRenderSetting(MapRenderer2.KEY_SHOW_UNORDERED, Boolean.valueOf(value));
+            dmr2.setRenderSetting(MapRenderer2.KEY_SHOW_UNORDERED, value);
             dmr2.unsyncUpdateAllProvinces();    // update provinces, but not orders
         }// execute()
     }// nested class RCSetDisplayUnordered
@@ -331,7 +331,7 @@ public class DMR2RenderCommandFactory extends RenderCommandFactory {
         public void execute() {
             Log.println("DMR2RCF::RCShowMap()");
             DefaultMapRenderer2 dmr2 = (DefaultMapRenderer2) mr;
-            dmr2.setRenderSetting(MapRenderer2.KEY_SHOW_MAP, Boolean.valueOf(value));
+            dmr2.setRenderSetting(MapRenderer2.KEY_SHOW_MAP, value);
             SVGElement mapLayer = (SVGElement) dmr2.layerMap.get(DefaultMapRenderer2.LAYER_MAP);
             assert (mapLayer != null);
             dmr2.setElementVisibility(mapLayer, value);

@@ -403,7 +403,7 @@ public class MapMetadata {
      * Throws an IllegalArgumentException if parameter is not found.
      */
     public float getOrderParamFloat(String orderElement, String attribute) {
-        return ((Float) getOrderParam(orderElement, attribute)).floatValue();
+        return (Float) getOrderParam(orderElement, attribute);
     }// getOrderParamFloat()
 
 
@@ -416,7 +416,7 @@ public class MapMetadata {
      * orderElement is a order element constant (e.g., EL_HOLD, EL_MOVE).<br>
      */
     public float getOrderRadius(String orderElement, String symbolName) {
-        final float deltaRadius = ((Float) getOrderParam(orderElement, ATT_DELTA_RADIUS)).floatValue();
+        final float deltaRadius = (Float) getOrderParam(orderElement, ATT_DELTA_RADIUS);
         return getSymbolSize(symbolName).getRadius(deltaRadius);
     }// getOrderRadius()
 
@@ -1002,7 +1002,7 @@ public class MapMetadata {
             this.w = (String) tmp[0];
             this.h = (String) tmp[1];
             this.r = (String) tmp[2];
-            this.rFloat = ((Float) tmp[3]).floatValue();
+            this.rFloat = (Float) tmp[3];
             this.units = (String) tmp[4];
         }// SymbolSize()
 
@@ -1060,11 +1060,11 @@ public class MapMetadata {
         private Object[] makeValues(String w, String h, float scale, Element el)
                 throws MapException {
             Object[] obj = parseDim(w, el, ATT_WIDTH);
-            float width = ((Float) obj[0]).floatValue();
+            float width = (Float) obj[0];
             String widthUnits = (String) obj[1];
 
             obj = parseDim(h, el, ATT_HEIGHT);
-            float height = ((Float) obj[0]).floatValue();
+            float height = (Float) obj[0];
             String heightUnits = (String) obj[1];
 
             // check that units are identical

@@ -651,7 +651,7 @@ public class PersistenceManager {
             if (Utils.isOSX()) {
                 // aqua-specific. Draws dot in close button.
                 // http://developer.apple.com/qa/qa2001/qa1146.html
-                clientFrame.getRootPane().putClientProperty(WINDOW_MODIFIED, Boolean.valueOf(isChanged));
+                clientFrame.getRootPane().putClientProperty(WINDOW_MODIFIED, isChanged);
             } else {
                 if (isChanged) {
                     title.append(' ');

@@ -315,7 +315,7 @@ public class HTMLFormat {
         Object obj = map.get(key);
         if (obj instanceof Integer) {
             try {
-                return ((Integer) obj).intValue();
+                return (Integer) obj;
             } catch (NumberFormatException e) {
             }
         }
