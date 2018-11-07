@@ -253,7 +253,7 @@ public class AIDemo {
      * <p>
      * We return an Array of Lists (a somewhat unusual construct...)
      */
-    private List[] createOrders(Map map, Position pos) {
+    private void createOrders(Map map, Position pos) {
         // get the OrderFactory. The default order factory is OrderFactory.getDefault().
         OrderFactory orderFactory = OrderFactory.getDefault();
 
@@ -292,21 +292,21 @@ public class AIDemo {
 
         // we're just making 2 sets of german orders
         //
-        List<Order>[] germanOrders = new List[2];
+        List<Order> germanOrders1 = new ArrayList<>();
 
         // German Orders: 1
         // ================
         // 	A pru-war
         // 	A sil S A pru-war
         //	A gal S A pru-war
-        germanOrders[0] = new ArrayList<>();
-        germanOrders[0].add(orderFactory.createMove(
+        germanOrders1 = new ArrayList<>();
+        germanOrders1.add(orderFactory.createMove(
                 germany,
                 makeLocation(pos, map.getProvince("pru")),
                 Unit.Type.ARMY,
                 makeLocation(pos, map.getProvince("war"))
         ));
-        germanOrders[0].add(orderFactory.createSupport(
+        germanOrders1.add(orderFactory.createSupport(
                 germany,
                 makeLocation(pos, map.getProvince("sil")),
                 Unit.Type.ARMY,
@@ -315,7 +315,7 @@ public class AIDemo {
                 Unit.Type.ARMY,
                 makeLocation(pos, map.getProvince("war"))
         ));
-        germanOrders[0].add(orderFactory.createSupport(
+        germanOrders1.add(orderFactory.createSupport(
                 germany,
                 makeLocation(pos, map.getProvince("gal")),
                 Unit.Type.ARMY,
@@ -331,8 +331,9 @@ public class AIDemo {
         // 	A pru S A sil-war
         // 	A sil-war
         //	A gal S A sil-war
-        germanOrders[1] = new ArrayList<>();
-        germanOrders[1].add(orderFactory.createSupport(
+        List<Order> germanOrders2 = new ArrayList<>();
+        germanOrders2 = new ArrayList<>();
+        germanOrders2.add(orderFactory.createSupport(
                 germany,
                 makeLocation(pos, map.getProvince("pru")),
                 Unit.Type.ARMY,
@@ -341,13 +342,13 @@ public class AIDemo {
                 Unit.Type.ARMY,
                 makeLocation(pos, map.getProvince("war"))
         ));
-        germanOrders[1].add(orderFactory.createMove(
+        germanOrders2.add(orderFactory.createMove(
                 germany,
                 makeLocation(pos, map.getProvince("sil")),
                 Unit.Type.ARMY,
                 makeLocation(pos, map.getProvince("war"))
         ));
-        germanOrders[1].add(orderFactory.createSupport(
+        germanOrders2.add(orderFactory.createSupport(
                 germany,
                 makeLocation(pos, map.getProvince("gal")),
                 Unit.Type.ARMY,
@@ -358,18 +359,8 @@ public class AIDemo {
         ));
 
 
-        // create combined orders sets for all powers
-        //
-        List<Order>[] orderLists = new List[2];
-        for (int i = 0; i < orderLists.length; i++) {
-            orderLists[i] = new ArrayList<>();
-            orderLists[i].addAll(russianOrders);
-            orderLists[i].addAll(germanOrders[i]);
-        }
 
-        System.out.println("Created " + orderLists.length + " sets of orders to evaluate.");
 
-        return orderLists;
     }// createOrders()
 
 
