@@ -34,7 +34,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
 
@@ -774,7 +773,7 @@ public class ErrorDialog extends TextViewer
 	private static String encode(String in)
 	throws UnsupportedEncodingException
 	{
-		return URLEncoder.encode(in, StandardCharsets.UTF_8);
+        return URLEncoder.encode(in, "UTF-8");
 	}// encode()
 	
 	
