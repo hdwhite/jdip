@@ -354,8 +354,7 @@ public class Phase implements java.io.Serializable, Comparable {
     /**
      * Reconstitute a Phase object
      */
-    protected Object readResolve()
-            throws java.io.ObjectStreamException {
+    protected Object readResolve() {
         this.orderIdx = deriveOrderIdx(this.seasonType, this.phaseType);
         return this;
     }// readResolve()
@@ -536,8 +535,7 @@ public class Phase implements java.io.Serializable, Comparable {
         /**
          * Resolves the serialized reference into a constant
          */
-        protected Object readResolve()
-                throws java.io.ObjectStreamException {
+        protected Object readResolve() {
             SeasonType st = null;
 
             if (position == POS_SPRING) {
@@ -748,8 +746,7 @@ public class Phase implements java.io.Serializable, Comparable {
         /**
          * Resolves a serialized Phase object into a constant reference
          */
-        protected Object readResolve()
-                throws java.io.ObjectStreamException {
+        protected Object readResolve() {
             PhaseType pt = null;
 
             if (constName.equalsIgnoreCase(CONST_ADJUSTMENT)) {

@@ -942,8 +942,7 @@ public class OrderParser {
      * the error message is correct.
      */
     private Order createDisbandOrRemove(OrderFactory orderFactory, TurnState ts,
-                                        boolean disbandPreferred, Power power, Location src, Unit.Type unitType)
-            throws OrderException {
+                                        boolean disbandPreferred, Power power, Location src, Unit.Type unitType) {
         if (ts.getPhase().getPhaseType() == Phase.PhaseType.RETREAT) {
             return orderFactory.createDisband(power, src, unitType);
         } else if (ts.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT) {
