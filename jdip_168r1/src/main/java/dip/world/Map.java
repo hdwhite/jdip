@@ -505,7 +505,7 @@ public class Map implements Serializable {
 
             // sort array from longest entries to shortest. This
             // eliminates errors in partial replacements.
-            Arrays.sort(wsNames, new Comparator<String>() {
+            Arrays.sort(wsNames, new Comparator<>() {
                 // longer strings are more negative, thus rise to top
                 public int compare(String o1, String o2) {
                     return (o2.length() - o1.length());
