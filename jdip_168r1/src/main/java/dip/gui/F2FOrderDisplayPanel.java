@@ -478,7 +478,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
 
             synchronized (f2fs) {
                 currentPower = f2fs.getCurrentPower();
-                submittedMap = (HashMap) f2fs.submittedMap.clone();
+                submittedMap = new HashMap<>(f2fs.submittedMap);
             }
         }// F2FState()
 

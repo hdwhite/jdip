@@ -76,12 +76,7 @@ public class ValidationOptionsDialog extends HeaderDialog {
         this.oldOpts = (oldOptions == null) ? (new ValidationOptions()) : oldOptions;
 
         // clone old options into new validation options.
-        try {
-            valOpts = (ValidationOptions) oldOpts.clone();
-        } catch (CloneNotSupportedException e) {
-            System.err.println(e);    // print error; should not occur
-            valOpts = oldOpts;        // we'll continue, but no protection of old data.
-        }
+            valOpts = new ValidationOptions(oldOpts);
 
         // description setup
         description = Utils.createTextLabel(true);

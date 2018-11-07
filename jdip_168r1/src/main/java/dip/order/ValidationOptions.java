@@ -67,22 +67,13 @@ public class ValidationOptions implements Serializable, Cloneable {
     }// ValidationOptions()
 
     /**
-     * for clone():
-     * <p>
-     * The hashtable is cloned, using hashtable.clone(). Althoug this is a shallow
-     * copy, keys are OK to be shallow, and so are values, since all values are constants
-     * anyway. The only important thing is that a new hashtable is made, that
-     * is similar to the old hashtable.
-     * <p>
-     * <p>
-     * only data in the hashtable changes between objects for a given validationOptions
+     * Copy constructor
      */
-    public Object clone()
-            throws CloneNotSupportedException {
-        ValidationOptions vopt = (ValidationOptions) super.clone();
-        vopt.map = (Hashtable) this.map.clone();
-        return vopt;
-    }// clone()
+    public ValidationOptions(ValidationOptions oldOpts) {
+        this();
+        this.map = new Hashtable<>(oldOpts.map);
+    }
+
 
 
     // Query methods
