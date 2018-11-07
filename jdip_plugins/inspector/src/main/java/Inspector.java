@@ -233,7 +233,7 @@ public class Inspector implements Tool {
         subMenu.add(item);
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                StringBuffer sb = new StringBuffer(512);
+                StringBuilder sb = new StringBuilder(512);
                 sb.append("Current Mode: ");
                 sb.append(clientFrame.getMode());
                 sb.append("\n\n");
@@ -322,7 +322,7 @@ public class Inspector implements Tool {
         final Position pos = ts.getPosition();
         final Province[] allProvinces = pos.getProvinces();
 
-        StringBuffer sb = new StringBuffer(1024);
+        StringBuilder sb = new StringBuilder(1024);
         sb.append("VARIANT_ALL ");
         sb.append(w.getVariantInfo().getVariantName());
         sb.append("\n");

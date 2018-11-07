@@ -90,7 +90,7 @@ public class OrderResult extends Result {
      * For debugging
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(180);
+        StringBuilder sb = new StringBuilder(180);
         sb.append(power);
         sb.append(": [");
         sb.append(resultType);

@@ -142,7 +142,7 @@ public class BouncedResult extends OrderResult {
      * Primarily for debugging.
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
         sb.append(super.toString());
 
         sb.append("Bounced with: ");

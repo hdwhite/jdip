@@ -165,7 +165,7 @@ public class MultiOrderEntry {
                     nOrders - nFailed);
 
             // order text, formatted with CSS
-            StringBuffer sb = new StringBuffer(4096);
+            StringBuilder sb = new StringBuilder(4096);
 
             for (int i = 0; i < exList.size(); i++) {
                 // failed order
@@ -318,7 +318,7 @@ public class MultiOrderEntry {
             throw new IllegalArgumentException();
         }
 
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
 
         for (int i = start; i < end; i++) {
             sb.append(tokens[i]);

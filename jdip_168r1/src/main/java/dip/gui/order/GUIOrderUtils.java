@@ -308,7 +308,7 @@ final class GUIOrderUtils {
         element.setAttributeNS(null, CSSConstants.CSS_STROKE_PROPERTY, mmd.getPowerColor(power));
         String filter = mmd.getOrderParamString(mmdOrderElementName, MapMetadata.ATT_FILTERID);
         if (filter.length() > 0) {
-            StringBuffer sb = new StringBuffer(filter.length() + 6);
+            StringBuilder sb = new StringBuilder(filter.length() + 6);
             sb.append("url(#");
             sb.append(filter);
             sb.append(')');
@@ -324,7 +324,7 @@ final class GUIOrderUtils {
     public static void makeStyled(SVGElement[] elements, MapMetadata mmd, String mmdOrderElementName, Power power) {
         String filter = mmd.getOrderParamString(mmdOrderElementName, MapMetadata.ATT_FILTERID);
         if (filter.length() > 0) {
-            StringBuffer sb = new StringBuffer(filter.length() + 6);
+            StringBuilder sb = new StringBuilder(filter.length() + 6);
             sb.append("url(#");
             sb.append(filter);
             sb.append(')');

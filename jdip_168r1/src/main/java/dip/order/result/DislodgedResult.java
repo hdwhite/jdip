@@ -153,7 +153,7 @@ public class DislodgedResult extends OrderResult {
         }
 
         // create retreat list
-        StringBuffer retreats = new StringBuffer(128);
+        StringBuilder retreats = new StringBuilder(128);
         if (retreatLocations != null) {
             for (int i = 0; i < retreatLocations.length; i++) {
                 retreats.append(' ');

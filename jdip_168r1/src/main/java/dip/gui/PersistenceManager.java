@@ -617,7 +617,7 @@ public class PersistenceManager {
      * World object may not yet be available in ClientFrame; if not, can specify it here (or null)
      */
     private void setTitle(World localWorld) {
-        StringBuffer title = new StringBuffer(128);
+        StringBuilder title = new StringBuilder(128);
         title.append(ClientFrame.getProgramName());
 
         // if no file is open, we shouldn't display a gamename/filename
@@ -780,7 +780,7 @@ public class PersistenceManager {
      * Assumes current World/TurnState are not null.
      */
     public String getSuggestedExportName() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
 
         // get prefix
         sb.append(getSuggestedSaveName());

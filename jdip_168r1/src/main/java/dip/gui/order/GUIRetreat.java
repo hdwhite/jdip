@@ -375,7 +375,7 @@ public class GUIRetreat extends Retreat implements GUIOrder {
         if (retreatLocs.length == 0) {
             throw new IllegalStateException();
         } else {
-            StringBuffer tmp = new StringBuffer(64);
+            StringBuilder tmp = new StringBuilder(64);
             tmp.append(Utils.getLocalString(VALID_RETREAT_LOCS));
 
             tmp.append(retreatLocs[0].getProvince().getShortName());

@@ -393,7 +393,7 @@ public class Variant implements Cloneable, Comparable<Variant> {
         }
 
         // create list of powers
-        StringBuffer sb = new StringBuffer(512);
+        StringBuilder sb = new StringBuilder(512);
         for (int i = 0; i < powers.length; i++) {
             if (powers[i].isActive()) {
                 sb.append(powers[i].getName());
@@ -447,7 +447,7 @@ public class Variant implements Cloneable, Comparable<Variant> {
      * For debugging only!
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
         sb.append(this.getClass().getName());
         sb.append('[');
         sb.append("name=");

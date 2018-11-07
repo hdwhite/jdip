@@ -358,7 +358,7 @@ public final class Coast implements java.io.Serializable {
                         }
                     } else if ((c2 == 'c' && (c1 == 'n' || c1 == 's' || c1 == 'w' || c1 == 'e' || c1 == 'x'))
                             || (c1 == 'm' && c2 == 'v')) {
-                        StringBuffer rep = new StringBuffer(4);
+                        StringBuilder rep = new StringBuilder(4);
                         rep.append('/');
                         rep.append(c1);
                         rep.append(c2);

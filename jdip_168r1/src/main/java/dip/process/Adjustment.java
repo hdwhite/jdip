@@ -270,7 +270,7 @@ public class Adjustment {
          * mostly for debugging
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("[AdjustmentInfo: units=");
             sb.append(numUnits);
             sb.append("; supplycenters=");

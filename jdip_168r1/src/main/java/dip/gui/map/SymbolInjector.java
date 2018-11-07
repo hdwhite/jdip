@@ -263,7 +263,7 @@ public class SymbolInjector {
         }
 
         // add (at end)
-        StringBuffer sb = new StringBuffer(oldCSS);
+        StringBuilder sb = new StringBuilder(oldCSS);
 
 
         sb.append("/* merged CSS from SymbolPack */\n");

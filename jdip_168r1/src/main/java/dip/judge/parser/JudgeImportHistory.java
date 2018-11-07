@@ -1251,7 +1251,7 @@ final class JudgeImportHistory {
         Matcher m = pattern.matcher(jp.getText());
 
         if (m.find()) {
-            StringBuffer sb = new StringBuffer(64);
+            StringBuilder sb = new StringBuilder(64);
             sb.append(m.group(1));
             sb.append(' ');
             sb.append(m.group(2));
@@ -1303,7 +1303,7 @@ final class JudgeImportHistory {
         Matcher m = pattern.matcher(lastTurn.getText());
 
         if (m.find()) {
-            StringBuffer sb = new StringBuffer(64);
+            StringBuilder sb = new StringBuilder(64);
             sb.append(m.group(1));
             sb.append(' ');
             sb.append(m.group(2));

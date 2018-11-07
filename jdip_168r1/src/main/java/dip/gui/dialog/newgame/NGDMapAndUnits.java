@@ -443,7 +443,7 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane {
                     } else if (text == null || "".equals(text)) {
                         description.setText("");
                     } else {
-                        StringBuffer sb = new StringBuffer(text.length() + 48);
+                        StringBuilder sb = new StringBuilder(text.length() + 48);
                         sb.append("<html><font face=\"arial,helvetica,sansserif\">");
                         sb.append(text);
                         description.setText(sb.toString());

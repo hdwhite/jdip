@@ -89,7 +89,7 @@ public class MTChecker {
      * Get properly formatted output as a String
      */
     private String getOutput() {
-        StringBuffer sb = new StringBuffer(16384);
+        StringBuilder sb = new StringBuilder(16384);
 
 
         sb.append(checkSC());
@@ -117,7 +117,7 @@ public class MTChecker {
      * Check that all Provinces that require an SC have an SC placed
      */
     private String checkSC() {
-        StringBuffer sb = new StringBuffer(1024);
+        StringBuilder sb = new StringBuilder(1024);
         sb.append("Provinces that Require an SC (for this variant):\n");
         boolean allOK = true;
 
@@ -146,7 +146,7 @@ public class MTChecker {
      * Check that unit positions (including coasts, for multi-coastal) have been set.
      */
     private String checkUnits() {
-        StringBuffer sbMain = new StringBuffer(1024);
+        StringBuilder sbMain = new StringBuilder(1024);
         sbMain.append("Provinces That Require NON-dislodged Unit Positions:\n");
         boolean allOK = true;
 
@@ -155,7 +155,7 @@ public class MTChecker {
             MapMetadata.InfoEntry ie = mmd.getInfoEntry(p);
             boolean isOK = true;
 
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("    ");
             sb.append(p.getShortName());
             sb.append(": missing unit position(s): ");
@@ -202,7 +202,7 @@ public class MTChecker {
      * For DISLODGED units.
      */
     private String checkDislodgedUnits() {
-        StringBuffer sbMain = new StringBuffer(1024);
+        StringBuilder sbMain = new StringBuilder(1024);
         sbMain.append("Provinces That Require Dislodged Unit Positions:\n");
         boolean allOK = true;
 
@@ -211,7 +211,7 @@ public class MTChecker {
             MapMetadata.InfoEntry ie = mmd.getInfoEntry(p);
             boolean isOK = true;
 
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("    ");
             sb.append(p.getShortName());
             sb.append(": missing unit position(s): ");
@@ -256,7 +256,7 @@ public class MTChecker {
      * Check that all Provinces have labels; isBrief = brief (or full) label
      */
     private String checkProvinceNames(boolean isBrief) {
-        StringBuffer sb = new StringBuffer(1024);
+        StringBuilder sb = new StringBuilder(1024);
         boolean allOK = true;
 
         for (int i = 0; i < allProvs.length; i++) {

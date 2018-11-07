@@ -118,7 +118,7 @@ public class StateWriter {
      */
     public static void displayDialog(final ClientFrame clientFrame,
                                      final TurnState ts) {
-        final StringBuffer title = new StringBuffer(64);
+        final StringBuilder title = new StringBuilder(64);
         title.append(Utils.getLocalString(DIALOG_TITLE));
         title.append(": ");
         title.append(ts.getPhase());
@@ -179,7 +179,7 @@ public class StateWriter {
      * A light highlight color for the rows is applied for readability.
      */
     private String getUnitLocationTable() {
-        StringBuffer sb = new StringBuffer(1024);
+        StringBuilder sb = new StringBuilder(1024);
         int nRows = -1;    // max # of rows
 
         sb.append("<table cellpadding=\"3\" cellspacing\"3\">");
@@ -242,7 +242,7 @@ public class StateWriter {
      * powers that are hidden (not displayable)
      */
     private String getOrders() {
-        StringBuffer sb = new StringBuffer(2048);
+        StringBuilder sb = new StringBuilder(2048);
         Position position = turnState.getPosition();
 
         for (int i = 0; i < allPowers.length; i++) {
@@ -323,7 +323,7 @@ public class StateWriter {
      * Write SC ownership information
      */
     private String getSCInfo() {
-        StringBuffer sb = new StringBuffer(1024);
+        StringBuilder sb = new StringBuilder(1024);
         sb.append("<div class=\"indent1cm\">");
 
         Position position = turnState.getPosition();
@@ -374,7 +374,7 @@ public class StateWriter {
         // ordered by powers (like SC ownership)
         boolean anyDislodged = false;
         Position position = turnState.getPosition();
-        StringBuffer sb = new StringBuffer(1024);
+        StringBuilder sb = new StringBuilder(1024);
         sb.append("<div class=\"indent1cm\">");
 
         for (int i = 0; i < allPowers.length; i++) {
@@ -427,7 +427,7 @@ public class StateWriter {
      * Write adjustment information.
      */
     private String getAdjustmentInfo() {
-        StringBuffer sb = new StringBuffer(1024);
+        StringBuilder sb = new StringBuilder(1024);
         sb.append("<div class=\"indent1cm\">");
 
         // format using format string
@@ -493,7 +493,7 @@ public class StateWriter {
             if (position.hasUnit(province)) {
                 Unit unit = position.getUnit(province);
                 List<String> uList = pmap.get(unit.getPower());
-                StringBuffer sb = new StringBuffer(16);
+                StringBuilder sb = new StringBuilder(16);
                 sb.append(unit.getType().getShortName());
                 sb.append(' ');
                 sb.append(province.getShortName());
@@ -504,7 +504,7 @@ public class StateWriter {
                 // dislodged units are underlined
                 Unit unit = position.getDislodgedUnit(province);
                 List<String> uList = pmap.get(unit.getPower());
-                StringBuffer sb = new StringBuffer(16);
+                StringBuilder sb = new StringBuilder(16);
                 sb.append("<u>");
                 sb.append(unit.getType().getShortName());
                 sb.append("</u> <u>");

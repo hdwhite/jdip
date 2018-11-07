@@ -577,7 +577,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
                                     (SVGGElement) doc.createElementNS(SVGDOMImplementation.SVG_NAMESPACE_URI,
                                             SVGConstants.SVG_G_TAG);
                             // make layer name (needs to be unique)
-                            StringBuffer sb = new StringBuffer(32);
+                            StringBuilder sb = new StringBuilder(32);
                             sb.append(getPowerName(powers[i]));
                             sb.append('_');
                             sb.append(String.valueOf(z));
@@ -1049,7 +1049,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
      * If the power starts with a number, the a capital X is prepended.
      */
     private String getUnitCSSClass(Power power) {
-        StringBuffer sb = new StringBuffer(power.getName().length() + 4);
+        StringBuilder sb = new StringBuilder(power.getName().length() + 4);
         sb.append("unit");
         sb.append(getPowerName(power));
         return sb.toString();
@@ -1065,7 +1065,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
             return SC_NOPOWER;
         }
 
-        StringBuffer sb = new StringBuffer(power.getName().length() + 2);
+        StringBuilder sb = new StringBuilder(power.getName().length() + 2);
         sb.append("sc");
         sb.append(getPowerName(power));
         return sb.toString();
@@ -1080,7 +1080,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
         String name = power.getName().toLowerCase();
 
         if (Character.isDigit(name.charAt(0))) {
-            StringBuffer sb = new StringBuffer(name.length() + 1);
+            StringBuilder sb = new StringBuilder(name.length() + 1);
             sb.append('X');
             sb.append(name);
             return sb.toString();
@@ -1397,7 +1397,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
          * For debugging only
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("elUnit=");
             sb.append(elUnit);
             sb.append(",unit=");

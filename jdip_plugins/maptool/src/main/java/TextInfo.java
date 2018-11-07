@@ -196,7 +196,7 @@ class TextInfo {
      * Print out as XML
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
 
         sb.append("<text id=\"");
         sb.append(te.getAttributeNS(null, SVGConstants.SVG_ID_ATTRIBUTE));
@@ -241,7 +241,7 @@ class TextInfo {
      */
     private String makeXForm() {
         // example: translate(1090, 710), rotate(335)
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
         sb.append("translate(");
         sb.append(MTHelper.formatFloat(x));
         sb.append(",");

@@ -174,7 +174,7 @@ public class OrderStatusPanel extends XJPanel {
             Phase tsPhase = turnState.getPhase();
 
             // set game time
-            StringBuffer sb = new StringBuffer(32);
+            StringBuilder sb = new StringBuilder(32);
             sb.append("<html><h2>");
             sb.append(tsPhase.toString());
             sb.append("</h2></html>");

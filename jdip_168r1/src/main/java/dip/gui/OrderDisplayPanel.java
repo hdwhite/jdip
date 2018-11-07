@@ -1256,7 +1256,7 @@ public class OrderDisplayPanel extends JPanel {
                 // search for unicode-arrow; replace with "->"
                 String text = this.getText();
                 if (text != null) {
-                    StringBuffer buffer = new StringBuffer(text);
+                    StringBuilder buffer = new StringBuilder(text);
                     boolean isChanged = false;
 
                     for (int i = buffer.length() - 1; i >= 0; i--) {
@@ -1362,7 +1362,7 @@ public class OrderDisplayPanel extends JPanel {
          * Return HTML formatted text to display.
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("<html>");
 
             if (isInvalid) {

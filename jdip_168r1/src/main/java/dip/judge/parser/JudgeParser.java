@@ -274,7 +274,7 @@ public class JudgeParser {
         // save the initial text; we will need this if we are a history;
         // if we are a listing, this will be null. This is all the text UP TO and EXCLUDING
         // the first "Date:" line.
-        StringBuffer initSB = new StringBuffer(2048);
+        StringBuilder initSB = new StringBuilder(2048);
 
         line = reader.readLine();
         while (line != null && count < READ_AHEAD_LENGTH) {
@@ -296,7 +296,7 @@ public class JudgeParser {
                 if (pos2 >= 0 && pos2 < 10) {
                     type = JP_TYPE_HISTORY;
 
-                    StringBuffer sb = new StringBuffer(256);
+                    StringBuilder sb = new StringBuilder(256);
                     sb.append(line);
                     sb.append('\n');
                     sb.append(line2);
@@ -390,7 +390,7 @@ public class JudgeParser {
      */
     private void makeRestOfText(String toPrepend)
             throws IOException {
-        StringBuffer sb = new StringBuffer(16384);
+        StringBuilder sb = new StringBuilder(16384);
 
         // prepend text first, if any
         if (toPrepend != null) {

@@ -141,7 +141,7 @@ public class SVGUtils {
                                                  float x, float y, MapMetadata.SymbolSize symbolSize) {
         // prepend '#' to name, if required
         if (symbolName.charAt(0) != '#') {
-            StringBuffer sb = new StringBuffer(symbolName.length() + 1);
+            StringBuilder sb = new StringBuilder(symbolName.length() + 1);
             sb.append('#');
             sb.append(symbolName);
             symbolName = sb.toString();

@@ -330,7 +330,7 @@ public class MapMetadata {
      * is not recognized. Case sensitive.
      */
     public SymbolSize getSymbolSize(String symbolName) {
-        StringBuffer sbKey = new StringBuffer(64);
+        StringBuilder sbKey = new StringBuilder(64);
         sbKey.append(EL_SYMBOLSIZE);
         sbKey.append(symbolName);
         return (SymbolSize) displayProps.get(sbKey.toString());
@@ -435,7 +435,7 @@ public class MapMetadata {
      * For filter parameter, if no filter is supplied, returns an empty string.
      */
     private Object getOrderParam(String el, String att) {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         sb.append(el);
         sb.append(att);
         Object value = displayProps.get(sb.toString());
@@ -773,7 +773,7 @@ public class MapMetadata {
             throw new MapException(el + " attribute " + att + " is missing!");
         }
 
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         sb.append(el);
         sb.append(att);
         displayProps.put(sb.toString(), value);
@@ -788,7 +788,7 @@ public class MapMetadata {
             throw new IllegalArgumentException();
         }
 
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         sb.append(el);
         sb.append(att);
         displayProps.put(sb.toString(), value);
@@ -815,7 +815,7 @@ public class MapMetadata {
             throw new MapException("Element " + el.getTagName() + " symbol named \"" + name + "\" not found in symbol pack! Case sensitive.");
         }
 
-        StringBuffer sbKey = new StringBuffer(64);
+        StringBuilder sbKey = new StringBuilder(64);
         sbKey.append(EL_SYMBOLSIZE);
         sbKey.append(name);
 

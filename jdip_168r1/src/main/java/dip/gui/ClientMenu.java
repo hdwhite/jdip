@@ -496,7 +496,7 @@ public class ClientMenu {
         numItems = array.length;
         for (int i = 0; i < array.length; i++) {
             String mnemonic = String.valueOf(i + 1);
-            StringBuffer sb = new StringBuffer(32);
+            StringBuilder sb = new StringBuilder(32);
             sb.append(mnemonic);
             sb.append(' ');
             sb.append(array[i]);
@@ -828,7 +828,7 @@ public class ClientMenu {
         int maxAccel = 12;                    // only go upto VK_F12 (pc/mac/unix usually have 12 Fn keys)
         for (int i = 0; i < powers.length; i++) {
             String mnemonic = String.valueOf(i + 1);
-            StringBuffer sb = new StringBuffer(32);
+            StringBuilder sb = new StringBuilder(32);
             sb.append(mnemonic);
             sb.append(' ');
             sb.append(powers[i].getName());

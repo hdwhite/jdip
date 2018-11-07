@@ -131,7 +131,7 @@ public class Phase implements java.io.Serializable, Comparable {
      * Displays as a short String (e.g., F1902R)
      */
     public String getBriefName() {
-        StringBuffer sb = new StringBuffer(6);
+        StringBuilder sb = new StringBuilder(6);
         sb.append(seasonType.getBriefName());
         sb.append(YEAR_FORMAT.format(yearType.getYear()));
         sb.append(phaseType.getBriefName());
@@ -142,7 +142,7 @@ public class Phase implements java.io.Serializable, Comparable {
      * Displays the phase as a String
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         sb.append(seasonType);
         sb.append(", ");
         sb.append(yearType);
@@ -340,7 +340,7 @@ public class Phase implements java.io.Serializable, Comparable {
     public static String[] getAllSeasonPhaseCombos() {
         String[] spCombos = new String[ORDER_SEASON.length];
         for (int i = 0; i < ORDER_SEASON.length; i++) {
-            StringBuffer sb = new StringBuffer(64);
+            StringBuilder sb = new StringBuilder(64);
             sb.append(ORDER_SEASON[i].toString());
             sb.append(' ');
             sb.append(ORDER_PHASE[i].toString());
@@ -799,12 +799,12 @@ public class Phase implements java.io.Serializable, Comparable {
                 return String.valueOf(year);
             } else if (year > 0) {
                 // explicitly add "AD"
-                StringBuffer sb = new StringBuffer(8);
+                StringBuilder sb = new StringBuilder(8);
                 sb.append(year);
                 sb.append(" AD");
                 return sb.toString();
             } else {
-                StringBuffer sb = new StringBuffer(8);
+                StringBuilder sb = new StringBuilder(8);
                 sb.append(-year);
                 sb.append(" BC");
                 return sb.toString();

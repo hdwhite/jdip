@@ -894,7 +894,7 @@ public class OrderParser {
         } else {
             // multiple matches! unclear. give a more detailed error message.
             // create a comma-separated list of all but the last.
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             for (int i = 0; i < (provinces.length - 1); i++) {
                 sb.append(provinces[i]);
                 sb.append(", ");

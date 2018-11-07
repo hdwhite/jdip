@@ -443,7 +443,7 @@ public class ClientFrame extends JFrame {
         String revision = Utils.getLocalStringNoEx(KEY_VERSION_REVISION);
         String language = Utils.getLocalStringNoEx(KEY_CURRENT_LANGUAGE);
 
-        StringBuffer sb = new StringBuffer(80);
+        StringBuilder sb = new StringBuilder(80);
         sb.append(VERSION_MAJOR);
         sb.append('.');
         sb.append(VERSION_MINOR);

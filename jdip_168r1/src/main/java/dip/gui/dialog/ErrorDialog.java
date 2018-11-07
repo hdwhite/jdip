@@ -754,7 +754,7 @@ public class ErrorDialog extends TextViewer {
          * on a single line.
          */
         public void add(String name, String value) {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append(((name == null) ? "" : name));
             sb.append(": ");
             sb.append(value);
@@ -770,7 +770,7 @@ public class ErrorDialog extends TextViewer {
             if (list.isEmpty()) {
                 return "";
             } else {
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 sb.append("\n------ Additional Info -------------------");
                 Iterator iter = list.iterator();
                 while (iter.hasNext()) {
@@ -789,7 +789,7 @@ public class ErrorDialog extends TextViewer {
          * Gets a brief description of the throwable
          */
         public String getBriefDescription() {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append(t.getClass().getName());
             sb.append(": ");
             sb.append(t.getMessage());
@@ -825,7 +825,7 @@ public class ErrorDialog extends TextViewer {
          * Get system information
          */
         public String getSystemInfo() {
-            StringBuffer sb = new StringBuffer(1024);
+            StringBuilder sb = new StringBuilder(1024);
 
             // memory
             final Runtime rt = Runtime.getRuntime();
@@ -849,7 +849,7 @@ public class ErrorDialog extends TextViewer {
                 while (propEnum.hasMoreElements()) {
                     final String propName = (String) propEnum.nextElement();
                     if (!propName.equals("line.separator")) {
-                        StringBuffer line = new StringBuffer(128);
+                        StringBuilder line = new StringBuilder(128);
                         line.append(propName);
                         line.append(": ");
                         line.append(props.getProperty(propName));

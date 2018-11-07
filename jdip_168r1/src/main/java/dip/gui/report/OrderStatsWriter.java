@@ -133,7 +133,7 @@ public class OrderStatsWriter {
 
 
     private String makeTable(final MovePhaseTurnData[] mptds, int type) {
-        StringBuffer sb = new StringBuffer(4096);
+        StringBuilder sb = new StringBuilder(4096);
 
         sb.append("<table cellspacing=\"3\" cellpadding=\"1\" border=\"0\">");
 
@@ -219,12 +219,12 @@ public class OrderStatsWriter {
     }// makeOrderSuccessRateTable()
 
     private String makeSupportRateTable(final MovePhaseTurnData[] mptds) {
-        StringBuffer sb = new StringBuffer(4096);
+        StringBuilder sb = new StringBuilder(4096);
         return sb.toString();
     }// makeSupportRateTable()
 
     private String makeNonSelfSupportRateTable(final MovePhaseTurnData[] mptds) {
-        StringBuffer sb = new StringBuffer(4096);
+        StringBuilder sb = new StringBuilder(4096);
         return sb.toString();
     }// makeNonSelfSupportRateTable()
 

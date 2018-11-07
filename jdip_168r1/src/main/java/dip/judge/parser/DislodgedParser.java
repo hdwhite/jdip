@@ -159,7 +159,7 @@ public class DislodgedParser {
         // keep searching until we find an empty line, or HEADER_END_REGEX.
         //
         BufferedReader br = new BufferedReader(new StringReader(input));
-        StringBuffer accum = new StringBuffer(2048);
+        StringBuilder accum = new StringBuilder(2048);
 
         String line = br.readLine();
         while (line != null) {
@@ -343,7 +343,7 @@ public class DislodgedParser {
          * String output for debugging; may change between versions.
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append("DislodgedInfo[power=");
             sb.append(power);
             sb.append(", src=");

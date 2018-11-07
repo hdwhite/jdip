@@ -129,7 +129,7 @@ public class HTMLFormat {
         this.map = map;
         sb.setLength(0);
 
-        StringBuffer accum = new StringBuffer(1024);
+        StringBuilder accum = new StringBuilder(1024);
 
         boolean inBrace = false;
         StringTokenizer st = new StringTokenizer(html, "{}", true);

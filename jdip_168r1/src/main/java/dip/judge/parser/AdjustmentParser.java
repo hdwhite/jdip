@@ -323,7 +323,7 @@ public class AdjustmentParser {
          * String output for debugging; may change between versions.
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append("OwnerInfo[power=");
             sb.append(power);
             sb.append(", locations=");
@@ -392,7 +392,7 @@ public class AdjustmentParser {
          * String output for debugging; may change between versions.
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append("AdjustInfo[power=");
             sb.append(power);
             sb.append(", SC=");

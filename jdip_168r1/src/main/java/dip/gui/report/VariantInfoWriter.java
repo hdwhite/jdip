@@ -105,7 +105,7 @@ public class VariantInfoWriter {
         System.arraycopy(oldArgs, 0, newArgs, 0, oldArgs.length);
 
         // make 9th argument: 'rules settings'
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
 
         RuleOptions ro = world.getRuleOptions();
         Set allOpts = ro.getAllOptions();

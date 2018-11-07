@@ -291,7 +291,7 @@ public class TestParser {
 
                 // if marked as fail, and we succeed, it's a failure!
                 if (isMarkedFail) {
-                    StringBuffer sb = new StringBuffer(128);
+                    StringBuilder sb = new StringBuilder(128);
                     sb.append("Order line ");
                     sb.append(String.valueOf(orp.getLineNumber()));
                     sb.append("\"");
@@ -306,7 +306,7 @@ public class TestParser {
             } catch (OrderException e) {
                 // only count as a failure if RESULT line does NOT have a "FAIL" result.
                 if (!isMarkedFail) {
-                    StringBuffer sb = new StringBuffer(128);
+                    StringBuilder sb = new StringBuilder(128);
                     sb.append("Order line ");
                     sb.append(String.valueOf(orp.getLineNumber()));
                     sb.append(" \"");
@@ -382,7 +382,7 @@ public class TestParser {
 
         // validate name
         if (!name.equalsIgnoreCase(o.getFullName())) {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("Order line ");
             sb.append(String.valueOf(orp.getLineNumber()));
             sb.append(" \"");
@@ -487,7 +487,7 @@ public class TestParser {
 
         // does tok match? if not, add to failed cases, return false
         if (power != thePower) {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("Order line ");
             sb.append(String.valueOf(orp.getLineNumber()));
             sb.append(" \"");
@@ -516,7 +516,7 @@ public class TestParser {
         // does tok match? if not, add to failed cases, return false
         // cannot use identity-equals here
         if (!loc.equals(theLoc)) {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("Order line ");
             sb.append(String.valueOf(orp.getLineNumber()));
             sb.append(" \"");
@@ -553,7 +553,7 @@ public class TestParser {
 
         // does tok match? if not, add to failed cases, return false
         if (ut != theUnitType) {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("Order line ");
             sb.append(String.valueOf(orp.getLineNumber()));
             sb.append(" \"");
@@ -592,7 +592,7 @@ public class TestParser {
 
         // does tok match? if not, add to failed cases, return false
         if (bool != theBoolean) {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("Order line ");
             sb.append(String.valueOf(orp.getLineNumber()));
             sb.append(" \"");

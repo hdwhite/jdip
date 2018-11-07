@@ -415,7 +415,7 @@ public class RPConvert
 			throw new IllegalArgumentException();
 		}
 
-		StringBuffer sb = new StringBuffer(4096);
+		StringBuilder sb = new StringBuilder(4096);
 		BufferedReader br = null;
 
 		try

@@ -133,7 +133,7 @@ public class TextViewer extends HeaderDialog {
                 final Document doc = textPane.getDocument();
 
                 for (int i = 0; i < files.length; i++) {
-                    StringBuffer sb = new StringBuffer();
+                    StringBuilder sb = new StringBuilder();
                     BufferedReader br = null;
 
                     try {
@@ -255,7 +255,7 @@ public class TextViewer extends HeaderDialog {
                             try {
                                 reader = bestTextFlavor.getReaderForText(t);
                                 char[] buffer = new char[128];
-                                StringBuffer sb = new StringBuffer(2048);
+                                StringBuilder sb = new StringBuilder(2048);
 
                                 int nRead = reader.read(buffer);
                                 while (nRead != -1) {
@@ -335,7 +335,7 @@ public class TextViewer extends HeaderDialog {
      * content between angle brackets.
      */
     protected String filterHTML(String in) {
-        StringBuffer out = new StringBuffer(in.length());
+        StringBuilder out = new StringBuilder(in.length());
 
         boolean noCopy = false;
         final int len = in.length();
@@ -596,7 +596,7 @@ public class TextViewer extends HeaderDialog {
             String cssText = Utils.getText(Utils.getResourceBasePrefix() + m.group(1));
 
             if (cssText != null) {
-                StringBuffer sb = new StringBuffer(text.length() + 4096);
+                StringBuilder sb = new StringBuilder(text.length() + 4096);
                 sb.append(text.substring(0, m.start()));
                 sb.append("<style type=\"text/css\" media=\"screen\">\n\t<!--\n");
                 sb.append(cssText);

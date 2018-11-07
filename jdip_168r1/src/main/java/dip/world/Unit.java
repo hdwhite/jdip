@@ -128,7 +128,7 @@ public class Unit implements java.io.Serializable, Cloneable {
      * Displays internal object values. For debugging use only!
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         sb.append("Unit:[type=");
         sb.append(type);
         sb.append(",power=");

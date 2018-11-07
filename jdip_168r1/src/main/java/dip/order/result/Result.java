@@ -111,7 +111,7 @@ public class Result implements Serializable, Comparable<Result> {
      * For debugging. Use getPower() and getMessage() for general use.
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
 
         if (power == null) {
             sb.append("(none)");

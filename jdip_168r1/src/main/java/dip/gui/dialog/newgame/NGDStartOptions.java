@@ -105,7 +105,7 @@ public class NGDStartOptions extends JPanel implements NewGameDialog.NGDTabPane 
      */
     public synchronized Variant getVariant() {
         // set game time
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(phaseBox.getSelectedItem());
         sb.append(' ');
         sb.append(year.getValue());

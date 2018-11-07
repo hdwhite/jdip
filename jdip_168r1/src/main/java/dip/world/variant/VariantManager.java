@@ -259,7 +259,7 @@ public class VariantManager {
 
         // check: did we find *any* variants? Throw an exception.
         if (vm.variantMap.isEmpty()) {
-            StringBuffer msg = new StringBuffer(256);
+            StringBuilder msg = new StringBuilder(256);
             msg.append("No variants found on path: ");
             for (int i = 0; i < searchPaths.length; i++) {
                 msg.append(searchPaths[i]);
@@ -358,7 +358,7 @@ public class VariantManager {
 
         // check: did we find *any* symbol packs? Throw an exception.
         if (vm.symbolMap.isEmpty()) {
-            StringBuffer msg = new StringBuffer(256);
+            StringBuilder msg = new StringBuilder(256);
             msg.append("No SymbolPacks found on path: ");
             for (int i = 0; i < searchPaths.length; i++) {
                 msg.append(searchPaths[i]);
@@ -648,7 +648,7 @@ public class VariantManager {
                 if (txtUrl.startsWith("jar:")) {
                     return url;
                 } else {
-                    StringBuffer sb = new StringBuffer(txtUrl.length() + 8);
+                    StringBuilder sb = new StringBuilder(txtUrl.length() + 8);
                     sb.append("jar:");
                     sb.append(txtUrl);
                     sb.append("!/");

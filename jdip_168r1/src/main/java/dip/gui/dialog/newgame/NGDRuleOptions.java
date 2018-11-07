@@ -268,7 +268,7 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
      * makes the text HTML
      */
     private String makeHTML(String in) {
-        StringBuffer sb = new StringBuffer(in.length() + 64);
+        StringBuilder sb = new StringBuilder(in.length() + 64);
         sb.append("<html><font face=\"Arial, Helvetica\" size=\"-1\">");
         sb.append(in);
         sb.append("</html>");

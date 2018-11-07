@@ -95,7 +95,7 @@ public class ResultWriter {
      */
     public static void displayDialog(final ClientFrame clientFrame,
                                      final TurnState ts, final OrderFormatOptions orderFormatOptions) {
-        final StringBuffer title = new StringBuffer(64);
+        final StringBuilder title = new StringBuilder(64);
         title.append(Utils.getLocalString(DIALOG_TITLE));
         title.append(": ");
         title.append(ts.getPhase());
@@ -163,7 +163,7 @@ public class ResultWriter {
         }
 
 
-        StringBuffer sb = new StringBuffer(2048);
+        StringBuilder sb = new StringBuilder(2048);
         iter = generalResults.iterator();
         while (iter.hasNext()) {
             Result r = (Result) iter.next();
@@ -232,7 +232,7 @@ public class ResultWriter {
      * Print non order results for a power.
      */
     private void printNonOrderResultsForPower(StringBuffer sb, Power power, List results) {
-        StringBuffer text = new StringBuffer(1024);
+        StringBuilder text = new StringBuilder(1024);
 
         boolean foundAnOtherResult = false;
         Iterator iter = results.iterator();

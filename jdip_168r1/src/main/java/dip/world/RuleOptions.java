@@ -221,7 +221,7 @@ public class RuleOptions implements Serializable {
      * For debugging only; print the rule options
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
         sb.append(this.getClass().getName());
         sb.append('\n');
 

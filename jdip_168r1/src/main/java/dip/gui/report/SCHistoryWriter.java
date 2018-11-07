@@ -162,7 +162,7 @@ public class SCHistoryWriter {
 
         // format array into a table.
         //
-        StringBuffer sb = new StringBuffer(4096);
+        StringBuilder sb = new StringBuilder(4096);
         sb.append("<table cellspacing=\"3\" cellpadding=\"1\" border=\"0\">");
 
         // header row
@@ -289,7 +289,7 @@ public class SCHistoryWriter {
      * Power names are along the X axis.
      */
     private String makeSCCounts() {
-        StringBuffer sb = new StringBuffer(2048);
+        StringBuilder sb = new StringBuilder(2048);
         sb.append("<table cellspacing=\"4\" cellpadding=\"1\" border=\"0\">");
 
         // make header
@@ -348,7 +348,7 @@ public class SCHistoryWriter {
      */
     private String makeSCCountTableRow(TurnState ts) {
         final Phase phase = ts.getPhase();
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
 
         sb.append("<tr>");
 
@@ -395,7 +395,7 @@ public class SCHistoryWriter {
         if (mmd != null) {
             String colorName = mmd.getPowerColor(power);
             Color color = SVGColorParser.parseColor(colorName);
-            StringBuffer sb = new StringBuffer(32);
+            StringBuilder sb = new StringBuilder(32);
             sb.append("<font color=\"");
             sb.append(Utils.colorToHTMLHex(color));
             sb.append("\">");

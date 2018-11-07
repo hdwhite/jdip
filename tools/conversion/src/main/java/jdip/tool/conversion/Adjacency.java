@@ -121,7 +121,7 @@ class Adjacency
 	*/
 	public String toXML()
 	{
-		StringBuffer sb = new StringBuffer(128);
+		StringBuilder sb = new StringBuilder(128);
 		
 		sb.append("\t<ADJACENCY type=\"");
 		sb.append(getLoc().getCoastType());
@@ -145,7 +145,7 @@ class Adjacency
 	/** For debugging */
 	public String toString()
 	{
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append(this.getClass().getName());
 		sb.append("[");
 		sb.append(loc);

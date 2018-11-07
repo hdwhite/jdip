@@ -341,7 +341,7 @@ public final class TestSuite {
 
     private static void println(String s1, int i1) {
         if (isLogging) {
-            StringBuffer sb = new StringBuffer(256);
+            StringBuilder sb = new StringBuilder(256);
             sb.append(s1);
             sb.append(i1);
             System.out.println(sb.toString());
@@ -350,7 +350,7 @@ public final class TestSuite {
 
     private static void println(String s1, int i1, String s2) {
         if (isLogging) {
-            StringBuffer sb = new StringBuffer(256);
+            StringBuilder sb = new StringBuilder(256);
             sb.append(s1);
             sb.append(i1);
             sb.append(s2);
@@ -360,7 +360,7 @@ public final class TestSuite {
 
     private static void println(String s1, Object o2) {
         if (isLogging) {
-            StringBuffer sb = new StringBuffer(256);
+            StringBuilder sb = new StringBuilder(256);
             sb.append(s1);
             sb.append(o2);
             System.out.println(sb.toString());
@@ -369,7 +369,7 @@ public final class TestSuite {
 
     private static void println(String s1, Object o2, Object o3) {
         if (isLogging) {
-            StringBuffer sb = new StringBuffer(256);
+            StringBuilder sb = new StringBuilder(256);
             sb.append(s1);
             sb.append(o2);
             sb.append(o3);
@@ -379,7 +379,7 @@ public final class TestSuite {
 
     private static void println(String s1, Object o2, Object o3, Object o4) {
         if (isLogging) {
-            StringBuffer sb = new StringBuffer(256);
+            StringBuilder sb = new StringBuilder(256);
             sb.append(s1);
             sb.append(o2);
             sb.append(o3);
@@ -839,7 +839,7 @@ public final class TestSuite {
         while (iter.hasNext()) {
             UnitPos up = (UnitPos) iter.next();
 
-            StringBuffer sb = new StringBuffer(64);
+            StringBuilder sb = new StringBuilder(64);
             sb.append("  ");    // spacer
             sb.append(prefix);
             sb.append(" ");
@@ -1119,7 +1119,7 @@ public final class TestSuite {
          * Print
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer(32);
+            StringBuilder sb = new StringBuilder(32);
             sb.append(unit.getPower().getName());
             sb.append(' ');
             sb.append(unit.getType().getShortName());

@@ -323,7 +323,7 @@ class ProvObj implements Comparable
 	/** Writes XML text of this province */
 	public String toXML()
 	{
-		StringBuffer sb = new StringBuffer(512);
+		StringBuilder sb = new StringBuilder(512);
 		
 		/*
 			if 'mx' coast, need to create appropriate border reference
@@ -422,7 +422,7 @@ class ProvObj implements Comparable
 			}
 		}
 		
-		StringBuffer sb = new StringBuffer(64);
+		StringBuilder sb = new StringBuilder(64);
 		for(int i=0; i<borders.size(); i++)
 		{
 			sb.append( borders.get(i) );

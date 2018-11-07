@@ -54,7 +54,7 @@ class Template
 		try
 		{
 			br = new BufferedReader(new InputStreamReader(is));
-			StringBuffer sb = new StringBuffer(4096);
+			StringBuilder sb = new StringBuilder(4096);
 			
 			String line = br.readLine();
 			while(line != null)

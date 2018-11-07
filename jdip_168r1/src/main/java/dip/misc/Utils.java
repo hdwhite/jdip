@@ -253,7 +253,7 @@ public class Utils {
             return file;
         }
 
-        StringBuffer sb = new StringBuffer(file.getPath());
+        StringBuilder sb = new StringBuilder(file.getPath());
         if (ext.charAt(0) != '.') {
             sb.append('.');
         }
@@ -711,7 +711,7 @@ public class Utils {
             // expand 3-digit to 6 digit
             if (length == 4) {
                 // screw math!
-                StringBuffer sb = new StringBuffer(6);
+                StringBuilder sb = new StringBuilder(6);
                 sb.append(lcColor.charAt(0));
                 sb.append(lcColor.charAt(0));
                 sb.append(lcColor.charAt(1));
@@ -958,8 +958,8 @@ public class Utils {
      * Object argument into text.
      */
     public static String format(String format, Object args[]) {
-        StringBuffer output = new StringBuffer(4096);
-        StringBuffer accum = new StringBuffer(64);
+        StringBuilder output = new StringBuilder(4096);
+        StringBuilder accum = new StringBuilder(64);
 
         boolean inBrace = false;
         StringTokenizer st = new StringTokenizer(format, "{}", true);
@@ -1042,7 +1042,7 @@ public class Utils {
             }// replace()
 
             private String getValidWordString(String in) {
-                StringBuffer buffer = new StringBuffer(in);
+                StringBuilder buffer = new StringBuilder(in);
 
                 for (int i = buffer.length() - 1; i >= 0; i--) {
                     char c = buffer.charAt(i);
@@ -1096,7 +1096,7 @@ public class Utils {
             }// replace()
 
             private String getValidEmailString(String in) {
-                StringBuffer buffer = new StringBuffer(in);
+                StringBuilder buffer = new StringBuilder(in);
 
                 for (int i = buffer.length() - 1; i >= 0; i--) {
                     char c = buffer.charAt(i);
@@ -1154,7 +1154,7 @@ public class Utils {
             }// replace()
 
             private String getValidURLString(String in) {
-                StringBuffer buffer = new StringBuffer(in);
+                StringBuilder buffer = new StringBuilder(in);
 
                 for (int i = buffer.length() - 1; i >= 0; i--) {
                     final char c = buffer.charAt(i);
@@ -1232,7 +1232,7 @@ public class Utils {
         // cleanup
         for (int i = 0; i < matches.length; i++) {
             if (matches[i].length() > 0) {
-                StringBuffer sb = new StringBuffer(matches[i]);
+                StringBuilder sb = new StringBuilder(matches[i]);
                 // step 1: remove (if present) start/end quotes
                 if (sb.charAt(0) == '\"') {
                     sb.deleteCharAt(0);
@@ -1327,7 +1327,7 @@ public class Utils {
         final int toFindLen = toFind.length();
         final int toReplaceLen = toReplace.length();
 
-        StringBuffer sb = new StringBuffer(input);
+        StringBuilder sb = new StringBuilder(input);
 
         int idx = 0;
         int start = sb.indexOf(toFind, idx);
@@ -1365,7 +1365,7 @@ public class Utils {
             return null;
         }
 
-        StringBuffer sb = new StringBuffer(input);
+        StringBuilder sb = new StringBuilder(input);
         boolean isModified = false;
 
         for (int i = 0; i < toFind.length; i++) {

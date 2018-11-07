@@ -321,7 +321,7 @@ public class NJudgeOrderParser {
         // be multiple tokens) and, optionally, the coast (also multiple
         // tokens). Periods are stripped.
         //
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         for (int i = start; i < end; i++) {
             if (i > start) {
                 sb.append(' ');
@@ -510,7 +510,7 @@ public class NJudgeOrderParser {
         String[] toks = getTokenUpto(pc, idx, tokens, UNIT_DELIMS);
         if (toks != null) {
             // conjugate strings before parsing with getPower()
-            StringBuffer sb = new StringBuffer(64);
+            StringBuilder sb = new StringBuilder(64);
             sb.append(toks[0]);
             for (int i = 1; i < toks.length; i++) {
                 sb.append(' ');
@@ -599,7 +599,7 @@ public class NJudgeOrderParser {
         String[] toks = getTokenUpto(pc, idx, tokens, UNIT_DELIMS);
         if (toks != null) {
             // conjugate strings before parsing with getPower()
-            StringBuffer sb = new StringBuffer(64);
+            StringBuilder sb = new StringBuilder(64);
             sb.append(toks[0]);
             for (int i = 1; i < toks.length; i++) {
                 sb.append(' ');
@@ -1148,7 +1148,7 @@ public class NJudgeOrderParser {
          * For debugging only
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer(256);
+            StringBuilder sb = new StringBuilder(256);
             sb.append(this.getClass().getName());
             sb.append("[");
             sb.append(getOrder());

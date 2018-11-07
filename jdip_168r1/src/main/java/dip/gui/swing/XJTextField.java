@@ -70,7 +70,7 @@ public class XJTextField extends JTextField {
             }// replace()
 
             private String getFixedString(String in) {
-                StringBuffer buffer = new StringBuffer((in == null) ? "" : in);
+                StringBuilder buffer = new StringBuilder((in == null) ? "" : in);
 
                 for (int i = buffer.length() - 1; i >= 0; i--) {
                     final char c = buffer.charAt(i);

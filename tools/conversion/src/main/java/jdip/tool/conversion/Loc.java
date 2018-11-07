@@ -162,7 +162,7 @@ class Loc
 	*/
 	public String toString(boolean printAnyCoast)
 	{
-		StringBuffer sb = new StringBuffer(8);
+		StringBuilder sb = new StringBuilder(8);
 		sb.append(shortName);
 		
 		if(coastType != null)
