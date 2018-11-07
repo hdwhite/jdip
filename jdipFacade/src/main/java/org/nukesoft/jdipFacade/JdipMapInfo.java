@@ -22,6 +22,7 @@ import org.nukesoft.jdipFacade.exception.StateError;
 import org.nukesoft.jdipFacade.exception.UnitNotFoundException;
 
 import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -57,7 +58,7 @@ public class JdipMapInfo {
      */
     public String[] getAllProvinceNames(int nameLength) {
         Province[] provinces = world.getMap().getProvinces();
-        LinkedList<String> provWithCoast = new LinkedList<>();
+        List<String> provWithCoast = new LinkedList<>();
         for (int i = 0; i < provinces.length; i++) {
             if (provinces[i].isCoastal()) {
                 Coast[] coasts = provinces[i].getValidDirectionalCoasts();

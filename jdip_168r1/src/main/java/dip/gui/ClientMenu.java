@@ -43,6 +43,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Implements many menu methods, and constructs the menus.
@@ -139,7 +140,7 @@ public class ClientMenu {
     private static final int RI_INSERT_POINT = 12;    // insertion point (index) for recent files
     // instance variables
     private JMenuBar menuBar;
-    private HashMap<Object, JMenuItem> menuMap;
+    private Map<Object, JMenuItem> menuMap;
     //private static Font menuFont = new Font("SansSerif", Font.PLAIN, 12);
     private ClientFrame clientFrame = null;
     private int numItems = 0;
