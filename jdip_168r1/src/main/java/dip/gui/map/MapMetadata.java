@@ -986,7 +986,7 @@ public class MapMetadata
 			values[0] = (SVGUtils.floatToString(width) + widthUnits);
 			values[1] = (SVGUtils.floatToString(height) + widthUnits);
 			values[2] = (SVGUtils.floatToString(radius) + widthUnits);
-			values[3] = new Float(radius);
+			values[3] = radius;
 			values[4] = widthUnits;
 			return values;
 		}// makeValues()
@@ -1035,7 +1035,7 @@ public class MapMetadata
 	{
 		try
 		{
-			return new Float(value.trim());
+			return Float.valueOf(value.trim());
 		}
 		catch(NumberFormatException e)
 		{

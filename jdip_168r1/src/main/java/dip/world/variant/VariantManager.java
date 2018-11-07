@@ -142,7 +142,7 @@ public class VariantManager
 		{
 			// this may improve performance, and really only apply to Xerces
 			dbf.setAttribute("http://apache.org/xml/features/dom/defer-node-expansion", Boolean.FALSE);
-			dbf.setAttribute("http://apache.org/xml/properties/input-buffer-size", new Integer(4096));
+			dbf.setAttribute("http://apache.org/xml/properties/input-buffer-size", 4096);
 			dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", Boolean.FALSE);
 		}
 		catch(Exception e)

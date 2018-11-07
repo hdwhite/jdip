@@ -34,6 +34,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
 
@@ -334,8 +335,8 @@ public class ErrorDialog extends TextViewer
 		Object[] args = new Object[3];
 		
 		args[0] = vi.getVariantName();
-		args[1] = new Float( vi.getVariantVersion() );
-		args[2] = new Float( availableVersion );
+		args[1] = vi.getVariantVersion();
+		args[2] = availableVersion;
 		
 		String text = Utils.getText(Utils.getLocalString(VERSION_MISMATCH_TEMPLATE));
 		ErrorDialog ed = getOneButtonDialog(parent, 
@@ -356,7 +357,7 @@ public class ErrorDialog extends TextViewer
 		Object[] args = new Object[3];
 		
 		args[0] = vi.getVariantName();
-		args[1] = new Float( vi.getVariantVersion() );
+		args[1] = vi.getVariantVersion();
 		args[2] = vi.getVariantName();
 		
 		String text = Utils.getText(Utils.getLocalString(NOVARIANT_TEMPLATE));
@@ -773,7 +774,7 @@ public class ErrorDialog extends TextViewer
 	private static String encode(String in)
 	throws UnsupportedEncodingException
 	{
-		return URLEncoder.encode(in, "UTF-8");
+		return URLEncoder.encode(in, StandardCharsets.UTF_8);
 	}// encode()
 	
 	

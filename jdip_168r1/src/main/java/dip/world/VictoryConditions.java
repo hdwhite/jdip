@@ -194,8 +194,8 @@ public class VictoryConditions implements java.io.Serializable
 			
 			if(!overallSCChange)
 			{
-				evalResults.add(new Result(null, 
-								Utils.getLocalString(VC_MAX_NO_SC_CHANGE, new Integer(maxYearsNoSCChange))));
+				evalResults.add(new Result(null,
+						Utils.getLocalString(VC_MAX_NO_SC_CHANGE, maxYearsNoSCChange)));
 				evalResults.add(new Result(null, Utils.getLocalString(VC_DRAW, getRemainingPowers(turnState, powers, adjInfo)) ));
 				return true;
 			}

@@ -22,15 +22,6 @@
 //
 package dip.gui.report;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.JScrollPane;
-
 import dip.gui.ClientFrame;
 import dip.gui.dialog.TextViewer;
 import dip.misc.Help;
@@ -38,12 +29,10 @@ import dip.misc.Utils;
 import dip.order.Order;
 import dip.order.OrderFormatOptions;
 import dip.process.Adjustment;
-import dip.world.Phase;
-import dip.world.Position;
-import dip.world.Power;
-import dip.world.Province;
-import dip.world.TurnState;
-import dip.world.Unit;
+import dip.world.*;
+
+import javax.swing.*;
+import java.util.*;
 
 
 
@@ -326,7 +315,7 @@ public class StateWriter
 						
 					if( diff > 0 )
 					{
-						sb.append(Utils.getLocalString(ORD_TOO_FEW, new Integer(diff)));
+						sb.append(Utils.getLocalString(ORD_TOO_FEW, diff));
 						sb.append("<br>\n");
 					}
 					
@@ -402,7 +391,7 @@ public class StateWriter
 				sb.delete( sb.length() - 2, sb.length());
 				
 				sb.append("  ");
-				sb.append(Utils.getLocalString(SC_NUM, new Integer(ownedSCs.length)));
+				sb.append(Utils.getLocalString(SC_NUM, ownedSCs.length));
 			}
 			else
 			{
@@ -500,11 +489,11 @@ public class StateWriter
 			int adjAmount = adjInfo.getAdjustmentAmount();
 			if(adjAmount > 0)
 			{
-				adjustmentText = Utils.getLocalString(ADJ_BUILD_TEXT, new Integer(Math.abs(adjAmount)));
+				adjustmentText = Utils.getLocalString(ADJ_BUILD_TEXT, Math.abs(adjAmount));
 			}
 			else if(adjAmount < 0)
 			{
-				adjustmentText = Utils.getLocalString(ADJ_REMOVE_TEXT, new Integer(Math.abs(adjAmount)));
+				adjustmentText = Utils.getLocalString(ADJ_REMOVE_TEXT, Math.abs(adjAmount));
 			}
 			else
 			{
@@ -515,15 +504,15 @@ public class StateWriter
 			int shouldBuild = (adjInfo.getSupplyCenterCount() - adjInfo.getUnitCount());
 			if(adjAmount >=0 && shouldBuild > adjAmount)
 			{
-				blockedBuildMessage = Utils.getLocalString(ADJ_BLOCKED_BUILD_TEXT, 
-										new Integer(shouldBuild - adjAmount));
+				blockedBuildMessage = Utils.getLocalString(ADJ_BLOCKED_BUILD_TEXT,
+						shouldBuild - adjAmount);
 			}
 			
 			Object[] args = new Object[]
 			{
 				allPowers[i],			// {0} : Power
-				new Integer(adjInfo.getSupplyCenterCount()),	// {1} : # SC (including home SC) controlled
-				new Integer(adjInfo.getUnitCount()),			// {2} : # units controlled
+					adjInfo.getSupplyCenterCount(),    // {1} : # SC (including home SC) controlled
+					adjInfo.getUnitCount(),            // {2} : # units controlled
 				adjustmentText,			// {3} : build or remove (or no change) message
 				blockedBuildMessage, 	// {4} : misc text (blocked builds), or empty
 			};

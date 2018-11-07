@@ -113,7 +113,7 @@ public class ToolManager
 			{
 				try
 				{
-					Tool tool = (Tool) tm.toolClassLoader.loadClass(mainClassNames[i]).newInstance();
+					Tool tool = (Tool) tm.toolClassLoader.loadClass(mainClassNames[i]).getDeclaredConstructor().newInstance();
 					list.add(tool);
 				}
 				catch(Throwable e)

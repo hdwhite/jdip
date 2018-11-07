@@ -200,9 +200,9 @@ public class MultiOrderEntry
 		if(nFailed > 0)
 		{
 			String headerText = Utils.getLocalString(RESULT_DIALOG_HEADER,
-											new Integer(nOrders),
-											new Integer(nFailed),
-											new Integer(nOrders - nFailed));
+					nOrders,
+					nFailed,
+					nOrders - nFailed);
 			
 			// order text, formatted with CSS
 			StringBuffer sb = new StringBuffer(4096);

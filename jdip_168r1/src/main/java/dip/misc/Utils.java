@@ -1647,7 +1647,7 @@ public class Utils
 	{
 		try
 		{
-			final Class service = Class.forName("javax.jnlp.ServiceManager");
+			final Class<javax.jnlp.ServiceManager> service = javax.jnlp.ServiceManager.class;
 			final Method lookup = service.getMethod("lookup", String.class);
 			final Object basic = lookup.invoke(null, "javax.jnlp.BasicService");
 			return true;

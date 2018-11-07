@@ -271,8 +271,8 @@ public class XMLSymbolParser implements SymbolParser
 		{
 			throw new IOException(element.getTagName()+" attribute "+attrName+" cannot be negative or zero.");
 		}
-		
-		return new Float(f);
+
+		return f;
 	}// parseScaleFactor()
 	
 	

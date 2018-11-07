@@ -617,8 +617,8 @@ public class OrderFormat
 	{
 		assert (order != null);
 		assert (name != null);
-		
-		final Class cls = order.getClass();
+
+		final Class<? extends Orderable> cls = order.getClass();
 		final boolean isMethod = (name.endsWith("()"));
 		
 		if(isMethod)

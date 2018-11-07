@@ -177,7 +177,7 @@ public class ClientMenu
 		private KeyStroke accelerator = null;
 		private Icon icon = null;
 		private static final Icon blank = Utils.getIcon(BLANK_ICON);
-		private static final int MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+		private static final int MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();  //TODO: DEPRECATED IN JAVA 11 FOR A METHOD INTRODUCED IN JAVA 10
 		
 		/**
 		*	Create a MenuItem definition from the properties file 
@@ -204,7 +204,7 @@ public class ClientMenu
 				{
 					// substitute COMMAND for CTRL modifier.
 					//
-					if((accelerator.getModifiers() & InputEvent.CTRL_MASK) > 0)
+					if ((accelerator.getModifiers() & InputEvent.CTRL_DOWN_MASK) > 0)
 					{
 						accelerator = KeyStroke.getKeyStroke(accelerator.getKeyCode(), MASK);
 					}
@@ -465,7 +465,7 @@ public class ClientMenu
 	/** Get a JMenuItem given an Item (usually a specified constant) */
 	public JMenuItem getMenuItem(Item item)
 	{
-		JMenuItem menuItem = (JMenuItem) menuMap.get(item);
+		JMenuItem menuItem = menuMap.get(item);
 		if(menuItem != null)
 		{
 			return menuItem;
@@ -476,7 +476,7 @@ public class ClientMenu
 	/** Via Power */
 	private JMenuItem getMenuItem(Power power)
 	{
-		JMenuItem menuItem = (JMenuItem) menuMap.get(power);
+		JMenuItem menuItem = menuMap.get(power);
 		if(menuItem != null)
 		{
 			return menuItem;
@@ -1010,7 +1010,7 @@ public class ClientMenu
 			// accel only go from F1-F12
 			if(i < maxAccel)
 			{
-				menuItem.setAccelerator( KeyStroke.getKeyStroke((i + startAccel), InputEvent.CTRL_MASK) );
+				menuItem.setAccelerator(KeyStroke.getKeyStroke((i + startAccel), InputEvent.CTRL_DOWN_MASK));
 			}
 			
 			orderMenu.add(menuItem);
@@ -1032,8 +1032,8 @@ public class ClientMenu
 				list.add(powers[i]);
 			}
 		}
-		
-		return (Power[]) list.toArray(new Power[list.size()]);
+
+		return list.toArray(new Power[list.size()]);
 	}// getOrderDrawingPowers()
 	
 	

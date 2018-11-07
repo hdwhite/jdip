@@ -23,23 +23,6 @@
 
 package dip.gui.dialog.prefs;
 
-import java.awt.FlowLayout;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-
-import org.apache.batik.transcoder.Transcoder;
-import org.apache.batik.transcoder.image.ImageTranscoder;
-import org.apache.batik.transcoder.image.JPEGTranscoder;
-import org.apache.batik.transcoder.image.PNGTranscoder;
-
 import cz.autel.dmi.HIGConstraints;
 import cz.autel.dmi.HIGLayout;
 import dip.gui.ClientFrame;
@@ -47,6 +30,15 @@ import dip.gui.swing.AssocJComboBox;
 import dip.gui.swing.GradientJLabel;
 import dip.misc.SharedPrefs;
 import dip.misc.Utils;
+import org.apache.batik.transcoder.Transcoder;
+import org.apache.batik.transcoder.image.ImageTranscoder;
+import org.apache.batik.transcoder.image.JPEGTranscoder;
+import org.apache.batik.transcoder.image.PNGTranscoder;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 
 /**
@@ -214,11 +206,11 @@ public class ExportPreferencePanel extends PreferencePanel
 		// png BPP combobox
 		Integer[] bppVals = new Integer[ALLOWED_PNG_BPP.length];
 		String[] bppText = new String[ALLOWED_PNG_BPP.length];
-		bppVals[0] = new Integer(0);
+		bppVals[0] = 0;
 		bppText[0] = Utils.getLocalString(I18N_CHOICE_PNG_BPP_UNLIM);
 		for(int i=1; i<bppVals.length; i++)
 		{
-			bppVals[i] = new Integer(ALLOWED_PNG_BPP[i]);
+			bppVals[i] = ALLOWED_PNG_BPP[i];
 			bppText[i] = bppVals[i].toString();
 		}
 		
@@ -227,7 +219,7 @@ public class ExportPreferencePanel extends PreferencePanel
 				bppText, bppVals[0], true);
 		pngBPP = new AssocJComboBox(assocObjs);
 		pngBPP.reset();
-		pngBPP.setSelectedItem(new Integer(bpp));
+		pngBPP.setSelectedItem(bpp);
 		
 		// spinners: value, min, max, step
 		imgWidth = new JSpinner(new SpinnerNumberModel(0, 0, MAX_IMG_SIZE, 1));
@@ -253,18 +245,18 @@ public class ExportPreferencePanel extends PreferencePanel
 		}
 		else if(w > 0 && h > 0)
 		{
-			imgWidth.setValue(new Integer(w));
-			imgHeight.setValue(new Integer(h));
+			imgWidth.setValue(w);
+			imgHeight.setValue(h);
 			jrb[JRB_IMGSIZE].setSelected(true);
 		}
 		else if(w > 0 && h == 0)
 		{
-			imgWidthOnly.setValue(new Integer(w));
+			imgWidthOnly.setValue(w);
 			jrb[JRB_WIDTH_ONLY].setSelected(true);
 		}
 		else if(h > 0 && w == 0)
 		{
-			imgHeightOnly.setValue(new Integer(h));
+			imgHeightOnly.setValue(h);
 			jrb[JRB_HEIGHT_ONLY].setSelected(true);
 		}
 		else
@@ -287,7 +279,7 @@ public class ExportPreferencePanel extends PreferencePanel
 		Preferences prefs = SharedPrefs.getUserNode();
 		
 		// set preference nodes
-		prefs.putInt(NODE_PNG_BPP, ((Integer) pngBPP.getSelectedValue()).intValue());
+		prefs.putInt(NODE_PNG_BPP, (Integer) pngBPP.getSelectedValue());
 		prefs.putFloat(NODE_EXPORT_JPG_QUALITY, ((float) jpgQuality.getValue() / 100.0f) );
 		
 		int w = 0;
@@ -295,16 +287,16 @@ public class ExportPreferencePanel extends PreferencePanel
 		// if(FULL_SIZE) ... keep w, h both 0
 		if(jrb[JRB_IMGSIZE].isSelected())
 		{
-			w = ((Integer) imgWidth.getValue()).intValue();
-			h = ((Integer) imgHeight.getValue()).intValue();
+			w = (Integer) imgWidth.getValue();
+			h = (Integer) imgHeight.getValue();
 		}
 		else if(jrb[JRB_WIDTH_ONLY].isSelected())
 		{
-			w = ((Integer) imgWidthOnly.getValue()).intValue();
+			w = (Integer) imgWidthOnly.getValue();
 		}
 		else if(jrb[JRB_HEIGHT_ONLY].isSelected())
 		{
-			h = ((Integer) imgHeightOnly.getValue()).intValue();
+			h = (Integer) imgHeightOnly.getValue();
 		}
 		prefs.putInt(NODE_EXPORT_WIDTH, w);
 		prefs.putInt(NODE_EXPORT_HEIGHT, h);
@@ -353,20 +345,20 @@ public class ExportPreferencePanel extends PreferencePanel
 		// add hints
 		if(w != 0)
 		{
-			transcoder.addTranscodingHint(ImageTranscoder.KEY_WIDTH, new Float(w));
+			transcoder.addTranscodingHint(ImageTranscoder.KEY_WIDTH, (float) w);
 		}
 		
 		if(h != 0)
 		{
-			transcoder.addTranscodingHint(ImageTranscoder.KEY_HEIGHT, new Float(h));
+			transcoder.addTranscodingHint(ImageTranscoder.KEY_HEIGHT, (float) h);
 		}
 		
 		if(bpp > 0)
 		{
-			transcoder.addTranscodingHint(PNGTranscoder.KEY_INDEXED, new Integer(bpp));
+			transcoder.addTranscodingHint(PNGTranscoder.KEY_INDEXED, bpp);
 		}
-		
-		transcoder.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(q));
+
+		transcoder.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, q);
 	}// applyTranscodingHints()
 	
 }// class ExportPreferencePanel

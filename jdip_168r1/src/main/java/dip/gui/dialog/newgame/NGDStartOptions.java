@@ -251,15 +251,15 @@ public class NGDStartOptions extends JPanel implements NewGameDialog.NGDTabPane
 	private void setSpinner(JSpinner spinner, int value, int min, int max)
 	{
 		SpinnerNumberModel snn = (SpinnerNumberModel) spinner.getModel();
-		snn.setMinimum(new Integer(min));
-		snn.setMaximum(new Integer(max));
-		snn.setValue(new Integer(value));
+        snn.setMinimum(min);
+        snn.setMaximum(max);
+        snn.setValue(value);
 	}// setSpinner()
 	
 	/** Convenience method: get int from spinner */
 	private int getSpinnerValue(JSpinner spinner)
 	{
-		return ((Integer) spinner.getValue()).intValue();
+        return (Integer) spinner.getValue();
 	}// getSpinnerValue()
 	
 	/** Get the tab name. */

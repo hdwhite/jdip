@@ -952,8 +952,8 @@ public class StdAdjudicator implements Adjudicator
 		// prevent infinite loop.....
 		if(syzkmanAppliedCount > 10)
 		{
-			addResult( new Result(null, 
-					Utils.getLocalString(STDADJ_MV_UNRESOLVED_PARADOX, new Integer(paradoxBreakAttempt))) );
+			addResult( new Result(null,
+					Utils.getLocalString(STDADJ_MV_UNRESOLVED_PARADOX, paradoxBreakAttempt)));
 			
 			if(Log.isLogging())
 			{
@@ -1473,7 +1473,7 @@ public class StdAdjudicator implements Adjudicator
 			if(ai.getAdjustmentAmount() > 0 && orderCount < ai.getAdjustmentAmount())
 			{
 				addResult( 	new Result(powers[i],
-							Utils.getLocalString(STDADJ_ADJ_BUILDS_UNUSED, new Integer(adjAmount - orderCount))) );
+						Utils.getLocalString(STDADJ_ADJ_BUILDS_UNUSED, adjAmount - orderCount)));
 			}
 			
 			// While builds are optional (they may be waived), removes are not.

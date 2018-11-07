@@ -22,16 +22,9 @@
 //
 package dip.gui.map;
 
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.geom.AffineTransform;
-
-import javax.swing.ActionMap;
-import javax.swing.JFrame;
-
+import dip.gui.StatusBar;
+import dip.gui.dialog.ErrorDialog;
+import dip.misc.Utils;
 import org.apache.batik.bridge.UserAgent;
 import org.apache.batik.bridge.ViewBox;
 import org.apache.batik.gvt.CanvasGraphicsNode;
@@ -41,9 +34,10 @@ import org.apache.batik.swing.gvt.GVTTreeRendererListener;
 import org.apache.batik.swing.svg.SVGUserAgent;
 import org.w3c.dom.svg.SVGSVGElement;
 
-import dip.gui.StatusBar;
-import dip.gui.dialog.ErrorDialog;
-import dip.misc.Utils;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 
 
 /**
@@ -364,11 +358,11 @@ public class XJSVGCanvas extends JSVGCanvas
 		
 		if(!isEquivalent(lsx, at.getScaleX()))
 		{
-			statusBar.setText(Utils.getLocalString(I18N_ZOOM_FACTOR, new Double(at.getScaleX())));
+			statusBar.setText(Utils.getLocalString(I18N_ZOOM_FACTOR, at.getScaleX()));
 		}
 		else if(!isEquivalent(lsy, at.getScaleY()))
 		{
-			statusBar.setText(Utils.getLocalString(I18N_ZOOM_FACTOR, new Double(at.getScaleY())));
+			statusBar.setText(Utils.getLocalString(I18N_ZOOM_FACTOR, at.getScaleY()));
 		}
 		
 		lsx = at.getScaleX();
