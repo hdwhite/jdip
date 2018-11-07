@@ -657,14 +657,14 @@ public class TextViewer extends HeaderDialog {
          * open, depending upon the value returned by
          * getCloseDialogAfterUnacceptable()
          */
-        public boolean isAcceptable(TextViewer t);
+        boolean isAcceptable(TextViewer t);
 
 
         /**
          * If true, the dialog closes after unacceptable input is given (but a warning
          * message could be displayed). If false, the dialog is not closed.
          */
-        public boolean getCloseDialogAfterUnacceptable();
+        boolean getCloseDialogAfterUnacceptable();
     }// inner interface AcceptListener
 
     /**

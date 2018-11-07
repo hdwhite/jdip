@@ -44,28 +44,28 @@ public interface Adjudicator {
      * that will have its results and flags set appropriately when
      * adjudication is complete.
      */
-    public TurnState getTurnState();
+    TurnState getTurnState();
 
     /**
      * Start adjudication.
      */
-    public void process();
+    void process();
 
     /**
      * Returns <code>true</code> if an unresolved paradox was detected.
      */
-    public boolean isUnresolvedParadox();
+    boolean isUnresolvedParadox();
 
     /**
      * Returns the next TurnState, or <code>null</code>
      * if an error occured or the game has been won.
      */
-    public abstract TurnState getNextTurnState();
+    TurnState getNextTurnState();
 
     /**
      * Enable or disable reporting of failure statistics.
      */
-    public void setStatReporting(boolean value);
+    void setStatReporting(boolean value);
 
     /**
      * If enabled, checks to make sure that each Power's
@@ -73,7 +73,7 @@ public interface Adjudicator {
      * This is important for networked games, to prevent
      * illicit order injection.
      */
-    public void setPowerOrderChecking(boolean value);
+    void setPowerOrderChecking(boolean value);
 
     //
     //	Methods used by Orders and Adjudicator implementations
@@ -84,18 +84,18 @@ public interface Adjudicator {
      * no corresponding order was found. <b>Note:</b> Coast is not relevent
      * here; only the Province in the given Location is used.
      */
-    public OrderState findOrderStateBySrc(Location location);
+    OrderState findOrderStateBySrc(Location location);
 
     /**
      * Find the OrderState with the given source Province. Returns null if
      * no corresponding order was found.
      */
-    public OrderState findOrderStateBySrc(Province src);
+    OrderState findOrderStateBySrc(Province src);
 
     /**
      * Get all OrderStates
      */
-    public OrderState[] getOrderStates();
+    OrderState[] getOrderStates();
 
     /**
      * Returns 'true' if The Orderstate in question is a support order
@@ -106,7 +106,7 @@ public interface Adjudicator {
      * <li>power of unit in supported dest == power of support order
      * </ol>
      */
-    public boolean isSelfSupportedMove(OrderState os);
+    boolean isSelfSupportedMove(OrderState os);
 
 
     /**
@@ -115,7 +115,7 @@ public interface Adjudicator {
      * note that this will <b>not</b> contain 'null' substitutions (e.g.,
      * no order was specified, and a Hold order was automatically generated).
      */
-    public List getSubstitutedOrderStates();
+    List getSubstitutedOrderStates();
 
     //
     //	Result-adding methods
@@ -124,25 +124,25 @@ public interface Adjudicator {
     /**
      * Add a Result to the result list
      */
-    public void addResult(Result result);
+    void addResult(Result result);
 
     /**
      * Add a BouncedResult to the result list
      */
-    public void addBouncedResult(OrderState os, OrderState bouncer);
+    void addBouncedResult(OrderState os, OrderState bouncer);
 
     /**
      * Add a DislodgedResult to the result list
      */
-    public void addDislodgedResult(OrderState os);
+    void addDislodgedResult(OrderState os);
 
     /**
      * Add a Result to the result list
      */
-    public void addResult(OrderState os, String message);
+    void addResult(OrderState os, String message);
 
     /**
      * Add a Result to the result list
      */
-    public void addResult(OrderState os, ResultType type, String message);
+    void addResult(OrderState os, ResultType type, String message);
 }// interface Adjudicator

@@ -256,17 +256,17 @@ public class NewGameDialog extends HeaderDialog {
         /**
          * Get the name of the tab.
          */
-        public String getTabName();
+        String getTabName();
 
         /**
          * Called when the variant has changed. Variant may be null.
          */
-        public void variantChanged(Variant variant);
+        void variantChanged(Variant variant);
 
         /**
          * Sets the enabling/disabling of the tab
          */
-        public void enablingChanged(boolean enabled);
+        void enablingChanged(boolean enabled);
 
     }// interface NGDTabPane
 

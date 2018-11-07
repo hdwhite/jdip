@@ -193,11 +193,11 @@ public class FlocImporter implements Runnable {
     /**
      * This is the interface which defines the callback
      */
-    public static interface FlocImportCallback {
+    public interface FlocImportCallback {
         /**
          * An exception (given as an argument) occured during import.
          */
-        public void flocImportException(IOException e);
+        void flocImportException(IOException e);
 
         /**
          * Floc Text import completed successfully.
@@ -208,7 +208,7 @@ public class FlocImporter implements Runnable {
          * FlocImport is complete and automatic World object creation is
          * not required.
          */
-        public boolean flocTextImportComplete(String text);
+        boolean flocTextImportComplete(String text);
 
         /**
          * Floc World import completed successfully. World should never be null.
@@ -216,19 +216,19 @@ public class FlocImporter implements Runnable {
          * Note: this method only excecutes if flocTextImportComplete() returns
          * <code>true</code>
          */
-        public void flocWorldImportComplete(World world);
+        void flocWorldImportComplete(World world);
 
 
         /**
          * Floc import progress message (displays import progress)
          */
-        public void flocImportMessage(String message);
+        void flocImportMessage(String message);
 
 
         /**
          * Import failed; the game is not registered.
          */
-        public void flocImportUnregistered();
+        void flocImportUnregistered();
     }// interface FlocImportCallback
 	
 	

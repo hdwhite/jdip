@@ -32,49 +32,49 @@ public interface Tool {
     /**
      * Get the current Tool version
      */
-    public float getVersion();
+    float getVersion();
 
     /**
      * Get the Tool Copyright Information (authors, etc.). Never should return null.
      */
-    public String getCopyrightInfo();
+    String getCopyrightInfo();
 
     /**
      * Get the Tool Web URI (web address, ftp address, etc.). Never should return null.
      */
-    public URI getWebURI();
+    URI getWebURI();
 
     /**
      * Get the Email addresses. Never should return null.
      */
-    public URI[] getEmailURIs();
+    URI[] getEmailURIs();
 
     /**
      * Get the Tool comment. Never should return null.
      */
-    public String getComment();
+    String getComment();
 
     /**
      * Get the Tool Description. Never should return null.
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * Get the Tool name. Never should return null.
      */
-    public String getName();
+    String getName();
 
     // registration methods
 
     /**
      * Creates a JMenuItem (or JMenu for sub-items)
      */
-    public JMenuItem registerJMenuItem();
+    JMenuItem registerJMenuItem();
 
     /**
      * Gets the ToolProxy object which allows a Tool access to internal data structures
      */
-    public void setToolProxy(ToolProxy toolProxy);
+    void setToolProxy(ToolProxy toolProxy);
 
 
 }// interface Tool

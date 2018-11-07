@@ -34,11 +34,11 @@ public interface ProvinceParser {
     /**
      * Returns the ProvinceData
      */
-    public ProvinceData[] getProvinceData();
+    ProvinceData[] getProvinceData();
 
     /**
      * Returns the BorderData
      */
-    public BorderData[] getBorderData();
+    BorderData[] getBorderData();
 
 }// interface ProvinceParser
