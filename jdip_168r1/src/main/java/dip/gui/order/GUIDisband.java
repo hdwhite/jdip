@@ -244,7 +244,8 @@ public class GUIDisband extends Disband implements GUIOrder {
         MapMetadata.SymbolSize symbolSize = mmd.getSymbolSize(DefaultMapRenderer2.SYMBOL_REMOVEUNIT);
 
         // create RemoveUnit symbol via a USE element
-        SVGElement useElement = SVGUtils.createUseElement(
+
+        return SVGUtils.createUseElement(
                 mapInfo.getDocument(),
                 "#" + DefaultMapRenderer2.SYMBOL_REMOVEUNIT,
                 null,    // no ID
@@ -252,8 +253,6 @@ public class GUIDisband extends Disband implements GUIOrder {
                 srcPt.x,
                 srcPt.y,
                 symbolSize);
-
-        return useElement;
     }// drawOrder()
 
 

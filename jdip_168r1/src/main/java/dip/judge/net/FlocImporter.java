@@ -55,7 +55,7 @@ public class FlocImporter implements Runnable {
     private final FlocImportCallback fic;
     private final OrderFactory orderFactory;
     private Thread netThread = null;
-    
+
     private boolean isInProgress = false;
 
     /**

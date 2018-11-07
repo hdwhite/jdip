@@ -90,14 +90,12 @@ public class World implements Serializable {
         try {
             GZIPInputStream gzi = new GZIPInputStream(new BufferedInputStream(new FileInputStream(file), 4096));
             in = new JSX.ObjectReader(gzi);
-            World w = (World) in.readObject();
-            return w;
+            return (World) in.readObject();
         } catch (IOException ioe) {
             throw ioe;
         } catch (Exception e) {
             // rethrow all non-IOExceptions as IOExceptions
-            IOException ioe = new IOException(e.getMessage(), e);
-            throw ioe;
+            throw new IOException(e.getMessage(), e);
         } finally {
             if (in != null) {
                 in.close();
@@ -123,8 +121,7 @@ public class World implements Serializable {
             throw ioe;
         } catch (Exception e) {
             // rethrow all non-IOExceptions as IOExceptions
-            IOException ioe = new IOException(e.getMessage(), e);
-            throw ioe;
+            throw new IOException(e.getMessage(), e);
         } finally {
             if (gzos != null) {
                 gzos.close();

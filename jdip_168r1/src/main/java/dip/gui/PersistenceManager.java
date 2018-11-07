@@ -401,16 +401,15 @@ public class PersistenceManager {
 
             // get file name
             if (file != null) {
-                File saveToFile = file;
 
                 try {
-                    World.save(saveToFile, clientFrame.getWorld());
+                    World.save(file, clientFrame.getWorld());
                     // DO NOT clear changed flag, though.
                     // Update recent file name list
-                    GeneralPreferencePanel.setRecentFileName(saveToFile);
+                    GeneralPreferencePanel.setRecentFileName(file);
                     clientFrame.getClientMenu().updateRecentFiles();
                 } catch (Exception e) {
-                    ErrorDialog.displayFileIO(clientFrame, e, saveToFile.toString());
+                    ErrorDialog.displayFileIO(clientFrame, e, file.toString());
                 }
             }
         }

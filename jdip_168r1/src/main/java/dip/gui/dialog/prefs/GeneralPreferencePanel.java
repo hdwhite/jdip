@@ -257,9 +257,8 @@ public class GeneralPreferencePanel extends PreferencePanel {
      */
     public static String getOrderSortMode() {
         Preferences prefs = SharedPrefs.getUserNode();
-        final String osSetting = OrderDisplayPanel.parseSortValue(
+        return OrderDisplayPanel.parseSortValue(
                 prefs.get(NODE_ORDER_SORTING, null), OrderDisplayPanel.SORT_PROVINCE);
-        return osSetting;
     }// getOrderSortMode()
 
     public static void getWindowSettings(Component c) {

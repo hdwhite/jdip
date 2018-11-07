@@ -949,8 +949,7 @@ public class ClientFrame extends JFrame {
     public synchronized String getMode() {
         // return a new reference, so that noone can change the mode
         // without using fireChangeMode()
-        final String mode = currentMode;
-        return mode;
+        return currentMode;
     }// getMode()
 
     /**

@@ -311,7 +311,7 @@ public class GUIWaive extends Waive implements GUIOrder {
         //
         MapMetadata.SymbolSize symbolSize = mmd.getSymbolSize(DefaultMapRenderer2.SYMBOL_WAIVEDBUILD);
 
-        SVGElement element = SVGUtils.createUseElement(
+        return SVGUtils.createUseElement(
                 mapInfo.getDocument(),
                 "#" + DefaultMapRenderer2.SYMBOL_WAIVEDBUILD,
                 null,    // no ID
@@ -319,8 +319,6 @@ public class GUIWaive extends Waive implements GUIOrder {
                 center.x,
                 center.y,
                 symbolSize);
-
-        return element;
     }// drawOrder()
 
 

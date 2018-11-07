@@ -239,8 +239,7 @@ public class OrderResult extends Result {
          * Sorts the result type
          */
         public int compareTo(ResultType obj) {
-            ResultType rt = obj;
-            return (ordering - rt.ordering);
+            return (ordering - obj.ordering);
         }// compareTo()
 
 

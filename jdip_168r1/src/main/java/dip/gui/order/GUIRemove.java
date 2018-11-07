@@ -258,7 +258,9 @@ public class GUIRemove extends Remove implements GUIOrder {
         MapMetadata.SymbolSize symbolSize = mmd.getSymbolSize(DefaultMapRenderer2.SYMBOL_REMOVEUNIT);
 
         // create RemoveUnit symbol via a USE element
-        SVGElement useElement = SVGUtils.createUseElement(
+
+        // add to parent
+        return SVGUtils.createUseElement(
                 mapInfo.getDocument(),
                 "#" + DefaultMapRenderer2.SYMBOL_REMOVEUNIT,
                 null,    // no ID
@@ -266,9 +268,6 @@ public class GUIRemove extends Remove implements GUIOrder {
                 srcPt.x,
                 srcPt.y,
                 symbolSize);
-
-        // add to parent
-        return useElement;
     }// drawOrder()
 
     public boolean isDependent() {

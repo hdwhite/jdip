@@ -723,9 +723,8 @@ public class MapPanel extends JPanel {
 
         String parser = XMLResourceDescriptor.getXMLParserClassName();
         SAXSVGDocumentFactory f = new SAXSVGDocumentFactory(parser);
-        SVGDocument outDoc = f.createSVGDocument(uri, new StringReader(sw.toString()));
 
-        return outDoc;
+        return f.createSVGDocument(uri, new StringReader(sw.toString()));
     }
 
     /**

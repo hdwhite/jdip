@@ -92,9 +92,7 @@ public class SCHistoryWriter {
         // sort list by alphabetical order of the short name (abbreviation)
         Collections.sort(scList, new Comparator<Province>() {
             public int compare(Province o1, Province o2) {
-                Province p1 = o1;
-                Province p2 = o2;
-                return p1.getShortName().compareTo(p2.getShortName());
+                return o1.getShortName().compareTo(o2.getShortName());
             }
 
             public boolean equals(Object obj) {

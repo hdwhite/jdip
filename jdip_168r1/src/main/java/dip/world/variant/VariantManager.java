@@ -127,7 +127,6 @@ public class VariantManager {
     public static synchronized void init(File[] searchPaths, boolean isValidating)
             throws javax.xml.parsers.ParserConfigurationException, NoVariantsException {
         long ttime = System.currentTimeMillis();
-        long vptime = ttime;
         Log.println("VariantManager.init()");
 
         if (searchPaths == null || searchPaths.length == 0) {
@@ -270,7 +269,7 @@ public class VariantManager {
             throw new NoVariantsException(msg.toString());
         }
 
-        Log.printTimed(vptime, "VariantManager: variant parsing time: ");
+        Log.printTimed(ttime, "VariantManager: variant parsing time: ");
 
         ///////////////// SYMBOLS /////////////////////////
 
