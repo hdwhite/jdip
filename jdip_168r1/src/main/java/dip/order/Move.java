@@ -1158,7 +1158,7 @@ public class Move extends Order {
                     // CHANGED: 10/2002 to fix a couple of bugs
                     Log.println("  isHTH evaluation");
                     OrderState hthOS = thisOS.getHeadToHead();
-                    if ((attack_certain + 0) > (hthOS.getAtkMax() + hthOS.getAtkSelfSupportMax())) {
+                    if ((attack_certain) > (hthOS.getAtkMax() + hthOS.getAtkSelfSupportMax())) {
                         if (!isBwoss || isDestSamePower(hthOS)) {
                             thisOS.setEvalState(Tristate.FAILURE); // we fail--no self dislodgement!
                             adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_NO_SELF_DISLODGE));
