@@ -19,25 +19,24 @@ package org.nukesoft.jdipFacade.exception;
 
 /**
  * An exception for when a specified power cannot be resolved.
+ *
  * @author Ryan Michela
  */
-public class PowerNotFoundException extends JdipFacadeException
-{
+public class PowerNotFoundException extends JdipFacadeException {
 
-	public PowerNotFoundException()
-	{
-		super();
-	}
-	public PowerNotFoundException(String msg)
-	{
-		super(msg);
-	}
-	public PowerNotFoundException(String msg, Throwable e)
-	{
-		super(msg, e);
-	}
-	public PowerNotFoundException(Throwable e)
-	{
-		super(e);
-	}
+    public PowerNotFoundException() {
+        super();
+    }
+
+    public PowerNotFoundException(String msg) {
+        super(msg);
+    }
+
+    public PowerNotFoundException(String msg, Throwable e) {
+        super(msg, e);
+    }
+
+    public PowerNotFoundException(Throwable e) {
+        super(e);
+    }
 }

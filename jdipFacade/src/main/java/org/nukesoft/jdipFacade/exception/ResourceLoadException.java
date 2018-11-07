@@ -19,18 +19,17 @@ package org.nukesoft.jdipFacade.exception;
 
 /**
  * Thrown when a resoucre fails to load
+ *
  * @author Ryan Michela
  */
-public class ResourceLoadException extends JdipFacadeException
-{
+public class ResourceLoadException extends JdipFacadeException {
 
-	/**
-	 * Please provide a description of the failure.
-	 */
-	public ResourceLoadException(String arg)
-	{
-		super(arg);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * Please provide a description of the failure.
+     */
+    public ResourceLoadException(String arg) {
+        super(arg);
+        // TODO Auto-generated constructor stub
+    }
 
 }

@@ -20,20 +20,19 @@ package org.nukesoft.jdipFacade.exception;
 /**
  * Used to wrap JDip speciffic exceptions. Must wrap another
  * exception.
+ *
  * @author Ryan Michela
  */
-public class JdipException extends JdipFacadeException
-{
-	public JdipException(String msg)
-	{
-		super(msg);
-	}
-	public JdipException(String msg, Throwable e)
-	{
-		super(msg, e);
-	}
-	public JdipException(Throwable e)
-	{
-		super(e);
-	}
+public class JdipException extends JdipFacadeException {
+    public JdipException(String msg) {
+        super(msg);
+    }
+
+    public JdipException(String msg, Throwable e) {
+        super(msg, e);
+    }
+
+    public JdipException(Throwable e) {
+        super(e);
+    }
 }

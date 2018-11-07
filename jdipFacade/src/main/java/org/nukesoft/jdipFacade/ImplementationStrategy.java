@@ -21,18 +21,18 @@ import dip.order.OrderFactory;
 
 /**
  * Defines different runtime speciffic configurations for the JdipFacade
+ *
  * @author Ryan Michela
  */
-public abstract class ImplementationStrategy
-{
-	protected static OrderFactory orderFactory;
-	
-	/**
-	 * Determines the Jdip OrderFactory to be used by JdipFacade.
-	 * @return an <code>OrderFactory</code>
-	 */
-	OrderFactory getOrderFactory()
-	{
-		return orderFactory;
-	}
+public abstract class ImplementationStrategy {
+    protected static OrderFactory orderFactory;
+
+    /**
+     * Determines the Jdip OrderFactory to be used by JdipFacade.
+     *
+     * @return an <code>OrderFactory</code>
+     */
+    OrderFactory getOrderFactory() {
+        return orderFactory;
+    }
 }

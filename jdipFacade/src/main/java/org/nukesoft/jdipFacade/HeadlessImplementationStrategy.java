@@ -21,20 +21,17 @@ import dip.order.OrderFactory;
 
 /**
  * An implementation strategy that runs headless with the option for disableing AWT.
+ *
  * @author Ryan Michela
  */
-public class HeadlessImplementationStrategy extends ImplementationStrategy
-{
-	public HeadlessImplementationStrategy(boolean disableAWT)
-	{
-		if(disableAWT)
-		{
-			//turn off AWT
-			System.setProperty("java.awt.headless", "true");	
-		}
-		if(super.orderFactory == null)
-		{
-			super.orderFactory = OrderFactory.getDefault();
-		}
-	}
+public class HeadlessImplementationStrategy extends ImplementationStrategy {
+    public HeadlessImplementationStrategy(boolean disableAWT) {
+        if (disableAWT) {
+            //turn off AWT
+            System.setProperty("java.awt.headless", "true");
+        }
+        if (super.orderFactory == null) {
+            super.orderFactory = OrderFactory.getDefault();
+        }
+    }
 }

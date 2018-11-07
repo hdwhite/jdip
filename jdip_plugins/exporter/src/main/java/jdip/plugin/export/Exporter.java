@@ -42,135 +42,162 @@ import java.net.URI;
 import java.util.List;
 
 
-public class Exporter implements Tool
-{
-	ClientFrame 	clientFrame = null;
-	JMenuItem 		exportCurrent = null;
-	JMenuItem		exportAll = null;
-	
-	/** Get the current Tool version */
-	public float getVersion()			{ return 1.0f; }
-	/** Get the Tool Copyright Information (authors, etc.). Never should return null. */
-	public String getCopyrightInfo()	{ return "Copyright 2003 Zach DelProposto"; }
-	/** Get the Tool Web URI (web address, ftp address, etc.). Never should return null. */
-	public URI	getWebURI()			{ try { return new URI("http://jdip.sf.net"); } catch(Exception e) { return null; } }
-	/** Get the Email addresses. Never should return null. */
-	public URI[] getEmailURIs()		{ return new URI[0]; }
-	/** Get the Tool comment. Never should return null. */
-	public String getComment()		{ return "See Instructions for Usage"; }
-	/** Get the Tool Description. Never should return null. */
-	public String getDescription()	{ return "Exporter helps export turn data."; }
-	/** Get the Tool name. Never should return null. */
-	public String getName()			{ return "Exporter"; }
-	
-	
-	/** Creates a JMenuItem (or JMenu for sub-items) */
-	public JMenuItem registerJMenuItem()
-	{
-		// our menu item is a Menu (thus it will be a submenu)
-		JMenu subMenu = new JMenu("Export");
-		
-		exportCurrent = new JMenuItem("Current Turn");
-		exportCurrent.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				XJFileChooser xjfc = XJFileChooser.getXJFileChooser();
-				File file = xjfc.displaySaveAs(clientFrame);
-				XJFileChooser.dispose();
-				if(file != null)
-				{
-					TurnState ts = clientFrame.getTurnState();
-					exportToFile(file, new TurnState[] { ts });
-				}
-			}
-		});
-		subMenu.add(exportCurrent);
-		
-		exportAll = new JMenuItem("All Turns");
-		exportAll.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				XJFileChooser xjfc = XJFileChooser.getXJFileChooser();
-				File file = xjfc.displaySaveAs(clientFrame);
-				XJFileChooser.dispose();
-				if(file != null)
-				{
-					List<TurnState> tsList = clientFrame.getWorld().getAllTurnStates();
-					TurnState[] ts = (TurnState[]) tsList.toArray(new TurnState[0]);
-					exportToFile(file, ts);
-				}
-			}
-		});
-		subMenu.add(exportAll);
-		
-		exportAll.setEnabled(false);
-		exportCurrent.setEnabled(false);
-		
-		return subMenu;
-	}// registerJMenuItem()
-	
-	
-	/** Gets the ToolProxy object which allows a Tool access to internal data structures */
-	public void setToolProxy(ToolProxy toolProxy)
-	{
-		clientFrame = toolProxy.getClient();
-		registerListener();
-	}// setToolProxy()
-	
-	
-	/** Register a listener to see when a World object exists */
-	private void registerListener()
-	{
-		clientFrame.addPropertyChangeListener(new PropertyChangeListener()
-		{
-			public void propertyChange(PropertyChangeEvent evt)
-			{
-				final String evtName = evt.getPropertyName();
+public class Exporter implements Tool {
+    ClientFrame clientFrame = null;
+    JMenuItem exportCurrent = null;
+    JMenuItem exportAll = null;
 
-				if (evtName.equals(ClientFrame.EVT_WORLD_CREATED))
-				{
-					// activate menu items
-					exportAll.setEnabled(true);
-					exportCurrent.setEnabled(true);
-				} else if (evtName.equals(ClientFrame.EVT_WORLD_DESTROYED))
-				{
-					// deactivate menu items
-					exportAll.setEnabled(false);
-					exportCurrent.setEnabled(false);
-				}
-			}// propertyChange()
-		});
-	}// registerListener()
-	
-	
-	/** xport as a file */
-	private void exportToFile(File file, TurnState[] turnStates)
-	{
-		BufferedWriter bw = null;
-		
-		try
-		{
-			bw = new BufferedWriter(new FileWriter(file));
-			
-			for(int i=0; i<turnStates.length; i++)
-			{
-				bw.write(jdip.plugin.export.XMLExport.export(turnStates[i], ""));
-			}
-		}
-		catch(IOException e)
-		{
-			ErrorDialog.displayFileIO(clientFrame, e, file.toString());
-		}
-		finally
-		{
-			if(bw != null)
-			{
-				try { bw.close(); } catch(IOException e2) {}
-			}
-		}
-	}// exportToFile()
-	
-	
+    /**
+     * Get the current Tool version
+     */
+    public float getVersion() {
+        return 1.0f;
+    }
+
+    /**
+     * Get the Tool Copyright Information (authors, etc.). Never should return null.
+     */
+    public String getCopyrightInfo() {
+        return "Copyright 2003 Zach DelProposto";
+    }
+
+    /**
+     * Get the Tool Web URI (web address, ftp address, etc.). Never should return null.
+     */
+    public URI getWebURI() {
+        try {
+            return new URI("http://jdip.sf.net");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Get the Email addresses. Never should return null.
+     */
+    public URI[] getEmailURIs() {
+        return new URI[0];
+    }
+
+    /**
+     * Get the Tool comment. Never should return null.
+     */
+    public String getComment() {
+        return "See Instructions for Usage";
+    }
+
+    /**
+     * Get the Tool Description. Never should return null.
+     */
+    public String getDescription() {
+        return "Exporter helps export turn data.";
+    }
+
+    /**
+     * Get the Tool name. Never should return null.
+     */
+    public String getName() {
+        return "Exporter";
+    }
+
+
+    /**
+     * Creates a JMenuItem (or JMenu for sub-items)
+     */
+    public JMenuItem registerJMenuItem() {
+        // our menu item is a Menu (thus it will be a submenu)
+        JMenu subMenu = new JMenu("Export");
+
+        exportCurrent = new JMenuItem("Current Turn");
+        exportCurrent.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                XJFileChooser xjfc = XJFileChooser.getXJFileChooser();
+                File file = xjfc.displaySaveAs(clientFrame);
+                XJFileChooser.dispose();
+                if (file != null) {
+                    TurnState ts = clientFrame.getTurnState();
+                    exportToFile(file, new TurnState[]{ts});
+                }
+            }
+        });
+        subMenu.add(exportCurrent);
+
+        exportAll = new JMenuItem("All Turns");
+        exportAll.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                XJFileChooser xjfc = XJFileChooser.getXJFileChooser();
+                File file = xjfc.displaySaveAs(clientFrame);
+                XJFileChooser.dispose();
+                if (file != null) {
+                    List<TurnState> tsList = clientFrame.getWorld().getAllTurnStates();
+                    TurnState[] ts = (TurnState[]) tsList.toArray(new TurnState[0]);
+                    exportToFile(file, ts);
+                }
+            }
+        });
+        subMenu.add(exportAll);
+
+        exportAll.setEnabled(false);
+        exportCurrent.setEnabled(false);
+
+        return subMenu;
+    }// registerJMenuItem()
+
+
+    /**
+     * Gets the ToolProxy object which allows a Tool access to internal data structures
+     */
+    public void setToolProxy(ToolProxy toolProxy) {
+        clientFrame = toolProxy.getClient();
+        registerListener();
+    }// setToolProxy()
+
+
+    /**
+     * Register a listener to see when a World object exists
+     */
+    private void registerListener() {
+        clientFrame.addPropertyChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                final String evtName = evt.getPropertyName();
+
+                if (evtName.equals(ClientFrame.EVT_WORLD_CREATED)) {
+                    // activate menu items
+                    exportAll.setEnabled(true);
+                    exportCurrent.setEnabled(true);
+                } else if (evtName.equals(ClientFrame.EVT_WORLD_DESTROYED)) {
+                    // deactivate menu items
+                    exportAll.setEnabled(false);
+                    exportCurrent.setEnabled(false);
+                }
+            }// propertyChange()
+        });
+    }// registerListener()
+
+
+    /**
+     * xport as a file
+     */
+    private void exportToFile(File file, TurnState[] turnStates) {
+        BufferedWriter bw = null;
+
+        try {
+            bw = new BufferedWriter(new FileWriter(file));
+
+            for (int i = 0; i < turnStates.length; i++) {
+                bw.write(jdip.plugin.export.XMLExport.export(turnStates[i], ""));
+            }
+        } catch (IOException e) {
+            ErrorDialog.displayFileIO(clientFrame, e, file.toString());
+        } finally {
+            if (bw != null) {
+                try {
+                    bw.close();
+                } catch (IOException e2) {
+                }
+            }
+        }
+    }// exportToFile()
+
+
 }// interface Tool

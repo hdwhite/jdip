@@ -19,25 +19,24 @@ package org.nukesoft.jdipFacade.exception;
 
 /**
  * An exception for when a specified unit cannot be resolved.
+ *
  * @author Ryan Michela
  */
-public class UnitNotFoundException extends JdipFacadeException
-{
+public class UnitNotFoundException extends JdipFacadeException {
 
-	public UnitNotFoundException()
-	{
-		super();
-	}
-	public UnitNotFoundException(String msg)
-	{
-		super(msg);
-	}
-	public UnitNotFoundException(String msg, Throwable e)
-	{
-		super(msg, e);
-	}
-	public UnitNotFoundException(Throwable e)
-	{
-		super(e);
-	}
+    public UnitNotFoundException() {
+        super();
+    }
+
+    public UnitNotFoundException(String msg) {
+        super(msg);
+    }
+
+    public UnitNotFoundException(String msg, Throwable e) {
+        super(msg, e);
+    }
+
+    public UnitNotFoundException(Throwable e) {
+        super(e);
+    }
 }

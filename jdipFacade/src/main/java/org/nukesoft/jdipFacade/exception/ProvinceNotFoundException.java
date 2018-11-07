@@ -19,25 +19,24 @@ package org.nukesoft.jdipFacade.exception;
 
 /**
  * An exception for when a specified province cannot be resolved.
+ *
  * @author Ryan Michela
  */
-public class ProvinceNotFoundException extends JdipFacadeException
-{
+public class ProvinceNotFoundException extends JdipFacadeException {
 
-	public ProvinceNotFoundException()
-	{
-		super();
-	}
-	public ProvinceNotFoundException(String msg)
-	{
-		super(msg);
-	}
-	public ProvinceNotFoundException(String msg, Throwable e)
-	{
-		super(msg, e);
-	}
-	public ProvinceNotFoundException(Throwable e)
-	{
-		super(e);
-	}
+    public ProvinceNotFoundException() {
+        super();
+    }
+
+    public ProvinceNotFoundException(String msg) {
+        super(msg);
+    }
+
+    public ProvinceNotFoundException(String msg, Throwable e) {
+        super(msg, e);
+    }
+
+    public ProvinceNotFoundException(Throwable e) {
+        super(e);
+    }
 }
