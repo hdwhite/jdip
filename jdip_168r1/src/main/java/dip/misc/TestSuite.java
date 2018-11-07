@@ -333,13 +333,13 @@ public final class TestSuite {
 
 
 	*/
-    private static final void println(String s1) {
+    private static void println(String s1) {
         if (isLogging) {
             System.out.println(s1);
         }
     }
 
-    private static final void println(String s1, int i1) {
+    private static void println(String s1, int i1) {
         if (isLogging) {
             StringBuffer sb = new StringBuffer(256);
             sb.append(s1);
@@ -348,7 +348,7 @@ public final class TestSuite {
         }
     }
 
-    private static final void println(String s1, int i1, String s2) {
+    private static void println(String s1, int i1, String s2) {
         if (isLogging) {
             StringBuffer sb = new StringBuffer(256);
             sb.append(s1);
@@ -358,7 +358,7 @@ public final class TestSuite {
         }
     }
 
-    private static final void println(String s1, Object o2) {
+    private static void println(String s1, Object o2) {
         if (isLogging) {
             StringBuffer sb = new StringBuffer(256);
             sb.append(s1);
@@ -367,7 +367,7 @@ public final class TestSuite {
         }
     }
 
-    private static final void println(String s1, Object o2, Object o3) {
+    private static void println(String s1, Object o2, Object o3) {
         if (isLogging) {
             StringBuffer sb = new StringBuffer(256);
             sb.append(s1);
@@ -377,7 +377,7 @@ public final class TestSuite {
         }
     }
 
-    private static final void println(String s1, Object o2, Object o3, Object o4) {
+    private static void println(String s1, Object o2, Object o3, Object o4) {
         if (isLogging) {
             StringBuffer sb = new StringBuffer(256);
             sb.append(s1);

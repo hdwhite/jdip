@@ -972,7 +972,7 @@ public class MapMetadata {
         /**
          * Makes a new point from an existing point, since Point2D objects are mutable.
          */
-        private final Point2D.Float makePt(Point2D.Float p) {
+        private Point2D.Float makePt(Point2D.Float p) {
             return new Point2D.Float(p.x, p.y);
         }// makePt()
     }// nested class InfoEntry

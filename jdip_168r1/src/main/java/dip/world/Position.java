@@ -673,7 +673,7 @@ public class Position implements java.io.Serializable, Cloneable {
      * <p>
      * This method creates a sufficiently large array to hold temporary data.
      */
-    private final void makeTmpProvArray() {
+    private void makeTmpProvArray() {
         if (tmpProvArray == null) {
             tmpProvArray = new Province[provArray.length];
         }
