@@ -23,7 +23,6 @@
 package dip.gui.map;
 
 import com.dautelle.util.TypeFormat;
-import dip.world.Province;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.dom.util.XLinkSupport;
 import org.apache.batik.swing.JSVGCanvas;

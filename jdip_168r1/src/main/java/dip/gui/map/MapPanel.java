@@ -58,7 +58,6 @@ import org.w3c.dom.svg.SVGDocument;
 
 import javax.swing.*;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
