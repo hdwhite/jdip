@@ -24,16 +24,16 @@
 package dip.world;
 
 /**
-*	An exception typically thrown if there is a problem during Border creation.
-*/
-class InvalidBorderException extends Exception
-{
-	
-	/** Create an InvalidBorderException */
-	public InvalidBorderException(String message)
-	{
-		super(message);
-	}// InvalidBorderException()
-	
-	
+ * An exception typically thrown if there is a problem during Border creation.
+ */
+class InvalidBorderException extends Exception {
+
+    /**
+     * Create an InvalidBorderException
+     */
+    public InvalidBorderException(String message) {
+        super(message);
+    }// InvalidBorderException()
+
+
 }// InvalidBorderException 

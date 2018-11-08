@@ -24,18 +24,16 @@
 package dip.world;
 
 /**
-*	An exception typically thrown if there is a problem during World creation.
-*
-*
-*/
-public class InvalidWorldException extends Exception
-{
-	
-	/** Create an InvalidWorldException */
-	public InvalidWorldException(String message)
-	{
-		super(message);
-	}
-	
-	
+ * An exception typically thrown if there is a problem during World creation.
+ */
+public class InvalidWorldException extends Exception {
+
+    /**
+     * Create an InvalidWorldException
+     */
+    public InvalidWorldException(String message) {
+        super(message);
+    }
+
+
 }// InvalidWorldException 

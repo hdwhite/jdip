@@ -27,37 +27,32 @@ import dip.world.TurnState;
 import dip.world.World;
 
 /**
-*
-*	Default, standard implementation of the ToolProxy object.
-*	This API has not yet been defined, and remains in flux.
-*
-*/
-public class ToolProxyImpl implements ToolProxy
-{
-	private final ClientFrame clientFrame;
-	
-	/** Constructor */
-	public ToolProxyImpl(ClientFrame clientFrame)
-	{
-		this.clientFrame = clientFrame;
-	}// ToolProxyImpl()
-	
-	
-	// basic methods
-	//
-	public World getWorld()
-	{
-		return clientFrame.getWorld();
-	}// getWorld()
-	
-	public TurnState getCurrentTurnState()
-	{
-		return clientFrame.getTurnState();
-	}// getCurrentTurnState()
-	
-	public ClientFrame getClient()
-	{
-		return clientFrame;
-	}// getJFrame()
-	
+ * Default, standard implementation of the ToolProxy object.
+ * This API has not yet been defined, and remains in flux.
+ */
+public class ToolProxyImpl implements ToolProxy {
+    private final ClientFrame clientFrame;
+
+    /**
+     * Constructor
+     */
+    public ToolProxyImpl(ClientFrame clientFrame) {
+        this.clientFrame = clientFrame;
+    }// ToolProxyImpl()
+
+
+    // basic methods
+    //
+    public World getWorld() {
+        return clientFrame.getWorld();
+    }// getWorld()
+
+    public TurnState getCurrentTurnState() {
+        return clientFrame.getTurnState();
+    }// getCurrentTurnState()
+
+    public ClientFrame getClient() {
+        return clientFrame;
+    }// getJFrame()
+
 }// class ToolProxyImpl

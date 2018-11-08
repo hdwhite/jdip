@@ -22,86 +22,88 @@
 //
 package dip.world.variant.parser;
 
+import dip.gui.dialog.ErrorDialog;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import dip.gui.dialog.ErrorDialog;
-
 /**
-*	A simple error handler for the XML parsers.
-*	<p>
-*	Errors sent to an ErrorDialog
-*/
-public final class XMLErrorHandler implements ErrorHandler
-{
-	/** Create an XMLErrorHandler */
-	public XMLErrorHandler()
-	{
-	}// XMLErrorHandler()
-	
-	
-	/** Handle a (recoverable) error */
-	public void error(SAXParseException exception)
-	{
-		showError(exception, "Error");
-	}// error()
-	
-	/** Handle a non-recoverable error */
-	public void fatalError(SAXParseException exception)
-	{
-		showError(exception, "Fatal Error");
-	}// fatalError()
-	
-	/** Handle a warning */
-	public void warning(SAXParseException exception)	
-	{
-		showError(exception, "Warning");
-	}// warning()
-	
-	/** Dialog method for error handling */
-	protected void showError(SAXParseException e, String type)
-	{
-		StringBuffer sb = new StringBuffer(256);
-		sb.append("XML Validation ");
-		sb.append(type);
-		sb.append(":\n");
-		sb.append(getLocationString(e));
-		ErrorDialog.displayGeneral(null, new SAXException(sb.toString()));
-	}// showError()
-	
-	
-	/** Gets the error, nicely formatted */
-	protected String getLocationString(SAXParseException e)
-	{
-		StringBuffer sb = new StringBuffer(256);
-		String systemId = e.getSystemId();
-		
-		if(systemId != null)
-		{
-			final int index = systemId.lastIndexOf('/');
-			
-			if(index != -1)
-			{
-				systemId = systemId.substring(index + 1);
-			}
-			
-			sb.append(systemId);
-			sb.append(':');
-		}
-		
-		sb.append("line ");
-		sb.append(e.getLineNumber());
-		sb.append(":col ");
-		sb.append(e.getColumnNumber());
-		sb.append(':');
-		sb.append(e.getMessage());
-		
-		//e.printStackTrace();
-		
-		return sb.toString();
-	}// getLocationString()
-	
-	
+ * A simple error handler for the XML parsers.
+ * <p>
+ * Errors sent to an ErrorDialog
+ */
+public final class XMLErrorHandler implements ErrorHandler {
+    /**
+     * Create an XMLErrorHandler
+     */
+    public XMLErrorHandler() {
+    }// XMLErrorHandler()
+
+
+    /**
+     * Handle a (recoverable) error
+     */
+    public void error(SAXParseException exception) {
+        showError(exception, "Error");
+    }// error()
+
+    /**
+     * Handle a non-recoverable error
+     */
+    public void fatalError(SAXParseException exception) {
+        showError(exception, "Fatal Error");
+    }// fatalError()
+
+    /**
+     * Handle a warning
+     */
+    public void warning(SAXParseException exception) {
+        showError(exception, "Warning");
+    }// warning()
+
+    /**
+     * Dialog method for error handling
+     */
+    protected void showError(SAXParseException e, String type) {
+        StringBuffer sb = new StringBuffer(256);
+        sb.append("XML Validation ");
+        sb.append(type);
+        sb.append(":\n");
+        sb.append(getLocationString(e));
+        ErrorDialog.displayGeneral(null, new SAXException(sb.toString()));
+    }// showError()
+
+
+    /**
+     * Gets the error, nicely formatted
+     */
+    protected String getLocationString(SAXParseException e) {
+        StringBuffer sb = new StringBuffer(256);
+        String systemId = e.getSystemId();
+
+        if (systemId != null) {
+            final int index = systemId.lastIndexOf('/');
+
+            if (index != -1) {
+                systemId = systemId.substring(index + 1);
+            }
+
+            sb.append(systemId);
+            sb.append(':');
+        }
+
+        sb.append("line ");
+        sb.append(e.getLineNumber());
+        sb.append(":col ");
+        sb.append(e.getColumnNumber());
+        sb.append(':');
+        sb.append(e.getMessage());
+
+        //e.printStackTrace();
+
+        return sb.toString();
+    }// getLocationString()
+
+
 }// class XMLErrorHandler
 

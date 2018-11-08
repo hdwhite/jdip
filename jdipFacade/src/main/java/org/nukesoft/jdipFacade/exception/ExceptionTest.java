@@ -17,86 +17,60 @@
 package org.nukesoft.jdipFacade.exception;
 
 
-
 /**
  * Tests exceptions
+ *
  * @author Ryan Michela
  */
-public class ExceptionTest
-{
+public class ExceptionTest {
 
-	public static void main(String[] args)
-	{
-		try
-		{
-			throw new PowerNotFoundException();
-		}
-		catch(PowerNotFoundException e)
-		{
-			System.out.println(e.getMessage());
-		}
-		System.out.println();
-		try
-		{
-			die();
-		}
-		catch(JdipException e)
-		{
-			System.out.println(e.getMessage());
-		}
-		System.out.println();
-		try
-		{
-			die2();
-		}
-		catch(JdipException e)
-		{
-			System.out.println(e.getMessage());
-		}
-		System.out.println();
-		try
-		{
-			die3();
-		}
-		catch(JdipException e)
-		{
-			System.out.println(e.getMessage());
-		}
-	}
-	
-	private static void die() throws JdipException
-	{
-		try
-		{
-			throw new ResourceLoadException("A load failed.");
-		}
-		catch(ResourceLoadException e)
-		{
-			throw new JdipException("Problem with method call", e);
-		}
-	}
-	
-	private static void die2() throws JdipException
-	{
-		try
-		{
-			die();
-		}
-		catch(JdipException e)
-		{
-			throw new JdipException("Problem with method call", e);
-		}
-	}
-	
-	private static void die3() throws JdipException
-	{
-		try
-		{
-			throw new Exception("Foo");
-		}
-		catch(Exception e)
-		{
-			throw new JdipException("Problem with method call", e);
-		}
-	}
+    public static void main(String[] args) {
+        try {
+            throw new PowerNotFoundException();
+        } catch (PowerNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println();
+        try {
+            die();
+        } catch (JdipException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println();
+        try {
+            die2();
+        } catch (JdipException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println();
+        try {
+            die3();
+        } catch (JdipException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void die() throws JdipException {
+        try {
+            throw new ResourceLoadException("A load failed.");
+        } catch (ResourceLoadException e) {
+            throw new JdipException("Problem with method call", e);
+        }
+    }
+
+    private static void die2() throws JdipException {
+        try {
+            die();
+        } catch (JdipException e) {
+            throw new JdipException("Problem with method call", e);
+        }
+    }
+
+    private static void die3() throws JdipException {
+        try {
+            throw new Exception("Foo");
+        } catch (Exception e) {
+            throw new JdipException("Problem with method call", e);
+        }
+    }
 }

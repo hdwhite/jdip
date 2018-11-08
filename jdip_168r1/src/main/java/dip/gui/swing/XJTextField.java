@@ -22,111 +22,96 @@
 //
 package dip.gui.swing;
 
-import java.awt.Font;
-
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
+import java.awt.*;
 
 /**
-*	eXtended JTextField.
-*	<p>
-*	Converts unicode arrows (\u2192) to "->" arrows, 
-*	if the component font is not Unicode-aware.
-*/
-public class XJTextField extends JTextField
-{
-	private boolean isUnicodeArrowAware = false;
-	
-	public XJTextField()
-	{
+ * eXtended JTextField.
+ * <p>
+ * Converts unicode arrows (\u2192) to "->" arrows,
+ * if the component font is not Unicode-aware.
+ */
+public class XJTextField extends JTextField {
+    private boolean isUnicodeArrowAware = false;
+
+    public XJTextField() {
         this(null, 0);
-	}
-	
-	public XJTextField(int columns)
-	{
-       this(null, columns);
- 	}
-	
-	public XJTextField(String text)
-	{
-       this(text, 0);
- 	}
-	
-	public XJTextField(String text, int columns) 
-	{
- 		super(null, columns);
-		
-		AbstractDocument doc = (AbstractDocument) getDocument();
-		doc.setDocumentFilter(new DocumentFilter()
-		{
-			public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attr)
-			throws BadLocationException
-			{
-				replace(fb, offset, 0, text, attr);
-			}// insertString()
-			
-			public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attr)
-			throws BadLocationException
-			{
-				if(!XJTextField.this.isUnicodeAware())
-				{
-					fb.replace(offset, length, getFixedString(text), attr);
-				}
-				else
-				{
-					super.replace(fb, offset, length, text, attr);
-				}
-			}// replace()
-			
-			private String getFixedString(String in)
-			{
-				StringBuffer buffer = new StringBuffer((in == null) ? "" : in);
-				
-				for(int i=buffer.length()-1; i>=0; i--)
-				{
-					final char c = buffer.charAt(i);
-					
-					if(c == '\u2192')
-					{
-						buffer.deleteCharAt(i);
-						buffer.insert(i, "->");
-					}
-				}
-				
-				return buffer.toString();
-			}// getValidURLString()
-			
-			
-		});
-		
-		setText(text);
-		
-		if(text != null)
-		{
-			setText(text);
-		}
-	}
-	
-	public void setFont(Font f)
-	{
-		super.setFont(f);
-		detectUnicode();
-	}// setFont()
-	
-	/** Detect if font is unicode-aware */
-	private void detectUnicode()
-	{
-		isUnicodeArrowAware = getFont().canDisplay('\u2192');
-	}// detectUnicode()
-	
-	/** Returns if parent is unicode-aware */
-	private boolean isUnicodeAware()
-	{
-		return isUnicodeArrowAware;
-	}// isUnicodeAware()
-	
+    }
+
+    public XJTextField(int columns) {
+        this(null, columns);
+    }
+
+    public XJTextField(String text) {
+        this(text, 0);
+    }
+
+    public XJTextField(String text, int columns) {
+        super(null, columns);
+
+        AbstractDocument doc = (AbstractDocument) getDocument();
+        doc.setDocumentFilter(new DocumentFilter() {
+            public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attr)
+                    throws BadLocationException {
+                replace(fb, offset, 0, text, attr);
+            }// insertString()
+
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attr)
+                    throws BadLocationException {
+                if (!XJTextField.this.isUnicodeAware()) {
+                    fb.replace(offset, length, getFixedString(text), attr);
+                } else {
+                    super.replace(fb, offset, length, text, attr);
+                }
+            }// replace()
+
+            private String getFixedString(String in) {
+                StringBuffer buffer = new StringBuffer((in == null) ? "" : in);
+
+                for (int i = buffer.length() - 1; i >= 0; i--) {
+                    final char c = buffer.charAt(i);
+
+                    if (c == '\u2192') {
+                        buffer.deleteCharAt(i);
+                        buffer.insert(i, "->");
+                    }
+                }
+
+                return buffer.toString();
+            }// getValidURLString()
+
+
+        });
+
+        setText(text);
+
+        if (text != null) {
+            setText(text);
+        }
+    }
+
+    public void setFont(Font f) {
+        super.setFont(f);
+        detectUnicode();
+    }// setFont()
+
+    /**
+     * Detect if font is unicode-aware
+     */
+    private void detectUnicode() {
+        isUnicodeArrowAware = getFont().canDisplay('\u2192');
+    }// detectUnicode()
+
+    /**
+     * Returns if parent is unicode-aware
+     */
+    private boolean isUnicodeAware() {
+        return isUnicodeArrowAware;
+    }// isUnicodeAware()
+
 }// class XJTextField
 

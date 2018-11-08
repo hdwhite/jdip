@@ -22,47 +22,40 @@
 //
 package dip.gui.undo;
 
+import dip.order.Orderable;
+
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
-import dip.order.Orderable;
-
 
 /**
-*
-*	UndoAddOrder is created any time an order is entered.
-*	
-*/	
-public class UndoAddOrder extends XAbstractUndoableEdit implements java.io.Serializable
-{
-	// instance variables
-	private Orderable order;
-	
-	
-	public UndoAddOrder(UndoRedoManager urm, Orderable order)
-	{
-		super(urm);
-		this.order = order;
-	}// UndoAddOrder
-	
-	public String getPresentationName()
-	{
-		return order.getFullName();
-	}// getPresentationName()
-	
-	public void redo()
-	throws CannotRedoException
-	{
-		super.redo();
-		undoRedoManager.getOrderDisplayPanel().addOrder(order, false);
-	}// redo()
-	
-	public void undo()
-	throws CannotUndoException
-	{
-		super.undo();
-		undoRedoManager.getOrderDisplayPanel().removeOrder(order, false);
-	}// undo()
- 	
+ * UndoAddOrder is created any time an order is entered.
+ */
+public class UndoAddOrder extends XAbstractUndoableEdit implements java.io.Serializable {
+    // instance variables
+    private Orderable order;
+
+
+    public UndoAddOrder(UndoRedoManager urm, Orderable order) {
+        super(urm);
+        this.order = order;
+    }// UndoAddOrder
+
+    public String getPresentationName() {
+        return order.getFullName();
+    }// getPresentationName()
+
+    public void redo()
+            throws CannotRedoException {
+        super.redo();
+        undoRedoManager.getOrderDisplayPanel().addOrder(order, false);
+    }// redo()
+
+    public void undo()
+            throws CannotUndoException {
+        super.undo();
+        undoRedoManager.getOrderDisplayPanel().removeOrder(order, false);
+    }// undo()
+
 }// class UndoAddOrder
 

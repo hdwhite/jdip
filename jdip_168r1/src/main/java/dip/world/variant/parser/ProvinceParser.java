@@ -26,19 +26,19 @@ import dip.world.variant.data.BorderData;
 import dip.world.variant.data.ProvinceData;
 
 /**
-*	Interface for parsers; parsers must return ProvinceData and BorderData 
-*	arrays.
-*
-*
-*
-*/
-public interface ProvinceParser
-{
-	
-	/** Returns the ProvinceData */
-	public ProvinceData[] getProvinceData();
-	
-	/** Returns the BorderData */
-	public BorderData[] getBorderData();
-	
+ * Interface for parsers; parsers must return ProvinceData and BorderData
+ * arrays.
+ */
+public interface ProvinceParser {
+
+    /**
+     * Returns the ProvinceData
+     */
+    public ProvinceData[] getProvinceData();
+
+    /**
+     * Returns the BorderData
+     */
+    public BorderData[] getBorderData();
+
 }// interface ProvinceParser

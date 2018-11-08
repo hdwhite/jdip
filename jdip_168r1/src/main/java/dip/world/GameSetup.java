@@ -23,17 +23,16 @@
 package dip.world;
 
 /**
-*	A GameSetup is an object set in the World object that 
-*	contains the required functionality to restore a saved
-*	game. For example, if playing a networked game, it should
-*	contain the nescessary data to restore the game.
-*	<p>
-*	This is a marker interface to maintain better gui/non-gui
-*	separation.
-*/
-public interface GameSetup
-{
-	
-	// no methods : marker interface
-	
+ * A GameSetup is an object set in the World object that
+ * contains the required functionality to restore a saved
+ * game. For example, if playing a networked game, it should
+ * contain the nescessary data to restore the game.
+ * <p>
+ * This is a marker interface to maintain better gui/non-gui
+ * separation.
+ */
+public interface GameSetup {
+
+    // no methods : marker interface
+
 }// interface GameSetup

@@ -24,62 +24,59 @@
 package dip.process;
 
 /**
-*
-*	Trinary state object. Immutable.
-*	<p>
-*	This class is not serializable; if this is required, 
-*	readResolve() must be implemented to preserve the integrity
-*	of referential equality.
-*
-*/
-final public class Tristate
-{
-	// constants
-	public static final Tristate TRUE		= new Tristate("True");
-	public static final Tristate FALSE		= new Tristate("False");
-	public static final Tristate UNCERTAIN	= new Tristate("Uncertain");
-	
-	// alternate set of constants, fully equivalent and interchangeable with above
-	// constants.
-	public static final Tristate MAYBE 		= UNCERTAIN;
-	public static final Tristate YES 		= TRUE;
-	public static final Tristate NO 		= FALSE;
-	public static final Tristate SUCCESS	= TRUE;
-	public static final Tristate FAILURE	= FALSE;
-	
-	
-	// instance variables
-	private transient String text = null;
-	
-	
-	/** Create a TriState object */
-	private Tristate(String value)
-	{
-		this.text = value;
-	}// Tristate()
-	
-	
-	public String toString()
-	{
-		return text;
-	}// toString()
-	
-	/** Compares a Tristate to a boolean */
-	public boolean equals(boolean value)
-	{
-		if( (value && (this == TRUE))
-			|| (!value && (this == FALSE)) )
-		{
-			return true;
-		}
-		
-		return false;
-	}// equals()
-	
-	/** Get a Tristate that is equivalent to the boolean */
-	public static Tristate getTristate(boolean value)
-	{
-		return ((value) ? TRUE : FALSE);
-	}// getTristate()
-	
+ * Trinary state object. Immutable.
+ * <p>
+ * This class is not serializable; if this is required,
+ * readResolve() must be implemented to preserve the integrity
+ * of referential equality.
+ */
+final public class Tristate {
+    // constants
+    public static final Tristate TRUE = new Tristate("True");
+    public static final Tristate FALSE = new Tristate("False");
+    public static final Tristate UNCERTAIN = new Tristate("Uncertain");
+
+    // alternate set of constants, fully equivalent and interchangeable with above
+    // constants.
+    public static final Tristate MAYBE = UNCERTAIN;
+    public static final Tristate YES = TRUE;
+    public static final Tristate NO = FALSE;
+    public static final Tristate SUCCESS = TRUE;
+    public static final Tristate FAILURE = FALSE;
+
+
+    // instance variables
+    private transient String text = null;
+
+
+    /**
+     * Create a TriState object
+     */
+    private Tristate(String value) {
+        this.text = value;
+    }// Tristate()
+
+    /**
+     * Get a Tristate that is equivalent to the boolean
+     */
+    public static Tristate getTristate(boolean value) {
+        return ((value) ? TRUE : FALSE);
+    }// getTristate()
+
+    public String toString() {
+        return text;
+    }// toString()
+
+    /**
+     * Compares a Tristate to a boolean
+     */
+    public boolean equals(boolean value) {
+        if ((value && (this == TRUE))
+                || (!value && (this == FALSE))) {
+            return true;
+        }
+
+        return false;
+    }// equals()
+
 }// class Tristate

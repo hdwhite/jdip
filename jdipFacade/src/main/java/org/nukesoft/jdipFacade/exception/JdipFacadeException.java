@@ -19,88 +19,82 @@ package org.nukesoft.jdipFacade.exception;
 
 /**
  * Top level exception for all facade related errors.
+ *
  * @author Ryan Michela
  */
-public class JdipFacadeException extends Exception
-{
-	/**
-	 * 
-	 */
-	public JdipFacadeException()
-	{
-		super();
-	}
-	/**
-	 * @param arg0
-	 */
-	public JdipFacadeException(String arg0)
-	{
-		super(arg0);
-	}
-	/**
-	 * @param arg0
-	 * @param arg1
-	 */
-	public JdipFacadeException(String arg0, Throwable arg1)
-	{
-		super(arg0, arg1);
-	}
-	/**
-	 * @param arg0
-	 */
-	public JdipFacadeException(Throwable arg0)
-	{
-		super(arg0);
-	}
-	/**
-	 * Automaticaly adds the error header to the message.
-	 * @see java.lang.Throwable#getMessage()
-	 */
-	public String getMessage()
-	{
-		return getMessage(0);
-	}
-	
-	/**
-	 * @param tabs the number of tabs to indent
-	 * @return
-	 */
-	String getMessage(int tabs)
-	{
-		String message = identify();
-		if(super.getMessage() != null)
-		{
-			message += ("::" + super.getMessage());
-		}
-		if(this.getCause() != null)
-		{
-			message += "\n";
-			//insert tabs
-			for(int i = -1; i < tabs; i++)
-			{
-				message += "   ";
-			}
-			message += "Root Cause::";
-			if(this.getCause() instanceof JdipFacadeException)
-			{
-				message += ((JdipFacadeException)this.getCause()).getMessage(tabs + 1);
-			}
-			else
-			{
-				message += this.getCause().toString();
-			}
-		}
-		return message;
-	}
-	/**
-	 * Makes an error header in the format 
-	 * [ExceptionClassName @ ErroringClass : BadMethod (LineNumber)] :: error text
-	 * @return the error header
-	 */
-	private String identify()
-	{
-		StackTraceElement currentFrame = getStackTrace()[0];
-		return "[" + getClass().getName() + "@" + currentFrame.getClassName() + ":" 
-				+ currentFrame.getMethodName() + "(" + currentFrame.getLineNumber() +")]";
-	}
+public class JdipFacadeException extends Exception {
+    /**
+     *
+     */
+    public JdipFacadeException() {
+        super();
+    }
+
+    /**
+     * @param arg0
+     */
+    public JdipFacadeException(String arg0) {
+        super(arg0);
+    }
+
+    /**
+     * @param arg0
+     * @param arg1
+     */
+    public JdipFacadeException(String arg0, Throwable arg1) {
+        super(arg0, arg1);
+    }
+
+    /**
+     * @param arg0
+     */
+    public JdipFacadeException(Throwable arg0) {
+        super(arg0);
+    }
+
+    /**
+     * Automaticaly adds the error header to the message.
+     *
+     * @see java.lang.Throwable#getMessage()
+     */
+    public String getMessage() {
+        return getMessage(0);
+    }
+
+    /**
+     * @param tabs the number of tabs to indent
+     * @return
+     */
+    String getMessage(int tabs) {
+        String message = identify();
+        if (super.getMessage() != null) {
+            message += ("::" + super.getMessage());
+        }
+        if (this.getCause() != null) {
+            message += "\n";
+            //insert tabs
+            for (int i = -1; i < tabs; i++) {
+                message += "   ";
+            }
+            message += "Root Cause::";
+            if (this.getCause() instanceof JdipFacadeException) {
+                message += ((JdipFacadeException) this.getCause()).getMessage(tabs + 1);
+            } else {
+                message += this.getCause().toString();
+            }
+        }
+        return message;
+    }
+
+    /**
+     * Makes an error header in the format
+     * [ExceptionClassName @ ErroringClass : BadMethod (LineNumber)] :: error text
+     *
+     * @return the error header
+     */
+    private String identify() {
+        StackTraceElement currentFrame = getStackTrace()[0];
+        return "[" + getClass().getName() + "@" + currentFrame.getClassName() + ":"
+                + currentFrame.getMethodName() + "(" + currentFrame.getLineNumber() + ")]";
+    }
 }

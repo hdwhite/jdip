@@ -22,147 +22,141 @@
 //
 package dip.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
+import java.awt.*;
 
 /**
-*
-*	StatusBar
-*
-*/
-public class StatusBar extends JPanel
-{
-	private final JTextField text;
-	private final JTextField mode;
-	private final static String INITIAL_MESSAGE = "";
-	private JProgressBar pb = null;	
-	
-	
-	/** Creates the StatusBar */
-	public StatusBar()
-	{
-		super(new BorderLayout());
-		
-		add(new javax.swing.JSeparator(), BorderLayout.NORTH);
-		
-		text = new JTextField(INITIAL_MESSAGE)
-		{
-			public boolean isFocusable()
-			{
-				return false;
-			}
-		};
-		
-		text.setEditable(false);
-		text.setBorder(new EmptyBorder(3,3,3,3));
-		text.setHighlighter(null);
-		text.setOpaque(false);
-		add(text, BorderLayout.CENTER);
-		
-		mode = new JTextField("", 8)
-		{
-			public boolean isFocusable()
-			{
-				return false;
-			}
-		};
-		mode.setHorizontalAlignment(JTextField.RIGHT);
-		mode.setEditable(false);
-		mode.setHighlighter(null);
-		mode.setOpaque(false);
-		mode.setBorder(new EmptyBorder(3,3,3,3));
-		mode.setMinimumSize(new Dimension(45, (int)text.getPreferredSize().getHeight()));
-		mode.setMaximumSize(mode.getMinimumSize());
-		add(mode, BorderLayout.EAST);
-	}// StatusBar()
-	
-	
-	/** Clear the text */
-	public void clearText()
-	{
-		setText("");
-	}// clear()
-	
-	
-	/** Set the text */
-	public void setText(final String s)
-	{
-		text.setText(s);
-	}// setText()
-	
-	/** Set Mode indicator text */
-	public void setModeText(String s)
-	{
-		mode.setText(s);
-	}// setModeText()
-	
-	/** Clear Mode indicator text */
-	public void clearModeText()
-	{
-		mode.setText("");
-	}// clearModeText();
-	
-	/** Get the Mode indicator text */
-	public String getModeText()
-	{
-		return mode.getText();
-	}// getModeText()
-	
-	/** Shows the Progress Bar (in place of the Mode setting) */
-	public void showPB(int min, int max)
-	{
-		if(pb == null)
-		{
-			pb = new JProgressBar(min, max);
-			pb.setStringPainted(false);
-			pb.setIndeterminate(false);
-			pb.setBorderPainted(true);
-		}
-		
-		pb.setValue(min);
-		
-		remove(mode);
-		add(pb, BorderLayout.EAST); 
-		validate();
-	}// showPB()
-	
-	/** Sets the progress bar displayed value. */
-	public void setPBValue(int value)
-	{
-		if(pb != null)
-		{
-			pb.setValue(value);
-		}
-	}// setPB()
-	
-	
-	/** Increment the progress bar's displayed value by 1 */
-	public void incPBValue()
-	{
-		if(pb != null)
-		{
-			//System.out.println("incPBValue(): "+pb.getValue()+" -> "+(pb.getValue()+1));
-			pb.setValue( pb.getValue() + 1 );
-		}
-	}// incPBValue()
-	
-	/** Hides the Progress Bar (and puts the Mode setting back) */
-	public void hidePB()
-	{
-		if(pb != null)
-		{
-			remove(pb);
-			add(mode, BorderLayout.EAST); 
-			validate();
-			mode.repaint();
-			pb = null;
-		}
-	}// hidePB()
-	
+ * StatusBar
+ */
+public class StatusBar extends JPanel {
+    private final static String INITIAL_MESSAGE = "";
+    private final JTextField text;
+    private final JTextField mode;
+    private JProgressBar pb = null;
+
+
+    /**
+     * Creates the StatusBar
+     */
+    public StatusBar() {
+        super(new BorderLayout());
+
+        add(new javax.swing.JSeparator(), BorderLayout.NORTH);
+
+        text = new JTextField(INITIAL_MESSAGE) {
+            public boolean isFocusable() {
+                return false;
+            }
+        };
+
+        text.setEditable(false);
+        text.setBorder(new EmptyBorder(3, 3, 3, 3));
+        text.setHighlighter(null);
+        text.setOpaque(false);
+        add(text, BorderLayout.CENTER);
+
+        mode = new JTextField("", 8) {
+            public boolean isFocusable() {
+                return false;
+            }
+        };
+        mode.setHorizontalAlignment(JTextField.RIGHT);
+        mode.setEditable(false);
+        mode.setHighlighter(null);
+        mode.setOpaque(false);
+        mode.setBorder(new EmptyBorder(3, 3, 3, 3));
+        mode.setMinimumSize(new Dimension(45, (int) text.getPreferredSize().getHeight()));
+        mode.setMaximumSize(mode.getMinimumSize());
+        add(mode, BorderLayout.EAST);
+    }// StatusBar()
+
+
+    /**
+     * Clear the text
+     */
+    public void clearText() {
+        setText("");
+    }// clear()
+
+
+    /**
+     * Set the text
+     */
+    public void setText(final String s) {
+        text.setText(s);
+    }// setText()
+
+    /**
+     * Clear Mode indicator text
+     */
+    public void clearModeText() {
+        mode.setText("");
+    }// clearModeText();
+
+    /**
+     * Get the Mode indicator text
+     */
+    public String getModeText() {
+        return mode.getText();
+    }// getModeText()
+
+    /**
+     * Set Mode indicator text
+     */
+    public void setModeText(String s) {
+        mode.setText(s);
+    }// setModeText()
+
+    /**
+     * Shows the Progress Bar (in place of the Mode setting)
+     */
+    public void showPB(int min, int max) {
+        if (pb == null) {
+            pb = new JProgressBar(min, max);
+            pb.setStringPainted(false);
+            pb.setIndeterminate(false);
+            pb.setBorderPainted(true);
+        }
+
+        pb.setValue(min);
+
+        remove(mode);
+        add(pb, BorderLayout.EAST);
+        validate();
+    }// showPB()
+
+    /**
+     * Sets the progress bar displayed value.
+     */
+    public void setPBValue(int value) {
+        if (pb != null) {
+            pb.setValue(value);
+        }
+    }// setPB()
+
+
+    /**
+     * Increment the progress bar's displayed value by 1
+     */
+    public void incPBValue() {
+        if (pb != null) {
+            //System.out.println("incPBValue(): "+pb.getValue()+" -> "+(pb.getValue()+1));
+            pb.setValue(pb.getValue() + 1);
+        }
+    }// incPBValue()
+
+    /**
+     * Hides the Progress Bar (and puts the Mode setting back)
+     */
+    public void hidePB() {
+        if (pb != null) {
+            remove(pb);
+            add(mode, BorderLayout.EAST);
+            validate();
+            mode.repaint();
+            pb = null;
+        }
+    }// hidePB()
+
 }// class StatusBar

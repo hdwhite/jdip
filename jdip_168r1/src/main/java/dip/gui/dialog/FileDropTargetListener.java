@@ -22,6 +22,8 @@
 //
 package dip.gui.dialog;
 
+import dip.misc.Utils;
+
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -33,83 +35,67 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import dip.misc.Utils;
-
 /**
-*	DND (drag-and-drop) DropTarget listener that can accept drops 
-*	from files. 
-*	<p>
-*	Usage:
-*	<code>  new DropTarget(this, new FileDropTargetListener());</code>, after
-*	subclassing and implementing <code>processDroppedFiles()</code>
-*	<p>
-*	TODO: get (on windows) ".lnk" file targets so shortcuts work correctly.
-*/
-public abstract class FileDropTargetListener extends DropTargetAdapter
-{
-	
-	public void drop(DropTargetDropEvent dtde)
-	{
-		if( dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor) )
-		{
-			try
-			{
-				dtde.acceptDrop(DnDConstants.ACTION_COPY);
-				Transferable xfer = dtde.getTransferable();
-				Object obj = xfer.getTransferData(DataFlavor.javaFileListFlavor);
-				
-				if(obj instanceof java.util.List)
-				{
-					java.util.List list = (java.util.List) obj;
-					if(!list.isEmpty())
-					{
-						ArrayList fileList = new ArrayList(list.size());
-						
-						Iterator iter = list.iterator();
-						while(iter.hasNext())
-						{
-							File originalFile = (File) iter.next();
-							File file = convertFile(originalFile);
-							if(file != null)
-							{
-								fileList.add(file);
-							}
-						}
-						
-						processDroppedFiles( (File[]) fileList.toArray(new File[fileList.size()]) );
-					}
-					
-					dtde.dropComplete(true);
-					return;
-				}
-			}
-			catch(UnsupportedFlavorException e)
-			{
-				// fail silently
-				System.out.println(e);
-			}
-			catch(IOException e2)
-			{
-				// fail silently
-				System.out.println(e2);
-			}
-		}
-		
-		// all done
-		dtde.acceptDrop(DnDConstants.ACTION_NONE);
-		dtde.dropComplete(true);
-	}// drop()
-	
-	/**
-	*	NOTE: this method will find the targets of  ".lnk" files on Windows
-	*	as the sun.awt.shell.ShellFolder.getShellFolder(File).getLinkLocation()
-	*	method does not work correctly. Instead, it will return 'null' for links.
-	*/
-	protected File convertFile(File file)
-	{
-		if( Utils.isWindows() &&
-			file.getPath().toLowerCase().endsWith(".lnk") ) 
-		{
+ * DND (drag-and-drop) DropTarget listener that can accept drops
+ * from files.
+ * <p>
+ * Usage:
+ * <code>  new DropTarget(this, new FileDropTargetListener());</code>, after
+ * subclassing and implementing <code>processDroppedFiles()</code>
+ * <p>
+ * TODO: get (on windows) ".lnk" file targets so shortcuts work correctly.
+ */
+public abstract class FileDropTargetListener extends DropTargetAdapter {
+
+    public void drop(DropTargetDropEvent dtde) {
+        if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+            try {
+                dtde.acceptDrop(DnDConstants.ACTION_COPY);
+                Transferable xfer = dtde.getTransferable();
+                Object obj = xfer.getTransferData(DataFlavor.javaFileListFlavor);
+
+                if (obj instanceof java.util.List) {
+                    java.util.List list = (java.util.List) obj;
+                    if (!list.isEmpty()) {
+                        ArrayList<File> fileList = new ArrayList<>(list.size());
+
+                        Iterator iter = list.iterator();
+                        while (iter.hasNext()) {
+                            File originalFile = (File) iter.next();
+                            File file = convertFile(originalFile);
+                            if (file != null) {
+                                fileList.add(file);
+                            }
+                        }
+
+                        processDroppedFiles((File[]) fileList.toArray(new File[fileList.size()]));
+                    }
+
+                    dtde.dropComplete(true);
+                    return;
+                }
+            } catch (UnsupportedFlavorException e) {
+                // fail silently
+                System.out.println(e);
+            } catch (IOException e2) {
+                // fail silently
+                System.out.println(e2);
+            }
+        }
+
+        // all done
+        dtde.acceptDrop(DnDConstants.ACTION_NONE);
+        dtde.dropComplete(true);
+    }// drop()
+
+    /**
+     * NOTE: this method will find the targets of  ".lnk" files on Windows
+     * as the sun.awt.shell.ShellFolder.getShellFolder(File).getLinkLocation()
+     * method does not work correctly. Instead, it will return 'null' for links.
+     */
+    protected File convertFile(File file) {
+        if (Utils.isWindows() &&
+                file.getPath().toLowerCase().endsWith(".lnk")) {
 			/*
 			try
 			{
@@ -120,19 +106,19 @@ public abstract class FileDropTargetListener extends DropTargetAdapter
 				// do nothing; we are not running in the SUN JVM
 			}
 			*/
-			return null;
-		}
-		
-		return file;
-	}// converFile()
-	
-	
-	/**
-	*	Subclasses must override this method.
-	*	The array of Files will not be null. 
-	*	<p>
-	*	To avoid GUI freeze, processing should be performed in another thread.
-	*/
-	public abstract void processDroppedFiles(File[] files);
+            return null;
+        }
+
+        return file;
+    }// converFile()
+
+
+    /**
+     * Subclasses must override this method.
+     * The array of Files will not be null.
+     * <p>
+     * To avoid GUI freeze, processing should be performed in another thread.
+     */
+    public abstract void processDroppedFiles(File[] files);
 }// class FileDropTargetListener
 

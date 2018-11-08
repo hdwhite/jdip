@@ -20,76 +20,61 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //  Or from http://www.gnu.org/
 //
-package jdip.plugin.export; 
+package jdip.plugin.export;
 
-import dip.tool.*;
-import dip.gui.*;
-import dip.gui.swing.*;
-import dip.gui.map.*;
-import dip.misc.*;
-import dip.world.*;
-import dip.process.*;
-import dip.order.*;
-import dip.order.result.*;
-
-import javax.swing.*;
-import java.awt.event.*;
-import java.net.URI;
-import java.io.*;
-import java.util.*;
+import dip.misc.Utils;
+import dip.world.TurnState;
 
 
 /**
-*	A VERY simple XML export facility.
-*	<p>
-*	No attempt has been made for performance. This is a very simple utility.
-*
-*/
-class XMLExport
-{
-	// xml template constants
-	//
-	private static final String HEADER = "<?xml version=\"1.0\" ?>";
-	private static final String TEMPLATE_MAIN = 
-		"<jdip game=\"{0}\" year=\"{1}\" season=\"{2}\">"+
-		"<moves>\n"+
-		"{3}"+						// move and other orders
-		"</moves>\n"+
-		"<adjustments>\n"+
-		"{4}"+						// build/remove orders (if any)
-		"</adjustments>\n"+
-		"<sc>\n"+
-		"{5}"+						// done
-		"</sc>"+
-		"</jdip>\n";
-		
-	// for moves, adjustmenets
-	private static final String TEMPLATE_POWER = 
-	"\t<country name=\"{0}\">\n{1}</country>\n";
-		
-	private static final String TEMPLATE_MOVE__RESULT_SUCCESS = 
-	"\t\t<move result=\"success\" retreat=\"{0}\" disband=\"{1}\">\n\t\t\t{2}\n\t\t</move>\n";
-		
-	private static final String TEMPLATE_MOVE_RESULT_FAILURE = 
-	"\t\t<move result=\"failure\">\n\t\t\t{0}\n\t\t</move>\n";
-		
-	private static final String TEMPLATE_ADJ_BUILD = 
-	"\t\t<build type=\"{0}\">\n\t\t\t{1}\n\t\t</build>\n";
-		
-	private static final String TEMPLATE_ADJ_DISBAND = 
-	"\t\t<disband>\n\t\t\t{0}\n\t\t</disband>\n";
-		
-	private static final String SC_POWER = 
-	"\t<country name=\"{0}\" total=\"{1}\" diff=\"{2}\">\n{2}</country>\n";
-	
-	private static final String SC_LOCATION = 
-	"\t\t<sc name=\"{0}\" diff=\"{1}\"/>\n";	// diff: gained or lost
-	
-	
-	
-	/** Export the given TurnState as very simple XML */
-	public static String export(TurnState ts, String gameName)
-	{
+ * A VERY simple XML export facility.
+ * <p>
+ * No attempt has been made for performance. This is a very simple utility.
+ */
+class XMLExport {
+    // xml template constants
+    //
+    private static final String HEADER = "<?xml version=\"1.0\" ?>";
+    private static final String TEMPLATE_MAIN =
+            "<jdip game=\"{0}\" year=\"{1}\" season=\"{2}\">" +
+                    "<moves>\n" +
+                    "{3}" +                        // move and other orders
+                    "</moves>\n" +
+                    "<adjustments>\n" +
+                    "{4}" +                        // build/remove orders (if any)
+                    "</adjustments>\n" +
+                    "<sc>\n" +
+                    "{5}" +                        // done
+                    "</sc>" +
+                    "</jdip>\n";
+
+    // for moves, adjustmenets
+    private static final String TEMPLATE_POWER =
+            "\t<country name=\"{0}\">\n{1}</country>\n";
+
+    private static final String TEMPLATE_MOVE__RESULT_SUCCESS =
+            "\t\t<move result=\"success\" retreat=\"{0}\" disband=\"{1}\">\n\t\t\t{2}\n\t\t</move>\n";
+
+    private static final String TEMPLATE_MOVE_RESULT_FAILURE =
+            "\t\t<move result=\"failure\">\n\t\t\t{0}\n\t\t</move>\n";
+
+    private static final String TEMPLATE_ADJ_BUILD =
+            "\t\t<build type=\"{0}\">\n\t\t\t{1}\n\t\t</build>\n";
+
+    private static final String TEMPLATE_ADJ_DISBAND =
+            "\t\t<disband>\n\t\t\t{0}\n\t\t</disband>\n";
+
+    private static final String SC_POWER =
+            "\t<country name=\"{0}\" total=\"{1}\" diff=\"{2}\">\n{2}</country>\n";
+
+    private static final String SC_LOCATION =
+            "\t\t<sc name=\"{0}\" diff=\"{1}\"/>\n";    // diff: gained or lost
+
+
+    /**
+     * Export the given TurnState as very simple XML
+     */
+    public static String export(TurnState ts, String gameName) {
 		/*
 		// orders (if any; otherwise empty)
 		String orders = getOrders(ts);
@@ -127,14 +112,14 @@ class XMLExport
 		sb.append(Utils.format(TEMPLATE_MAIN, templateArgs));
 		return sb.toString();
 		*/
-		return "";
-	}// export()
-	
-	
-	
-	/** Gets the Positions (units and SC) */
-	private static String getPositions(TurnState ts)
-	{
+        return "";
+    }// export()
+
+
+    /**
+     * Gets the Positions (units and SC)
+     */
+    private static String getPositions(TurnState ts) {
 		/*
 		StringBuffer sb = new StringBuffer(4096);
 		Position pos = ts.getPosition();
@@ -182,13 +167,14 @@ class XMLExport
 		
 		return sb.toString();
 		*/
-		return "";
-	}// getPositions()
-	
-	
-	/** Gets the Orders, and (if appropriate) results */
-	private static String getOrders(TurnState ts)
-	{
+        return "";
+    }// getPositions()
+
+
+    /**
+     * Gets the Orders, and (if appropriate) results
+     */
+    private static String getOrders(TurnState ts) {
 		/*
 		// this is somewhat complicated if we're resolved
 		// we need to get results and match them to orders
@@ -273,13 +259,14 @@ class XMLExport
 		
 		return sb.toString();
 		*/
-		return "";
-	}// getOrdersAndResults()
-	
-	
-	/** Gets the retreating units */
-	private static String getRetreats(TurnState ts)
-	{
+        return "";
+    }// getOrdersAndResults()
+
+
+    /**
+     * Gets the retreating units
+     */
+    private static String getRetreats(TurnState ts) {
 		/*
 		RetreatChecker rc = new RetreatChecker(ts);
 		StringBuffer sb = new StringBuffer(1024);
@@ -314,13 +301,14 @@ class XMLExport
 		
 		return sb.toString();
 		*/
-		return "";
-	}// getRetreats()
-	
-	
-	/** Gets the SC */
-	private static String getSC(TurnState ts)
-	{
+        return "";
+    }// getRetreats()
+
+
+    /**
+     * Gets the SC
+     */
+    private static String getSC(TurnState ts) {
 		/*
 		StringBuffer sb = new StringBuffer(4096);
 		TurnState priorTS = ts.getWorld().getPreviousTurnState();
@@ -394,79 +382,73 @@ class XMLExport
 		
  		return sb.toString();
 		*/
-		return "";
-	}// getSC()
-	
-	
-	
-	/** Convenience format() */
-	private static String format(final String template, String arg0)
-	{
-		return format(template, new String[] {arg0});
-	}
-	
-	private static String format(final String template, String arg0, String arg1)
-	{
-		return format(template, new String[] {arg0, arg1});
-	}
-	
-	private static String format(final String template, String arg0, String arg1, String arg2)
-	{
-		return format(template, new String[] {arg0, arg1, arg2});
-	}
-	
-	private static String format(final String template, String arg0, String arg1, String arg2, String arg3)
-	{
-		return format(template, new String[] {arg0, arg1, arg2, arg3});
-	}
-	
-	/**
-	*	Formats args into template, after making sure args
-	*	have been converted with toXMLString()
-	*/
-	private static String format(final String template, final String[] args)
-	{
-		final Object[] templateArgs = new Object[args.length];
-		for(int i=0; i<templateArgs.length; i++)
-		{
-			templateArgs[i] = toXMLString(args[i]);
-		}
-		
-		return Utils.format(template, templateArgs);		
-	}// format()
-	
-	
-	/**
-	*	Converts a string to XML compatible string; expands
-	*	entities like &amp; to &amp;amp; and quotes (double
-	*	and single) as well as brackets.
-	*/
-	private static String toXMLString(CharSequence in)
-	{
-		StringBuffer sb = new StringBuffer(in.toString());
-		replaceAll(sb, "&", "&amp;");	// this must come first!!
-		replaceAll(sb, "<", "&lt;");
-		replaceAll(sb, ">", "&gt;");
-		replaceAll(sb, "\'", "&apos;");
-		replaceAll(sb, "\"", "&quot;");
-		return sb.toString();
-	}// toXMLString()
-	
-	/** replace all instances of "search" with "replace" in StringBuffer sb */
-	private static void replaceAll(StringBuffer sb, String search, String replace)
-	{
-		int start = sb.indexOf(search, 0);
-		while(start != -1)
-		{
-			final int end = start + search.length();
-			sb.replace(start, end, replace);
-			
-			// repeat search
-			start = sb.indexOf(search, (start + replace.length()));
-		}
-	}// replaceAll()
+        return "";
+    }// getSC()
 
-	
+
+    /**
+     * Convenience format()
+     */
+    private static String format(final String template, String arg0) {
+        return format(template, new String[]{arg0});
+    }
+
+    private static String format(final String template, String arg0, String arg1) {
+        return format(template, new String[]{arg0, arg1});
+    }
+
+    private static String format(final String template, String arg0, String arg1, String arg2) {
+        return format(template, new String[]{arg0, arg1, arg2});
+    }
+
+    private static String format(final String template, String arg0, String arg1, String arg2, String arg3) {
+        return format(template, new String[]{arg0, arg1, arg2, arg3});
+    }
+
+    /**
+     * Formats args into template, after making sure args
+     * have been converted with toXMLString()
+     */
+    private static String format(final String template, final String[] args) {
+        final Object[] templateArgs = new Object[args.length];
+        for (int i = 0; i < templateArgs.length; i++) {
+            templateArgs[i] = toXMLString(args[i]);
+        }
+
+        return Utils.format(template, templateArgs);
+    }// format()
+
+
+    /**
+     * Converts a string to XML compatible string; expands
+     * entities like &amp; to &amp;amp; and quotes (double
+     * and single) as well as brackets.
+     */
+    private static String toXMLString(CharSequence in) {
+        StringBuffer sb = new StringBuffer(in.toString());
+        replaceAll(sb, "&", "&amp;");    // this must come first!!
+        replaceAll(sb, "<", "&lt;");
+        replaceAll(sb, ">", "&gt;");
+        replaceAll(sb, "\'", "&apos;");
+        replaceAll(sb, "\"", "&quot;");
+        return sb.toString();
+    }// toXMLString()
+
+    /**
+     * replace all instances of "search" with "replace" in StringBuffer sb
+     */
+    private static void replaceAll(StringBuffer sb, String search, String replace) {
+        int start = sb.indexOf(search, 0);
+        while (start != -1) {
+            final int end = start + search.length();
+            sb.replace(start, end, replace);
+
+            // repeat search
+            start = sb.indexOf(search, (start + replace.length()));
+        }
+    }// replaceAll()
+
+
 }// class XMLExport
 
 

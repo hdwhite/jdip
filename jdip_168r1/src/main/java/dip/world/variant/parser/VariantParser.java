@@ -25,17 +25,13 @@ package dip.world.variant.parser;
 import dip.world.variant.data.Variant;
 
 /**
-*	Parses a Variant description.
-*
-*
-*
-*
-*
-*/
-public interface VariantParser
-{
-	
-	/** Returns an array of Variant objects. */
-	public Variant[] getVariants();
-	
+ * Parses a Variant description.
+ */
+public interface VariantParser {
+
+    /**
+     * Returns an array of Variant objects.
+     */
+    public Variant[] getVariants();
+
 }// interface VariantParser

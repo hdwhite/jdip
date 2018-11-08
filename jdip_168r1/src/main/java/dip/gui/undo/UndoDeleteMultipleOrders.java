@@ -22,51 +22,42 @@
 //
 package dip.gui.undo;
 
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
-
 import dip.misc.Utils;
 import dip.order.Orderable;
 
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 
 
 /**
-*
-*	UndoDeleteMultipleOrders is created any time multiple orders are
-*	deleted. This can be used instead of a CompoundEdit of UndoDeleteOrders.
-*	
-*	
-*/	
-public class UndoDeleteMultipleOrders extends XAbstractUndoableEdit
-{
-	// instance variables
-	private final static String PRESENTATION_NAME_PREFIX = "Undo.order.delete.multiple";
-	private Orderable[] orders;
-	
-	
-	public UndoDeleteMultipleOrders(UndoRedoManager urm, Orderable[] orders)
-	{
-		super(urm);
-		this.orders = orders;
-	}// UndoDeleteMultipleOrders()
-	
-	public String getPresentationName()
-	{
-		return Utils.getLocalString(PRESENTATION_NAME_PREFIX);
-	}// getPresentationName()
-	
-	public void redo()
-	throws CannotRedoException
-	{
-		super.redo();
-		undoRedoManager.getOrderDisplayPanel().removeOrders(orders, false);
-	}// redo()
-	
-	public void undo()
-	throws CannotUndoException
-	{
-		super.undo();
-		undoRedoManager.getOrderDisplayPanel().addOrdersRaw(orders, false);
-	}// undo()
- 	
+ * UndoDeleteMultipleOrders is created any time multiple orders are
+ * deleted. This can be used instead of a CompoundEdit of UndoDeleteOrders.
+ */
+public class UndoDeleteMultipleOrders extends XAbstractUndoableEdit {
+    // instance variables
+    private final static String PRESENTATION_NAME_PREFIX = "Undo.order.delete.multiple";
+    private Orderable[] orders;
+
+
+    public UndoDeleteMultipleOrders(UndoRedoManager urm, Orderable[] orders) {
+        super(urm);
+        this.orders = orders;
+    }// UndoDeleteMultipleOrders()
+
+    public String getPresentationName() {
+        return Utils.getLocalString(PRESENTATION_NAME_PREFIX);
+    }// getPresentationName()
+
+    public void redo()
+            throws CannotRedoException {
+        super.redo();
+        undoRedoManager.getOrderDisplayPanel().removeOrders(orders, false);
+    }// redo()
+
+    public void undo()
+            throws CannotUndoException {
+        super.undo();
+        undoRedoManager.getOrderDisplayPanel().addOrdersRaw(orders, false);
+    }// undo()
+
 }// class UndoDeleteMultipleOrders

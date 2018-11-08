@@ -24,42 +24,37 @@ package dip.gui.dialog.prefs;
 
 
 /**
-*	This defines a Panel (tabbed Panel) in the PreferenceDialog.
-*	<p>
-*	Preferences can be applied or cancelled.
-*	<p>
-*/
-public abstract class PreferencePanel extends javax.swing.JPanel
-{
-	/**
-	*	Apply changes made by user.
-	*
-	*/
-	public abstract void apply();
-	
-	
-	/**
-	*	Cancel; do not apply changes made.
-	*
-	*/
-	public abstract void cancel();
-	
-	
-	/**
-	*	Return settings to their default. 
-	*	Does not apply the changes.
-	*
-	*/
-	public abstract void setDefault();
-	
-	
-	
-	/**
-	*	Returns the name of the panel.
-	*	<p>
-	*	This is displayed in the tab.
-	*/
-	public abstract String getName();
-	
-	
+ * This defines a Panel (tabbed Panel) in the PreferenceDialog.
+ * <p>
+ * Preferences can be applied or cancelled.
+ * <p>
+ */
+public abstract class PreferencePanel extends javax.swing.JPanel {
+    /**
+     * Apply changes made by user.
+     */
+    public abstract void apply();
+
+
+    /**
+     * Cancel; do not apply changes made.
+     */
+    public abstract void cancel();
+
+
+    /**
+     * Return settings to their default.
+     * Does not apply the changes.
+     */
+    public abstract void setDefault();
+
+
+    /**
+     * Returns the name of the panel.
+     * <p>
+     * This is displayed in the tab.
+     */
+    public abstract String getName();
+
+
 }// interface PreferencePanel

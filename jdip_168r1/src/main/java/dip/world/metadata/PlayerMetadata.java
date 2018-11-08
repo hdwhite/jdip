@@ -24,57 +24,83 @@ package dip.world.metadata;
 
 import java.io.Serializable;
 import java.net.URI;
+
 /**
-*	Contains MetaData about a player. 
-*	One PlayerMetadata object exists for each player.
-*	
-*	
-*	
-*	
-*	
-*/
-public class PlayerMetadata implements Serializable
-{
-	// constants
-	private static final String EMPTY = "";
-	
-	// MetaData
-	private String 		name = EMPTY;
-	private String[] 	email = new String[0];
-	private URI 		uri = null;
-	private String		notes = EMPTY;
-	
-	
-	/** Create a PlayerMetadata object */
-	public PlayerMetadata()
-	{
-	}// PlayerMetadata()
-	
-	
-	/** Gets player name. Never null. May be empty. */
-	public String getName()						{ return name; }
-	
-	/** Gets player email addresses. Never null. */
-	public String[] getEmailAddresses()			{ return email; }
-		
-	/** Gets player contact URI. May be null. */
-	public URI getURI()							{ return uri; }
-	
-	/** Gets textual notes. Never null, but may be empty. */
-	public String getNotes()					{ return notes; }
-	
-	
-	
-	/** Sets the player name. A null value will create an empty string. */
-	public void setName(String value)				{ name = (value == null) ? EMPTY : value; }
-	
-	/** Sets the player's email addresses. a Null value will create a zero-length array.*/
-	public void setEmailAddresses(String[] value)	{ email = (value == null) ? new String[0] : value; }
-	
-	/** Sets the player contact URI. Null values are permissable. */
-	public void setURI(URI value)					{ uri = value; }
-	
-	/** Sets notes. Null values will create an empty string. */
-	public void setNotes(String value)				{ notes = (value == null) ? EMPTY : value; }
-	
+ * Contains MetaData about a player.
+ * One PlayerMetadata object exists for each player.
+ */
+public class PlayerMetadata implements Serializable {
+    // constants
+    private static final String EMPTY = "";
+
+    // MetaData
+    private String name = EMPTY;
+    private String[] email = new String[0];
+    private URI uri = null;
+    private String notes = EMPTY;
+
+
+    /**
+     * Create a PlayerMetadata object
+     */
+    public PlayerMetadata() {
+    }// PlayerMetadata()
+
+
+    /**
+     * Gets player name. Never null. May be empty.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the player name. A null value will create an empty string.
+     */
+    public void setName(String value) {
+        name = (value == null) ? EMPTY : value;
+    }
+
+    /**
+     * Gets player email addresses. Never null.
+     */
+    public String[] getEmailAddresses() {
+        return email;
+    }
+
+    /**
+     * Sets the player's email addresses. a Null value will create a zero-length array.
+     */
+    public void setEmailAddresses(String[] value) {
+        email = (value == null) ? new String[0] : value;
+    }
+
+    /**
+     * Gets player contact URI. May be null.
+     */
+    public URI getURI() {
+        return uri;
+    }
+
+    /**
+     * Sets the player contact URI. Null values are permissable.
+     */
+    public void setURI(URI value) {
+        uri = value;
+    }
+
+    /**
+     * Gets textual notes. Never null, but may be empty.
+     */
+    public String getNotes() {
+        return notes;
+    }
+
+    /**
+     * Sets notes. Null values will create an empty string.
+     */
+    public void setNotes(String value) {
+        notes = (value == null) ? EMPTY : value;
+    }
+
 }// class PlayerMetadata

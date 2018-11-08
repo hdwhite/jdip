@@ -7,12 +7,11 @@
 
 package dip.gui.swing;
 
+import javax.swing.text.DefaultFormatter;
 import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import javax.swing.text.DefaultFormatter;
 
 /**
  * A regular expression based implementation of <code>AbstractFormatter</code>.
@@ -46,6 +45,14 @@ public class RegexFormatter extends DefaultFormatter {
     }
 
     /**
+     * Returns the <code>Pattern</code> used to determine if a value is
+     * legal.
+     */
+    public Pattern getPattern() {
+        return pattern;
+    }
+
+    /**
      * Sets the pattern that will be used to determine if a value is
      * legal.
      */
@@ -54,11 +61,10 @@ public class RegexFormatter extends DefaultFormatter {
     }
 
     /**
-     * Returns the <code>Pattern</code> used to determine if a value is
-     * legal.
+     * Returns the <code>Matcher</code> from the most test.
      */
-    public Pattern getPattern() {
-        return pattern;
+    protected Matcher getMatcher() {
+        return matcher;
     }
 
     /**
@@ -70,13 +76,6 @@ public class RegexFormatter extends DefaultFormatter {
     }
 
     /**
-     * Returns the <code>Matcher</code> from the most test.
-     */
-    protected Matcher getMatcher() {
-        return matcher;
-    }
-
-    /**
      * Parses <code>text</code> returning an arbitrary Object. Some
      * formatters may return null.
      * <p>
@@ -84,9 +83,9 @@ public class RegexFormatter extends DefaultFormatter {
      * completely matches the regular expression this will invoke
      * <code>setMatcher</code>.
      *
-     * @throws ParseException if there is an error in the conversion
      * @param text String to convert
      * @return Object representation of text
+     * @throws ParseException if there is an error in the conversion
      */
     public Object stringToValue(String text) throws ParseException {
         Pattern pattern = getPattern();

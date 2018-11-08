@@ -23,98 +23,93 @@
 
 package dip.gui.map;
 
-import java.awt.event.ActionListener;
-
-import javax.swing.AbstractButton;
-import javax.swing.JMenuItem;
-
 import dip.gui.ClientMenu;
 
+import javax.swing.*;
+import java.awt.event.ActionListener;
+
 /**
-*	Controls the interaction between the menu (ClientMenu) and 
-*	the Map display (MapPanel). 
-*	<p>
-*
-*
-*/
-final class MenuController
-{
-	private final MapPanel mapPanel;
-	
-	
-	/** Creates a MenuController */
-	public MenuController(MapPanel mapPanel)
-	{
-		this.mapPanel = mapPanel;
-		
-		// Print / Export
-		registerExportItems();
-		setExportingEnabled(true);
-		
-		// other stuff... 
-	}// MenuController()
-	
-	
-	/** Cleanup / should be called by MapPanel.close() to reset Menu state. */
-	public void close()
-	{
-		setExportingEnabled(false);
-	}// close()
-	
-	
-	/** enable / disable Print & Export menu items */
-	private void setExportingEnabled(boolean value)
-	{
-		ClientMenu cm = mapPanel.getClientFrame().getClientMenu();
-		cm.setEnabled(ClientMenu.FILE_PRINT, value);
-		cm.setEnabled(ClientMenu.FILE_EXPORT_JPG, value);
-		cm.setEnabled(ClientMenu.FILE_EXPORT_PNG, value);
-		cm.setEnabled(ClientMenu.FILE_EXPORT_SVG, value);
-		cm.setEnabled(ClientMenu.FILE_EXPORT_PDF, value);
-	}// setExportingEnabled()
-	
-	
-	/** register us with Print & Export menu items */
-	private void registerExportItems()
-	{
-		// remove any pre-existing listeners for these items
-		ClientMenu cm = mapPanel.getClientFrame().getClientMenu();
-		
-		JMenuItem mi = cm.getMenuItem(ClientMenu.FILE_PRINT);
-		removeActionListeners(mi);
-		mi.addActionListener(new MapPanelSVGAction.Print(mapPanel));
-		
-		mi = cm.getMenuItem(ClientMenu.FILE_EXPORT_JPG);
-		removeActionListeners(mi);
-		mi.addActionListener(new MapPanelSVGAction.ExportJPG(mapPanel));
-		
-		mi = cm.getMenuItem(ClientMenu.FILE_EXPORT_PNG);
-		removeActionListeners(mi);
-		mi.addActionListener(new MapPanelSVGAction.ExportPNG(mapPanel));
-		
-		mi = cm.getMenuItem(ClientMenu.FILE_EXPORT_PDF);
-		removeActionListeners(mi);
-		mi.addActionListener(new MapPanelSVGAction.ExportPDF(mapPanel));
-		
-		mi = cm.getMenuItem(ClientMenu.FILE_EXPORT_SVG);
-		removeActionListeners(mi);
-		mi.addActionListener(new MapPanelSVGAction.ExportSVG(mapPanel));
-	}// registerExportItems()
-	
-	
-	
-	
-	
-	/** Removes all action listeners associated with an AbstractButton */
-	private void removeActionListeners(AbstractButton ab)
-	{
-		ActionListener[] al = ab.getActionListeners();
-		for(int i=0; i<al.length; i++)
-		{
-			ab.removeActionListener(al[i]);
-		}
-	}// removeActionListeners()
-	
-	
-	
+ * Controls the interaction between the menu (ClientMenu) and
+ * the Map display (MapPanel).
+ * <p>
+ */
+final class MenuController {
+    private final MapPanel mapPanel;
+
+
+    /**
+     * Creates a MenuController
+     */
+    public MenuController(MapPanel mapPanel) {
+        this.mapPanel = mapPanel;
+
+        // Print / Export
+        registerExportItems();
+        setExportingEnabled(true);
+
+        // other stuff...
+    }// MenuController()
+
+
+    /**
+     * Cleanup / should be called by MapPanel.close() to reset Menu state.
+     */
+    public void close() {
+        setExportingEnabled(false);
+    }// close()
+
+
+    /**
+     * enable / disable Print & Export menu items
+     */
+    private void setExportingEnabled(boolean value) {
+        ClientMenu cm = mapPanel.getClientFrame().getClientMenu();
+        cm.setEnabled(ClientMenu.FILE_PRINT, value);
+        cm.setEnabled(ClientMenu.FILE_EXPORT_JPG, value);
+        cm.setEnabled(ClientMenu.FILE_EXPORT_PNG, value);
+        cm.setEnabled(ClientMenu.FILE_EXPORT_SVG, value);
+        cm.setEnabled(ClientMenu.FILE_EXPORT_PDF, value);
+    }// setExportingEnabled()
+
+
+    /**
+     * register us with Print & Export menu items
+     */
+    private void registerExportItems() {
+        // remove any pre-existing listeners for these items
+        ClientMenu cm = mapPanel.getClientFrame().getClientMenu();
+
+        JMenuItem mi = cm.getMenuItem(ClientMenu.FILE_PRINT);
+        removeActionListeners(mi);
+        mi.addActionListener(new MapPanelSVGAction.Print(mapPanel));
+
+        mi = cm.getMenuItem(ClientMenu.FILE_EXPORT_JPG);
+        removeActionListeners(mi);
+        mi.addActionListener(new MapPanelSVGAction.ExportJPG(mapPanel));
+
+        mi = cm.getMenuItem(ClientMenu.FILE_EXPORT_PNG);
+        removeActionListeners(mi);
+        mi.addActionListener(new MapPanelSVGAction.ExportPNG(mapPanel));
+
+        mi = cm.getMenuItem(ClientMenu.FILE_EXPORT_PDF);
+        removeActionListeners(mi);
+        mi.addActionListener(new MapPanelSVGAction.ExportPDF(mapPanel));
+
+        mi = cm.getMenuItem(ClientMenu.FILE_EXPORT_SVG);
+        removeActionListeners(mi);
+        mi.addActionListener(new MapPanelSVGAction.ExportSVG(mapPanel));
+    }// registerExportItems()
+
+
+    /**
+     * Removes all action listeners associated with an AbstractButton
+     */
+    private void removeActionListeners(AbstractButton ab) {
+        ActionListener[] al = ab.getActionListeners();
+        for (int i = 0; i < al.length; i++) {
+            ab.removeActionListener(al[i]);
+        }
+    }// removeActionListeners()
+
+
 }// class MenuController

@@ -22,6 +22,7 @@
 //
 package dip.gui.map;
 
+import dip.world.Location;
 import org.apache.batik.dom.events.DOMKeyEvent;
 import org.apache.batik.util.SVGConstants;
 import org.w3c.dom.events.Event;
@@ -29,139 +30,122 @@ import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.MouseEvent;
 import org.w3c.dom.svg.SVGElement;
 
-import dip.world.Location;
-
 
 /**
-*
-*	Handles DOM UI Events, and dispatches the events (after some
-*	decoding) to the DOMUIEventHandler that is set. 
-*	<p>
-*	Currently this handles Mouse and Key events in the MapPanel. According to
-*	http://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030221/DOM3-Events.txt, 
-*	the mac 'command' key maps to the meta key.
-*
-*/
-public class DOMUIEventListener implements EventListener 
-{
-	/** Left mouse button */
-	public static final short BUTTON_LEFT = 0;
-	/** Right mouse button */
-	public static final short BUTTON_RIGHT = 2;
-	/** Middle mouse button */
-	public static final short BUTTON_MIDDLE = 1;
-	
-	
-	private MapRenderer2 mapRenderer = null;
-	private DOMUIEventHandler handler = null;
-	
-	/** Create a DOMUIEventListener */
-	public DOMUIEventListener()
-	{
-	}// DOMUIEventListener()
-	
-	/** Set the MapRenderer */
-	public void setMapRenderer(MapRenderer2 mr)
-	{
-		this.mapRenderer = mr;
-	}// setMapRenderer()
-	
-	/**
-	*	Define the (single) object that will receive DOM UI
-	*	events. Set to null to disable event reporting.
-	*/
-	public void setDOMUIEventHandler(DOMUIEventHandler handler)
-	{
-		this.handler = handler;
-	}// setDOMUIEventHandler()
-	
-	/** 
-	*	Handle Events; this method dispatches events to the appropriate
-	*	DOMUIEventHandler methods.
-	*/
-	public void handleEvent(Event evt)
-	{
-		if(handler == null || mapRenderer == null)
-		{
-			return;
-		}
-		
-		// get ID for current element. If no ID is present, go up one level
-		// the the parent element (usually a <g> element).
-		SVGElement element = (SVGElement) evt.getTarget();
-		String id = element.getAttribute(SVGConstants.SVG_ID_ATTRIBUTE);
-		if("".equals(id))
-		{
-			id = ((SVGElement) element.getParentNode()).getAttribute(SVGConstants.SVG_ID_ATTRIBUTE);
-		}
-		
-		// lookup Location (convert ID to Location); this may be null.
-		Location location = mapRenderer.getLocation(id);
-		
-		// dispatch events, as appropriate
-		if(evt instanceof MouseEvent)
-		{
-			final MouseEvent me = (MouseEvent) evt;
-			final String type = evt.getType();
-			
+ * Handles DOM UI Events, and dispatches the events (after some
+ * decoding) to the DOMUIEventHandler that is set.
+ * <p>
+ * Currently this handles Mouse and Key events in the MapPanel. According to
+ * http://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030221/DOM3-Events.txt,
+ * the mac 'command' key maps to the meta key.
+ */
+public class DOMUIEventListener implements EventListener {
+    /**
+     * Left mouse button
+     */
+    public static final short BUTTON_LEFT = 0;
+    /**
+     * Right mouse button
+     */
+    public static final short BUTTON_RIGHT = 2;
+    /**
+     * Middle mouse button
+     */
+    public static final short BUTTON_MIDDLE = 1;
+
+
+    private MapRenderer2 mapRenderer = null;
+    private DOMUIEventHandler handler = null;
+
+    /**
+     * Create a DOMUIEventListener
+     */
+    public DOMUIEventListener() {
+    }// DOMUIEventListener()
+
+    /**
+     * Method to decide if the mouse button is the Right mouse button, or,
+     * command (meta) + left (default) mouse button.
+     */
+    public static boolean isRMBorMetaLMB(MouseEvent me) {
+        final short button = me.getButton();
+        return ((button == BUTTON_RIGHT) ||
+                (button == BUTTON_LEFT && me.getMetaKey()));
+    }// isRMBorMetaLMB()
+
+    /**
+     * Method to decide if the mouse button is the middle mouse button, or,
+     * control + left (default) mouse button.
+     */
+    public static boolean isMMBorControlLMB(MouseEvent me) {
+        final short button = me.getButton();
+        return ((button == BUTTON_MIDDLE) ||
+                (button == BUTTON_LEFT && me.getShiftKey()));
+    }// isMMBorControlLMB()
+
+    /**
+     * Set the MapRenderer
+     */
+    public void setMapRenderer(MapRenderer2 mr) {
+        this.mapRenderer = mr;
+    }// setMapRenderer()
+
+    /**
+     * Define the (single) object that will receive DOM UI
+     * events. Set to null to disable event reporting.
+     */
+    public void setDOMUIEventHandler(DOMUIEventHandler handler) {
+        this.handler = handler;
+    }// setDOMUIEventHandler()
+
+    /**
+     * Handle Events; this method dispatches events to the appropriate
+     * DOMUIEventHandler methods.
+     */
+    public void handleEvent(Event evt) {
+        if (handler == null || mapRenderer == null) {
+            return;
+        }
+
+        // get ID for current element. If no ID is present, go up one level
+        // the the parent element (usually a <g> element).
+        SVGElement element = (SVGElement) evt.getTarget();
+        String id = element.getAttribute(SVGConstants.SVG_ID_ATTRIBUTE);
+        if ("".equals(id)) {
+            id = ((SVGElement) element.getParentNode()).getAttribute(SVGConstants.SVG_ID_ATTRIBUTE);
+        }
+
+        // lookup Location (convert ID to Location); this may be null.
+        Location location = mapRenderer.getLocation(id);
+
+        // dispatch events, as appropriate
+        if (evt instanceof MouseEvent) {
+            final MouseEvent me = (MouseEvent) evt;
+            final String type = evt.getType();
+
 			/* NOTE: if we enable this, also register event to DMR2
 			if(type == SVGConstants.SVG_MOUSEMOVE_EVENT_TYPE)
 			{
 				handler.mouseMoved(me, location);
 			}
 			*/
-			
-			if(type == SVGConstants.SVG_EVENT_MOUSEOUT)
-			{
-				handler.mouseOut(me, location);
-			}
-			else if(type == SVGConstants.SVG_EVENT_MOUSEOVER)
-			{
-				handler.mouseOver(me, location);
-			}
-			else if(type == SVGConstants.SVG_EVENT_CLICK)
-			{
-				handler.mouseClicked(me, location);
-			}
-			else if(type == SVGConstants.SVG_MOUSEDOWN_EVENT_TYPE)
-			{
-				handler.mouseDown(me, location);
-			}
-			else if(type == SVGConstants.SVG_MOUSEUP_EVENT_TYPE)
-			{
-				handler.mouseUp(me, location);
-			}
-		}
-		else if(evt instanceof DOMKeyEvent)
-		{
-			handler.keyPressed((DOMKeyEvent) evt, location);
-		}
-		
-	}// handleEvent()
-	
-	
-	/**
-	*	Method to decide if the mouse button is the Right mouse button, or,
-	*	command (meta) + left (default) mouse button.
-	*/
-	public static boolean isRMBorMetaLMB(MouseEvent me)
-	{
-		final short button = me.getButton();
-		return ( (button == BUTTON_RIGHT) ||
-			(button == BUTTON_LEFT && me.getMetaKey()) );
-	}// isRMBorMetaLMB()
-	
-	
-	/**
-	*	Method to decide if the mouse button is the middle mouse button, or,
-	*	control + left (default) mouse button.
-	*/
-	public static boolean isMMBorControlLMB(MouseEvent me)
-	{
-		final short button = me.getButton();
-		return ( (button == BUTTON_MIDDLE) ||
-			(button == BUTTON_LEFT && me.getShiftKey()) );
-	}// isMMBorControlLMB()
-	
-	
+
+            if (type == SVGConstants.SVG_EVENT_MOUSEOUT) {
+                handler.mouseOut(me, location);
+            } else if (type == SVGConstants.SVG_EVENT_MOUSEOVER) {
+                handler.mouseOver(me, location);
+            } else if (type == SVGConstants.SVG_EVENT_CLICK) {
+                handler.mouseClicked(me, location);
+            } else if (type == SVGConstants.SVG_MOUSEDOWN_EVENT_TYPE) {
+                handler.mouseDown(me, location);
+            } else if (type == SVGConstants.SVG_MOUSEUP_EVENT_TYPE) {
+                handler.mouseUp(me, location);
+            }
+        } else if (evt instanceof DOMKeyEvent) {
+            handler.keyPressed((DOMKeyEvent) evt, location);
+        }
+
+    }// handleEvent()
+
+
 }// DOMUIEventListener()

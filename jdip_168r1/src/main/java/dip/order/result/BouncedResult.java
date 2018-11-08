@@ -29,104 +29,86 @@ import dip.world.Province;
 
 
 /**
-*	
-*	Similar to an OrderResult, but allows the <b>optional</b> specification of:
-*	<ul>
-*		<li>the unit with which this unit bounces</li>
-*		<li>the attack and defense strengths</li>
-*	</ul>
-*
-*/
-public class BouncedResult extends OrderResult
-{
-	// instance fields
-	private Province bouncer = null;
-	private int atkStrength = -1;
-	private int defStrength = -1;
-	
-	public BouncedResult(Orderable order)
-	{
-		super(order, OrderResult.ResultType.FAILURE, null);
-	}// BouncedResult()
-	
-	
-	/**
-	*	Returns the attack strength, or -1 if it has not
-	*	been set.
-	*/
-	public int getAttackStrength()
-	{
-		return atkStrength;
-	}// getAttackStrength()
-	
-	
-	/**
-	*	Returns the defense strength, or -1 if it has not
-	*	been set.
-	*/
-	public int getDefenseStrength()
-	{
-		return defStrength;
-	}// getDefenseStrength()
-	
-	
-	/**
-	*	Returns the location of the unit with whom we bounced,
-	*	or null if it has not been set.
-	*/
-	public Province getBouncer()
-	{
-		return bouncer;
-	}// getBouncer()
-	
-	
-	/**
-	*	Set the attack strength. A value of -1 indicates
-	*	that this has not been set.
-	*/
-	public void setAttackStrength(int value)
-	{
-		if(value < -1)
-		{
-			throw new IllegalArgumentException();
-		}
-		
-		atkStrength = value;
-	}// setAttackStrength()
-	
-	
-	/**
-	*	Set the defense strength. A value of -1 indicates
-	*	that this has not been set.
-	*/
-	public void setDefenseStrength(int value)
-	{
-		if(value < -1)
-		{
-			throw new IllegalArgumentException();
-		}
-		
-		defStrength = value;
-	}// setDefenseStrength()
-	
-	
-	/**
-	*	Set the unit which which we had bounced. 
-	*	A value of <code>null</code> indicates that this 
-	*	has not been set.
-	*/
-	public void setBouncer(Province value)
-	{
-		bouncer = value;
-	}// setBouncer()
-	
-	
-	/**
-	*	Creates an appropriate internationalized text 
-	*	message given the set and unset parameters.
-	*/
-	public String getMessage(OrderFormatOptions ofo)
-	{
+ * Similar to an OrderResult, but allows the <b>optional</b> specification of:
+ * <ul>
+ * <li>the unit with which this unit bounces</li>
+ * <li>the attack and defense strengths</li>
+ * </ul>
+ */
+public class BouncedResult extends OrderResult {
+    // instance fields
+    private Province bouncer = null;
+    private int atkStrength = -1;
+    private int defStrength = -1;
+
+    public BouncedResult(Orderable order) {
+        super(order, OrderResult.ResultType.FAILURE, null);
+    }// BouncedResult()
+
+
+    /**
+     * Returns the attack strength, or -1 if it has not
+     * been set.
+     */
+    public int getAttackStrength() {
+        return atkStrength;
+    }// getAttackStrength()
+
+    /**
+     * Set the attack strength. A value of -1 indicates
+     * that this has not been set.
+     */
+    public void setAttackStrength(int value) {
+        if (value < -1) {
+            throw new IllegalArgumentException();
+        }
+
+        atkStrength = value;
+    }// setAttackStrength()
+
+    /**
+     * Returns the defense strength, or -1 if it has not
+     * been set.
+     */
+    public int getDefenseStrength() {
+        return defStrength;
+    }// getDefenseStrength()
+
+    /**
+     * Set the defense strength. A value of -1 indicates
+     * that this has not been set.
+     */
+    public void setDefenseStrength(int value) {
+        if (value < -1) {
+            throw new IllegalArgumentException();
+        }
+
+        defStrength = value;
+    }// setDefenseStrength()
+
+    /**
+     * Returns the location of the unit with whom we bounced,
+     * or null if it has not been set.
+     */
+    public Province getBouncer() {
+        return bouncer;
+    }// getBouncer()
+
+    /**
+     * Set the unit which which we had bounced.
+     * A value of <code>null</code> indicates that this
+     * has not been set.
+     */
+    public void setBouncer(Province value) {
+        bouncer = value;
+    }// setBouncer()
+
+
+    /**
+     * Creates an appropriate internationalized text
+     * message given the set and unset parameters.
+     */
+    public String getMessage(OrderFormatOptions ofo) {
 		/*
 		0 : province not specified
 		1 : province specified
@@ -136,48 +118,44 @@ public class BouncedResult extends OrderResult
 		{2} : atk
 		{3} : def
 		*/
-		
-		String fmtProvince = null;
-		if(bouncer != null)
-		{
-			fmtProvince = OrderFormat.format(ofo, bouncer);
-		}
-		
-		// create messageformat arguments
-		Object[] args = 
-		{
-			((bouncer == null) ? new Integer(0) : new Integer(1)), 	// {0}; 0 if no province specified
-			fmtProvince,											// {1}
-			new Integer(atkStrength),								// {2}
-			new Integer(defStrength),								// {3}
-		};
-		
-		// return formatted message
-		return Utils.getLocalString("BouncedResult.message", args);
-	}// getMessage()
 
-	
-	
-	/**
-	*	Primarily for debugging.
-	*/
-	public String toString()
-	{
-		StringBuffer sb = new StringBuffer(256);
-		sb.append(super.toString());
-		
-		sb.append("Bounced with: ");
-		sb.append(bouncer);
-		
-		sb.append(". Stats: ");
-		sb.append(atkStrength);
-		sb.append(':');
-		sb.append(defStrength);
-		sb.append('.');
-		
-		return sb.toString();
-	}// toString()
-	
-	
-	
+        String fmtProvince = null;
+        if (bouncer != null) {
+            fmtProvince = OrderFormat.format(ofo, bouncer);
+        }
+
+        // create messageformat arguments
+        Object[] args =
+                {
+                        ((bouncer == null) ? 0 : 1),    // {0}; 0 if no province specified
+                        fmtProvince,                                            // {1}
+                        atkStrength,                                // {2}
+                        defStrength,                                // {3}
+                };
+
+        // return formatted message
+        return Utils.getLocalString("BouncedResult.message", args);
+    }// getMessage()
+
+
+    /**
+     * Primarily for debugging.
+     */
+    public String toString() {
+        StringBuffer sb = new StringBuffer(256);
+        sb.append(super.toString());
+
+        sb.append("Bounced with: ");
+        sb.append(bouncer);
+
+        sb.append(". Stats: ");
+        sb.append(atkStrength);
+        sb.append(':');
+        sb.append(defStrength);
+        sb.append('.');
+
+        return sb.toString();
+    }// toString()
+
+
 }// class BouncedResult

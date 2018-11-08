@@ -22,29 +22,26 @@
 //
 package dip.gui.swing;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-
-import javax.swing.JEditorPane;
+import javax.swing.*;
+import java.awt.*;
 
 /**
-*	eXtended JEditorPane.
-*	<p>
-*	Implements antialiased text.
-*/
-public class XJEditorPane extends JEditorPane
-{
-	/** Override paint with new RenderingHints */
-	public void paint(Graphics g)
-	{
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setRenderingHint(
-			RenderingHints.KEY_TEXT_ANTIALIASING,
-			RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		super.paint(g);
-	}// paint()
-	
-	
+ * eXtended JEditorPane.
+ * <p>
+ * Implements antialiased text.
+ */
+public class XJEditorPane extends JEditorPane {
+    /**
+     * Override paint with new RenderingHints
+     */
+    public void paint(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(
+                RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        super.paint(g);
+    }// paint()
+
+
 }// class XJEditorPane
 

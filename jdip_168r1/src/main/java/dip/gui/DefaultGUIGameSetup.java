@@ -22,75 +22,73 @@
 //
 package dip.gui;
 
-import java.awt.BorderLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-
 import dip.gui.map.MapPanel;
 import dip.gui.undo.UndoRedoManager;
 import dip.world.World;
 
+import javax.swing.*;
+import java.awt.*;
+
 /**
-*	The Default GameSetup. This is used when we are not in face-
-*	to-face or a network mode. All powers may have their orders 
-*	entered and displayed. The last turnstate is always made the
-*	current turnstate.
-*/
-public class DefaultGUIGameSetup implements GUIGameSetup
-{
-	
-	/** Setup the game. */
-	public void setup(ClientFrame cf, World world)
-	{
-		// create right-panel components
-		OrderDisplayPanel odp = new OrderDisplayPanel(cf);
-		OrderStatusPanel osp = new OrderStatusPanel(cf);
-		
-		cf.setOrderDisplayPanel( odp );
-		cf.setOrderStatusPanel( osp );
-		
-		// right-panel layout
-		JPanel rightPanel = new JPanel(new BorderLayout());
-		rightPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-		rightPanel.add(osp, BorderLayout.NORTH);
-		rightPanel.add(odp, BorderLayout.CENTER);
-		cf.getJSplitPane().setRightComponent(rightPanel);
-		
-		// setup map panel (left-panel)
-		MapPanel mp = new MapPanel(cf);
-		cf.setMapPanel( mp );
-		cf.getJSplitPane().setLeftComponent( mp );
-		
-		// restore or create the undo/redo manager
-		UndoRedoManager urm = world.getUndoRedoManager();
-		if(urm == null)
-		{
-			urm = new UndoRedoManager(cf, odp);
-			world.setUndoRedoManager(urm);
-		}
-		else
-		{
-			urm.setClientFrame(cf);
-			urm.setOrderDisplayPanel(odp);
-		}
-		
-		cf.setUndoRedoManager(urm);
-		
-		cf.getJSplitPane().setVisible(true);
-		
-		// inform everybody about the World
-		cf.fireWorldCreated(world);
-		
-		// set turnstate and powers
-		cf.fireDisplayablePowersChanged(cf.getDisplayablePowers(), world.getMap().getPowers());
-		cf.fireOrderablePowersChanged(cf.getOrderablePowers(), world.getMap().getPowers());
-		cf.fireTurnstateChanged( world.getLastTurnState() );
-	}// setup()
-	
-	
-	/** We do not need to save any data. */
-	public void save(ClientFrame cf)	{}
-	
-	
+ * The Default GameSetup. This is used when we are not in face-
+ * to-face or a network mode. All powers may have their orders
+ * entered and displayed. The last turnstate is always made the
+ * current turnstate.
+ */
+public class DefaultGUIGameSetup implements GUIGameSetup {
+
+    /**
+     * Setup the game.
+     */
+    public void setup(ClientFrame cf, World world) {
+        // create right-panel components
+        OrderDisplayPanel odp = new OrderDisplayPanel(cf);
+        OrderStatusPanel osp = new OrderStatusPanel(cf);
+
+        cf.setOrderDisplayPanel(odp);
+        cf.setOrderStatusPanel(osp);
+
+        // right-panel layout
+        JPanel rightPanel = new JPanel(new BorderLayout());
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        rightPanel.add(osp, BorderLayout.NORTH);
+        rightPanel.add(odp, BorderLayout.CENTER);
+        cf.getJSplitPane().setRightComponent(rightPanel);
+
+        // setup map panel (left-panel)
+        MapPanel mp = new MapPanel(cf);
+        cf.setMapPanel(mp);
+        cf.getJSplitPane().setLeftComponent(mp);
+
+        // restore or create the undo/redo manager
+        UndoRedoManager urm = world.getUndoRedoManager();
+        if (urm == null) {
+            urm = new UndoRedoManager(cf, odp);
+            world.setUndoRedoManager(urm);
+        } else {
+            urm.setClientFrame(cf);
+            urm.setOrderDisplayPanel(odp);
+        }
+
+        cf.setUndoRedoManager(urm);
+
+        cf.getJSplitPane().setVisible(true);
+
+        // inform everybody about the World
+        cf.fireWorldCreated(world);
+
+        // set turnstate and powers
+        cf.fireDisplayablePowersChanged(cf.getDisplayablePowers(), world.getMap().getPowers());
+        cf.fireOrderablePowersChanged(cf.getOrderablePowers(), world.getMap().getPowers());
+        cf.fireTurnstateChanged(world.getLastTurnState());
+    }// setup()
+
+
+    /**
+     * We do not need to save any data.
+     */
+    public void save(ClientFrame cf) {
+    }
+
+
 }// class DefaultGUIGameSetup

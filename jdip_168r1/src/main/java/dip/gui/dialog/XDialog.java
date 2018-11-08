@@ -22,229 +22,235 @@
 //
 package dip.gui.dialog;
 
-import java.awt.Dialog;
-import java.awt.Frame;
+import dip.gui.AbstractCFPListener;
+import dip.gui.ClientFrame;
+import dip.misc.Help;
+import dip.misc.Utils;
+import dip.world.World;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JRootPane;
-import javax.swing.KeyStroke;
-import javax.swing.WindowConstants;
-
-import dip.gui.AbstractCFPListener;
-import dip.gui.ClientFrame;
-import dip.misc.Help;
-import dip.misc.Utils;
-import dip.world.World;
 /**
-*	Extended JDialog
-*	<p>
-*	Features:
-*	<ol>
-*		<li>Automatically disposes dialog if close-button pressed, although
-*			this behavior can be changed by over-riding close()</li>
-*		<li>Closes dialog if ESC pressed (calls close())</li>
-*		<li>Internationalized button text, by default</li>
-*		<li>Button constants</li>
-*		<li>Help support</li>
-*		<li>If non-modal, automatically closes the dialog when the World object
-*			changes. This behavior can be modified by subclassing the 
-*			<code>worldChanged()</code> method.</li>
-*	</ol>
-*	<p>
-*	To add a default button, use JRootPane.setDefaultButton(); note that if a 
-*	text panel/field is present then this will not work. If a read-only (non-editable)
-*	text component is present, it can be sub-classed to avoid receiving any keyboard
-*	input (override isFocusable()). See TextViewer for an example.
-*/
-public class XDialog extends JDialog
-{
-	// common dialog constants
-	/** Internationalized button text for "OK" */
-	public static final String TEXT_OK = Utils.getLocalString("XDialog.button.ok");
-	/** Internationalized button text for "Cancel" */
-	public static final String TEXT_CANCEL = Utils.getLocalString("XDialog.button.cancel");
-	/** Internationalized button text for "Close" */
-	public static final String TEXT_CLOSE = Utils.getLocalString("XDialog.button.close");
-	/** Internationalized button text for "Accept" */
-	public static final String TEXT_ACCEPT = Utils.getLocalString("XDialog.button.accept");
-	
-	
-	// instance vars
-	private AbstractCFPListener cfl = null;
-	
-	
-	/** Create an XDialog */
-	public XDialog()
-	{
-		super();
-	}// XDialog()
-	
-	/** Create an XDialog */
-	public XDialog(Frame owner)
-	{
-		super(owner );
-	}// UniverseJDialog()
-	
-	/** Create an XDialog */
-	public XDialog(Frame owner, String title)
-	{
-		super(owner, title);
-	}// XDialog()
-	
-	/** Create an XDialog */
-	public XDialog(Frame owner, boolean modal)
-	{
-		super(owner, modal);
-	}// XDialog()
-	
-	/** Create an XDialog */
-	public XDialog(Frame owner, String title, boolean modal) 	
-	{
-		super(owner, title, modal);
-	}// XDialog()
+ * Extended JDialog
+ * <p>
+ * Features:
+ * <ol>
+ * <li>Automatically disposes dialog if close-button pressed, although
+ * this behavior can be changed by over-riding close()</li>
+ * <li>Closes dialog if ESC pressed (calls close())</li>
+ * <li>Internationalized button text, by default</li>
+ * <li>Button constants</li>
+ * <li>Help support</li>
+ * <li>If non-modal, automatically closes the dialog when the World object
+ * changes. This behavior can be modified by subclassing the
+ * <code>worldChanged()</code> method.</li>
+ * </ol>
+ * <p>
+ * To add a default button, use JRootPane.setDefaultButton(); note that if a
+ * text panel/field is present then this will not work. If a read-only (non-editable)
+ * text component is present, it can be sub-classed to avoid receiving any keyboard
+ * input (override isFocusable()). See TextViewer for an example.
+ */
+public class XDialog extends JDialog {
+    // common dialog constants
+    /**
+     * Internationalized button text for "OK"
+     */
+    public static final String TEXT_OK = Utils.getLocalString("XDialog.button.ok");
+    /**
+     * Internationalized button text for "Cancel"
+     */
+    public static final String TEXT_CANCEL = Utils.getLocalString("XDialog.button.cancel");
+    /**
+     * Internationalized button text for "Close"
+     */
+    public static final String TEXT_CLOSE = Utils.getLocalString("XDialog.button.close");
+    /**
+     * Internationalized button text for "Accept"
+     */
+    public static final String TEXT_ACCEPT = Utils.getLocalString("XDialog.button.accept");
 
-	/** Create an XDialog */
-	public XDialog(Dialog owner)
-	{
-		super(owner );
-	}// UniverseJDialog()
-	
-	/** Create an XDialog */
-	public XDialog(Dialog owner, String title)
-	{
-		super(owner, title);
-	}// XDialog()
-	
-	/** Create an XDialog */
-	public XDialog(Dialog owner, boolean modal)
-	{
-		super(owner, modal);
-	}// XDialog()
-	
-	/** Create an XDialog */
-	public XDialog(Dialog owner, String title, boolean modal) 	
-	{
-		super(owner, title, modal);
-	}// XDialog()
-	
-	
-	/** Called when closing. By default, calls dispose(). */
-	protected void close()
-	{
-		dispose();
-	}// close()	
-	
-	
-	/** Dialog setup, including adding Window-Close listener */
-	protected void dialogInit()
-	{	
-		super.dialogInit();
-		
-		// install world-change listener (if appropriate)
-		setupCFL();
-		
-		// install close/close-button handling
-		super.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) 
-			{
-				XDialog.this.close();
-			}
-		});		
-	}// dialogInit()	
-	
-	
-	/** Adds the ESC key listener */
-	protected JRootPane createRootPane() 
-	{
-		JRootPane rootPane = super.createRootPane();
-		
-		// install ESC key checking.
-		ActionListener actionListener = new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				XDialog.this.close();
-			}
-		};
-		
-		KeyStroke strokeESC = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-		
-		rootPane.registerKeyboardAction(actionListener, strokeESC, JComponent.WHEN_IN_FOCUSED_WINDOW);
-		
-		return rootPane;
-	}// createRootPane()
-	
-	
-	/** Throws an IllegalArgumentException() */
-	public void setDefaultCloseOperation(int operation)
-	{
-		throw new IllegalArgumentException("override close() instead");
-	}// setDefaultCloseOperation()
-	
-	
-	/** 
-	*	Set the HelpID (see dip.misc.Help).  If non-null, sets the Window-Level
-	*	help for this dialog.
-	*/
-	public void setHelpID(Help.HelpID helpID)
-	{
-		Help.enableDialogHelp(this, helpID);
-	}// setHelpID()
-	
-	
-	public void dispose()
-	{
-		if(cfl != null)
-		{
-			((JComponent) getParent()).removePropertyChangeListener(cfl);
-			cfl = null;
-		}
-		
-		super.dispose();	
-	}// dispose()
-	
-	
-	/**
-	*	For non-modal dialogs, that are an instance of ClientFrame, add
-	*	a ClientFrame property listener to catch world created/destroyed
-	*	events. Our listener will call worldChanged().
-	*/
-	private void setupCFL() // CFL = client frame listener
-	{
-		if(getParent() instanceof ClientFrame && !isModal())
-		{
-			final ClientFrame cf = (ClientFrame) getParent();
-			cf.addPropertyChangeListener(new AbstractCFPListener()
-			{
-				public void actionWorldCreated(World w)
-				{
-					worldChanged();
-				}
-			
-				public void actionWorldDestroyed(World w)
-				{
-					worldChanged();
-				}
-			});
-		}
-	}// setupCFL()
-  	 
-  	 
-	/**
-	*	Called for non-modal dialogs with a ClientFrame parent, when a
-	*	World object has been deleted or created. By default, this calls
-	*	close().
-	*/
-	protected void worldChanged()
-	{
-		close();
-	}// worldChanged()	
-	
+
+    // instance vars
+    private AbstractCFPListener cfl = null;
+
+
+    /**
+     * Create an XDialog
+     */
+    public XDialog() {
+        super();
+    }// XDialog()
+
+    /**
+     * Create an XDialog
+     */
+    public XDialog(Frame owner) {
+        super(owner);
+    }// UniverseJDialog()
+
+    /**
+     * Create an XDialog
+     */
+    public XDialog(Frame owner, String title) {
+        super(owner, title);
+    }// XDialog()
+
+    /**
+     * Create an XDialog
+     */
+    public XDialog(Frame owner, boolean modal) {
+        super(owner, modal);
+    }// XDialog()
+
+    /**
+     * Create an XDialog
+     */
+    public XDialog(Frame owner, String title, boolean modal) {
+        super(owner, title, modal);
+    }// XDialog()
+
+    /**
+     * Create an XDialog
+     */
+    public XDialog(Dialog owner) {
+        super(owner);
+    }// UniverseJDialog()
+
+    /**
+     * Create an XDialog
+     */
+    public XDialog(Dialog owner, String title) {
+        super(owner, title);
+    }// XDialog()
+
+    /**
+     * Create an XDialog
+     */
+    public XDialog(Dialog owner, boolean modal) {
+        super(owner, modal);
+    }// XDialog()
+
+    /**
+     * Create an XDialog
+     */
+    public XDialog(Dialog owner, String title, boolean modal) {
+        super(owner, title, modal);
+    }// XDialog()
+
+
+    /**
+     * Called when closing. By default, calls dispose().
+     */
+    protected void close() {
+        dispose();
+    }// close()
+
+
+    /**
+     * Dialog setup, including adding Window-Close listener
+     */
+    protected void dialogInit() {
+        super.dialogInit();
+
+        // install world-change listener (if appropriate)
+        setupCFL();
+
+        // install close/close-button handling
+        super.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                XDialog.this.close();
+            }
+        });
+    }// dialogInit()
+
+
+    /**
+     * Adds the ESC key listener
+     */
+    protected JRootPane createRootPane() {
+        JRootPane rootPane = super.createRootPane();
+
+        // install ESC key checking.
+        ActionListener actionListener = new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                XDialog.this.close();
+            }
+        };
+
+        KeyStroke strokeESC = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+
+        rootPane.registerKeyboardAction(actionListener, strokeESC, JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        return rootPane;
+    }// createRootPane()
+
+
+    /**
+     * Throws an IllegalArgumentException()
+     */
+    public void setDefaultCloseOperation(int operation) {
+        throw new IllegalArgumentException("override close() instead");
+    }// setDefaultCloseOperation()
+
+
+    /**
+     * Set the HelpID (see dip.misc.Help).  If non-null, sets the Window-Level
+     * help for this dialog.
+     */
+    public void setHelpID(Help.HelpID helpID) {
+        Help.enableDialogHelp(this, helpID);
+    }// setHelpID()
+
+
+    public void dispose() {
+        if (cfl != null) {
+            ((JComponent) getParent()).removePropertyChangeListener(cfl);
+            cfl = null;
+        }
+
+        super.dispose();
+    }// dispose()
+
+
+    /**
+     * For non-modal dialogs, that are an instance of ClientFrame, add
+     * a ClientFrame property listener to catch world created/destroyed
+     * events. Our listener will call worldChanged().
+     */
+    private void setupCFL() // CFL = client frame listener
+    {
+        if (getParent() instanceof ClientFrame && !isModal()) {
+            final ClientFrame cf = (ClientFrame) getParent();
+            cf.addPropertyChangeListener(new AbstractCFPListener() {
+                public void actionWorldCreated(World w) {
+                    worldChanged();
+                }
+
+                public void actionWorldDestroyed(World w) {
+                    worldChanged();
+                }
+            });
+        }
+    }// setupCFL()
+
+
+    /**
+     * Called for non-modal dialogs with a ClientFrame parent, when a
+     * World object has been deleted or created. By default, this calls
+     * close().
+     */
+    protected void worldChanged() {
+        close();
+    }// worldChanged()
+
 }// class XDialog
 

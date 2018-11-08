@@ -24,17 +24,13 @@
 package dip.world.variant;
 
 /**
-*	No Variants are available.
-*
-*
-*/
-public class NoVariantsException extends Exception
-{
-	
-	public NoVariantsException(String message)
-	{
-		super(message);
-	}
-	
-	
+ * No Variants are available.
+ */
+public class NoVariantsException extends Exception {
+
+    public NoVariantsException(String message) {
+        super(message);
+    }
+
+
 }// class NoVariantsException 

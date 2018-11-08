@@ -22,49 +22,55 @@
 //
 package dip.gui.swing;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-
-import javax.swing.Icon;
+import javax.swing.*;
+import java.awt.*;
 
 /**
-*	Creates an Icon that is a solid color within
-*	a 1-pixel black rectangular border.
-*	<p>
-*	NOTE: if this is going to be used by ANY other class,
-*	it should be taken out instead of be a nested class.
-*/
-public class ColorRectIcon implements Icon
-{
-	private final int h;
-	private final int w;
-	private final Color color;
-	
-	/** Create a ColorRect */
-	public ColorRectIcon(int height, int width, Color color)
-	{
-		this.h = height;
-		this.w = width;
-		this.color = color;
-	}// ColorRectIcon()
-	
-	/** Icon height */
-	public int getIconHeight()	{ return h; }
-	
-	/** Icon width */
-	public int getIconWidth()	{ return w; }
-	
-	/** Draw the Icon */
-	public void paintIcon(Component c, Graphics g, int x, int y)
-	{
-		g.setColor(color);
-		g.fillRect(x, y, w, h);
-		
-		g.setColor( c.getBackground() );
-		g.draw3DRect(x, y, w, h, false);
-		//g.setColor(Color.black);
-		//g.drawRect(x, y, w, h);
-	}// paintIcon()
-	
+ * Creates an Icon that is a solid color within
+ * a 1-pixel black rectangular border.
+ * <p>
+ * NOTE: if this is going to be used by ANY other class,
+ * it should be taken out instead of be a nested class.
+ */
+public class ColorRectIcon implements Icon {
+    private final int h;
+    private final int w;
+    private final Color color;
+
+    /**
+     * Create a ColorRect
+     */
+    public ColorRectIcon(int height, int width, Color color) {
+        this.h = height;
+        this.w = width;
+        this.color = color;
+    }// ColorRectIcon()
+
+    /**
+     * Icon height
+     */
+    public int getIconHeight() {
+        return h;
+    }
+
+    /**
+     * Icon width
+     */
+    public int getIconWidth() {
+        return w;
+    }
+
+    /**
+     * Draw the Icon
+     */
+    public void paintIcon(Component c, Graphics g, int x, int y) {
+        g.setColor(color);
+        g.fillRect(x, y, w, h);
+
+        g.setColor(c.getBackground());
+        g.draw3DRect(x, y, w, h, false);
+        //g.setColor(Color.black);
+        //g.drawRect(x, y, w, h);
+    }// paintIcon()
+
 }// class ColorRectIcon

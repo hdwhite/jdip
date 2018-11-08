@@ -22,95 +22,79 @@
 //
 package dip.misc;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 
 /**
-*
-*	This is just a simple class to get a consistent preference node 
-*	between packages; thus they will all SHARE the same preference 
-*	node. This makes it easy to change, especially for properties
-*	that can be altered in the PReferences dialog; no class must
-*	be specified.
-*	<p>
-*	It defaults to a USER node.
-*	<p>
-*	Packages can use their own preferences node, via java.util.preferences,
-*	if they desire.
-*
-*/
-public class SharedPrefs
-{
-	// the class we want to be the root node.
-	private static Class sharedRootNodeClass = null;
-	
-	static
-	{
-		try
-		{
-			sharedRootNodeClass = Class.forName("dip.gui.ClientFrame");
-		}
-		catch(ClassNotFoundException e)
-		{
-			System.err.println("ERROR: could not find class: dip.gui.ClientFrame");
-		}
-	}
-	
-	/** Per-user preferences.  */
-	public static Preferences getUserNode()
-	{
-		return Preferences.userNodeForPackage(sharedRootNodeClass);
-	}// getUserNode()
-	
-	/** Preferences that apply for all users ("System"). This should not generally be used. */
-	public static Preferences getSystemNode()
-	{
-		return Preferences.systemNodeForPackage(sharedRootNodeClass);
-	}// getSystemNode()
-	
-	
-	
-	// helper methods
-	public static void putColor(Preferences p, String key, Color c)
-	{
-		if(c == null)
-		{
-			throw new IllegalArgumentException("null color");
-		}
-		
-		p.put(key, Utils.colorToHex(c, true));
-	}// putColor()
-	
-	public static Color getColor(Preferences p, String key, Color defaultColor)
-	{
-		String str = p.get(key, null);
-		if(str != null)
-		{
-			return Utils.parseColor(str, defaultColor);
-		}
-		
-		return defaultColor;
-	}// getColor()
-	
-	
-	/** Save user preferences. Save errors ignored (unless logging on) */
-	public static void savePrefs(Preferences prefs)
-	{
-		try
-		{ 
-			prefs.flush();
-		}
-		catch(BackingStoreException bse)
-		{
-			Log.println(bse);
-		}
-	}// savePrefs()
-	
-	
-	private SharedPrefs()
-	{
-	}// SharedPrefs()
-	
+ * This is just a simple class to get a consistent preference node
+ * between packages; thus they will all SHARE the same preference
+ * node. This makes it easy to change, especially for properties
+ * that can be altered in the PReferences dialog; no class must
+ * be specified.
+ * <p>
+ * It defaults to a USER node.
+ * <p>
+ * Packages can use their own preferences node, via java.util.preferences,
+ * if they desire.
+ */
+public class SharedPrefs {
+    // the class we want to be the root node.
+    private static Class sharedRootNodeClass = null;
+
+    static {
+        try {
+            sharedRootNodeClass = Class.forName("dip.gui.ClientFrame");
+        } catch (ClassNotFoundException e) {
+            System.err.println("ERROR: could not find class: dip.gui.ClientFrame");
+        }
+    }
+
+    private SharedPrefs() {
+    }// SharedPrefs()
+
+    /**
+     * Per-user preferences.
+     */
+    public static Preferences getUserNode() {
+        return Preferences.userNodeForPackage(sharedRootNodeClass);
+    }// getUserNode()
+
+    /**
+     * Preferences that apply for all users ("System"). This should not generally be used.
+     */
+    public static Preferences getSystemNode() {
+        return Preferences.systemNodeForPackage(sharedRootNodeClass);
+    }// getSystemNode()
+
+    // helper methods
+    public static void putColor(Preferences p, String key, Color c) {
+        if (c == null) {
+            throw new IllegalArgumentException("null color");
+        }
+
+        p.put(key, Utils.colorToHex(c, true));
+    }// putColor()
+
+    public static Color getColor(Preferences p, String key, Color defaultColor) {
+        String str = p.get(key, null);
+        if (str != null) {
+            return Utils.parseColor(str, defaultColor);
+        }
+
+        return defaultColor;
+    }// getColor()
+
+    /**
+     * Save user preferences. Save errors ignored (unless logging on)
+     */
+    public static void savePrefs(Preferences prefs) {
+        try {
+            prefs.flush();
+        } catch (BackingStoreException bse) {
+            Log.println(bse);
+        }
+    }// savePrefs()
+
 }// class SharedPrefs

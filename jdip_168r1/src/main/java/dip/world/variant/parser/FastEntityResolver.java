@@ -22,64 +22,57 @@
 //
 package dip.world.variant.parser;
 
-import java.io.StringReader;
-
-import javax.xml.parsers.DocumentBuilder;
-
+import dip.misc.Log;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
-import dip.misc.Log;
+import javax.xml.parsers.DocumentBuilder;
+import java.io.StringReader;
+
 /**
-*	Resolves Entity definitions to an empty InputSource, unless validation
-*	is enabled, in which case we actually do resolve the entities.
-*	<p>
-*	Not looking for entity resolutions improves startup time.
-*/
-public class FastEntityResolver implements EntityResolver
-{
-	private final boolean isValidating;
-	
-	
-	
-	/** Construct a FastEntityResolver */
-	public FastEntityResolver(boolean isValidating)
-	{
-		this.isValidating = isValidating;
-	}// FastEntityResolver()
-	
-	
-	/** 
-	*	Attach a FastEntityResolver to a DocumentBuilder, setting
-	*	validation as appropriate.
-	*/
-	public static void attach(DocumentBuilder db)
-	{
-		db.setEntityResolver(new FastEntityResolver(db.isValidating()));
-	}// attach()
-	
-	
-	/** Resolve the Entity */
-	public InputSource resolveEntity(String publicID, String systemID)
-	{
-		if(!isValidating)
-		{
-			// log the request
-			Log.println("XML:Entity resolution ignored: ", publicID, "; ", systemID);
-		
-			// return an empty InputSource
-			InputSource is = new InputSource(new StringReader(""));
-			is.setPublicId(publicID);
-			is.setSystemId(systemID);
-			return is;
-		}
-		
-		return null;	// default entity handling
-	}// resolveEntity()
-	
-	
-	
-	
-	
-	
+ * Resolves Entity definitions to an empty InputSource, unless validation
+ * is enabled, in which case we actually do resolve the entities.
+ * <p>
+ * Not looking for entity resolutions improves startup time.
+ */
+public class FastEntityResolver implements EntityResolver {
+    private final boolean isValidating;
+
+
+    /**
+     * Construct a FastEntityResolver
+     */
+    public FastEntityResolver(boolean isValidating) {
+        this.isValidating = isValidating;
+    }// FastEntityResolver()
+
+
+    /**
+     * Attach a FastEntityResolver to a DocumentBuilder, setting
+     * validation as appropriate.
+     */
+    public static void attach(DocumentBuilder db) {
+        db.setEntityResolver(new FastEntityResolver(db.isValidating()));
+    }// attach()
+
+
+    /**
+     * Resolve the Entity
+     */
+    public InputSource resolveEntity(String publicID, String systemID) {
+        if (!isValidating) {
+            // log the request
+            Log.println("XML:Entity resolution ignored: ", publicID, "; ", systemID);
+
+            // return an empty InputSource
+            InputSource is = new InputSource(new StringReader(""));
+            is.setPublicId(publicID);
+            is.setSystemId(systemID);
+            return is;
+        }
+
+        return null;    // default entity handling
+    }// resolveEntity()
+
+
 }// class FastEntityResolver

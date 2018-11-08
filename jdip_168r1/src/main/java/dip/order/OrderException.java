@@ -1,9 +1,9 @@
 /*
-*  @(#)OrderException.java	1.00	4/1/2002
-*
-*  Copyright 2002 Zachary DelProposto. All rights reserved.
-*  Use is subject to license terms.
-*/
+ *  @(#)OrderException.java	1.00	4/1/2002
+ *
+ *  Copyright 2002 Zachary DelProposto. All rights reserved.
+ *  Use is subject to license terms.
+ */
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation; either version 2 of the License, or
@@ -23,36 +23,37 @@ package dip.order;
 
 
 /**
-*	An OrderException indicates that an Order could not be created,
-*	or contains invalid parameters.
-*	<p>
-*
-*/
-public class OrderException extends Exception implements Cloneable
-{
-	private Order order = null;
-	
-	
-	/** Create an OrderException, with a Message only. */
-	public OrderException(String text)
-	{
-		super(text);
-	}// OrderException()
-	
-	
-	/** Create an OrderException, with the given Order and Message. */
-	public OrderException(Order order, String text)
-	{
-		super(text);
-		this.order = order;
-	}// OrderException()
-	
-	
-	/** The Order that generated the Exception; null if not set. */
-	public Order getOrder()
-	{
-		return order;
-	}// getOrder()
-	
-	
+ * An OrderException indicates that an Order could not be created,
+ * or contains invalid parameters.
+ * <p>
+ */
+public class OrderException extends Exception implements Cloneable {
+    private Order order = null;
+
+
+    /**
+     * Create an OrderException, with a Message only.
+     */
+    public OrderException(String text) {
+        super(text);
+    }// OrderException()
+
+
+    /**
+     * Create an OrderException, with the given Order and Message.
+     */
+    public OrderException(Order order, String text) {
+        super(text);
+        this.order = order;
+    }// OrderException()
+
+
+    /**
+     * The Order that generated the Exception; null if not set.
+     */
+    public Order getOrder() {
+        return order;
+    }// getOrder()
+
+
 }// class OrderException

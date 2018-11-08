@@ -22,65 +22,50 @@
 //
 package dip.gui.undo;
 
-import javax.swing.UIManager;
-import javax.swing.undo.CompoundEdit;
-
 import dip.misc.Utils;
 
-/**
-*	UndoClearSelected
-*	<p>
-*	Just a fancy name for a compound edit.
-*	<p>
-*	If only one 'selected' edit, it will display the name of the edit. But if
-*	there are multiple edits, then it will just display "Clear Selected".
-*
-*/
+import javax.swing.*;
+import javax.swing.undo.CompoundEdit;
 
-public class UndoClearSelected extends CompoundEdit implements java.io.Serializable
-{
-	private final static String PRESENTATION_NAME = "Undo.order.clearselected";
-	
-	public UndoClearSelected()
-	{
-		super();
-	}// UndoClearSelected
-	
-	public String getPresentationName()
-	{
-		if(edits.size() == 1)
-		{
-			return super.getPresentationName();
-		}
-		else
-		{
-			return Utils.getLocalString(PRESENTATION_NAME);
-		}
-	}// getPresentationName()
-	
-	public String getRedoPresentationName() 
-	{
-		if(edits.size() == 1)
-		{
-			return super.getRedoPresentationName();
-		}
-		else
-		{
-			return UIManager.getString("AbstractUndoableEdit.redoText") + " " + Utils.getLocalString(PRESENTATION_NAME);
-		}
-	}// getRedoPresentationName()
-	
-	public String getUndoPresentationName() 
-	{
-		if(edits.size() == 1)
-		{
-			return super.getUndoPresentationName();
-		}
-		else
-		{
-			return UIManager.getString("AbstractUndoableEdit.undoText") + " " + Utils.getLocalString(PRESENTATION_NAME);
-		}
-	}// getUndoPresentationName()
-	
- 	
+/**
+ * UndoClearSelected
+ * <p>
+ * Just a fancy name for a compound edit.
+ * <p>
+ * If only one 'selected' edit, it will display the name of the edit. But if
+ * there are multiple edits, then it will just display "Clear Selected".
+ */
+
+public class UndoClearSelected extends CompoundEdit implements java.io.Serializable {
+    private final static String PRESENTATION_NAME = "Undo.order.clearselected";
+
+    public UndoClearSelected() {
+        super();
+    }// UndoClearSelected
+
+    public String getPresentationName() {
+        if (edits.size() == 1) {
+            return super.getPresentationName();
+        } else {
+            return Utils.getLocalString(PRESENTATION_NAME);
+        }
+    }// getPresentationName()
+
+    public String getRedoPresentationName() {
+        if (edits.size() == 1) {
+            return super.getRedoPresentationName();
+        } else {
+            return UIManager.getString("AbstractUndoableEdit.redoText") + " " + Utils.getLocalString(PRESENTATION_NAME);
+        }
+    }// getRedoPresentationName()
+
+    public String getUndoPresentationName() {
+        if (edits.size() == 1) {
+            return super.getUndoPresentationName();
+        } else {
+            return UIManager.getString("AbstractUndoableEdit.undoText") + " " + Utils.getLocalString(PRESENTATION_NAME);
+        }
+    }// getUndoPresentationName()
+
+
 }// class UndoClearSelected
