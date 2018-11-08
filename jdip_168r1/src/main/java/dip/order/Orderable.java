@@ -24,7 +24,11 @@
 package dip.order;
 
 import dip.process.Adjudicator;
-import dip.world.*;
+import dip.world.Location;
+import dip.world.Power;
+import dip.world.RuleOptions;
+import dip.world.TurnState;
+import dip.world.Unit;
 
 /**
  * All Order objects must implement this interface.

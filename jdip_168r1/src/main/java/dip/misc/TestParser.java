@@ -22,16 +22,51 @@
 //
 package dip.misc;
 
-import dip.order.*;
-import dip.world.*;
+import dip.order.Build;
+import dip.order.Convoy;
+import dip.order.DefineState;
+import dip.order.Disband;
+import dip.order.Move;
+import dip.order.Order;
+import dip.order.OrderException;
+import dip.order.OrderFactory;
+import dip.order.OrderParser;
+import dip.order.Remove;
+import dip.order.Retreat;
+import dip.order.Support;
+import dip.order.ValidationOptions;
+import dip.world.Location;
+import dip.world.Phase;
 import dip.world.Phase.PhaseType;
 import dip.world.Phase.SeasonType;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.RuleOptions;
+import dip.world.TurnState;
+import dip.world.Unit;
+import dip.world.World;
+import dip.world.WorldFactory;
 import dip.world.variant.VariantManager;
 import dip.world.variant.data.Variant;
-import jcmdline.*;
+import jcmdline.BooleanParam;
+import jcmdline.CmdLineHandler;
+import jcmdline.FileParam;
+import jcmdline.HelpCmdLineHandler;
+import jcmdline.Parameter;
+import jcmdline.VersionCmdLineHandler;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * A test harness that allows testing of the Order Parser (OrderParser.java).

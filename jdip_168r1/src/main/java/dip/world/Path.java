@@ -29,7 +29,12 @@ import dip.process.Adjudicator;
 import dip.process.OrderState;
 import dip.process.Tristate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Determines Convoy paths between points on a Map, and also minimum distances

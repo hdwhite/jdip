@@ -22,7 +22,18 @@
 //
 package dip.gui.order;
 
-import dip.order.*;
+import dip.order.Build;
+import dip.order.Convoy;
+import dip.order.DefineState;
+import dip.order.Disband;
+import dip.order.Hold;
+import dip.order.Move;
+import dip.order.OrderException;
+import dip.order.OrderFactory;
+import dip.order.Remove;
+import dip.order.Retreat;
+import dip.order.Support;
+import dip.order.Waive;
 import dip.world.Location;
 import dip.world.Power;
 import dip.world.Province;

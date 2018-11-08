@@ -30,7 +30,15 @@ import dip.gui.undo.UndoEditSCOwner;
 import dip.gui.undo.UndoRedoManager;
 import dip.misc.Utils;
 import dip.order.result.TimeResult;
-import dip.world.*;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Phase;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.RuleOptions;
+import dip.world.TurnState;
+import dip.world.Unit;
 import org.w3c.dom.events.MouseEvent;
 
 import javax.swing.*;

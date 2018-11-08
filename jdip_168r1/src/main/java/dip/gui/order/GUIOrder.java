@@ -29,7 +29,13 @@ import dip.order.Orderable;
 import dip.order.ValidationOptions;
 import dip.process.Adjustment.AdjustmentInfoMap;
 import dip.process.RetreatChecker;
-import dip.world.*;
+import dip.world.Location;
+import dip.world.Phase;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.RuleOptions;
+import dip.world.TurnState;
+import dip.world.Unit;
 import org.w3c.dom.svg.SVGDocument;
 import org.w3c.dom.svg.SVGGElement;
 

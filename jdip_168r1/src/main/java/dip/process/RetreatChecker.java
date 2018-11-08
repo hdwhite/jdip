@@ -25,7 +25,11 @@ package dip.process;
 import dip.order.Move;
 import dip.order.Orderable;
 import dip.order.result.OrderResult;
-import dip.world.*;
+import dip.world.Location;
+import dip.world.Position;
+import dip.world.Province;
+import dip.world.TurnState;
+import dip.world.World;
 
 import java.util.ArrayList;
 import java.util.HashMap;

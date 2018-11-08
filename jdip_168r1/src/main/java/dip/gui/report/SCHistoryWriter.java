@@ -27,11 +27,19 @@ import dip.gui.dialog.TextViewer;
 import dip.gui.map.MapMetadata;
 import dip.gui.map.SVGColorParser;
 import dip.misc.Utils;
-import dip.world.*;
+import dip.world.Phase;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.TurnState;
+import dip.world.World;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 

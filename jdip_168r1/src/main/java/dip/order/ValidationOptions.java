@@ -74,7 +74,6 @@ public class ValidationOptions implements Serializable, Cloneable {
     }
 
 
-
     // Query methods
     // get options descriptions, internationilzed; used by GUI to
     // display settings.

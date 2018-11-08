@@ -22,7 +22,11 @@
 package dip.order;
 
 import dip.misc.Log;
-import dip.world.*;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.Unit;
 
 import java.util.StringTokenizer;
 

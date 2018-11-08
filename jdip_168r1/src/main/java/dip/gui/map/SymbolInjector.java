@@ -31,7 +31,12 @@ import dip.world.variant.data.SymbolPack;
 import dip.world.variant.data.Variant;
 import dip.world.variant.parser.FastEntityResolver;
 import dip.world.variant.parser.XMLErrorHandler;
-import org.w3c.dom.*;
+import org.w3c.dom.CDATASection;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;

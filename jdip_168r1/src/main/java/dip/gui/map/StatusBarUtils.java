@@ -24,7 +24,11 @@ package dip.gui.map;
 
 import dip.gui.StatusBar;
 import dip.misc.Utils;
-import dip.world.*;
+import dip.world.Location;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.Unit;
 
 /**
  * Convenience methods for displaying information on the StatusBar.

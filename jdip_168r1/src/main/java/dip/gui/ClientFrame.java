@@ -22,7 +22,14 @@
 //
 package dip.gui;
 
-import dip.gui.dialog.*;
+import dip.gui.dialog.AboutDialog;
+import dip.gui.dialog.ErrorDialog;
+import dip.gui.dialog.FileDropTargetListener;
+import dip.gui.dialog.MapPicker;
+import dip.gui.dialog.MetadataDialog;
+import dip.gui.dialog.MultiOrderEntry;
+import dip.gui.dialog.SelectPhaseDialog;
+import dip.gui.dialog.ValidationOptionsDialog;
 import dip.gui.dialog.newgame.NewGameDialog;
 import dip.gui.dialog.prefs.DisplayPreferencePanel;
 import dip.gui.dialog.prefs.GeneralPreferencePanel;
@@ -32,7 +39,11 @@ import dip.gui.map.MapPanel;
 import dip.gui.map.MapRenderer2;
 import dip.gui.map.RenderCommandFactory.RenderCommand;
 import dip.gui.order.GUIOrderFactory;
-import dip.gui.report.*;
+import dip.gui.report.OrderStatsWriter;
+import dip.gui.report.ResultWriter;
+import dip.gui.report.SCHistoryWriter;
+import dip.gui.report.StateWriter;
+import dip.gui.report.VariantInfoWriter;
 import dip.gui.swing.XJFileChooser;
 import dip.gui.undo.UndoRedoManager;
 import dip.gui.undo.UndoResolve;
@@ -51,7 +62,13 @@ import dip.world.Power;
 import dip.world.TurnState;
 import dip.world.World;
 import dip.world.variant.VariantManager;
-import jcmdline.*;
+import jcmdline.BooleanParam;
+import jcmdline.CmdLineHandler;
+import jcmdline.FileParam;
+import jcmdline.HelpCmdLineHandler;
+import jcmdline.Parameter;
+import jcmdline.StringParam;
+import jcmdline.VersionCmdLineHandler;
 import org.apache.batik.util.XMLResourceDescriptor;
 import org.xml.sax.XMLReader;
 

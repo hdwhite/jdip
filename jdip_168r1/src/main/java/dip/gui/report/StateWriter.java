@@ -29,10 +29,20 @@ import dip.misc.Utils;
 import dip.order.Order;
 import dip.order.OrderFormatOptions;
 import dip.process.Adjustment;
-import dip.world.*;
+import dip.world.Phase;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.TurnState;
+import dip.world.Unit;
 
 import javax.swing.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**

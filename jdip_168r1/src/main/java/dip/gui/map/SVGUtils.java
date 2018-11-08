@@ -38,8 +38,11 @@ import org.w3c.dom.svg.SVGUseElement;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 /**

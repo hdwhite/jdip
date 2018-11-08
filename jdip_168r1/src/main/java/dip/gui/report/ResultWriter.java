@@ -37,7 +37,11 @@ import dip.world.TurnState;
 import dip.world.World;
 
 import javax.swing.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Writes a summary of adjudication results in HTML format.

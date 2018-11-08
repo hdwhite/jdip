@@ -26,9 +26,18 @@ import dip.order.result.DislodgedResult;
 import dip.order.result.OrderResult;
 import dip.order.result.Result;
 import dip.order.result.SubstitutedResult;
-import dip.world.*;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Phase;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.Unit;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

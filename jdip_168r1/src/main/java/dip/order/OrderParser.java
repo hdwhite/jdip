@@ -24,7 +24,15 @@ package dip.order;
 
 import dip.misc.Log;
 import dip.misc.Utils;
-import dip.world.*;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Map;
+import dip.world.Phase;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.TurnState;
+import dip.world.Unit;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -29,7 +29,15 @@ import dip.order.result.OrderResult.ResultType;
 import dip.process.Adjudicator;
 import dip.process.OrderState;
 import dip.process.Tristate;
-import dip.world.*;
+import dip.world.Border;
+import dip.world.Location;
+import dip.world.Path;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.RuleOptions;
+import dip.world.TurnState;
+import dip.world.Unit;
 
 import java.util.ArrayList;
 import java.util.Collections;

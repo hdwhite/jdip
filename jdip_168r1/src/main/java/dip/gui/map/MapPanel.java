@@ -22,14 +22,22 @@
 //
 package dip.gui.map;
 
-import dip.gui.*;
+import dip.gui.AbstractCFPListener;
+import dip.gui.ClientFrame;
+import dip.gui.ClientMenu;
+import dip.gui.OrderDisplayPanel;
+import dip.gui.StatusBar;
 import dip.gui.dialog.ErrorDialog;
 import dip.gui.dialog.prefs.GeneralPreferencePanel;
 import dip.gui.map.RenderCommandFactory.RenderCommand;
 import dip.misc.Log;
 import dip.misc.Utils;
 import dip.order.ValidationOptions;
-import dip.world.*;
+import dip.world.Position;
+import dip.world.Province;
+import dip.world.RuleOptions;
+import dip.world.TurnState;
+import dip.world.World;
 import dip.world.variant.VariantManager;
 import dip.world.variant.data.MapGraphic;
 import dip.world.variant.data.SymbolPack;

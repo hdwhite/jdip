@@ -12,7 +12,16 @@ package dip.misc;
 
 import dip.order.Order;
 import dip.order.OrderFactory;
-import dip.world.*;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Map;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.RuleOptions;
+import dip.world.Unit;
+import dip.world.World;
+import dip.world.WorldFactory;
 import dip.world.variant.VariantManager;
 import dip.world.variant.data.Variant;
 
@@ -357,8 +366,6 @@ public class AIDemo {
                 Unit.Type.ARMY,
                 makeLocation(pos, map.getProvince("war"))
         ));
-
-
 
 
     }// createOrders()
