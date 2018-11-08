@@ -103,9 +103,7 @@ public class Waive extends Order {
 
     public boolean equals(Object obj) {
         if (obj instanceof Waive) {
-            if (super.equals(obj)) {
-                return true;
-            }
+            return super.equals(obj);
         }
         return false;
     }// equals()

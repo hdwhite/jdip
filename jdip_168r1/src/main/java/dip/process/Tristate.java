@@ -71,12 +71,9 @@ final public class Tristate {
      * Compares a Tristate to a boolean
      */
     public boolean equals(boolean value) {
-        if ((value && (this == TRUE))
-                || (!value && (this == FALSE))) {
-            return true;
-        }
+        return (value && (this == TRUE))
+                || (!value && (this == FALSE));
 
-        return false;
     }// equals()
 
 }// class Tristate

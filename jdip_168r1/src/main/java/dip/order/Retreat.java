@@ -87,10 +87,8 @@ public class Retreat extends Move {
     public boolean equals(Object obj) {
         if (obj instanceof Retreat) {
             Retreat retreat = (Retreat) obj;
-            if (super.equals(retreat)
-                    && this.dest.equals(retreat.dest)) {
-                return true;
-            }
+            return super.equals(retreat)
+                    && this.dest.equals(retreat.dest);
         }
         return false;
     }// equals()

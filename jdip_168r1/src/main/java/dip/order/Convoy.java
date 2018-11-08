@@ -178,12 +178,10 @@ public class Convoy extends Order {
     public boolean equals(Object obj) {
         if (obj instanceof Convoy) {
             Convoy convoy = (Convoy) obj;
-            if (super.equals(convoy)
+            return super.equals(convoy)
                     && this.convoySrc.equals(convoy.convoySrc)
                     && this.convoyUnitType.equals(convoy.convoyUnitType)
-                    && this.convoyDest.equals(convoy.convoyDest)) {
-                return true;
-            }
+                    && this.convoyDest.equals(convoy.convoyDest);
         }
         return false;
     }// equals()

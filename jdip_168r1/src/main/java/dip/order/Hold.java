@@ -100,10 +100,7 @@ public class Hold extends Order {
 
 
     public boolean equals(Object obj) {
-        if (obj instanceof Hold && super.equals(obj)) {
-            return true;
-        }
-        return false;
+        return obj instanceof Hold && super.equals(obj);
     }// equals()
 
 

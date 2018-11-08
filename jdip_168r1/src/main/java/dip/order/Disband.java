@@ -99,9 +99,7 @@ public class Disband extends Order {
 
     public boolean equals(Object obj) {
         if (obj instanceof Disband) {
-            if (super.equals(obj)) {
-                return true;
-            }
+            return super.equals(obj);
         }
         return false;
     }// equals()

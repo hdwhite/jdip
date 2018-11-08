@@ -263,13 +263,11 @@ public class Support extends Order {
     public boolean equals(Object obj) {
         if (obj instanceof Support) {
             final Support support = (Support) obj;
-            if (super.equals(support)
+            return super.equals(support)
                     && supUnitType.equals(support.supUnitType)
                     && supSrc.equals(support.supSrc)
                     && supPower.equals(support.supPower)
-                    && ((supDest == support.supDest) || ((supDest != null) && (supDest.equals(support.supDest))))) {
-                return true;
-            }
+                    && ((supDest == support.supDest) || ((supDest != null) && (supDest.equals(support.supDest))));
         }
         return false;
     }// equals()

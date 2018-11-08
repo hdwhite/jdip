@@ -642,7 +642,7 @@ public class OrderParser {
             if (isConvoyedMove)    // MUST test this first -- it overrides isExplicitConvoy
             {
                 assert (al != null);
-                Province[] convoyRoute = (Province[]) al.toArray(new Province[al.size()]);
+                Province[] convoyRoute = al.toArray(new Province[al.size()]);
                 return orderFactory.createMove(srcPower, srcLoc, srcUnitType, dest, convoyRoute);
             } else if (isExplicitConvoy) {
                 return orderFactory.createMove(srcPower, srcLoc, srcUnitType, dest, isExplicitConvoy);
@@ -779,11 +779,8 @@ public class OrderParser {
      * Determine if a Token is a Unit.Type token
      */
     private boolean isTypeToken(String s) {
-        if (s.equals("f") || s.equals("a") || s.equals("w")) {
-            return true;
-        }
+        return s.equals("f") || s.equals("a") || s.equals("w");
 
-        return false;
     }// isTypeToken
 
     // deletes any strings in the stringBuffer that match
@@ -834,15 +831,12 @@ public class OrderParser {
     private boolean isCommandPrefixed(String s) {
         // b,r,w = build, remove, waive
         // m = move
-        if (s.equalsIgnoreCase("b")
+        return s.equalsIgnoreCase("b")
                 || s.equalsIgnoreCase("r")
                 || s.equalsIgnoreCase("d")
                 || s.equalsIgnoreCase("m")
-                || s.equalsIgnoreCase("waive")) {
-            return true;
-        }
+                || s.equalsIgnoreCase("waive");
 
-        return false;
     }// isCommandPrefixed
 
     private TypeAndSource getTypeAndSource(StringTokenizer st) throws OrderException {
@@ -879,7 +873,7 @@ public class OrderParser {
 
         // parse the province. if there are 'ties', we return the result.
         final Collection<Province> col = map.getProvincesMatchingClosest(locName);
-        final Province[] provinces = (Province[]) col.toArray(new Province[col.size()]);
+        final Province[] provinces = col.toArray(new Province[col.size()]);
 
 
         if (provinces.length == 0) {

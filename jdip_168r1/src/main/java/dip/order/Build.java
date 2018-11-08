@@ -116,9 +116,7 @@ public class Build extends Order {
 
     public boolean equals(Object obj) {
         if (obj instanceof Build) {
-            if (super.equals(obj)) {
-                return true;
-            }
+            return super.equals(obj);
         }
         return false;
     }// equals()
