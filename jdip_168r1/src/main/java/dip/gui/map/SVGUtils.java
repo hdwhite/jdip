@@ -247,7 +247,7 @@ public class SVGUtils {
      */
     public static Map tagFinderSVG(List<String> lookList, Node root, boolean anySVGElement) {
         List<String> list = new ArrayList<>(lookList);
-        Map<Object, Node> map = new HashMap<>((4 * lookList.size()) / 3);
+        Map<String, Node> map = new HashMap<>((4 * lookList.size()) / 3);
 
         // recursively walk tree from root
         nodeWalker(root, list, map, anySVGElement);
@@ -271,14 +271,14 @@ public class SVGUtils {
      * <li>Province (checks all short names via getShortNames())
      * </ul>
      */
-    public static void tagFinderSVG(Map map, List<String> lookList, Node root) {
+    public static void tagFinderSVG(Map<String,Node> map, List<String> lookList, Node root) {
         tagFinderSVG(map, lookList, root, false);
     }// tagFinderSVG
 
     /**
      * As above but allows any SVG element to be returned
      */
-    public static void tagFinderSVG(Map<Object, Node> map, List<String> lookList, Node root, boolean anySVGElement) {
+    public static void tagFinderSVG(Map<String, Node> map, List<String> lookList, Node root, boolean anySVGElement) {
         List<String> list = new ArrayList<>(lookList);
 
         // recursively walk tree from root
@@ -301,7 +301,7 @@ public class SVGUtils {
      * Walks the nodes of the SVG DOM, recursively.
      * All non-G or non-SYMBOL elements are ignored, if anySVGElement flag is false
      */
-    private static void nodeWalker(Node node, List<String> list, Map<Object, Node> map, boolean anySVGElement) {
+    private static void nodeWalker(Node node, List<String> list, Map<String, Node> map, boolean anySVGElement) {
         if (node.getNodeType() == Node.ELEMENT_NODE
                 && ((anySVGElement && node instanceof org.w3c.dom.svg.SVGElement)
                 || (node.getNodeName() == SVGConstants.SVG_G_TAG || node.getNodeName() == SVGConstants.SVG_SYMBOL_TAG))) {
@@ -353,7 +353,7 @@ public class SVGUtils {
      * Checks if the current node ID matches the ID of any elements in the
      * list. If it does, the element is added to map, and removed from the list.
      */
-    private static void nodeChecker(Node attributeNode, Node parentNode, List<String> list, Map<Object, Node> map) {
+    private static void nodeChecker(Node attributeNode, Node parentNode, List<String> list, Map<String, Node> map) {
         String nodeValue = attributeNode.getNodeValue();
         Iterator<String> iter = list.iterator();
         while (iter.hasNext()) {
