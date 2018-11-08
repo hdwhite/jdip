@@ -124,7 +124,7 @@ public class OrderDisplayPanel extends JPanel {
     protected ClientFrame clientFrame = null;
     protected World world = null;
     protected TurnState turnState = null;
-    protected JScrollPane orderListScrollPane;
+    protected final JScrollPane orderListScrollPane;
     private ValidationOptions valOpts = null;
     private OrderParser orderParser = null;
     private Power[] displayablePowers = null;
@@ -134,7 +134,7 @@ public class OrderDisplayPanel extends JPanel {
     private Adjustment.AdjustmentInfoMap adjMap = null;    // non-null only in Adjustment phase
     private UndoRedoManager undoManager = null;
     // GUI component instance variables
-    private JList<DisplayOrder> orderList;
+    private final JList<DisplayOrder> orderList;
 
 
     /**
@@ -452,11 +452,11 @@ public class OrderDisplayPanel extends JPanel {
         {
             Orderable[] tmpDel = null;
             if (ordersDeleted.size() > 0) {
-                tmpDel = (Orderable[]) ordersDeleted.toArray(new Orderable[ordersAdded.size()]);
+                tmpDel = ordersDeleted.toArray(new Orderable[ordersAdded.size()]);
                 clientFrame.fireMultipleOrdersDeleted(tmpDel);
             }
 
-            Orderable[] tmpAdd = (Orderable[]) ordersAdded.toArray(new Orderable[ordersAdded.size()]);
+            Orderable[] tmpAdd = ordersAdded.toArray(new Orderable[ordersAdded.size()]);
             clientFrame.fireMultipleOrdersCreated(tmpAdd);
 
             if (undoable) {
@@ -529,7 +529,7 @@ public class OrderDisplayPanel extends JPanel {
             }
         }
 
-        Orderable[] deletedOrders = (Orderable[]) deletedOrderList.toArray(new Orderable[deletedOrderList.size()]);
+        Orderable[] deletedOrders = deletedOrderList.toArray(new Orderable[deletedOrderList.size()]);
 
         if (undoable) {
             if (count > 1) {
@@ -572,7 +572,7 @@ public class OrderDisplayPanel extends JPanel {
             }
 
             // create a temporary order array
-            deletedOrderArray = (Orderable[]) deletedOrders.toArray(new Orderable[deletedOrders.size()]);
+            deletedOrderArray = deletedOrders.toArray(new Orderable[deletedOrders.size()]);
         }
 
 
@@ -973,7 +973,7 @@ public class OrderDisplayPanel extends JPanel {
      * displayablePowers into account.
      */
     private class OrderListModel extends AbstractListModel<DisplayOrder> {
-        private ArrayList<DisplayOrder> list;
+        private final ArrayList<DisplayOrder> list;
         private DOComparator comparator;
 
         /**

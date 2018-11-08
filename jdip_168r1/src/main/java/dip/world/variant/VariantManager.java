@@ -1049,7 +1049,7 @@ public class VariantManager {
      * The value which is stored within the name mapping
      */
     private static class MapRec {
-        private ArrayList<MapRecObj> list = new ArrayList<>(2);
+        private final ArrayList<MapRecObj> list = new ArrayList<>(2);
 
         // this constructor prevents us from having an empty list.
         public MapRec(MapRecObj obj) {

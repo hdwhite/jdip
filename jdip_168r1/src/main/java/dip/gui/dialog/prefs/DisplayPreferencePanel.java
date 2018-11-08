@@ -90,7 +90,7 @@ public class DisplayPreferencePanel extends PreferencePanel {
     private JCheckBox cbDot;
     private JComboBox<String> arrowBox;
 
-    private JLabel example;
+    private final JLabel example;
 
 
     public DisplayPreferencePanel(final ClientFrame cf) {

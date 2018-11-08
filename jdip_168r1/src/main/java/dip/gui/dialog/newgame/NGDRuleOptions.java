@@ -60,16 +60,16 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
     // instance variables
     private RuleOptions ruleOpts;
     private Variant variant;
-    private DefaultListModel<OptListItem> optionListModel;
-    private ButtonGroup buttonGroup;
-    private RBListener rbListener;
+    private final DefaultListModel<OptListItem> optionListModel;
+    private final ButtonGroup buttonGroup;
+    private final RBListener rbListener;
     private InvalidWorldException heldException = null;
 
     // GUI controls
-    private JList<OptListItem> optionList;
-    private JEditorPane description;
-    private JRadioButton[] radioButtons;
-    private JButton reset;
+    private final JList<OptListItem> optionList;
+    private final JEditorPane description;
+    private final JRadioButton[] radioButtons;
+    private final JButton reset;
 
     /**
      * Create the RuleOptions panel for the New Game dialog
@@ -304,7 +304,7 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
      * Private class to encapsulate an Option and have it display the il8n name in a JList
      */
     private class OptListItem {
-        private Option option;
+        private final Option option;
 
         public OptListItem(Option option) {
             this.option = option;

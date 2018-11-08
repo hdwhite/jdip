@@ -45,7 +45,7 @@ public class SelectPhaseDialog extends HeaderDialog {
     private static final String HEADER_LOCATION = "SPD.location.header";
 
     // instance variables
-    private ClientFrame clientFrame;
+    private final ClientFrame clientFrame;
     private JScrollPane phaseScrollPane = null;
     private JList<ListRow> list = null;
 
@@ -86,7 +86,7 @@ public class SelectPhaseDialog extends HeaderDialog {
 
     private Phase getSelectedPhase() {
         if (getReturnedActionCommand().equals(ACTION_OK)) {
-            ListRow lr = (ListRow) list.getSelectedValue();
+            ListRow lr = list.getSelectedValue();
             if (lr != null) {
                 return lr.getPhase();
             }

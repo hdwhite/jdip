@@ -139,8 +139,8 @@ public class ClientMenu {
     // recent file menu fields
     private static final int RI_INSERT_POINT = 12;    // insertion point (index) for recent files
     // instance variables
-    private JMenuBar menuBar;
-    private Map<Object, JMenuItem> menuMap;
+    private final JMenuBar menuBar;
+    private final Map<Object, JMenuItem> menuMap;
     //private static Font menuFont = new Font("SansSerif", Font.PLAIN, 12);
     private ClientFrame clientFrame = null;
     private int numItems = 0;

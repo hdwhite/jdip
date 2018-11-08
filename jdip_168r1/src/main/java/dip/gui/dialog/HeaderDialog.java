@@ -82,7 +82,7 @@ public class HeaderDialog extends XDialog {
     public final static String ACTION_ACCEPT = "ACTION_ACCEPT";
 
 
-    private static JButton sizerButton = new JButton(TEXT_CANCEL);        // used to size buttons
+    private static final JButton sizerButton = new JButton(TEXT_CANCEL);        // used to size buttons
     protected JEditorPane header = null;
     private String defaultCloseButtonAction = null;
     private String returnedAction = null;

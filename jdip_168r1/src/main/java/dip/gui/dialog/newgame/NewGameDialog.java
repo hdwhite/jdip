@@ -52,12 +52,12 @@ public class NewGameDialog extends HeaderDialog {
     private static SwingWorker loader = null;
     // instance variables
     private World world = null;
-    private ClientFrame clientFrame;
-    private JTabbedPane tabPane;
-    private NGDStartOptions tabOptions;
-    private NGDVariantSelect tabVariant;
-    private NGDRuleOptions tabRuleOpts;
-    private NGDMapAndUnits tabMapAndUnits;
+    private final ClientFrame clientFrame;
+    private final JTabbedPane tabPane;
+    private final NGDStartOptions tabOptions;
+    private final NGDVariantSelect tabVariant;
+    private final NGDRuleOptions tabRuleOpts;
+    private final NGDMapAndUnits tabMapAndUnits;
 
 
     /**

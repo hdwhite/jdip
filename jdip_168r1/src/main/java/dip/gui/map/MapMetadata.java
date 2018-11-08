@@ -227,8 +227,8 @@ public class MapMetadata {
     private static final Point2D.Float POINT_ZERO = new Point2D.Float(0.0f, 0.0f);
     private final MapPanel mp;
     // instance variables
-    private Map<Province, InfoEntry> infoMap;                // placement info
-    private HashMap<Object, Object> displayProps;        // display info Todo: this map is very strangely used
+    private final Map<Province, InfoEntry> infoMap;                // placement info
+    private final HashMap<Object, Object> displayProps;        // display info Todo: this map is very strangely used
     private Point2D.Float dislodgedUnitOffset = null;
     private boolean supressPlacementErrors = false;
     private SymbolPack sp = null;

@@ -302,7 +302,7 @@ public class Adjustment {
      * mapped by Power.
      */
     public static class AdjustmentInfoMap {
-        private HashMap<Power, AdjustmentInfo> map;
+        private final HashMap<Power, AdjustmentInfo> map;
 
         /**
          * Create an AdjustmentInfoMap
@@ -329,7 +329,7 @@ public class Adjustment {
          * Gets AdjustmentInfo for a power.
          */
         public AdjustmentInfo get(Power power) {
-            return (AdjustmentInfo) map.get(power);
+            return map.get(power);
         }// get()
 
         /**

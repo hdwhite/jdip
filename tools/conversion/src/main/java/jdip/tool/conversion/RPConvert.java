@@ -22,8 +22,22 @@
 //
 package jdip.tool.conversion;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 /**
 	Converts Realpolitik variants to jDip variants.
@@ -816,9 +830,9 @@ public class RPConvert
 		private String patternName;
 		private String colorName;
 
-        private List<Loc> sc;
-        private List<Unit> units;
-        private List<Unit> dislodgedUnits;
+		private final List<Loc> sc;
+		private final List<Unit> units;
+		private final List<Unit> dislodgedUnits;
 
 		private Country()
 		{

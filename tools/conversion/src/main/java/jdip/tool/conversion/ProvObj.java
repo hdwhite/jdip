@@ -23,7 +23,11 @@
 package jdip.tool.conversion;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /** Province object */
 class ProvObj implements Comparable
@@ -31,8 +35,8 @@ class ProvObj implements Comparable
 	public static final String BORDER_NAME_PREFIX = "mxFrom";
 	
 	private String 		fullName = null;
-	private ArrayList<String> 	shortNames;       	// contains strings
-	private ArrayList<Adjacency>	adjList;          	// contains 'Adj' objects
+	private final ArrayList<String> shortNames;        // contains strings
+	private final ArrayList<Adjacency> adjList;            // contains 'Adj' objects
 	private String 		type = null;		// e.g.: "l", "lw", "Aw", etc.
 	private boolean 	hasMX = false;		// if contains an 'mx' coast.
 	
@@ -108,7 +112,7 @@ class ProvObj implements Comparable
 	/** Get the FIRST shortname. */
 	public String getSN()
 	{
-		return (String) shortNames.get(0);
+		return shortNames.get(0);
 	}// getSN()
 	
 	/** Checks that the given short name (NO coast!!) is a valid shortname. */
@@ -116,7 +120,7 @@ class ProvObj implements Comparable
 	{
 		for(int i=0; i<shortNames.size(); i++)
 		{
-			String sn = (String) shortNames.get(i);
+			String sn = shortNames.get(i);
 			if(sn.equalsIgnoreCase(in))
 			{
 				return true;
@@ -161,7 +165,7 @@ class ProvObj implements Comparable
 		// check for dupes
 		for(int i=0; i<adjList.size(); i++)
 		{
-			Adjacency tmp = (Adjacency) adjList.get(i);
+			Adjacency tmp = adjList.get(i);
 			if(coast.equals(tmp.getLoc().getCoastType()))
 			{
 				fl.makeError("An -"+coast+" coast type was already specified for this province ("+getSN()+")");
@@ -204,7 +208,7 @@ class ProvObj implements Comparable
 			boolean foundMV = false;
 			for(int i=0; i<adjList.size(); i++)
 			{
-				Adjacency tmp = (Adjacency) adjList.get(i);
+				Adjacency tmp = adjList.get(i);
 				if("mv".equals(tmp.getLoc().getCoastType()))
 				{
 					foundMV = true;
@@ -239,7 +243,7 @@ class ProvObj implements Comparable
 	
 	public String[] getShortNames()
 	{
-		return (String[]) shortNames.toArray(new String[shortNames.size()]);
+		return shortNames.toArray(new String[shortNames.size()]);
 	}
 	
 	public boolean isConvoyableCoast()
@@ -371,7 +375,7 @@ class ProvObj implements Comparable
 			for(int i=1; i<shortNames.size(); i++)
 			{
 				sb.append("\t\t<UNIQUENAME name=\"");
-				sb.append( (String) shortNames.get(i) );
+				sb.append(shortNames.get(i));
 				sb.append("\" />\n");
 			}
 		}
@@ -380,7 +384,7 @@ class ProvObj implements Comparable
 		for(int i=0; i<adjList.size(); i++)
 		{
 			sb.append("\t");
-			final Adjacency adj = (Adjacency) adjList.get(i);
+			final Adjacency adj = adjList.get(i);
 			sb.append( adj.toXML() );
 		}
 		
@@ -402,7 +406,7 @@ class ProvObj implements Comparable
 		
 		for(int i=0; i<adjList.size(); i++)
 		{
-			Adjacency adj = (Adjacency) adjList.get(i);
+			Adjacency adj = adjList.get(i);
 			if(adj.hasMX())
 			{
 				Iterator iter = adj.getAdjLocs().iterator();
@@ -446,7 +450,7 @@ class ProvObj implements Comparable
 		
 		for(int i=0; i<adjList.size(); i++)
 		{
-			Adjacency adj = (Adjacency) adjList.get(i);
+			Adjacency adj = adjList.get(i);
 			if(adj.hasMX())
 			{
 				Iterator iter = adj.getAdjLocs().iterator();

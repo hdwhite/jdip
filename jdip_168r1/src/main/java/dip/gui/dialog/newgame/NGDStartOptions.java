@@ -60,13 +60,13 @@ public class NGDStartOptions extends JPanel implements NewGameDialog.NGDTabPane 
     private Variant original = null;
 
     // GUI controls
-    private JComboBox<String> phaseBox;
-    private BCSpinner year;
-    private JSpinner vcSC;
-    private JSpinner vcSCChange;
-    private JSpinner vcDuration;
-    private JButton reset;
-    private JEditorPane introText;
+    private final JComboBox<String> phaseBox;
+    private final BCSpinner year;
+    private final JSpinner vcSC;
+    private final JSpinner vcSCChange;
+    private final JSpinner vcDuration;
+    private final JButton reset;
+    private final JEditorPane introText;
 
 
     /**

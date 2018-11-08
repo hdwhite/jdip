@@ -16,7 +16,12 @@
  */
 package org.nukesoft.jdipFacade;
 
-import dip.order.*;
+import dip.order.Order;
+import dip.order.OrderException;
+import dip.order.OrderFactory;
+import dip.order.OrderFormatOptions;
+import dip.order.OrderParser;
+import dip.order.Orderable;
 import dip.order.result.Result;
 import dip.world.Phase.PhaseType;
 import dip.world.Power;
@@ -48,8 +53,8 @@ public class JdipWorld {
     public static final int PHASE_TYPE_MOVEMENT = 2;
     public static final int PHASE_TYPE_RETREAT = 3;
 
-    private ImplementationStrategy strategy;
-    private World world;
+    private final ImplementationStrategy strategy;
+    private final World world;
 
     /**
      * Builds a <code>JdipWorld</code>. Don't try this at home, kids.

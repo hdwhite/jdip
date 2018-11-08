@@ -44,8 +44,8 @@ public class PreferenceDialog extends HeaderDialog {
     private static final String HEADER_LOCATION = "PreferenceDialog.header";
 
     // GUI
-    private ClientFrame parent;
-    private JTabbedPane tabPane;
+    private final ClientFrame parent;
+    private final JTabbedPane tabPane;
     private PreferencePanel[] tabbedPanels;        // make static, & create just once?
 
 

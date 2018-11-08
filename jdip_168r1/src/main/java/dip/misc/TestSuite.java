@@ -209,11 +209,11 @@ public final class TestSuite {
     private static String inFileName = null;
     private static int benchTimes = 1;
     private Map<String, List<String>> keyMap = null;
-    private List<TestSuite.Case> cases = new ArrayList<>(10);
+    private final List<TestSuite.Case> cases = new ArrayList<>(10);
     private World world = null;
     private TurnState templateTurnState;
     private StdAdjudicator stdJudge = null;
-    private List<String> failedCaseNames = new ArrayList<>(10);
+    private final List<String> failedCaseNames = new ArrayList<>(10);
     // VARIANT_ALL name
     private String variantName = null;
     private File variantsDir;
@@ -1167,7 +1167,7 @@ public final class TestSuite {
         private OrderResult[] results = null;
 
         private Order[] orders = null;
-        private String name;
+        private final String name;
         private Phase phase = null;
         private OrderParser of = null;
         private TurnState currentTS = null;

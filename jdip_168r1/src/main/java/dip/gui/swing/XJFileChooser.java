@@ -88,7 +88,7 @@ public class XJFileChooser {
     private static int refcount = 0;
 
     // instance variables
-    private FileChooser chooser;
+    private final FileChooser chooser;
 
     /**
      * Constructor

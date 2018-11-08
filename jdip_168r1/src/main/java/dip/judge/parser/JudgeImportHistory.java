@@ -1360,8 +1360,8 @@ final class JudgeImportHistory {
      * Home Supply Center information
      */
     private class HSCInfo {
-        private Province province;
-        private Power power;
+        private final Province province;
+        private final Power power;
 
         public HSCInfo(Province province, Power power) {
             this.province = province;

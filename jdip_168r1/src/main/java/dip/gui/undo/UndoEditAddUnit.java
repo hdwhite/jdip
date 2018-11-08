@@ -38,10 +38,10 @@ public class UndoEditAddUnit extends XAbstractUndoableEdit {
     private static final String PRESENTATION_NAME = "Undo.edit.addunit";
 
     // instance variables
-    private Position position;
-    private Unit unit;
-    private boolean isDislodged;
-    private Province province;
+    private final Position position;
+    private final Unit unit;
+    private final boolean isDislodged;
+    private final Province province;
 
     public UndoEditAddUnit(UndoRedoManager urm, Position position, Province province, Unit unit, boolean isDislodged) {
         super(urm);

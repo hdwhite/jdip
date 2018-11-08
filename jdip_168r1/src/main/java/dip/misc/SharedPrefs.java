@@ -41,7 +41,7 @@ import java.util.prefs.Preferences;
  */
 public class SharedPrefs {
     // the class we want to be the root node.
-    private static Class sharedRootNodeClass = null;
+    private static final Class sharedRootNodeClass = null;
 
     static {
         try {

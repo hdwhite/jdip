@@ -16,7 +16,11 @@
  */
 package org.nukesoft.jdipFacade;
 
-import dip.world.*;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Province;
+import dip.world.Unit;
+import dip.world.World;
 import org.nukesoft.jdipFacade.exception.ProvinceNotFoundException;
 import org.nukesoft.jdipFacade.exception.StateError;
 import org.nukesoft.jdipFacade.exception.UnitNotFoundException;
@@ -44,7 +48,7 @@ public class JdipMapInfo {
     public static final int FLEET_TYPE = 101;
     public static final int WING_TYPE = 102;
 
-    private World world;
+    private final World world;
 
     JdipMapInfo(World world) {
         this.world = world;

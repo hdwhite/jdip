@@ -105,14 +105,14 @@ public class GeneralPreferencePanel extends PreferencePanel {
     private static LRUCache<String, File> fileCache = null;
     private static Collator collator = null;
     // UI Elements
-    private JCheckBox saveWindowSettings;                // save window settings (position, size)
-    private JTextField saveDir;                        // default save-files directory
-    private JButton browseSaveDir;                    // browse button for setting directory
-    private JButton clearMRU;                        // clears most-recently-used file list
-    private JCheckBox reverseSort;    // reverse the order sort direction
-    private AssocJComboBox orderSorting;    // order sorting type
-    private AssocJComboBox mapLabels;        // map label level
-    private JCheckBox showResolution;
+    private final JCheckBox saveWindowSettings;                // save window settings (position, size)
+    private final JTextField saveDir;                        // default save-files directory
+    private final JButton browseSaveDir;                    // browse button for setting directory
+    private final JButton clearMRU;                        // clears most-recently-used file list
+    private final JCheckBox reverseSort;    // reverse the order sort direction
+    private final AssocJComboBox orderSorting;    // order sorting type
+    private final AssocJComboBox mapLabels;        // map label level
+    private final JCheckBox showResolution;
     private ClientFrame cf = null;
 
 

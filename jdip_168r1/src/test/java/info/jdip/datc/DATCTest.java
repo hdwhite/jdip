@@ -12,7 +12,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import static java.time.Duration.ofSeconds;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
@@ -23,7 +27,7 @@ public abstract class DATCTest {
 
     protected static TestSuite testSuite;
     protected static String testCaseLocation;
-    List<String> unRezParadoxes = new LinkedList<>();
+    final List<String> unRezParadoxes = new LinkedList<>();
 
 
     private static List<TestSuite.Case> sourceOfCases() {

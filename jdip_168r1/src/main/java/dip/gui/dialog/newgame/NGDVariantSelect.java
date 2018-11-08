@@ -60,13 +60,13 @@ public class NGDVariantSelect extends JPanel implements NewGameDialog.NGDTabPane
 
 
     // instance variables
-    private ClientFrame parent;
-    private NewGameDialog ngd;
-    private boolean isLoading = false;
+    private final ClientFrame parent;
+    private final NewGameDialog ngd;
+    private final boolean isLoading = false;
 
-    private DefaultListModel<String> listModel;
-    private JList<String> variantList;
-    private JEditorPane textPanel;
+    private final DefaultListModel<String> listModel;
+    private final JList<String> variantList;
+    private final JEditorPane textPanel;
     private String description;
     private Variant defaultVariant = null;
 

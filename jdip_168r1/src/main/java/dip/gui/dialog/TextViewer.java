@@ -105,8 +105,8 @@ public class TextViewer extends HeaderDialog {
 
     private boolean _isAccepted = false;
     private AcceptListener acceptListener = null;
-    private JEditorPane textPane;
-    private JScrollPane jsp;
+    private final JEditorPane textPane;
+    private final JScrollPane jsp;
 
     /**
      * Create a non-modal TextViewer
@@ -597,7 +597,7 @@ public class TextViewer extends HeaderDialog {
 
             if (cssText != null) {
                 StringBuilder sb = new StringBuilder(text.length() + 4096);
-                sb.append(text.substring(0, m.start()));
+                sb.append(text, 0, m.start());
                 sb.append("<style type=\"text/css\" media=\"screen\">\n\t<!--\n");
                 sb.append(cssText);
                 sb.append("\n\t-->\n</style>");
@@ -717,7 +717,7 @@ public class TextViewer extends HeaderDialog {
         }// JTextComponentMenuListener()
 
         public void actionPerformed(ActionEvent e) {
-            final String action = (String) e.getActionCommand();
+            final String action = e.getActionCommand();
             Action a = textComponent.getActionMap().get(action);
             if (a != null) {
                 a.actionPerformed(new ActionEvent(textComponent,

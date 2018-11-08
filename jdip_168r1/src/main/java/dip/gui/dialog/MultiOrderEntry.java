@@ -83,10 +83,10 @@ public class MultiOrderEntry {
             };
 
     // instance variables
-    private ClientFrame parent;
-    private TextViewer tv;
-    private OrderDisplayPanel orderDisplayPanel;
-    private World world;
+    private final ClientFrame parent;
+    private final TextViewer tv;
+    private final OrderDisplayPanel orderDisplayPanel;
+    private final World world;
     private Pattern listPattern = null;
 
 

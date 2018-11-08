@@ -57,8 +57,8 @@ public class JudgeParser {
     private static final String JP_NO_COLONS = "JP.jp.nocolons";
     // instance variables
     private final static int READ_AHEAD_LENGTH = 7200;
-    private BufferedReader reader;
-    private OrderFactory orderFactory;
+    private final BufferedReader reader;
+    private final OrderFactory orderFactory;
     private String judgeName;
     private String variantName;
     private String gameName;

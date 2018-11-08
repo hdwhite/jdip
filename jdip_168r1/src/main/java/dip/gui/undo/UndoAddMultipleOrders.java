@@ -36,7 +36,7 @@ import javax.swing.undo.CannotUndoException;
 public class UndoAddMultipleOrders extends XAbstractUndoableEdit {
     // instance variables
     private final static String PRESENTATION_NAME_PREFIX = "Undo.order.add.multiple";
-    private Orderable[] orders;
+    private final Orderable[] orders;
 
 
     public UndoAddMultipleOrders(UndoRedoManager urm, Orderable[] orders) {

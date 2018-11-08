@@ -46,9 +46,9 @@ public class OrderStatusPanel extends XJPanel {
     private final static String EMPTY = "";
 
     // instance variables
-    private JLabel orderFieldLabel;
-    private JLabel phase;
-    private JTextField orderField;
+    private final JLabel orderFieldLabel;
+    private final JLabel phase;
+    private final JTextField orderField;
     private OSPPropertyListener propListener = null;
     private ClientFrame cf = null;
 

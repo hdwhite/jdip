@@ -100,11 +100,11 @@ public class Utils {
     private final static MediaTracker tracker = new MediaTracker(component);
     private final static boolean isOSX;
     private final static boolean isWindows;
-    private static ClassLoader classLoader = null;
-    private static Utils singleton = null;
+    private static final ClassLoader classLoader = null;
+    private static final Utils singleton = null;
     private static ResourceBundle resourceBundle = null;
-    private static ResourceBundle commonBundle = null;
-    private static Toolkit toolkit = null;
+    private static final ResourceBundle commonBundle = null;
+    private static final Toolkit toolkit = null;
     private static Locale chosenLocale = null;
 
     // static code

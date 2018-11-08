@@ -73,7 +73,7 @@ public class XJSVGCanvas extends JSVGCanvas {
      * Maximum scale value (if > 0.0)
      */
     private double maxScale = 0.0f;
-    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private boolean isValidating = false;
     private double lsx, lsy;                        // last scale x, y values
 

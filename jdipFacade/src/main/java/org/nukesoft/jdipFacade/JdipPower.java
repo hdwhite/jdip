@@ -30,7 +30,7 @@ import org.nukesoft.jdipFacade.exception.PowerNotFoundException;
  */
 public class JdipPower {
     private Power power;
-    private World world;
+    private final World world;
 
     JdipPower(World world, String power)
             throws PowerNotFoundException {
