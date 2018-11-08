@@ -665,7 +665,7 @@ public class StdAdjudicator implements Adjudicator {
             Province sourceProvince = os.getSourceProvince();
 
             // clone the old unit (from the old position)
-            Unit newUnit = (Unit) position.getUnit(sourceProvince).clone();
+            Unit newUnit = position.getUnit(sourceProvince).copy();
 
             if (os.getDislodgedState() == Tristate.YES) {
                 // unit remains in same location / coast, but in dislodged area
@@ -1209,7 +1209,7 @@ public class StdAdjudicator implements Adjudicator {
             Province sourceProvince = os.getSourceProvince();
 
             // clone the old unit (from the old position)
-            Unit newUnit = (Unit) position.getDislodgedUnit(sourceProvince).clone();
+            Unit newUnit = position.getDislodgedUnit(sourceProvince).copy();
 
             if (order instanceof Retreat
                     && os.getEvalState() == Tristate.SUCCESS) {

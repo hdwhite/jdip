@@ -33,7 +33,7 @@ import dip.order.OrderException;
  * Convenience methods are provided for obtaining adjacency
  * information.
  */
-public class Location implements Cloneable {
+public class Location {
     /**
      * Constant defining an empty array of Location() objects
      */
@@ -139,14 +139,6 @@ public class Location implements Cloneable {
     }// isProvinceEqual()
 
 
-    /**
-     * Implements a clone. Note that this is not a strict
-     * implementation, in that a constructor is invoked
-     * for performance reasons, rather than using super.clone().
-     */
-    public Object clone() {
-        return new Location(province, coast);
-    }// clone()
 
     /**
      * Determines if two Locations are equal.

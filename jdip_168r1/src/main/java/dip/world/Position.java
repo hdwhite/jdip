@@ -44,7 +44,7 @@ import java.util.Map;
  * to assist in cloning rather than call super.clone(). This is done for
  * performance reasons.
  */
-public class Position implements java.io.Serializable, Cloneable {
+public class Position implements java.io.Serializable {
     // size constants; these should be prime
     private static final int POWER_SIZE = 17;
 
@@ -81,7 +81,7 @@ public class Position implements java.io.Serializable, Cloneable {
      * Returns true if this Power has been eliminated. False by default.
      */
     public boolean isEliminated(Power power) {
-        PowerData pd = (PowerData) powerMap.get(power);
+        PowerData pd = powerMap.get(power);
         if (pd != null) {
             return pd.isEliminated();
         }
@@ -513,7 +513,7 @@ public class Position implements java.io.Serializable, Cloneable {
     /**
      * Deep clone of the contents of this Position.
      */
-    public Object clone() {
+    public Position copy() {
         Position pos = new Position(map);
 
         for (int i = 0; i < provArray.length; i++) {
@@ -527,7 +527,7 @@ public class Position implements java.io.Serializable, Cloneable {
         Iterator iter = powerMap.keySet().iterator();
         while (iter.hasNext()) {
             Power key = (Power) iter.next();
-            PowerData pd = (PowerData) powerMap.get(key);
+            PowerData pd = powerMap.get(key);
 
             pos.powerMap.put(key, pd.normClone());
         }
@@ -553,7 +553,7 @@ public class Position implements java.io.Serializable, Cloneable {
         Iterator iter = powerMap.keySet().iterator();
         while (iter.hasNext()) {
             Power key = (Power) iter.next();
-            PowerData pd = (PowerData) powerMap.get(key);
+            PowerData pd = powerMap.get(key);
 
             pos.powerMap.put(key, pd.normClone());
         }
@@ -578,7 +578,7 @@ public class Position implements java.io.Serializable, Cloneable {
         Iterator iter = powerMap.keySet().iterator();
         while (iter.hasNext()) {
             Power key = (Power) iter.next();
-            PowerData pd = (PowerData) powerMap.get(key);
+            PowerData pd = powerMap.get(key);
 
             pos.powerMap.put(key, pd.normClone());
         }
@@ -656,7 +656,7 @@ public class Position implements java.io.Serializable, Cloneable {
      * Same type of functionality as getProvinceData() but for PowerData objects
      */
     private PowerData getPowerData(Power power) {
-        PowerData pd = (PowerData) powerMap.get(power);
+        PowerData pd = powerMap.get(power);
         if (pd == null) {
             pd = new PowerData();
             powerMap.put(power, pd);
@@ -757,11 +757,11 @@ public class Position implements java.io.Serializable, Cloneable {
 
             // deep copy unit information
             if (unit != null) {
-                pd.unit = (Unit) unit.clone();
+                pd.unit = unit.copy();
             }
 
             if (dislodgedUnit != null) {
-                pd.dislodgedUnit = (Unit) dislodgedUnit.clone();
+                pd.dislodgedUnit = dislodgedUnit.copy();
             }
 
             // shallow copy Powers [Power is immutable]
@@ -814,7 +814,7 @@ public class Position implements java.io.Serializable, Cloneable {
 
             // deep copy unit
             if (unit != null) {
-                pd.unit = (Unit) unit.clone();
+                pd.unit = unit.copy();
             }
 
             return pd;

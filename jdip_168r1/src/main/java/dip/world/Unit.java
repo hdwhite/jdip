@@ -34,7 +34,7 @@ import dip.misc.Utils;
  * <b>This object is not immutable!</b>
  */
 
-public class Unit implements java.io.Serializable, Cloneable {
+public class Unit implements java.io.Serializable {
     // instance variables
     protected final Unit.Type type;
     protected final Power owner;
@@ -119,7 +119,7 @@ public class Unit implements java.io.Serializable, Cloneable {
      * strict implementation of clone(); a constructor is
      * invoked for performance reasons.
      */
-    public Object clone() {
+    public Unit copy() {
         return new Unit(owner, type, coast);
     }// clone()
 

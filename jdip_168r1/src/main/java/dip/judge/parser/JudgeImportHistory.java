@@ -1028,14 +1028,14 @@ final class JudgeImportHistory {
             final Province p = provinces[i];
             Unit unit = oldPos.getUnit(p);
             if (unit != null) {
-                Unit newUnit = (Unit) unit.clone();
+                Unit newUnit = unit.copy();
                 newPos.setUnit(p, newUnit);
                 Log.println("  cloned unit from/into: ", p, " - ", unit.getPower());
             }
 
             unit = oldPos.getDislodgedUnit(p);
             if (isCopyDislodged && unit != null) {
-                Unit newUnit = (Unit) unit.clone();
+                Unit newUnit = unit.copy();
                 newPos.setDislodgedUnit(p, newUnit);
                 Log.println("  cloned dislodged unit from/into: ", p, " - ", unit.getPower());
             }
