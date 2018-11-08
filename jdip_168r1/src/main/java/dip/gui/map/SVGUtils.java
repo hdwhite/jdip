@@ -238,15 +238,15 @@ public class SVGUtils {
      * <li>Province (checks all short names via getShortNames())
      * </ul>
      */
-    public static Map tagFinderSVG(List lookList, Node root) {
+    public static Map tagFinderSVG(List<String> lookList, Node root) {
         return tagFinderSVG(lookList, root, false);
     }// tagFinderSVG
 
     /**
      * As above, but allows any SVG element to be returned
      */
-    public static Map tagFinderSVG(List lookList, Node root, boolean anySVGElement) {
-        List list = new ArrayList(lookList);
+    public static Map tagFinderSVG(List<String> lookList, Node root, boolean anySVGElement) {
+        List<String> list = new ArrayList<>(lookList);
         Map<Object, Node> map = new HashMap<>((4 * lookList.size()) / 3);
 
         // recursively walk tree from root
@@ -271,15 +271,15 @@ public class SVGUtils {
      * <li>Province (checks all short names via getShortNames())
      * </ul>
      */
-    public static void tagFinderSVG(Map map, List lookList, Node root) {
+    public static void tagFinderSVG(Map map, List<String> lookList, Node root) {
         tagFinderSVG(map, lookList, root, false);
     }// tagFinderSVG
 
     /**
      * As above but allows any SVG element to be returned
      */
-    public static void tagFinderSVG(Map<Object, Node> map, List lookList, Node root, boolean anySVGElement) {
-        List list = new ArrayList(lookList);
+    public static void tagFinderSVG(Map<Object, Node> map, List<String> lookList, Node root, boolean anySVGElement) {
+        List<String> list = new ArrayList<>(lookList);
 
         // recursively walk tree from root
         nodeWalker(root, list, map, anySVGElement);
@@ -301,7 +301,7 @@ public class SVGUtils {
      * Walks the nodes of the SVG DOM, recursively.
      * All non-G or non-SYMBOL elements are ignored, if anySVGElement flag is false
      */
-    private static void nodeWalker(Node node, List list, Map<Object, Node> map, boolean anySVGElement) {
+    private static void nodeWalker(Node node, List<String> list, Map<Object, Node> map, boolean anySVGElement) {
         if (node.getNodeType() == Node.ELEMENT_NODE
                 && ((anySVGElement && node instanceof org.w3c.dom.svg.SVGElement)
                 || (node.getNodeName() == SVGConstants.SVG_G_TAG || node.getNodeName() == SVGConstants.SVG_SYMBOL_TAG))) {
@@ -353,32 +353,19 @@ public class SVGUtils {
      * Checks if the current node ID matches the ID of any elements in the
      * list. If it does, the element is added to map, and removed from the list.
      */
-    private static void nodeChecker(Node attributeNode, Node parentNode, List list, Map<Object, Node> map) {
+    private static void nodeChecker(Node attributeNode, Node parentNode, List<String> list, Map<Object, Node> map) {
         String nodeValue = attributeNode.getNodeValue();
-        Iterator iter = list.iterator();
+        Iterator<String> iter = list.iterator();
         while (iter.hasNext()) {
-            Object obj = iter.next();
+            String obj = iter.next();
             if (obj == null) {
                 iter.remove();
             } else {
-                if (obj instanceof Province) {
-                    // use getShortNames() to check against all short names
-                    String[] provShortNames = ((Province) obj).getShortNames();
-                    for (int i = 0; i < provShortNames.length; i++) {
-                        if (nodeValue.equalsIgnoreCase(provShortNames[i])) {
-                            map.put(obj, parentNode);
-                            iter.remove();
-                            return;
-                        }
-                    }
-                } else {
-                    // for String and Objects, just use toString()
-                    if (nodeValue.equalsIgnoreCase(obj.toString())) {
+                    if (nodeValue.equalsIgnoreCase(obj)) {
                         map.put(obj, parentNode);
                         iter.remove();
                         return;
                     }
-                }
             }
         }
     }// nodeChecker()
