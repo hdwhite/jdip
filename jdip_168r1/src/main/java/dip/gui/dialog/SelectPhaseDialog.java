@@ -30,7 +30,6 @@ import dip.world.Phase;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -99,11 +98,9 @@ public class SelectPhaseDialog extends HeaderDialog {
     private void makePhaseList() {
         // create ListRows
         List<ListRow> lrList = new LinkedList<>();
-        Set phaseSet = clientFrame.getWorld().getPhaseSet();
+        Set<Phase> phaseSet = clientFrame.getWorld().getPhaseSet();
         int idx = 1;
-        Iterator iter = phaseSet.iterator();
-        while (iter.hasNext()) {
-            Phase phase = (Phase) iter.next();
+        for (Phase phase : phaseSet) {
             lrList.add(new ListRow(phase, idx++));
         }
 

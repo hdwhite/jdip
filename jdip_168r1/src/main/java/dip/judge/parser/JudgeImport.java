@@ -47,7 +47,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.Iterator;
 import java.util.regex.PatternSyntaxException;
 
 /**
@@ -159,9 +158,8 @@ public class JudgeImport {
         // eliminate all existing TurnStates; we will create our own from parsed values
         // we need the Position, though, since it has home-supply-center information
         Position position = null;
-        Iterator iter = world.getPhaseSet().iterator();
-        while (iter.hasNext()) {
-            TurnState ts = world.getTurnState((Phase) iter.next());
+        for (Phase phase : world.getPhaseSet()) {
+            TurnState ts = world.getTurnState(phase);
             if (position == null) {
                 position = ts.getPosition();
             }

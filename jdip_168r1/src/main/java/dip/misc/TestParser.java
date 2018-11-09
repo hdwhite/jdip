@@ -259,10 +259,7 @@ public class TestParser {
         valOpts = new ValidationOptions();
         valOpts.setOption(ValidationOptions.KEY_GLOBAL_PARSING, ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE);
 
-        Iterator iter = cases.iterator();
-        while (iter.hasNext()) {
-            ORPair orp = (ORPair) iter.next();
-
+        for (ORPair orp : cases) {
             // determine if case is marked with a "FAIL" result line.
             boolean isMarkedFail = false;
             String res = orp.getResult().trim().toLowerCase();
@@ -326,9 +323,8 @@ public class TestParser {
         if (failedCases.size() > 0) {
             System.out.println("\nFailed orders, and failure reasons follow:");
 
-            iter = failedCases.iterator();
-            while (iter.hasNext()) {
-                System.out.println(iter.next());
+            for (String failedCase : failedCases) {
+                System.out.println(failedCase);
                 System.out.println();
             }
         }

@@ -40,7 +40,6 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -167,9 +166,8 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
 
         // create a list of OptListItems, and refresh list data
         Set<Option> options = ruleOpts.getAllOptions();
-        Iterator iter = options.iterator();
-        while (iter.hasNext()) {
-            optionListModel.addElement(new OptListItem((Option) iter.next()));
+        for (Option option : options) {
+            optionListModel.addElement(new OptListItem(option));
         }
     }// refreshList()
 

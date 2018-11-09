@@ -46,7 +46,6 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -238,16 +237,14 @@ public class XMLSymbolParser implements SymbolParser {
         }
 
         // find all IDs
-        HashMap map = elementMapper(svgDoc.getDocumentElement(), ATT_ID);
+        HashMap<String, Node> map = elementMapper(svgDoc.getDocumentElement(), ATT_ID);
 
         // List of Symbols
         ArrayList<Symbol> list = new ArrayList<>(15);
 
         // iterate over hashmap finding all symbols with IDs
-        Iterator iter = map.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry me = (Map.Entry) iter.next();
-            final String name = (String) me.getKey();
+        for (Map.Entry<String, Node> me : map.entrySet()) {
+            final String name = me.getKey();
             final Float scale = (Float) scaleMap.get(name);
             list.add(new Symbol(
                     name,
@@ -306,7 +303,7 @@ public class XMLSymbolParser implements SymbolParser {
      * value. This starts from the given Element and recurses downward. Throws an
      * exception if an element with a duplicate attribute name is found.
      */
-    private HashMap elementMapper(Element start, String attrName)
+    private HashMap<String, Node> elementMapper(Element start, String attrName)
             throws IOException {
         HashMap<String, Node> map = new HashMap<>(31);
         elementMapperWalker(map, start, attrName);

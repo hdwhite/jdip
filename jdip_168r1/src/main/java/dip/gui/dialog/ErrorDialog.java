@@ -772,10 +772,8 @@ public class ErrorDialog extends TextViewer {
             } else {
                 StringBuilder sb = new StringBuilder();
                 sb.append("\n------ Additional Info -------------------");
-                Iterator iter = list.iterator();
-                while (iter.hasNext()) {
+                for (String line : list) {
                     sb.append('\n');
-                    String line = (String) iter.next();
                     sb.append(line);
                 }
 

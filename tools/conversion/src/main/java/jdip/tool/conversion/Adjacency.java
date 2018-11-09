@@ -23,7 +23,11 @@
 package jdip.tool.conversion;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /** Adjacency object */
 class Adjacency
@@ -111,7 +115,7 @@ class Adjacency
 	}
 	
 	/** List of adjacent locations */
-	public List getAdjLocs()
+    public List<Loc> getAdjLocs()
 	{
 		return Collections.unmodifiableList(adjLocs);
 	}

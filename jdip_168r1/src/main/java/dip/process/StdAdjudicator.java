@@ -358,13 +358,12 @@ public class StdAdjudicator implements Adjudicator {
         //
         // make sure that each location in the OrderState mapping has a corresponding unit,
         // If an order exists for a province without a unit, the order is deleted.
-        List orderList = turnState.getAllOrders();
+        List<Orderable> orderList = turnState.getAllOrders();
         // temporary list for holding orders; ASSUME that we won't be adding too many orders.
         ArrayList<OrderState> osList = new ArrayList<>(orderList.size());
 
-        Iterator iter = orderList.iterator();
-        while (iter.hasNext()) {
-            Order order = (Order) iter.next();
+        for (Orderable orderable : orderList) {
+            Order order = (Order) orderable;
             OrderState os = new OrderState(order);
             Province province = os.getSourceProvince();
 
@@ -602,9 +601,7 @@ public class StdAdjudicator implements Adjudicator {
 
         // report statistics, if enabled
         if (statReporting) {
-            iter = resultList.iterator();
-            while (iter.hasNext()) {
-                Result r = (Result) iter.next();
+            for (Result r : resultList) {
                 if (r instanceof BouncedResult) {
                     Log.println("-- setting stats for: BouncedResult: ", r);
                     BouncedResult br = (BouncedResult) r;
@@ -985,9 +982,7 @@ public class StdAdjudicator implements Adjudicator {
                 if (move.isConvoying()) {
                     Log.println("  checking move: ", move);
 
-                    Iterator it = getConvoyList(move).iterator();
-                    while (it.hasNext()) {
-                        OrderState itos = (OrderState) it.next();
+                    for (OrderState itos : getConvoyList(move)) {
 
                         Log.println("    convoy: ", itos.getOrder(), "  evalstate:", itos.getEvalState());
                         if (itos.getEvalState() == Tristate.UNCERTAIN) {
@@ -1058,9 +1053,8 @@ public class StdAdjudicator implements Adjudicator {
         List orderList = turnState.getAllOrders();
         ArrayList<OrderState> osList = new ArrayList<>(orderList.size());
 
-        Iterator iter = orderList.iterator();
-        while (iter.hasNext()) {
-            Order order = (Order) iter.next();
+        for (Object anOrderList : orderList) {
+            Order order = (Order) anOrderList;
             OrderState os = new OrderState(order);
             Province province = os.getSourceProvince();
 
@@ -1298,10 +1292,9 @@ public class StdAdjudicator implements Adjudicator {
             int orderCount = 0;
             final int adjAmount = ai.getAdjustmentAmount();
 
-            List orders = turnState.getOrders(power);
-            Iterator iter = orders.iterator();
-            while (iter.hasNext()) {
-                Order order = (Order) iter.next();
+            List<Orderable> orders = turnState.getOrders(power);
+            for (Orderable orderable : orders) {
+                Order order = (Order) orderable;
 
                 if (order instanceof Remove && adjAmount > 0) {
                     addResult(new OrderResult(order, Utils.getLocalString(STDADJ_ADJ_IGNORED_MUST_BUILD)));
@@ -1767,7 +1760,7 @@ public class StdAdjudicator implements Adjudicator {
      * Returns a List of all OrderStates representing Convoy
      * orders for the given Move order
      */
-    private List getConvoyList(Move move) {
+    private List<OrderState> getConvoyList(Move move) {
         ArrayList<OrderState> list = new ArrayList<>(8);
 
         for (int i = 0; i < orderStates.length; i++) {
@@ -1824,12 +1817,10 @@ public class StdAdjudicator implements Adjudicator {
 
         // step 2: check each move in list for cicularity chains. If multiple chains
         // exist, we will find them in a single pass
-        Iterator iter = movesToCheck.iterator();
-        while (iter.hasNext()) {
+        for (OrderState moveOS : movesToCheck) {
             chain.clear();
             isChainCircular = false;
 
-            OrderState moveOS = (OrderState) iter.next();
             if (!moveOS.isCircular()) {
                 Move firstMove = (Move) moveOS.getOrder();
 
@@ -1873,9 +1864,7 @@ public class StdAdjudicator implements Adjudicator {
 
                         // all moves in chain are part of a circle (last move -> first move)
                         // set 'isCircular()' flags
-                        Iterator chainIter = chain.iterator();
-                        while (chainIter.hasNext()) {
-                            OrderState os = (OrderState) chainIter.next();
+                        for (OrderState os : chain) {
                             os.setCircular(true);
                         }
                     } else if (chain.size() == 2) {
@@ -1883,9 +1872,7 @@ public class StdAdjudicator implements Adjudicator {
                         // are legitimate, however.
                         boolean isSwap = false;
 
-                        Iterator chainIter = chain.iterator();
-                        while (chainIter.hasNext()) {
-                            OrderState os = (OrderState) chainIter.next();
+                        for (OrderState os : chain) {
                             Move move = (Move) os.getOrder();
                             if (move.isConvoying()) {
                                 isSwap = true;
@@ -1895,9 +1882,7 @@ public class StdAdjudicator implements Adjudicator {
                         if (isSwap) {
                             chainCount++;
 
-                            chainIter = chain.iterator();
-                            while (chainIter.hasNext()) {
-                                OrderState os = (OrderState) chainIter.next();
+                            for (OrderState os : chain) {
                                 os.setCircular(true);
                             }
                         }

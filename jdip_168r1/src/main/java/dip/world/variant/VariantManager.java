@@ -45,7 +45,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -387,9 +386,7 @@ public class VariantManager {
             set.addAll(vm.variantMap.values());
 
             // fill variant list with variants.
-            Iterator iter = set.iterator();
-            while (iter.hasNext()) {
-                MapRec mr = (MapRec) iter.next();
+            for (MapRec mr : set) {
                 MapRecObj mro = mr.get(VERSION_NEWEST);
                 assert (mro != null);
                 list.add(((VRec) mro).getVariant());
@@ -417,9 +414,7 @@ public class VariantManager {
             set.addAll(vm.symbolMap.values());
 
             // fill variant list with variants.
-            Iterator iter = set.iterator();
-            while (iter.hasNext()) {
-                MapRec mr = (MapRec) iter.next();
+            for (MapRec mr : set) {
                 MapRecObj mro = mr.get(VERSION_NEWEST);
                 assert (mro != null);
                 list.add(((SPRec) mro).getSymbolPack());

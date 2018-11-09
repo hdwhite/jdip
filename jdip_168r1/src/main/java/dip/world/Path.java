@@ -329,7 +329,7 @@ public class Path {
             throw new IllegalArgumentException();
         }
 
-        final List explicitRoutes = move.getConvoyRoutes();
+        final List<Province[]> explicitRoutes = move.getConvoyRoutes();
 
         if (explicitRoutes == null) {
             // implicit paths.
@@ -345,9 +345,7 @@ public class Path {
 
             boolean hasUncertainRoute = false;        // true if >= 1 route is uncertain, but not failed.
 
-            Iterator iter = explicitRoutes.iterator();
-            while (iter.hasNext()) {
-                final Province[] route = (Province[]) iter.next();
+            for (Province[] route : explicitRoutes) {
                 boolean isFailed = true;
                 boolean isUncertain = false;
 
@@ -966,13 +964,11 @@ public class Path {
         /**
          * Creates a Province array from a List of endpoints.
          */
-        private Province[][] createProvinceArray(List list) {
+        private Province[][] createProvinceArray(List<TreeNode> list) {
             Province[][] pathArray = new Province[list.size()][];
             int idx = 0;
-            Iterator iter = list.iterator();
-            while (iter.hasNext()) {
+            for (TreeNode n : list) {
 
-                TreeNode n = (TreeNode) iter.next();
                 Province[] path = new Province[n.getDepth() + 1];    // root is depth 0
                 for (int i = (path.length - 1); i >= 0; i--) {
                     path[i] = n.getProvince();

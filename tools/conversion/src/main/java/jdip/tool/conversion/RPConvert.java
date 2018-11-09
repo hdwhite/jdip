@@ -268,42 +268,30 @@ public class RPConvert
 
 		// SC
 		sb = new StringBuffer();
-		Iterator iter = mc.getProvObjList().iterator();
-		while(iter.hasNext())
-		{
-			ProvObj po = (ProvObj) iter.next();
+		for (ProvObj po : mc.getProvObjList()) {
 
-			if(po.isNeutralSC())
-			{
+			if (po.isNeutralSC()) {
 				sb.append("\t\t<SUPPLYCENTER province=\"");
 				sb.append(po.getSN());
 				sb.append("\"/>\n");
-			}
-			else if(po.isHomeSC())
-			{
+			} else if (po.isHomeSC()) {
 				sb.append("\t\t<SUPPLYCENTER province=\"");
 				sb.append(po.getSN());
 
 				// find country
-                Country c = i2cMap.get(po.getHomeSC());
-				if(c == null)
-				{
-					throw new IOException("Cannot find a Country for initial "+po.getHomeSC()+".\n");
+				Country c = i2cMap.get(po.getHomeSC());
+				if (c == null) {
+					throw new IOException("Cannot find a Country for initial " + po.getHomeSC() + ".\n");
 				}
 
 				sb.append("\" homepower=\"");
 				sb.append(c.getName());
 
 				// if owned, set owner
-				for(int i=0; i<countries.length; i++)
-				{
+				for (int i = 0; i < countries.length; i++) {
 					Country country = countries[i];
-					Iterator cIter = countries[i].getSC().iterator();
-					while(cIter.hasNext())
-					{
-						Loc loc = (Loc) cIter.next();
-						if(loc.getShortName().equalsIgnoreCase(po.getSN()))
-						{
+					for (Loc loc : countries[i].getSC()) {
+						if (loc.getShortName().equalsIgnoreCase(po.getSN())) {
 							sb.append("\" owner=\"");
 							sb.append(c.getName());
 						}
@@ -324,19 +312,14 @@ public class RPConvert
 				<INITIALSTATE province="stp" power="russia" unit="fleet" unitcoast="sc" />
 			*/
 			Country country = countries[i];
-			iter = country.getUnits().iterator();
-			while(iter.hasNext())
-			{
-				Unit unit = (Unit) iter.next();
-
+			for (Unit unit : country.getUnits()) {
 				sb.append("\t\t<INITIALSTATE province=\"");
 				sb.append(unit.getLoc().getShortName());
 				sb.append("\" power=\"");
 				sb.append(country.getName());
 				sb.append("\" unit=\"");
 				sb.append(unit.getType());
-				if(unit.getLoc().getCoastType() != null)
-				{
+				if (unit.getLoc().getCoastType() != null) {
 					sb.append("\" unitcoast=\"");
 					sb.append(unit.getLoc().getCoastType());
 				}

@@ -35,7 +35,6 @@ import dip.world.Unit;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -783,13 +782,12 @@ public class NJudgeOrderParser {
      * </ul>
      * The given results are returned in the List.
      */
-    private List<Result> createResults(ParseContext pc, Orderable order, final List stringResults)
+    private List<Result> createResults(ParseContext pc, Orderable order, final List<String> stringResults)
             throws OrderException {
         List<Result> results = new ArrayList<>(stringResults.size());
 
-        Iterator iter = stringResults.iterator();
-        while (iter.hasNext()) {
-            final String textResult = ((String) iter.next()).trim();
+        for (String stringResult : stringResults) {
+            final String textResult = stringResult.trim();
             if (textResult.equalsIgnoreCase("bounce")) {
                 results.add(new OrderResult(order, OrderResult.ResultType.FAILURE, "Bounce"));
             } else if (textResult.equalsIgnoreCase("cut")) {

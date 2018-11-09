@@ -29,7 +29,6 @@ import dip.world.Location;
 import dip.world.Power;
 import dip.world.Province;
 
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -562,10 +561,8 @@ public final class OrderState {
     /**
      * Verifies that given list ONLY contains Move orderstates
      */
-    private boolean verifyListMove(List list) {
-        Iterator iter = list.iterator();
-        while (iter.hasNext()) {
-            OrderState os = (OrderState) iter.next();
+    private boolean verifyListMove(List<OrderState> list) {
+        for (OrderState os : list) {
             if (!(os.getOrder() instanceof Move)) {
                 return false;
             }
@@ -578,10 +575,8 @@ public final class OrderState {
     /**
      * Verifies that given list ONLY contains Support orderstates
      */
-    private boolean verifyListSupport(List list) {
-        Iterator iter = list.iterator();
-        while (iter.hasNext()) {
-            OrderState os = (OrderState) iter.next();
+    private boolean verifyListSupport(List<OrderState> list) {
+        for (OrderState os : list) {
             if (!(os.getOrder() instanceof Support)) {
                 return false;
             }
@@ -594,10 +589,8 @@ public final class OrderState {
     /**
      * Verifies that given list ONLY contains Self Support orderstates
      */
-    private boolean verifyListSelfSupport(List list) {
-        Iterator iter = list.iterator();
-        while (iter.hasNext()) {
-            OrderState os = (OrderState) iter.next();
+    private boolean verifyListSelfSupport(List<OrderState> list) {
+        for (OrderState os : list) {
             if (os.getOrder() instanceof Support) {
                 Support support = (Support) os.getOrder();
                 if (support.isSupportingHold()) {

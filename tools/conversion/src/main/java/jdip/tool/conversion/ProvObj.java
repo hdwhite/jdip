@@ -24,7 +24,6 @@ package jdip.tool.conversion;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -409,16 +408,11 @@ class ProvObj implements Comparable
 			Adjacency adj = adjList.get(i);
 			if(adj.hasMX())
 			{
-				Iterator iter = adj.getAdjLocs().iterator();
-				while(iter.hasNext())
-				{
-					Loc loc = (Loc) iter.next();
-					if(loc.isMX())
-					{
+				for (Loc loc : adj.getAdjLocs()) {
+					if (loc.isMX()) {
 						String name = BORDER_NAME_PREFIX;
 						name += loc.getShortName().toUpperCase();
-						if(!borders.contains(name))
-						{
+						if (!borders.contains(name)) {
 							borders.add(name);
 						}
 					}
@@ -444,7 +438,7 @@ class ProvObj implements Comparable
 	*	Get -mx border types (if any)
 	*	empty list if none
 	*/
-	List getMXProvs()
+	List<String> getMXProvs()
 	{
 		LinkedList<String> mxList = new LinkedList<>();
 		
@@ -453,12 +447,8 @@ class ProvObj implements Comparable
 			Adjacency adj = adjList.get(i);
 			if(adj.hasMX())
 			{
-				Iterator iter = adj.getAdjLocs().iterator();
-				while(iter.hasNext())
-				{
-					Loc loc = (Loc) iter.next();
-					if(loc.isMX())
-					{
+				for (Loc loc : adj.getAdjLocs()) {
+					if (loc.isMX()) {
 						mxList.add(loc.getShortName());
 					}
 				}

@@ -235,7 +235,7 @@ public class Move extends Order {
      * Returns, if set, all explicit convoy routes as an unmodifiable List.
      * Returns null if not convoying or no explicit route(s) were defined.
      */
-    public List getConvoyRoutes() {
+    public List<Province[]> getConvoyRoutes() {
         return (convoyRoutes != null) ? Collections.unmodifiableList(convoyRoutes) : null;
     }// getConvoyRoute()
 

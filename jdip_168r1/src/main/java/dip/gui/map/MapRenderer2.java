@@ -198,9 +198,8 @@ public abstract class MapRenderer2 {
 
                 RunnableQueue rq = getRunnableQueue();
                 if (rq != null) {
-                    Iterator iter = tempQueue.iterator();
-                    while (iter.hasNext()) {
-                        rq.invokeLater(((RenderCommand) iter.next()));
+                    for (RenderCommand command : tempQueue) {
+                        rq.invokeLater((command));
                     }
 
                     tempQueue.clear();

@@ -32,7 +32,6 @@ import org.nukesoft.jdipFacade.exception.PowerNotFoundException;
 import org.nukesoft.jdipFacade.exception.StateError;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -131,12 +130,11 @@ public class JdipWorld {
         OrderFormatOptions ofo = this.ceateOrderFormat(format);
 
         TurnState state = world.getPreviousTurnState(world.getLastTurnState());
-        List allResults = state.getResultList();
+        List<Result> allResults = state.getResultList();
         ArrayList<JdipResult> generalResults = new ArrayList<>();
-        Iterator it = allResults.iterator();
 
-        while (it.hasNext()) {
-            JdipResult r = new JdipResult((Result) it.next(), ofo);
+        for (Result result : allResults) {
+            JdipResult r = new JdipResult(result, ofo);
             //find all general resluts
             if (r.isGeneralResult()) {
                 generalResults.add(r);
@@ -157,12 +155,11 @@ public class JdipWorld {
         OrderFormatOptions ofo = this.ceateOrderFormat(format);
 
         TurnState state = world.getPreviousTurnState(world.getLastTurnState());
-        List allResults = state.getResultList();
+        List<Result> allResults = state.getResultList();
         ArrayList<JdipResult> generalResults = new ArrayList<>();
-        Iterator it = allResults.iterator();
 
-        while (it.hasNext()) {
-            JdipResult r = new JdipResult((Result) it.next(), ofo);
+        for (Result result : allResults) {
+            JdipResult r = new JdipResult(result, ofo);
             //find all resluts for given power
             if (!r.isGeneralResult() && r.getPower().equals(power.getPowerName())) {
                 generalResults.add(r);

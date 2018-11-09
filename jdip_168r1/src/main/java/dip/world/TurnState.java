@@ -29,7 +29,6 @@ import dip.order.result.Result;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -191,14 +190,11 @@ public class TurnState implements Serializable {
     public List<Orderable> getAllOrders() {
         List<Orderable> list = new ArrayList<>(75);
 
-        Iterator<Map.Entry<Power, List<Orderable>>> esIter = orderMap.entrySet().iterator();
-        while (esIter.hasNext()) {
-            Map.Entry<Power, List<Orderable>> mapEntry = esIter.next();
+        for (Map.Entry<Power, List<Orderable>> mapEntry : orderMap.entrySet()) {
             List<Orderable> orders = mapEntry.getValue();
 
-            Iterator<Orderable> ordIter = orders.iterator();
-            while (ordIter.hasNext()) {
-                list.add(ordIter.next());
+            for (Orderable order : orders) {
+                list.add(order);
             }
         }
 
@@ -285,9 +281,7 @@ public class TurnState implements Serializable {
 
         if (resultMap == null) {
             resultMap = new HashMap<>(53);
-            Iterator iter = getResultList().iterator();
-            while (iter.hasNext()) {
-                Object obj = iter.next();
+            for (Result obj : getResultList()) {
                 if (obj instanceof OrderResult) {
                     OrderResult ordRes = (OrderResult) obj;
 

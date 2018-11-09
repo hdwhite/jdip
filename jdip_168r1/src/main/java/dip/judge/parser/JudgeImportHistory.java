@@ -53,7 +53,6 @@ import dip.world.World;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -480,9 +479,7 @@ final class JudgeImportHistory {
             // We must first check for a 'dislodged' indicator.
             boolean isUnitDislodged = false;
             if (isRetreatMoveProcessing) {
-                Iterator iter = njo.getResults().iterator();
-                while (iter.hasNext()) {
-                    final Result r = (Result) iter.next();
+                for (Result r : njo.getResults()) {
                     if (r instanceof OrderResult) {
                         if (((OrderResult) r).getResultType().equals(OrderResult.ResultType.DISLODGED)) {
                             isUnitDislodged = true;
@@ -592,9 +589,7 @@ final class JudgeImportHistory {
 
             // now that all orders are parsed, and all units are cleared, put
             // unit in the proper place.
-            Iterator iter = results.iterator();
-            while (iter.hasNext()) {
-                Result result = (Result) iter.next();
+            for (Result result : results) {
                 if (result instanceof OrderResult) {
                     OrderResult ordResult = (OrderResult) result;
                     Orderable order = ordResult.getOrder();
@@ -754,9 +749,7 @@ final class JudgeImportHistory {
             // now that all orders are parsed, and all units are cleared, put
             // unit in the proper place.
             //
-            Iterator iter = results.iterator();
-            while (iter.hasNext()) {
-                Result result = (Result) iter.next();
+            for (Result result : results) {
                 if (result instanceof OrderResult) {
                     OrderResult ordResult = (OrderResult) result;
                     Orderable order = ordResult.getOrder();

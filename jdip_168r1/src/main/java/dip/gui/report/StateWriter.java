@@ -28,6 +28,7 @@ import dip.misc.Help;
 import dip.misc.Utils;
 import dip.order.Order;
 import dip.order.OrderFormatOptions;
+import dip.order.Orderable;
 import dip.process.Adjustment;
 import dip.world.Phase;
 import dip.world.Position;
@@ -40,7 +41,6 @@ import javax.swing.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -263,11 +263,10 @@ public class StateWriter {
             sb.append("<div class=\"indent2cm\">");
             if (canShow) {
                 // print submission/elimination information
-                List orders = turnState.getOrders(allPowers[i]);
+                List<Orderable> orders = turnState.getOrders(allPowers[i]);
                 if (orders.size() > 0) {
-                    Iterator iter = orders.iterator();
-                    while (iter.hasNext()) {
-                        Order order = (Order) iter.next();
+                    for (Orderable orderable : orders) {
+                        Order order = (Order) orderable;
                         sb.append(order.toFormattedString(ofo));
                         sb.append("<br>\n");
                     }

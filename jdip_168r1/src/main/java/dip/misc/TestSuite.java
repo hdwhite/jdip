@@ -834,10 +834,8 @@ public final class TestSuite {
     /**
      * Print all the UnitPos objects from a Set; prefixing with the given prefix
      */
-    private void printSet(Set set, String prefix) {
-        Iterator iter = set.iterator();
-        while (iter.hasNext()) {
-            UnitPos up = (UnitPos) iter.next();
+    private void printSet(Set<UnitPos> set, String prefix) {
+        for (UnitPos up : set) {
 
             StringBuilder sb = new StringBuilder(64);
             sb.append("  ");    // spacer

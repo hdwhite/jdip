@@ -27,7 +27,6 @@ import dip.misc.Utils;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 
 /**
@@ -295,10 +294,7 @@ public class Phase implements java.io.Serializable, Comparable {
             }
 
             // parse until we run out of things to parse
-            Iterator iter = tokList.iterator();
-            while (iter.hasNext()) {
-                String tok = (String) iter.next();
-
+            for (String tok : tokList) {
                 SeasonType tmpSeason = SeasonType.parse(tok);
                 seasonType = (tmpSeason == null) ? seasonType : tmpSeason;
 

@@ -23,7 +23,6 @@
 package dip.world;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -524,9 +523,7 @@ public class Position implements java.io.Serializable {
             }
         }
 
-        Iterator iter = powerMap.keySet().iterator();
-        while (iter.hasNext()) {
-            Power key = (Power) iter.next();
+        for (Power key : powerMap.keySet()) {
             PowerData pd = powerMap.get(key);
 
             pos.powerMap.put(key, pd.normClone());
@@ -550,9 +547,7 @@ public class Position implements java.io.Serializable {
             }
         }
 
-        Iterator iter = powerMap.keySet().iterator();
-        while (iter.hasNext()) {
-            Power key = (Power) iter.next();
+        for (Power key : powerMap.keySet()) {
             PowerData pd = powerMap.get(key);
 
             pos.powerMap.put(key, pd.normClone());
@@ -575,9 +570,7 @@ public class Position implements java.io.Serializable {
             }
         }
 
-        Iterator iter = powerMap.keySet().iterator();
-        while (iter.hasNext()) {
-            Power key = (Power) iter.next();
+        for (Power key : powerMap.keySet()) {
             PowerData pd = powerMap.get(key);
 
             pos.powerMap.put(key, pd.normClone());

@@ -47,7 +47,6 @@ import org.w3c.dom.svg.SVGGElement;
 import org.w3c.dom.svg.SVGUseElement;
 
 import java.awt.geom.Point2D;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -378,10 +377,8 @@ final class GUIOrderUtils {
     public static Move findMatchingMove(MapInfo mapInfo, Province src, Province dest) {
         Power[] powers = mapInfo.getDisplayablePowers();
         for (int i = 0; i < powers.length; i++) {
-            List orders = mapInfo.getTurnState().getOrders(powers[i]);
-            Iterator iter = orders.iterator();
-            while (iter.hasNext()) {
-                Orderable o = (Orderable) iter.next();
+            List<Orderable> orders = mapInfo.getTurnState().getOrders(powers[i]);
+            for (Orderable o : orders) {
                 if (o instanceof Move) {
                     Move mv = (Move) o;
                     if (mv.getSource().isProvinceEqual(src)
@@ -403,10 +400,8 @@ final class GUIOrderUtils {
     public static Hold findMatchingHold(MapInfo mapInfo, Province src) {
         Power[] powers = mapInfo.getDisplayablePowers();
         for (int i = 0; i < powers.length; i++) {
-            List orders = mapInfo.getTurnState().getOrders(powers[i]);
-            Iterator iter = orders.iterator();
-            while (iter.hasNext()) {
-                Orderable o = (Orderable) iter.next();
+            List<Orderable> orders = mapInfo.getTurnState().getOrders(powers[i]);
+            for (Orderable o : orders) {
                 if (o instanceof Hold && o.getSource().isProvinceEqual(src)) {
                     return (Hold) o;
                 }
@@ -429,10 +424,8 @@ final class GUIOrderUtils {
 
         Power[] powers = mapInfo.getDisplayablePowers();
         for (int i = 0; i < powers.length; i++) {
-            List orders = mapInfo.getTurnState().getOrders(powers[i]);
-            Iterator iter = orders.iterator();
-            while (iter.hasNext()) {
-                Orderable o = (Orderable) iter.next();
+            List<Orderable> orders = mapInfo.getTurnState().getOrders(powers[i]);
+            for (Orderable o : orders) {
                 if (o instanceof Support) {
                     Support sup = (Support) o;
                     if (sup.getSupportedSrc().isProvinceEqual(supSrc)

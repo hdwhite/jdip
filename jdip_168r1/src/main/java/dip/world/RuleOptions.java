@@ -29,7 +29,6 @@ import java.io.InvalidObjectException;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -225,10 +224,8 @@ public class RuleOptions implements Serializable {
         sb.append(this.getClass().getName());
         sb.append('\n');
 
-        Set set = getAllOptions();
-        Iterator iter = set.iterator();
-        while (iter.hasNext()) {
-            Option opt = (Option) iter.next();
+        Set<Option> set = getAllOptions();
+        for (Option opt : set) {
             OptionValue ov = getOptionValue(opt);
             sb.append("  ");
             sb.append(opt);

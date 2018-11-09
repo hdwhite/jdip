@@ -185,10 +185,8 @@ public class ResultWriter {
         List<Result> orderResults = new ArrayList<>(128);
         List<Result> otherResults = new ArrayList<>(64);
 
-        List resultList = turnState.getResultList();
-        Iterator iter = resultList.iterator();
-        while (iter.hasNext()) {
-            Result r = (Result) iter.next();
+        List<Result> resultList = turnState.getResultList();
+        for (Result r : resultList) {
             if (r.getPower() != null) {
                 if (r instanceof OrderResult) {
                     orderResults.add(r);
@@ -231,13 +229,11 @@ public class ResultWriter {
     /**
      * Print non order results for a power.
      */
-    private void printNonOrderResultsForPower(StringBuffer sb, Power power, List results) {
+    private void printNonOrderResultsForPower(StringBuffer sb, Power power, List<Result> results) {
         StringBuilder text = new StringBuilder(1024);
 
         boolean foundAnOtherResult = false;
-        Iterator iter = results.iterator();
-        while (iter.hasNext()) {
-            Result result = (Result) iter.next();
+        for (Result result : results) {
             if (power.equals(result.getPower())) {
                 text.append(result.getMessage(ofo));
                 text.append("<br>\n");

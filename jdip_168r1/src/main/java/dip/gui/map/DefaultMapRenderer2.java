@@ -51,7 +51,6 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -187,14 +186,14 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     // instance variables
     protected final Map<Province, Tracker> trackerMap;            // for rendering units & dislodged units; keyed by Province
     protected final HashMap<String, Node> layerMap;        // layers to which we render; keyed by LAYER; includes label layers
-    private final HashMap<Object, Object> renderSettings;    // control rendering options.
+    private final HashMap<String, Object> renderSettings;    // control rendering options.
     private final HashMap<String, Location> locMap;            // maps multicoastal province ids -> Location objects for multicoastal provinces
     private final ArrayList<HashMap<Power, SVGElement>> powerOrderMaps;
     private final dip.world.Map worldMap;    // World Map reference
     private final Province[] provinces;
     private final Power[] powers;
     private final SymbolPack symbolPack;
-    private HashMap oldRenderSettings;        // old render settings
+    private HashMap<String, Object> oldRenderSettings;        // old render settings
     private TurnState turnState = null;                    // current TurnState
     private Position position = null;                    // current Position
     private MapMetadata mapMeta = null;
@@ -497,7 +496,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     /**
      * Internally set a Render Setting
      */
-    protected void setRenderSetting(Object key, Object value) {
+    protected void setRenderSetting(String key, Object value) {
         synchronized (renderSettings) {
             renderSettings.put(key, value);
         }
@@ -600,9 +599,8 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     protected void unsyncDestroyAllOrders() {
         Log.println("DMR2::unsyncDestroyAllOrders()");
         MapInfo mapInfo = new DMRMapInfo(turnState);
-        Iterator iter = turnState.getAllOrders().iterator();
-        while (iter.hasNext()) {
-            GUIOrder order = (GUIOrder) iter.next();
+        for (Orderable orderable : turnState.getAllOrders()) {
+            GUIOrder order = (GUIOrder) orderable;
             order.removeFromDOM(mapInfo);
         }
     }// unsyncDestroyAllOrders()
@@ -699,7 +697,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
             // now clear the render settings
             synchronized (renderSettings) {
                 // copy old render settings
-                oldRenderSettings = (HashMap) renderSettings.clone();
+                oldRenderSettings = new HashMap<>(renderSettings);
 
                 // if 'show unordered' was enabled, we must first disable it.
                 if (oldRenderSettings.get(MapRenderer2.KEY_SHOW_UNORDERED) == Boolean.TRUE) {
@@ -749,10 +747,8 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
             // this must be set for unsyncUpdateProvince to work correctly
             // we also want to reset the KEY_INFLUENCE_MODE
             synchronized (renderSettings) {
-                Iterator iter = oldRenderSettings.entrySet().iterator();
-                while (iter.hasNext()) {
-                    Map.Entry me = (Map.Entry) iter.next();
-                    renderSettings.put(me.getKey(), me.getValue());
+                for (Map.Entry<String, Object> entry : oldRenderSettings.entrySet()) {
+                    renderSettings.put(entry.getKey(), entry.getValue());
                 }
 
                 renderSettings.put(MapRenderer2.KEY_INFLUENCE_MODE, Boolean.FALSE);
@@ -807,9 +803,8 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
 
         // get ALL orders
         MapInfo mapInfo = new DMRMapInfo(turnState);
-        Iterator iter = turnState.getAllOrders().iterator();
-        while (iter.hasNext()) {
-            GUIOrder order = (GUIOrder) iter.next();
+        for (Orderable orderable : turnState.getAllOrders()) {
+            GUIOrder order = (GUIOrder) orderable;
 
             if (order.isDependent()) {
                 if (addedOrders != null) {
@@ -834,9 +829,8 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     protected void unsyncRecreateAllOrders() {
         // get ALL orders
         MapInfo mapInfo = new DMRMapInfo(turnState);
-        Iterator iter = turnState.getAllOrders().iterator();
-        while (iter.hasNext()) {
-            GUIOrder order = (GUIOrder) iter.next();
+        for (Orderable orderable : turnState.getAllOrders()) {
+            GUIOrder order = (GUIOrder) orderable;
             order.updateDOM(mapInfo);
         }
     }// unsyncRecreateAllOrders()
@@ -848,9 +842,8 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     private void unsyncUpdateAllOrders() {
         // get ALL orders
         MapInfo mapInfo = new DMRMapInfo(turnState);
-        Iterator iter = turnState.getAllOrders().iterator();
-        while (iter.hasNext()) {
-            GUIOrder order = (GUIOrder) iter.next();
+        for (Orderable orderable : turnState.getAllOrders()) {
+            GUIOrder order = (GUIOrder) orderable;
             order.updateDOM(mapInfo);
         }
     }// unsyncUpdateAllOrders()
@@ -1272,10 +1265,8 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     private boolean isOrdered(Province province) {
         Unit unit = getPhaseApropriateUnit(province);
         if (unit != null) {
-            List list = turnState.getOrders(unit.getPower());
-            Iterator iter = list.iterator();
-            while (iter.hasNext()) {
-                Orderable order = (Orderable) iter.next();
+            List<Orderable> list = turnState.getOrders(unit.getPower());
+            for (Orderable order : list) {
                 if (order.getSource().isProvinceEqual(province)) {
                     return true;
                 }

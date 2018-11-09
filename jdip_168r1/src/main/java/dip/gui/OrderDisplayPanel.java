@@ -1152,9 +1152,7 @@ public class OrderDisplayPanel extends JPanel {
             synchronized (list) {
                 list.clear();
 
-                Iterator iter = turnState.getAllOrders().iterator();
-                while (iter.hasNext()) {
-                    Orderable order = (Orderable) iter.next();
+                for (Orderable order : turnState.getAllOrders()) {
                     if (isDisplayable(order)) {
                         list.add(createDisplayOrder(order));
                     }
@@ -1170,10 +1168,7 @@ public class OrderDisplayPanel extends JPanel {
          */
         public void revalidateAllOrders() {
             synchronized (list) {
-                Iterator iter = list.iterator();
-                while (iter.hasNext()) {
-                    DisplayOrder displayOrder = (DisplayOrder) iter.next();
-
+                for (DisplayOrder displayOrder : list) {
                     try {
                         displayOrder.getOrder().validate(turnState, valOpts, world.getRuleOptions());
                         displayOrder.setInvalid(false);

@@ -283,9 +283,7 @@ public class World implements Serializable {
 
 
         Phase previous = null;
-        Iterator iter = turnStates.keySet().iterator();
-        while (iter.hasNext()) {
-            Phase phase = (Phase) iter.next();
+        for (Phase phase : turnStates.keySet()) {
             if (phase.compareTo(current) != 0) {
                 previous = phase;
             } else {

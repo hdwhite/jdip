@@ -25,6 +25,7 @@ package dip.process;
 import dip.order.Move;
 import dip.order.Orderable;
 import dip.order.result.OrderResult;
+import dip.order.result.Result;
 import dip.world.Location;
 import dip.world.Position;
 import dip.world.Province;
@@ -33,7 +34,6 @@ import dip.world.World;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -57,7 +57,7 @@ import java.util.List;
 public class RetreatChecker {
     // instance variables
     private transient final Position position;
-    private transient final ArrayList filteredMoveResults;
+    private transient final ArrayList<RCMoveResult> filteredMoveResults;
 
     /**
      * Create a RetreatChecker.
@@ -67,7 +67,7 @@ public class RetreatChecker {
      * first TurnState (this can happen if the game is edited), it is allowed.
      */
     public RetreatChecker(TurnState current) {
-        List results = null;
+        List<Result> results = null;
 
         TurnState last = current.getWorld().getPreviousTurnState(current);
         if (last == null) {
@@ -76,7 +76,7 @@ public class RetreatChecker {
             World w = current.getWorld();
             if (w.getInitialTurnState() == current) {
                 //Log.println("     no previous turnstate, and we are first; creating results");
-                results = new ArrayList();
+                results = new ArrayList<>();
             } else {
                 throw new IllegalStateException("No Previous Turn State!!");
             }
@@ -96,7 +96,7 @@ public class RetreatChecker {
      * Useful for when the previous TurnState has not yet been inserted
      * into the World object.
      */
-    public RetreatChecker(TurnState current, List previousTurnStateResults) {
+    public RetreatChecker(TurnState current, List<Result> previousTurnStateResults) {
         if (current == null || previousTurnStateResults == null) {
             throw new IllegalStateException("null arguments!");
         }
@@ -192,9 +192,8 @@ public class RetreatChecker {
      * dislodged <code>dislodgedLoc</code>
      */
     private boolean isDislodgersSpace(Location dislodgedLoc, Location loc) {
-        Iterator iter = filteredMoveResults.iterator();
-        while (iter.hasNext()) {
-            RCMoveResult rcmr = (RCMoveResult) iter.next();
+        for (Object filteredMoveResult : filteredMoveResults) {
+            RCMoveResult rcmr = (RCMoveResult) filteredMoveResult;
 
             // note: dislodgedLoc is the potential move destination
             if (rcmr.isDislodger(loc, dislodgedLoc)) {
@@ -222,9 +221,7 @@ public class RetreatChecker {
 
         int moveCount = 0;
 
-        Iterator iter = filteredMoveResults.iterator();
-        while (iter.hasNext()) {
-            RCMoveResult rcmr = (RCMoveResult) iter.next();
+        for (RCMoveResult rcmr : filteredMoveResults) {
 
             if (rcmr.isPossibleStandoff(loc)) {
                 moveCount++;
@@ -244,13 +241,11 @@ public class RetreatChecker {
      * generate one RCMoveResult object, which holds the pertinent information
      * about that Move order.
      */
-    private ArrayList makeFMRList(List turnStateResults) {
+    private ArrayList<RCMoveResult> makeFMRList(List<Result> turnStateResults) {
         ArrayList<RCMoveResult> mrList = new ArrayList<>(64);
         HashMap<Province, RCMoveResult> map = new HashMap<>(119);    // key: move source province; value: RCMoveResult
 
-        Iterator iter = turnStateResults.iterator();
-        while (iter.hasNext()) {
-            Object obj = iter.next();
+        for (Result obj : turnStateResults) {
             if (obj instanceof OrderResult) {
                 OrderResult or = (OrderResult) obj;
                 Orderable order = or.getOrder();
