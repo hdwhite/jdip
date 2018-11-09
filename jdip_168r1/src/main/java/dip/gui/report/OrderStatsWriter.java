@@ -43,7 +43,6 @@ import javax.swing.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -313,11 +312,9 @@ public class OrderStatsWriter {
 
                 s.isEliminated = ts.getPosition().isEliminated(allPowers[i]);
 
-                Iterator<Orderable> iter = ts.getOrders(allPowers[i]).iterator();
-                while (iter.hasNext()) {
+                for (Orderable order : ts.getOrders(allPowers[i])) {
                     s.nOrders++;
 
-                    final Orderable order = iter.next();
                     final boolean success = (resultMap.get(order) == Boolean.TRUE);
 
                     if (order instanceof Move) {
