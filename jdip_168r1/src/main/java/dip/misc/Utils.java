@@ -114,7 +114,7 @@ public class Utils {
         toolkit = Toolkit.getDefaultToolkit();
 
         isOSX = (System.getProperty("mrj.version", null) != null);
-        isWindows = (System.getProperty("os.name", "").toLowerCase().indexOf("windows") >= 0);
+        isWindows = (System.getProperty("os.name", "").toLowerCase().contains("windows"));
 
         // if a locale cannot be found, automatically defaults
         // to the closest locale, or (at worst) BASE_RESOURCE_FILE.

@@ -796,7 +796,7 @@ public class VariantManager {
                 String lcPath = url.getPath();
                 String search = mro.getPluginName() + "!";
 
-                if (lcPath.indexOf(search) >= 0) {
+                if (lcPath.contains(search)) {
                     return url;
                 }
             }
@@ -846,7 +846,7 @@ public class VariantManager {
             // 'pluginName', we can be foolproof.
             //
             String lcPath = url.getPath();
-            if (lcPath.indexOf(deconflictName) >= 0) {
+            if (lcPath.contains(deconflictName)) {
                 return url;
             }
         }

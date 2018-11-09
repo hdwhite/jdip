@@ -105,7 +105,7 @@ public class TurnParser {
 
                 // set the subject line; if not present, throw an error (shouldn't occur)
                 String nextLine = reader.readLine();
-                if (nextLine.toLowerCase().indexOf("subject:") == -1) {
+                if (!nextLine.toLowerCase().contains("subject:")) {
                     throw new IOException(Utils.getLocalString(TP_NO_SUBJECT));
                 } else if (isResultsPattern.matcher(nextLine).find()) {
                     turn.setSubjectLine(nextLine);

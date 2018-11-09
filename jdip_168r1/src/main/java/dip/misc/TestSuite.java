@@ -243,7 +243,7 @@ public final class TestSuite {
                 isLogging = false;
                 isAdjudicatorLogged = false;
                 isPerfTest = true;
-                if (firstArg.indexOf(":") != -1) {
+                if (firstArg.contains(":")) {
                     benchTimes = getTimes(firstArg);
                 } else {
                     printUsageAndExit();
