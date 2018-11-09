@@ -213,7 +213,7 @@ public class XDialog extends JDialog {
 
     public void dispose() {
         if (cfl != null) {
-            ((JComponent) getParent()).removePropertyChangeListener(cfl);
+            getParent().removePropertyChangeListener(cfl);
             cfl = null;
         }
 

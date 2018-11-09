@@ -649,7 +649,7 @@ public class OrderFormatOptions implements Cloneable {
      */
     public Object clone() {
         try {
-            return (OrderFormatOptions) super.clone();
+            return super.clone();
         } catch (CloneNotSupportedException e) {
             Log.println("OrderFormat::clone() error: ", e);
             throw new IllegalStateException();

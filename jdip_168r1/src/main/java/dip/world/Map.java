@@ -137,7 +137,7 @@ public class Map implements Serializable {
         }
 
         // create names array from ArrayList
-        names = (String[]) namesAL.toArray(new String[namesAL.size()]);
+        names = namesAL.toArray(new String[namesAL.size()]);
     }// createMappings()
 
 
@@ -156,7 +156,7 @@ public class Map implements Serializable {
      * The match must be exact, but is case-insensitive.
      */
     public Power getPower(String name) {
-        return (Power) powerNameMap.get(name.toLowerCase());
+        return powerNameMap.get(name.toLowerCase());
     }// getPower()
 
 
@@ -218,7 +218,7 @@ public class Map implements Serializable {
         }
 
         // if absolute error rate is too high, discard.
-        if (bestMatch <= ((int) (powerName.length() / 2))) {
+        if (bestMatch <= powerName.length() / 2) {
             return matchPower;
         }
 
@@ -278,7 +278,7 @@ public class Map implements Serializable {
 
         // if absolute error rate is too high, discard.
         // we are stricter than in getClosestPower()
-        if (bestMatch <= ((int) (powerName.length() / 3))) {
+        if (bestMatch <= powerName.length() / 3) {
             return getPower(bestMatchPowerName);    // should never return null
         }
 
@@ -302,7 +302,7 @@ public class Map implements Serializable {
      * The match must be exact, but is case-insensitive.
      */
     public Province getProvince(String name) {
-        return (Province) nameMap.get(name.toLowerCase());
+        return nameMap.get(name.toLowerCase());
     }// getProvince()
 
 
@@ -376,9 +376,9 @@ public class Map implements Serializable {
 
         // if absolute error rate is too high, discard.
         // if we have >1 unique ties, (or none at all) no match
-        if (bestDist <= ((int) (input.length() / 2)) && ties.size() == 1) {
+        if (bestDist <= input.length() / 2 && ties.size() == 1) {
             // there is but one
-            return (Province) ties.iterator().next();
+            return ties.iterator().next();
         }
 
         return null;
@@ -501,7 +501,7 @@ public class Map implements Serializable {
                     list.add(name.toLowerCase());
                 }
             }
-            wsNames = (String[]) list.toArray(new String[list.size()]);
+            wsNames = list.toArray(new String[list.size()]);
 
             // sort array from longest entries to shortest. This
             // eliminates errors in partial replacements.
@@ -730,7 +730,7 @@ public class Map implements Serializable {
         // "Russian" come before "Russia"; otherwise, the replacement will be f'd up.
         tmpNames.sort(Collections.reverseOrder());
 
-        lcPowerNames = (String[]) tmpNames.toArray(new String[tmpNames.size()]);
+        lcPowerNames = tmpNames.toArray(new String[tmpNames.size()]);
     }// createLCPowerNameList()
 	
 	

@@ -223,7 +223,7 @@ public class Border implements Serializable {
         if (list.isEmpty()) {
             return null;
         } else {
-            return (Phase.SeasonType[]) list.toArray(new Phase.SeasonType[list.size()]);
+            return list.toArray(new Phase.SeasonType[list.size()]);
         }
     }// parseProhibitedSeasons()
 
@@ -247,7 +247,7 @@ public class Border implements Serializable {
         if (list.isEmpty()) {
             return null;
         } else {
-            return (Phase.PhaseType[]) list.toArray(new Phase.PhaseType[list.size()]);
+            return list.toArray(new Phase.PhaseType[list.size()]);
         }
     }// parseProhibitedPhases()
 
@@ -345,7 +345,7 @@ public class Border implements Serializable {
         if (list.isEmpty()) {
             return null;
         } else {
-            return (Unit.Type[]) list.toArray(new Unit.Type[list.size()]);
+            return list.toArray(new Unit.Type[list.size()]);
         }
     }// parseUnitTypes()
 
@@ -390,7 +390,7 @@ public class Border implements Serializable {
 
         }
 
-        return (Class[]) list.toArray(new Class[list.size()]);
+        return list.toArray(new Class[list.size()]);
     }// parseClasses2Objs()
 
 

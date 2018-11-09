@@ -130,7 +130,7 @@ public class Exporter implements Tool {
                 XJFileChooser.dispose();
                 if (file != null) {
                     List<TurnState> tsList = clientFrame.getWorld().getAllTurnStates();
-                    TurnState[] ts = (TurnState[]) tsList.toArray(new TurnState[0]);
+                    TurnState[] ts = tsList.toArray(new TurnState[0]);
                     exportToFile(file, ts);
                 }
             }

@@ -467,7 +467,7 @@ public class PersistenceManager {
                             }
                         }
                         while (!l.isEmpty()) {
-                            Phase p = (Phase) l.getFirst();
+                            Phase p = l.getFirst();
                             l.removeFirst();
                             TurnState ts = currentWorld.getTurnState(p);
                             currentWorld.removeTurnState(ts);

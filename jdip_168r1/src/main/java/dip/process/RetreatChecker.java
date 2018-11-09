@@ -158,7 +158,7 @@ public class RetreatChecker {
             }
         }
 
-        return (Location[]) retreatLocations.toArray(new Location[retreatLocations.size()]);
+        return retreatLocations.toArray(new Location[retreatLocations.size()]);
     }// getValidLocations()
 
 
@@ -259,7 +259,7 @@ public class RetreatChecker {
                     // set options; if not, create an entry.
                     // This avoids duplicate entries per Move.
                     //
-                    RCMoveResult rcmr = (RCMoveResult) map.get(order.getSource().getProvince());
+                    RCMoveResult rcmr = map.get(order.getSource().getProvince());
                     if (rcmr == null) {
                         rcmr = new RCMoveResult(or);
                         map.put(order.getSource().getProvince(), rcmr);

@@ -392,7 +392,7 @@ public final class OrderState {
      */
     public void setDependentSupports(List<OrderState> osList) {
         assert (verifyListSupport(osList));
-        dependentSupports = (OrderState[]) osList.toArray(new OrderState[osList.size()]);
+        dependentSupports = osList.toArray(new OrderState[osList.size()]);
     }// setDependentSupports()
 
     /**
@@ -408,7 +408,7 @@ public final class OrderState {
      */
     public void setDependentMovesToSource(List<OrderState> osList) {
         assert (verifyListMove(osList));
-        dependentMovesToSource = (OrderState[]) osList.toArray(new OrderState[osList.size()]);
+        dependentMovesToSource = osList.toArray(new OrderState[osList.size()]);
     }// addDependentMoveToSource()
 
     /**
@@ -424,7 +424,7 @@ public final class OrderState {
      */
     public void setDependentMovesToDestination(List<OrderState> osList) {
         assert (verifyListMove(osList));
-        dependentMovesToDestination = (OrderState[]) osList.toArray(new OrderState[osList.size()]);
+        dependentMovesToDestination = osList.toArray(new OrderState[osList.size()]);
     }// addDependentMoveToDestination()
 
     /**
@@ -447,7 +447,7 @@ public final class OrderState {
      */
     public void setDependentSelfSupports(List<OrderState> osList) {
         assert (verifyListSelfSupport(osList));
-        dependentSelfSupports = (OrderState[]) osList.toArray(new OrderState[osList.size()]);
+        dependentSelfSupports = osList.toArray(new OrderState[osList.size()]);
     }// addDependentSupport()
 
     /**

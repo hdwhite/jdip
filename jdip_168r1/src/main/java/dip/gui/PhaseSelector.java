@@ -160,7 +160,7 @@ public class PhaseSelector {
     private void setCurrentPosition() {
         // get set, convert to array
         Set<Phase> set = currentWorld.getPhaseSet();
-        phases = (Phase[]) set.toArray(new Phase[set.size()]);
+        phases = set.toArray(new Phase[set.size()]);
 
         // set max size
         maxPos = phases.length - 1;
