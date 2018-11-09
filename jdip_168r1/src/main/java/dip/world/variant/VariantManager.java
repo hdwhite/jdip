@@ -177,9 +177,7 @@ public class VariantManager {
                 String pluginName = getFile(pluginURLs[i]);
 
                 // parse variant description file, and create hash entry of variant object -> URL
-                InputStream is = null;
-                try {
-                    is = new BufferedInputStream(variantXMLURL.openStream());
+                try (InputStream is = new BufferedInputStream(variantXMLURL.openStream())) {
                     variantParser.parse(is, pluginURLs[i]);
                     Variant[] variants = variantParser.getVariants();
 
@@ -194,13 +192,6 @@ public class VariantManager {
                 } catch (org.xml.sax.SAXException e) {
                     // display error dialog
                     ErrorDialog.displayGeneral(null, e);
-                } finally {
-                    if (is != null) {
-                        try {
-                            is.close();
-                        } catch (IOException e) {
-                        }
-                    }
                 }
             }
         }
@@ -224,11 +215,9 @@ public class VariantManager {
                     URL variantURL = (URL) enm.nextElement();
 
                     // parse variant description file, and create hash entry of variant object -> URL
-                    InputStream is = null;
-                    String pluginName = getWSPluginName(variantURL);
 
-                    try {
-                        is = new BufferedInputStream(variantURL.openStream());
+                    String pluginName = getWSPluginName(variantURL);
+                    try (InputStream is = new BufferedInputStream(variantURL.openStream())) {
 
                         variantParser.parse(is, variantURL);
                         Variant[] variants = variantParser.getVariants();
@@ -244,13 +233,6 @@ public class VariantManager {
                     } catch (org.xml.sax.SAXException e) {
                         // display error dialog
                         ErrorDialog.displayGeneral(null, e);
-                    } finally {
-                        if (is != null) {
-                            try {
-                                is.close();
-                            } catch (IOException e) {
-                            }
-                        }
                     }
                 }
             }// if(enm != null)
@@ -289,9 +271,7 @@ public class VariantManager {
                 String pluginName = getFile(pluginURLs[i]);
 
                 // parse variant description file, and create hash entry of variant object -> URL
-                InputStream is = null;
-                try {
-                    is = new BufferedInputStream(symbolXMLURL.openStream());
+                try (InputStream is = new BufferedInputStream(symbolXMLURL.openStream())) {
                     symbolParser.parse(is, pluginURLs[i]);
                     addSymbolPack(symbolParser.getSymbolPack(), pluginName, pluginURLs[i]);
                 } catch (IOException e) {
@@ -300,13 +280,6 @@ public class VariantManager {
                 } catch (org.xml.sax.SAXException e) {
                     // display error dialog
                     ErrorDialog.displayGeneral(null, e);
-                } finally {
-                    if (is != null) {
-                        try {
-                            is.close();
-                        } catch (IOException e) {
-                        }
-                    }
                 }
             }
         }
@@ -329,11 +302,9 @@ public class VariantManager {
                     URL symbolURL = (URL) enm.nextElement();
 
                     // parse variant description file, and create hash entry of variant object -> URL
-                    InputStream is = null;
-                    String pluginName = getWSPluginName(symbolURL);
 
-                    try {
-                        is = new BufferedInputStream(symbolURL.openStream());
+                    String pluginName = getWSPluginName(symbolURL);
+                    try (InputStream is = new BufferedInputStream(symbolURL.openStream())) {
                         symbolParser.parse(is, symbolURL);
                         addSymbolPack(symbolParser.getSymbolPack(), pluginName, symbolURL);
                     } catch (IOException e) {
@@ -342,13 +313,6 @@ public class VariantManager {
                     } catch (org.xml.sax.SAXException e) {
                         // display error dialog
                         ErrorDialog.displayGeneral(null, e);
-                    } finally {
-                        if (is != null) {
-                            try {
-                                is.close();
-                            } catch (IOException e) {
-                            }
-                        }
                     }
                 }
             }// if(enm != null)

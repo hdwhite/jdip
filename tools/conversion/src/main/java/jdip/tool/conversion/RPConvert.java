@@ -165,23 +165,13 @@ public class RPConvert
 
 		File out = new File("variants.xml");
 
-		BufferedWriter bw = null;
-		try
-		{
-			bw = new BufferedWriter(new FileWriter(out));
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(out))) {
 
 			// write adjacency data
-            HashMap<String, String> templateData = new HashMap<>();
+			HashMap<String, String> templateData = new HashMap<>();
 			makeVariantXMLTemplateData(templateData, mc, variant, countries);
-			bw.write( variantTemplate.parse(templateData) );
-			System.out.println("File created: "+out);
-		}
-		finally
-		{
-			if(bw != null)
-			{
-				bw.close();
-			}
+			bw.write(variantTemplate.parse(templateData));
+			System.out.println("File created: " + out);
 		}
 	}// makeVariantXMLFile()
 
@@ -407,24 +397,17 @@ public class RPConvert
 		}
 
 		StringBuilder sb = new StringBuilder(4096);
-		BufferedReader br = null;
 
-		try
-		{
-			br = new BufferedReader(new FileReader(file));
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
 			sb.append("\t\t<p>\n");
 
 			String line = br.readLine();
-			while(line != null)
-			{
+			while (line != null) {
 				line = line.trim();
-				if("".equals(line))
-				{
+				if ("".equals(line)) {
 					sb.append("\t\t</p>\n\t\t<p>\n");
-				}
-				else
-				{
+				} else {
 					sb.append("\t\t\t");
 					sb.append(line);
 					sb.append("\n");
@@ -434,13 +417,6 @@ public class RPConvert
 			}
 
 			sb.append("\t\t</p>\n");
-		}
-		finally
-		{
-			if(br != null)
-			{
-				br.close();
-			}
 		}
 
 		return sb.toString();

@@ -196,17 +196,8 @@ public class XMLSymbolParser implements SymbolParser {
         }
 
         // parse resolved URI into a Document
-        InputStream is = null;
-        try {
-            is = new BufferedInputStream(url.openStream());
+        try (InputStream is = new BufferedInputStream(url.openStream())) {
             svgDoc = docBuilder.parse(is);
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                }
-            }
         }
 
         // find defs section, if any, and style attribute

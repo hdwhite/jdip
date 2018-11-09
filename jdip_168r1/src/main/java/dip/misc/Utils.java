@@ -381,11 +381,9 @@ public class Utils {
      *
      ********************************************************************/
     public static String getText(String name) {
-        BufferedReader br = null;
-        StringBuffer sb = null;
 
-        try {
-            br = new BufferedReader(getInputStreamReader(name));
+        StringBuffer sb = null;
+        try (BufferedReader br = new BufferedReader(getInputStreamReader(name))) {
             sb = new StringBuffer(4096);
 
             String line = br.readLine();
@@ -396,13 +394,6 @@ public class Utils {
 
             return sb.toString();
         } catch (IOException e) {
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                }
-            }
         }
 
         return null;

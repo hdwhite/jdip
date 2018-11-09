@@ -251,9 +251,7 @@ public class TextViewer extends HeaderDialog {
                         DataFlavor bestTextFlavor = DataFlavor.selectBestTextFlavor(t.getTransferDataFlavors());
                         if (bestTextFlavor != null) {
                             // typical / fancy case
-                            Reader reader = null;
-                            try {
-                                reader = bestTextFlavor.getReaderForText(t);
+                            try (Reader reader = bestTextFlavor.getReaderForText(t)) {
                                 char[] buffer = new char[128];
                                 StringBuilder sb = new StringBuilder(2048);
 
@@ -265,14 +263,6 @@ public class TextViewer extends HeaderDialog {
                                 textPane.replaceSelection(sb.toString());
                                 return true;
                             } catch (Exception e) {
-                            } // do nothing
-                            finally {
-                                if (reader != null) {
-                                    try {
-                                        reader.close();
-                                    } catch (IOException e) {
-                                    }
-                                }
                             }
                         }
                     }

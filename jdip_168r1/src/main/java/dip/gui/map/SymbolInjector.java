@@ -86,9 +86,7 @@ public class SymbolInjector {
         }
 
         // load URL into DOM Document
-        InputStream is = null;
-        try {
-            is = new BufferedInputStream(url.openStream());
+        try (InputStream is = new BufferedInputStream(url.openStream())) {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);    // essential!
             dbf.setValidating(cf.getValidating());
@@ -97,13 +95,6 @@ public class SymbolInjector {
             FastEntityResolver.attach(docBuilder);
 
             doc = docBuilder.parse(is);
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                }
-            }
         }
     }// SymbolInjector()
 

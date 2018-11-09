@@ -179,23 +179,14 @@ public class Exporter implements Tool {
      * xport as a file
      */
     private void exportToFile(File file, TurnState[] turnStates) {
-        BufferedWriter bw = null;
 
-        try {
-            bw = new BufferedWriter(new FileWriter(file));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
 
             for (int i = 0; i < turnStates.length; i++) {
-                bw.write(jdip.plugin.export.XMLExport.export(turnStates[i], ""));
+                bw.write(XMLExport.export(turnStates[i], ""));
             }
         } catch (IOException e) {
             ErrorDialog.displayFileIO(clientFrame, e, file.toString());
-        } finally {
-            if (bw != null) {
-                try {
-                    bw.close();
-                } catch (IOException e2) {
-                }
-            }
         }
     }// exportToFile()
 

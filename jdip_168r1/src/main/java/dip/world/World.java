@@ -108,10 +108,8 @@ public class World implements Serializable {
      */
     public static void save(File file, World world)
             throws IOException {
-        GZIPOutputStream gzos = null;
 
-        try {
-            gzos = new GZIPOutputStream(new FileOutputStream(file), 2048);
+        try (GZIPOutputStream gzos = new GZIPOutputStream(new FileOutputStream(file), 2048)) {
             JSX.ObjectWriter out = new JSX.ObjectWriter(gzos);
             out.setPrettyPrint(false);
             out.writeObject(world);
@@ -122,10 +120,6 @@ public class World implements Serializable {
         } catch (Exception e) {
             // rethrow all non-IOExceptions as IOExceptions
             throw new IOException(e.getMessage(), e);
-        } finally {
-            if (gzos != null) {
-                gzos.close();
-            }
         }
     }// save()
 

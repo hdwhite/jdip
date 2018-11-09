@@ -546,17 +546,8 @@ public class XMLVariantParser implements VariantParser {
 
             // parse resolved URI
             //Log.println("  AdjCache: not in cache: ", adjacencyURI);
-            InputStream is = null;
-            try {
-                is = new BufferedInputStream(url.openStream());
+            try (InputStream is = new BufferedInputStream(url.openStream())) {
                 pp.parse(is);
-            } finally {
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (IOException e) {
-                    }
-                }
             }
 
             // cache and return parsed data.

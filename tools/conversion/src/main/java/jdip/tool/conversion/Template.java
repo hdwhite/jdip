@@ -48,30 +48,18 @@ class Template
 		{
 			throw new IllegalArgumentException();
 		}
-		
-		BufferedReader br = null;
-		
-		try
-		{
-			br = new BufferedReader(new InputStreamReader(is));
+
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
 			StringBuilder sb = new StringBuilder(4096);
-			
+
 			String line = br.readLine();
-			while(line != null)
-			{
+			while (line != null) {
 				sb.append(line);
 				sb.append('\n');
 				line = br.readLine();
 			}
-			
+
 			template = sb.toString();
-		}
-		finally
-		{
-			if(br != null)
-			{
-				br.close();
-			}
 		}
 	}// Template()
 	

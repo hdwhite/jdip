@@ -208,27 +208,17 @@ public class MapConvert
 		
 		// write everything out
 		// 
-		BufferedWriter bw = null;
-		try
-		{
-			bw = new BufferedWriter(new FileWriter(adjacencyOutput));
-			
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(adjacencyOutput))) {
+
 			StringBuffer sb = new StringBuffer(4096);
 			makeXMLData(sb, pmap.getList());
-			
+
 			// write adjacency data
-            HashMap<String, String> templateData = new HashMap<>();
+			HashMap<String, String> templateData = new HashMap<>();
 			templateData.put("xmldata", sb.toString());
-			bw.write( adjacencyTemplate.parse(templateData) );
-			System.out.println("File created: "+adjacencyOutput);
-			
-		}
-		finally
-		{
-			if(bw != null)
-			{
-				bw.close();
-			}
+			bw.write(adjacencyTemplate.parse(templateData));
+			System.out.println("File created: " + adjacencyOutput);
+
 		}
 	}// MapConvert()
 	
@@ -356,25 +346,15 @@ public class MapConvert
 		{
 			out = new File("variants.xml");
 		}
-			
-		
-		BufferedWriter bw = null;
-		try
-		{
-			bw = new BufferedWriter(new FileWriter(out));
-			
+
+
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(out))) {
+
 			// write adjacency data
-            HashMap<String, String> templateData = new HashMap<>();
+			HashMap<String, String> templateData = new HashMap<>();
 			makeVariantXMLTemplateData(templateData, provList, adjacencyFile);
-			bw.write( variantTemplate.parse(templateData) );
-			System.out.println("File created: "+out);
-		}
-		finally
-		{
-			if(bw != null)
-			{
-				bw.close();
-			}
+			bw.write(variantTemplate.parse(templateData));
+			System.out.println("File created: " + out);
 		}
 		
 	}// makeVariantFile()
