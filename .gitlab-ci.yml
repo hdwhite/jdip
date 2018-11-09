@@ -27,14 +27,14 @@ test:
   artifacts:
     reports:
       junit: jdip_168r1/build/test-results/test/TEST-*.xml
-    expire_in: 1 day
+    expire_in: 3 day
 
 package:
   stage: package
   only:
     refs:
       - master
-      - /^bugfix.*$/
+      - /^release.*$/
   dependencies:
     - build
   script:
