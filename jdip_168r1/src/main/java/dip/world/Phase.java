@@ -316,7 +316,7 @@ public class Phase implements java.io.Serializable, Comparable {
             // 'bc' token may be 'loose'. If so, we need to find it, as the
             // YearType parser was fed only a single token (no whitespace)
             // e.g., "1083 BC" won't be parsed right, but "1083bc" will be.
-            if (lcIn.indexOf("bc") >= 0 || lcIn.indexOf("b.c.") >= 0) {
+            if (lcIn.contains("bc") || lcIn.contains("b.c.")) {
                 if (yearType.getYear() > 0) {
                     yearType = new YearType(-yearType.getYear());
                 }

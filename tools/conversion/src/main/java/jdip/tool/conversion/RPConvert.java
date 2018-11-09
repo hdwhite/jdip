@@ -784,7 +784,7 @@ public class RPConvert
 		throws IOException
 		{
 			boolean isReferenced = false;
-			if(value.indexOf("/") >= 0 || value.indexOf("\"") >= 0)
+			if (value.contains("/") || value.contains("\""))
 			{
 				isReferenced = true;
 			}

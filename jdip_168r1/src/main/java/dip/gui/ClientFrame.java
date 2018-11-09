@@ -279,8 +279,8 @@ public class ClientFrame extends JFrame {
                 // UIManager.put("Application.useSystemFontSettings", Boolean.FALSE);
             } else if (!Utils.isOSX()) {
                 // keep synth; switch if Motif / Metal
-                if (lafClassName.indexOf("MotifLookAndFeel") >= 0 ||
-                        lafClassName.indexOf("MetalLookAndFeel") >= 0) {
+                if (lafClassName.contains("MotifLookAndFeel") ||
+                        lafClassName.contains("MetalLookAndFeel")) {
                     // good generic LAF
                     lafClassName = "com.jgoodies.looks.plastic.PlasticLookAndFeel";
                 }
@@ -288,7 +288,7 @@ public class ClientFrame extends JFrame {
 
 
             try {
-                if (lafClassName.indexOf("jgoodies") >= 0) {
+                if (lafClassName.contains("jgoodies")) {
                     // for WebStart compatibility
                     UIManager.put("ClassLoader", com.jgoodies.looks.LookUtils.class.getClassLoader());
                 }

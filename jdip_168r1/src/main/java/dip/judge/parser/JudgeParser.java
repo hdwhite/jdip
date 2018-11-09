@@ -176,7 +176,7 @@ public class JudgeParser {
         // find :: line
         String line = reader.readLine();
         while (line != null) {
-            if (line.trim().indexOf("::") >= 0) {
+            if (line.trim().contains("::")) {
                 // attempt to parse via regex. If it fails, read another line.
                 Matcher m = pattern.matcher(line);
                 if (m.find()) {

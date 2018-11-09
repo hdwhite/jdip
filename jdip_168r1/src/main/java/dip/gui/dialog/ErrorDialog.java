@@ -671,7 +671,7 @@ public class ErrorDialog extends TextViewer {
             rd = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
             String line;
             while ((line = rd.readLine()) != null) {
-                if (line.indexOf("Thanks.") != -1) {
+                if (line.contains("Thanks.")) {
                     return true;
                 }
             }

@@ -257,7 +257,7 @@ public class SymbolInjector {
 
         // collision check
         for (int i = 0; i < cssStyles.length; i++) {
-            if (oldCSS.indexOf(cssStyles[i].getName()) >= 0) {
+            if (oldCSS.contains(cssStyles[i].getName())) {
                 throw new IOException("Map and SymbolPack contain same CSS style: \"" + cssStyles[i].getName() + "\"");
             }
         }
