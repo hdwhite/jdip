@@ -520,8 +520,7 @@ public class Support extends Order {
 
             OrderState[] depMovesToSrc = thisOS.getDependentMovesToSource();
 
-            for (int i = 0; i < depMovesToSrc.length; i++) {
-                OrderState depMoveOS = depMovesToSrc[i];
+            for (OrderState depMoveOS : depMovesToSrc) {
                 Move depMove = (Move) depMoveOS.getOrder();
 
                 Log.println("  checking against move: ", depMove);

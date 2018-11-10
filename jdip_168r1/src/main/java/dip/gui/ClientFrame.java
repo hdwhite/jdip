@@ -331,8 +331,8 @@ public class ClientFrame extends JFrame {
         ToolManager.init(new File[]{toolDirPath});
         Tool[] tools = ToolManager.getTools();
         ToolProxyImpl toolProxy = new ToolProxyImpl(this);
-        for (int i = 0; i < tools.length; i++) {
-            tools[i].setToolProxy(toolProxy);
+        for (Tool tool : tools) {
+            tool.setToolProxy(toolProxy);
         }
         dtime = Log.printDelta(dtime, "CF: tool setup time: ");
 
@@ -938,8 +938,8 @@ public class ClientFrame extends JFrame {
     public void dbgPrintListeners() {
         PropertyChangeListener[] pcls = getPropertyChangeListeners();
         System.out.println("ClientFrame listeners: " + pcls.length);
-        for (int i = 0; i < pcls.length; i++) {
-            System.out.println("     " + pcls[i].getClass().getName());
+        for (PropertyChangeListener pcl : pcls) {
+            System.out.println("     " + pcl.getClass().getName());
         }
     }// dbgPrintListeners()
 
@@ -1119,15 +1119,13 @@ public class ClientFrame extends JFrame {
      */
     private class CFDropTargetListener extends FileDropTargetListener {
         public void processDroppedFiles(File[] files) {
-            for (int i = 0; i < files.length; i++) {
-                if (files.length >= 0) {
-                    World world = ClientFrame.this.persistMan.acceptDrag(files[0], ClientFrame.this.getWorld());
-                    if (world != null) {
-                        world.setGameSetup(new DefaultGUIGameSetup());
-                        ClientFrame.this.createWorld(world);
-                    }
-                    ClientFrame.this.persistMan.updateTitle();
+            for (File file : files) {
+                World world = ClientFrame.this.persistMan.acceptDrag(file, ClientFrame.this.getWorld());
+                if (world != null) {
+                    world.setGameSetup(new DefaultGUIGameSetup());
+                    ClientFrame.this.createWorld(world);
                 }
+                ClientFrame.this.persistMan.updateTitle();
             }
         }// processDroppedFiles()
     }// inner class CFDropTargetListener

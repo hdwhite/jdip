@@ -354,14 +354,14 @@ public class TestParser {
 
         // find order.
         String[] params = null;
-        for (int i = 0; i < ORDER_ARGS.length; i++) {
-            if (toks[0].equalsIgnoreCase(ORDER_ARGS[i][0])) {
-                if (toks.length != ORDER_ARGS[i].length) {
+        for (String[] orderArg : ORDER_ARGS) {
+            if (toks[0].equalsIgnoreCase(orderArg[0])) {
+                if (toks.length != orderArg.length) {
                     System.out.println("ERROR: in result of order pair starting at line: " + orp.getLineNumber());
-                    System.out.println("Invalid number of arguments; " + (ORDER_ARGS[i].length - 1) + " are required.");
+                    System.out.println("Invalid number of arguments; " + (orderArg.length - 1) + " are required.");
                     System.exit(1);
                 } else {
-                    params = ORDER_ARGS[i];
+                    params = orderArg;
                 }
             }
         }
@@ -669,9 +669,9 @@ public class TestParser {
         // clear positions in this world
         Position pos = turnState.getPosition();
         Province[] provs = pos.getProvinces();
-        for (int i = 0; i < provs.length; i++) {
-            pos.setUnit(provs[i], null);
-            pos.setDislodgedUnit(provs[i], null);
+        for (Province prov : provs) {
+            pos.setUnit(prov, null);
+            pos.setDislodgedUnit(prov, null);
         }
 
         System.out.println("Variant \"" + variantName + "\" loaded successfully.");
@@ -855,9 +855,9 @@ public class TestParser {
      */
     private String getKeyword(String line) {
         String lcLine = line.trim().toLowerCase();
-        for (int i = 0; i < KEYWORDS.length; i++) {
-            if (lcLine.startsWith(KEYWORDS[i][0])) {
-                return KEYWORDS[i][1];
+        for (String[] keyword : KEYWORDS) {
+            if (lcLine.startsWith(keyword[0])) {
+                return keyword[1];
             }
         }
 

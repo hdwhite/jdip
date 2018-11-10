@@ -284,8 +284,8 @@ public interface GUIOrder extends Orderable {
          */
         public boolean canIssueOrder(final Power power) {
             final Power[] powers = cf.getOrderablePowers();
-            for (int i = 0; i < powers.length; i++) {
-                if (powers[i] == power) {
+            for (Power orderablePower : powers) {
+                if (orderablePower == power) {
                     return true;
                 }
             }

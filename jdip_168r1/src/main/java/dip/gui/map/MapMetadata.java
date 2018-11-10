@@ -577,16 +577,16 @@ public class MapMetadata {
         // verify: make sure each province has at least one InfoEntry.
         // if we are supressing errors, fill in with empty data.
         Province[] provinces = mp.getWorld().getMap().getProvinces();
-        for (int i = 0; i < provinces.length; i++) {
-            if (infoMap.get(provinces[i]) == null) {
+        for (Province province : provinces) {
+            if (infoMap.get(province) == null) {
                 if (supressPlacementErrors) {
                     InfoEntry ie = new InfoEntry(new Point2D.Float(0, 0),
                             new Point2D.Float(0, 0),
                             new Point2D.Float(0, 0));
-                    infoMap.put(provinces[i], ie);
-                    Log.println("MMD: added empty entry for province ", provinces[i]);
+                    infoMap.put(province, ie);
+                    Log.println("MMD: added empty entry for province ", province);
                 } else {
-                    throw new MapException("Missing PROVINCE placement information for province: " + provinces[i]);
+                    throw new MapException("Missing PROVINCE placement information for province: " + province);
                 }
             }
         }
@@ -741,9 +741,9 @@ public class MapMetadata {
 
         // verify all powers have a color
         Power[] powers = map.getPowers();
-        for (int i = 0; i < powers.length; i++) {
-            if (displayProps.get(powers[i]) == null) {
-                throw new MapException(EL_POWERCOLORS + ": no color defined for power " + powers[i]);
+        for (Power power : powers) {
+            if (displayProps.get(power) == null) {
+                throw new MapException(EL_POWERCOLORS + ": no color defined for power " + power);
             }
         }
 

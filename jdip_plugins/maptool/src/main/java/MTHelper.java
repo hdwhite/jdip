@@ -22,11 +22,21 @@
 //
 
 import dip.gui.ClientFrame;
-import dip.gui.map.*;
+import dip.gui.map.DMR2RenderCommandFactory;
+import dip.gui.map.DefaultMapRenderer2;
+import dip.gui.map.MapMetadata;
 import dip.gui.map.MapMetadata.InfoEntry;
+import dip.gui.map.MapPanel;
+import dip.gui.map.MapRenderer2;
 import dip.gui.map.RenderCommandFactory.RenderCommand;
 import dip.misc.Log;
-import dip.world.*;
+import dip.world.Coast;
+import dip.world.Position;
+import dip.world.Power;
+import dip.world.Province;
+import dip.world.TurnState;
+import dip.world.Unit;
+import dip.world.World;
 import org.w3c.dom.svg.SVGDocument;
 
 import java.awt.geom.Point2D;
@@ -90,11 +100,11 @@ public class MTHelper {
     public void setAllUnits() {
         long time = System.currentTimeMillis();
         Log.printTimed(time, "MTHelper::setAllUnits() start");
-        for (int i = 0; i < allProvs.length; i++) {
+        for (Province province : allProvs) {
             Unit unit = null;
             Unit unit2 = null;
 
-            if (allProvs[i].isSea()) {
+            if (province.isSea()) {
                 unit = new Unit(allPowers[0], Unit.Type.FLEET);
                 unit2 = new Unit(allPowers[0], Unit.Type.FLEET);
                 unit.setCoast(Coast.SEA);
@@ -106,8 +116,8 @@ public class MTHelper {
                 unit2.setCoast(Coast.LAND);
             }
 
-            position.setUnit(allProvs[i], unit);
-            position.setDislodgedUnit(allProvs[i], unit2);
+            position.setUnit(province, unit);
+            position.setDislodgedUnit(province, unit2);
         }
         Log.printTimed(time, "MTHelper::setAllUnits() complete");
     }// setAllUnits()

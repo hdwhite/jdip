@@ -132,8 +132,8 @@ public class RuleOptions implements Serializable {
         RuleOptions ruleOpts = new RuleOptions();
 
         // set default rule options
-        for (int i = 0; i < DEFAULT_RULE_OPTIONS.length; i++) {
-            ruleOpts.setOption(DEFAULT_RULE_OPTIONS[i], DEFAULT_RULE_OPTIONS[i].getDefault());
+        for (Option defaultRuleOption : DEFAULT_RULE_OPTIONS) {
+            ruleOpts.setOption(defaultRuleOption, defaultRuleOption.getDefault());
         }
 
         // this class
@@ -141,27 +141,27 @@ public class RuleOptions implements Serializable {
 
         // look up all name-value pairs via reflection.
         Variant.NameValuePair[] nvps = variant.getRuleOptionNVPs();
-        for (int i = 0; i < nvps.length; i++) {
+        for (Variant.NameValuePair nvp : nvps) {
             Option option = null;
             OptionValue optionValue = null;
 
             // first, check the name
             try {
-                Field field = clazz.getField(nvps[i].getName());
+                Field field = clazz.getField(nvp.getName());
                 option = (Option) field.get(null);
 
-                field = clazz.getField(nvps[i].getValue());
+                field = clazz.getField(nvp.getValue());
                 optionValue = (OptionValue) field.get(null);
             } catch (Exception e) {
                 throw new InvalidWorldException(
-                        Utils.getLocalString(RO_BAD_NVP, nvps[i].getName(), nvps[i].getValue(), e.getMessage()));
+                        Utils.getLocalString(RO_BAD_NVP, nvp.getName(), nvp.getValue(), e.getMessage()));
             }
 
 
             // ensure that optionValue is valid for option
             if (!option.isAllowed(optionValue)) {
                 throw new InvalidWorldException(
-                        Utils.getLocalString(RO_BAD_OPTIONVALUE, nvps[i].getValue(), nvps[i].getName()));
+                        Utils.getLocalString(RO_BAD_OPTIONVALUE, nvp.getValue(), nvp.getName()));
             }
 
             // set option
@@ -285,8 +285,8 @@ public class RuleOptions implements Serializable {
          * Checks if the given optionValue is allowed.
          */
         public boolean isAllowed(OptionValue optionValue) {
-            for (int i = 0; i < allowed.length; i++) {
-                if (optionValue == allowed[i]) {
+            for (OptionValue anAllowed : allowed) {
+                if (optionValue == anAllowed) {
                     return true;
                 }
             }
@@ -312,8 +312,8 @@ public class RuleOptions implements Serializable {
          * Checks if the given OptionValue is permitted; if so, returns true.
          */
         public boolean checkValue(OptionValue value) {
-            for (int i = 0; i < allowed.length; i++) {
-                if (allowed[i].equals(value)) {
+            for (OptionValue optionValue : allowed) {
+                if (optionValue.equals(value)) {
                     return true;
                 }
             }
@@ -335,9 +335,9 @@ public class RuleOptions implements Serializable {
         protected Object readResolve()
                 throws java.io.ObjectStreamException {
             // slow but easy
-            for (int i = 0; i < ALL_OPTIONS.length; i++) {
-                if (name.equals(ALL_OPTIONS[i].name)) {
-                    return ALL_OPTIONS[i];
+            for (Option option : ALL_OPTIONS) {
+                if (name.equals(option.name)) {
+                    return option;
                 }
             }
 
@@ -406,9 +406,9 @@ public class RuleOptions implements Serializable {
         protected Object readResolve()
                 throws java.io.ObjectStreamException {
             // slow but easy
-            for (int i = 0; i < ALL_OPTIONVALUES.length; i++) {
-                if (name.equals(ALL_OPTIONVALUES[i].name)) {
-                    return ALL_OPTIONVALUES[i];
+            for (OptionValue optionValue : ALL_OPTIONVALUES) {
+                if (name.equals(optionValue.name)) {
+                    return optionValue;
                 }
             }
 

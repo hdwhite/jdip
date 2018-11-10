@@ -130,8 +130,8 @@ public class RetreatChecker {
 		}
 		*/
 
-        for (int i = 0; i < validLocs.length; i++) {
-            if (validLocs[i].equals(to)) {
+        for (Location validLoc : validLocs) {
+            if (validLoc.equals(to)) {
                 return true;
             }
         }
@@ -150,11 +150,11 @@ public class RetreatChecker {
 
         Location[] adjacent = from.getProvince().getAdjacentLocations(from.getCoast());
 
-        for (int i = 0; i < adjacent.length; i++) {
-            if (!position.hasUnit(adjacent[i].getProvince())
-                    && !isDislodgersSpace(from, adjacent[i])
-                    && !isContestedSpace(adjacent[i])) {
-                retreatLocations.add(adjacent[i]);
+        for (Location location : adjacent) {
+            if (!position.hasUnit(location.getProvince())
+                    && !isDislodgersSpace(from, location)
+                    && !isContestedSpace(location)) {
+                retreatLocations.add(location);
             }
         }
 
@@ -168,10 +168,10 @@ public class RetreatChecker {
     public boolean hasRetreats(Location from) {
         Location[] adjacent = from.getProvince().getAdjacentLocations(from.getCoast());
 
-        for (int i = 0; i < adjacent.length; i++) {
-            if (!position.hasUnit(adjacent[i].getProvince())
-                    && !isDislodgersSpace(from, adjacent[i])
-                    && !isContestedSpace(adjacent[i])) {
+        for (Location location : adjacent) {
+            if (!position.hasUnit(location.getProvince())
+                    && !isDislodgersSpace(from, location)
+                    && !isContestedSpace(location)) {
                 return true;
             }
         }

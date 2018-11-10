@@ -118,8 +118,8 @@ public class WorldFactory {
             // add Province names (all) to our name->province map
             provNameMap.put(province.getFullName().toLowerCase(), province);
             String[] lcProvNames = province.getShortNames();
-            for (int pnIdx = 0; pnIdx < lcProvNames.length; pnIdx++) {
-                provNameMap.put(lcProvNames[pnIdx].toLowerCase(), province);
+            for (String lcProvName : lcProvNames) {
+                provNameMap.put(lcProvName.toLowerCase(), province);
             }
         }
 
@@ -127,9 +127,7 @@ public class WorldFactory {
         // parse adjacency data for all provinces
         // keep a list of the locations parsed below
         ArrayList<Location> locationList = new ArrayList<>(16);
-        for (int i = 0; i < provinceDataArray.length; i++) {
-            ProvinceData provinceData = provinceDataArray[i];
-
+        for (ProvinceData provinceData : provinceDataArray) {
             String[] adjProvinceTypes = provinceData.getAdjacentProvinceTypes();
             String[] adjProvinceNames = provinceData.getAdjacentProvinceNames();
 
@@ -181,8 +179,7 @@ public class WorldFactory {
         HashMap<String, Border> borderMap = new HashMap<>(11);
         try {
             BorderData[] borderDataArray = variant.getBorderData();
-            for (int i = 0; i < borderDataArray.length; i++) {
-                BorderData bd = borderDataArray[i];
+            for (BorderData bd : borderDataArray) {
                 Location fromLocs[] = makeBorderLocations(bd.getFrom(), provNameMap);
 
                 Border border = new Border(bd.getID(), bd.getDescription(),
@@ -200,16 +197,15 @@ public class WorldFactory {
         {
             ArrayList<Border> list = new ArrayList<>(10);
 
-            for (int i = 0; i < provinceDataArray.length; i++) {
+            for (ProvinceData provinceData : provinceDataArray) {
                 list.clear();
-                ProvinceData provinceData = provinceDataArray[i];
                 Province province = provNameMap.get(provinceData.getFullName().toLowerCase());
 
                 String[] borderNames = provinceData.getBorders();
-                for (int bIdx = 0; bIdx < borderNames.length; bIdx++) {
-                    Border border = borderMap.get(borderNames[bIdx]);
+                for (String borderName : borderNames) {
+                    Border border = borderMap.get(borderName);
                     if (border == null) {
-                        throw new InvalidWorldException(Utils.getLocalString(WF_BAD_BORDER_NAME, province.getShortName(), borderNames[bIdx]));
+                        throw new InvalidWorldException(Utils.getLocalString(WF_BAD_BORDER_NAME, province.getShortName(), borderName));
                     }
 
                     list.add(border);
@@ -248,15 +244,15 @@ public class WorldFactory {
 
         // define supply centers
         SupplyCenter[] supplyCenters = variant.getSupplyCenters();
-        for (int i = 0; i < supplyCenters.length; i++) {
-            Province province = map.getProvince(supplyCenters[i].getProvinceName());
+        for (SupplyCenter supplyCenter : supplyCenters) {
+            Province province = map.getProvince(supplyCenter.getProvinceName());
             if (province == null) {
-                throw new InvalidWorldException(Utils.getLocalString(WF_BAD_SC_PROVINCE, supplyCenters[i].getProvinceName()));
+                throw new InvalidWorldException(Utils.getLocalString(WF_BAD_SC_PROVINCE, supplyCenter.getProvinceName()));
             }
 
             province.setSupplyCenter(true);
 
-            String hpName = supplyCenters[i].getHomePowerName();
+            String hpName = supplyCenter.getHomePowerName();
             if (!"none".equalsIgnoreCase(hpName)) {
                 Power power = map.getPower(hpName);
                 if (power == null) {
@@ -267,7 +263,7 @@ public class WorldFactory {
             }
 
             // define current owner of supply center, if any
-            String scOwner = supplyCenters[i].getOwnerName();
+            String scOwner = supplyCenter.getOwnerName();
             if (!"none".equalsIgnoreCase(scOwner)) {
                 Power power = map.getPower(scOwner);
                 if (power == null) {
@@ -281,11 +277,11 @@ public class WorldFactory {
 
         // set initial state [derived from INITIALSTATE elements in XML file]
         InitialState[] initStates = variant.getInitialStates();
-        for (int i = 0; i < initStates.length; i++) {
+        for (InitialState initState : initStates) {
             // a province and power is required, no matter what, unless
             // we are ONLY setting the supply center (which we do above)
-            Power power = map.getPowerMatching(initStates[i].getPowerName());
-            Province province = map.getProvinceMatching(initStates[i].getProvinceName());
+            Power power = map.getPowerMatching(initState.getPowerName());
+            Province province = map.getProvinceMatching(initState.getProvinceName());
 
             // n/a if we use a validating parser
             if (power == null) {
@@ -297,11 +293,11 @@ public class WorldFactory {
                 throw new InvalidWorldException(Utils.getLocalString(WF_BAD_IS_PROVINCE));
             }
 
-            Unit.Type unitType = initStates[i].getUnitType();
+            Unit.Type unitType = initState.getUnitType();
 
             if (unitType != null) {
                 // create unit in province, if location is valid
-                Coast coast = initStates[i].getCoast();
+                Coast coast = initState.getCoast();
 
                 Unit unit = new Unit(power, unitType);
                 Location location = new Location(province, coast);
@@ -314,10 +310,10 @@ public class WorldFactory {
                     pos.setLastOccupier(province, unit.getPower());
                 } catch (OrderException e) {
                     throw new InvalidWorldException(Utils.getLocalString(WF_BAD_IS_UNIT_LOC,
-                            initStates[i].getProvinceName(), e.getMessage()));
+                            initState.getProvinceName(), e.getMessage()));
                 }
             } else {
-                throw new InvalidWorldException(Utils.getLocalString(WF_BAD_IS_UNIT, initStates[i].getProvinceName()));
+                throw new InvalidWorldException(Utils.getLocalString(WF_BAD_IS_UNIT, initState.getProvinceName()));
             }
         }
 
@@ -441,8 +437,8 @@ public class WorldFactory {
             return false;
         }
 
-        for (int i = 0; i < shortnames.length; i++) {
-            if (provNameMap.get(shortnames[i].toLowerCase()) != null) {
+        for (String shortname : shortnames) {
+            if (provNameMap.get(shortname.toLowerCase()) != null) {
                 return false;
             }
         }

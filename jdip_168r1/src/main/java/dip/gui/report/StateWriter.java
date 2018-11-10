@@ -245,16 +245,16 @@ public class StateWriter {
         StringBuilder sb = new StringBuilder(2048);
         Position position = turnState.getPosition();
 
-        for (int i = 0; i < allPowers.length; i++) {
+        for (Power power : allPowers) {
             // print power name
             sb.append("<div class=\"indent1cm\"><b>");
-            sb.append(allPowers[i]);
+            sb.append(power);
             sb.append("</b></div>");
 
             // if power is not displayable, mention that.
             boolean canShow = false;
-            for (int z = 0; z < displayablePowers.length; z++) {
-                if (allPowers[i] == displayablePowers[z]) {
+            for (Power displayablePower : displayablePowers) {
+                if (power == displayablePower) {
                     canShow = true;
                     break;
                 }
@@ -263,7 +263,7 @@ public class StateWriter {
             sb.append("<div class=\"indent2cm\">");
             if (canShow) {
                 // print submission/elimination information
-                List<Orderable> orders = turnState.getOrders(allPowers[i]);
+                List<Orderable> orders = turnState.getOrders(power);
                 if (orders.size() > 0) {
                     for (Orderable orderable : orders) {
                         Order order = (Order) orderable;
@@ -274,7 +274,7 @@ public class StateWriter {
                     // but do we have orders for all units?
                     // indicate if we do not.
                     // this is phase dependent
-                    Adjustment.AdjustmentInfo adjInfo = adjMap.get(allPowers[i]);
+                    Adjustment.AdjustmentInfo adjInfo = adjMap.get(power);
                     int diff = 0;
                     if (turnState.getPhase().getPhaseType() == Phase.PhaseType.RETREAT) {
                         diff = adjInfo.getDislodgedUnitCount() - orders.size();
@@ -292,7 +292,7 @@ public class StateWriter {
                 } else {
                     // if no orders are submitted, we must mention that, unless power
                     // has been eliminated....
-                    if (position.isEliminated(allPowers[i])) {
+                    if (position.isEliminated(power)) {
                         sb.append(Utils.getLocalString(MSG_POWER_ELIMINATED));
                     } else {
                         sb.append(Utils.getLocalString(MSG_NO_ORDERS_SUBMITTED));
@@ -302,7 +302,7 @@ public class StateWriter {
                 }
             } else {
                 // (not available), unless eliminated
-                if (position.isEliminated(allPowers[i])) {
+                if (position.isEliminated(power)) {
                     sb.append(Utils.getLocalString(MSG_POWER_ELIMINATED));
                 } else {
                     sb.append(Utils.getLocalString(MSG_UNAVAILABLE));
@@ -328,20 +328,20 @@ public class StateWriter {
         Position position = turnState.getPosition();
 
         // we're going to do this the slow, but simple way
-        for (int i = 0; i < allPowers.length; i++) {
+        for (Power allPower : allPowers) {
             // create a sorted list of owned supply centers for this power.
-            Province[] ownedSCs = position.getOwnedSupplyCenters(allPowers[i]);
+            Province[] ownedSCs = position.getOwnedSupplyCenters(allPower);
             Arrays.sort(ownedSCs);
 
             // print the power name
             sb.append("<b>");
-            sb.append(allPowers[i]);
+            sb.append(allPower);
             sb.append(":</b> ");
 
             // print out the provinces
             if (ownedSCs.length > 0) {
-                for (int z = 0; z < ownedSCs.length; z++) {
-                    sb.append(ownedSCs[z].getFullName());
+                for (Province ownedSC : ownedSCs) {
+                    sb.append(ownedSC.getFullName());
                     sb.append(", ");
                 }
 
@@ -376,14 +376,14 @@ public class StateWriter {
         StringBuilder sb = new StringBuilder(1024);
         sb.append("<div class=\"indent1cm\">");
 
-        for (int i = 0; i < allPowers.length; i++) {
-            Province[] dislodged = position.getDislodgedUnitProvinces(allPowers[i]);
+        for (Power allPower : allPowers) {
+            Province[] dislodged = position.getDislodgedUnitProvinces(allPower);
             if (dislodged.length > 0) {
                 anyDislodged = true;
 
                 // print power name
                 sb.append("<b>");
-                sb.append(allPowers[i]);
+                sb.append(allPower);
                 sb.append(":</b> ");
 
 
@@ -431,8 +431,8 @@ public class StateWriter {
 
         // format using format string
         // many args...
-        for (int i = 0; i < allPowers.length; i++) {
-            Adjustment.AdjustmentInfo adjInfo = adjMap.get(allPowers[i]);
+        for (Power power : allPowers) {
+            Adjustment.AdjustmentInfo adjInfo = adjMap.get(power);
 
 
             // determine build/remove/nochange text, and blocked builds
@@ -457,7 +457,7 @@ public class StateWriter {
 
             Object[] args = new Object[]
                     {
-                            allPowers[i],            // {0} : Power
+                            power,            // {0} : Power
                             adjInfo.getSupplyCenterCount(),    // {1} : # SC (including home SC) controlled
                             adjInfo.getUnitCount(),            // {2} : # units controlled
                             adjustmentText,            // {3} : build or remove (or no change) message
@@ -480,15 +480,13 @@ public class StateWriter {
      */
     private java.util.Map getUnitsByPower() {
         java.util.Map<Power, List<String>> pmap = new HashMap<>();
-        for (int i = 0; i < allPowers.length; i++) {
-            pmap.put(allPowers[i], new LinkedList<>());
+        for (Power power : allPowers) {
+            pmap.put(power, new LinkedList<>());
         }
 
         Position position = turnState.getPosition();
         Province[] provinces = position.getProvinces();
-        for (int i = 0; i < provinces.length; i++) {
-            Province province = provinces[i];
-
+        for (Province province : provinces) {
             if (position.hasUnit(province)) {
                 Unit unit = position.getUnit(province);
                 List<String> uList = pmap.get(unit.getPower());
@@ -515,8 +513,8 @@ public class StateWriter {
         }
 
         // sort the lists.
-        for (int i = 0; i < allPowers.length; i++) {
-            List<String> list = pmap.get(allPowers[i]);
+        for (Power power : allPowers) {
+            List<String> list = pmap.get(power);
             Collections.sort(list);
         }
 

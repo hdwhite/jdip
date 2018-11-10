@@ -160,9 +160,9 @@ public class SymbolPack implements Comparable<SymbolPack> {
      * Find the Symbol with the given Name (case sensitive); returns null if name not found.
      */
     public Symbol getSymbol(String name) {
-        for (int i = 0; i < symbols.length; i++) {
-            if (symbols[i].getName().equals(name)) {
-                return symbols[i];
+        for (Symbol symbol : symbols) {
+            if (symbol.getName().equals(name)) {
+                return symbol;
             }
         }
 

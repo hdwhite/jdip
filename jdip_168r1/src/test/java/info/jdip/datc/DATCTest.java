@@ -90,19 +90,15 @@ public abstract class DATCTest {
         Set<TestSuite.UnitPos> resolvedUnits = new HashSet<>();
 
         Province[] provs = pos.getUnitProvinces();
-        for(int i=0; i<provs.length; i++)
-        {
-            if(!resolvedUnits.add(new TestSuite.UnitPos(pos, provs[i], false)))
-            {
+        for (Province province : provs) {
+            if (!resolvedUnits.add(new TestSuite.UnitPos(pos, province, false))) {
                 throw new IllegalStateException("CompareState: Internal error (non dislodged)");
             }
         }
 
         provs = pos.getDislodgedUnitProvinces();
-        for(int i=0; i<provs.length; i++)
-        {
-            if(!resolvedUnits.add(new TestSuite.UnitPos(pos, provs[i], true)))
-            {
+        for (Province province : provs) {
+            if (!resolvedUnits.add(new TestSuite.UnitPos(pos, province, true))) {
                 throw new IllegalStateException("CompareState: Internal error (dislodged)");
             }
         }
@@ -116,20 +112,16 @@ public abstract class DATCTest {
         Set<TestSuite.UnitPos> caseUnits = new HashSet<>();
 
         DefineState[] dsOrds = c.getPostState();
-        for(int i=0; i<dsOrds.length; i++)
-        {
-            if(!caseUnits.add(new TestSuite.UnitPos(dsOrds[i], false)))
-            {
+        for (DefineState dsOrd : dsOrds) {
+            if (!caseUnits.add(new TestSuite.UnitPos(dsOrd, false))) {
 //                println("ERROR: duplicate POSTSTATE position: "+dsOrds[i]);
                 return false;
             }
         }
 
         dsOrds = c.getPostDislodged();
-        for(int i=0; i<dsOrds.length; i++)
-        {
-            if(!caseUnits.add(new TestSuite.UnitPos(dsOrds[i], true)))
-            {
+        for (DefineState dsOrd : dsOrds) {
+            if (!caseUnits.add(new TestSuite.UnitPos(dsOrd, true))) {
 //                println("ERROR: duplicate POSTSTATE_DISLODGED position: "+dsOrds[i]);
                 return false;
             }

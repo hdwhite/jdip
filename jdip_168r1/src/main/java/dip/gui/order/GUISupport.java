@@ -424,16 +424,16 @@ public class GUISupport extends Support implements GUIOrder {
             float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_SUPPORT, MapMetadata.ATT_HILIGHT_OFFSET);
             elements = drawSupportedHold(mapInfo, offset);
             GUIOrderUtils.makeHilight(elements, mapInfo.getMapMetadata(), MapMetadata.EL_SUPPORT);
-            for (int i = 0; i < elements.length; i++) {
-                group.appendChild(elements[i]);
+            for (SVGElement element : elements) {
+                group.appendChild(element);
             }
         }
 
         // create real line
         elements = drawSupportedHold(mapInfo, 0);
         GUIOrderUtils.makeStyled(elements, mapInfo.getMapMetadata(), MapMetadata.EL_SUPPORT, power);
-        for (int i = 0; i < elements.length; i++) {
-            group.appendChild(elements[i]);
+        for (SVGElement element : elements) {
+            group.appendChild(element);
         }
     }// updateDOMHold()
 
@@ -450,16 +450,16 @@ public class GUISupport extends Support implements GUIOrder {
             float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_SUPPORT, MapMetadata.ATT_HILIGHT_OFFSET);
             elements = drawSupportedMove(mapInfo, offset, false);
             GUIOrderUtils.makeHilight(elements, mapInfo.getMapMetadata(), MapMetadata.EL_SUPPORT);
-            for (int i = 0; i < elements.length; i++) {
-                group.appendChild(elements[i]);
+            for (SVGElement element : elements) {
+                group.appendChild(element);
             }
         }
 
         // create real line
         elements = drawSupportedMove(mapInfo, 0, true);
         GUIOrderUtils.makeStyled(elements, mapInfo.getMapMetadata(), MapMetadata.EL_SUPPORT, power);
-        for (int i = 0; i < elements.length; i++) {
-            group.appendChild(elements[i]);
+        for (SVGElement element : elements) {
+            group.appendChild(element);
         }
     }// updateDOMMove()
 
@@ -593,10 +593,10 @@ public class GUISupport extends Support implements GUIOrder {
             Point2D.Float[] pts = GUIOrderUtils.makeOctagon(ptSupSrc, radius);
 
             StringBuffer sb = new StringBuffer(160);
-            for (int i = 0; i < pts.length; i++) {
-                GUIOrderUtils.appendFloat(sb, pts[i].x);
+            for (Point2D.Float pt : pts) {
+                GUIOrderUtils.appendFloat(sb, pt.x);
                 sb.append(',');
-                GUIOrderUtils.appendFloat(sb, pts[i].y);
+                GUIOrderUtils.appendFloat(sb, pt.y);
                 sb.append(' ');
             }
 

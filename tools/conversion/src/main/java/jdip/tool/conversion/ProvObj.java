@@ -117,11 +117,8 @@ class ProvObj implements Comparable
 	/** Checks that the given short name (NO coast!!) is a valid shortname. */
 	public boolean isSN(String in)
 	{
-		for(int i=0; i<shortNames.size(); i++)
-		{
-			String sn = shortNames.get(i);
-			if(sn.equalsIgnoreCase(in))
-			{
+		for (String sn : shortNames) {
+			if (sn.equalsIgnoreCase(in)) {
 				return true;
 			}
 		}
@@ -162,12 +159,9 @@ class ProvObj implements Comparable
 		}
 		
 		// check for dupes
-		for(int i=0; i<adjList.size(); i++)
-		{
-			Adjacency tmp = adjList.get(i);
-			if(coast.equals(tmp.getLoc().getCoastType()))
-			{
-				fl.makeError("An -"+coast+" coast type was already specified for this province ("+getSN()+")");
+		for (Adjacency tmp : adjList) {
+			if (coast.equals(tmp.getLoc().getCoastType())) {
+				fl.makeError("An -" + coast + " coast type was already specified for this province (" + getSN() + ")");
 			}
 		}
 		
@@ -205,11 +199,8 @@ class ProvObj implements Comparable
 		{
 			// make sure we have a "-mv" adjacency
 			boolean foundMV = false;
-			for(int i=0; i<adjList.size(); i++)
-			{
-				Adjacency tmp = adjList.get(i);
-				if("mv".equals(tmp.getLoc().getCoastType()))
-				{
+			for (Adjacency tmp : adjList) {
+				if ("mv".equals(tmp.getLoc().getCoastType())) {
 					foundMV = true;
 					break;
 				}
@@ -380,11 +371,9 @@ class ProvObj implements Comparable
 		}
 		
 		// write adjacency information
-		for(int i=0; i<adjList.size(); i++)
-		{
+		for (Adjacency adj : adjList) {
 			sb.append("\t");
-			final Adjacency adj = adjList.get(i);
-			sb.append( adj.toXML() );
+			sb.append(adj.toXML());
 		}
 		
 		// <PROVINCE> end
@@ -402,12 +391,9 @@ class ProvObj implements Comparable
 	private String makeBorderNames()
 	{
 		ArrayList<String> borders = new ArrayList<>();
-		
-		for(int i=0; i<adjList.size(); i++)
-		{
-			Adjacency adj = adjList.get(i);
-			if(adj.hasMX())
-			{
+
+		for (Adjacency adj : adjList) {
+			if (adj.hasMX()) {
 				for (Loc loc : adj.getAdjLocs()) {
 					if (loc.isMX()) {
 						String name = BORDER_NAME_PREFIX;
@@ -441,12 +427,9 @@ class ProvObj implements Comparable
 	List<String> getMXProvs()
 	{
 		LinkedList<String> mxList = new LinkedList<>();
-		
-		for(int i=0; i<adjList.size(); i++)
-		{
-			Adjacency adj = adjList.get(i);
-			if(adj.hasMX())
-			{
+
+		for (Adjacency adj : adjList) {
+			if (adj.hasMX()) {
 				for (Loc loc : adj.getAdjLocs()) {
 					if (loc.isMX()) {
 						mxList.add(loc.getShortName());

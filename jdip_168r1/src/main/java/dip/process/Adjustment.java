@@ -56,9 +56,7 @@ public class Adjustment {
         Position position = turnState.getPosition();
         final Province[] provinces = position.getProvinces();
 
-        for (int i = 0; i < provinces.length; i++) {
-            Province province = provinces[i];
-
+        for (Province province : provinces) {
             // tally units
             Unit unit = position.getUnit(province);
             if (unit != null
@@ -100,16 +98,15 @@ public class Adjustment {
 
         // setup AdjustmentInfoMap
         AdjustmentInfoMap adjMap = new AdjustmentInfoMap();
-        for (int i = 0; i < powers.length; i++) {
-            adjMap.put(powers[i], new AdjustmentInfo(ruleOpts));
+        for (Power power : powers) {
+            adjMap.put(power, new AdjustmentInfo(ruleOpts));
         }
 
         // Iterate for all Powers
         Position position = turnState.getPosition();
         final Province[] provinces = position.getProvinces();
 
-        for (int i = 0; i < provinces.length; i++) {
-            Province province = provinces[i];
+        for (Province province : provinces) {
             boolean hasUnit = false;
 
             // tally units

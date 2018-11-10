@@ -109,8 +109,8 @@ public class JdipWorld {
         OrderParser parser = OrderParser.getInstance();
         OrderFactory of = strategy.getOrderFactory();
         try {
-            for (int i = 0; i < orderStrings.length; i++) {
-                Order o = parser.parse(of, power.getName() + " " + orderStrings[i], power, world.getLastTurnState(), true, false);
+            for (String orderString : orderStrings) {
+                Order o = parser.parse(of, power.getName() + " " + orderString, power, world.getLastTurnState(), true, false);
                 orders.add(o);
             }
         } catch (OrderException e) {

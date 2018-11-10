@@ -166,13 +166,12 @@ public class Path {
      * <p>
      * See getConvoyRouteEvaluation() for return values.
      */
-    public static Tristate evaluateRoutes(final Adjudicator adj, List routes, final Location invalid) {
+    public static Tristate evaluateRoutes(final Adjudicator adj, List<Province[]> routes, final Location invalid) {
         final Province invalidProvince = (invalid == null) ? null : invalid.getProvince();
 
         Tristate overallResult = Tristate.FAILURE;
 
-        for (int routeIdx = 0; routeIdx < routes.size(); routeIdx++) {
-            final Province[] route = (Province[]) routes.get(routeIdx);
+        for (Province[] route : routes) {
             final Province src = route[0];
             final Province dest = route[route.length - 1];
 
@@ -249,8 +248,8 @@ public class Path {
         // quick check: dest: next to at least 1 sea/conv coastal province
         final Location[] dLocs = dest.getAdjacentLocations(Coast.TOUCHING);
         boolean isOk = false;
-        for (int i = 0; i < dLocs.length; i++) {
-            final Province p = dLocs[i].getProvince();
+        for (Location dLoc : dLocs) {
+            final Province p = dLoc.getProvince();
             if (p.isConvoyableCoast() || p.isSea()) {
                 isOk = true;
                 break;
@@ -274,8 +273,8 @@ public class Path {
             TreeNode node = queue.removeFirst();
             Province prov = node.getProvince();
             final Location[] locs = prov.getAdjacentLocations(Coast.TOUCHING);
-            for (int i = 0; i < locs.length; i++) {
-                Province p = locs[i].getProvince();
+            for (Location loc : locs) {
+                Province p = loc.getProvince();
                 if (p.equals(dest)) {
                     // special case. dest is NOT nescessarily a convoyable coast,
                     // and is not Sea, and should not be evaluated with TreeBuilder.
@@ -538,8 +537,7 @@ public class Path {
             // note: our path, if found, may be longer than required (due to
             // breadth-first search. So iterate until we find the dest.
             if (validPath != null) {
-                for (int i = 0; i < path.size(); i++) {
-                    Location loc = path.get(i);
+                for (Location loc : path) {
                     validPath.add(loc.getProvince());
                     if (dest.isProvinceEqual(loc)) {
                         break;
@@ -589,8 +587,7 @@ public class Path {
         for (int i = 0; i < Coast.ALL_COASTS.length; i++) {
             Location[] locations = current.getProvince().getAdjacentLocations(Coast.ALL_COASTS[i]);
 
-            for (int j = 0; j < locations.length; j++) {
-                Location testLoc = locations[j];
+            for (Location testLoc : locations) {
                 if (pathEvaluator.evaluate(testLoc)) {
                     adjLocs.add(testLoc);
                 }
@@ -662,8 +659,7 @@ public class Path {
             dist++;
 
             // iterate toCheck, create nextToCheck list
-            for (int z = 0; z < toCheck.size(); z++) {
-                Province p = toCheck.get(z);
+            for (Province p : toCheck) {
                 if (p == dest) {
                     return dist;
                 }
@@ -687,8 +683,8 @@ public class Path {
 
                 // NEW CODE: using Coast.TOUCHING
                 Location[] locs = p.getAdjacentLocations(Coast.TOUCHING);
-                for (int i = 0; i < locs.length; i++) {
-                    Province ckp = locs[i].getProvince();
+                for (Location loc : locs) {
+                    Province ckp = loc.getProvince();
 
                     if (visited.get(ckp) == null) {
                         nextToCheck.add(ckp);
@@ -989,12 +985,12 @@ public class Path {
         public void print() {
             Province[][] px = getAllBranches();
 
-            for (int i = 0; i < px.length; i++) {
+            for (Province[] aPx : px) {
                 StringBuffer sb = new StringBuffer(128);
-                sb.append(px[i][0].getShortName());
-                for (int j = 1; j < px[i].length; j++) {
+                sb.append(aPx[0].getShortName());
+                for (int j = 1; j < aPx.length; j++) {
                     sb.append("-");
-                    sb.append(px[i][j].getShortName());
+                    sb.append(aPx[j].getShortName());
                 }
                 System.out.println(sb);
             }

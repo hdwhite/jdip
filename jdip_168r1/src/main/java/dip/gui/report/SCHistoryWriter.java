@@ -83,9 +83,9 @@ public class SCHistoryWriter {
         // find all provinces w/supply centers
         List<Province> scList = new ArrayList<>();
         final Province[] provs = w.getMap().getProvinces();
-        for (int i = 0; i < provs.length; i++) {
-            if (provs[i].hasSupplyCenter()) {
-                scList.add(provs[i]);
+        for (Province prov : provs) {
+            if (prov.hasSupplyCenter()) {
+                scList.add(prov);
             }
         }
 
@@ -298,10 +298,10 @@ public class SCHistoryWriter {
         sb.append(Utils.getLocalString(LABEL_YEAR));
         sb.append(" </b></td>");
 
-        for (int i = 0; i < allPowers.length; i++) {
+        for (Power power : allPowers) {
             sb.append(TD_HEADER);
             sb.append("<b> ");
-            sb.append(allPowers[i].getName());
+            sb.append(power.getName());
             sb.append(" </b></td>");
         }
 
@@ -363,8 +363,8 @@ public class SCHistoryWriter {
         sb.append("</b></td>");
 
         int sumOfSquares = 0;
-        for (int i = 0; i < allPowers.length; i++) {
-            Province[] ownedSC = ts.getPosition().getOwnedSupplyCenters(allPowers[i]);
+        for (Power power : allPowers) {
+            Province[] ownedSC = ts.getPosition().getOwnedSupplyCenters(power);
             final int count = ownedSC.length;
 
             sumOfSquares += (count * count);

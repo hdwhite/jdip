@@ -145,9 +145,9 @@ public class NGDStartOptions extends JPanel implements NewGameDialog.NGDTabPane 
         phaseBox.removeAllItems();
         String[] combos = Phase.getAllSeasonPhaseCombos();
         String protoType = combos[0];
-        for (int i = 0; i < combos.length; i++) {
-            phaseBox.addItem(combos[i]);
-            protoType = (combos[i].length() > protoType.length()) ? combos[i] : protoType;
+        for (String combo : combos) {
+            phaseBox.addItem(combo);
+            protoType = (combo.length() > protoType.length()) ? combo : protoType;
         }
 
         phaseBox.setPrototypeDisplayValue(protoType + "M");

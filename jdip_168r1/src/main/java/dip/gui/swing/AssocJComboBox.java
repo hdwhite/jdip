@@ -54,10 +54,10 @@ public class AssocJComboBox extends JComboBox<AssocJComboBox.AssociatedObj> {
         // longest is the prototype
         int len = 0;
         AssociatedObj longestAO = null;
-        for (int i = 0; i < objs.length; i++) {
-            if (objs[i].getDisplay().length() > len) {
-                len = objs[i].getDisplay().length();
-                longestAO = objs[i];
+        for (AssociatedObj obj : objs) {
+            if (obj.getDisplay().length() > len) {
+                len = obj.getDisplay().length();
+                longestAO = obj;
             }
         }
 

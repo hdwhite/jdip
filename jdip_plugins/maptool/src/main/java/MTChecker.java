@@ -121,8 +121,7 @@ public class MTChecker {
         sb.append("Provinces that Require an SC (for this variant):\n");
         boolean allOK = true;
 
-        for (int i = 0; i < allProvs.length; i++) {
-            Province p = allProvs[i];
+        for (Province p : allProvs) {
             if (p.hasSupplyCenter()) {
                 MapMetadata.InfoEntry ie = mmd.getInfoEntry(p);
                 if (ie.getSCPt().equals(MTHelper.ORIGIN)) {
@@ -150,8 +149,7 @@ public class MTChecker {
         sbMain.append("Provinces That Require NON-dislodged Unit Positions:\n");
         boolean allOK = true;
 
-        for (int i = 0; i < allProvs.length; i++) {
-            Province p = allProvs[i];
+        for (Province p : allProvs) {
             MapMetadata.InfoEntry ie = mmd.getInfoEntry(p);
             boolean isOK = true;
 
@@ -173,9 +171,9 @@ public class MTChecker {
 
             // if we are multi-coastal, we must print all coast data.
             Coast[] multiCoasts = p.getValidDirectionalCoasts();
-            for (int mcIdx = 0; mcIdx < multiCoasts.length; mcIdx++) {
-                if (ie.getUnitPt(multiCoasts[mcIdx]).equals(MTHelper.ORIGIN)) {
-                    sb.append(multiCoasts[mcIdx].getName());
+            for (Coast multiCoast : multiCoasts) {
+                if (ie.getUnitPt(multiCoast).equals(MTHelper.ORIGIN)) {
+                    sb.append(multiCoast.getName());
                     sb.append("; ");
                     allOK = false;
                     isOK = false;
@@ -206,8 +204,7 @@ public class MTChecker {
         sbMain.append("Provinces That Require Dislodged Unit Positions:\n");
         boolean allOK = true;
 
-        for (int i = 0; i < allProvs.length; i++) {
-            Province p = allProvs[i];
+        for (Province p : allProvs) {
             MapMetadata.InfoEntry ie = mmd.getInfoEntry(p);
             boolean isOK = true;
 
@@ -229,9 +226,9 @@ public class MTChecker {
 
             // if we are multi-coastal, we must print all coast data.
             Coast[] multiCoasts = p.getValidDirectionalCoasts();
-            for (int mcIdx = 0; mcIdx < multiCoasts.length; mcIdx++) {
-                if (ie.getDislodgedUnitPt(multiCoasts[mcIdx]).equals(MTHelper.ORIGIN)) {
-                    sb.append(multiCoasts[mcIdx].getName());
+            for (Coast multiCoast : multiCoasts) {
+                if (ie.getDislodgedUnitPt(multiCoast).equals(MTHelper.ORIGIN)) {
+                    sb.append(multiCoast.getName());
                     sb.append("; ");
                     allOK = false;
                     isOK = false;
@@ -259,11 +256,11 @@ public class MTChecker {
         StringBuilder sb = new StringBuilder(1024);
         boolean allOK = true;
 
-        for (int i = 0; i < allProvs.length; i++) {
-            TextInfo ti = (isBrief) ? mtl.getBriefTextInfo(allProvs[i]) : mtl.getFullTextInfo(allProvs[i]);
+        for (Province province : allProvs) {
+            TextInfo ti = (isBrief) ? mtl.getBriefTextInfo(province) : mtl.getFullTextInfo(province);
             if (!ti.isPlaced()) {
                 sb.append("    ");
-                sb.append(allProvs[i].getShortName());
+                sb.append(province.getShortName());
                 if (isBrief) {
                     sb.append(": missing brief label");
                 } else {

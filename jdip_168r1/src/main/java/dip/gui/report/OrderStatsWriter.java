@@ -142,9 +142,9 @@ public class OrderStatsWriter {
         //
         sb.append("<tr>");
         sb.append("<td></td>");        // empty
-        for (int i = 0; i < allPowers.length; i++) {
+        for (Power power : allPowers) {
             sb.append("<td><b> &nbsp;");
-            sb.append(allPowers[i].getName());
+            sb.append(power.getName());
             sb.append("&nbsp; </b></td>");
         }
         sb.append("<td>");
@@ -282,9 +282,9 @@ public class OrderStatsWriter {
                 throw new IllegalArgumentException();
             }
 
-            for (int i = 0; i < stats.length; i++) {
-                if (p.equals(stats[i].getPower())) {
-                    return stats[i];
+            for (Stats stat : stats) {
+                if (p.equals(stat.getPower())) {
+                    return stat;
                 }
             }
 

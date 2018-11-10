@@ -173,11 +173,11 @@ public class PersistenceManager {
             final int actualCount = persistTG.enumerate(pendingThreads);
             Log.println("PM::exit(): actual threads pending: ", actualCount);
 
-            for (int i = 0; i < pendingThreads.length; i++) {
-                if (pendingThreads[i].isAlive()) {
+            for (Thread pendingThread : pendingThreads) {
+                if (pendingThread.isAlive()) {
                     try {
-                        Log.println("PM::exit(): waiting on ", pendingThreads[i].getName());
-                        pendingThreads[i].join(THREAD_WAIT);
+                        Log.println("PM::exit(): waiting on ", pendingThread.getName());
+                        pendingThread.join(THREAD_WAIT);
                         Log.println("    done.");
                     } catch (Throwable t) {
                         Log.println("PM::exit(): uncaught exception:");

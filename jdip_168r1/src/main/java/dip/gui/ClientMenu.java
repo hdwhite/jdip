@@ -458,8 +458,8 @@ public class ClientMenu {
         }
 
         // now delete
-        for (int i = 0; i < toRemove.length; i++) {
-            fileMenu.remove(toRemove[i]);
+        for (JMenuItem item : toRemove) {
+            fileMenu.remove(item);
         }
 
 
@@ -518,8 +518,8 @@ public class ClientMenu {
      */
     private void makeToolMenu(JMenu menu) {
         Tool[] tools = ToolManager.getTools();
-        for (int i = 0; i < tools.length; i++) {
-            menu.add(tools[i].registerJMenuItem());
+        for (Tool tool : tools) {
+            menu.add(tool.registerJMenuItem());
         }
     }// makeToolMenu()
 
@@ -785,8 +785,8 @@ public class ClientMenu {
 
         // remove old powers (if any) from menu map
         if (powers != null) {
-            for (int i = 0; i < powers.length; i++) {
-                menuMap.remove(powers[i]);
+            for (Power power : powers) {
+                menuMap.remove(power);
             }
         }
 
@@ -859,9 +859,9 @@ public class ClientMenu {
         // some powers are selected. determine which.
         ArrayList<Power> list = new ArrayList<>(powers.length);
 
-        for (int i = 0; i < powers.length; i++) {
-            if (getSelected(powers[i])) {
-                list.add(powers[i]);
+        for (Power power : powers) {
+            if (getSelected(power)) {
+                list.add(power);
             }
         }
 
@@ -899,8 +899,8 @@ public class ClientMenu {
 
         // remove any existing listeners
         ActionListener[] listeners = menuItem.getActionListeners();
-        for (int i = 0; i < listeners.length; i++) {
-            menuItem.removeActionListener(listeners[i]);
+        for (ActionListener listener : listeners) {
+            menuItem.removeActionListener(listener);
         }
 
         // add our new action listener, which will invoke (via reflection)
@@ -1032,12 +1032,12 @@ public class ClientMenu {
             JMenuItem jmi = (JMenuItem) e.getSource();
 
             if (jmi == getMenuItem(ClientMenu.VIEW_ORDERS_ALLPOWERS)) {
-                for (int i = 0; i < powers.length; i++) {
-                    setSelected(powers[i], true);
+                for (Power power : powers) {
+                    setSelected(power, true);
                 }
             } else if (jmi == getMenuItem(ClientMenu.VIEW_ORDERS_NOPOWERS)) {
-                for (int i = 0; i < powers.length; i++) {
-                    setSelected(powers[i], false);
+                for (Power power : powers) {
+                    setSelected(power, false);
                 }
             }
 

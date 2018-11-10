@@ -222,9 +222,7 @@ public class RPConvert
 
 		// power (countries)
 		StringBuffer sb = new StringBuffer();
-		for(int i=0; i<countries.length; i++)
-		{
-			Country country = countries[i];
+		for (Country country : countries) {
 			sb.append("\t\t<POWER name=\"");
 			sb.append(country.getName());
 			sb.append("\" active=\"true\" adjective=\"");
@@ -251,9 +249,8 @@ public class RPConvert
 
 		// create mapping of Country initials to Country
         final HashMap<String, Country> i2cMap = new HashMap<>();
-		for(int i=0; i<countries.length; i++)
-		{
-			i2cMap.put(countries[i].getInitial(), countries[i]);
+		for (Country country : countries) {
+			i2cMap.put(country.getInitial(), country);
 		}
 
 		// SC
@@ -278,9 +275,8 @@ public class RPConvert
 				sb.append(c.getName());
 
 				// if owned, set owner
-				for (int i = 0; i < countries.length; i++) {
-					Country country = countries[i];
-					for (Loc loc : countries[i].getSC()) {
+				for (Country country : countries) {
+					for (Loc loc : country.getSC()) {
 						if (loc.getShortName().equalsIgnoreCase(po.getSN())) {
 							sb.append("\" owner=\"");
 							sb.append(c.getName());
@@ -296,12 +292,10 @@ public class RPConvert
 		// initial unit positions
 		// (this is not known)
 		sb = new StringBuffer();
-		for(int i=0; i<countries.length; i++)
-		{
+		for (Country country : countries) {
 			/*
 				<INITIALSTATE province="stp" power="russia" unit="fleet" unitcoast="sc" />
 			*/
-			Country country = countries[i];
 			for (Unit unit : country.getUnits()) {
 				sb.append("\t\t<INITIALSTATE province=\"");
 				sb.append(unit.getLoc().getShortName());
@@ -492,24 +486,22 @@ public class RPConvert
 
 				// read each country (assume order is same as Countries[] array)
 				//
-				for(int i=0; i<countries.length; i++)
-				{
+				for (Country country : countries) {
 					// we don't care about adjustments
 					value = getNextDataLine(lnr);
 
 					// HOME SC
 					value = getNextDataLine(lnr);
 					StringTokenizer st = new StringTokenizer(value, " ;,\n\r");
-					while(st.hasMoreTokens())
-					{
+					while (st.hasMoreTokens()) {
 						final Loc loc = Loc.makeLoc(st.nextToken(), null);
-						countries[i].addSC(loc);
+						country.addSC(loc);
 					}
 
 					// UNITS
 					value = getNextDataLine(lnr);
 					Unit[] units = Unit.makeUnits(value);
-					countries[i].addUnits(units);
+					country.addUnits(units);
 				}
 
 				// # OF DISLODGES

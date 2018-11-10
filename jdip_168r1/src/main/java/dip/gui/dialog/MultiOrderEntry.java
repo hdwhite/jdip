@@ -343,8 +343,8 @@ public class MultiOrderEntry {
         }
 
         // check against against other bad tokens
-        for (int i = 0; i < BAD_TOKS.length; i++) {
-            if (tok.equals(BAD_TOKS[i])) {
+        for (String badTok : BAD_TOKS) {
+            if (tok.equals(badTok)) {
                 return true;
             }
         }

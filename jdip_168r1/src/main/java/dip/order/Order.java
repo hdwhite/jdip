@@ -203,8 +203,7 @@ public abstract class Order implements Orderable, java.io.Serializable {
         ArrayList<OrderState> depSup = null;
 
         OrderState[] orderStates = adjudicator.getOrderStates();
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState dependentOS = orderStates[osIdx];
+        for (OrderState dependentOS : orderStates) {
             Order order = dependentOS.getOrder();
 
             if (order != this) // always exclude self

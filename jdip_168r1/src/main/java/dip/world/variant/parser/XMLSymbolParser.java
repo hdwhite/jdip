@@ -345,8 +345,8 @@ public class XMLSymbolParser implements SymbolParser {
      * See if name is a valid element tag name
      */
     private boolean isValidElement(String name) {
-        for (int i = 0; i < VALID_ELEMENTS.length; i++) {
-            if (VALID_ELEMENTS[i].equals(name)) {
+        for (String validElement : VALID_ELEMENTS) {
+            if (validElement.equals(name)) {
                 return true;
             }
         }

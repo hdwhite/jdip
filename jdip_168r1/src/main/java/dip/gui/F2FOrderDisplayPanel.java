@@ -201,8 +201,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
         Adjustment.AdjustmentInfoMap f2fAdjMap = Adjustment.getAdjustmentInfo(turnState,
                 world.getRuleOptions(), powers);
 
-        for (int i = 0; i < powers.length; i++) {
-            final Power power = powers[i];
+        for (final Power power : powers) {
             if (!pos.isEliminated(power) && power.isActive()) {
                 // create icon, if possible
                 Icon icon = null;
@@ -265,8 +264,8 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
         final Power[] powers = world.getMap().getPowers();
         List<TabComponent> tabSelectionOrderList = new ArrayList<>(powers.length);
 
-        for (int i = 0; i < powers.length; i++) {
-            TabComponent tc = getTabComponent(powers[i]);
+        for (Power power : powers) {
+            TabComponent tc = getTabComponent(power);
             if (tabPane.isEnabledAt(tabPane.indexOfComponent(tc))) {
                 tabSelectionOrderList.add(tc);
             }
@@ -382,8 +381,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
             // set enabled tabs (submitted == disabled)
             boolean aSubmit = false;
             final Power[] powers = world.getMap().getPowers();
-            for (int i = 0; i < powers.length; i++) {
-                final Power power = powers[i];
+            for (final Power power : powers) {
                 boolean value = state.getSubmitted(power);
                 aSubmit = (value) || aSubmit;
                 setTabEnabled(power, !value);
@@ -422,8 +420,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
             final Power[] powers = world.getMap().getPowers();
 
             // set submitted
-            for (int i = 0; i < powers.length; i++) {
-                final Power power = powers[i];
+            for (final Power power : powers) {
                 entryState.setSubmitted(power, !isTabEnabled(power));
             }
 

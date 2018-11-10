@@ -196,9 +196,9 @@ public class DislodgedResult extends OrderResult {
         } else if (retreatLocations.length == 0) {
             sb.append(" none");
         } else {
-            for (int i = 0; i < retreatLocations.length; i++) {
+            for (Location retreatLocation : retreatLocations) {
                 sb.append(' ');
-                retreatLocations[i].appendBrief(sb);
+                retreatLocation.appendBrief(sb);
             }
         }
 

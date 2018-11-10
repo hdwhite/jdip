@@ -445,9 +445,7 @@ public class Move extends Order {
         if (convoyRoutes != null) {
             // if we have defined routes, check all of them to make sure
             // they are (all) theoretically valid
-            for (int routeIdx = 0; routeIdx < convoyRoutes.size(); routeIdx++) {
-                final Province[] route = convoyRoutes.get(routeIdx);
-
+            for (final Province[] route : convoyRoutes) {
                 // check that src, dest are included in path
                 if (route[0] != src.getProvince()
                         || route[route.length - 1] != dest.getProvince()) {
@@ -551,8 +549,7 @@ public class Move extends Order {
                     {
                         // if we have multiple routes, we don't fail until *all* paths fail.
                         boolean overall = false;
-                        for (int routeIdx = 0; routeIdx < convoyRoutes.size(); routeIdx++) {
-                            final Province[] route = convoyRoutes.get(routeIdx);
+                        for (final Province[] route : convoyRoutes) {
                             overall = Path.isRouteLegal(adjudicator, route);
                             if (overall)    // if at least one is true, then we are OK
                             {
@@ -610,8 +607,8 @@ public class Move extends Order {
                     // now, we need to evaluate each path, to see if that province
                     // has a fleet of the same power as this order in any legal path.
                     // If so, the intent is to convoy.
-                    for (int i = 0; i < paths.length; i++) {
-                        Province p = evalPath(adjudicator, paths[i]);
+                    for (Province[] path : paths) {
+                        Province p = evalPath(adjudicator, path);
                         if (p != null) {
                             _isConvoyIntent = true;
                             adjudicator.addResult(thisOS, ResultType.TEXT, Utils.getLocalString(MOVE_VER_CONVOY_INTENT, p));
@@ -737,8 +734,7 @@ public class Move extends Order {
         ArrayList<OrderState> depSelfSup = null;
 
         OrderState[] orderStates = adjudicator.getOrderStates();
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState dependentOS = orderStates[osIdx];
+        for (OrderState dependentOS : orderStates) {
             Order order = dependentOS.getOrder();
 
             if (order instanceof Move && order != this) {
@@ -1013,10 +1009,7 @@ public class Move extends Order {
 
             Log.println("  # dep dest moves: ", dml.length);
 
-            for (int i = 0; i < dml.length; i++) {
-                OrderState os = dml[i];
-
-
+            for (OrderState os : dml) {
                 if (Log.isLogging()) {
                     Log.println(" checking against dependent move: ", os.getOrder());
                     Log.println("       :(dep) atkMax = " + os.getAtkMax() + ";  atkCertain = " + os.getAtkCertain());
@@ -1304,9 +1297,7 @@ public class Move extends Order {
         OrderState[] dml = thisOS.getDependentMovesToDestination();
         Log.println("   Move::isBetterWithoutSelfSupport(); dml.length: ", dml.length);
 
-        for (int i = 0; i < dml.length; i++) {
-            OrderState os = dml[i];
-
+        for (OrderState os : dml) {
             // 3.d
             if (os.isHeadToHead() && (os.getEvalState() == Tristate.UNCERTAIN || !isDependentHTHResolved(os))) {
                 // we can't evaluate yet; remain uncertain

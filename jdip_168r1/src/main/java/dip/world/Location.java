@@ -281,10 +281,10 @@ public class Location {
             // (this prevents iterating completely thru all coasts each time)
             //
             Location[] locs = from.getProvince().getAdjacentLocations(from.getCoast());
-            for (int i = 0; i < locs.length; i++) {
-                if (locs[i].getProvince() == newLoc.getProvince()) {
+            for (Location loc : locs) {
+                if (loc.getProvince() == newLoc.getProvince()) {
                     adjCoasts++;
-                    toCoast = locs[i].getCoast();
+                    toCoast = loc.getCoast();
                 }
             }
 

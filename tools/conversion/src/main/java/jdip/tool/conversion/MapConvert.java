@@ -495,8 +495,8 @@ public class MapConvert
 						return po;
 					} else {
 						final String[] names = po.getShortNames();
-						for (int i = 0; i < names.length; i++) {
-							if (name.equalsIgnoreCase(names[i])) {
+						for (String shortName : names) {
+							if (name.equalsIgnoreCase(shortName)) {
 								return po;
 							}
 						}

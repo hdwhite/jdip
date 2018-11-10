@@ -133,8 +133,8 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
     public void setEnabled(boolean value) {
         optionList.setEnabled(value);
         reset.setEnabled(value);
-        for (int i = 0; i < radioButtons.length; i++) {
-            radioButtons[i].setEnabled(value);
+        for (JRadioButton radioButton : radioButtons) {
+            radioButton.setEnabled(value);
         }
 
         super.setEnabled(value);
@@ -178,16 +178,16 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
     private void updateChoices() {
         OptListItem optListItem = optionList.getSelectedValue();
         if (optListItem == null) {
-            for (int i = 0; i < radioButtons.length; i++) {
-                radioButtons[i].setVisible(false);
+            for (JRadioButton radioButton : radioButtons) {
+                radioButton.setVisible(false);
             }
 
             description.setText(makeHTML(Utils.getLocalString(INTRO_TEXT)));
 
-            for (int i = 0; i < radioButtons.length; i++) {
-                radioButtons[i].setText("");
-                radioButtons[i].setSelected(false);
-                radioButtons[i].setVisible(false);
+            for (JRadioButton radioButton : radioButtons) {
+                radioButton.setText("");
+                radioButton.setSelected(false);
+                radioButton.setVisible(false);
             }
 
             revalidate();

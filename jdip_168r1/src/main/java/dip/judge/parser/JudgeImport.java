@@ -293,25 +293,25 @@ public class JudgeImport {
 
         // reset home supply centers
         Province[] provinces = map.getProvinces();
-        for (int i = 0; i < provinces.length; i++) {
-            Power power = oldPosition.getSupplyCenterHomePower(provinces[i]);
+        for (Province province : provinces) {
+            Power power = oldPosition.getSupplyCenterHomePower(province);
             if (power != null) {
-                position.setSupplyCenterHomePower(provinces[i], power);
+                position.setSupplyCenterHomePower(province, power);
             }
         }
 
         // set SC ownership information
-        for (int i = 0; i < ownerInfo.length; i++) {
-            Power power = map.getPowerMatching(ownerInfo[i].getPowerName());
+        for (AdjustmentParser.OwnerInfo anOwnerInfo : ownerInfo) {
+            Power power = map.getPowerMatching(anOwnerInfo.getPowerName());
             if (power == null) {
-                throw new IOException(Utils.getLocalString(JI_UNKNOWN_POWER, ownerInfo[i].getPowerName()));
+                throw new IOException(Utils.getLocalString(JI_UNKNOWN_POWER, anOwnerInfo.getPowerName()));
             }
 
-            String[] ownedProvNames = ownerInfo[i].getProvinces();
-            for (int j = 0; j < ownedProvNames.length; j++) {
-                Province province = map.getProvinceMatching(ownedProvNames[j]);
+            String[] ownedProvNames = anOwnerInfo.getProvinces();
+            for (String ownedProvName : ownedProvNames) {
+                Province province = map.getProvinceMatching(ownedProvName);
                 if (province == null) {
-                    throw new IOException(Utils.getLocalString(JI_UNKNOWN_PROVINCE, ownerInfo[i].getPowerName()));
+                    throw new IOException(Utils.getLocalString(JI_UNKNOWN_PROVINCE, anOwnerInfo.getPowerName()));
                 }
 
                 position.setSupplyCenterOwner(province, power);
@@ -319,18 +319,18 @@ public class JudgeImport {
         }
 
         // create units & positions on the map
-        for (int i = 0; i < posInfo.length; i++) {
-            Power power = map.getPowerMatching(posInfo[i].getPowerName());
-            Unit.Type unitType = Unit.Type.parse(posInfo[i].getUnitName());
-            Location location = map.parseLocation(posInfo[i].getLocationName());
+        for (PositionParser.PositionInfo aPosInfo : posInfo) {
+            Power power = map.getPowerMatching(aPosInfo.getPowerName());
+            Unit.Type unitType = Unit.Type.parse(aPosInfo.getUnitName());
+            Location location = map.parseLocation(aPosInfo.getLocationName());
 
             // check
             if (power == null || location == null || unitType.equals(Unit.Type.UNDEFINED)) {
                 throw new IOException(
                         Utils.getLocalString(JI_BAD_POSITION,
-                                posInfo[i].getPowerName(),
-                                posInfo[i].getUnitName(),
-                                posInfo[i].getLocationName()));
+                                aPosInfo.getPowerName(),
+                                aPosInfo.getUnitName(),
+                                aPosInfo.getLocationName()));
             }
 
             // validate location

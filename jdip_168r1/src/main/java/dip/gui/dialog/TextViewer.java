@@ -132,12 +132,12 @@ public class TextViewer extends HeaderDialog {
             public void processDroppedFiles(File[] files) {
                 final Document doc = textPane.getDocument();
 
-                for (int i = 0; i < files.length; i++) {
+                for (File file : files) {
                     StringBuilder sb = new StringBuilder();
                     BufferedReader br = null;
 
                     try {
-                        br = new BufferedReader(new FileReader(files[i]));
+                        br = new BufferedReader(new FileReader(file));
                         String line = br.readLine();
                         while (line != null) {
                             sb.append(line);
@@ -145,14 +145,14 @@ public class TextViewer extends HeaderDialog {
                             line = br.readLine();
                         }
                     } catch (IOException e) {
-                        ErrorDialog.displayFileIO(parent, e, files[i].getName());
+                        ErrorDialog.displayFileIO(parent, e, file.getName());
                     } finally {
                         try {
                             if (br != null) {
                                 br.close();
                             }
                         } catch (IOException e) {
-                            ErrorDialog.displayFileIO(parent, e, files[i].getName());
+                            ErrorDialog.displayFileIO(parent, e, file.getName());
                         }
                     }
 
@@ -224,9 +224,9 @@ public class TextViewer extends HeaderDialog {
                     DataFlavor stringDF = null;
 
                     DataFlavor[] dfs = t.getTransferDataFlavors();
-                    for (int i = 0; i < dfs.length; i++) {
-                        if (dfs[i].equals(DataFlavor.stringFlavor)) {
-                            stringDF = dfs[i];
+                    for (DataFlavor df : dfs) {
+                        if (df.equals(DataFlavor.stringFlavor)) {
+                            stringDF = df;
                             break;
                         }
                     }

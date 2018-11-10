@@ -695,8 +695,8 @@ public class NJudgeOrderParser {
 
         // is delim at start? if so, return null.
         String tok = tokens[index];
-        for (int nDelim = 0; nDelim < delim.length; nDelim++) {
-            if (tok.equalsIgnoreCase(delim[nDelim])) {
+        for (String aDelim : delim) {
+            if (tok.equalsIgnoreCase(aDelim)) {
                 return null;
             }
         }
@@ -708,8 +708,8 @@ public class NJudgeOrderParser {
         for (int i = index + 1; i < tokens.length; i++) {
             tok = tokens[i];
 
-            for (int nDelim = 0; nDelim < delim.length; nDelim++) {
-                if (tok.equalsIgnoreCase(delim[nDelim])) {
+            for (String aDelim : delim) {
+                if (tok.equalsIgnoreCase(aDelim)) {
                     foundDelim = true;
                     break;
                 }
@@ -761,8 +761,8 @@ public class NJudgeOrderParser {
         final String resultText = line.substring(rStart + 2, rEnd);
         final String[] resultStrings = resultText.split("\\s*,\\s*");
 
-        for (int i = 0; i < resultStrings.length; i++) {
-            results.add(resultStrings[i]);
+        for (String resultString : resultStrings) {
+            results.add(resultString);
         }
 
         // return the order, without the result text.
@@ -1227,11 +1227,11 @@ public class NJudgeOrderParser {
             String tmpOrderName = null;
             while (tokIdx < tokens.length && orderNameIndex < 0) {
                 final String aToken = tokens[tokIdx];
-                for (int onIdx = 0; onIdx < ORDER_NAME_TOKENS.length; onIdx++) {
-                    if (ORDER_NAME_TOKENS[onIdx].equals(aToken)) {
+                for (String orderNameToken : ORDER_NAME_TOKENS) {
+                    if (orderNameToken.equals(aToken)) {
                         // error-check
                         orderNameIndex = tokIdx;
-                        tmpOrderName = ORDER_NAME_TOKENS[onIdx];
+                        tmpOrderName = orderNameToken;
                         break;
                     }
                 }

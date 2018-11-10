@@ -111,8 +111,7 @@ public class MTOutput {
         StringBuilder sb = new StringBuilder(2048);
         sb.append("<jdipNS:PROVINCE_DATA>\n");
 
-        for (int i = 0; i < allProvs.length; i++) {
-            Province p = allProvs[i];
+        for (Province p : allProvs) {
             MapMetadata.InfoEntry ie = mmd.getInfoEntry(p);
 
             // print standard coast info first (shouldn't matter: Coast.LAND or Coast.SEA
@@ -123,9 +122,9 @@ public class MTOutput {
 
             // if we are multi-coastal, we must print all coast data.
             Coast[] multiCoasts = p.getValidDirectionalCoasts();
-            for (int mcIdx = 0; mcIdx < multiCoasts.length; mcIdx++) {
+            for (Coast multiCoast : multiCoasts) {
                 sb.append("   ");
-                sb.append(makePROVINCEtag(ie, p, multiCoasts[mcIdx]));
+                sb.append(makePROVINCEtag(ie, p, multiCoast));
                 sb.append("\n");
             }
         }
@@ -207,17 +206,17 @@ public class MTOutput {
         StringBuilder sb = new StringBuilder(8192);
 
         sb.append("\n\n*** PROVINCE BRIEF NAME LAYER ***\n");
-        for (int i = 0; i < allProvs.length; i++) {
+        for (Province province : allProvs) {
             sb.append("   ");
-            sb.append(mtl.getBriefTextInfo(allProvs[i]).toString());
+            sb.append(mtl.getBriefTextInfo(province).toString());
             sb.append("\n");
         }
 
 
         sb.append("\n\n*** PROVINCE FULL NAME LAYER ***\n");
-        for (int i = 0; i < allProvs.length; i++) {
+        for (Province province : allProvs) {
             sb.append("   ");
-            sb.append(mtl.getFullTextInfo(allProvs[i]).toString());
+            sb.append(mtl.getFullTextInfo(province).toString());
             sb.append("\n");
         }
 

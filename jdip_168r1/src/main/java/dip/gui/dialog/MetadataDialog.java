@@ -182,9 +182,9 @@ public class MetadataDialog extends HeaderDialog {
 
         // all other tabs are by Power name
         Power[] powers = world.getMap().getPowers();
-        for (int i = 0; i < powers.length; i++) {
-            tabPane.add(powers[i].getName(),
-                    makePlayerPanel(powers[i], world.getPlayerMetadata(powers[i])));
+        for (Power power : powers) {
+            tabPane.add(power.getName(),
+                    makePlayerPanel(power, world.getPlayerMetadata(power)));
         }
     }// makeTabPanel()
 

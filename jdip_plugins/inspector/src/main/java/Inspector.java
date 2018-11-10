@@ -193,10 +193,10 @@ public class Inspector implements Tool {
                     // coasts are always forced
                     final Position pos = ts.getPosition();
                     final Province[] allProvinces = pos.getProvinces();
-                    for (int i = 0; i < allProvinces.length; i++) {
-                        Unit unit = pos.getUnit(allProvinces[i]);
+                    for (Province province : allProvinces) {
+                        Unit unit = pos.getUnit(province);
                         if (unit != null) {
-                            sb.append(allProvinces[i].getShortName());
+                            sb.append(province.getShortName());
                             sb.append("/");
                             sb.append(unit.getCoast().getAbbreviation());
                             sb.append(": ");
@@ -206,9 +206,9 @@ public class Inspector implements Tool {
                             sb.append("\n");
                         }
 
-                        unit = pos.getDislodgedUnit(allProvinces[i]);
+                        unit = pos.getDislodgedUnit(province);
                         if (unit != null) {
-                            sb.append(allProvinces[i].getShortName());
+                            sb.append(province.getShortName());
                             sb.append("/");
                             sb.append(unit.getCoast().getAbbreviation());
                             sb.append(": ");
@@ -331,17 +331,17 @@ public class Inspector implements Tool {
         sb.append("\n");
 
         sb.append("PRESTATE\n");
-        for (int i = 0; i < allProvinces.length; i++) {
-            Unit unit = pos.getUnit(allProvinces[i]);
+        for (Province province : allProvinces) {
+            Unit unit = pos.getUnit(province);
             if (unit != null) {
                 sb.append("\t");
                 sb.append(unit.getPower().getName());
                 sb.append(": ");
                 sb.append(unit.getType().getShortName());
                 sb.append(" ");
-                sb.append(allProvinces[i].getShortName());
+                sb.append(province.getShortName());
                 if (unit.getType() == Unit.Type.FLEET
-                        && allProvinces[i].isMultiCoastal()) {
+                        && province.isMultiCoastal()) {
                     sb.append("/");
                     sb.append(unit.getCoast().getAbbreviation());
                 }
@@ -350,17 +350,17 @@ public class Inspector implements Tool {
         }
 
         sb.append("PRESTATE_DISLODGED\n");
-        for (int i = 0; i < allProvinces.length; i++) {
-            Unit unit = pos.getDislodgedUnit(allProvinces[i]);
+        for (Province province : allProvinces) {
+            Unit unit = pos.getDislodgedUnit(province);
             if (unit != null) {
                 sb.append("\t");
                 sb.append(unit.getPower().getName());
                 sb.append(": ");
                 sb.append(unit.getType().getShortName());
                 sb.append(" ");
-                sb.append(allProvinces[i].getShortName());
+                sb.append(province.getShortName());
                 if (unit.getType() == Unit.Type.FLEET
-                        && allProvinces[i].isMultiCoastal()) {
+                        && province.isMultiCoastal()) {
                     sb.append("/");
                     sb.append(unit.getCoast().getAbbreviation());
                 }
@@ -427,17 +427,17 @@ public class Inspector implements Tool {
             final Position nextPos = nextTS.getPosition();
 
             sb.append("POSTSTATE\n");
-            for (int i = 0; i < allProvinces.length; i++) {
-                Unit unit = nextPos.getUnit(allProvinces[i]);
+            for (Province province : allProvinces) {
+                Unit unit = nextPos.getUnit(province);
                 if (unit != null) {
                     sb.append("\t");
                     sb.append(unit.getPower().getName());
                     sb.append(": ");
                     sb.append(unit.getType().getShortName());
                     sb.append(" ");
-                    sb.append(allProvinces[i].getShortName());
+                    sb.append(province.getShortName());
                     if (unit.getType() == Unit.Type.FLEET
-                            && allProvinces[i].isMultiCoastal()) {
+                            && province.isMultiCoastal()) {
                         sb.append("/");
                         sb.append(unit.getCoast().getAbbreviation());
                     }
@@ -446,17 +446,17 @@ public class Inspector implements Tool {
             }
 
             sb.append("POSTSTATE_DISLODGED\n");
-            for (int i = 0; i < allProvinces.length; i++) {
-                Unit unit = nextPos.getDislodgedUnit(allProvinces[i]);
+            for (Province province : allProvinces) {
+                Unit unit = nextPos.getDislodgedUnit(province);
                 if (unit != null) {
                     sb.append("\t");
                     sb.append(unit.getPower().getName());
                     sb.append(": ");
                     sb.append(unit.getType().getShortName());
                     sb.append(" ");
-                    sb.append(allProvinces[i].getShortName());
+                    sb.append(province.getShortName());
                     if (unit.getType() == Unit.Type.FLEET
-                            && allProvinces[i].isMultiCoastal()) {
+                            && province.isMultiCoastal()) {
                         sb.append("/");
                         sb.append(unit.getCoast().getAbbreviation());
                     }

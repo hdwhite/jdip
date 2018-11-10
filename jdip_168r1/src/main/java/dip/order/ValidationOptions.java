@@ -118,8 +118,8 @@ public class ValidationOptions implements Serializable, Cloneable {
     // set all options to default.
     public final void clearOptions() {
         map.clear();
-        for (int i = 0; i < options.length; i++) {
-            map.put(options[i].getKey(), options[i].getDefaultValue());
+        for (Option option : options) {
+            map.put(option.getKey(), option.getDefaultValue());
         }
     }// clearOptions()
 

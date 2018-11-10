@@ -330,9 +330,9 @@ public class Variant implements Cloneable, Comparable<Variant> {
      */
     public MapGraphic getMapGrapic(String mgName) {
         if (mapGraphics != null) {
-            for (int i = 0; i < mapGraphics.length; i++) {
-                if (mapGraphics[i].getName().equalsIgnoreCase(mgName)) {
-                    return mapGraphics[i];
+            for (MapGraphic mapGraphic : mapGraphics) {
+                if (mapGraphic.getName().equalsIgnoreCase(mgName)) {
+                    return mapGraphic;
                 }
             }
         }
@@ -348,9 +348,9 @@ public class Variant implements Cloneable, Comparable<Variant> {
         if (mapGraphics != null && mapGraphics.length > 0) {
             mg = mapGraphics[0];
 
-            for (int i = 0; i < mapGraphics.length; i++) {
-                if (mapGraphics[i].isDefault()) {
-                    mg = mapGraphics[i];
+            for (MapGraphic mapGraphic : mapGraphics) {
+                if (mapGraphic.isDefault()) {
+                    mg = mapGraphic;
                     break;
                 }
             }
@@ -455,27 +455,27 @@ public class Variant implements Cloneable, Comparable<Variant> {
         sb.append(",isDefault=");
         sb.append(isDefault);
         sb.append("powers=");
-        for (int i = 0; i < powers.length; i++) {
-            sb.append(powers[i]);
+        for (Power power : powers) {
+            sb.append(power);
             sb.append(',');
         }
         sb.append(",phase=");
         sb.append(phase);
         sb.append(",istate=");
-        for (int i = 0; i < istate.length; i++) {
-            System.out.println(istate[i]);
+        for (InitialState anIstate : istate) {
+            System.out.println(anIstate);
         }
         sb.append(",supplyCenters=");
-        for (int i = 0; i < supplyCenters.length; i++) {
-            System.out.println(supplyCenters[i]);
+        for (SupplyCenter supplyCenter : supplyCenters) {
+            System.out.println(supplyCenter);
         }
         sb.append(",provinceData=");
-        for (int i = 0; i < provinceData.length; i++) {
-            System.out.println(provinceData[i]);
+        for (ProvinceData aProvinceData : provinceData) {
+            System.out.println(aProvinceData);
         }
         sb.append("mapGraphics=");
-        for (int i = 0; i < mapGraphics.length; i++) {
-            System.out.println(mapGraphics[i]);
+        for (MapGraphic mapGraphic : mapGraphics) {
+            System.out.println(mapGraphic);
         }
         sb.append(",vcNumSCForVictory=");
         sb.append(vcNumSCForVictory);

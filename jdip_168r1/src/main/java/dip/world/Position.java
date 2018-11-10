@@ -103,12 +103,11 @@ public class Position implements java.io.Serializable {
      */
     public void setEliminationStatus(final Power[] powers) {
         HashMap<Power, Object> pmap = new HashMap<>(19);
-        for (int i = 0; i < powers.length; i++) {
-            pmap.put(powers[i], null);
+        for (Power power : powers) {
+            pmap.put(power, null);
         }
 
-        for (int i = 0; i < provArray.length; i++) {
-            ProvinceData pd = provArray[i];
+        for (ProvinceData pd : provArray) {
             Power power = null;
 
             if (pd != null) {
@@ -140,11 +139,11 @@ public class Position implements java.io.Serializable {
             }
         }
 
-        for (int i = 0; i < powers.length; i++) {
-            if (pmap.get(powers[i]) == null) {
-                setEliminated(powers[i], true);
+        for (Power power : powers) {
+            if (pmap.get(power) == null) {
+                setEliminated(power, true);
             } else {
-                setEliminated(powers[i], false);
+                setEliminated(power, false);
             }
         }
     }// setEliminationStatus()
@@ -381,8 +380,7 @@ public class Position implements java.io.Serializable {
      */
     public int getUnitCount() {
         int count = 0;
-        for (int i = 0; i < provArray.length; i++) {
-            ProvinceData pd = provArray[i];
+        for (ProvinceData pd : provArray) {
             if (pd != null && pd.hasUnit()) {
                 count++;
             }
@@ -397,8 +395,7 @@ public class Position implements java.io.Serializable {
      */
     public int getDislodgedUnitCount() {
         int count = 0;
-        for (int i = 0; i < provArray.length; i++) {
-            ProvinceData pd = provArray[i];
+        for (ProvinceData pd : provArray) {
             if (pd != null && pd.hasDislodgedUnit()) {
                 count++;
             }
@@ -456,8 +453,7 @@ public class Position implements java.io.Serializable {
      * An owned home supply center need not have a unit present.
      */
     public boolean hasAnOwnedHomeSC(Power power) {
-        for (int i = 0; i < provArray.length; i++) {
-            ProvinceData pd = provArray[i];
+        for (ProvinceData pd : provArray) {
             if (pd != null && pd.getSCHomePower() == power && pd.getSCOwner() == power) {
                 return true;
             }

@@ -108,14 +108,12 @@ class Loc
 		if(coast != null)
 		{
 			boolean found = false;
-			for(int i=0; i<COAST_TYPES.length; i++)
-			{
-				if(COAST_TYPES[i].equals(coast))
-				{
-					found = true;
-					break;
-				}
-			}
+            for (String coastType : COAST_TYPES) {
+                if (coastType.equals(coast)) {
+                    found = true;
+                    break;
+                }
+            }
 			
 			if(!found)
 			{
@@ -174,14 +172,12 @@ class Loc
 			}
 			else
 			{
-				for(int i=0; i<DIRECTIONAL_COASTS.length; i++)
-				{
-					if(DIRECTIONAL_COASTS[i].equals(coastType))
-					{
-						sb.append("-");
-						sb.append(coastType);
-					}
-				}
+                for (String directionalCoast : DIRECTIONAL_COASTS) {
+                    if (directionalCoast.equals(coastType)) {
+                        sb.append("-");
+                        sb.append(coastType);
+                    }
+                }
 			}
 		}
 		

@@ -145,8 +145,8 @@ public class MTLabeler {
         final Province[] allProvs = gameMap.getProvinces();
 
         // setup map entries
-        for (int i = 0; i < allProvs.length; i++) {
-            map.put(allProvs[i], new TIMapEntry());
+        for (Province province : allProvs) {
+            map.put(province, new TIMapEntry());
         }
 
         // read in existing map labels.
@@ -188,15 +188,15 @@ public class MTLabeler {
         }
 
         // check to see which map labels aren't read. Create empty labels.
-        for (int i = 0; i < allProvs.length; i++) {
-            TIMapEntry me = map.get(allProvs[i]);
+        for (Province province : allProvs) {
+            TIMapEntry me = map.get(province);
 
             if (me.brief == null) {
-                me.brief = new TextInfo(doc, allProvs[i], true);
+                me.brief = new TextInfo(doc, province, true);
             }
 
             if (me.full == null) {
-                me.full = new TextInfo(doc, allProvs[i], false);
+                me.full = new TextInfo(doc, province, false);
             }
         }
 
@@ -204,8 +204,8 @@ public class MTLabeler {
         removeChildren(briefLayer);
         removeChildren(fullLayer);
 
-        for (int i = 0; i < allProvs.length; i++) {
-            TIMapEntry me = map.get(allProvs[i]);
+        for (Province province : allProvs) {
+            TIMapEntry me = map.get(province);
             briefLayer.appendChild(me.brief.getTextElement());
             fullLayer.appendChild(me.full.getTextElement());
         }

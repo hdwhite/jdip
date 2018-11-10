@@ -42,7 +42,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -862,9 +861,9 @@ public class ErrorDialog extends TextViewer {
 
 
             // system properties
-            for (Iterator iter = list.iterator(); iter.hasNext(); ) {
+            for (String line : list) {
                 sb.append("\n  ");
-                sb.append(iter.next());
+                sb.append(line);
             }
 
             sb.append('\n');
