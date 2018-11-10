@@ -161,7 +161,7 @@ public class OrderStatusPanel extends XJPanel {
         }
 
         public void actionModeChanged(String mode) {
-            if (mode == ClientFrame.MODE_ORDER) {
+            if (ClientFrame.MODE_ORDER.equals(mode)) {
                 orderField.setVisible(true);
                 orderFieldLabel.setVisible(true);
             } else {

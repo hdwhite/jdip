@@ -185,7 +185,7 @@ public class OrderControlBar extends ViewControlBar {
                 // Painting the current order in drag mode
                 // Are we dragging from a province that has a unit available to move?
                 if (inDrag && !dragLoc.equals(loc) && currentOrder.getSourceUnitType() != null) {
-                    if (MODE_MOVE == currentAction) {
+                    if (MODE_MOVE.equals(currentAction)) {
                         tempOrder = (GUIMove) guiOrderFactory.createMove(
                                 currentOrder.getPower(), dragLoc,
                                 currentOrder.getSourceUnitType(), loc, ((GUIMove) currentOrder).isViaConvoy()
@@ -195,13 +195,13 @@ public class OrderControlBar extends ViewControlBar {
                         tempOrder.setLocation(stateInfo, loc, sb);
 
                         mapPanel.getOrderDisplayPanel().addOrder(tempOrder, false);
-                    } else if (MODE_RETREAT == currentAction) {
+                    } else if (MODE_RETREAT.equals(currentAction)) {
                         tempOrder = (GUIRetreat) guiOrderFactory.createRetreat(
                                 currentOrder.getPower(), dragLoc,
                                 currentOrder.getSourceUnitType(), loc
                         );
                         mapPanel.getOrderDisplayPanel().addOrder(tempOrder, false);
-                    } else if (MODE_SUPPORT == currentAction) {
+                    } else if (MODE_SUPPORT.equals(currentAction)) {
                         if (dragSupportLoc == null) {
                             dragSupportLoc = loc;
                             doOrder(me, loc);
@@ -439,34 +439,34 @@ public class OrderControlBar extends ViewControlBar {
          *  This is amateurish but effective. Should probably be replaced by
          *  an object-oriented approach
          */
-        if (currentAction == MODE_HOLD) {
+        if (MODE_HOLD.equals(currentAction)) {
             currentOrder = guiOrderFactory.createGUIHold();
-        } else if (currentAction == MODE_MOVE) {
+        } else if (MODE_MOVE.equals(currentAction)) {
             if (useExplicitGUIMove) {
                 currentOrder = guiOrderFactory.createGUIMoveExplicit();
             } else {
                 currentOrder = guiOrderFactory.createGUIMove();
             }
-        } else if (currentAction == MODE_SUPPORT) {
+        } else if (MODE_SUPPORT.equals(currentAction)) {
             currentOrder = guiOrderFactory.createGUISupport();
-        } else if (currentAction == MODE_CONVOY) {
+        } else if (MODE_CONVOY.equals(currentAction)) {
             currentOrder = guiOrderFactory.createGUIConvoy();
-        } else if (currentAction == MODE_RETREAT) {
+        } else if (MODE_RETREAT.equals(currentAction)) {
             currentOrder = guiOrderFactory.createGUIRetreat();
-        } else if (currentAction == MODE_DISBAND) {
+        } else if (MODE_DISBAND.equals(currentAction)) {
             currentOrder = guiOrderFactory.createGUIDisband();
-        } else if (currentAction == MODE_BUILD_ARMY) {
+        } else if (MODE_BUILD_ARMY.equals(currentAction)) {
             currentOrder = guiOrderFactory.createGUIBuild();
             currentOrder.setParam(GUIBuild.BUILD_UNIT, Unit.Type.ARMY);
-        } else if (currentAction == MODE_BUILD_FLEET) {
+        } else if (MODE_BUILD_FLEET.equals(currentAction)) {
             currentOrder = guiOrderFactory.createGUIBuild();
             currentOrder.setParam(GUIBuild.BUILD_UNIT, Unit.Type.FLEET);
-        } else if (currentAction == MODE_BUILD_WING) {
+        } else if (MODE_BUILD_WING.equals(currentAction)) {
             currentOrder = guiOrderFactory.createGUIBuild();
             currentOrder.setParam(GUIBuild.BUILD_UNIT, Unit.Type.WING);
-        } else if (currentAction == MODE_REMOVE) {
+        } else if (MODE_REMOVE.equals(currentAction)) {
             currentOrder = guiOrderFactory.createGUIRemove();
-        } else if (currentAction == MODE_WAIVE_BUILD) {
+        } else if (MODE_WAIVE_BUILD.equals(currentAction)) {
             currentOrder = guiOrderFactory.createGUIWaive();
         } else {
             currentOrder = null;
@@ -590,7 +590,7 @@ public class OrderControlBar extends ViewControlBar {
                 int idx = 0;
 
                 for (int i = 0; i < GROUP_ADJUSTMENT_CMD.length; i++) {
-                    if (GROUP_ADJUSTMENT_CMD[i] != MODE_BUILD_WING) {
+                    if (!MODE_BUILD_WING.equals(GROUP_ADJUSTMENT_CMD[i])) {
                         text[idx] = GROUP_ADJUSTMENT_TEXT[i];
                         cmd[idx] = GROUP_ADJUSTMENT_CMD[i];
                         charMap[idx] = GROUP_ADJUSTMENT_CHARCODES[i];

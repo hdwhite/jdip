@@ -158,7 +158,7 @@ public class OrderFormat {
      * returning a transformed String.
      */
     private static String applyStyle(final int originalStyle, final String input) {
-        if (input == EMPTY) {
+        if (EMPTY.equals(input)) {
             return input;
         }
 

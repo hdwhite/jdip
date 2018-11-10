@@ -54,51 +54,51 @@ public abstract class AbstractCFPListener implements PropertyChangeListener {
      */
     public final void propertyChange(PropertyChangeEvent evt) {
         final String name = evt.getPropertyName();
-        if (name == ClientFrame.EVT_WORLD_CREATED) {
+        if (ClientFrame.EVT_WORLD_CREATED.equals(name)) {
             final World w = (World) evt.getNewValue();
             actionWorldCreated(w);
-        } else if (name == ClientFrame.EVT_WORLD_DESTROYED) {
+        } else if (ClientFrame.EVT_WORLD_DESTROYED.equals(name)) {
             final World w = (World) evt.getOldValue();
             actionWorldDestroyed(w);
-        } else if (name == ClientFrame.EVT_MODIFIED_STATE) {
+        } else if (ClientFrame.EVT_MODIFIED_STATE.equals(name)) {
             actionStateModified();
-        } else if (name == ClientFrame.EVT_TURNSTATE_CHANGED) {
+        } else if (ClientFrame.EVT_TURNSTATE_CHANGED.equals(name)) {
             final TurnState ts = (TurnState) evt.getNewValue();
             actionTurnstateChanged(ts);
-        } else if (name == ClientFrame.EVT_TURNSTATE_ADDED) {
+        } else if (ClientFrame.EVT_TURNSTATE_ADDED.equals(name)) {
             final TurnState ts = (TurnState) evt.getNewValue();
             actionTurnstateAdded(ts);
-        } else if (name == ClientFrame.EVT_TURNSTATE_REMOVED) {
+        } else if (ClientFrame.EVT_TURNSTATE_REMOVED.equals(name)) {
             actionTurnstateRemoved();
-        } else if (name == ClientFrame.EVT_TURNSTATE_RESOLVED) {
+        } else if (ClientFrame.EVT_TURNSTATE_RESOLVED.equals(name)) {
             final TurnState ts = (TurnState) evt.getNewValue();
             actionTurnstateResolved(ts);
-        } else if (name == ClientFrame.EVT_MODE_CHANGED) {
+        } else if (ClientFrame.EVT_MODE_CHANGED.equals(name)) {
             final String mode = (String) evt.getNewValue();
             actionModeChanged(mode);
-        } else if (name == ClientFrame.EVT_VALOPTS_CHANGED) {
+        } else if (ClientFrame.EVT_VALOPTS_CHANGED.equals(name)) {
             final ValidationOptions options = (ValidationOptions) evt.getNewValue();
             actionValOptsChanged(options);
-        } else if (name == ClientFrame.EVT_MMD_READY) {
+        } else if (ClientFrame.EVT_MMD_READY.equals(name)) {
             final MapMetadata mmd = (MapMetadata) evt.getNewValue();
             actionMMDReady(mmd);
-        } else if (name == ClientFrame.EVT_ORDER_CREATED) {
+        } else if (ClientFrame.EVT_ORDER_CREATED.equals(name)) {
             final Orderable order = (Orderable) evt.getNewValue();
             actionOrderCreated(order);
-        } else if (name == ClientFrame.EVT_ORDER_DELETED) {
+        } else if (ClientFrame.EVT_ORDER_DELETED.equals(name)) {
             final Orderable order = (Orderable) evt.getOldValue();
             actionOrderDeleted(order);
-        } else if (name == ClientFrame.EVT_MULTIPLE_ORDERS_CREATED) {
+        } else if (ClientFrame.EVT_MULTIPLE_ORDERS_CREATED.equals(name)) {
             final Orderable[] orders = (Orderable[]) evt.getNewValue();
             actionOrdersCreated(orders);
-        } else if (name == ClientFrame.EVT_MULTIPLE_ORDERS_DELETED) {
+        } else if (ClientFrame.EVT_MULTIPLE_ORDERS_DELETED.equals(name)) {
             final Orderable[] orders = (Orderable[]) evt.getOldValue();
             actionOrdersDeleted(orders);
-        } else if (name == ClientFrame.EVT_DISPLAYABLE_POWERS_CHANGED) {
+        } else if (ClientFrame.EVT_DISPLAYABLE_POWERS_CHANGED.equals(name)) {
             final Power[] newPowers = (Power[]) evt.getNewValue();
             final Power[] oldPowers = (Power[]) evt.getOldValue();
             actionDisplayablePowersChanged(oldPowers, newPowers);
-        } else if (name == ClientFrame.EVT_ORDERABLE_POWERS_CHANGED) {
+        } else if (ClientFrame.EVT_ORDERABLE_POWERS_CHANGED.equals(name)) {
             final Power[] newPowers = (Power[]) evt.getNewValue();
             final Power[] oldPowers = (Power[]) evt.getOldValue();
             actionOrderablePowersChanged(oldPowers, newPowers);

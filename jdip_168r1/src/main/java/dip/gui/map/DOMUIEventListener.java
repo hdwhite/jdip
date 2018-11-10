@@ -130,15 +130,15 @@ public class DOMUIEventListener implements EventListener {
 			}
 			*/
 
-            if (type == SVGConstants.SVG_EVENT_MOUSEOUT) {
+            if (SVGConstants.SVG_EVENT_MOUSEOUT.equals(type)) {
                 handler.mouseOut(me, location);
-            } else if (type == SVGConstants.SVG_EVENT_MOUSEOVER) {
+            } else if (SVGConstants.SVG_EVENT_MOUSEOVER.equals(type)) {
                 handler.mouseOver(me, location);
-            } else if (type == SVGConstants.SVG_EVENT_CLICK) {
+            } else if (SVGConstants.SVG_EVENT_CLICK.equals(type)) {
                 handler.mouseClicked(me, location);
-            } else if (type == SVGConstants.SVG_MOUSEDOWN_EVENT_TYPE) {
+            } else if (SVGConstants.SVG_MOUSEDOWN_EVENT_TYPE.equals(type)) {
                 handler.mouseDown(me, location);
-            } else if (type == SVGConstants.SVG_MOUSEUP_EVENT_TYPE) {
+            } else if (SVGConstants.SVG_MOUSEUP_EVENT_TYPE.equals(type)) {
                 handler.mouseUp(me, location);
             }
         } else if (evt instanceof DOMKeyEvent) {

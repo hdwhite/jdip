@@ -287,15 +287,15 @@ public class NJudgeOrderParser {
             throws OrderException {
         final String type = op.orderName;
 
-        if (type == ORDER_HOLD
-                || type == ORDER_DISBAND
-                || type == ORDER_NO_ORDERS) {
+        if (ORDER_HOLD.equals(type)
+                || ORDER_DISBAND.equals(type)
+                || ORDER_NO_ORDERS.equals(type)) {
             return parseHoldOrDisband(pc, op, tokens, type);
-        } else if (type == ORDER_MOVE) {
+        } else if (ORDER_MOVE.equals(type)) {
             return parseMove(pc, op, tokens);
-        } else if (type == ORDER_SUPPORT) {
+        } else if (ORDER_SUPPORT.equals(type)) {
             return parseSupport(pc, op, tokens);
-        } else if (type == ORDER_CONVOY) {
+        } else if (ORDER_CONVOY.equals(type)) {
             return parseConvoy(pc, op, tokens);
         }
 
@@ -390,11 +390,11 @@ public class NJudgeOrderParser {
                                          final String[] tokens, final String type) {
         // NO additional parsing
         //
-        if (type == ORDER_HOLD) {
+        if (ORDER_HOLD.equals(type)) {
             return pc.orderFactory.createHold(op.power, op.location, op.unit);
-        } else if (type == ORDER_DISBAND) {
+        } else if (ORDER_DISBAND.equals(type)) {
             return pc.orderFactory.createDisband(op.power, op.location, op.unit);
-        } else if (type == ORDER_NO_ORDERS) {
+        } else if (ORDER_NO_ORDERS.equals(type)) {
             // FIXME: create own order type for "No Orders Processed"
             return pc.orderFactory.createHold(op.power, op.location, op.unit);
         }

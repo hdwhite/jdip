@@ -701,7 +701,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
 
         public void actionModeChanged(String mode) {
             super.actionModeChanged(mode);
-            if (mode == ClientFrame.MODE_ORDER) {
+            if (ClientFrame.MODE_ORDER.equals(mode)) {
                 // disable some menu options
                 // when in order mode.
                 ClientMenu cm = clientFrame.getClientMenu();

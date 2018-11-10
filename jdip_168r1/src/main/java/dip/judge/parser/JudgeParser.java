@@ -341,7 +341,7 @@ public class JudgeParser {
             }
             line = reader.readLine();
         }
-        if (type == JP_TYPE_RESULTS) {
+        if (JP_TYPE_RESULTS.equals(type)) {
             // We are results. Get the text including the results header.
             initialText = null;
             reader.reset();
@@ -363,13 +363,13 @@ public class JudgeParser {
             if (m_gs.lookingAt()) {
                 type = JP_TYPE_GAMESTART;
             }
-            if (m_sp.lookingAt() && (type == JP_TYPE_GAMESTART)) {
+            if (m_sp.lookingAt() && (JP_TYPE_GAMESTART.equals(type))) {
                 phase = Phase.parse("Movement " + line.substring(0, line.indexOf(".")));
                 break;
             }
             line = reader.readLine();
         }
-        if (type == JP_TYPE_GAMESTART) {
+        if (JP_TYPE_GAMESTART.equals(type)) {
             // the game is starting. Get the text.
             initialText = null;
             reader.reset();

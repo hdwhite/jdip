@@ -1064,13 +1064,13 @@ public class ClientMenu {
         }// actionWorldCreated()
 
         public void actionModeChanged(String mode) {
-            if (mode == ClientFrame.MODE_NONE) {
+            if (ClientFrame.MODE_NONE.equals(mode)) {
                 setModeNone();
-            } else if (mode == ClientFrame.MODE_ORDER) {
+            } else if (ClientFrame.MODE_ORDER.equals(mode)) {
                 setModeOrder();
-            } else if (mode == ClientFrame.MODE_REVIEW) {
+            } else if (ClientFrame.MODE_REVIEW.equals(mode)) {
                 setModeReview();
-            } else if (mode == ClientFrame.MODE_EDIT) {
+            } else if (ClientFrame.MODE_EDIT.equals(mode)) {
                 setModeEdit();
             }
         }// actionModeChanged()

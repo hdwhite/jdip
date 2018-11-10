@@ -132,9 +132,9 @@ public abstract class MapRenderer2 {
      * Returns the given default if parsing fails.
      */
     public static String parseLabelValue(String in, String defaultValue) {
-        if (defaultValue != VALUE_LABELS_NONE
-                && defaultValue != VALUE_LABELS_FULL
-                && defaultValue != VALUE_LABELS_BRIEF
+        if (!VALUE_LABELS_NONE.equals(defaultValue)
+                && !VALUE_LABELS_FULL.equals(defaultValue)
+                && !VALUE_LABELS_BRIEF.equals(defaultValue)
                 && defaultValue != null) {
             throw new IllegalArgumentException();
         }

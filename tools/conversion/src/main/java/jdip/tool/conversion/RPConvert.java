@@ -233,11 +233,10 @@ public class RPConvert
 
 		// rule options (only build rule is currently set)
 		String buildType = "VALUE_BUILDS_HOME_ONLY";
-		if(variant.getBuildType() == Variant.BUILD_CHAOS)
+        if (Variant.BUILD_CHAOS.equals(variant.getBuildType()))
 		{
 			buildType = "VALUE_BUILDS_ANY_OWNED";
-		}
-		else if(variant.getBuildType() == Variant.BUILD_ABERRATION)
+		} else if (Variant.BUILD_ABERRATION.equals(variant.getBuildType()))
 		{
 			buildType = "VALUE_BUILDS_ANY_IF_HOME_OWNED";
 		}
@@ -949,8 +948,7 @@ public class RPConvert
 				throw new IllegalArgumentException();
 			}
 
-			if(type != UNIT_WING && type != UNIT_FLEET && type
-				!= UNIT_ARMY)
+            if (!UNIT_WING.equals(type) && !UNIT_FLEET.equals(type) && !UNIT_ARMY.equals(type))
 			{
 				throw new IllegalArgumentException("invalid type");
 			}

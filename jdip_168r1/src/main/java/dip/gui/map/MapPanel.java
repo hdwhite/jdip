@@ -451,12 +451,12 @@ public class MapPanel extends JPanel {
         } else {
             String mode = clientFrame.getMode();
 
-            if (mode == ClientFrame.MODE_NONE
-                    || mode == ClientFrame.MODE_REVIEW) {
+            if (ClientFrame.MODE_NONE.equals(mode)
+                    || ClientFrame.MODE_REVIEW.equals(mode)) {
                 cb = new ViewControlBar(this);
-            } else if (mode == ClientFrame.MODE_ORDER) {
+            } else if (ClientFrame.MODE_ORDER.equals(mode)) {
                 cb = new OrderControlBar(this);
-            } else if (mode == ClientFrame.MODE_EDIT) {
+            } else if (ClientFrame.MODE_EDIT.equals(mode)) {
                 cb = new EditControlBar(this);
             } else {
                 throw new IllegalArgumentException("unknown mode");

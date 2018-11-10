@@ -171,8 +171,8 @@ public class UndoRedoManager extends UndoManager {
         menu.setText(ClientMenu.EDIT_UNDO, getUndoPresentationName());
         menu.setText(ClientMenu.EDIT_REDO, getRedoPresentationName());
 
-        if (clientFrame.getMode() == ClientFrame.MODE_ORDER ||
-                clientFrame.getMode() == ClientFrame.MODE_EDIT) {
+        if (ClientFrame.MODE_ORDER.equals(clientFrame.getMode()) ||
+                ClientFrame.MODE_EDIT.equals(clientFrame.getMode())) {
             menu.setEnabled(ClientMenu.EDIT_UNDO, canUndo());
             menu.setEnabled(ClientMenu.EDIT_REDO, canRedo());
         } else {

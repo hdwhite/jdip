@@ -178,10 +178,10 @@ public class OrderDisplayPanel extends JPanel {
      * defaultValue cannot be null.
      */
     public static String parseSortValue(String in, String defaultValue) {
-        if (defaultValue != SORT_POWER
-                && defaultValue != SORT_PROVINCE
-                && defaultValue != SORT_ORDER
-                && defaultValue != SORT_UNIT
+        if (!SORT_POWER.equals(defaultValue)
+                && !SORT_PROVINCE.equals(defaultValue)
+                && !SORT_ORDER.equals(defaultValue)
+                && !SORT_UNIT.equals(defaultValue)
                 && defaultValue != null) {
             throw new IllegalArgumentException();
         }
@@ -932,7 +932,7 @@ public class OrderDisplayPanel extends JPanel {
         }// actionTurnstateChanged()
 
         public synchronized void actionModeChanged(String newMode) {
-            if (newMode == ClientFrame.MODE_ORDER) {
+            if (ClientFrame.MODE_ORDER.equals(newMode)) {
                 isEditable = true;
                 orderList.setEnabled(true);
                 orderList.clearSelection();
@@ -942,8 +942,8 @@ public class OrderDisplayPanel extends JPanel {
                 if (turnState != null) {
                     orderListModel.updateFromTurnState();
                 }
-            } else if (newMode == ClientFrame.MODE_EDIT
-                    || newMode == ClientFrame.MODE_NONE) {
+            } else if (ClientFrame.MODE_EDIT.equals(newMode)
+                    || ClientFrame.MODE_NONE.equals(newMode)) {
                 isEditable = false;
                 orderList.setEnabled(false);
                 orderList.clearSelection();

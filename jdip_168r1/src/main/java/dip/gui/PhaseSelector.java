@@ -240,8 +240,8 @@ public class PhaseSelector {
         }// actionTurnstateRemoved()
 
         public void actionModeChanged(String newMode) {
-            if (newMode == ClientFrame.MODE_NONE
-                    || newMode == ClientFrame.MODE_EDIT) {
+            if (ClientFrame.MODE_NONE.equals(newMode)
+                    || ClientFrame.MODE_EDIT.equals(newMode)) {
                 // disable history menu, completely
                 menu.setEnabled(ClientMenu.HISTORY_PREVIOUS, false);
                 menu.setEnabled(ClientMenu.HISTORY_NEXT, false);

@@ -449,12 +449,12 @@ public class PersistenceManager {
 
             // Check if the results (if any) matched the current game,
             // otherwise diplay dialog and try again
-            while ((ji.getResult() == JudgeImport.JI_RESULT_TRYREWIND) ||
-                    (ji.getResult() == JudgeImport.JI_RESULT_LOADOTHER)) {
+            while ((JudgeImport.JI_RESULT_TRYREWIND.equals(ji.getResult())) ||
+                    (JudgeImport.JI_RESULT_LOADOTHER.equals(ji.getResult()))) {
                 String gameInfo = ji.getGameInfo();
                 Phase phase = Phase.parse(gameInfo);
 
-                if (ji.getResult() == JudgeImport.JI_RESULT_TRYREWIND) {
+                if (JudgeImport.JI_RESULT_TRYREWIND.equals(ji.getResult())) {
                     // we need to rewind the current game
                     if (rewindDialog(phase)) {
                         // rewind current game
@@ -499,7 +499,7 @@ public class PersistenceManager {
                 ji = new JudgeImport(clientFrame.getGUIOrderFactory(), file, currentWorld);
             }
 
-            if (ji.getResult() == JudgeImport.JI_RESULT_THISWORLD) {
+            if (JudgeImport.JI_RESULT_THISWORLD.equals(ji.getResult())) {
                 // show results (if desired)
                 if (GeneralPreferencePanel.getShowResolutionResults()) {
                     final TurnState priorTS = clientFrame.getWorld().getPreviousTurnState(clientFrame.getWorld().getLastTurnState());
@@ -507,7 +507,7 @@ public class PersistenceManager {
                 }
             }
 
-            if (ji.getResult() == JudgeImport.JI_RESULT_NEWWORLD) {
+            if (JudgeImport.JI_RESULT_NEWWORLD.equals(ji.getResult())) {
                 if (confirmDialog()) {
                     world = ji.getWorld();
                     fileName = null;

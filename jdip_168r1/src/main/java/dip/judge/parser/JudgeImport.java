@@ -194,14 +194,14 @@ public class JudgeImport {
         }
 
         // activate listing or history parsing
-        if (jp.getType() == JudgeParser.JP_TYPE_LISTING) {
+        if (JudgeParser.JP_TYPE_LISTING.equals(jp.getType())) {
             procListing(position);
-        } else if (jp.getType() == JudgeParser.JP_TYPE_HISTORY) {
+        } else if (JudgeParser.JP_TYPE_HISTORY.equals(jp.getType())) {
             JudgeImportHistory jih = new JudgeImportHistory(orderFactory, world, jp, position);
             world = jih.getWorld();
-        } else if (jp.getType() == JudgeParser.JP_TYPE_RESULTS) {
+        } else if (JudgeParser.JP_TYPE_RESULTS.equals(jp.getType())) {
             procResults(jp, variant.getName());
-        } else if (jp.getType() == JudgeParser.JP_TYPE_GAMESTART) {
+        } else if (JudgeParser.JP_TYPE_GAMESTART.equals(jp.getType())) {
             jp.prependText("Subject: " + jp.getJudgeName() + ":" + jp.getGameName() + " - " +
                     jp.getPhase().getBriefName() + " Game Starting\n");
             JudgeImportHistory jih = new JudgeImportHistory(orderFactory, world, jp, position);

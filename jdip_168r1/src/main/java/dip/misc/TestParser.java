@@ -750,20 +750,20 @@ public class TestParser {
 
 
                     String key = getKeyword(line);
-                    if (key == KEY_VARIANT) {
+                    if (KEY_VARIANT.equals(key)) {
                         if (variantName != null) {
                             lnrErrorExit(lnr, "VARIANT already defined.");
                         }
 
                         variantName = getPostKeywordText(line).trim();
                         setupVariant();
-                    } else if (key == KEY_SETUP) {
+                    } else if (KEY_SETUP.equals(key)) {
                         if (posList != null) {
                             lnrErrorExit(lnr, "SETUP block already defined.");
                         }
 
                         accum = new ArrayList<>(50);
-                    } else if (key == KEY_END) {
+                    } else if (KEY_END.equals(key)) {
                         if (accum == null) {
                             lnrErrorExit(lnr, "END line must be after a SETUP line or SETUPDISLODGED line.");
                         }
@@ -781,7 +781,7 @@ public class TestParser {
                             setupPositions(posList, dislodgedPosList);
                             setupDone = true;
                         }
-                    } else if (key == KEY_SETUPDISLODGED) {
+                    } else if (KEY_SETUPDISLODGED.equals(key)) {
                         if (posList == null) {
                             lnrErrorExit(lnr, "SETUPDISLODGED must be after a SETUP block.");
                         }
@@ -791,7 +791,7 @@ public class TestParser {
                         }
 
                         accum = new ArrayList<>(50);
-                    } else if (key == KEY_ORDER) {
+                    } else if (KEY_ORDER.equals(key)) {
                         if (!setupDone) {
                             lnrErrorExit(lnr, "ORDER (or ORD) keyword must be after SETUP block complete.");
                         }
@@ -803,7 +803,7 @@ public class TestParser {
                         currentCase = new ORPair();
                         currentCase.setOrder(getPostKeywordText(line));
                         currentCase.setLineNumber(lnr.getLineNumber());
-                    } else if (key == KEY_RESULT) {
+                    } else if (KEY_RESULT.equals(key)) {
                         if (!setupDone) {
                             lnrErrorExit(lnr, "RESULT (or RES) keyword must be after SETUP block complete.");
                         }
@@ -815,7 +815,7 @@ public class TestParser {
                         currentCase.setResult(getPostKeywordText(line));
                         cases.add(currentCase);
                         currentCase = null;
-                    } else if (key == KEY_COMMENT) {
+                    } else if (KEY_COMMENT.equals(key)) {
                         // do nothing
                     } else {
                         // add lines to accumulator

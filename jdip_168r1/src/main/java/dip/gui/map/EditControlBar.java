@@ -286,9 +286,9 @@ public class EditControlBar extends ViewControlBar {
                 // make RMB add the 'other unit' that is selected,
                 // if an army or fleet is selected. if a wing or anything
                 // else is selected, RMB doesn't apply
-                if (currentAction == CLICK_TO_ADD_FLEET) {
+                if (CLICK_TO_ADD_FLEET.equals(currentAction)) {
                     currentAction = CLICK_TO_ADD_ARMY;
-                } else if (currentAction == CLICK_TO_ADD_ARMY) {
+                } else if (CLICK_TO_ADD_ARMY.equals(currentAction)) {
                     currentAction = CLICK_TO_ADD_FLEET;
                 } else {
                     currentAction = defaultAction;
@@ -314,10 +314,10 @@ public class EditControlBar extends ViewControlBar {
         if (checkValidity(loc)) {
             Province province = loc.getProvince();
             // Removes first
-            if (currentAction == CLICK_TO_ADD_FLEET ||
-                    currentAction == CLICK_TO_ADD_ARMY ||
-                    currentAction == CLICK_TO_ADD_WING ||
-                    currentAction == CLICK_TO_REMOVE) {
+            if (CLICK_TO_ADD_FLEET.equals(currentAction) ||
+                    CLICK_TO_ADD_ARMY.equals(currentAction) ||
+                    CLICK_TO_ADD_WING.equals(currentAction) ||
+                    CLICK_TO_REMOVE.equals(currentAction)) {
                 if (hasUnit(loc.getProvince())) {
                     // get old unit
                     Unit oldUnit = (isDislodged()) ? position.getDislodgedUnit(province) : position.getUnit(province);
@@ -327,7 +327,7 @@ public class EditControlBar extends ViewControlBar {
                     undoManager.addEdit(new UndoEditRemoveUnit(undoManager, position, province, oldUnit, isDislodged()));
                 }
             }
-            if (currentAction == CLICK_TO_ADD_ARMY) {
+            if (CLICK_TO_ADD_ARMY.equals(currentAction)) {
                 // add an army
                 Unit army = new Unit(currentPower, Unit.Type.ARMY);
                 army.setCoast(Coast.NONE);
@@ -335,7 +335,7 @@ public class EditControlBar extends ViewControlBar {
 
                 undoManager.addEdit(new UndoEditAddUnit(undoManager, position, province, army, isDislodged()));
             }
-            if (currentAction == CLICK_TO_ADD_FLEET) {
+            if (CLICK_TO_ADD_FLEET.equals(currentAction)) {
                 // add a fleet
                 Unit fleet = new Unit(currentPower, Unit.Type.FLEET);
                 if (province.isMultiCoastal()) {
@@ -352,7 +352,7 @@ public class EditControlBar extends ViewControlBar {
                 addUnit(province, fleet, isDislodged());
                 undoManager.addEdit(new UndoEditAddUnit(undoManager, position, province, fleet, isDislodged()));
             }
-            if (currentAction == CLICK_TO_ADD_WING) {
+            if (CLICK_TO_ADD_WING.equals(currentAction)) {
                 // add a Wing
                 Unit wing = new Unit(currentPower, Unit.Type.WING);
                 wing.setCoast(Coast.WING);
@@ -360,7 +360,7 @@ public class EditControlBar extends ViewControlBar {
 
                 undoManager.addEdit(new UndoEditAddUnit(undoManager, position, province, wing, isDislodged()));
             }
-            if (currentAction == CLICK_TO_SET_SC) {
+            if (CLICK_TO_SET_SC.equals(currentAction)) {
                 // change supply center ownership
                 Power oldPower = position.getSupplyCenterOwner(province);
                 changeSCOwner(province, currentPower);
@@ -450,30 +450,30 @@ public class EditControlBar extends ViewControlBar {
     public boolean checkValidity(Location loc) {
         // determine validity
         Province province = loc.getProvince();
-        if (currentAction == CLICK_TO_ADD_ARMY && currentPower != null) {
+        if (CLICK_TO_ADD_ARMY.equals(currentAction) && currentPower != null) {
             if (province.isSea()) {
                 mapPanel.statusBarUtils.displayProvinceInfo(loc, Utils.getLocalString(ERR_NO_ARMY_IN_SEA));
                 return false;
             } else {
                 return true;
             }
-        } else if (currentAction == CLICK_TO_ADD_FLEET && currentPower != null) {
+        } else if (CLICK_TO_ADD_FLEET.equals(currentAction) && currentPower != null) {
             if (province.isLandLocked()) {
                 mapPanel.statusBarUtils.displayProvinceInfo(loc, Utils.getLocalString(ERR_NO_FLEET_IN_LANDLOCKED));
                 return false;
             } else {
                 return true;
             }
-        } else if (currentAction == CLICK_TO_ADD_WING && currentPower != null) {
+        } else if (CLICK_TO_ADD_WING.equals(currentAction) && currentPower != null) {
             return true;
-        } else if (currentAction == CLICK_TO_SET_SC) {
+        } else if (CLICK_TO_SET_SC.equals(currentAction)) {
             if (province.hasSupplyCenter()) {
                 return true;
             } else {
                 mapPanel.statusBarUtils.displayProvinceInfo(loc, Utils.getLocalString(ERR_NO_SC));
                 return false;
             }
-        } else if (currentAction == CLICK_TO_REMOVE) {
+        } else if (CLICK_TO_REMOVE.equals(currentAction)) {
             if (position.hasUnit(province)) {
                 return true;
             } else {
