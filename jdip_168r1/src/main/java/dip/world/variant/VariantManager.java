@@ -184,8 +184,8 @@ public class VariantManager {
 
                     // add variants; variants with same name (but older versions) are
                     // replaced with same-name newer versioned variants
-                    for (int vi = 0; vi < variants.length; vi++) {
-                        addVariant(variants[vi], pluginName, pluginURL);
+                    for (Variant variant : variants) {
+                        addVariant(variant, pluginName, pluginURL);
                     }
                 } catch (IOException e) {
                     // display error dialog
@@ -225,8 +225,8 @@ public class VariantManager {
 
                         // add variants; variants with same name (but older versions) are
                         // replaced with same-name newer versioned variants
-                        for (int vi = 0; vi < variants.length; vi++) {
-                            addVariant(variants[vi], pluginName, variantURL);
+                        for (Variant variant : variants) {
+                            addVariant(variant, pluginName, variantURL);
                         }
                     } catch (IOException e) {
                         // display error dialog

@@ -182,8 +182,8 @@ public class Exporter implements Tool {
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
 
-            for (int i = 0; i < turnStates.length; i++) {
-                bw.write(XMLExport.export(turnStates[i], ""));
+            for (TurnState turnState : turnStates) {
+                bw.write(XMLExport.export(turnState, ""));
             }
         } catch (IOException e) {
             ErrorDialog.displayFileIO(clientFrame, e, file.toString());
