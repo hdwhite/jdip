@@ -16,10 +16,10 @@
  */
 package org.nukesoft.jdipFacade;
 
-import dip.process.Adjustment;
-import dip.world.Power;
-import dip.world.TurnState;
-import dip.world.World;
+import info.jdip.process.Adjustment;
+import info.jdip.world.Power;
+import info.jdip.world.TurnState;
+import info.jdip.world.World;
 import org.nukesoft.jdipFacade.exception.PowerNotFoundException;
 
 

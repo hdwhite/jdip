@@ -16,7 +16,7 @@
  */
 package org.nukesoft.jdipFacade;
 
-import dip.order.OrderFactory;
+import info.jdip.order.OrderFactory;
 
 
 /**

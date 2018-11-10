@@ -16,11 +16,11 @@
  */
 package org.nukesoft.jdipFacade;
 
-import dip.process.Adjudicator;
-import dip.process.StdAdjudicator;
-import dip.world.TurnState;
-import dip.world.World;
-import dip.world.variant.VariantManager;
+import info.jdip.process.Adjudicator;
+import info.jdip.process.StdAdjudicator;
+import info.jdip.world.TurnState;
+import info.jdip.world.World;
+import info.jdip.world.variant.VariantManager;
 import org.nukesoft.jdipFacade.exception.JdipException;
 import org.nukesoft.jdipFacade.exception.StateError;
 

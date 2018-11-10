@@ -12,7 +12,7 @@ dependencies {
 jar {
     baseName = "ExportTool"
     manifest {
-        attributes 'Main-Class': 'jdip.plugin.export.Exporter'
+        attributes 'Main-Class': 'info.jdip.plugin.export.Exporter'
     }
 }
 

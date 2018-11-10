@@ -27,8 +27,8 @@ You will probably need to modify the codebase path to work
 	<security>
 		<all-permissions/>
 	</security>
-	
-	<application-desc main-class="dip.gui.splash"/>
+
+	<application-desc main-class="info.jdip.gui.splash"/>
   
 	<resources>
 		<j2se version="1.4+" href="http://java.sun.com/products/autodl/j2se" initial-heap-size="64m" max-heap-size="192m"/>

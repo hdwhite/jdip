@@ -1,3 +1,3 @@
-@java -cp jdip.jar dip.misc.TestSuite -brief datc.txt >datc_out
+@java -cp jdip.jar info.jdip.misc.TestSuite -brief datc.txt >datc_out
 
 

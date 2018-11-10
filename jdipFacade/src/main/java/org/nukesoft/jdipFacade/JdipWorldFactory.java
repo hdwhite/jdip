@@ -16,12 +16,12 @@
  */
 package org.nukesoft.jdipFacade;
 
-import dip.world.InvalidWorldException;
-import dip.world.RuleOptions;
-import dip.world.World;
-import dip.world.WorldFactory;
-import dip.world.variant.VariantManager;
-import dip.world.variant.data.Variant;
+import info.jdip.world.InvalidWorldException;
+import info.jdip.world.RuleOptions;
+import info.jdip.world.World;
+import info.jdip.world.WorldFactory;
+import info.jdip.world.variant.VariantManager;
+import info.jdip.world.variant.data.Variant;
 import org.nukesoft.jdipFacade.exception.JdipException;
 import org.nukesoft.jdipFacade.exception.ResourceLoadException;
 

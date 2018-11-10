@@ -49,7 +49,7 @@ various Border properties.
 			<BORDER id="seasonBorder" description="Season: Spring" season="Spring"/>
 			<BORDER id="phaseBorder" description="Phase: Movement" phase="Movement"/>
 			<BORDER id="unitBorder" description="UnitTypes: Fleet,Wing" unitTypes="Fleet, Wing"/>
-			<BORDER id="orderBorder" description="OrderTypes: dip.order.Move" orderTypes="dip.order.Move"/>
+            <BORDER id="orderBorder" description="OrderTypes: info.jdip.order.Move" orderTypes="info.jdip.order.Move"/>
 			
 			<!-- year testing -->
 			<BORDER id="yearSingle" description="Single Year: 1914" year="1914,1914"/>

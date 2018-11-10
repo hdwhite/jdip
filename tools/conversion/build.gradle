@@ -8,7 +8,7 @@ repositories {
 jar {
     baseName = "judgeconvert"
     manifest {
-        attributes 'Main-Class': 'jdip.tool.conversion.MapConvert'
+        attributes 'Main-Class': 'info.jdip.tool.conversion.MapConvert'
     }
 }
 

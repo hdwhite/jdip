@@ -16,12 +16,12 @@
  */
 package org.nukesoft.jdipFacade;
 
-import dip.order.OrderFormatOptions;
-import dip.order.Orderable;
-import dip.order.result.OrderResult;
-import dip.order.result.OrderResult.ResultType;
-import dip.order.result.Result;
-import dip.world.Power;
+import info.jdip.order.OrderFormatOptions;
+import info.jdip.order.Orderable;
+import info.jdip.order.result.OrderResult;
+import info.jdip.order.result.OrderResult.ResultType;
+import info.jdip.order.result.Result;
+import info.jdip.world.Power;
 
 
 /**

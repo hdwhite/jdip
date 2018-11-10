@@ -2,11 +2,11 @@
 <project name="jDip_plugin_maptool" default="build" basedir=".">
 	
 	<!--
-		BUILD file for jdip plugins: MapTool
+		BUILD file for jdip plugins: info.jdip.plugin.maptool.MapTool
 	-->
 	
 	<!-- unique properties for this plugin -->
-	<property name="plugin.name" value="MapTool"/>
+	<property name="plugin.name" value="info.jdip.plugin.maptool.MapTool"/>
 	
 	<!-- where jdip.jar is, and any associated jdip libraries -->
 	<property name="jdip.base" value="../../jdip_1_5"/>

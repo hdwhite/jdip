@@ -1,6 +1,6 @@
 package info.jdip.datc;
 
-import dip.misc.TestSuite;
+import info.jdip.misc.TestSuite;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.io.File;

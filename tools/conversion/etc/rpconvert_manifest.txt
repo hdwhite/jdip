@@ -1,3 +1,3 @@
-Main-Class: jdip.tool.conversion.RPConvert
+Main-Class: info.jdip.tool.conversion.RPConvert
 
 

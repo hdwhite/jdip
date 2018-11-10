@@ -1,13 +1,13 @@
 package info.jdip.datc;
 
-import dip.misc.TestSuite;
-import dip.order.DefineState;
-import dip.order.OrderFactory;
-import dip.process.StdAdjudicator;
-import dip.world.Position;
-import dip.world.Province;
-import dip.world.TurnState;
-import dip.world.World;
+import info.jdip.misc.TestSuite;
+import info.jdip.order.DefineState;
+import info.jdip.order.OrderFactory;
+import info.jdip.process.StdAdjudicator;
+import info.jdip.world.Position;
+import info.jdip.world.Province;
+import info.jdip.world.TurnState;
+import info.jdip.world.World;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
