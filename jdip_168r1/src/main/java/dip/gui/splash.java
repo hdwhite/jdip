@@ -55,8 +55,8 @@ public final class splash {
 
         // check for a 'nosplash' argument
         boolean noSplash = false;
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equalsIgnoreCase("-nosplash")) {
+        for (String arg : args) {
+            if (arg.equalsIgnoreCase("-nosplash")) {
                 noSplash = true;
                 break;
             }

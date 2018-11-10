@@ -32,6 +32,6 @@ public interface SymbolParser {
     /**
      * Returns the SymbolPack
      */
-    public SymbolPack getSymbolPack();
+    SymbolPack getSymbolPack();
 
 }// interface SymbolParser

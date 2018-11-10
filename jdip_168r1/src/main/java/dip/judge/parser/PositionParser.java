@@ -203,7 +203,7 @@ public class PositionParser {
             throws IOException {
         phaseType = (phaseType == null) ? "Movement" : phaseType;
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(phaseType);
         sb.append(' ');
         sb.append(seasonType);
@@ -259,7 +259,7 @@ public class PositionParser {
          * For debugging only; this may change between versions.
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append("PositionInfo[power=");
             sb.append(power);
             sb.append(",unit=");

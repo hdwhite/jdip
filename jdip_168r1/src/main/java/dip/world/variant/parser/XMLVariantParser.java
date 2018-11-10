@@ -249,7 +249,7 @@ public class XMLVariantParser implements VariantParser {
 
             // VARIANT attributes
             variant.setName(elVariant.getAttribute(ATT_NAME));
-            variant.setDefault(Boolean.valueOf(elVariant.getAttribute(ATT_DEFAULT)).booleanValue());
+            variant.setDefault(Boolean.valueOf(elVariant.getAttribute(ATT_DEFAULT)));
             variant.setVersion(parseFloat(elVariant.getAttribute(ATT_VERSION)));
             variant.setAliases(Utils.parseCSV(elVariant.getAttribute(ATT_ALIASES)));
 
@@ -263,7 +263,7 @@ public class XMLVariantParser implements VariantParser {
             element = getSingleElementByName(elVariant, EL_STARTINGTIME);
             checkElement(element, EL_STARTINGTIME);
             variant.setStartingPhase(Phase.parse(element.getAttribute(ATT_TURN)));
-            variant.setBCYearsAllowed(Boolean.valueOf(element.getAttribute(ATT_ALLOW_BC_YEARS)).booleanValue());
+            variant.setBCYearsAllowed(Boolean.valueOf(element.getAttribute(ATT_ALLOW_BC_YEARS)));
 
             // if start is BC, and BC years are not allowed, then BC years ARE allowed.
             if (variant.getStartingPhase().getYear() < 0) {
@@ -296,7 +296,7 @@ public class XMLVariantParser implements VariantParser {
             for (int j = 0; j < nodeListLen; j++) {
                 element = (Element) nodes.item(j);
                 String name = element.getAttribute(ATT_NAME);
-                final boolean isActive = Boolean.valueOf(element.getAttribute(ATT_ACTIVE)).booleanValue();
+                final boolean isActive = Boolean.valueOf(element.getAttribute(ATT_ACTIVE));
                 String adjective = element.getAttribute(ATT_ADJECTIVE);
                 String[] altNames = Utils.parseCSVXE(element.getAttribute(ATT_ALTNAMES));
 
@@ -546,17 +546,8 @@ public class XMLVariantParser implements VariantParser {
 
             // parse resolved URI
             //Log.println("  AdjCache: not in cache: ", adjacencyURI);
-            InputStream is = null;
-            try {
-                is = new BufferedInputStream(url.openStream());
+            try (InputStream is = new BufferedInputStream(url.openStream())) {
                 pp.parse(is);
-            } finally {
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (IOException e) {
-                    }
-                }
             }
 
             // cache and return parsed data.

@@ -153,7 +153,7 @@ public class DislodgedResult extends OrderResult {
         }
 
         // create retreat list
-        StringBuffer retreats = new StringBuffer(128);
+        StringBuilder retreats = new StringBuilder(128);
         if (retreatLocations != null) {
             for (int i = 0; i < retreatLocations.length; i++) {
                 retreats.append(' ');
@@ -196,9 +196,9 @@ public class DislodgedResult extends OrderResult {
         } else if (retreatLocations.length == 0) {
             sb.append(" none");
         } else {
-            for (int i = 0; i < retreatLocations.length; i++) {
+            for (Location retreatLocation : retreatLocations) {
                 sb.append(' ');
-                retreatLocations[i].appendBrief(sb);
+                retreatLocation.appendBrief(sb);
             }
         }
 

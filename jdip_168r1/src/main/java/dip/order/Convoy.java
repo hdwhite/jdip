@@ -178,12 +178,10 @@ public class Convoy extends Order {
     public boolean equals(Object obj) {
         if (obj instanceof Convoy) {
             Convoy convoy = (Convoy) obj;
-            if (super.equals(convoy)
+            return super.equals(convoy)
                     && this.convoySrc.equals(convoy.convoySrc)
                     && this.convoyUnitType.equals(convoy.convoyUnitType)
-                    && this.convoyDest.equals(convoy.convoyDest)) {
-                return true;
-            }
+                    && this.convoyDest.equals(convoy.convoyDest);
         }
         return false;
     }// equals()
@@ -348,8 +346,8 @@ public class Convoy extends Order {
             // moves against us have failed.
             boolean isSuccess = true;
             OrderState[] depMovesToSrc = thisOS.getDependentMovesToSource();
-            for (int i = 0; i < depMovesToSrc.length; i++) {
-                if (depMovesToSrc[i].getEvalState() != Tristate.FAILURE) {
+            for (OrderState orderState : depMovesToSrc) {
+                if (orderState.getEvalState() != Tristate.FAILURE) {
                     isSuccess = false;
                     break;
                 }

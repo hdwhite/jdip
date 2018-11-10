@@ -32,6 +32,7 @@ import dip.order.OrderFormatOptions;
 import dip.order.Orderable;
 import dip.order.Support;
 import dip.order.result.OrderResult;
+import dip.order.result.Result;
 import dip.world.Phase;
 import dip.world.Power;
 import dip.world.TurnState;
@@ -42,7 +43,6 @@ import javax.swing.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -133,7 +133,7 @@ public class OrderStatsWriter {
 
 
     private String makeTable(final MovePhaseTurnData[] mptds, int type) {
-        StringBuffer sb = new StringBuffer(4096);
+        StringBuilder sb = new StringBuilder(4096);
 
         sb.append("<table cellspacing=\"3\" cellpadding=\"1\" border=\"0\">");
 
@@ -142,9 +142,9 @@ public class OrderStatsWriter {
         //
         sb.append("<tr>");
         sb.append("<td></td>");        // empty
-        for (int i = 0; i < allPowers.length; i++) {
+        for (Power power : allPowers) {
             sb.append("<td><b> &nbsp;");
-            sb.append(allPowers[i].getName());
+            sb.append(power.getName());
             sb.append("&nbsp; </b></td>");
         }
         sb.append("<td>");
@@ -219,12 +219,12 @@ public class OrderStatsWriter {
     }// makeOrderSuccessRateTable()
 
     private String makeSupportRateTable(final MovePhaseTurnData[] mptds) {
-        StringBuffer sb = new StringBuffer(4096);
+        StringBuilder sb = new StringBuilder(4096);
         return sb.toString();
     }// makeSupportRateTable()
 
     private String makeNonSelfSupportRateTable(final MovePhaseTurnData[] mptds) {
-        StringBuffer sb = new StringBuffer(4096);
+        StringBuilder sb = new StringBuilder(4096);
         return sb.toString();
     }// makeNonSelfSupportRateTable()
 
@@ -234,15 +234,13 @@ public class OrderStatsWriter {
      * ONLY Movement TURNS are used to create statistical data.
      */
     public MovePhaseTurnData[] collectData() {
-        List turns = world.getAllTurnStates();
+        List<TurnState> turns = world.getAllTurnStates();
         ArrayList<MovePhaseTurnData> data = new ArrayList<>(turns.size());
 
-        Iterator iter = turns.iterator();
-        while (iter.hasNext()) {
-            TurnState ts = (TurnState) iter.next();
-            if (ts.isResolved() &&
-                    Phase.PhaseType.MOVEMENT.equals(ts.getPhase().getPhaseType())) {
-                data.add(new MovePhaseTurnData(ts));
+        for (TurnState turn : turns) {
+            if (turn.isResolved() &&
+                    Phase.PhaseType.MOVEMENT.equals(turn.getPhase().getPhaseType())) {
+                data.add(new MovePhaseTurnData(turn));
             }
         }
 
@@ -284,9 +282,9 @@ public class OrderStatsWriter {
                 throw new IllegalArgumentException();
             }
 
-            for (int i = 0; i < stats.length; i++) {
-                if (p.equals(stats[i].getPower())) {
-                    return stats[i];
+            for (Stats stat : stats) {
+                if (p.equals(stat.getPower())) {
+                    return stat;
                 }
             }
 
@@ -297,9 +295,7 @@ public class OrderStatsWriter {
         private void collectStats(TurnState ts) {
             // create order-result mapping
             HashMap<Orderable, Boolean> resultMap = new HashMap<>(53);
-            Iterator iter = ts.getResultList().iterator();
-            while (iter.hasNext()) {
-                Object obj = iter.next();
+            for (Result obj : ts.getResultList()) {
                 if (obj instanceof OrderResult) {
                     OrderResult ordRes = (OrderResult) obj;
 
@@ -316,11 +312,9 @@ public class OrderStatsWriter {
 
                 s.isEliminated = ts.getPosition().isEliminated(allPowers[i]);
 
-                iter = ts.getOrders(allPowers[i]).iterator();
-                while (iter.hasNext()) {
+                for (Orderable order : ts.getOrders(allPowers[i])) {
                     s.nOrders++;
 
-                    final Orderable order = (Orderable) iter.next();
                     final boolean success = (resultMap.get(order) == Boolean.TRUE);
 
                     if (order instanceof Move) {

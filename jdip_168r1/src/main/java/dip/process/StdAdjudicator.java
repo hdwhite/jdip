@@ -326,8 +326,7 @@ public class StdAdjudicator implements Adjudicator {
     private void checkOrders() {
         Power[] powers = world.getMap().getPowers();
 
-        for (int i = 0; i < powers.length; i++) {
-            Power power = powers[i];
+        for (Power power : powers) {
             Iterator iter = turnState.getOrders(power).iterator();
             while (iter.hasNext()) {
                 Orderable order = (Orderable) iter.next();
@@ -358,13 +357,12 @@ public class StdAdjudicator implements Adjudicator {
         //
         // make sure that each location in the OrderState mapping has a corresponding unit,
         // If an order exists for a province without a unit, the order is deleted.
-        List orderList = turnState.getAllOrders();
+        List<Orderable> orderList = turnState.getAllOrders();
         // temporary list for holding orders; ASSUME that we won't be adding too many orders.
         ArrayList<OrderState> osList = new ArrayList<>(orderList.size());
 
-        Iterator iter = orderList.iterator();
-        while (iter.hasNext()) {
-            Order order = (Order) iter.next();
+        for (Orderable orderable : orderList) {
+            Order order = (Order) orderable;
             OrderState os = new OrderState(order);
             Province province = os.getSourceProvince();
 
@@ -389,8 +387,7 @@ public class StdAdjudicator implements Adjudicator {
         // ensure that each unit has a corresponding OrderState. If a unit has no corresponding
         // OrderState, an OrderState with a Hold order is used.
         Province[] unitList = position.getUnitProvinces();
-        for (int i = 0; i < unitList.length; i++) {
-            Province province = unitList[i];
+        for (Province province : unitList) {
             if (!osMap.containsKey(province)) {
                 Unit unit = position.getUnit(province);
                 Hold hold = orderFactory.createHold(unit.getPower(), new Location(province, unit.getCoast()), unit.getType());
@@ -422,8 +419,7 @@ public class StdAdjudicator implements Adjudicator {
         ValidationOptions valOpts = new ValidationOptions();
         valOpts.setOption(ValidationOptions.KEY_GLOBAL_PARSING, ValidationOptions.VALUE_GLOBAL_PARSING_STRICT);
 
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
+        for (OrderState os : orderStates) {
             Order order = os.getOrder();
 
             // validate order (Strict, No warnings)
@@ -455,8 +451,7 @@ public class StdAdjudicator implements Adjudicator {
 
 
         // step 4: calculate dependencies
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
+        for (OrderState os : orderStates) {
             Order order = os.getOrder();
             order.determineDependencies(this);
         }
@@ -500,9 +495,7 @@ public class StdAdjudicator implements Adjudicator {
         int totalMoves = 0;
         int totalNonMoves = 0;
 
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
-
+        for (OrderState os : orderStates) {
             if (os.getOrder() instanceof Move) {
                 totalMoves++;
             } else {
@@ -540,9 +533,7 @@ public class StdAdjudicator implements Adjudicator {
             // d) if power isn't active (e.g., Italy in a 6-player game), and
             //    its unit is dislodged, it will be automatically disbanded (later)
             // e) set flag indicating if any units are dislodged
-            for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-                OrderState os = orderStates[osIdx];
-
+            for (OrderState os : orderStates) {
                 // convert maybe->certain
                 if (os.getDislodgedState() == Tristate.MAYBE) {
                     Log.println("dislodged: maybe -> yes: ", os.getOrder());
@@ -582,9 +573,7 @@ public class StdAdjudicator implements Adjudicator {
         // successfully gets a success result.
         //
         // CHANGE [5/03]: dislodged units cannot be successful
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
-
+        for (OrderState os : orderStates) {
             if (os.getEvalState() == Tristate.UNCERTAIN) {
                 //Log.println("uncertain: uncertain -> yes: ", os.getOrder()+"; dislodged: ",os.getDislodgedState());
                 if (os.getDislodgedState() == Tristate.YES) {
@@ -602,9 +591,7 @@ public class StdAdjudicator implements Adjudicator {
 
         // report statistics, if enabled
         if (statReporting) {
-            iter = resultList.iterator();
-            while (iter.hasNext()) {
-                Result r = (Result) iter.next();
+            for (Result r : resultList) {
                 if (r instanceof BouncedResult) {
                     Log.println("-- setting stats for: BouncedResult: ", r);
                     BouncedResult br = (BouncedResult) r;
@@ -659,13 +646,12 @@ public class StdAdjudicator implements Adjudicator {
         nextTurnState.setWorld(turnState.getWorld());
 
         // create units in the appropriate place.
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
+        for (OrderState os : orderStates) {
             Order order = os.getOrder();
             Province sourceProvince = os.getSourceProvince();
 
             // clone the old unit (from the old position)
-            Unit newUnit = (Unit) position.getUnit(sourceProvince).clone();
+            Unit newUnit = position.getUnit(sourceProvince).copy();
 
             if (os.getDislodgedState() == Tristate.YES) {
                 // unit remains in same location / coast, but in dislodged area
@@ -740,8 +726,7 @@ public class StdAdjudicator implements Adjudicator {
             boolean areAllDestroyed = true;
 
             final Province[] provinces = nextPosition.getProvinces();
-            for (int i = 0; i < provinces.length; i++) {
-                Province prov = provinces[i];
+            for (Province prov : provinces) {
                 Unit unit = nextPosition.getDislodgedUnit(prov);
                 if (unit != null) {
                     if (rc.hasRetreats(new Location(prov, unit.getCoast()))) {
@@ -814,9 +799,7 @@ public class StdAdjudicator implements Adjudicator {
             // for logging statistics only:
             iterations++;
 
-            for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-                OrderState os = orderStates[osIdx];
-
+            for (OrderState os : orderStates) {
                 // evaluate each order
                 os.getOrder().evaluate(this);
 
@@ -905,8 +888,7 @@ public class StdAdjudicator implements Adjudicator {
                 Log.println("paradox: order status:");
                 Log.println("======================");
 
-                for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-                    OrderState os = orderStates[osIdx];
+                for (OrderState os : orderStates) {
                     Log.println("  > ", os.getOrder(), " ", os.getEvalState());
                 }
 
@@ -940,8 +922,7 @@ public class StdAdjudicator implements Adjudicator {
         Log.println(":: circular chains found: ", nCircular);
 
         if (nCircular > 0) {
-            for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-                OrderState os = orderStates[osIdx];
+            for (OrderState os : orderStates) {
                 if (os.getEvalState() == Tristate.UNCERTAIN
                         && os.isCircular()) {
                     os.setEvalState(Tristate.SUCCESS);
@@ -976,8 +957,7 @@ public class StdAdjudicator implements Adjudicator {
         addResult(new Result(null, Utils.getLocalString(STDADJ_MV_SZYKMAN_NOTICE)));
         Log.println("breakParadoxSzykman(): entered");
 
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
+        for (OrderState os : orderStates) {
             if (os.getEvalState() == Tristate.UNCERTAIN
                     && os.getOrder() instanceof Move) {
                 Move move = (Move) os.getOrder();
@@ -985,9 +965,7 @@ public class StdAdjudicator implements Adjudicator {
                 if (move.isConvoying()) {
                     Log.println("  checking move: ", move);
 
-                    Iterator it = getConvoyList(move).iterator();
-                    while (it.hasNext()) {
-                        OrderState itos = (OrderState) it.next();
+                    for (OrderState itos : getConvoyList(move)) {
 
                         Log.println("    convoy: ", itos.getOrder(), "  evalstate:", itos.getEvalState());
                         if (itos.getEvalState() == Tristate.UNCERTAIN) {
@@ -1018,8 +996,7 @@ public class StdAdjudicator implements Adjudicator {
             nLastVerified = 0;
             nRemainingToVerify = orderStates.length;
 
-            for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-                final OrderState os = orderStates[osIdx];
+            for (final OrderState os : orderStates) {
                 if (!os.isVerified()) {
                     os.getOrder().verify(this);
                     if (os.isVerified()) {
@@ -1058,9 +1035,8 @@ public class StdAdjudicator implements Adjudicator {
         List orderList = turnState.getAllOrders();
         ArrayList<OrderState> osList = new ArrayList<>(orderList.size());
 
-        Iterator iter = orderList.iterator();
-        while (iter.hasNext()) {
-            Order order = (Order) iter.next();
+        for (Object anOrderList : orderList) {
+            Order order = (Order) anOrderList;
             OrderState os = new OrderState(order);
             Province province = os.getSourceProvince();
 
@@ -1085,8 +1061,7 @@ public class StdAdjudicator implements Adjudicator {
         // ensure that each unit now has a corresponding OrderState. If a unit has no corresponding
         // OrderState, an OrderState with a Disband order is used.
         Province[] dislodgedUnitProvs = position.getDislodgedUnitProvinces();
-        for (int i = 0; i < dislodgedUnitProvs.length; i++) {
-            Province province = dislodgedUnitProvs[i];
+        for (Province province : dislodgedUnitProvs) {
             if (!osMap.containsKey(province)) {
                 Unit unit = position.getDislodgedUnit(province);
                 Disband disband = orderFactory.createDisband(unit.getPower(), new Location(province, unit.getCoast()), unit.getType());
@@ -1116,8 +1091,7 @@ public class StdAdjudicator implements Adjudicator {
         ValidationOptions valOpts = new ValidationOptions();
         valOpts.setOption(ValidationOptions.KEY_GLOBAL_PARSING, ValidationOptions.VALUE_GLOBAL_PARSING_STRICT);
 
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
+        for (OrderState os : orderStates) {
             Order order = os.getOrder();
 
             try {
@@ -1134,8 +1108,7 @@ public class StdAdjudicator implements Adjudicator {
 
 
         // step 4: calculate dependencies
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
+        for (OrderState os : orderStates) {
             Order order = os.getOrder();
             order.determineDependencies(this);
         }
@@ -1150,9 +1123,7 @@ public class StdAdjudicator implements Adjudicator {
         int totalMoves = 0;
         int totalNonMoves = 0;
 
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
-
+        for (OrderState os : orderStates) {
             if (os.getOrder() instanceof Move) {
                 totalMoves++;
             } else {
@@ -1175,9 +1146,7 @@ public class StdAdjudicator implements Adjudicator {
 
         // Step 7:
         // a) Create SUCCESS and FAILURE results
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
-
+        for (OrderState os : orderStates) {
             if (os.getEvalState() == Tristate.SUCCESS) {
                 addResult(os, ResultType.SUCCESS, null);
             } else {
@@ -1203,13 +1172,12 @@ public class StdAdjudicator implements Adjudicator {
         nextTurnState.setWorld(turnState.getWorld());
 
         // create units in the appropriate places
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
+        for (OrderState os : orderStates) {
             Order order = os.getOrder();
             Province sourceProvince = os.getSourceProvince();
 
             // clone the old unit (from the old position)
-            Unit newUnit = (Unit) position.getDislodgedUnit(sourceProvince).clone();
+            Unit newUnit = position.getDislodgedUnit(sourceProvince).copy();
 
             if (order instanceof Retreat
                     && os.getEvalState() == Tristate.SUCCESS) {
@@ -1292,16 +1260,14 @@ public class StdAdjudicator implements Adjudicator {
 
         ArrayList<OrderState> osList = new ArrayList<>(32);
 
-        for (int i = 0; i < powers.length; i++) {
-            Power power = powers[i];
+        for (Power power : powers) {
             Adjustment.AdjustmentInfo ai = adjustmentMap.get(power);
             int orderCount = 0;
             final int adjAmount = ai.getAdjustmentAmount();
 
-            List orders = turnState.getOrders(power);
-            Iterator iter = orders.iterator();
-            while (iter.hasNext()) {
-                Order order = (Order) iter.next();
+            List<Orderable> orders = turnState.getOrders(power);
+            for (Orderable orderable : orders) {
+                Order order = (Order) orderable;
 
                 if (order instanceof Remove && adjAmount > 0) {
                     addResult(new OrderResult(order, Utils.getLocalString(STDADJ_ADJ_IGNORED_MUST_BUILD)));
@@ -1340,7 +1306,7 @@ public class StdAdjudicator implements Adjudicator {
             // it is legal for a power to not use all the build orders, but if that occurs,
             // a result indicating that some builds were unused is created
             if (ai.getAdjustmentAmount() > 0 && orderCount < ai.getAdjustmentAmount()) {
-                addResult(new Result(powers[i],
+                addResult(new Result(power,
                         Utils.getLocalString(STDADJ_ADJ_BUILDS_UNUSED, adjAmount - orderCount)));
             }
 
@@ -1352,8 +1318,8 @@ public class StdAdjudicator implements Adjudicator {
             // clear the list when done
             int ordersToMake = adjAmount + orderCount;
             if (ordersToMake < 0) {
-                addResult(new Result(powers[i], Utils.getLocalString(STDADJ_ADJ_TOO_FEW_DISBANDS)));
-                createRemoveOrders(osList, powers[i], Math.abs(ordersToMake));
+                addResult(new Result(power, Utils.getLocalString(STDADJ_ADJ_TOO_FEW_DISBANDS)));
+                createRemoveOrders(osList, power, Math.abs(ordersToMake));
             }
         }// for(power)
 
@@ -1366,8 +1332,7 @@ public class StdAdjudicator implements Adjudicator {
         // step 4: calculate dependencies
         // NOTE: while no orders currently use this, it's here for future use (thus a variant
         // could subclass Build or Remove but not have to subclass StdAdjudicator)
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
+        for (OrderState os : orderStates) {
             Order order = os.getOrder();
             order.determineDependencies(this);
         }
@@ -1400,8 +1365,7 @@ public class StdAdjudicator implements Adjudicator {
 
         // step 6
         // single-pass adjudication (order evaluation)
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
+        for (OrderState os : orderStates) {
             os.getOrder().evaluate(this);
 
             // internal check against error; failure = failed single-pass decision making.
@@ -1412,9 +1376,7 @@ public class StdAdjudicator implements Adjudicator {
         // step 8
         // create success results for all successful orders
         // only invalid orders will have failed.
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
-
+        for (OrderState os : orderStates) {
             if (os.getEvalState() == Tristate.SUCCESS) {
                 addResult(os, ResultType.SUCCESS, null);
             } else {
@@ -1441,8 +1403,7 @@ public class StdAdjudicator implements Adjudicator {
         nextTurnState.setWorld(turnState.getWorld());
 
         // remove units that are disbanded, and build units that are to be built.
-        for (int osIdx = 0; osIdx < orderStates.length; osIdx++) {
-            OrderState os = orderStates[osIdx];
+        for (OrderState os : orderStates) {
             Order order = os.getOrder();
             Province sourceProvince = os.getSourceProvince();
 
@@ -1465,14 +1426,14 @@ public class StdAdjudicator implements Adjudicator {
         // the AdjustmentInfo obtained from the beginning, since that will not
         // have changed since step 1.
         powers = world.getMap().getPowers();
-        for (int i = 0; i < powers.length; i++) {
+        for (Power power : powers) {
             // get adjustment information
-            Adjustment.AdjustmentInfo ai = adjustmentMap.get(powers[i]);
+            Adjustment.AdjustmentInfo ai = adjustmentMap.get(power);
 
             // check for player elimination
             if (ai.getSupplyCenterCount() == 0) {
-                nextPosition.setEliminated(powers[i], true);
-                addResult(new Result(powers[i], Utils.getLocalString(STDADJ_ADJ_ELIMINATED, powers[i].getName())));
+                nextPosition.setEliminated(power, true);
+                addResult(new Result(power, Utils.getLocalString(STDADJ_ADJ_ELIMINATED, power.getName())));
             }
         }
 
@@ -1529,8 +1490,7 @@ public class StdAdjudicator implements Adjudicator {
             int maxDist = 0;
 
             Province[] provinces = position.getProvinces();
-            for (int provIdx = 0; provIdx < provinces.length; provIdx++) {
-                Province province = provinces[provIdx];
+            for (Province province : provinces) {
                 Unit unit = position.getUnit(province);
 
                 if (unit != null) {
@@ -1538,8 +1498,8 @@ public class StdAdjudicator implements Adjudicator {
                     if (os == null) {
                         if (unit.getPower().equals(power)) {
                             int hsDist = 9999;
-                            for (int hsIdx = 0; hsIdx < homeSupplyCenters.length; hsIdx++) {
-                                final int d = path.getMinDistance(province, homeSupplyCenters[hsIdx]);
+                            for (Province homeSupplyCenter : homeSupplyCenters) {
+                                final int d = path.getMinDistance(province, homeSupplyCenter);
                                 hsDist = (d < hsDist) ? d : hsDist;
                             }
 
@@ -1619,9 +1579,7 @@ public class StdAdjudicator implements Adjudicator {
         // remember, we're using the adjudicated position!
         Position nextPosition = nextTurnState.getPosition();
         Province[] provinces = nextPosition.getProvinces();
-        for (int i = 0; i < provinces.length; i++) {
-            Province province = provinces[i];
-
+        for (Province province : provinces) {
             if (province != null && province.hasSupplyCenter()) {
                 Unit unit = nextPosition.getUnit(province);
                 if (unit != null) {
@@ -1655,8 +1613,8 @@ public class StdAdjudicator implements Adjudicator {
             Object[] args = new Object[1];
 
             Power[] powers = world.getMap().getPowers();
-            for (int i = 0; i < powers.length; i++) {
-                Adjustment.AdjustmentInfo ai = Adjustment.getAdjustmentInfo(nextTurnState, ruleOpts, powers[i]);
+            for (Power power : powers) {
+                Adjustment.AdjustmentInfo ai = Adjustment.getAdjustmentInfo(nextTurnState, ruleOpts, power);
                 final int adjAmount = ai.getAdjustmentAmount();
                 if (adjAmount != 0) {
                     // can't skip adjustment phase
@@ -1671,12 +1629,12 @@ public class StdAdjudicator implements Adjudicator {
                     // speed improvment.
                     if (adjAmount < 0) {
                         args[0] = String.valueOf(-adjAmount);    // 'abs'
-                        addResult(new Result(powers[i], MFRemove.format(args)));
+                        addResult(new Result(power, MFRemove.format(args)));
                     } else if (adjAmount > 0) {
                         args[0] = String.valueOf(adjAmount);
-                        addResult(new Result(powers[i], MFBuild.format(args)));
+                        addResult(new Result(power, MFBuild.format(args)));
                     } else {
-                        addResult(new Result(powers[i], Utils.getLocalString(STDADJ_PREADJ_TONEITHER)));
+                        addResult(new Result(power, Utils.getLocalString(STDADJ_PREADJ_TONEITHER)));
                     }
                 }
             }
@@ -1700,8 +1658,7 @@ public class StdAdjudicator implements Adjudicator {
     private List findMovesTo(Province moveDest) {
         ArrayList<Order> list = new ArrayList<>(6); //todo: i kind of feel this method should return this list
 
-        for (int i = 0; i < orderStates.length; i++) {
-            OrderState os = orderStates[i];
+        for (OrderState os : orderStates) {
             Order order = os.getOrder();
             if (order instanceof Move
                     && moveDest == ((Move) order).getDest().getProvince()) {
@@ -1717,8 +1674,7 @@ public class StdAdjudicator implements Adjudicator {
      * Find the OrderState corresponding to the given Move order
      */
     private OrderState findMove(Province src, Province dest) {
-        for (int i = 0; i < orderStates.length; i++) {
-            OrderState os = orderStates[i];
+        for (OrderState os : orderStates) {
             Order order = os.getOrder();
             if (order instanceof Move
                     && order.getSource().isProvinceEqual(src)
@@ -1734,8 +1690,7 @@ public class StdAdjudicator implements Adjudicator {
      * Find the OrderState for a Move originating from the given Province
      */
     private OrderState findMoveFrom(Province src) {
-        for (int i = 0; i < orderStates.length; i++) {
-            OrderState os = orderStates[i];
+        for (OrderState os : orderStates) {
             Order order = os.getOrder();
             if (order instanceof Move
                     && order.getSource().isProvinceEqual(src)) {
@@ -1752,8 +1707,7 @@ public class StdAdjudicator implements Adjudicator {
     private List<OrderState> findOrderStatesForPower(Power power) {
         ArrayList<OrderState> list = new ArrayList<>(32);
 
-        for (int i = 0; i < orderStates.length; i++) {
-            OrderState os = orderStates[i];
+        for (OrderState os : orderStates) {
             if (os.getPower() == power) {
                 list.add(os);
             }
@@ -1767,11 +1721,10 @@ public class StdAdjudicator implements Adjudicator {
      * Returns a List of all OrderStates representing Convoy
      * orders for the given Move order
      */
-    private List getConvoyList(Move move) {
+    private List<OrderState> getConvoyList(Move move) {
         ArrayList<OrderState> list = new ArrayList<>(8);
 
-        for (int i = 0; i < orderStates.length; i++) {
-            OrderState os = orderStates[i];
+        for (OrderState os : orderStates) {
             if (os.getOrder() instanceof Convoy) {
                 Convoy convoy = (Convoy) os.getOrder();
                 if (convoy.getConvoySrc().isProvinceEqual(move.getSource())
@@ -1812,8 +1765,7 @@ public class StdAdjudicator implements Adjudicator {
 
         // step 1: get list of moves to check. Note that circular moves can only include
         // valid, UNCERTAIN moves, that haven't already been marked as circular
-        for (int i = 0; i < orderStates.length; i++) {
-            OrderState os = orderStates[i];
+        for (OrderState os : orderStates) {
             if (os.getEvalState() == Tristate.UNCERTAIN
                     && !os.isCircular()
                     && os.getOrder() instanceof Move) {
@@ -1824,12 +1776,10 @@ public class StdAdjudicator implements Adjudicator {
 
         // step 2: check each move in list for cicularity chains. If multiple chains
         // exist, we will find them in a single pass
-        Iterator iter = movesToCheck.iterator();
-        while (iter.hasNext()) {
+        for (OrderState moveOS : movesToCheck) {
             chain.clear();
             isChainCircular = false;
 
-            OrderState moveOS = (OrderState) iter.next();
             if (!moveOS.isCircular()) {
                 Move firstMove = (Move) moveOS.getOrder();
 
@@ -1845,8 +1795,7 @@ public class StdAdjudicator implements Adjudicator {
                         Move nextMove = (Move) nextMoveOS.getOrder();
 
                         // Uwe Plonus: This is a dirty hack to let the test case 6.e.4 pass
-                        for (Iterator it = chain.iterator(); it.hasNext(); ) {
-                            OrderState nm = (OrderState) it.next();
+                        for (OrderState nm : chain) {
                             if (nextMove.getDest().isProvinceEqual(nm.getSource())) {
                                 // we've found the move that completes the (sub-)chain.
                                 subChainCircular = true;
@@ -1873,9 +1822,7 @@ public class StdAdjudicator implements Adjudicator {
 
                         // all moves in chain are part of a circle (last move -> first move)
                         // set 'isCircular()' flags
-                        Iterator chainIter = chain.iterator();
-                        while (chainIter.hasNext()) {
-                            OrderState os = (OrderState) chainIter.next();
+                        for (OrderState os : chain) {
                             os.setCircular(true);
                         }
                     } else if (chain.size() == 2) {
@@ -1883,9 +1830,7 @@ public class StdAdjudicator implements Adjudicator {
                         // are legitimate, however.
                         boolean isSwap = false;
 
-                        Iterator chainIter = chain.iterator();
-                        while (chainIter.hasNext()) {
-                            OrderState os = (OrderState) chainIter.next();
+                        for (OrderState os : chain) {
                             Move move = (Move) os.getOrder();
                             if (move.isConvoying()) {
                                 isSwap = true;
@@ -1895,9 +1840,7 @@ public class StdAdjudicator implements Adjudicator {
                         if (isSwap) {
                             chainCount++;
 
-                            chainIter = chain.iterator();
-                            while (chainIter.hasNext()) {
-                                OrderState os = (OrderState) chainIter.next();
+                            for (OrderState os : chain) {
                                 os.setCircular(true);
                             }
                         }

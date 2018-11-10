@@ -173,11 +173,11 @@ public class PersistenceManager {
             final int actualCount = persistTG.enumerate(pendingThreads);
             Log.println("PM::exit(): actual threads pending: ", actualCount);
 
-            for (int i = 0; i < pendingThreads.length; i++) {
-                if (pendingThreads[i].isAlive()) {
+            for (Thread pendingThread : pendingThreads) {
+                if (pendingThread.isAlive()) {
                     try {
-                        Log.println("PM::exit(): waiting on ", pendingThreads[i].getName());
-                        pendingThreads[i].join(THREAD_WAIT);
+                        Log.println("PM::exit(): waiting on ", pendingThread.getName());
+                        pendingThread.join(THREAD_WAIT);
                         Log.println("    done.");
                     } catch (Throwable t) {
                         Log.println("PM::exit(): uncaught exception:");
@@ -401,16 +401,15 @@ public class PersistenceManager {
 
             // get file name
             if (file != null) {
-                File saveToFile = file;
 
                 try {
-                    World.save(saveToFile, clientFrame.getWorld());
+                    World.save(file, clientFrame.getWorld());
                     // DO NOT clear changed flag, though.
                     // Update recent file name list
-                    GeneralPreferencePanel.setRecentFileName(saveToFile);
+                    GeneralPreferencePanel.setRecentFileName(file);
                     clientFrame.getClientMenu().updateRecentFiles();
                 } catch (Exception e) {
-                    ErrorDialog.displayFileIO(clientFrame, e, saveToFile.toString());
+                    ErrorDialog.displayFileIO(clientFrame, e, file.toString());
                 }
             }
         }
@@ -450,12 +449,12 @@ public class PersistenceManager {
 
             // Check if the results (if any) matched the current game,
             // otherwise diplay dialog and try again
-            while ((ji.getResult() == JudgeImport.JI_RESULT_TRYREWIND) ||
-                    (ji.getResult() == JudgeImport.JI_RESULT_LOADOTHER)) {
+            while ((JudgeImport.JI_RESULT_TRYREWIND.equals(ji.getResult())) ||
+                    (JudgeImport.JI_RESULT_LOADOTHER.equals(ji.getResult()))) {
                 String gameInfo = ji.getGameInfo();
                 Phase phase = Phase.parse(gameInfo);
 
-                if (ji.getResult() == JudgeImport.JI_RESULT_TRYREWIND) {
+                if (JudgeImport.JI_RESULT_TRYREWIND.equals(ji.getResult())) {
                     // we need to rewind the current game
                     if (rewindDialog(phase)) {
                         // rewind current game
@@ -468,7 +467,7 @@ public class PersistenceManager {
                             }
                         }
                         while (!l.isEmpty()) {
-                            Phase p = (Phase) l.getFirst();
+                            Phase p = l.getFirst();
                             l.removeFirst();
                             TurnState ts = currentWorld.getTurnState(p);
                             currentWorld.removeTurnState(ts);
@@ -500,7 +499,7 @@ public class PersistenceManager {
                 ji = new JudgeImport(clientFrame.getGUIOrderFactory(), file, currentWorld);
             }
 
-            if (ji.getResult() == JudgeImport.JI_RESULT_THISWORLD) {
+            if (JudgeImport.JI_RESULT_THISWORLD.equals(ji.getResult())) {
                 // show results (if desired)
                 if (GeneralPreferencePanel.getShowResolutionResults()) {
                     final TurnState priorTS = clientFrame.getWorld().getPreviousTurnState(clientFrame.getWorld().getLastTurnState());
@@ -508,7 +507,7 @@ public class PersistenceManager {
                 }
             }
 
-            if (ji.getResult() == JudgeImport.JI_RESULT_NEWWORLD) {
+            if (JudgeImport.JI_RESULT_NEWWORLD.equals(ji.getResult())) {
                 if (confirmDialog()) {
                     world = ji.getWorld();
                     fileName = null;
@@ -618,7 +617,7 @@ public class PersistenceManager {
      * World object may not yet be available in ClientFrame; if not, can specify it here (or null)
      */
     private void setTitle(World localWorld) {
-        StringBuffer title = new StringBuffer(128);
+        StringBuilder title = new StringBuilder(128);
         title.append(ClientFrame.getProgramName());
 
         // if no file is open, we shouldn't display a gamename/filename
@@ -652,7 +651,7 @@ public class PersistenceManager {
             if (Utils.isOSX()) {
                 // aqua-specific. Draws dot in close button.
                 // http://developer.apple.com/qa/qa2001/qa1146.html
-                clientFrame.getRootPane().putClientProperty(WINDOW_MODIFIED, Boolean.valueOf(isChanged));
+                clientFrame.getRootPane().putClientProperty(WINDOW_MODIFIED, isChanged);
             } else {
                 if (isChanged) {
                     title.append(' ');
@@ -781,7 +780,7 @@ public class PersistenceManager {
      * Assumes current World/TurnState are not null.
      */
     public String getSuggestedExportName() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
 
         // get prefix
         sb.append(getSuggestedSaveName());

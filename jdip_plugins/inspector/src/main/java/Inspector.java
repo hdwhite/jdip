@@ -26,9 +26,15 @@ import dip.gui.dialog.TextViewer;
 import dip.order.OrderFormatOptions;
 import dip.order.Orderable;
 import dip.order.result.OrderResult;
+import dip.order.result.Result;
 import dip.tool.Tool;
 import dip.tool.ToolProxy;
-import dip.world.*;
+import dip.world.Phase;
+import dip.world.Position;
+import dip.world.Province;
+import dip.world.TurnState;
+import dip.world.Unit;
+import dip.world.World;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +43,6 @@ import java.awt.event.ActionListener;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -134,20 +139,12 @@ public class Inspector implements Tool {
                     TurnState ts = clientFrame.getTurnState();
                     appendTSInfo(sb, ts);
 
-                    List orders = ts.getAllOrders();
-                    Iterator iter = orders.iterator();
-                    while (iter.hasNext()) {
-                        Object obj = iter.next();
-                        if (obj instanceof Orderable) {
-                            Orderable o = (Orderable) obj;
-                            sb.append(o.toFormattedString(OFO));
-                        } else {
-                            // this shouldn't happen....
-                            sb.append("** ERROR: NON-ORDERABLE ** ");
-                        }
+                    List<Orderable> orders = ts.getAllOrders();
+                    for (Orderable o : orders) {
+                        sb.append(o.toFormattedString(OFO));
 
                         sb.append(" [");
-                        sb.append(obj.getClass().getName());
+                        sb.append(o.getClass().getName());
                         sb.append("]\n");
                     }
 
@@ -167,13 +164,11 @@ public class Inspector implements Tool {
 
                     TurnState ts = clientFrame.getTurnState();
                     appendTSInfo(sb, ts);
-                    List results = ts.getResultList();
-                    Iterator iter = results.iterator();
-                    while (iter.hasNext()) {
-                        Object obj = iter.next();
-                        sb.append(obj);
+                    List<Result> results = ts.getResultList();
+                    for (Result result : results) {
+                        sb.append(result);
                         sb.append(" [");
-                        sb.append(obj.getClass().getName());
+                        sb.append(result.getClass().getName());
                         sb.append("]\n");
                     }
 
@@ -198,10 +193,10 @@ public class Inspector implements Tool {
                     // coasts are always forced
                     final Position pos = ts.getPosition();
                     final Province[] allProvinces = pos.getProvinces();
-                    for (int i = 0; i < allProvinces.length; i++) {
-                        Unit unit = pos.getUnit(allProvinces[i]);
+                    for (Province province : allProvinces) {
+                        Unit unit = pos.getUnit(province);
                         if (unit != null) {
-                            sb.append(allProvinces[i].getShortName());
+                            sb.append(province.getShortName());
                             sb.append("/");
                             sb.append(unit.getCoast().getAbbreviation());
                             sb.append(": ");
@@ -211,9 +206,9 @@ public class Inspector implements Tool {
                             sb.append("\n");
                         }
 
-                        unit = pos.getDislodgedUnit(allProvinces[i]);
+                        unit = pos.getDislodgedUnit(province);
                         if (unit != null) {
-                            sb.append(allProvinces[i].getShortName());
+                            sb.append(province.getShortName());
                             sb.append("/");
                             sb.append(unit.getCoast().getAbbreviation());
                             sb.append(": ");
@@ -233,7 +228,7 @@ public class Inspector implements Tool {
         subMenu.add(item);
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                StringBuffer sb = new StringBuffer(512);
+                StringBuilder sb = new StringBuilder(512);
                 sb.append("Current Mode: ");
                 sb.append(clientFrame.getMode());
                 sb.append("\n\n");
@@ -322,7 +317,7 @@ public class Inspector implements Tool {
         final Position pos = ts.getPosition();
         final Province[] allProvinces = pos.getProvinces();
 
-        StringBuffer sb = new StringBuffer(1024);
+        StringBuilder sb = new StringBuilder(1024);
         sb.append("VARIANT_ALL ");
         sb.append(w.getVariantInfo().getVariantName());
         sb.append("\n");
@@ -336,17 +331,17 @@ public class Inspector implements Tool {
         sb.append("\n");
 
         sb.append("PRESTATE\n");
-        for (int i = 0; i < allProvinces.length; i++) {
-            Unit unit = pos.getUnit(allProvinces[i]);
+        for (Province province : allProvinces) {
+            Unit unit = pos.getUnit(province);
             if (unit != null) {
                 sb.append("\t");
                 sb.append(unit.getPower().getName());
                 sb.append(": ");
                 sb.append(unit.getType().getShortName());
                 sb.append(" ");
-                sb.append(allProvinces[i].getShortName());
+                sb.append(province.getShortName());
                 if (unit.getType() == Unit.Type.FLEET
-                        && allProvinces[i].isMultiCoastal()) {
+                        && province.isMultiCoastal()) {
                     sb.append("/");
                     sb.append(unit.getCoast().getAbbreviation());
                 }
@@ -355,17 +350,17 @@ public class Inspector implements Tool {
         }
 
         sb.append("PRESTATE_DISLODGED\n");
-        for (int i = 0; i < allProvinces.length; i++) {
-            Unit unit = pos.getDislodgedUnit(allProvinces[i]);
+        for (Province province : allProvinces) {
+            Unit unit = pos.getDislodgedUnit(province);
             if (unit != null) {
                 sb.append("\t");
                 sb.append(unit.getPower().getName());
                 sb.append(": ");
                 sb.append(unit.getType().getShortName());
                 sb.append(" ");
-                sb.append(allProvinces[i].getShortName());
+                sb.append(province.getShortName());
                 if (unit.getType() == Unit.Type.FLEET
-                        && allProvinces[i].isMultiCoastal()) {
+                        && province.isMultiCoastal()) {
                     sb.append("/");
                     sb.append(unit.getCoast().getAbbreviation());
                 }
@@ -383,20 +378,16 @@ public class Inspector implements Tool {
                 // we assume all orders fail UNLESS a success result for that order
                 // exists. NOTE THAT ALL THESE RESULTS are from the PRIOR turnstate.
                 //
-                List results = prevTS.getResultList();
+                List<Result> results = prevTS.getResultList();
 
-                List orders = prevTS.getAllOrders();
-                Iterator iter = orders.iterator();
-                while (iter.hasNext()) {
+                List<Orderable> orders = prevTS.getAllOrders();
+                for (Orderable o : orders) {
                     sb.append("\t");
-                    Orderable o = (Orderable) iter.next();
 
                     boolean isSuccess = false;
-                    Iterator resultIter = results.iterator();
-                    while (resultIter.hasNext()) {
-                        Object obj = resultIter.next();
-                        if (obj instanceof OrderResult) {
-                            OrderResult or = (OrderResult) obj;
+                    for (Result result : results) {
+                        if (result instanceof OrderResult) {
+                            OrderResult or = (OrderResult) result;
                             if (or.getOrder() == o
                                     && or.getResultType() == OrderResult.ResultType.SUCCESS) {
                                 isSuccess = true;
@@ -422,11 +413,9 @@ public class Inspector implements Tool {
         }
 
         sb.append("ORDERS\n");
-        List orders = ts.getAllOrders();
-        Iterator iter = orders.iterator();
-        while (iter.hasNext()) {
+        List<Orderable> orders = ts.getAllOrders();
+        for (Orderable o : orders) {
             sb.append("\t");
-            Orderable o = (Orderable) iter.next();
             sb.append(o.toFormattedString(TERSE_OFO));
             sb.append("\n");
         }
@@ -438,17 +427,17 @@ public class Inspector implements Tool {
             final Position nextPos = nextTS.getPosition();
 
             sb.append("POSTSTATE\n");
-            for (int i = 0; i < allProvinces.length; i++) {
-                Unit unit = nextPos.getUnit(allProvinces[i]);
+            for (Province province : allProvinces) {
+                Unit unit = nextPos.getUnit(province);
                 if (unit != null) {
                     sb.append("\t");
                     sb.append(unit.getPower().getName());
                     sb.append(": ");
                     sb.append(unit.getType().getShortName());
                     sb.append(" ");
-                    sb.append(allProvinces[i].getShortName());
+                    sb.append(province.getShortName());
                     if (unit.getType() == Unit.Type.FLEET
-                            && allProvinces[i].isMultiCoastal()) {
+                            && province.isMultiCoastal()) {
                         sb.append("/");
                         sb.append(unit.getCoast().getAbbreviation());
                     }
@@ -457,17 +446,17 @@ public class Inspector implements Tool {
             }
 
             sb.append("POSTSTATE_DISLODGED\n");
-            for (int i = 0; i < allProvinces.length; i++) {
-                Unit unit = nextPos.getDislodgedUnit(allProvinces[i]);
+            for (Province province : allProvinces) {
+                Unit unit = nextPos.getDislodgedUnit(province);
                 if (unit != null) {
                     sb.append("\t");
                     sb.append(unit.getPower().getName());
                     sb.append(": ");
                     sb.append(unit.getType().getShortName());
                     sb.append(" ");
-                    sb.append(allProvinces[i].getShortName());
+                    sb.append(province.getShortName());
                     if (unit.getType() == Unit.Type.FLEET
-                            && allProvinces[i].isMultiCoastal()) {
+                            && province.isMultiCoastal()) {
                         sb.append("/");
                         sb.append(unit.getCoast().getAbbreviation());
                     }

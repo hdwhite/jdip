@@ -193,8 +193,7 @@ public class JudgeOrderParser {
                 line = ParserUtils.getNextLongLine(br);
             }
         } catch (OrderException oe) {
-            IOException ioe = new IOException(oe.getMessage(), oe);
-            throw ioe;
+            throw new IOException(oe.getMessage(), oe);
         }
     }// moveAndRetreatParser()
 

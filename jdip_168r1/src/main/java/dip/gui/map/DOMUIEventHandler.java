@@ -37,33 +37,33 @@ public interface DOMUIEventHandler {
     /**
      * Key Pressed event
      */
-    public void keyPressed(DOMKeyEvent ke, Location loc);
+    void keyPressed(DOMKeyEvent ke, Location loc);
 
 
     /**
      * Mouse Over event: Mouse over a province
      */
-    public void mouseOver(MouseEvent me, Location loc);
+    void mouseOver(MouseEvent me, Location loc);
 
     /**
      * Mouse Out event: Mouse out of a province
      */
-    public void mouseOut(MouseEvent me, Location loc);
+    void mouseOut(MouseEvent me, Location loc);
 
     /**
      * Mouse clicked
      */
-    public void mouseClicked(MouseEvent me, Location loc);
+    void mouseClicked(MouseEvent me, Location loc);
 
     /**
      * Mouse button pressed
      */
-    public void mouseDown(MouseEvent me, Location loc);
+    void mouseDown(MouseEvent me, Location loc);
 
     /**
      * Mouse button released
      */
-    public void mouseUp(MouseEvent me, Location loc);
+    void mouseUp(MouseEvent me, Location loc);
 	
 	/* Mouse moved 
 	public void mouseMoved(MouseEvent me, Location loc)

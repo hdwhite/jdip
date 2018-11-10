@@ -263,13 +263,11 @@ public class Support extends Order {
     public boolean equals(Object obj) {
         if (obj instanceof Support) {
             final Support support = (Support) obj;
-            if (super.equals(support)
+            return super.equals(support)
                     && supUnitType.equals(support.supUnitType)
                     && supSrc.equals(support.supSrc)
                     && supPower.equals(support.supPower)
-                    && ((supDest == support.supDest) || ((supDest != null) && (supDest.equals(support.supDest))))) {
-                return true;
-            }
+                    && ((supDest == support.supDest) || ((supDest != null) && (supDest.equals(support.supDest))));
         }
         return false;
     }// equals()
@@ -522,8 +520,7 @@ public class Support extends Order {
 
             OrderState[] depMovesToSrc = thisOS.getDependentMovesToSource();
 
-            for (int i = 0; i < depMovesToSrc.length; i++) {
-                OrderState depMoveOS = depMovesToSrc[i];
+            for (OrderState depMoveOS : depMovesToSrc) {
                 Move depMove = (Move) depMoveOS.getOrder();
 
                 Log.println("  checking against move: ", depMove);

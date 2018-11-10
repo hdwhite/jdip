@@ -34,7 +34,7 @@ import dip.misc.Utils;
  * <b>This object is not immutable!</b>
  */
 
-public class Unit implements java.io.Serializable, Cloneable {
+public class Unit implements java.io.Serializable {
     // instance variables
     protected final Unit.Type type;
     protected final Power owner;
@@ -119,7 +119,7 @@ public class Unit implements java.io.Serializable, Cloneable {
      * strict implementation of clone(); a constructor is
      * invoked for performance reasons.
      */
-    public Object clone() {
+    public Unit copy() {
         return new Unit(owner, type, coast);
     }// clone()
 
@@ -128,7 +128,7 @@ public class Unit implements java.io.Serializable, Cloneable {
      * Displays internal object values. For debugging use only!
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         sb.append("Unit:[type=");
         sb.append(type);
         sb.append(",power=");
@@ -146,7 +146,7 @@ public class Unit implements java.io.Serializable, Cloneable {
      * Type constans should be used; new Type objects should not be created
      * unless the game concepts are being extended.
      */
-    public static class Type extends Object implements java.io.Serializable {
+    public static class Type implements java.io.Serializable {
         // internal i18n key constants
         private static final String UNIT_TYPE_PREFIX = "unit.type.";
         private static final String UNIT_TYPE_BRIEF_SUFFIX = ".brief";

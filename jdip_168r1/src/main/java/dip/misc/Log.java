@@ -374,7 +374,7 @@ public final class Log {
             return null;
         }
 
-        StringBuffer sb = new StringBuffer(8192);
+        StringBuilder sb = new StringBuilder(8192);
 
         // print out buffer contents, starting from 'bufferNext' to end of
         // array, then continuing from beginning to 'bufferNext -1'.

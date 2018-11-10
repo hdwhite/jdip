@@ -31,9 +31,9 @@ import dip.world.Power;
  * @author Ryan Michela
  */
 public class JdipResult {
-    private Result result;
-    private OrderFormatOptions format;
-    private Power power;
+    private final Result result;
+    private final OrderFormatOptions format;
+    private final Power power;
 
     /**
      * Package constructor. Don't try this at home, kids.

@@ -284,10 +284,10 @@ public class GUIHold extends Hold implements GUIOrder {
         Point2D.Float[] pts = GUIOrderUtils.makeOctagon(center, radius);
 
         StringBuffer sb = new StringBuffer(160);
-        for (int ptsIdx = 0; ptsIdx < pts.length; ptsIdx++) {
-            GUIOrderUtils.appendFloat(sb, pts[ptsIdx].x);
+        for (Point2D.Float pt : pts) {
+            GUIOrderUtils.appendFloat(sb, pt.x);
             sb.append(',');
-            GUIOrderUtils.appendFloat(sb, pts[ptsIdx].y);
+            GUIOrderUtils.appendFloat(sb, pt.y);
             sb.append(' ');
         }
 

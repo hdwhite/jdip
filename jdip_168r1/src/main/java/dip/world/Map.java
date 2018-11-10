@@ -101,11 +101,10 @@ public class Map implements Serializable {
     private void createMappings() {
         // create powerNameMap
         powerNameMap = new HashMap<>(POWER_SIZE);
-        for (int i = 0; i < powers.length; i++) {
-            Power power = powers[i];
+        for (Power power : powers) {
             String[] tmp = power.getNames();
-            for (int nmIdx = 0; nmIdx < tmp.length; nmIdx++) {
-                powerNameMap.put(tmp[nmIdx].toLowerCase(), power);
+            for (String name : tmp) {
+                powerNameMap.put(name.toLowerCase(), power);
             }
 
             // also map adjectives
@@ -119,8 +118,7 @@ public class Map implements Serializable {
         //
         nameMap = new HashMap<>(MAP_SIZE);
         ArrayList<String> namesAL = new ArrayList<>(MAP_SIZE);
-        for (int i = 0; i < provinces.length; i++) {
-            Province province = provinces[i];
+        for (Province province : provinces) {
             String lcName = province.getFullName().toLowerCase();
 
             // map long name, and add to list
@@ -129,15 +127,15 @@ public class Map implements Serializable {
 
             // map short names, and add to list
             String[] lcShortNames = province.getShortNames();
-            for (int j = 0; j < lcShortNames.length; j++) {
-                lcName = lcShortNames[j].toLowerCase();
+            for (String lcShortName : lcShortNames) {
+                lcName = lcShortName.toLowerCase();
                 nameMap.put(lcName, province);
                 namesAL.add(lcName);
             }
         }
 
         // create names array from ArrayList
-        names = (String[]) namesAL.toArray(new String[namesAL.size()]);
+        names = namesAL.toArray(new String[namesAL.size()]);
     }// createMappings()
 
 
@@ -156,7 +154,7 @@ public class Map implements Serializable {
      * The match must be exact, but is case-insensitive.
      */
     public Power getPower(String name) {
-        return (Power) powerNameMap.get(name.toLowerCase());
+        return powerNameMap.get(name.toLowerCase());
     }// getPower()
 
 
@@ -203,9 +201,7 @@ public class Map implements Serializable {
         //
         int bestMatch = Integer.MAX_VALUE;
         matchPower = null;
-        for (int i = 0; i < lcPowerNames.length; i++) {
-            String name = lcPowerNames[i];
-
+        for (String name : lcPowerNames) {
             final int distance = Distance.getLD(powerName, name);
             if (distance < bestMatch) {
                 matchPower = getPower(name);
@@ -218,7 +214,7 @@ public class Map implements Serializable {
         }
 
         // if absolute error rate is too high, discard.
-        if (bestMatch <= ((int) (powerName.length() / 2))) {
+        if (bestMatch <= powerName.length() / 2) {
             return matchPower;
         }
 
@@ -264,9 +260,7 @@ public class Map implements Serializable {
         //
         int bestMatch = Integer.MAX_VALUE;
         String bestMatchPowerName = null;
-        for (int i = 0; i < lcPowerNames.length; i++) {
-            String name = lcPowerNames[i];
-
+        for (String name : lcPowerNames) {
             final int distance = Distance.getLD(powerName, name);
             if (distance < bestMatch) {
                 bestMatchPowerName = name;
@@ -278,7 +272,7 @@ public class Map implements Serializable {
 
         // if absolute error rate is too high, discard.
         // we are stricter than in getClosestPower()
-        if (bestMatch <= ((int) (powerName.length() / 3))) {
+        if (bestMatch <= powerName.length() / 3) {
             return getPower(bestMatchPowerName);    // should never return null
         }
 
@@ -302,7 +296,7 @@ public class Map implements Serializable {
      * The match must be exact, but is case-insensitive.
      */
     public Province getProvince(String name) {
-        return (Province) nameMap.get(name.toLowerCase());
+        return nameMap.get(name.toLowerCase());
     }// getProvince()
 
 
@@ -353,9 +347,7 @@ public class Map implements Serializable {
         // if there are ties, keep them.. for now
         ties.clear();
         int bestDist = Integer.MAX_VALUE;
-        for (int i = 0; i < names.length; i++) {
-            String name = names[i];
-
+        for (String name : names) {
             // check closeness. Smaller is better.
             final int distance = Distance.getLD(input, name);
             if (distance < bestDist) {
@@ -376,9 +368,9 @@ public class Map implements Serializable {
 
         // if absolute error rate is too high, discard.
         // if we have >1 unique ties, (or none at all) no match
-        if (bestDist <= ((int) (input.length() / 2)) && ties.size() == 1) {
+        if (bestDist <= input.length() / 2 && ties.size() == 1) {
             // there is but one
-            return (Province) ties.iterator().next();
+            return ties.iterator().next();
         }
 
         return null;
@@ -430,8 +422,7 @@ public class Map implements Serializable {
             // which can return some very odd results.
             // for short strings...
             //
-            for (int i = 0; i < names.length; i++) {
-                String name = names[i];
+            for (String name : names) {
                 if (name.startsWith(input)) {
                     ties.add(getProvince(name));
                 }
@@ -440,9 +431,7 @@ public class Map implements Serializable {
             // compute Levenshteins on the match
             // if there are ties, keep them.. for now
             int bestDist = Integer.MAX_VALUE;
-            for (int i = 0; i < names.length; i++) {
-                String name = names[i];
-
+            for (String name : names) {
                 // check closeness. Smaller is better.
                 final int distance = Distance.getLD(input, name);
 
@@ -495,13 +484,12 @@ public class Map implements Serializable {
         // create the whitespace list, if it doesn't exist.
         if (wsNames == null) {
             List<String> list = new ArrayList<>(50);
-            for (int i = 0; i < names.length; i++) {
-                String name = names[i];
+            for (String name : names) {
                 if (name.indexOf(' ') != -1 || name.indexOf('-') != -1) {
                     list.add(name.toLowerCase());
                 }
             }
-            wsNames = (String[]) list.toArray(new String[list.size()]);
+            wsNames = list.toArray(new String[list.size()]);
 
             // sort array from longest entries to shortest. This
             // eliminates errors in partial replacements.
@@ -519,9 +507,7 @@ public class Map implements Serializable {
         }
 
         // search & replace.
-        for (int i = 0; i < wsNames.length; i++) {
-            String currentName = wsNames[i];
-
+        for (String currentName : wsNames) {
             int idx = 0;
             int start = sb.indexOf(currentName, idx);
 
@@ -562,11 +548,11 @@ public class Map implements Serializable {
         // preceding character MUST be a whitespace character.
         // thus "prussia" would not become "p"
         if (wsIdx >= 0) {
-            for (int i = 0; i < lcPowerNames.length; i++) {
-                final int idx = sb.indexOf(lcPowerNames[i], wsIdx);
+            for (String lcPowerName : lcPowerNames) {
+                final int idx = sb.indexOf(lcPowerName, wsIdx);
                 if (idx >= 0) {
                     if (idx != 0 && Character.isWhitespace(sb.charAt(idx - 1))) {
-                        sb.delete(idx, (idx + lcPowerNames[i].length()));
+                        sb.delete(idx, (idx + lcPowerName.length()));
                     }
                 }
             }
@@ -625,8 +611,8 @@ public class Map implements Serializable {
                 return nameToTest;
             } else {
                 // stricter: no ':'; first token may or may not be a power.
-                for (int i = 0; i < lcPowerNames.length; i++) {
-                    if (nameToTest.startsWith(lcPowerNames[i])) {
+                for (String lcPowerName : lcPowerNames) {
+                    if (nameToTest.startsWith(lcPowerName)) {
                         return nameToTest;
                     }
                 }
@@ -686,8 +672,8 @@ public class Map implements Serializable {
                 return getClosestPower(nameToTest);
             } else {
                 // stricter: no ':'; first token may or may not be a power.
-                for (int i = 0; i < lcPowerNames.length; i++) {
-                    if (nameToTest.startsWith(lcPowerNames[i])) {
+                for (String lcPowerName : lcPowerNames) {
+                    if (nameToTest.startsWith(lcPowerName)) {
                         return getPowerMatching(nameToTest);
                     }
                 }
@@ -715,11 +701,10 @@ public class Map implements Serializable {
     private void createLCPowerNameList() {
         List<String> tmpNames = new ArrayList<>(powers.length);
 
-        for (int i = 0; i < powers.length; i++) {
-            Power power = powers[i];
+        for (Power power : powers) {
             String[] tmp = power.getNames();
-            for (int nmIdx = 0; nmIdx < tmp.length; nmIdx++) {
-                tmpNames.add(tmp[nmIdx].toLowerCase());
+            for (String name : tmp) {
+                tmpNames.add(name.toLowerCase());
             }
 
             tmpNames.add(power.getAdjective().toLowerCase());
@@ -730,7 +715,7 @@ public class Map implements Serializable {
         // "Russian" come before "Russia"; otherwise, the replacement will be f'd up.
         tmpNames.sort(Collections.reverseOrder());
 
-        lcPowerNames = (String[]) tmpNames.toArray(new String[tmpNames.size()]);
+        lcPowerNames = tmpNames.toArray(new String[tmpNames.size()]);
     }// createLCPowerNameList()
 	
 	
@@ -821,9 +806,7 @@ public class Map implements Serializable {
     private List<Power> findPartialPowerMatch(String input) {
         HashSet<Power> ties = new HashSet<>(41);
 
-        for (int i = 0; i < lcPowerNames.length; i++) {
-            String powerName = lcPowerNames[i];
-
+        for (String powerName : lcPowerNames) {
             if (powerName.startsWith(input)) {
                 ties.add(getPower(powerName));    // should NEVER be null
             }

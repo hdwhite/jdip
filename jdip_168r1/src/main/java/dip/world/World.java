@@ -90,14 +90,12 @@ public class World implements Serializable {
         try {
             GZIPInputStream gzi = new GZIPInputStream(new BufferedInputStream(new FileInputStream(file), 4096));
             in = new JSX.ObjectReader(gzi);
-            World w = (World) in.readObject();
-            return w;
+            return (World) in.readObject();
         } catch (IOException ioe) {
             throw ioe;
         } catch (Exception e) {
             // rethrow all non-IOExceptions as IOExceptions
-            IOException ioe = new IOException(e.getMessage(), e);
-            throw ioe;
+            throw new IOException(e.getMessage(), e);
         } finally {
             if (in != null) {
                 in.close();
@@ -110,10 +108,8 @@ public class World implements Serializable {
      */
     public static void save(File file, World world)
             throws IOException {
-        GZIPOutputStream gzos = null;
 
-        try {
-            gzos = new GZIPOutputStream(new FileOutputStream(file), 2048);
+        try (GZIPOutputStream gzos = new GZIPOutputStream(new FileOutputStream(file), 2048)) {
             JSX.ObjectWriter out = new JSX.ObjectWriter(gzos);
             out.setPrettyPrint(false);
             out.writeObject(world);
@@ -123,12 +119,7 @@ public class World implements Serializable {
             throw ioe;
         } catch (Exception e) {
             // rethrow all non-IOExceptions as IOExceptions
-            IOException ioe = new IOException(e.getMessage(), e);
-            throw ioe;
-        } finally {
-            if (gzos != null) {
-                gzos.close();
-            }
+            throw new IOException(e.getMessage(), e);
         }
     }// save()
 
@@ -286,9 +277,7 @@ public class World implements Serializable {
 
 
         Phase previous = null;
-        Iterator iter = turnStates.keySet().iterator();
-        while (iter.hasNext()) {
-            Phase phase = (Phase) iter.next();
+        for (Phase phase : turnStates.keySet()) {
             if (phase.compareTo(current) != 0) {
                 previous = phase;
             } else {

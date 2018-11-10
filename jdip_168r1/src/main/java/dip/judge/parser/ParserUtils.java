@@ -46,7 +46,7 @@ public class ParserUtils {
     public static String parseBlock(BufferedReader br)
             throws IOException {
         // create first block: the ownership block
-        StringBuffer accum = new StringBuffer(2048);
+        StringBuilder accum = new StringBuilder(2048);
         boolean inBlock = false;
 
         String line = br.readLine();
@@ -73,7 +73,7 @@ public class ParserUtils {
      * Coalesces whitespace, and ensures that it's only spaces and not any other type
      */
     public static String filter(String in) {
-        StringBuffer sb = new StringBuffer(in.length());
+        StringBuilder sb = new StringBuilder(in.length());
         for (int i = 0; i < in.length(); i++) {
             char c = in.charAt(i);
             if (Character.isWhitespace(c)) {

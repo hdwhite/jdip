@@ -159,7 +159,7 @@ public class DislodgedParser {
         // keep searching until we find an empty line, or HEADER_END_REGEX.
         //
         BufferedReader br = new BufferedReader(new StringReader(input));
-        StringBuffer accum = new StringBuffer(2048);
+        StringBuilder accum = new StringBuilder(2048);
 
         String line = br.readLine();
         while (line != null) {
@@ -241,8 +241,8 @@ public class DislodgedParser {
 
             boolean foundMatch = false;
 
-            for (int i = 0; i < destroyeds.length; i++) {
-                Matcher m = destroyeds[i].matcher(line);
+            for (Pattern destroyed : destroyeds) {
+                Matcher m = destroyed.matcher(line);
                 if (m.lookingAt()) {
                     disList.add(new DislodgedInfo(
                             m.group(1),
@@ -343,7 +343,7 @@ public class DislodgedParser {
          * String output for debugging; may change between versions.
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append("DislodgedInfo[power=");
             sb.append(power);
             sb.append(", src=");
@@ -351,8 +351,8 @@ public class DislodgedParser {
             sb.append(", unit=");
             sb.append(unit);
             sb.append(", locNames=");
-            for (int i = 0; i < retreatLocs.length; i++) {
-                sb.append(retreatLocs[i]);
+            for (String retreatLoc : retreatLocs) {
+                sb.append(retreatLoc);
                 sb.append(',');
             }
             sb.append(']');

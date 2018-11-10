@@ -30,7 +30,7 @@ import org.nukesoft.jdipFacade.exception.PowerNotFoundException;
  */
 public class JdipPower {
     private Power power;
-    private World world;
+    private final World world;
 
     JdipPower(World world, String power)
             throws PowerNotFoundException {
@@ -136,25 +136,25 @@ public class JdipPower {
     /**
      * Converts a key into a power
      *
-     * @param power the power name to look up
+     * @param powerName the power name to look up
      * @return the associated <code>Power</code> object
      * @throws PowerNotFoundException
      */
-    private Power getPowerFromKey(String power)
+    private Power getPowerFromKey(String powerName)
             throws PowerNotFoundException {
         Power[] powers = world.getMap().getPowers();
         //get the power for the provided key
         Power p = null;
-        for (int i = 0; i < powers.length; i++) {
-            if (powers[i].getName().equals(power)) {
-                p = powers[i];
+        for (Power power : powers) {
+            if (power.getName().equals(powerName)) {
+                p = power;
                 break;
             }
         }
         if (p != null) {
             return p;
         } else {
-            throw new PowerNotFoundException("Could not find power: " + power);
+            throw new PowerNotFoundException("Could not find power: " + powerName);
         }
     }
 }

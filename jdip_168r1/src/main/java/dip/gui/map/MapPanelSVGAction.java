@@ -83,7 +83,7 @@ public class MapPanelSVGAction {
         chooser.setCurrentDirectory(GeneralPreferencePanel.getDefaultGameDir());
         chooser.setSelectedFile(new File(cf.getPM().getSuggestedExportName()));
         File file = chooser.displaySave(cf, Utils.getLocalString("MapPanel.export.title"));
-        chooser.dispose();
+        XJFileChooser.dispose();
         return file;
     }// getSaveFile()
 

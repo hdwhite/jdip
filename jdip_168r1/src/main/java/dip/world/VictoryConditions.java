@@ -232,7 +232,7 @@ public class VictoryConditions implements java.io.Serializable {
 
     // creates a comma-seperated list of power names, if they are still in play
     private String getRemainingPowers(TurnState turnState, Power[] powers, Adjustment.AdjustmentInfo[] adjInfo) {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
         Position pos = turnState.getPosition();
 
         for (int i = 0; i < powers.length; i++) {

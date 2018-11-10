@@ -107,9 +107,7 @@ public class Remove extends Order {
 
     public boolean equals(Object obj) {
         if (obj instanceof Remove) {
-            if (super.equals(obj)) {
-                return true;
-            }
+            return super.equals(obj);
         }
         return false;
     }// equals()

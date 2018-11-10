@@ -23,7 +23,6 @@
 package dip.world;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -44,7 +43,7 @@ import java.util.Map;
  * to assist in cloning rather than call super.clone(). This is done for
  * performance reasons.
  */
-public class Position implements java.io.Serializable, Cloneable {
+public class Position implements java.io.Serializable {
     // size constants; these should be prime
     private static final int POWER_SIZE = 17;
 
@@ -81,7 +80,7 @@ public class Position implements java.io.Serializable, Cloneable {
      * Returns true if this Power has been eliminated. False by default.
      */
     public boolean isEliminated(Power power) {
-        PowerData pd = (PowerData) powerMap.get(power);
+        PowerData pd = powerMap.get(power);
         if (pd != null) {
             return pd.isEliminated();
         }
@@ -104,12 +103,11 @@ public class Position implements java.io.Serializable, Cloneable {
      */
     public void setEliminationStatus(final Power[] powers) {
         HashMap<Power, Object> pmap = new HashMap<>(19);
-        for (int i = 0; i < powers.length; i++) {
-            pmap.put(powers[i], null);
+        for (Power power : powers) {
+            pmap.put(power, null);
         }
 
-        for (int i = 0; i < provArray.length; i++) {
-            ProvinceData pd = provArray[i];
+        for (ProvinceData pd : provArray) {
             Power power = null;
 
             if (pd != null) {
@@ -141,11 +139,11 @@ public class Position implements java.io.Serializable, Cloneable {
             }
         }
 
-        for (int i = 0; i < powers.length; i++) {
-            if (pmap.get(powers[i]) == null) {
-                setEliminated(powers[i], true);
+        for (Power power : powers) {
+            if (pmap.get(power) == null) {
+                setEliminated(power, true);
             } else {
-                setEliminated(powers[i], false);
+                setEliminated(power, false);
             }
         }
     }// setEliminationStatus()
@@ -382,8 +380,7 @@ public class Position implements java.io.Serializable, Cloneable {
      */
     public int getUnitCount() {
         int count = 0;
-        for (int i = 0; i < provArray.length; i++) {
-            ProvinceData pd = provArray[i];
+        for (ProvinceData pd : provArray) {
             if (pd != null && pd.hasUnit()) {
                 count++;
             }
@@ -398,8 +395,7 @@ public class Position implements java.io.Serializable, Cloneable {
      */
     public int getDislodgedUnitCount() {
         int count = 0;
-        for (int i = 0; i < provArray.length; i++) {
-            ProvinceData pd = provArray[i];
+        for (ProvinceData pd : provArray) {
             if (pd != null && pd.hasDislodgedUnit()) {
                 count++;
             }
@@ -457,8 +453,7 @@ public class Position implements java.io.Serializable, Cloneable {
      * An owned home supply center need not have a unit present.
      */
     public boolean hasAnOwnedHomeSC(Power power) {
-        for (int i = 0; i < provArray.length; i++) {
-            ProvinceData pd = provArray[i];
+        for (ProvinceData pd : provArray) {
             if (pd != null && pd.getSCHomePower() == power && pd.getSCOwner() == power) {
                 return true;
             }
@@ -513,7 +508,7 @@ public class Position implements java.io.Serializable, Cloneable {
     /**
      * Deep clone of the contents of this Position.
      */
-    public Object clone() {
+    public Position copy() {
         Position pos = new Position(map);
 
         for (int i = 0; i < provArray.length; i++) {
@@ -524,10 +519,8 @@ public class Position implements java.io.Serializable, Cloneable {
             }
         }
 
-        Iterator iter = powerMap.keySet().iterator();
-        while (iter.hasNext()) {
-            Power key = (Power) iter.next();
-            PowerData pd = (PowerData) powerMap.get(key);
+        for (Power key : powerMap.keySet()) {
+            PowerData pd = powerMap.get(key);
 
             pos.powerMap.put(key, pd.normClone());
         }
@@ -550,10 +543,8 @@ public class Position implements java.io.Serializable, Cloneable {
             }
         }
 
-        Iterator iter = powerMap.keySet().iterator();
-        while (iter.hasNext()) {
-            Power key = (Power) iter.next();
-            PowerData pd = (PowerData) powerMap.get(key);
+        for (Power key : powerMap.keySet()) {
+            PowerData pd = powerMap.get(key);
 
             pos.powerMap.put(key, pd.normClone());
         }
@@ -575,10 +566,8 @@ public class Position implements java.io.Serializable, Cloneable {
             }
         }
 
-        Iterator iter = powerMap.keySet().iterator();
-        while (iter.hasNext()) {
-            Power key = (Power) iter.next();
-            PowerData pd = (PowerData) powerMap.get(key);
+        for (Power key : powerMap.keySet()) {
+            PowerData pd = powerMap.get(key);
 
             pos.powerMap.put(key, pd.normClone());
         }
@@ -656,7 +645,7 @@ public class Position implements java.io.Serializable, Cloneable {
      * Same type of functionality as getProvinceData() but for PowerData objects
      */
     private PowerData getPowerData(Power power) {
-        PowerData pd = (PowerData) powerMap.get(power);
+        PowerData pd = powerMap.get(power);
         if (pd == null) {
             pd = new PowerData();
             powerMap.put(power, pd);
@@ -673,7 +662,7 @@ public class Position implements java.io.Serializable, Cloneable {
      * <p>
      * This method creates a sufficiently large array to hold temporary data.
      */
-    private final void makeTmpProvArray() {
+    private void makeTmpProvArray() {
         if (tmpProvArray == null) {
             tmpProvArray = new Province[provArray.length];
         }
@@ -757,11 +746,11 @@ public class Position implements java.io.Serializable, Cloneable {
 
             // deep copy unit information
             if (unit != null) {
-                pd.unit = (Unit) unit.clone();
+                pd.unit = unit.copy();
             }
 
             if (dislodgedUnit != null) {
-                pd.dislodgedUnit = (Unit) dislodgedUnit.clone();
+                pd.dislodgedUnit = dislodgedUnit.copy();
             }
 
             // shallow copy Powers [Power is immutable]
@@ -814,7 +803,7 @@ public class Position implements java.io.Serializable, Cloneable {
 
             // deep copy unit
             if (unit != null) {
-                pd.unit = (Unit) unit.clone();
+                pd.unit = unit.copy();
             }
 
             return pd;

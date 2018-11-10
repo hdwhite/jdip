@@ -22,8 +22,20 @@
 //
 package jdip.tool.conversion;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -196,33 +208,23 @@ public class MapConvert
 		
 		// write everything out
 		// 
-		BufferedWriter bw = null;
-		try
-		{
-			bw = new BufferedWriter(new FileWriter(adjacencyOutput));
-			
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(adjacencyOutput))) {
+
 			StringBuffer sb = new StringBuffer(4096);
 			makeXMLData(sb, pmap.getList());
-			
+
 			// write adjacency data
-            HashMap<String, String> templateData = new HashMap<>();
+			HashMap<String, String> templateData = new HashMap<>();
 			templateData.put("xmldata", sb.toString());
-			bw.write( adjacencyTemplate.parse(templateData) );
-			System.out.println("File created: "+adjacencyOutput);
-			
-		}
-		finally
-		{
-			if(bw != null)
-			{
-				bw.close();
-			}
+			bw.write(adjacencyTemplate.parse(templateData));
+			System.out.println("File created: " + adjacencyOutput);
+
 		}
 	}// MapConvert()
 	
 	
 	/** Get a List of ProvObj objects. Umodifiable. */
-	public List getProvObjList()
+	public List<ProvObj> getProvObjList()
 	{
 		return pmap.getList();
 	}// getProvObjList()
@@ -238,7 +240,7 @@ public class MapConvert
 	
 	
 	/** Write province data to stringbuffer */
-	private void makeXMLData(StringBuffer sb, List provList)
+	private void makeXMLData(StringBuffer sb, List<ProvObj> provList)
 	{
 		// STEP 1: check for ice borders; insert appropriate border
 		// STEP 2: check for /mx coasts; insert appropriate borders
@@ -269,24 +271,19 @@ public class MapConvert
 			sb.append( ((ProvObj) iter.next()).toXML() );
 		}
 	}// makeXMLData()
-	
-	
-	private void writeBorders(StringBuffer sb, List provinces)
+
+
+	private void writeBorders(StringBuffer sb, List<ProvObj> provinces)
 	{
 		boolean hasIce = false;
 		boolean hasMX = false;
-		
-		Iterator iter = provinces.iterator();
-		while(iter.hasNext())
-		{
-			ProvObj po = (ProvObj) iter.next();
-			if(po.isIce())
-			{
+
+		for (ProvObj province : provinces) {
+			if (province.isIce()) {
 				hasIce = true;
 			}
-			
-			if(po.hasMX())
-			{
+
+			if (province.hasMX()) {
 				hasMX = true;
 			}
 		}
@@ -307,21 +304,17 @@ public class MapConvert
 				// create dupes.
 				//
                 HashMap<String, Boolean> borderMap = new HashMap<>();
-						
-				iter = provinces.iterator();
+
+				Iterator iter = provinces.iterator();
 				while(iter.hasNext())
 				{
 					ProvObj po = (ProvObj) iter.next();
 					if(po.hasMX())
 					{
-						Iterator mxIter = po.getMXProvs().iterator();
-						while(mxIter.hasNext())
-						{
-							final String provinceName = (String) mxIter.next();
+						for (String provinceName : po.getMXProvs()) {
 							final String borderName = ProvObj.BORDER_NAME_PREFIX + provinceName.toUpperCase();
-							
-							if(!borderMap.containsKey(borderName))
-							{
+
+							if (!borderMap.containsKey(borderName)) {
 								borderMap.put(borderName, Boolean.TRUE);
 								sb.append("\t\t<BORDER id=\"");
 								sb.append(borderName);
@@ -353,25 +346,15 @@ public class MapConvert
 		{
 			out = new File("variants.xml");
 		}
-			
-		
-		BufferedWriter bw = null;
-		try
-		{
-			bw = new BufferedWriter(new FileWriter(out));
-			
+
+
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(out))) {
+
 			// write adjacency data
-            HashMap<String, String> templateData = new HashMap<>();
+			HashMap<String, String> templateData = new HashMap<>();
 			makeVariantXMLTemplateData(templateData, provList, adjacencyFile);
-			bw.write( variantTemplate.parse(templateData) );
-			System.out.println("File created: "+out);
-		}
-		finally
-		{
-			if(bw != null)
-			{
-				bw.close();
-			}
+			bw.write(variantTemplate.parse(templateData));
+			System.out.println("File created: " + out);
 		}
 		
 	}// makeVariantFile()
@@ -505,22 +488,15 @@ public class MapConvert
 			if(po == null)
 			{
 				// search thru list
-				Iterator iter = list.iterator();
-				while(iter.hasNext())
-				{
-					po = (ProvObj) iter.next();
-					
-					if(name.equalsIgnoreCase(po.getFullName()))
-					{
+				for (ProvObj province : list) {
+					po = province;  //TODO: why first take it from map when then we use the list anyway?
+
+					if (name.equalsIgnoreCase(po.getFullName())) {
 						return po;
-					}
-					else
-					{
+					} else {
 						final String[] names = po.getShortNames();
-						for(int i=0; i<names.length; i++)
-						{
-							if(name.equalsIgnoreCase(names[i]))
-							{
+						for (String shortName : names) {
+							if (name.equalsIgnoreCase(shortName)) {
 								return po;
 							}
 						}
@@ -535,7 +511,7 @@ public class MapConvert
 		*	Returns the List of provinces.
 		*	Unmodifiable.
 		*/
-		public List getList()
+		public List<ProvObj> getList()
 		{
 			return Collections.unmodifiableList(list);
 		}

@@ -60,13 +60,13 @@ public class NGDStartOptions extends JPanel implements NewGameDialog.NGDTabPane 
     private Variant original = null;
 
     // GUI controls
-    private JComboBox<String> phaseBox;
-    private BCSpinner year;
-    private JSpinner vcSC;
-    private JSpinner vcSCChange;
-    private JSpinner vcDuration;
-    private JButton reset;
-    private JEditorPane introText;
+    private final JComboBox<String> phaseBox;
+    private final BCSpinner year;
+    private final JSpinner vcSC;
+    private final JSpinner vcSCChange;
+    private final JSpinner vcDuration;
+    private final JButton reset;
+    private final JEditorPane introText;
 
 
     /**
@@ -105,7 +105,7 @@ public class NGDStartOptions extends JPanel implements NewGameDialog.NGDTabPane 
      */
     public synchronized Variant getVariant() {
         // set game time
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(phaseBox.getSelectedItem());
         sb.append(' ');
         sb.append(year.getValue());
@@ -145,9 +145,9 @@ public class NGDStartOptions extends JPanel implements NewGameDialog.NGDTabPane 
         phaseBox.removeAllItems();
         String[] combos = Phase.getAllSeasonPhaseCombos();
         String protoType = combos[0];
-        for (int i = 0; i < combos.length; i++) {
-            phaseBox.addItem(combos[i]);
-            protoType = (combos[i].length() > protoType.length()) ? combos[i] : protoType;
+        for (String combo : combos) {
+            phaseBox.addItem(combo);
+            protoType = (combo.length() > protoType.length()) ? combo : protoType;
         }
 
         phaseBox.setPrototypeDisplayValue(protoType + "M");

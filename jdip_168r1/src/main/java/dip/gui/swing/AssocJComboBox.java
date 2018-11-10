@@ -54,10 +54,10 @@ public class AssocJComboBox extends JComboBox<AssocJComboBox.AssociatedObj> {
         // longest is the prototype
         int len = 0;
         AssociatedObj longestAO = null;
-        for (int i = 0; i < objs.length; i++) {
-            if (objs[i].getDisplay().length() > len) {
-                len = objs[i].getDisplay().length();
-                longestAO = objs[i];
+        for (AssociatedObj obj : objs) {
+            if (obj.getDisplay().length() > len) {
+                len = obj.getDisplay().length();
+                longestAO = obj;
             }
         }
 
@@ -110,7 +110,7 @@ public class AssocJComboBox extends JComboBox<AssocJComboBox.AssociatedObj> {
      * Get the selected AssociatedObj; null if none selected.
      */
     public Object getSelectedItem() {
-        return (AssociatedObj) super.getSelectedItem();
+        return super.getSelectedItem();
     }// getSelectedItem
 
     /**
@@ -131,7 +131,7 @@ public class AssocJComboBox extends JComboBox<AssocJComboBox.AssociatedObj> {
             ao = getDefaultAO();
             if (ao == null) {
                 assert (getItemAt(0) != null);
-                ao = (AssociatedObj) getItemAt(0);
+                ao = getItemAt(0);
             }
         }
 

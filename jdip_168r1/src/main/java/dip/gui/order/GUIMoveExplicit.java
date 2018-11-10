@@ -212,7 +212,7 @@ public class GUIMoveExplicit extends Move implements GUIOrder {
             // 'correct' adjacency; e.g., Coast.SEA or Coast.(direction) for
             // first check
             //
-            final Province lastProv = (Province) tmpConvoyPath.getLast();
+            final Province lastProv = tmpConvoyPath.getLast();
             Coast coast = Coast.SEA;
 
             if (lastProv.equals(getSource()) && lastProv.isMultiCoastal()) {
@@ -392,7 +392,7 @@ public class GUIMoveExplicit extends Move implements GUIOrder {
         if (tmpConvoyPath == null) {
             convoyRoutes = null;
         } else {
-            final Province[] provinceRoute = (Province[]) tmpConvoyPath.toArray(
+            final Province[] provinceRoute = tmpConvoyPath.toArray(
                     new Province[tmpConvoyPath.size()]);
             convoyRoutes = new ArrayList<>(1);
             convoyRoutes.add(provinceRoute);

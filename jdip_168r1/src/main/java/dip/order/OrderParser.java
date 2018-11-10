@@ -340,17 +340,17 @@ public class OrderParser {
         final int startIdx = (ptok == null) ? 0 : ptok.length();
 
         // string replacement
-        for (int i = 0; i < REPLACEMENTS.length; i++) {
+        for (String[] replacement : REPLACEMENTS) {
             int idx = startIdx;
-            int start = sb.indexOf(REPLACEMENTS[i][0], idx);
+            int start = sb.indexOf(replacement[0], idx);
 
             while (start != -1) {
-                int end = start + REPLACEMENTS[i][0].length();
-                sb.replace(start, end, REPLACEMENTS[i][1]);
+                int end = start + replacement[0].length();
+                sb.replace(start, end, replacement[1]);
 
                 // repeat search
-                idx = start + REPLACEMENTS[i][1].length();
-                start = sb.indexOf(REPLACEMENTS[i][0], idx);
+                idx = start + replacement[1].length();
+                start = sb.indexOf(replacement[0], idx);
             }
         }
 
@@ -642,7 +642,7 @@ public class OrderParser {
             if (isConvoyedMove)    // MUST test this first -- it overrides isExplicitConvoy
             {
                 assert (al != null);
-                Province[] convoyRoute = (Province[]) al.toArray(new Province[al.size()]);
+                Province[] convoyRoute = al.toArray(new Province[al.size()]);
                 return orderFactory.createMove(srcPower, srcLoc, srcUnitType, dest, convoyRoute);
             } else if (isExplicitConvoy) {
                 return orderFactory.createMove(srcPower, srcLoc, srcUnitType, dest, isExplicitConvoy);
@@ -779,21 +779,18 @@ public class OrderParser {
      * Determine if a Token is a Unit.Type token
      */
     private boolean isTypeToken(String s) {
-        if (s.equals("f") || s.equals("a") || s.equals("w")) {
-            return true;
-        }
+        return s.equals("f") || s.equals("a") || s.equals("w");
 
-        return false;
     }// isTypeToken
 
     // deletes any strings in the stringBuffer that match
     // strings specified in toDelete
     private void delChars(StringBuffer sb, String[] toDelete) {
-        for (int i = 0; i < toDelete.length; i++) {
-            int idx = sb.indexOf(toDelete[i]);
+        for (String str : toDelete) {
+            int idx = sb.indexOf(str);
             while (idx != -1) {
-                sb.delete(idx, idx + toDelete[i].length());
-                idx = sb.indexOf(toDelete[i], idx);
+                sb.delete(idx, idx + str.length());
+                idx = sb.indexOf(str, idx);
             }
         }
     }// delChars()
@@ -834,15 +831,12 @@ public class OrderParser {
     private boolean isCommandPrefixed(String s) {
         // b,r,w = build, remove, waive
         // m = move
-        if (s.equalsIgnoreCase("b")
+        return s.equalsIgnoreCase("b")
                 || s.equalsIgnoreCase("r")
                 || s.equalsIgnoreCase("d")
                 || s.equalsIgnoreCase("m")
-                || s.equalsIgnoreCase("waive")) {
-            return true;
-        }
+                || s.equalsIgnoreCase("waive");
 
-        return false;
     }// isCommandPrefixed
 
     private TypeAndSource getTypeAndSource(StringTokenizer st) throws OrderException {
@@ -879,7 +873,7 @@ public class OrderParser {
 
         // parse the province. if there are 'ties', we return the result.
         final Collection<Province> col = map.getProvincesMatchingClosest(locName);
-        final Province[] provinces = (Province[]) col.toArray(new Province[col.size()]);
+        final Province[] provinces = col.toArray(new Province[col.size()]);
 
 
         if (provinces.length == 0) {
@@ -894,7 +888,7 @@ public class OrderParser {
         } else {
             // multiple matches! unclear. give a more detailed error message.
             // create a comma-separated list of all but the last.
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             for (int i = 0; i < (provinces.length - 1); i++) {
                 sb.append(provinces[i]);
                 sb.append(", ");
@@ -942,8 +936,7 @@ public class OrderParser {
      * the error message is correct.
      */
     private Order createDisbandOrRemove(OrderFactory orderFactory, TurnState ts,
-                                        boolean disbandPreferred, Power power, Location src, Unit.Type unitType)
-            throws OrderException {
+                                        boolean disbandPreferred, Power power, Location src, Unit.Type unitType) {
         if (ts.getPhase().getPhaseType() == Phase.PhaseType.RETREAT) {
             return orderFactory.createDisband(power, src, unitType);
         } else if (ts.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT) {

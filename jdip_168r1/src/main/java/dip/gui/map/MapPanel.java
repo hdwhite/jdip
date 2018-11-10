@@ -58,7 +58,6 @@ import org.w3c.dom.svg.SVGDocument;
 
 import javax.swing.*;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -452,12 +451,12 @@ public class MapPanel extends JPanel {
         } else {
             String mode = clientFrame.getMode();
 
-            if (mode == ClientFrame.MODE_NONE
-                    || mode == ClientFrame.MODE_REVIEW) {
+            if (ClientFrame.MODE_NONE.equals(mode)
+                    || ClientFrame.MODE_REVIEW.equals(mode)) {
                 cb = new ViewControlBar(this);
-            } else if (mode == ClientFrame.MODE_ORDER) {
+            } else if (ClientFrame.MODE_ORDER.equals(mode)) {
                 cb = new OrderControlBar(this);
-            } else if (mode == ClientFrame.MODE_EDIT) {
+            } else if (ClientFrame.MODE_EDIT.equals(mode)) {
                 cb = new EditControlBar(this);
             } else {
                 throw new IllegalArgumentException("unknown mode");
@@ -694,7 +693,7 @@ public class MapPanel extends JPanel {
      * the variant-pack jar's actually works. This fixes bug #900714.
      */
     private Document transform(final Document inDoc, final String uri)
-            throws TransformerException, TransformerConfigurationException, IOException {
+            throws TransformerException, IOException {
         TransformerFactory tFactory = TransformerFactory.newInstance();
 
         Transformer transformer = tFactory.newTransformer();
@@ -723,9 +722,8 @@ public class MapPanel extends JPanel {
 
         String parser = XMLResourceDescriptor.getXMLParserClassName();
         SAXSVGDocumentFactory f = new SAXSVGDocumentFactory(parser);
-        SVGDocument outDoc = f.createSVGDocument(uri, new StringReader(sw.toString()));
 
-        return outDoc;
+        return f.createSVGDocument(uri, new StringReader(sw.toString()));
     }
 
     /**

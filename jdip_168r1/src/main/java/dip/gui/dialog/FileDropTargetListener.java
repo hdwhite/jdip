@@ -68,18 +68,15 @@ public abstract class FileDropTargetListener extends DropTargetAdapter {
                             }
                         }
 
-                        processDroppedFiles((File[]) fileList.toArray(new File[fileList.size()]));
+                        processDroppedFiles(fileList.toArray(new File[fileList.size()]));
                     }
 
                     dtde.dropComplete(true);
                     return;
                 }
-            } catch (UnsupportedFlavorException e) {
+            } catch (UnsupportedFlavorException | IOException e) {
                 // fail silently
                 System.out.println(e);
-            } catch (IOException e2) {
-                // fail silently
-                System.out.println(e2);
             }
         }
 

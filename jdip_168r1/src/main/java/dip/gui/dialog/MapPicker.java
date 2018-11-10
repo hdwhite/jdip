@@ -45,7 +45,7 @@ public class MapPicker extends HeaderDialog {
     private final String originalMapName;
     private final String originalSymbolPackName;
     // instance variables
-    private ClientFrame clientFrame;
+    private final ClientFrame clientFrame;
     private NGDMapAndUnits mauSelector = null;
     private World world = null;
 

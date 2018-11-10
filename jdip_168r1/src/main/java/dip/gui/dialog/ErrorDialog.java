@@ -42,7 +42,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -671,7 +670,7 @@ public class ErrorDialog extends TextViewer {
             rd = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
             String line;
             while ((line = rd.readLine()) != null) {
-                if (line.indexOf("Thanks.") != -1) {
+                if (line.contains("Thanks.")) {
                     return true;
                 }
             }
@@ -754,7 +753,7 @@ public class ErrorDialog extends TextViewer {
          * on a single line.
          */
         public void add(String name, String value) {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append(((name == null) ? "" : name));
             sb.append(": ");
             sb.append(value);
@@ -770,12 +769,10 @@ public class ErrorDialog extends TextViewer {
             if (list.isEmpty()) {
                 return "";
             } else {
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 sb.append("\n------ Additional Info -------------------");
-                Iterator iter = list.iterator();
-                while (iter.hasNext()) {
+                for (String line : list) {
                     sb.append('\n');
-                    String line = (String) iter.next();
                     sb.append(line);
                 }
 
@@ -789,7 +786,7 @@ public class ErrorDialog extends TextViewer {
          * Gets a brief description of the throwable
          */
         public String getBriefDescription() {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append(t.getClass().getName());
             sb.append(": ");
             sb.append(t.getMessage());
@@ -825,7 +822,7 @@ public class ErrorDialog extends TextViewer {
          * Get system information
          */
         public String getSystemInfo() {
-            StringBuffer sb = new StringBuffer(1024);
+            StringBuilder sb = new StringBuilder(1024);
 
             // memory
             final Runtime rt = Runtime.getRuntime();
@@ -849,7 +846,7 @@ public class ErrorDialog extends TextViewer {
                 while (propEnum.hasMoreElements()) {
                     final String propName = (String) propEnum.nextElement();
                     if (!propName.equals("line.separator")) {
-                        StringBuffer line = new StringBuffer(128);
+                        StringBuilder line = new StringBuilder(128);
                         line.append(propName);
                         line.append(": ");
                         line.append(props.getProperty(propName));
@@ -864,9 +861,9 @@ public class ErrorDialog extends TextViewer {
 
 
             // system properties
-            for (Iterator iter = list.iterator(); iter.hasNext(); ) {
+            for (String line : list) {
                 sb.append("\n  ");
-                sb.append(iter.next());
+                sb.append(line);
             }
 
             sb.append('\n');

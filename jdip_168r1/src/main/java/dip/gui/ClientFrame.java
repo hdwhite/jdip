@@ -279,8 +279,8 @@ public class ClientFrame extends JFrame {
                 // UIManager.put("Application.useSystemFontSettings", Boolean.FALSE);
             } else if (!Utils.isOSX()) {
                 // keep synth; switch if Motif / Metal
-                if (lafClassName.indexOf("MotifLookAndFeel") >= 0 ||
-                        lafClassName.indexOf("MetalLookAndFeel") >= 0) {
+                if (lafClassName.contains("MotifLookAndFeel") ||
+                        lafClassName.contains("MetalLookAndFeel")) {
                     // good generic LAF
                     lafClassName = "com.jgoodies.looks.plastic.PlasticLookAndFeel";
                 }
@@ -288,7 +288,7 @@ public class ClientFrame extends JFrame {
 
 
             try {
-                if (lafClassName.indexOf("jgoodies") >= 0) {
+                if (lafClassName.contains("jgoodies")) {
                     // for WebStart compatibility
                     UIManager.put("ClassLoader", com.jgoodies.looks.LookUtils.class.getClassLoader());
                 }
@@ -331,8 +331,8 @@ public class ClientFrame extends JFrame {
         ToolManager.init(new File[]{toolDirPath});
         Tool[] tools = ToolManager.getTools();
         ToolProxyImpl toolProxy = new ToolProxyImpl(this);
-        for (int i = 0; i < tools.length; i++) {
-            tools[i].setToolProxy(toolProxy);
+        for (Tool tool : tools) {
+            tool.setToolProxy(toolProxy);
         }
         dtime = Log.printDelta(dtime, "CF: tool setup time: ");
 
@@ -443,7 +443,7 @@ public class ClientFrame extends JFrame {
         String revision = Utils.getLocalStringNoEx(KEY_VERSION_REVISION);
         String language = Utils.getLocalStringNoEx(KEY_CURRENT_LANGUAGE);
 
-        StringBuffer sb = new StringBuffer(80);
+        StringBuilder sb = new StringBuilder(80);
         sb.append(VERSION_MAJOR);
         sb.append('.');
         sb.append(VERSION_MINOR);
@@ -923,8 +923,8 @@ public class ClientFrame extends JFrame {
      * Change the operating mode for this ClientFrame.<br>
      */
     public final synchronized void fireChangeMode(String newMode) {
-        if (newMode != MODE_ORDER && newMode != MODE_REVIEW && newMode != MODE_EDIT
-                && newMode != MODE_NONE) {
+        if (!MODE_ORDER.equals(newMode) && !MODE_REVIEW.equals(newMode) && !MODE_EDIT.equals(newMode)
+                && !MODE_NONE.equals(newMode)) {
             throw new IllegalArgumentException("bad mode constant");
         }
 
@@ -938,8 +938,8 @@ public class ClientFrame extends JFrame {
     public void dbgPrintListeners() {
         PropertyChangeListener[] pcls = getPropertyChangeListeners();
         System.out.println("ClientFrame listeners: " + pcls.length);
-        for (int i = 0; i < pcls.length; i++) {
-            System.out.println("     " + pcls[i].getClass().getName());
+        for (PropertyChangeListener pcl : pcls) {
+            System.out.println("     " + pcl.getClass().getName());
         }
     }// dbgPrintListeners()
 
@@ -949,8 +949,7 @@ public class ClientFrame extends JFrame {
     public synchronized String getMode() {
         // return a new reference, so that noone can change the mode
         // without using fireChangeMode()
-        final String mode = currentMode;
-        return mode;
+        return currentMode;
     }// getMode()
 
     /**
@@ -1120,15 +1119,13 @@ public class ClientFrame extends JFrame {
      */
     private class CFDropTargetListener extends FileDropTargetListener {
         public void processDroppedFiles(File[] files) {
-            for (int i = 0; i < files.length; i++) {
-                if (files.length >= 0) {
-                    World world = ClientFrame.this.persistMan.acceptDrag(files[0], ClientFrame.this.getWorld());
-                    if (world != null) {
-                        world.setGameSetup(new DefaultGUIGameSetup());
-                        ClientFrame.this.createWorld(world);
-                    }
-                    ClientFrame.this.persistMan.updateTitle();
+            for (File file : files) {
+                World world = ClientFrame.this.persistMan.acceptDrag(file, ClientFrame.this.getWorld());
+                if (world != null) {
+                    world.setGameSetup(new DefaultGUIGameSetup());
+                    ClientFrame.this.createWorld(world);
                 }
+                ClientFrame.this.persistMan.updateTitle();
             }
         }// processDroppedFiles()
     }// inner class CFDropTargetListener
@@ -1140,25 +1137,25 @@ public class ClientFrame extends JFrame {
         public void propertyChange(PropertyChangeEvent evt) {
             String evtName = evt.getPropertyName();
 
-            if (evtName == EVT_MODE_CHANGED) {
+            if (EVT_MODE_CHANGED.equals(evtName)) {
                 String newMode = (String) evt.getNewValue();
 
-                if (newMode == MODE_NONE) {
+                if (MODE_NONE.equals(newMode)) {
                     statusBar.clearModeText();
-                } else if (newMode == MODE_REVIEW) {
+                } else if (MODE_REVIEW.equals(newMode)) {
                     statusBar.setModeText(Utils.getLocalString("ClientFrame.mode.review"));
 
                     if (ClientFrame.this.getTurnState().isEnded()) {
                         statusBar.setModeText(Utils.getLocalString("ClientFrame.mode.ended"));
                     }
-                } else if (newMode == MODE_EDIT) {
+                } else if (MODE_EDIT.equals(newMode)) {
                     statusBar.setModeText(Utils.getLocalString("ClientFrame.mode.edit"));
-                } else if (newMode == MODE_ORDER) {
+                } else if (MODE_ORDER.equals(newMode)) {
                     statusBar.setModeText(Utils.getLocalString("ClientFrame.mode.order"));
                 } else {
                     throw new IllegalStateException("invalid mode: " + newMode);
                 }
-            } else if (evtName == EVT_TURNSTATE_CHANGED) {
+            } else if (EVT_TURNSTATE_CHANGED.equals(evtName)) {
                 synchronized (ClientFrame.this) {
                     ClientFrame.this.turnState = (TurnState) evt.getNewValue();
 
@@ -1168,15 +1165,15 @@ public class ClientFrame extends JFrame {
                         fireChangeMode(MODE_ORDER);
                     }
                 }
-            } else if (evtName == EVT_DISPLAYABLE_POWERS_CHANGED) {
+            } else if (EVT_DISPLAYABLE_POWERS_CHANGED.equals(evtName)) {
                 synchronized (ClientFrame.this) {
                     ClientFrame.this.displayablePowers = (Power[]) evt.getNewValue();
                 }
-            } else if (evtName == EVT_ORDERABLE_POWERS_CHANGED) {
+            } else if (EVT_ORDERABLE_POWERS_CHANGED.equals(evtName)) {
                 synchronized (ClientFrame.this) {
                     ClientFrame.this.orderablePowers = (Power[]) evt.getNewValue();
                 }
-            } else if (evtName == EVT_MMD_READY) {
+            } else if (EVT_MMD_READY.equals(evtName)) {
                 synchronized (ClientFrame.this) {
                     ClientFrame.this.mapMetadata = (MapMetadata) evt.getNewValue();
                 }

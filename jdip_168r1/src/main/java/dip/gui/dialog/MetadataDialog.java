@@ -182,9 +182,9 @@ public class MetadataDialog extends HeaderDialog {
 
         // all other tabs are by Power name
         Power[] powers = world.getMap().getPowers();
-        for (int i = 0; i < powers.length; i++) {
-            tabPane.add(powers[i].getName(),
-                    makePlayerPanel(powers[i], world.getPlayerMetadata(powers[i])));
+        for (Power power : powers) {
+            tabPane.add(power.getName(),
+                    makePlayerPanel(power, world.getPlayerMetadata(power)));
         }
     }// makeTabPanel()
 
@@ -248,15 +248,15 @@ public class MetadataDialog extends HeaderDialog {
     }// setTabIcons()
 
     private class GamePanel extends JPanel {
-        private JTextPane notes = new JTextPane();
-        private JTextField comment = new JTextField(COLUMNS_LONG);
-        private JTextField gameName = new JTextField(COLUMNS_LONG);
-        private JTextField modName = new JTextField(COLUMNS_LONG);
-        private JTextField modEmail = Utils.createEmailTextField(COLUMNS_LONG);
-        private JTextField modURI = Utils.createURITextField(COLUMNS_LONG);
-        private JTextField judgeName = new JTextField(COLUMNS);
-        private JTextField gameURI = Utils.createURITextField(COLUMNS_LONG);
-        private JTextField gameID = new JTextField(COLUMNS);
+        private final JTextPane notes = new JTextPane();
+        private final JTextField comment = new JTextField(COLUMNS_LONG);
+        private final JTextField gameName = new JTextField(COLUMNS_LONG);
+        private final JTextField modName = new JTextField(COLUMNS_LONG);
+        private final JTextField modEmail = Utils.createEmailTextField(COLUMNS_LONG);
+        private final JTextField modURI = Utils.createURITextField(COLUMNS_LONG);
+        private final JTextField judgeName = new JTextField(COLUMNS);
+        private final JTextField gameURI = Utils.createURITextField(COLUMNS_LONG);
+        private final JTextField gameID = new JTextField(COLUMNS);
 
 
         public GamePanel() {
@@ -337,10 +337,10 @@ public class MetadataDialog extends HeaderDialog {
     }// inner class GamePanel
 
     private class PlayerPanel extends JPanel {
-        private JTextPane notes = new JTextPane();
-        private JTextField name = new JTextField(COLUMNS);
-        private JTextField uri = Utils.createURITextField(COLUMNS);
-        private JTextField[] email = new JTextField[4];
+        private final JTextPane notes = new JTextPane();
+        private final JTextField name = new JTextField(COLUMNS);
+        private final JTextField uri = Utils.createURITextField(COLUMNS);
+        private final JTextField[] email = new JTextField[4];
         private Power power = null;
 
         public PlayerPanel(Power power) {

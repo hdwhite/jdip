@@ -30,8 +30,8 @@ public class HeadlessImplementationStrategy extends ImplementationStrategy {
             //turn off AWT
             System.setProperty("java.awt.headless", "true");
         }
-        if (super.orderFactory == null) {
-            super.orderFactory = OrderFactory.getDefault();
+        if (orderFactory == null) {
+            orderFactory = OrderFactory.getDefault();
         }
     }
 }

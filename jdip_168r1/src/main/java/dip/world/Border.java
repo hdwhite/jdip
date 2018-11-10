@@ -223,7 +223,7 @@ public class Border implements Serializable {
         if (list.isEmpty()) {
             return null;
         } else {
-            return (Phase.SeasonType[]) list.toArray(new Phase.SeasonType[list.size()]);
+            return list.toArray(new Phase.SeasonType[list.size()]);
         }
     }// parseProhibitedSeasons()
 
@@ -247,7 +247,7 @@ public class Border implements Serializable {
         if (list.isEmpty()) {
             return null;
         } else {
-            return (Phase.PhaseType[]) list.toArray(new Phase.PhaseType[list.size()]);
+            return list.toArray(new Phase.PhaseType[list.size()]);
         }
     }// parseProhibitedPhases()
 
@@ -345,7 +345,7 @@ public class Border implements Serializable {
         if (list.isEmpty()) {
             return null;
         } else {
-            return (Unit.Type[]) list.toArray(new Unit.Type[list.size()]);
+            return list.toArray(new Unit.Type[list.size()]);
         }
     }// parseUnitTypes()
 
@@ -390,7 +390,7 @@ public class Border implements Serializable {
 
         }
 
-        return (Class[]) list.toArray(new Class[list.size()]);
+        return list.toArray(new Class[list.size()]);
     }// parseClasses2Objs()
 
 
@@ -446,8 +446,8 @@ public class Border implements Serializable {
         boolean fromMatched = false;
 
         if (from != null) {
-            for (int i = 0; i < from.length; i++) {
-                if (from[i].equalsLoosely(fromLoc)) {
+            for (Location location : from) {
+                if (location.equalsLoosely(fromLoc)) {
                     fromMatched = true;
                     break;
                 }
@@ -460,8 +460,8 @@ public class Border implements Serializable {
             // check unit type
             if (unitTypes != null) {
                 nResults++;
-                for (int i = 0; i < unitTypes.length; i++) {
-                    if (unitTypes[i].equals(unit)) {
+                for (Unit.Type unitType : unitTypes) {
+                    if (unitType.equals(unit)) {
                         failResults++;
                         break;
                     }
@@ -471,8 +471,8 @@ public class Border implements Serializable {
             // check order
             if (orderClasses != null) {
                 nResults++;
-                for (int i = 0; i < orderClasses.length; i++) {
-                    if (orderClass == orderClasses[i]) {
+                for (Class orderClass1 : orderClasses) {
+                    if (orderClass == orderClass1) {
                         failResults++;
                         break;
                     }
@@ -482,8 +482,8 @@ public class Border implements Serializable {
             // check phase (season, phase, and year)
             if (seasons != null) {
                 nResults++;
-                for (int i = 0; i < seasons.length; i++) {
-                    if (phase.getSeasonType().equals(seasons[i])) {
+                for (Phase.SeasonType season : seasons) {
+                    if (phase.getSeasonType().equals(season)) {
                         failResults++;
                         break;
                     }
@@ -492,8 +492,8 @@ public class Border implements Serializable {
 
             if (phases != null) {
                 nResults++;
-                for (int i = 0; i < phases.length; i++) {
-                    if (phase.getPhaseType().equals(phases[i])) {
+                for (Phase.PhaseType phase1 : phases) {
+                    if (phase.getPhaseType().equals(phase1)) {
                         failResults++;
                         break;
                     }
@@ -535,8 +535,8 @@ public class Border implements Serializable {
             // if no locations defined, modifier is good for all locations.
             return baseMoveModifier;
         } else {
-            for (int i = 0; i < from.length; i++) {
-                if (from[i].equalsLoosely(moveFrom)) {
+            for (Location location : from) {
+                if (location.equalsLoosely(moveFrom)) {
                     return baseMoveModifier;
                 }
             }

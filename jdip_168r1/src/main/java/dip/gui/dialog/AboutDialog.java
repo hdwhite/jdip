@@ -70,7 +70,7 @@ public class AboutDialog extends HeaderDialog {
     private static AboutDialog dialogInstance = null;
     private static SwingWorker loader = null;
     // GUI
-    private JTabbedPane tabPane;
+    private final JTabbedPane tabPane;
     private JPanel aboutPanel;
     private JPanel systemPanel;
     private JPanel licensePanel;
@@ -289,8 +289,8 @@ public class AboutDialog extends HeaderDialog {
      * inner class to create a sorted system property list
      */
     private class SortProp implements Comparable {
-        private String name;
-        private String value;
+        private final String name;
+        private final String value;
 
         public SortProp(String name, String value) {
             this.name = name;

@@ -120,7 +120,7 @@ public class MTCBar extends ViewControlBar {
      * Called when the mouse pointer enters a province
      */
     public void mouseOver(MouseEvent me, Location loc) {
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
         sb.append(placeText);
 
         if (loc == null) {

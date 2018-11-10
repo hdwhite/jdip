@@ -44,8 +44,8 @@ public class PreferenceDialog extends HeaderDialog {
     private static final String HEADER_LOCATION = "PreferenceDialog.header";
 
     // GUI
-    private ClientFrame parent;
-    private JTabbedPane tabPane;
+    private final ClientFrame parent;
+    private final JTabbedPane tabPane;
     private PreferencePanel[] tabbedPanels;        // make static, & create just once?
 
 
@@ -80,8 +80,8 @@ public class PreferenceDialog extends HeaderDialog {
         tabbedPanels[1] = new DisplayPreferencePanel(parent);
         tabbedPanels[2] = new ExportPreferencePanel(parent);
 
-        for (int i = 0; i < tabbedPanels.length; i++) {
-            tabPane.addTab(tabbedPanels[i].getName(), tabbedPanels[i]);
+        for (PreferencePanel panel : tabbedPanels) {
+            tabPane.addTab(panel.getName(), panel);
         }
     }// createPanels()
 
@@ -93,12 +93,12 @@ public class PreferenceDialog extends HeaderDialog {
         super.close(actionCommand);
 
         if (isCloseOrCancel(actionCommand)) {
-            for (int i = 0; i < tabbedPanels.length; i++) {
-                tabbedPanels[i].cancel();
+            for (PreferencePanel panel : tabbedPanels) {
+                panel.cancel();
             }
         } else {
-            for (int i = 0; i < tabbedPanels.length; i++) {
-                tabbedPanels[i].apply();
+            for (PreferencePanel panel : tabbedPanels) {
+                panel.apply();
             }
         }
     }// close()

@@ -83,18 +83,16 @@ public class SCHistoryWriter {
         // find all provinces w/supply centers
         List<Province> scList = new ArrayList<>();
         final Province[] provs = w.getMap().getProvinces();
-        for (int i = 0; i < provs.length; i++) {
-            if (provs[i].hasSupplyCenter()) {
-                scList.add(provs[i]);
+        for (Province prov : provs) {
+            if (prov.hasSupplyCenter()) {
+                scList.add(prov);
             }
         }
 
         // sort list by alphabetical order of the short name (abbreviation)
         Collections.sort(scList, new Comparator<Province>() {
             public int compare(Province o1, Province o2) {
-                Province p1 = o1;
-                Province p2 = o2;
-                return p1.getShortName().compareTo(p2.getShortName());
+                return o1.getShortName().compareTo(o2.getShortName());
             }
 
             public boolean equals(Object obj) {
@@ -164,7 +162,7 @@ public class SCHistoryWriter {
 
         // format array into a table.
         //
-        StringBuffer sb = new StringBuffer(4096);
+        StringBuilder sb = new StringBuilder(4096);
         sb.append("<table cellspacing=\"3\" cellpadding=\"1\" border=\"0\">");
 
         // header row
@@ -291,7 +289,7 @@ public class SCHistoryWriter {
      * Power names are along the X axis.
      */
     private String makeSCCounts() {
-        StringBuffer sb = new StringBuffer(2048);
+        StringBuilder sb = new StringBuilder(2048);
         sb.append("<table cellspacing=\"4\" cellpadding=\"1\" border=\"0\">");
 
         // make header
@@ -300,10 +298,10 @@ public class SCHistoryWriter {
         sb.append(Utils.getLocalString(LABEL_YEAR));
         sb.append(" </b></td>");
 
-        for (int i = 0; i < allPowers.length; i++) {
+        for (Power power : allPowers) {
             sb.append(TD_HEADER);
             sb.append("<b> ");
-            sb.append(allPowers[i].getName());
+            sb.append(power.getName());
             sb.append(" </b></td>");
         }
 
@@ -350,7 +348,7 @@ public class SCHistoryWriter {
      */
     private String makeSCCountTableRow(TurnState ts) {
         final Phase phase = ts.getPhase();
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
 
         sb.append("<tr>");
 
@@ -365,8 +363,8 @@ public class SCHistoryWriter {
         sb.append("</b></td>");
 
         int sumOfSquares = 0;
-        for (int i = 0; i < allPowers.length; i++) {
-            Province[] ownedSC = ts.getPosition().getOwnedSupplyCenters(allPowers[i]);
+        for (Power power : allPowers) {
+            Province[] ownedSC = ts.getPosition().getOwnedSupplyCenters(power);
             final int count = ownedSC.length;
 
             sumOfSquares += (count * count);
@@ -397,7 +395,7 @@ public class SCHistoryWriter {
         if (mmd != null) {
             String colorName = mmd.getPowerColor(power);
             Color color = SVGColorParser.parseColor(colorName);
-            StringBuffer sb = new StringBuffer(32);
+            StringBuilder sb = new StringBuilder(32);
             sb.append("<font color=\"");
             sb.append(Utils.colorToHTMLHex(color));
             sb.append("\">");

@@ -56,9 +56,7 @@ public class Adjustment {
         Position position = turnState.getPosition();
         final Province[] provinces = position.getProvinces();
 
-        for (int i = 0; i < provinces.length; i++) {
-            Province province = provinces[i];
-
+        for (Province province : provinces) {
             // tally units
             Unit unit = position.getUnit(province);
             if (unit != null
@@ -100,16 +98,15 @@ public class Adjustment {
 
         // setup AdjustmentInfoMap
         AdjustmentInfoMap adjMap = new AdjustmentInfoMap();
-        for (int i = 0; i < powers.length; i++) {
-            adjMap.put(powers[i], new AdjustmentInfo(ruleOpts));
+        for (Power power : powers) {
+            adjMap.put(power, new AdjustmentInfo(ruleOpts));
         }
 
         // Iterate for all Powers
         Position position = turnState.getPosition();
         final Province[] provinces = position.getProvinces();
 
-        for (int i = 0; i < provinces.length; i++) {
-            Province province = provinces[i];
+        for (Province province : provinces) {
             boolean hasUnit = false;
 
             // tally units
@@ -270,7 +267,7 @@ public class Adjustment {
          * mostly for debugging
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("[AdjustmentInfo: units=");
             sb.append(numUnits);
             sb.append("; supplycenters=");
@@ -302,7 +299,7 @@ public class Adjustment {
      * mapped by Power.
      */
     public static class AdjustmentInfoMap {
-        private HashMap<Power, AdjustmentInfo> map;
+        private final HashMap<Power, AdjustmentInfo> map;
 
         /**
          * Create an AdjustmentInfoMap
@@ -329,7 +326,7 @@ public class Adjustment {
          * Gets AdjustmentInfo for a power.
          */
         public AdjustmentInfo get(Power power) {
-            return (AdjustmentInfo) map.get(power);
+            return map.get(power);
         }// get()
 
         /**

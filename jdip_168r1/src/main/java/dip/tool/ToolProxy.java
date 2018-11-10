@@ -39,17 +39,17 @@ public interface ToolProxy {
     /**
      * Gets the current World object, if any. May return null.
      */
-    public World getWorld();
+    World getWorld();
 
     /**
      * Convenience method: gets the current TurnState from the current World, or null
      */
-    public TurnState getCurrentTurnState();
+    TurnState getCurrentTurnState();
 
     /**
      * Gets the ClientFrame (JFrame) instance
      */
-    public ClientFrame getClient();
+    ClientFrame getClient();
 
 
 }// interface ToolProxy

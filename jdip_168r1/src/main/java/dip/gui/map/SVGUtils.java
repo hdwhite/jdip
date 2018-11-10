@@ -23,7 +23,6 @@
 package dip.gui.map;
 
 import com.dautelle.util.TypeFormat;
-import dip.world.Province;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.dom.util.XLinkSupport;
 import org.apache.batik.swing.JSVGCanvas;
@@ -77,7 +76,7 @@ public class SVGUtils {
         NodeList nl = element.getChildNodes();
         for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
-            if (node.getNodeName() == SVGConstants.SVG_TITLE_TAG) {
+            if (SVGConstants.SVG_TITLE_TAG.equals(node.getNodeName())) {
                 titleNode = node;
                 textNode = titleNode.getFirstChild();
                 break;
@@ -108,7 +107,7 @@ public class SVGUtils {
         NodeList nl = element.getChildNodes();
         for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
-            if (node.getNodeName() == SVGConstants.SVG_TITLE_TAG) {
+            if (SVGConstants.SVG_TITLE_TAG.equals(node.getNodeName())) {
                 descNode = node;
                 textNode = descNode.getFirstChild();
                 break;
@@ -141,7 +140,7 @@ public class SVGUtils {
                                                  float x, float y, MapMetadata.SymbolSize symbolSize) {
         // prepend '#' to name, if required
         if (symbolName.charAt(0) != '#') {
-            StringBuffer sb = new StringBuffer(symbolName.length() + 1);
+            StringBuilder sb = new StringBuilder(symbolName.length() + 1);
             sb.append('#');
             sb.append(symbolName);
             symbolName = sb.toString();
@@ -304,7 +303,7 @@ public class SVGUtils {
     private static void nodeWalker(Node node, List<String> list, Map<String, Node> map, boolean anySVGElement) {
         if (node.getNodeType() == Node.ELEMENT_NODE
                 && ((anySVGElement && node instanceof org.w3c.dom.svg.SVGElement)
-                || (node.getNodeName() == SVGConstants.SVG_G_TAG || node.getNodeName() == SVGConstants.SVG_SYMBOL_TAG))) {
+                || (SVGConstants.SVG_G_TAG.equals(node.getNodeName()) || SVGConstants.SVG_SYMBOL_TAG.equals(node.getNodeName())))) {
             // check if the element has an ID attribute
             if (node.hasAttributes()) {
                 NamedNodeMap attributes = node.getAttributes();

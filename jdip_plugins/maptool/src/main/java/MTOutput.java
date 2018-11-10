@@ -92,7 +92,7 @@ public class MTOutput {
      * Get properly formatted output as a String
      */
     private String getOutput() {
-        StringBuffer sb = new StringBuffer(16384);
+        StringBuilder sb = new StringBuilder(16384);
 
         sb.append(getPlacements());
 
@@ -108,11 +108,10 @@ public class MTOutput {
      * Write placements as they should be formatted.
      */
     private String getPlacements() {
-        StringBuffer sb = new StringBuffer(2048);
+        StringBuilder sb = new StringBuilder(2048);
         sb.append("<jdipNS:PROVINCE_DATA>\n");
 
-        for (int i = 0; i < allProvs.length; i++) {
-            Province p = allProvs[i];
+        for (Province p : allProvs) {
             MapMetadata.InfoEntry ie = mmd.getInfoEntry(p);
 
             // print standard coast info first (shouldn't matter: Coast.LAND or Coast.SEA
@@ -123,9 +122,9 @@ public class MTOutput {
 
             // if we are multi-coastal, we must print all coast data.
             Coast[] multiCoasts = p.getValidDirectionalCoasts();
-            for (int mcIdx = 0; mcIdx < multiCoasts.length; mcIdx++) {
+            for (Coast multiCoast : multiCoasts) {
                 sb.append("   ");
-                sb.append(makePROVINCEtag(ie, p, multiCoasts[mcIdx]));
+                sb.append(makePROVINCEtag(ie, p, multiCoast));
                 sb.append("\n");
             }
         }
@@ -138,7 +137,7 @@ public class MTOutput {
      * Creates a PROVINCE xml tag and children
      */
     private String makePROVINCEtag(MapMetadata.InfoEntry ie, Province p, Coast coast) {
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
 
         // province: <jdipNS:PROVINCE name="ank">
         sb.append("<jdipNS:PROVINCE name=\"");
@@ -204,20 +203,20 @@ public class MTOutput {
             return "\n[Label Data not Available]\n";
         }
 
-        StringBuffer sb = new StringBuffer(8192);
+        StringBuilder sb = new StringBuilder(8192);
 
         sb.append("\n\n*** PROVINCE BRIEF NAME LAYER ***\n");
-        for (int i = 0; i < allProvs.length; i++) {
+        for (Province province : allProvs) {
             sb.append("   ");
-            sb.append(mtl.getBriefTextInfo(allProvs[i]).toString());
+            sb.append(mtl.getBriefTextInfo(province).toString());
             sb.append("\n");
         }
 
 
         sb.append("\n\n*** PROVINCE FULL NAME LAYER ***\n");
-        for (int i = 0; i < allProvs.length; i++) {
+        for (Province province : allProvs) {
             sb.append("   ");
-            sb.append(mtl.getFullTextInfo(allProvs[i]).toString());
+            sb.append(mtl.getFullTextInfo(province).toString());
             sb.append("\n");
         }
 

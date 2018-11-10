@@ -53,15 +53,15 @@ public interface GUIOrder extends Orderable {
     /**
      * Z-order layer for orders that are drawn over units
      */
-    public static final int LAYER_HIGHEST = 0;        // build, remove, disband
+    int LAYER_HIGHEST = 0;        // build, remove, disband
     /**
      * Typical Z-order layer; drawn under units
      */
-    public static final int LAYER_TYPICAL = 1;        // most orders
+    int LAYER_TYPICAL = 1;        // most orders
     /**
      * Lowest Z-order units; all other order layers drawn over this layer.
      */
-    public static final int LAYER_LOWEST = 2;        // convoy, supports
+    int LAYER_LOWEST = 2;        // convoy, supports
 
 
     //
@@ -71,39 +71,39 @@ public interface GUIOrder extends Orderable {
     /**
      * Message displayed when an order may be issued by a mouse click
      */
-    public static final String CLICK_TO_ISSUE = "GUIOrder.common.click";
+    String CLICK_TO_ISSUE = "GUIOrder.common.click";
     /**
      * Message displayed when there is no unit in given location
      */
-    public static final String NO_UNIT = "GUIOrder.common.nounit";
+    String NO_UNIT = "GUIOrder.common.nounit";
     /**
      * Message displayed when there is no dislodged unit in given location
      */
-    public static final String NO_DISLODGED_UNIT = "GUIOrder.common.nodislodgedunit";
+    String NO_DISLODGED_UNIT = "GUIOrder.common.nodislodgedunit";
     /**
      * Message displayed when a power (set by setLockedPower()) does not control the given unit
      */
-    public static final String NOT_OWNER = "GUIOrder.common.notowner";
+    String NOT_OWNER = "GUIOrder.common.notowner";
     /**
      * Message displayed when order entry is complete.
      */
-    public static final String COMPLETE = "GUIOrder.common.complete";
+    String COMPLETE = "GUIOrder.common.complete";
     /**
      * Message displayed when order is cancelled.
      */
-    public static final String CANCELED = "GUIOrder.common.canceled";
+    String CANCELED = "GUIOrder.common.canceled";
     /**
      * Message indicating click to cancel order.
      */
-    public static final String CLICK_TO_CANCEL = "GUIOrder.common.clickcancel";
+    String CLICK_TO_CANCEL = "GUIOrder.common.clickcancel";
     /**
      * Message indicating cannot give order due to a Border constraint.
      */
-    public static final String BORDER_INVALID = "GUIOrder.common.badborder";
+    String BORDER_INVALID = "GUIOrder.common.badborder";
     /**
      * Message indicating that pointer is not over a province
      */
-    public static final String NOT_IN_PROVINCE = "GUIOrder.common.notprovince";
+    String NOT_IN_PROVINCE = "GUIOrder.common.notprovince";
 
     //
     // Methods for factory class
@@ -113,7 +113,7 @@ public interface GUIOrder extends Orderable {
     /**
      * Derive all fields from given Order. Sets completion flag.
      */
-    public void deriveFrom(Orderable order);
+    void deriveFrom(Orderable order);
 
     //
     //	Location setting/testing methods
@@ -123,32 +123,32 @@ public interface GUIOrder extends Orderable {
     /**
      * Tests if a given location is valid. Returns validity, and appends valid/invalid message to StringBuffer.
      */
-    public boolean testLocation(StateInfo stateInfo, Location location, StringBuffer sb);
+    boolean testLocation(StateInfo stateInfo, Location location, StringBuffer sb);
 
     /**
      * Clear all set locations. If no locations have been set, this has no effect.
      */
-    public boolean clearLocations();
+    boolean clearLocations();
 
     /**
      * Sets the current location. Otherwise similar to testLocation.
      */
-    public boolean setLocation(StateInfo stateInfo, Location location, StringBuffer sb);
+    boolean setLocation(StateInfo stateInfo, Location location, StringBuffer sb);
 
     /**
      * Returns if all Locations have been set and the order is complete.
      */
-    public boolean isComplete();
+    boolean isComplete();
 
     /**
      * Returns the number of required Location set points.
      */
-    public int getNumRequiredLocations();
+    int getNumRequiredLocations();
 
     /**
      * Returns the current Location set point, or 0 if no Locations have been set.
      */
-    public int getCurrentLocationNum();
+    int getCurrentLocationNum();
 
 
     /**
@@ -156,7 +156,7 @@ public interface GUIOrder extends Orderable {
      *
      * @throws IllegalArgumentException if the parameter or value is illegal
      */
-    public void setParam(Parameter param, Object value);
+    void setParam(Parameter param, Object value);
 
     /**
      * Checks if a given parameter has been set.
@@ -164,7 +164,7 @@ public interface GUIOrder extends Orderable {
      * @return set parameter, or null if no parameter has been set.
      * @throws IllegalArgumentException if the parameter is illegal
      */
-    public Object getParam(Parameter param);
+    Object getParam(Parameter param);
 
 
     //
@@ -175,24 +175,24 @@ public interface GUIOrder extends Orderable {
     /**
      * Indicates if this order is dependent upon the state of other orders for drawing.
      */
-    public boolean isDependent();
+    boolean isDependent();
 
     /**
      * Updates the DOM, given the given parameters. Adds if appropriate.
      */
-    public void updateDOM(MapInfo mapInfo);
+    void updateDOM(MapInfo mapInfo);
 
     /**
      * Removes order from the DOM
      */
-    public void removeFromDOM(MapInfo mapInfo);
+    void removeFromDOM(MapInfo mapInfo);
 
 
     /**
      * Typesafe Enum base class for Order object parameters.	<br>
      * GUIOrders which require Parameters must subclass this.
      */
-    public static abstract class Parameter {
+    abstract class Parameter {
         private transient final String name;
 
         /**
@@ -231,7 +231,7 @@ public interface GUIOrder extends Orderable {
      * typically change until the TurnState changes (or validation options
      * change).
      */
-    public static class StateInfo {
+    class StateInfo {
         private AdjustmentInfoMap adjMap = null;
         private TurnState turnState = null;
         private RuleOptions ruleOpts = null;
@@ -284,8 +284,8 @@ public interface GUIOrder extends Orderable {
          */
         public boolean canIssueOrder(final Power power) {
             final Power[] powers = cf.getOrderablePowers();
-            for (int i = 0; i < powers.length; i++) {
-                if (powers[i] == power) {
+            for (Power orderablePower : powers) {
+                if (orderablePower == power) {
                     return true;
                 }
             }
@@ -325,7 +325,7 @@ public interface GUIOrder extends Orderable {
      * Allows GUIOrder objects to ascertain information about other GUIOrders and
      * obtain Map metadata information.
      */
-    public static abstract class MapInfo {
+    abstract class MapInfo {
         protected TurnState ts = null;
 
         /**

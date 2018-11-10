@@ -259,10 +259,7 @@ public class TestParser {
         valOpts = new ValidationOptions();
         valOpts.setOption(ValidationOptions.KEY_GLOBAL_PARSING, ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE);
 
-        Iterator iter = cases.iterator();
-        while (iter.hasNext()) {
-            ORPair orp = (ORPair) iter.next();
-
+        for (ORPair orp : cases) {
             // determine if case is marked with a "FAIL" result line.
             boolean isMarkedFail = false;
             String res = orp.getResult().trim().toLowerCase();
@@ -291,7 +288,7 @@ public class TestParser {
 
                 // if marked as fail, and we succeed, it's a failure!
                 if (isMarkedFail) {
-                    StringBuffer sb = new StringBuffer(128);
+                    StringBuilder sb = new StringBuilder(128);
                     sb.append("Order line ");
                     sb.append(String.valueOf(orp.getLineNumber()));
                     sb.append("\"");
@@ -306,7 +303,7 @@ public class TestParser {
             } catch (OrderException e) {
                 // only count as a failure if RESULT line does NOT have a "FAIL" result.
                 if (!isMarkedFail) {
-                    StringBuffer sb = new StringBuffer(128);
+                    StringBuilder sb = new StringBuilder(128);
                     sb.append("Order line ");
                     sb.append(String.valueOf(orp.getLineNumber()));
                     sb.append(" \"");
@@ -326,9 +323,8 @@ public class TestParser {
         if (failedCases.size() > 0) {
             System.out.println("\nFailed orders, and failure reasons follow:");
 
-            iter = failedCases.iterator();
-            while (iter.hasNext()) {
-                System.out.println(iter.next());
+            for (String failedCase : failedCases) {
+                System.out.println(failedCase);
                 System.out.println();
             }
         }
@@ -358,14 +354,14 @@ public class TestParser {
 
         // find order.
         String[] params = null;
-        for (int i = 0; i < ORDER_ARGS.length; i++) {
-            if (toks[0].equalsIgnoreCase(ORDER_ARGS[i][0])) {
-                if (toks.length != ORDER_ARGS[i].length) {
+        for (String[] orderArg : ORDER_ARGS) {
+            if (toks[0].equalsIgnoreCase(orderArg[0])) {
+                if (toks.length != orderArg.length) {
                     System.out.println("ERROR: in result of order pair starting at line: " + orp.getLineNumber());
-                    System.out.println("Invalid number of arguments; " + (ORDER_ARGS[i].length - 1) + " are required.");
+                    System.out.println("Invalid number of arguments; " + (orderArg.length - 1) + " are required.");
                     System.exit(1);
                 } else {
-                    params = ORDER_ARGS[i];
+                    params = orderArg;
                 }
             }
         }
@@ -382,7 +378,7 @@ public class TestParser {
 
         // validate name
         if (!name.equalsIgnoreCase(o.getFullName())) {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("Order line ");
             sb.append(String.valueOf(orp.getLineNumber()));
             sb.append(" \"");
@@ -487,7 +483,7 @@ public class TestParser {
 
         // does tok match? if not, add to failed cases, return false
         if (power != thePower) {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("Order line ");
             sb.append(String.valueOf(orp.getLineNumber()));
             sb.append(" \"");
@@ -516,7 +512,7 @@ public class TestParser {
         // does tok match? if not, add to failed cases, return false
         // cannot use identity-equals here
         if (!loc.equals(theLoc)) {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("Order line ");
             sb.append(String.valueOf(orp.getLineNumber()));
             sb.append(" \"");
@@ -553,7 +549,7 @@ public class TestParser {
 
         // does tok match? if not, add to failed cases, return false
         if (ut != theUnitType) {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("Order line ");
             sb.append(String.valueOf(orp.getLineNumber()));
             sb.append(" \"");
@@ -592,7 +588,7 @@ public class TestParser {
 
         // does tok match? if not, add to failed cases, return false
         if (bool != theBoolean) {
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("Order line ");
             sb.append(String.valueOf(orp.getLineNumber()));
             sb.append(" \"");
@@ -673,9 +669,9 @@ public class TestParser {
         // clear positions in this world
         Position pos = turnState.getPosition();
         Province[] provs = pos.getProvinces();
-        for (int i = 0; i < provs.length; i++) {
-            pos.setUnit(provs[i], null);
-            pos.setDislodgedUnit(provs[i], null);
+        for (Province prov : provs) {
+            pos.setUnit(prov, null);
+            pos.setDislodgedUnit(prov, null);
         }
 
         System.out.println("Variant \"" + variantName + "\" loaded successfully.");
@@ -754,20 +750,20 @@ public class TestParser {
 
 
                     String key = getKeyword(line);
-                    if (key == KEY_VARIANT) {
+                    if (KEY_VARIANT.equals(key)) {
                         if (variantName != null) {
                             lnrErrorExit(lnr, "VARIANT already defined.");
                         }
 
                         variantName = getPostKeywordText(line).trim();
                         setupVariant();
-                    } else if (key == KEY_SETUP) {
+                    } else if (KEY_SETUP.equals(key)) {
                         if (posList != null) {
                             lnrErrorExit(lnr, "SETUP block already defined.");
                         }
 
                         accum = new ArrayList<>(50);
-                    } else if (key == KEY_END) {
+                    } else if (KEY_END.equals(key)) {
                         if (accum == null) {
                             lnrErrorExit(lnr, "END line must be after a SETUP line or SETUPDISLODGED line.");
                         }
@@ -785,7 +781,7 @@ public class TestParser {
                             setupPositions(posList, dislodgedPosList);
                             setupDone = true;
                         }
-                    } else if (key == KEY_SETUPDISLODGED) {
+                    } else if (KEY_SETUPDISLODGED.equals(key)) {
                         if (posList == null) {
                             lnrErrorExit(lnr, "SETUPDISLODGED must be after a SETUP block.");
                         }
@@ -795,7 +791,7 @@ public class TestParser {
                         }
 
                         accum = new ArrayList<>(50);
-                    } else if (key == KEY_ORDER) {
+                    } else if (KEY_ORDER.equals(key)) {
                         if (!setupDone) {
                             lnrErrorExit(lnr, "ORDER (or ORD) keyword must be after SETUP block complete.");
                         }
@@ -807,7 +803,7 @@ public class TestParser {
                         currentCase = new ORPair();
                         currentCase.setOrder(getPostKeywordText(line));
                         currentCase.setLineNumber(lnr.getLineNumber());
-                    } else if (key == KEY_RESULT) {
+                    } else if (KEY_RESULT.equals(key)) {
                         if (!setupDone) {
                             lnrErrorExit(lnr, "RESULT (or RES) keyword must be after SETUP block complete.");
                         }
@@ -819,7 +815,7 @@ public class TestParser {
                         currentCase.setResult(getPostKeywordText(line));
                         cases.add(currentCase);
                         currentCase = null;
-                    } else if (key == KEY_COMMENT) {
+                    } else if (KEY_COMMENT.equals(key)) {
                         // do nothing
                     } else {
                         // add lines to accumulator
@@ -859,9 +855,9 @@ public class TestParser {
      */
     private String getKeyword(String line) {
         String lcLine = line.trim().toLowerCase();
-        for (int i = 0; i < KEYWORDS.length; i++) {
-            if (lcLine.startsWith(KEYWORDS[i][0])) {
-                return KEYWORDS[i][1];
+        for (String[] keyword : KEYWORDS) {
+            if (lcLine.startsWith(keyword[0])) {
+                return keyword[1];
             }
         }
 

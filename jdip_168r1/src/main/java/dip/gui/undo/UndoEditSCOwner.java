@@ -38,10 +38,10 @@ public class UndoEditSCOwner extends XAbstractUndoableEdit {
     private static final String PRESENTATION_NAME = "Undo.edit.changescowner";
 
     // instance variables
-    private Position position;
-    private Province province;
-    private Power oldPower;
-    private Power newPower;
+    private final Position position;
+    private final Province province;
+    private final Power oldPower;
+    private final Power newPower;
 
 
     public UndoEditSCOwner(UndoRedoManager urm, Position position, Province province, Power oldPower, Power newPower) {

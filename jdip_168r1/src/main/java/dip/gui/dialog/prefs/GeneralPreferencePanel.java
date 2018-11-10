@@ -44,7 +44,6 @@ import java.io.File;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -105,14 +104,14 @@ public class GeneralPreferencePanel extends PreferencePanel {
     private static LRUCache<String, File> fileCache = null;
     private static Collator collator = null;
     // UI Elements
-    private JCheckBox saveWindowSettings;                // save window settings (position, size)
-    private JTextField saveDir;                        // default save-files directory
-    private JButton browseSaveDir;                    // browse button for setting directory
-    private JButton clearMRU;                        // clears most-recently-used file list
-    private JCheckBox reverseSort;    // reverse the order sort direction
-    private AssocJComboBox orderSorting;    // order sorting type
-    private AssocJComboBox mapLabels;        // map label level
-    private JCheckBox showResolution;
+    private final JCheckBox saveWindowSettings;                // save window settings (position, size)
+    private final JTextField saveDir;                        // default save-files directory
+    private final JButton browseSaveDir;                    // browse button for setting directory
+    private final JButton clearMRU;                        // clears most-recently-used file list
+    private final JCheckBox reverseSort;    // reverse the order sort direction
+    private final AssocJComboBox orderSorting;    // order sorting type
+    private final AssocJComboBox mapLabels;        // map label level
+    private final JCheckBox showResolution;
     private ClientFrame cf = null;
 
 
@@ -257,9 +256,8 @@ public class GeneralPreferencePanel extends PreferencePanel {
      */
     public static String getOrderSortMode() {
         Preferences prefs = SharedPrefs.getUserNode();
-        final String osSetting = OrderDisplayPanel.parseSortValue(
+        return OrderDisplayPanel.parseSortValue(
                 prefs.get(NODE_ORDER_SORTING, null), OrderDisplayPanel.SORT_PROVINCE);
-        return osSetting;
     }// getOrderSortMode()
 
     public static void getWindowSettings(Component c) {
@@ -347,9 +345,7 @@ public class GeneralPreferencePanel extends PreferencePanel {
         if (fileCache != null) {
             // load from cache; sort and check for file existence before returning
             ArrayList<String> names = new ArrayList<>(NUM_RECENT_FILES);
-            Iterator<Map.Entry<String, File>> iter = fileCache.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry<String, File> mapEntry = iter.next();
+            for (Map.Entry<String, File> mapEntry : fileCache.entrySet()) {
                 File file = mapEntry.getValue();
                 if (file.exists()) {
                     names.add(mapEntry.getKey());
@@ -415,10 +411,8 @@ public class GeneralPreferencePanel extends PreferencePanel {
             // use an iterator to preerve access-order.
             // save in reverse-order
             int idx = NUM_RECENT_FILES - 1;
-            Iterator iter = fileCache.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry mapEntry = (Map.Entry) iter.next();
-                File file = (File) mapEntry.getValue();
+            for (Map.Entry<String, File> mapEntry : fileCache.entrySet()) {
+                File file = mapEntry.getValue();
 
                 prefs.put((NODE_RECENT_FILE + String.valueOf(idx)), file.getPath());
                 idx--;

@@ -29,7 +29,7 @@ import java.util.Map;
  * Implements an LRU Cache; based on LinkedHashMap from JDK1.4
  */
 public class LRUCache<K, V> extends LinkedHashMap<K, V> {
-    private int maxsize;
+    private final int maxsize;
 
 
     /**

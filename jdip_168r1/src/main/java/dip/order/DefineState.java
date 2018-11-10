@@ -95,9 +95,7 @@ public class DefineState extends Order {
     public boolean equals(Object obj) {
         if (obj instanceof DefineState) {
             DefineState ds = (DefineState) obj;
-            if (super.equals(ds)) {
-                return true;
-            }
+            return super.equals(ds);
         }
         return false;
     }// equals()

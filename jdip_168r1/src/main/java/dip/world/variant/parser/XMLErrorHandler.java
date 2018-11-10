@@ -65,7 +65,7 @@ public final class XMLErrorHandler implements ErrorHandler {
      * Dialog method for error handling
      */
     protected void showError(SAXParseException e, String type) {
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
         sb.append("XML Validation ");
         sb.append(type);
         sb.append(":\n");
@@ -78,7 +78,7 @@ public final class XMLErrorHandler implements ErrorHandler {
      * Gets the error, nicely formatted
      */
     protected String getLocationString(SAXParseException e) {
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
         String systemId = e.getSystemId();
 
         if (systemId != null) {

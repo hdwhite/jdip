@@ -91,8 +91,8 @@ public class MTLabeler {
      * <b>DO NOT use setAttributes() from this TextInfo unless in a RunnableQueue</b>
      */
     public TextInfo getBriefTextInfo(Province p) {
-        assert (((TIMapEntry) map.get(p)).brief != null);
-        return ((TIMapEntry) map.get(p)).brief;
+        assert (map.get(p).brief != null);
+        return map.get(p).brief;
     }// getBriefTextInfo()
 
 
@@ -101,8 +101,8 @@ public class MTLabeler {
      * <b>DO NOT use setAttributes() from this TextInfo unless in a RunnableQueue</b>
      */
     public TextInfo getFullTextInfo(Province p) {
-        assert (((TIMapEntry) map.get(p)).full != null);
-        return ((TIMapEntry) map.get(p)).full;
+        assert (map.get(p).full != null);
+        return map.get(p).full;
     }// getFullTextInfo()
 
 
@@ -145,8 +145,8 @@ public class MTLabeler {
         final Province[] allProvs = gameMap.getProvinces();
 
         // setup map entries
-        for (int i = 0; i < allProvs.length; i++) {
-            map.put(allProvs[i], new TIMapEntry());
+        for (Province province : allProvs) {
+            map.put(province, new TIMapEntry());
         }
 
         // read in existing map labels.
@@ -156,7 +156,7 @@ public class MTLabeler {
             if (child instanceof SVGTextElement) {
                 TextInfo ti = TextInfo.createTextInfo(gameMap, doc, (SVGTextElement) child);
                 if (ti != null) {
-                    TIMapEntry me = (TIMapEntry) map.get(ti.getProvince());
+                    TIMapEntry me = map.get(ti.getProvince());
                     if (ti.isBrief()) {
                         me.brief = ti;
                     } else {
@@ -174,7 +174,7 @@ public class MTLabeler {
             if (child instanceof SVGTextElement) {
                 TextInfo ti = TextInfo.createTextInfo(gameMap, doc, (SVGTextElement) child);
                 if (ti != null) {
-                    TIMapEntry me = (TIMapEntry) map.get(ti.getProvince());
+                    TIMapEntry me = map.get(ti.getProvince());
                     if (ti.isBrief()) {
                         me.brief = ti;
                     } else {
@@ -188,15 +188,15 @@ public class MTLabeler {
         }
 
         // check to see which map labels aren't read. Create empty labels.
-        for (int i = 0; i < allProvs.length; i++) {
-            TIMapEntry me = (TIMapEntry) map.get(allProvs[i]);
+        for (Province province : allProvs) {
+            TIMapEntry me = map.get(province);
 
             if (me.brief == null) {
-                me.brief = new TextInfo(doc, allProvs[i], true);
+                me.brief = new TextInfo(doc, province, true);
             }
 
             if (me.full == null) {
-                me.full = new TextInfo(doc, allProvs[i], false);
+                me.full = new TextInfo(doc, province, false);
             }
         }
 
@@ -204,8 +204,8 @@ public class MTLabeler {
         removeChildren(briefLayer);
         removeChildren(fullLayer);
 
-        for (int i = 0; i < allProvs.length; i++) {
-            TIMapEntry me = (TIMapEntry) map.get(allProvs[i]);
+        for (Province province : allProvs) {
+            TIMapEntry me = map.get(province);
             briefLayer.appendChild(me.brief.getTextElement());
             fullLayer.appendChild(me.full.getTextElement());
         }

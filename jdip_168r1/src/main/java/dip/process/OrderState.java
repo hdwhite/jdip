@@ -29,7 +29,6 @@ import dip.world.Location;
 import dip.world.Power;
 import dip.world.Province;
 
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -392,7 +391,7 @@ public final class OrderState {
      */
     public void setDependentSupports(List<OrderState> osList) {
         assert (verifyListSupport(osList));
-        dependentSupports = (OrderState[]) osList.toArray(new OrderState[osList.size()]);
+        dependentSupports = osList.toArray(new OrderState[osList.size()]);
     }// setDependentSupports()
 
     /**
@@ -408,7 +407,7 @@ public final class OrderState {
      */
     public void setDependentMovesToSource(List<OrderState> osList) {
         assert (verifyListMove(osList));
-        dependentMovesToSource = (OrderState[]) osList.toArray(new OrderState[osList.size()]);
+        dependentMovesToSource = osList.toArray(new OrderState[osList.size()]);
     }// addDependentMoveToSource()
 
     /**
@@ -424,7 +423,7 @@ public final class OrderState {
      */
     public void setDependentMovesToDestination(List<OrderState> osList) {
         assert (verifyListMove(osList));
-        dependentMovesToDestination = (OrderState[]) osList.toArray(new OrderState[osList.size()]);
+        dependentMovesToDestination = osList.toArray(new OrderState[osList.size()]);
     }// addDependentMoveToDestination()
 
     /**
@@ -447,7 +446,7 @@ public final class OrderState {
      */
     public void setDependentSelfSupports(List<OrderState> osList) {
         assert (verifyListSelfSupport(osList));
-        dependentSelfSupports = (OrderState[]) osList.toArray(new OrderState[osList.size()]);
+        dependentSelfSupports = osList.toArray(new OrderState[osList.size()]);
     }// addDependentSupport()
 
     /**
@@ -546,8 +545,7 @@ public final class OrderState {
     protected int getSupport(boolean isCertain, OrderState[] supportList, int defaultStrength) {
         int strength = defaultStrength;
 
-        for (int i = 0; i < supportList.length; i++) {
-            OrderState os = supportList[i];
+        for (OrderState os : supportList) {
             if (os.getEvalState() == Tristate.SUCCESS
                     || (!isCertain && os.getEvalState() == Tristate.UNCERTAIN)) {
                 strength++;
@@ -562,10 +560,8 @@ public final class OrderState {
     /**
      * Verifies that given list ONLY contains Move orderstates
      */
-    private boolean verifyListMove(List list) {
-        Iterator iter = list.iterator();
-        while (iter.hasNext()) {
-            OrderState os = (OrderState) iter.next();
+    private boolean verifyListMove(List<OrderState> list) {
+        for (OrderState os : list) {
             if (!(os.getOrder() instanceof Move)) {
                 return false;
             }
@@ -578,10 +574,8 @@ public final class OrderState {
     /**
      * Verifies that given list ONLY contains Support orderstates
      */
-    private boolean verifyListSupport(List list) {
-        Iterator iter = list.iterator();
-        while (iter.hasNext()) {
-            OrderState os = (OrderState) iter.next();
+    private boolean verifyListSupport(List<OrderState> list) {
+        for (OrderState os : list) {
             if (!(os.getOrder() instanceof Support)) {
                 return false;
             }
@@ -594,10 +588,8 @@ public final class OrderState {
     /**
      * Verifies that given list ONLY contains Self Support orderstates
      */
-    private boolean verifyListSelfSupport(List list) {
-        Iterator iter = list.iterator();
-        while (iter.hasNext()) {
-            OrderState os = (OrderState) iter.next();
+    private boolean verifyListSelfSupport(List<OrderState> list) {
+        for (OrderState os : list) {
             if (os.getOrder() instanceof Support) {
                 Support support = (Support) os.getOrder();
                 if (support.isSupportingHold()) {

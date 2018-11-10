@@ -110,7 +110,7 @@ public abstract class RenderCommandFactory {
          * For debugging
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append("[");
             sb.append(this.getClass().getName());
             return sb.toString();

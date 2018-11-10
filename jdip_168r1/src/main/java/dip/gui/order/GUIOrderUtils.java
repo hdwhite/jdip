@@ -47,7 +47,6 @@ import org.w3c.dom.svg.SVGGElement;
 import org.w3c.dom.svg.SVGUseElement;
 
 import java.awt.geom.Point2D;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -308,7 +307,7 @@ final class GUIOrderUtils {
         element.setAttributeNS(null, CSSConstants.CSS_STROKE_PROPERTY, mmd.getPowerColor(power));
         String filter = mmd.getOrderParamString(mmdOrderElementName, MapMetadata.ATT_FILTERID);
         if (filter.length() > 0) {
-            StringBuffer sb = new StringBuffer(filter.length() + 6);
+            StringBuilder sb = new StringBuilder(filter.length() + 6);
             sb.append("url(#");
             sb.append(filter);
             sb.append(')');
@@ -324,7 +323,7 @@ final class GUIOrderUtils {
     public static void makeStyled(SVGElement[] elements, MapMetadata mmd, String mmdOrderElementName, Power power) {
         String filter = mmd.getOrderParamString(mmdOrderElementName, MapMetadata.ATT_FILTERID);
         if (filter.length() > 0) {
-            StringBuffer sb = new StringBuffer(filter.length() + 6);
+            StringBuilder sb = new StringBuilder(filter.length() + 6);
             sb.append("url(#");
             sb.append(filter);
             sb.append(')');
@@ -335,10 +334,10 @@ final class GUIOrderUtils {
 
         String powerColor = mmd.getPowerColor(power);
 
-        for (int i = 0; i < elements.length; i++) {
-            elements[i].setAttributeNS(null, CSSConstants.CSS_STROKE_PROPERTY, powerColor);
+        for (SVGElement element : elements) {
+            element.setAttributeNS(null, CSSConstants.CSS_STROKE_PROPERTY, powerColor);
             if (filter != null) {
-                elements[i].setAttributeNS(null, SVGConstants.SVG_FILTER_ATTRIBUTE, filter);
+                element.setAttributeNS(null, SVGConstants.SVG_FILTER_ATTRIBUTE, filter);
             }
         }
     }// makeStyled()
@@ -356,8 +355,8 @@ final class GUIOrderUtils {
      */
     public static void makeHilight(SVGElement[] elements, MapMetadata mmd, String mmdOrderElementName) {
         String cssStyle = mmd.getOrderParamString(mmdOrderElementName, MapMetadata.ATT_HILIGHT_CLASS);
-        for (int i = 0; i < elements.length; i++) {
-            elements[i].setAttributeNS(null, SVGConstants.SVG_CLASS_ATTRIBUTE, cssStyle);
+        for (SVGElement element : elements) {
+            element.setAttributeNS(null, SVGConstants.SVG_CLASS_ATTRIBUTE, cssStyle);
         }
     }// makeHilight()
 
@@ -377,11 +376,9 @@ final class GUIOrderUtils {
      */
     public static Move findMatchingMove(MapInfo mapInfo, Province src, Province dest) {
         Power[] powers = mapInfo.getDisplayablePowers();
-        for (int i = 0; i < powers.length; i++) {
-            List orders = mapInfo.getTurnState().getOrders(powers[i]);
-            Iterator iter = orders.iterator();
-            while (iter.hasNext()) {
-                Orderable o = (Orderable) iter.next();
+        for (Power power : powers) {
+            List<Orderable> orders = mapInfo.getTurnState().getOrders(power);
+            for (Orderable o : orders) {
                 if (o instanceof Move) {
                     Move mv = (Move) o;
                     if (mv.getSource().isProvinceEqual(src)
@@ -402,11 +399,9 @@ final class GUIOrderUtils {
      */
     public static Hold findMatchingHold(MapInfo mapInfo, Province src) {
         Power[] powers = mapInfo.getDisplayablePowers();
-        for (int i = 0; i < powers.length; i++) {
-            List orders = mapInfo.getTurnState().getOrders(powers[i]);
-            Iterator iter = orders.iterator();
-            while (iter.hasNext()) {
-                Orderable o = (Orderable) iter.next();
+        for (Power power : powers) {
+            List<Orderable> orders = mapInfo.getTurnState().getOrders(power);
+            for (Orderable o : orders) {
                 if (o instanceof Hold && o.getSource().isProvinceEqual(src)) {
                     return (Hold) o;
                 }
@@ -428,11 +423,9 @@ final class GUIOrderUtils {
         int count = 0;
 
         Power[] powers = mapInfo.getDisplayablePowers();
-        for (int i = 0; i < powers.length; i++) {
-            List orders = mapInfo.getTurnState().getOrders(powers[i]);
-            Iterator iter = orders.iterator();
-            while (iter.hasNext()) {
-                Orderable o = (Orderable) iter.next();
+        for (Power power : powers) {
+            List<Orderable> orders = mapInfo.getTurnState().getOrders(power);
+            for (Orderable o : orders) {
                 if (o instanceof Support) {
                     Support sup = (Support) o;
                     if (sup.getSupportedSrc().isProvinceEqual(supSrc)
@@ -529,8 +522,8 @@ final class GUIOrderUtils {
         }
 
         final Power[] displayedPowers = mapInfo.getDisplayablePowers();
-        for (int i = 0; i < displayedPowers.length; i++) {
-            if (displayedPowers[i] == power) {
+        for (Power displayedPower : displayedPowers) {
+            if (displayedPower == power) {
                 return true;
             }
         }

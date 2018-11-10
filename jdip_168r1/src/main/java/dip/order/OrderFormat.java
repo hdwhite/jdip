@@ -145,7 +145,7 @@ public class OrderFormat {
      */
     private static String handleNull(Class cls) {
         assert (cls != null);
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         sb.append("null(");
         sb.append(cls.getName());
         sb.append(")");
@@ -158,7 +158,7 @@ public class OrderFormat {
      * returning a transformed String.
      */
     private static String applyStyle(final int originalStyle, final String input) {
-        if (input == EMPTY) {
+        if (EMPTY.equals(input)) {
             return input;
         }
 
@@ -201,7 +201,7 @@ public class OrderFormat {
      * word.
      */
     private static String toTitleCase(final String input, boolean allWords) {
-        final StringBuffer sb = new StringBuffer(input.length());
+        final StringBuilder sb = new StringBuilder(input.length());
 
         boolean isInWord = false;
         boolean lastState = false;
@@ -249,7 +249,7 @@ public class OrderFormat {
                         text = coast.getName();
                         break;
                     case OrderFormatOptions.FORMAT_COAST_PAREN_BRIEF: {
-                        StringBuffer sb = new StringBuffer(4);
+                        StringBuilder sb = new StringBuilder(4);
                         sb.append('(');
                         sb.append(coast.getAbbreviation());
                         sb.append(')');
@@ -257,7 +257,7 @@ public class OrderFormat {
                     }
                     break;
                     case OrderFormatOptions.FORMAT_COAST_PAREN_FULL: {
-                        StringBuffer sb = new StringBuffer(16);
+                        StringBuilder sb = new StringBuilder(16);
                         sb.append('(');
                         sb.append(coast.getName());
                         sb.append(')');
@@ -389,7 +389,7 @@ public class OrderFormat {
         if (loc == null) {
             return (ofo.isDebug() ? handleNull(Location.class) : EMPTY);
         } else {
-            StringBuffer sb = new StringBuffer(64);
+            StringBuilder sb = new StringBuilder(64);
 
             sb.append(format(ofo, loc.getProvince()));
 
@@ -470,7 +470,7 @@ public class OrderFormat {
                 if (tokens[1].startsWith("?")) {
                     boolean isTrue = false;
                     if (out instanceof Boolean) {
-                        isTrue = ((Boolean) out).booleanValue();
+                        isTrue = (Boolean) out;
                     } else {
                         isTrue = (out != null);
                     }
@@ -600,7 +600,7 @@ public class OrderFormat {
             if (input == null) {
                 return EMPTY;
             } else if (input instanceof Location[]) {
-                final StringBuffer sb = new StringBuffer(128);
+                final StringBuilder sb = new StringBuilder(128);
                 final Location[] locs = (Location[]) input;
                 for (int i = 0; i < locs.length; i++) {
                     sb.append(format(ofo, locs[i].getProvince()));
@@ -612,7 +612,7 @@ public class OrderFormat {
                 }
                 return sb.toString();
             } else if (input instanceof Province[]) {
-                final StringBuffer sb = new StringBuffer(128);
+                final StringBuilder sb = new StringBuilder(128);
                 final Province[] provs = (Province[]) input;
                 for (int i = 0; i < provs.length; i++) {
                     sb.append(format(ofo, provs[i]));
@@ -657,7 +657,7 @@ public class OrderFormat {
         }
 
 
-        StringBuffer output = new StringBuffer(256);
+        StringBuilder output = new StringBuilder(256);
         StringBuffer accum = new StringBuffer(32);
 
         boolean inBrace = false;

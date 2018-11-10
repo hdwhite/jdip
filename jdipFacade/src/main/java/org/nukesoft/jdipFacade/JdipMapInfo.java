@@ -16,7 +16,11 @@
  */
 package org.nukesoft.jdipFacade;
 
-import dip.world.*;
+import dip.world.Coast;
+import dip.world.Location;
+import dip.world.Province;
+import dip.world.Unit;
+import dip.world.World;
 import org.nukesoft.jdipFacade.exception.ProvinceNotFoundException;
 import org.nukesoft.jdipFacade.exception.StateError;
 import org.nukesoft.jdipFacade.exception.UnitNotFoundException;
@@ -44,7 +48,7 @@ public class JdipMapInfo {
     public static final int FLEET_TYPE = 101;
     public static final int WING_TYPE = 102;
 
-    private World world;
+    private final World world;
 
     JdipMapInfo(World world) {
         this.world = world;
@@ -59,18 +63,18 @@ public class JdipMapInfo {
     public String[] getAllProvinceNames(int nameLength) {
         Province[] provinces = world.getMap().getProvinces();
         List<String> provWithCoast = new LinkedList<>();
-        for (int i = 0; i < provinces.length; i++) {
-            if (provinces[i].isCoastal()) {
-                Coast[] coasts = provinces[i].getValidDirectionalCoasts();
+        for (Province province : provinces) {
+            if (province.isCoastal()) {
+                Coast[] coasts = province.getValidDirectionalCoasts();
                 if (coasts.length == 0) {
-                    provWithCoast.add(getProvinceName(provinces[i], nameLength));
+                    provWithCoast.add(getProvinceName(province, nameLength));
                 } else {
-                    for (int j = 0; j < coasts.length; j++) {
-                        provWithCoast.add(getProvinceName(provinces[i], nameLength) + "/" + coasts[j].getAbbreviation());
+                    for (Coast coast : coasts) {
+                        provWithCoast.add(getProvinceName(province, nameLength) + "/" + coast.getAbbreviation());
                     }
                 }
             } else {
-                provWithCoast.add(getProvinceName(provinces[i], nameLength));
+                provWithCoast.add(getProvinceName(province, nameLength));
             }
         }
         //copy result into string array
@@ -147,16 +151,16 @@ public class JdipMapInfo {
         Province centeralProvince = getProvinceObject(provinceShortName);
         Location[] adjacentLocations = centeralProvince.getAdjacentLocations(Coast.TOUCHING);
         LinkedList<String> provsWithCoasts = new LinkedList<>();
-        for (int i = 0; i < adjacentLocations.length; i++) {
-            Province p = adjacentLocations[i].getProvince();
+        for (Location adjacentLocation : adjacentLocations) {
+            Province p = adjacentLocation.getProvince();
             if (p.isCoastal()) {
                 Coast[] coasts = p.getValidDirectionalCoasts();
                 if (coasts.length == 0) {
                     provsWithCoasts.add(getProvinceName(p, nameLength));
                 } else {
-                    for (int j = 0; j < coasts.length; j++) {
-                        if (p.isAdjacent(coasts[j], centeralProvince)) {
-                            provsWithCoasts.add(getProvinceName(p, nameLength) + "/" + coasts[j].getAbbreviation());
+                    for (Coast coast : coasts) {
+                        if (p.isAdjacent(coast, centeralProvince)) {
+                            provsWithCoasts.add(getProvinceName(p, nameLength) + "/" + coast.getAbbreviation());
                         }
                     }
                 }
@@ -183,9 +187,9 @@ public class JdipMapInfo {
     public String[] getConvoyEndpointProvinces(int nameLength) {
         Province[] allProvinces = world.getMap().getProvinces();
         LinkedList<Province> convoyableProvinces = new LinkedList<>();
-        for (int i = 0; i < allProvinces.length; i++) {
-            if (allProvinces[i].isCoastal()) {
-                convoyableProvinces.add(allProvinces[i]);
+        for (Province province : allProvinces) {
+            if (province.isCoastal()) {
+                convoyableProvinces.add(province);
             }
         }
         return convertProvincesToStrings(convoyableProvinces.toArray(), nameLength);

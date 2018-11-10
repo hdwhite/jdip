@@ -86,9 +86,7 @@ public class SymbolInjector {
         }
 
         // load URL into DOM Document
-        InputStream is = null;
-        try {
-            is = new BufferedInputStream(url.openStream());
+        try (InputStream is = new BufferedInputStream(url.openStream())) {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);    // essential!
             dbf.setValidating(cf.getValidating());
@@ -97,13 +95,6 @@ public class SymbolInjector {
             FastEntityResolver.attach(docBuilder);
 
             doc = docBuilder.parse(is);
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                }
-            }
         }
     }// SymbolInjector()
 
@@ -161,8 +152,7 @@ public class SymbolInjector {
         assert (symbols != null);
         assert (symbols.length > 0);
 
-        for (int i = 0; i < symbols.length; i++) {
-            Symbol symbol = symbols[i];
+        for (Symbol symbol : symbols) {
             Element element = (Element) defsElementMap.get(symbol.getName());
             if (element == null) {
                 // does not exist! add
@@ -256,22 +246,22 @@ public class SymbolInjector {
         final String oldCSS = cdsNode.getData();
 
         // collision check
-        for (int i = 0; i < cssStyles.length; i++) {
-            if (oldCSS.indexOf(cssStyles[i].getName()) >= 0) {
-                throw new IOException("Map and SymbolPack contain same CSS style: \"" + cssStyles[i].getName() + "\"");
+        for (SymbolPack.CSSStyle cssStyle : cssStyles) {
+            if (oldCSS.contains(cssStyle.getName())) {
+                throw new IOException("Map and SymbolPack contain same CSS style: \"" + cssStyle.getName() + "\"");
             }
         }
 
         // add (at end)
-        StringBuffer sb = new StringBuffer(oldCSS);
+        StringBuilder sb = new StringBuilder(oldCSS);
 
 
         sb.append("/* merged CSS from SymbolPack */\n");
 
-        for (int i = 0; i < cssStyles.length; i++) {
-            sb.append(cssStyles[i].getName());
+        for (SymbolPack.CSSStyle cssStyle : cssStyles) {
+            sb.append(cssStyle.getName());
             sb.append(' ');
-            sb.append(cssStyles[i].getStyle());
+            sb.append(cssStyle.getStyle());
             sb.append('\n');
         }
 

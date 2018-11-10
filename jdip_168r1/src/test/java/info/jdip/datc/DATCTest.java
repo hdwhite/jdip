@@ -12,7 +12,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import static java.time.Duration.ofSeconds;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
@@ -23,7 +27,7 @@ public abstract class DATCTest {
 
     protected static TestSuite testSuite;
     protected static String testCaseLocation;
-    List<String> unRezParadoxes = new LinkedList<>();
+    final List<String> unRezParadoxes = new LinkedList<>();
 
 
     private static List<TestSuite.Case> sourceOfCases() {
@@ -86,19 +90,15 @@ public abstract class DATCTest {
         Set<TestSuite.UnitPos> resolvedUnits = new HashSet<>();
 
         Province[] provs = pos.getUnitProvinces();
-        for(int i=0; i<provs.length; i++)
-        {
-            if(!resolvedUnits.add(new TestSuite.UnitPos(pos, provs[i], false)))
-            {
+        for (Province province : provs) {
+            if (!resolvedUnits.add(new TestSuite.UnitPos(pos, province, false))) {
                 throw new IllegalStateException("CompareState: Internal error (non dislodged)");
             }
         }
 
         provs = pos.getDislodgedUnitProvinces();
-        for(int i=0; i<provs.length; i++)
-        {
-            if(!resolvedUnits.add(new TestSuite.UnitPos(pos, provs[i], true)))
-            {
+        for (Province province : provs) {
+            if (!resolvedUnits.add(new TestSuite.UnitPos(pos, province, true))) {
                 throw new IllegalStateException("CompareState: Internal error (dislodged)");
             }
         }
@@ -112,20 +112,16 @@ public abstract class DATCTest {
         Set<TestSuite.UnitPos> caseUnits = new HashSet<>();
 
         DefineState[] dsOrds = c.getPostState();
-        for(int i=0; i<dsOrds.length; i++)
-        {
-            if(!caseUnits.add(new TestSuite.UnitPos(dsOrds[i], false)))
-            {
+        for (DefineState dsOrd : dsOrds) {
+            if (!caseUnits.add(new TestSuite.UnitPos(dsOrd, false))) {
 //                println("ERROR: duplicate POSTSTATE position: "+dsOrds[i]);
                 return false;
             }
         }
 
         dsOrds = c.getPostDislodged();
-        for(int i=0; i<dsOrds.length; i++)
-        {
-            if(!caseUnits.add(new TestSuite.UnitPos(dsOrds[i], true)))
-            {
+        for (DefineState dsOrd : dsOrds) {
+            if (!caseUnits.add(new TestSuite.UnitPos(dsOrd, true))) {
 //                println("ERROR: duplicate POSTSTATE_DISLODGED position: "+dsOrds[i]);
                 return false;
             }

@@ -22,8 +22,22 @@
 //
 package jdip.tool.conversion;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 /**
 	Converts Realpolitik variants to jDip variants.
@@ -86,17 +100,11 @@ public class RPConvert
 			File inFile = new File(in);
 			new RPConvert(inFile);
 		}
-		catch(IOException e)
+		catch(IOException | NumberFormatException e)
 		{
 			System.err.println(e.getMessage());
 			System.exit(1);
-		}
-		catch(NumberFormatException e2)
-		{
-			System.err.println(e2.getMessage());
-			System.exit(1);
-		}
-		catch(Throwable t)
+		} catch(Throwable t)
 		{
 			t.printStackTrace();
 			System.exit(1);
@@ -157,23 +165,13 @@ public class RPConvert
 
 		File out = new File("variants.xml");
 
-		BufferedWriter bw = null;
-		try
-		{
-			bw = new BufferedWriter(new FileWriter(out));
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(out))) {
 
 			// write adjacency data
-            HashMap<String, String> templateData = new HashMap<>();
+			HashMap<String, String> templateData = new HashMap<>();
 			makeVariantXMLTemplateData(templateData, mc, variant, countries);
-			bw.write( variantTemplate.parse(templateData) );
-			System.out.println("File created: "+out);
-		}
-		finally
-		{
-			if(bw != null)
-			{
-				bw.close();
-			}
+			bw.write(variantTemplate.parse(templateData));
+			System.out.println("File created: " + out);
 		}
 	}// makeVariantXMLFile()
 
@@ -224,9 +222,7 @@ public class RPConvert
 
 		// power (countries)
 		StringBuffer sb = new StringBuffer();
-		for(int i=0; i<countries.length; i++)
-		{
-			Country country = countries[i];
+		for (Country country : countries) {
 			sb.append("\t\t<POWER name=\"");
 			sb.append(country.getName());
 			sb.append("\" active=\"true\" adjective=\"");
@@ -237,11 +233,10 @@ public class RPConvert
 
 		// rule options (only build rule is currently set)
 		String buildType = "VALUE_BUILDS_HOME_ONLY";
-		if(variant.getBuildType() == Variant.BUILD_CHAOS)
+        if (Variant.BUILD_CHAOS.equals(variant.getBuildType()))
 		{
 			buildType = "VALUE_BUILDS_ANY_OWNED";
-		}
-		else if(variant.getBuildType() == Variant.BUILD_ABERRATION)
+		} else if (Variant.BUILD_ABERRATION.equals(variant.getBuildType()))
 		{
 			buildType = "VALUE_BUILDS_ANY_IF_HOME_OWNED";
 		}
@@ -253,49 +248,35 @@ public class RPConvert
 
 		// create mapping of Country initials to Country
         final HashMap<String, Country> i2cMap = new HashMap<>();
-		for(int i=0; i<countries.length; i++)
-		{
-			i2cMap.put(countries[i].getInitial(), countries[i]);
+		for (Country country : countries) {
+			i2cMap.put(country.getInitial(), country);
 		}
 
 		// SC
 		sb = new StringBuffer();
-		Iterator iter = mc.getProvObjList().iterator();
-		while(iter.hasNext())
-		{
-			ProvObj po = (ProvObj) iter.next();
+		for (ProvObj po : mc.getProvObjList()) {
 
-			if(po.isNeutralSC())
-			{
+			if (po.isNeutralSC()) {
 				sb.append("\t\t<SUPPLYCENTER province=\"");
 				sb.append(po.getSN());
 				sb.append("\"/>\n");
-			}
-			else if(po.isHomeSC())
-			{
+			} else if (po.isHomeSC()) {
 				sb.append("\t\t<SUPPLYCENTER province=\"");
 				sb.append(po.getSN());
 
 				// find country
-                Country c = i2cMap.get(po.getHomeSC());
-				if(c == null)
-				{
-					throw new IOException("Cannot find a Country for initial "+po.getHomeSC()+".\n");
+				Country c = i2cMap.get(po.getHomeSC());
+				if (c == null) {
+					throw new IOException("Cannot find a Country for initial " + po.getHomeSC() + ".\n");
 				}
 
 				sb.append("\" homepower=\"");
 				sb.append(c.getName());
 
 				// if owned, set owner
-				for(int i=0; i<countries.length; i++)
-				{
-					Country country = countries[i];
-					Iterator cIter = countries[i].getSC().iterator();
-					while(cIter.hasNext())
-					{
-						Loc loc = (Loc) cIter.next();
-						if(loc.getShortName().equalsIgnoreCase(po.getSN()))
-						{
+				for (Country country : countries) {
+					for (Loc loc : country.getSC()) {
+						if (loc.getShortName().equalsIgnoreCase(po.getSN())) {
 							sb.append("\" owner=\"");
 							sb.append(c.getName());
 						}
@@ -310,25 +291,18 @@ public class RPConvert
 		// initial unit positions
 		// (this is not known)
 		sb = new StringBuffer();
-		for(int i=0; i<countries.length; i++)
-		{
+		for (Country country : countries) {
 			/*
 				<INITIALSTATE province="stp" power="russia" unit="fleet" unitcoast="sc" />
 			*/
-			Country country = countries[i];
-			iter = country.getUnits().iterator();
-			while(iter.hasNext())
-			{
-				Unit unit = (Unit) iter.next();
-
+			for (Unit unit : country.getUnits()) {
 				sb.append("\t\t<INITIALSTATE province=\"");
 				sb.append(unit.getLoc().getShortName());
 				sb.append("\" power=\"");
 				sb.append(country.getName());
 				sb.append("\" unit=\"");
 				sb.append(unit.getType());
-				if(unit.getLoc().getCoastType() != null)
-				{
+				if (unit.getLoc().getCoastType() != null) {
 					sb.append("\" unitcoast=\"");
 					sb.append(unit.getLoc().getCoastType());
 				}
@@ -415,25 +389,18 @@ public class RPConvert
 			throw new IllegalArgumentException();
 		}
 
-		StringBuffer sb = new StringBuffer(4096);
-		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder(4096);
 
-		try
-		{
-			br = new BufferedReader(new FileReader(file));
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
 			sb.append("\t\t<p>\n");
 
 			String line = br.readLine();
-			while(line != null)
-			{
+			while (line != null) {
 				line = line.trim();
-				if("".equals(line))
-				{
+				if ("".equals(line)) {
 					sb.append("\t\t</p>\n\t\t<p>\n");
-				}
-				else
-				{
+				} else {
 					sb.append("\t\t\t");
 					sb.append(line);
 					sb.append("\n");
@@ -443,13 +410,6 @@ public class RPConvert
 			}
 
 			sb.append("\t\t</p>\n");
-		}
-		finally
-		{
-			if(br != null)
-			{
-				br.close();
-			}
 		}
 
 		return sb.toString();
@@ -525,24 +485,22 @@ public class RPConvert
 
 				// read each country (assume order is same as Countries[] array)
 				//
-				for(int i=0; i<countries.length; i++)
-				{
+				for (Country country : countries) {
 					// we don't care about adjustments
 					value = getNextDataLine(lnr);
 
 					// HOME SC
 					value = getNextDataLine(lnr);
 					StringTokenizer st = new StringTokenizer(value, " ;,\n\r");
-					while(st.hasMoreTokens())
-					{
+					while (st.hasMoreTokens()) {
 						final Loc loc = Loc.makeLoc(st.nextToken(), null);
-						countries[i].addSC(loc);
+						country.addSC(loc);
 					}
 
 					// UNITS
 					value = getNextDataLine(lnr);
 					Unit[] units = Unit.makeUnits(value);
-					countries[i].addUnits(units);
+					country.addUnits(units);
 				}
 
 				// # OF DISLODGES
@@ -776,7 +734,7 @@ public class RPConvert
 		throws IOException
 		{
 			boolean isReferenced = false;
-			if(value.indexOf("/") >= 0 || value.indexOf("\"") >= 0)
+			if (value.contains("/") || value.contains("\""))
 			{
 				isReferenced = true;
 			}
@@ -822,9 +780,9 @@ public class RPConvert
 		private String patternName;
 		private String colorName;
 
-        private List<Loc> sc;
-        private List<Unit> units;
-        private List<Unit> dislodgedUnits;
+		private final List<Loc> sc;
+		private final List<Unit> units;
+		private final List<Unit> dislodgedUnits;
 
 		private Country()
 		{
@@ -990,8 +948,7 @@ public class RPConvert
 				throw new IllegalArgumentException();
 			}
 
-			if(type != UNIT_WING && type != UNIT_FLEET && type
-				!= UNIT_ARMY)
+            if (!UNIT_WING.equals(type) && !UNIT_FLEET.equals(type) && !UNIT_ARMY.equals(type))
 			{
 				throw new IllegalArgumentException("invalid type");
 			}

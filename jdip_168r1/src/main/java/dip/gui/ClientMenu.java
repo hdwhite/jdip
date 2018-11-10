@@ -139,8 +139,8 @@ public class ClientMenu {
     // recent file menu fields
     private static final int RI_INSERT_POINT = 12;    // insertion point (index) for recent files
     // instance variables
-    private JMenuBar menuBar;
-    private Map<Object, JMenuItem> menuMap;
+    private final JMenuBar menuBar;
+    private final Map<Object, JMenuItem> menuMap;
     //private static Font menuFont = new Font("SansSerif", Font.PLAIN, 12);
     private ClientFrame clientFrame = null;
     private int numItems = 0;
@@ -458,8 +458,8 @@ public class ClientMenu {
         }
 
         // now delete
-        for (int i = 0; i < toRemove.length; i++) {
-            fileMenu.remove(toRemove[i]);
+        for (JMenuItem item : toRemove) {
+            fileMenu.remove(item);
         }
 
 
@@ -496,7 +496,7 @@ public class ClientMenu {
         numItems = array.length;
         for (int i = 0; i < array.length; i++) {
             String mnemonic = String.valueOf(i + 1);
-            StringBuffer sb = new StringBuffer(32);
+            StringBuilder sb = new StringBuilder(32);
             sb.append(mnemonic);
             sb.append(' ');
             sb.append(array[i]);
@@ -518,8 +518,8 @@ public class ClientMenu {
      */
     private void makeToolMenu(JMenu menu) {
         Tool[] tools = ToolManager.getTools();
-        for (int i = 0; i < tools.length; i++) {
-            menu.add(tools[i].registerJMenuItem());
+        for (Tool tool : tools) {
+            menu.add(tool.registerJMenuItem());
         }
     }// makeToolMenu()
 
@@ -785,8 +785,8 @@ public class ClientMenu {
 
         // remove old powers (if any) from menu map
         if (powers != null) {
-            for (int i = 0; i < powers.length; i++) {
-                menuMap.remove(powers[i]);
+            for (Power power : powers) {
+                menuMap.remove(power);
             }
         }
 
@@ -828,7 +828,7 @@ public class ClientMenu {
         int maxAccel = 12;                    // only go upto VK_F12 (pc/mac/unix usually have 12 Fn keys)
         for (int i = 0; i < powers.length; i++) {
             String mnemonic = String.valueOf(i + 1);
-            StringBuffer sb = new StringBuffer(32);
+            StringBuilder sb = new StringBuilder(32);
             sb.append(mnemonic);
             sb.append(' ');
             sb.append(powers[i].getName());
@@ -859,9 +859,9 @@ public class ClientMenu {
         // some powers are selected. determine which.
         ArrayList<Power> list = new ArrayList<>(powers.length);
 
-        for (int i = 0; i < powers.length; i++) {
-            if (getSelected(powers[i])) {
-                list.add(powers[i]);
+        for (Power power : powers) {
+            if (getSelected(power)) {
+                list.add(power);
             }
         }
 
@@ -899,8 +899,8 @@ public class ClientMenu {
 
         // remove any existing listeners
         ActionListener[] listeners = menuItem.getActionListeners();
-        for (int i = 0; i < listeners.length; i++) {
-            menuItem.removeActionListener(listeners[i]);
+        for (ActionListener listener : listeners) {
+            menuItem.removeActionListener(listener);
         }
 
         // add our new action listener, which will invoke (via reflection)
@@ -1032,12 +1032,12 @@ public class ClientMenu {
             JMenuItem jmi = (JMenuItem) e.getSource();
 
             if (jmi == getMenuItem(ClientMenu.VIEW_ORDERS_ALLPOWERS)) {
-                for (int i = 0; i < powers.length; i++) {
-                    setSelected(powers[i], true);
+                for (Power power : powers) {
+                    setSelected(power, true);
                 }
             } else if (jmi == getMenuItem(ClientMenu.VIEW_ORDERS_NOPOWERS)) {
-                for (int i = 0; i < powers.length; i++) {
-                    setSelected(powers[i], false);
+                for (Power power : powers) {
+                    setSelected(power, false);
                 }
             }
 
@@ -1064,13 +1064,13 @@ public class ClientMenu {
         }// actionWorldCreated()
 
         public void actionModeChanged(String mode) {
-            if (mode == ClientFrame.MODE_NONE) {
+            if (ClientFrame.MODE_NONE.equals(mode)) {
                 setModeNone();
-            } else if (mode == ClientFrame.MODE_ORDER) {
+            } else if (ClientFrame.MODE_ORDER.equals(mode)) {
                 setModeOrder();
-            } else if (mode == ClientFrame.MODE_REVIEW) {
+            } else if (ClientFrame.MODE_REVIEW.equals(mode)) {
                 setModeReview();
-            } else if (mode == ClientFrame.MODE_EDIT) {
+            } else if (ClientFrame.MODE_EDIT.equals(mode)) {
                 setModeEdit();
             }
         }// actionModeChanged()

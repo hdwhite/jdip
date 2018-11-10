@@ -38,7 +38,7 @@ import javax.swing.undo.CannotUndoException;
 public class UndoDeleteOrder extends XAbstractUndoableEdit {
     // instance variables
     private final static String PRESENTATION_NAME_PREFIX = "Undo.order.delete";
-    private Orderable order;
+    private final Orderable order;
 
 
     public UndoDeleteOrder(UndoRedoManager urm, Orderable order) {

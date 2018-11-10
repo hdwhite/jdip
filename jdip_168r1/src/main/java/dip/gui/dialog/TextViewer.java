@@ -105,8 +105,8 @@ public class TextViewer extends HeaderDialog {
 
     private boolean _isAccepted = false;
     private AcceptListener acceptListener = null;
-    private JEditorPane textPane;
-    private JScrollPane jsp;
+    private final JEditorPane textPane;
+    private final JScrollPane jsp;
 
     /**
      * Create a non-modal TextViewer
@@ -132,12 +132,12 @@ public class TextViewer extends HeaderDialog {
             public void processDroppedFiles(File[] files) {
                 final Document doc = textPane.getDocument();
 
-                for (int i = 0; i < files.length; i++) {
-                    StringBuffer sb = new StringBuffer();
+                for (File file : files) {
+                    StringBuilder sb = new StringBuilder();
                     BufferedReader br = null;
 
                     try {
-                        br = new BufferedReader(new FileReader(files[i]));
+                        br = new BufferedReader(new FileReader(file));
                         String line = br.readLine();
                         while (line != null) {
                             sb.append(line);
@@ -145,14 +145,14 @@ public class TextViewer extends HeaderDialog {
                             line = br.readLine();
                         }
                     } catch (IOException e) {
-                        ErrorDialog.displayFileIO(parent, e, files[i].getName());
+                        ErrorDialog.displayFileIO(parent, e, file.getName());
                     } finally {
                         try {
                             if (br != null) {
                                 br.close();
                             }
                         } catch (IOException e) {
-                            ErrorDialog.displayFileIO(parent, e, files[i].getName());
+                            ErrorDialog.displayFileIO(parent, e, file.getName());
                         }
                     }
 
@@ -224,9 +224,9 @@ public class TextViewer extends HeaderDialog {
                     DataFlavor stringDF = null;
 
                     DataFlavor[] dfs = t.getTransferDataFlavors();
-                    for (int i = 0; i < dfs.length; i++) {
-                        if (dfs[i].equals(DataFlavor.stringFlavor)) {
-                            stringDF = dfs[i];
+                    for (DataFlavor df : dfs) {
+                        if (df.equals(DataFlavor.stringFlavor)) {
+                            stringDF = df;
                             break;
                         }
                     }
@@ -251,11 +251,9 @@ public class TextViewer extends HeaderDialog {
                         DataFlavor bestTextFlavor = DataFlavor.selectBestTextFlavor(t.getTransferDataFlavors());
                         if (bestTextFlavor != null) {
                             // typical / fancy case
-                            Reader reader = null;
-                            try {
-                                reader = bestTextFlavor.getReaderForText(t);
+                            try (Reader reader = bestTextFlavor.getReaderForText(t)) {
                                 char[] buffer = new char[128];
-                                StringBuffer sb = new StringBuffer(2048);
+                                StringBuilder sb = new StringBuilder(2048);
 
                                 int nRead = reader.read(buffer);
                                 while (nRead != -1) {
@@ -265,14 +263,6 @@ public class TextViewer extends HeaderDialog {
                                 textPane.replaceSelection(sb.toString());
                                 return true;
                             } catch (Exception e) {
-                            } // do nothing
-                            finally {
-                                if (reader != null) {
-                                    try {
-                                        reader.close();
-                                    } catch (IOException e) {
-                                    }
-                                }
                             }
                         }
                     }
@@ -335,7 +325,7 @@ public class TextViewer extends HeaderDialog {
      * content between angle brackets.
      */
     protected String filterHTML(String in) {
-        StringBuffer out = new StringBuffer(in.length());
+        StringBuilder out = new StringBuilder(in.length());
 
         boolean noCopy = false;
         final int len = in.length();
@@ -596,8 +586,8 @@ public class TextViewer extends HeaderDialog {
             String cssText = Utils.getText(Utils.getResourceBasePrefix() + m.group(1));
 
             if (cssText != null) {
-                StringBuffer sb = new StringBuffer(text.length() + 4096);
-                sb.append(text.substring(0, m.start()));
+                StringBuilder sb = new StringBuilder(text.length() + 4096);
+                sb.append(text, 0, m.start());
                 sb.append("<style type=\"text/css\" media=\"screen\">\n\t<!--\n");
                 sb.append(cssText);
                 sb.append("\n\t-->\n</style>");
@@ -657,14 +647,14 @@ public class TextViewer extends HeaderDialog {
          * open, depending upon the value returned by
          * getCloseDialogAfterUnacceptable()
          */
-        public boolean isAcceptable(TextViewer t);
+        boolean isAcceptable(TextViewer t);
 
 
         /**
          * If true, the dialog closes after unacceptable input is given (but a warning
          * message could be displayed). If false, the dialog is not closed.
          */
-        public boolean getCloseDialogAfterUnacceptable();
+        boolean getCloseDialogAfterUnacceptable();
     }// inner interface AcceptListener
 
     /**
@@ -717,7 +707,7 @@ public class TextViewer extends HeaderDialog {
         }// JTextComponentMenuListener()
 
         public void actionPerformed(ActionEvent e) {
-            final String action = (String) e.getActionCommand();
+            final String action = e.getActionCommand();
             Action a = textComponent.getActionMap().get(action);
             if (a != null) {
                 a.actionPerformed(new ActionEvent(textComponent,

@@ -243,8 +243,8 @@ public class AdjustmentParser {
         // which should be eliminated.
         //
         final Power[] allPowers = map.getPowers();
-        for (int i = 0; i < allPowers.length; i++) {
-            StringBuffer sb = pmap.get(allPowers[i]);
+        for (Power power : allPowers) {
+            StringBuffer sb = pmap.get(power);
             if (sb != null) {
                 final String[] provs = sb.toString().split("[\\,]");
 
@@ -263,7 +263,7 @@ public class AdjustmentParser {
                 }
 
                 // create OwnerInfo
-                ownerList.add(new OwnerInfo(allPowers[i].getName(), provs));
+                ownerList.add(new OwnerInfo(power.getName(), provs));
             }
         }
     }// parseOwnerBlock()
@@ -274,8 +274,8 @@ public class AdjustmentParser {
     private void parseAdjustmentBlock(String text) {
         String[] lines = text.split("\\n");
 
-        for (int i = 0; i < lines.length; i++) {
-            Matcher m = regexAdjust.matcher(lines[i]);
+        for (String line : lines) {
+            Matcher m = regexAdjust.matcher(line);
 
             if (m.find()) {
                 adjustList.add(new AdjustInfo(
@@ -323,12 +323,12 @@ public class AdjustmentParser {
          * String output for debugging; may change between versions.
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append("OwnerInfo[power=");
             sb.append(power);
             sb.append(", locations=");
-            for (int i = 0; i < locations.length; i++) {
-                sb.append(locations[i]);
+            for (String location : locations) {
+                sb.append(location);
                 sb.append(',');
             }
             sb.append(']');
@@ -392,7 +392,7 @@ public class AdjustmentParser {
          * String output for debugging; may change between versions.
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append("AdjustInfo[power=");
             sb.append(power);
             sb.append(", SC=");

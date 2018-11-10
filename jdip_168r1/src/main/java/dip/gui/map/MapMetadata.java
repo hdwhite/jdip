@@ -227,8 +227,8 @@ public class MapMetadata {
     private static final Point2D.Float POINT_ZERO = new Point2D.Float(0.0f, 0.0f);
     private final MapPanel mp;
     // instance variables
-    private Map<Province, InfoEntry> infoMap;                // placement info
-    private HashMap<Object, Object> displayProps;        // display info Todo: this map is very strangely used
+    private final Map<Province, InfoEntry> infoMap;                // placement info
+    private final HashMap<Object, Object> displayProps;        // display info Todo: this map is very strangely used
     private Point2D.Float dislodgedUnitOffset = null;
     private boolean supressPlacementErrors = false;
     private SymbolPack sp = null;
@@ -330,7 +330,7 @@ public class MapMetadata {
      * is not recognized. Case sensitive.
      */
     public SymbolSize getSymbolSize(String symbolName) {
-        StringBuffer sbKey = new StringBuffer(64);
+        StringBuilder sbKey = new StringBuilder(64);
         sbKey.append(EL_SYMBOLSIZE);
         sbKey.append(symbolName);
         return (SymbolSize) displayProps.get(sbKey.toString());
@@ -403,7 +403,7 @@ public class MapMetadata {
      * Throws an IllegalArgumentException if parameter is not found.
      */
     public float getOrderParamFloat(String orderElement, String attribute) {
-        return ((Float) getOrderParam(orderElement, attribute)).floatValue();
+        return (Float) getOrderParam(orderElement, attribute);
     }// getOrderParamFloat()
 
 
@@ -416,7 +416,7 @@ public class MapMetadata {
      * orderElement is a order element constant (e.g., EL_HOLD, EL_MOVE).<br>
      */
     public float getOrderRadius(String orderElement, String symbolName) {
-        final float deltaRadius = ((Float) getOrderParam(orderElement, ATT_DELTA_RADIUS)).floatValue();
+        final float deltaRadius = (Float) getOrderParam(orderElement, ATT_DELTA_RADIUS);
         return getSymbolSize(symbolName).getRadius(deltaRadius);
     }// getOrderRadius()
 
@@ -435,7 +435,7 @@ public class MapMetadata {
      * For filter parameter, if no filter is supplied, returns an empty string.
      */
     private Object getOrderParam(String el, String att) {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         sb.append(el);
         sb.append(att);
         Object value = displayProps.get(sb.toString());
@@ -577,16 +577,16 @@ public class MapMetadata {
         // verify: make sure each province has at least one InfoEntry.
         // if we are supressing errors, fill in with empty data.
         Province[] provinces = mp.getWorld().getMap().getProvinces();
-        for (int i = 0; i < provinces.length; i++) {
-            if (infoMap.get(provinces[i]) == null) {
+        for (Province province : provinces) {
+            if (infoMap.get(province) == null) {
                 if (supressPlacementErrors) {
                     InfoEntry ie = new InfoEntry(new Point2D.Float(0, 0),
                             new Point2D.Float(0, 0),
                             new Point2D.Float(0, 0));
-                    infoMap.put(provinces[i], ie);
-                    Log.println("MMD: added empty entry for province ", provinces[i]);
+                    infoMap.put(province, ie);
+                    Log.println("MMD: added empty entry for province ", province);
                 } else {
-                    throw new MapException("Missing PROVINCE placement information for province: " + provinces[i]);
+                    throw new MapException("Missing PROVINCE placement information for province: " + province);
                 }
             }
         }
@@ -741,9 +741,9 @@ public class MapMetadata {
 
         // verify all powers have a color
         Power[] powers = map.getPowers();
-        for (int i = 0; i < powers.length; i++) {
-            if (displayProps.get(powers[i]) == null) {
-                throw new MapException(EL_POWERCOLORS + ": no color defined for power " + powers[i]);
+        for (Power power : powers) {
+            if (displayProps.get(power) == null) {
+                throw new MapException(EL_POWERCOLORS + ": no color defined for power " + power);
             }
         }
 
@@ -773,7 +773,7 @@ public class MapMetadata {
             throw new MapException(el + " attribute " + att + " is missing!");
         }
 
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         sb.append(el);
         sb.append(att);
         displayProps.put(sb.toString(), value);
@@ -788,7 +788,7 @@ public class MapMetadata {
             throw new IllegalArgumentException();
         }
 
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         sb.append(el);
         sb.append(att);
         displayProps.put(sb.toString(), value);
@@ -815,7 +815,7 @@ public class MapMetadata {
             throw new MapException("Element " + el.getTagName() + " symbol named \"" + name + "\" not found in symbol pack! Case sensitive.");
         }
 
-        StringBuffer sbKey = new StringBuffer(64);
+        StringBuilder sbKey = new StringBuilder(64);
         sbKey.append(EL_SYMBOLSIZE);
         sbKey.append(name);
 
@@ -972,7 +972,7 @@ public class MapMetadata {
         /**
          * Makes a new point from an existing point, since Point2D objects are mutable.
          */
-        private final Point2D.Float makePt(Point2D.Float p) {
+        private Point2D.Float makePt(Point2D.Float p) {
             return new Point2D.Float(p.x, p.y);
         }// makePt()
     }// nested class InfoEntry
@@ -1002,7 +1002,7 @@ public class MapMetadata {
             this.w = (String) tmp[0];
             this.h = (String) tmp[1];
             this.r = (String) tmp[2];
-            this.rFloat = ((Float) tmp[3]).floatValue();
+            this.rFloat = (Float) tmp[3];
             this.units = (String) tmp[4];
         }// SymbolSize()
 
@@ -1060,11 +1060,11 @@ public class MapMetadata {
         private Object[] makeValues(String w, String h, float scale, Element el)
                 throws MapException {
             Object[] obj = parseDim(w, el, ATT_WIDTH);
-            float width = ((Float) obj[0]).floatValue();
+            float width = (Float) obj[0];
             String widthUnits = (String) obj[1];
 
             obj = parseDim(h, el, ATT_HEIGHT);
-            float height = ((Float) obj[0]).floatValue();
+            float height = (Float) obj[0];
             String heightUnits = (String) obj[1];
 
             // check that units are identical

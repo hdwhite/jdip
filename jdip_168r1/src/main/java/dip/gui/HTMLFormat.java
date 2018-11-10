@@ -129,7 +129,7 @@ public class HTMLFormat {
         this.map = map;
         sb.setLength(0);
 
-        StringBuffer accum = new StringBuffer(1024);
+        StringBuilder accum = new StringBuilder(1024);
 
         boolean inBrace = false;
         StringTokenizer st = new StringTokenizer(html, "{}", true);
@@ -315,7 +315,7 @@ public class HTMLFormat {
         Object obj = map.get(key);
         if (obj instanceof Integer) {
             try {
-                return ((Integer) obj).intValue();
+                return (Integer) obj;
             } catch (NumberFormatException e) {
             }
         }

@@ -30,7 +30,6 @@ import dip.world.Phase;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -45,7 +44,7 @@ public class SelectPhaseDialog extends HeaderDialog {
     private static final String HEADER_LOCATION = "SPD.location.header";
 
     // instance variables
-    private ClientFrame clientFrame;
+    private final ClientFrame clientFrame;
     private JScrollPane phaseScrollPane = null;
     private JList<ListRow> list = null;
 
@@ -86,7 +85,7 @@ public class SelectPhaseDialog extends HeaderDialog {
 
     private Phase getSelectedPhase() {
         if (getReturnedActionCommand().equals(ACTION_OK)) {
-            ListRow lr = (ListRow) list.getSelectedValue();
+            ListRow lr = list.getSelectedValue();
             if (lr != null) {
                 return lr.getPhase();
             }
@@ -99,11 +98,9 @@ public class SelectPhaseDialog extends HeaderDialog {
     private void makePhaseList() {
         // create ListRows
         List<ListRow> lrList = new LinkedList<>();
-        Set phaseSet = clientFrame.getWorld().getPhaseSet();
+        Set<Phase> phaseSet = clientFrame.getWorld().getPhaseSet();
         int idx = 1;
-        Iterator iter = phaseSet.iterator();
-        while (iter.hasNext()) {
-            Phase phase = (Phase) iter.next();
+        for (Phase phase : phaseSet) {
             lrList.add(new ListRow(phase, idx++));
         }
 
@@ -128,7 +125,7 @@ public class SelectPhaseDialog extends HeaderDialog {
         }// getPhase()
 
         public String toString() {
-            StringBuffer sb = new StringBuffer(64);
+            StringBuilder sb = new StringBuilder(64);
             sb.append(String.valueOf(num));
             sb.append(".  ");
             sb.append(phase);

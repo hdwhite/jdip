@@ -80,7 +80,7 @@ public class TimeResult extends Result {
      * Convert the output to a String
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
 
         if (power == null) {
             sb.append("(none)");

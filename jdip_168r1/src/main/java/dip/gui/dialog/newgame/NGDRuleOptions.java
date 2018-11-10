@@ -40,7 +40,6 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -60,16 +59,16 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
     // instance variables
     private RuleOptions ruleOpts;
     private Variant variant;
-    private DefaultListModel<OptListItem> optionListModel;
-    private ButtonGroup buttonGroup;
-    private RBListener rbListener;
+    private final DefaultListModel<OptListItem> optionListModel;
+    private final ButtonGroup buttonGroup;
+    private final RBListener rbListener;
     private InvalidWorldException heldException = null;
 
     // GUI controls
-    private JList<OptListItem> optionList;
-    private JEditorPane description;
-    private JRadioButton[] radioButtons;
-    private JButton reset;
+    private final JList<OptListItem> optionList;
+    private final JEditorPane description;
+    private final JRadioButton[] radioButtons;
+    private final JButton reset;
 
     /**
      * Create the RuleOptions panel for the New Game dialog
@@ -134,8 +133,8 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
     public void setEnabled(boolean value) {
         optionList.setEnabled(value);
         reset.setEnabled(value);
-        for (int i = 0; i < radioButtons.length; i++) {
-            radioButtons[i].setEnabled(value);
+        for (JRadioButton radioButton : radioButtons) {
+            radioButton.setEnabled(value);
         }
 
         super.setEnabled(value);
@@ -167,9 +166,8 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
 
         // create a list of OptListItems, and refresh list data
         Set<Option> options = ruleOpts.getAllOptions();
-        Iterator iter = options.iterator();
-        while (iter.hasNext()) {
-            optionListModel.addElement(new OptListItem((Option) iter.next()));
+        for (Option option : options) {
+            optionListModel.addElement(new OptListItem(option));
         }
     }// refreshList()
 
@@ -180,16 +178,16 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
     private void updateChoices() {
         OptListItem optListItem = optionList.getSelectedValue();
         if (optListItem == null) {
-            for (int i = 0; i < radioButtons.length; i++) {
-                radioButtons[i].setVisible(false);
+            for (JRadioButton radioButton : radioButtons) {
+                radioButton.setVisible(false);
             }
 
             description.setText(makeHTML(Utils.getLocalString(INTRO_TEXT)));
 
-            for (int i = 0; i < radioButtons.length; i++) {
-                radioButtons[i].setText("");
-                radioButtons[i].setSelected(false);
-                radioButtons[i].setVisible(false);
+            for (JRadioButton radioButton : radioButtons) {
+                radioButton.setText("");
+                radioButton.setSelected(false);
+                radioButton.setVisible(false);
             }
 
             revalidate();
@@ -268,7 +266,7 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
      * makes the text HTML
      */
     private String makeHTML(String in) {
-        StringBuffer sb = new StringBuffer(in.length() + 64);
+        StringBuilder sb = new StringBuilder(in.length() + 64);
         sb.append("<html><font face=\"Arial, Helvetica\" size=\"-1\">");
         sb.append(in);
         sb.append("</html>");
@@ -303,8 +301,8 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
     /**
      * Private class to encapsulate an Option and have it display the il8n name in a JList
      */
-    private class OptListItem extends Object {
-        private Option option;
+    private class OptListItem {
+        private final Option option;
 
         public OptListItem(Option option) {
             this.option = option;

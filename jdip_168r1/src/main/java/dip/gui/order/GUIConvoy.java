@@ -374,16 +374,16 @@ public class GUIConvoy extends Convoy implements GUIOrder {
             float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_CONVOY, MapMetadata.ATT_HILIGHT_OFFSET);
             elements = drawOrder(mapInfo, offset, false);
             GUIOrderUtils.makeHilight(elements, mapInfo.getMapMetadata(), MapMetadata.EL_CONVOY);
-            for (int i = 0; i < elements.length; i++) {
-                group.appendChild(elements[i]);
+            for (SVGElement element : elements) {
+                group.appendChild(element);
             }
         }
 
         // create real line
         elements = drawOrder(mapInfo, 0, true);
         GUIOrderUtils.makeStyled(elements, mapInfo.getMapMetadata(), MapMetadata.EL_CONVOY, power);
-        for (int i = 0; i < elements.length; i++) {
-            group.appendChild(elements[i]);
+        for (SVGElement element : elements) {
+            group.appendChild(element);
         }
 
         // draw 'failed' marker, if appropriate.
@@ -434,10 +434,10 @@ public class GUIConvoy extends Convoy implements GUIOrder {
         Point2D.Float[] triPts = GUIOrderUtils.makeTriangle(ptConvoySrc, radius);
 
         StringBuffer sb = new StringBuffer(160);
-        for (int i = 0; i < triPts.length; i++) {
-            GUIOrderUtils.appendFloat(sb, triPts[i].x);
+        for (Point2D.Float triPt : triPts) {
+            GUIOrderUtils.appendFloat(sb, triPt.x);
             sb.append(',');
-            GUIOrderUtils.appendFloat(sb, triPts[i].y);
+            GUIOrderUtils.appendFloat(sb, triPt.y);
             sb.append(' ');
         }
 
@@ -458,11 +458,11 @@ public class GUIConvoy extends Convoy implements GUIOrder {
         //
         Point2D.Float newPtFrom = null;
         float maxDistSquared = 0.0f;
-        for (int i = 0; i < triPts.length; i++) {
-            float distSquared = (float) (Math.pow((ptConvoyDest.x - triPts[i].x), 2.0) + Math.pow((ptConvoyDest.y - triPts[i].y), 2.0));
+        for (Point2D.Float triPt : triPts) {
+            float distSquared = (float) (Math.pow((ptConvoyDest.x - triPt.x), 2.0) + Math.pow((ptConvoyDest.y - triPt.y), 2.0));
             if (distSquared > maxDistSquared) {
                 maxDistSquared = distSquared;
-                newPtFrom = triPts[i];
+                newPtFrom = triPt;
             }
         }
 

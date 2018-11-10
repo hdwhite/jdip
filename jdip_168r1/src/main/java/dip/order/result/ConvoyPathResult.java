@@ -85,7 +85,7 @@ public class ConvoyPathResult extends OrderResult {
 		*/
 
         // create path list
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
         final String arrow = Utils.getLocalString(KEY_ARROW);
 
         sb.append(OrderFormat.format(ofo, convoyPath[0]));
@@ -103,7 +103,7 @@ public class ConvoyPathResult extends OrderResult {
      * Primarily for debugging.
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
         sb.append(super.toString());
 
         // add convoy path

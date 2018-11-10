@@ -48,17 +48,17 @@ public interface Orderable {
     /**
      * Gets the Location of the ordered unit
      */
-    public Location getSource();
+    Location getSource();
 
     /**
      * Gets the Type of the ordered unit
      */
-    public Unit.Type getSourceUnitType();
+    Unit.Type getSourceUnitType();
 
     /**
      * Gets the Power ordering the ordered Source unit
      */
-    public Power getPower();
+    Power getPower();
 
 
     //
@@ -68,27 +68,27 @@ public interface Orderable {
     /**
      * Returns the Full name of the Order (e.g., "Hold" for a Hold order)
      */
-    public String getFullName();
+    String getFullName();
 
     /**
      * Returns the Brief name of the Order (e.g., "H" for a Hold order)
      */
-    public String getBriefName();
+    String getBriefName();
 
     /**
      * Prints the entire order, in a brief syntax
      */
-    public String toBriefString();
+    String toBriefString();
 
     /**
      * Prints the entire order, in a verbose syntax
      */
-    public String toFullString();
+    String toFullString();
 
     /**
      * Get the default OrderFormat String used to custom-format orders.
      */
-    public String getDefaultFormat();
+    String getDefaultFormat();
 
     /**
      * Formats the order using the OrderFormat format string.
@@ -100,7 +100,7 @@ public interface Orderable {
      * While this enables better formatting, it is slower than using the toBriefString() and toFullString()
      * methods.
      */
-    public String toFormattedString(OrderFormatOptions ofo);
+    String toFormattedString(OrderFormatOptions ofo);
 
 
     //
@@ -143,7 +143,7 @@ public interface Orderable {
      * @param valOpts Current validation options
      * @throws OrderException
      */
-    public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
+    void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException;
 
     /**
@@ -174,7 +174,7 @@ public interface Orderable {
      * <p>
      * This method should NEVER throw checked exceptions (e.g., an OrderException)
      */
-    public void verify(Adjudicator adjudicator);
+    void verify(Adjudicator adjudicator);
 
     /**
      * This method is called once all orders are known. It determines
@@ -184,7 +184,7 @@ public interface Orderable {
      * This is typically only used by orders generated in the Movement
      * phase.
      */
-    public void determineDependencies(Adjudicator adjudicator);
+    void determineDependencies(Adjudicator adjudicator);
 
     /**
      * Evaluates an Order.
@@ -195,7 +195,7 @@ public interface Orderable {
      * <p>
      * <b>NOTE:</b> this method assumes that all dependency information is complete.
      */
-    public void evaluate(Adjudicator adjudicator);
+    void evaluate(Adjudicator adjudicator);
 
 }// interface Order
 

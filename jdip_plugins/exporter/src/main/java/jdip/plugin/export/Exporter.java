@@ -130,7 +130,7 @@ public class Exporter implements Tool {
                 XJFileChooser.dispose();
                 if (file != null) {
                     List<TurnState> tsList = clientFrame.getWorld().getAllTurnStates();
-                    TurnState[] ts = (TurnState[]) tsList.toArray(new TurnState[0]);
+                    TurnState[] ts = tsList.toArray(new TurnState[0]);
                     exportToFile(file, ts);
                 }
             }
@@ -179,23 +179,14 @@ public class Exporter implements Tool {
      * xport as a file
      */
     private void exportToFile(File file, TurnState[] turnStates) {
-        BufferedWriter bw = null;
 
-        try {
-            bw = new BufferedWriter(new FileWriter(file));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
 
-            for (int i = 0; i < turnStates.length; i++) {
-                bw.write(jdip.plugin.export.XMLExport.export(turnStates[i], ""));
+            for (TurnState turnState : turnStates) {
+                bw.write(XMLExport.export(turnState, ""));
             }
         } catch (IOException e) {
             ErrorDialog.displayFileIO(clientFrame, e, file.toString());
-        } finally {
-            if (bw != null) {
-                try {
-                    bw.close();
-                } catch (IOException e2) {
-                }
-            }
         }
     }// exportToFile()
 

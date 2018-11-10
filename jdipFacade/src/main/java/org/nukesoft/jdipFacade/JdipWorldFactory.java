@@ -32,7 +32,7 @@ import org.nukesoft.jdipFacade.exception.ResourceLoadException;
  * @author Ryan Michela
  */
 public class JdipWorldFactory {
-    private ImplementationStrategy strategy;
+    private final ImplementationStrategy strategy;
 
     //singelton constructor
     JdipWorldFactory(ImplementationStrategy strategy) {

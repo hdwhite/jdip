@@ -67,7 +67,7 @@ public class ValidationOptionsDialog extends HeaderDialog {
     private ButtonGroup buttonGroup = null;
     private RBListener rbListener = null;
 
-    private StringBuffer sb = new StringBuffer(1024);
+    private final StringBuffer sb = new StringBuffer(1024);
 
 
     private ValidationOptionsDialog(ClientFrame parent, ValidationOptions oldOptions) {
@@ -149,8 +149,8 @@ public class ValidationOptionsDialog extends HeaderDialog {
     private void updatePanel() {
         int currentIndex = optionList.getSelectedIndex();
         if (currentIndex < 0) {
-            for (int i = 0; i < radioButtons.length; i++) {
-                radioButtons[i].setVisible(false);
+            for (JRadioButton radioButton : radioButtons) {
+                radioButton.setVisible(false);
             }
             description.setText(makeHTML(Utils.getLocalString(INIT_TEXT)));
             return;

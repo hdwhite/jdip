@@ -65,10 +65,10 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
     private static final int BORDER = 25;
 
     // vars
-    private ClientFrame clientFrame;
+    private final ClientFrame clientFrame;
     private World world = null;
-    private JComboBox<String> cbJudges;
-    private JTextField tfGameName;
+    private final JComboBox<String> cbJudges;
+    private final JTextField tfGameName;
     private JProgressBar progressBar = null;
     private FlocImporter fi = null;
 

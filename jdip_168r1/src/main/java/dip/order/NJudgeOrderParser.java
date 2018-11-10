@@ -35,7 +35,6 @@ import dip.world.Unit;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -288,15 +287,15 @@ public class NJudgeOrderParser {
             throws OrderException {
         final String type = op.orderName;
 
-        if (type == ORDER_HOLD
-                || type == ORDER_DISBAND
-                || type == ORDER_NO_ORDERS) {
+        if (ORDER_HOLD.equals(type)
+                || ORDER_DISBAND.equals(type)
+                || ORDER_NO_ORDERS.equals(type)) {
             return parseHoldOrDisband(pc, op, tokens, type);
-        } else if (type == ORDER_MOVE) {
+        } else if (ORDER_MOVE.equals(type)) {
             return parseMove(pc, op, tokens);
-        } else if (type == ORDER_SUPPORT) {
+        } else if (ORDER_SUPPORT.equals(type)) {
             return parseSupport(pc, op, tokens);
-        } else if (type == ORDER_CONVOY) {
+        } else if (ORDER_CONVOY.equals(type)) {
             return parseConvoy(pc, op, tokens);
         }
 
@@ -321,7 +320,7 @@ public class NJudgeOrderParser {
         // be multiple tokens) and, optionally, the coast (also multiple
         // tokens). Periods are stripped.
         //
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         for (int i = start; i < end; i++) {
             if (i > start) {
                 sb.append(' ');
@@ -391,11 +390,11 @@ public class NJudgeOrderParser {
                                          final String[] tokens, final String type) {
         // NO additional parsing
         //
-        if (type == ORDER_HOLD) {
+        if (ORDER_HOLD.equals(type)) {
             return pc.orderFactory.createHold(op.power, op.location, op.unit);
-        } else if (type == ORDER_DISBAND) {
+        } else if (ORDER_DISBAND.equals(type)) {
             return pc.orderFactory.createDisband(op.power, op.location, op.unit);
-        } else if (type == ORDER_NO_ORDERS) {
+        } else if (ORDER_NO_ORDERS.equals(type)) {
             // FIXME: create own order type for "No Orders Processed"
             return pc.orderFactory.createHold(op.power, op.location, op.unit);
         }
@@ -510,7 +509,7 @@ public class NJudgeOrderParser {
         String[] toks = getTokenUpto(pc, idx, tokens, UNIT_DELIMS);
         if (toks != null) {
             // conjugate strings before parsing with getPower()
-            StringBuffer sb = new StringBuffer(64);
+            StringBuilder sb = new StringBuilder(64);
             sb.append(toks[0]);
             for (int i = 1; i < toks.length; i++) {
                 sb.append(' ');
@@ -599,7 +598,7 @@ public class NJudgeOrderParser {
         String[] toks = getTokenUpto(pc, idx, tokens, UNIT_DELIMS);
         if (toks != null) {
             // conjugate strings before parsing with getPower()
-            StringBuffer sb = new StringBuffer(64);
+            StringBuilder sb = new StringBuilder(64);
             sb.append(toks[0]);
             for (int i = 1; i < toks.length; i++) {
                 sb.append(' ');
@@ -696,8 +695,8 @@ public class NJudgeOrderParser {
 
         // is delim at start? if so, return null.
         String tok = tokens[index];
-        for (int nDelim = 0; nDelim < delim.length; nDelim++) {
-            if (tok.equalsIgnoreCase(delim[nDelim])) {
+        for (String aDelim : delim) {
+            if (tok.equalsIgnoreCase(aDelim)) {
                 return null;
             }
         }
@@ -709,8 +708,8 @@ public class NJudgeOrderParser {
         for (int i = index + 1; i < tokens.length; i++) {
             tok = tokens[i];
 
-            for (int nDelim = 0; nDelim < delim.length; nDelim++) {
-                if (tok.equalsIgnoreCase(delim[nDelim])) {
+            for (String aDelim : delim) {
+                if (tok.equalsIgnoreCase(aDelim)) {
                     foundDelim = true;
                     break;
                 }
@@ -762,8 +761,8 @@ public class NJudgeOrderParser {
         final String resultText = line.substring(rStart + 2, rEnd);
         final String[] resultStrings = resultText.split("\\s*,\\s*");
 
-        for (int i = 0; i < resultStrings.length; i++) {
-            results.add(resultStrings[i]);
+        for (String resultString : resultStrings) {
+            results.add(resultString);
         }
 
         // return the order, without the result text.
@@ -783,13 +782,12 @@ public class NJudgeOrderParser {
      * </ul>
      * The given results are returned in the List.
      */
-    private List<Result> createResults(ParseContext pc, Orderable order, final List stringResults)
+    private List<Result> createResults(ParseContext pc, Orderable order, final List<String> stringResults)
             throws OrderException {
         List<Result> results = new ArrayList<>(stringResults.size());
 
-        Iterator iter = stringResults.iterator();
-        while (iter.hasNext()) {
-            final String textResult = ((String) iter.next()).trim();
+        for (String stringResult : stringResults) {
+            final String textResult = stringResult.trim();
             if (textResult.equalsIgnoreCase("bounce")) {
                 results.add(new OrderResult(order, OrderResult.ResultType.FAILURE, "Bounce"));
             } else if (textResult.equalsIgnoreCase("cut")) {
@@ -1148,7 +1146,7 @@ public class NJudgeOrderParser {
          * For debugging only
          */
         public String toString() {
-            StringBuffer sb = new StringBuffer(256);
+            StringBuilder sb = new StringBuilder(256);
             sb.append(this.getClass().getName());
             sb.append("[");
             sb.append(getOrder());
@@ -1229,11 +1227,11 @@ public class NJudgeOrderParser {
             String tmpOrderName = null;
             while (tokIdx < tokens.length && orderNameIndex < 0) {
                 final String aToken = tokens[tokIdx];
-                for (int onIdx = 0; onIdx < ORDER_NAME_TOKENS.length; onIdx++) {
-                    if (ORDER_NAME_TOKENS[onIdx].equals(aToken)) {
+                for (String orderNameToken : ORDER_NAME_TOKENS) {
+                    if (orderNameToken.equals(aToken)) {
                         // error-check
                         orderNameIndex = tokIdx;
-                        tmpOrderName = ORDER_NAME_TOKENS[onIdx];
+                        tmpOrderName = orderNameToken;
                         break;
                     }
                 }

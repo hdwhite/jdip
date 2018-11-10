@@ -214,8 +214,8 @@ public final class Coast implements java.io.Serializable {
      * Returns if this Coast is typically displayed
      */
     public static boolean isDisplayable(Coast coast) {
-        for (int i = 0; i < NOT_DISPLAYED.length; i++) {
-            if (coast == NOT_DISPLAYED[i]) {
+        for (Coast notDisplayed : NOT_DISPLAYED) {
+            if (coast == notDisplayed) {
                 return false;
             }
         }
@@ -322,8 +322,8 @@ public final class Coast implements java.io.Serializable {
 
         // start matching.
         String matchInput = input;
-        for (int i = 0; i < patterns.length; i++) {
-            Matcher m = patterns[i].matcher(matchInput);
+        for (Pattern pattern : patterns) {
+            Matcher m = pattern.matcher(matchInput);
             StringBuffer sb = new StringBuffer(matchInput.length());
 
             boolean result = m.find();
@@ -358,7 +358,7 @@ public final class Coast implements java.io.Serializable {
                         }
                     } else if ((c2 == 'c' && (c1 == 'n' || c1 == 's' || c1 == 'w' || c1 == 'e' || c1 == 'x'))
                             || (c1 == 'm' && c2 == 'v')) {
-                        StringBuffer rep = new StringBuffer(4);
+                        StringBuilder rep = new StringBuilder(4);
                         rep.append('/');
                         rep.append(c1);
                         rep.append(c2);
@@ -396,8 +396,8 @@ public final class Coast implements java.io.Serializable {
      * Coast.NORTH, Coast.SOUTH, Coast.WEST, or Coast.EAST
      */
     public boolean isDirectional() {
-        for (int i = 0; i < ANY_DIRECTIONAL.length; i++) {
-            if (this == ANY_DIRECTIONAL[i]) {
+        for (Coast coast : ANY_DIRECTIONAL) {
+            if (this == coast) {
                 return true;
             }
         }

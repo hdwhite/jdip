@@ -32,6 +32,6 @@ public interface VariantParser {
     /**
      * Returns an array of Variant objects.
      */
-    public Variant[] getVariants();
+    Variant[] getVariants();
 
 }// interface VariantParser

@@ -23,7 +23,11 @@
 package jdip.tool.conversion;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /** Adjacency object */
 class Adjacency
@@ -111,7 +115,7 @@ class Adjacency
 	}
 	
 	/** List of adjacent locations */
-	public List getAdjLocs()
+    public List<Loc> getAdjLocs()
 	{
 		return Collections.unmodifiableList(adjLocs);
 	}
@@ -121,7 +125,7 @@ class Adjacency
 	*/
 	public String toXML()
 	{
-		StringBuffer sb = new StringBuffer(128);
+		StringBuilder sb = new StringBuilder(128);
 		
 		sb.append("\t<ADJACENCY type=\"");
 		sb.append(getLoc().getCoastType());
@@ -145,7 +149,7 @@ class Adjacency
 	/** For debugging */
 	public String toString()
 	{
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append(this.getClass().getName());
 		sb.append("[");
 		sb.append(loc);

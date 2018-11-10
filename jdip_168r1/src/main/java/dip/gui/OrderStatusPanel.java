@@ -46,9 +46,9 @@ public class OrderStatusPanel extends XJPanel {
     private final static String EMPTY = "";
 
     // instance variables
-    private JLabel orderFieldLabel;
-    private JLabel phase;
-    private JTextField orderField;
+    private final JLabel orderFieldLabel;
+    private final JLabel phase;
+    private final JTextField orderField;
     private OSPPropertyListener propListener = null;
     private ClientFrame cf = null;
 
@@ -161,7 +161,7 @@ public class OrderStatusPanel extends XJPanel {
         }
 
         public void actionModeChanged(String mode) {
-            if (mode == ClientFrame.MODE_ORDER) {
+            if (ClientFrame.MODE_ORDER.equals(mode)) {
                 orderField.setVisible(true);
                 orderFieldLabel.setVisible(true);
             } else {
@@ -174,7 +174,7 @@ public class OrderStatusPanel extends XJPanel {
             Phase tsPhase = turnState.getPhase();
 
             // set game time
-            StringBuffer sb = new StringBuffer(32);
+            StringBuilder sb = new StringBuilder(32);
             sb.append("<html><h2>");
             sb.append(tsPhase.toString());
             sb.append("</h2></html>");

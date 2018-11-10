@@ -83,10 +83,10 @@ public class MultiOrderEntry {
             };
 
     // instance variables
-    private ClientFrame parent;
-    private TextViewer tv;
-    private OrderDisplayPanel orderDisplayPanel;
-    private World world;
+    private final ClientFrame parent;
+    private final TextViewer tv;
+    private final OrderDisplayPanel orderDisplayPanel;
+    private final World world;
     private Pattern listPattern = null;
 
 
@@ -165,7 +165,7 @@ public class MultiOrderEntry {
                     nOrders - nFailed);
 
             // order text, formatted with CSS
-            StringBuffer sb = new StringBuffer(4096);
+            StringBuilder sb = new StringBuilder(4096);
 
             for (int i = 0; i < exList.size(); i++) {
                 // failed order
@@ -318,7 +318,7 @@ public class MultiOrderEntry {
             throw new IllegalArgumentException();
         }
 
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
 
         for (int i = start; i < end; i++) {
             sb.append(tokens[i]);
@@ -343,8 +343,8 @@ public class MultiOrderEntry {
         }
 
         // check against against other bad tokens
-        for (int i = 0; i < BAD_TOKS.length; i++) {
-            if (tok.equals(BAD_TOKS[i])) {
+        for (String badTok : BAD_TOKS) {
+            if (tok.equals(badTok)) {
                 return true;
             }
         }

@@ -57,8 +57,8 @@ public class JudgeParser {
     private static final String JP_NO_COLONS = "JP.jp.nocolons";
     // instance variables
     private final static int READ_AHEAD_LENGTH = 7200;
-    private BufferedReader reader;
-    private OrderFactory orderFactory;
+    private final BufferedReader reader;
+    private final OrderFactory orderFactory;
     private String judgeName;
     private String variantName;
     private String gameName;
@@ -176,7 +176,7 @@ public class JudgeParser {
         // find :: line
         String line = reader.readLine();
         while (line != null) {
-            if (line.trim().indexOf("::") >= 0) {
+            if (line.trim().contains("::")) {
                 // attempt to parse via regex. If it fails, read another line.
                 Matcher m = pattern.matcher(line);
                 if (m.find()) {
@@ -274,7 +274,7 @@ public class JudgeParser {
         // save the initial text; we will need this if we are a history;
         // if we are a listing, this will be null. This is all the text UP TO and EXCLUDING
         // the first "Date:" line.
-        StringBuffer initSB = new StringBuffer(2048);
+        StringBuilder initSB = new StringBuilder(2048);
 
         line = reader.readLine();
         while (line != null && count < READ_AHEAD_LENGTH) {
@@ -296,7 +296,7 @@ public class JudgeParser {
                 if (pos2 >= 0 && pos2 < 10) {
                     type = JP_TYPE_HISTORY;
 
-                    StringBuffer sb = new StringBuffer(256);
+                    StringBuilder sb = new StringBuilder(256);
                     sb.append(line);
                     sb.append('\n');
                     sb.append(line2);
@@ -341,7 +341,7 @@ public class JudgeParser {
             }
             line = reader.readLine();
         }
-        if (type == JP_TYPE_RESULTS) {
+        if (JP_TYPE_RESULTS.equals(type)) {
             // We are results. Get the text including the results header.
             initialText = null;
             reader.reset();
@@ -363,13 +363,13 @@ public class JudgeParser {
             if (m_gs.lookingAt()) {
                 type = JP_TYPE_GAMESTART;
             }
-            if (m_sp.lookingAt() && (type == JP_TYPE_GAMESTART)) {
+            if (m_sp.lookingAt() && (JP_TYPE_GAMESTART.equals(type))) {
                 phase = Phase.parse("Movement " + line.substring(0, line.indexOf(".")));
                 break;
             }
             line = reader.readLine();
         }
-        if (type == JP_TYPE_GAMESTART) {
+        if (JP_TYPE_GAMESTART.equals(type)) {
             // the game is starting. Get the text.
             initialText = null;
             reader.reset();
@@ -390,7 +390,7 @@ public class JudgeParser {
      */
     private void makeRestOfText(String toPrepend)
             throws IOException {
-        StringBuffer sb = new StringBuffer(16384);
+        StringBuilder sb = new StringBuilder(16384);
 
         // prepend text first, if any
         if (toPrepend != null) {

@@ -71,7 +71,7 @@ public class SubstitutedResult extends OrderResult {
      * This is intended for debugging only.
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
         sb.append(power);
         sb.append(": [");
         sb.append(resultType);

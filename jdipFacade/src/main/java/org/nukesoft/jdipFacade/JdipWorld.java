@@ -16,7 +16,12 @@
  */
 package org.nukesoft.jdipFacade;
 
-import dip.order.*;
+import dip.order.Order;
+import dip.order.OrderException;
+import dip.order.OrderFactory;
+import dip.order.OrderFormatOptions;
+import dip.order.OrderParser;
+import dip.order.Orderable;
 import dip.order.result.Result;
 import dip.world.Phase.PhaseType;
 import dip.world.Power;
@@ -27,7 +32,6 @@ import org.nukesoft.jdipFacade.exception.PowerNotFoundException;
 import org.nukesoft.jdipFacade.exception.StateError;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -48,8 +52,8 @@ public class JdipWorld {
     public static final int PHASE_TYPE_MOVEMENT = 2;
     public static final int PHASE_TYPE_RETREAT = 3;
 
-    private ImplementationStrategy strategy;
-    private World world;
+    private final ImplementationStrategy strategy;
+    private final World world;
 
     /**
      * Builds a <code>JdipWorld</code>. Don't try this at home, kids.
@@ -105,8 +109,8 @@ public class JdipWorld {
         OrderParser parser = OrderParser.getInstance();
         OrderFactory of = strategy.getOrderFactory();
         try {
-            for (int i = 0; i < orderStrings.length; i++) {
-                Order o = parser.parse(of, power.getName() + " " + orderStrings[i], power, world.getLastTurnState(), true, false);
+            for (String orderString : orderStrings) {
+                Order o = parser.parse(of, power.getName() + " " + orderString, power, world.getLastTurnState(), true, false);
                 orders.add(o);
             }
         } catch (OrderException e) {
@@ -126,12 +130,11 @@ public class JdipWorld {
         OrderFormatOptions ofo = this.ceateOrderFormat(format);
 
         TurnState state = world.getPreviousTurnState(world.getLastTurnState());
-        List allResults = state.getResultList();
+        List<Result> allResults = state.getResultList();
         ArrayList<JdipResult> generalResults = new ArrayList<>();
-        Iterator it = allResults.iterator();
 
-        while (it.hasNext()) {
-            JdipResult r = new JdipResult((Result) it.next(), ofo);
+        for (Result result : allResults) {
+            JdipResult r = new JdipResult(result, ofo);
             //find all general resluts
             if (r.isGeneralResult()) {
                 generalResults.add(r);
@@ -152,12 +155,11 @@ public class JdipWorld {
         OrderFormatOptions ofo = this.ceateOrderFormat(format);
 
         TurnState state = world.getPreviousTurnState(world.getLastTurnState());
-        List allResults = state.getResultList();
+        List<Result> allResults = state.getResultList();
         ArrayList<JdipResult> generalResults = new ArrayList<>();
-        Iterator it = allResults.iterator();
 
-        while (it.hasNext()) {
-            JdipResult r = new JdipResult((Result) it.next(), ofo);
+        for (Result result : allResults) {
+            JdipResult r = new JdipResult(result, ofo);
             //find all resluts for given power
             if (!r.isGeneralResult() && r.getPower().equals(power.getPowerName())) {
                 generalResults.add(r);

@@ -147,8 +147,8 @@ public class AIDemo {
         Map map = newWorld.getMap();
         Power[] powers = map.getPowers();
         System.out.println("\nPowers in this game:");
-        for (int i = 0; i < powers.length; i++) {
-            System.out.println("  " + powers[i]);
+        for (Power power : powers) {
+            System.out.println("  " + power);
         }
 
         // how do we get a specific power?
@@ -165,8 +165,8 @@ public class AIDemo {
         System.out.println("  prov abbreviation: " + prov.getShortName());
         System.out.println("  all TOUCHING provinces:");
         Location[] touchLocs = prov.getAdjacentLocations(Coast.TOUCHING);
-        for (int i = 0; i < touchLocs.length; i++) {
-            System.out.println("    " + touchLocs[i].getProvince());
+        for (Location touchLoc : touchLocs) {
+            System.out.println("    " + touchLoc.getProvince());
         }
 
 
@@ -181,8 +181,8 @@ public class AIDemo {
         System.out.println("  adjacent? " + loc1.isAdjacent(loc2));
         System.out.println("  adjacent Locations to " + loc1.toString() + ":");
         Location[] adjLocs = loc1.getProvince().getAdjacentLocations(loc1.getCoast());
-        for (int i = 0; i < adjLocs.length; i++) {
-            System.out.println("    " + adjLocs[i]);
+        for (Location adjLoc : adjLocs) {
+            System.out.println("    " + adjLoc);
         }
 
         // a test: the province "spa" and the location "spa/sc" as well as

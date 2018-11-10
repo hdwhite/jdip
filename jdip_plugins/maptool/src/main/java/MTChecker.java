@@ -89,7 +89,7 @@ public class MTChecker {
      * Get properly formatted output as a String
      */
     private String getOutput() {
-        StringBuffer sb = new StringBuffer(16384);
+        StringBuilder sb = new StringBuilder(16384);
 
 
         sb.append(checkSC());
@@ -117,12 +117,11 @@ public class MTChecker {
      * Check that all Provinces that require an SC have an SC placed
      */
     private String checkSC() {
-        StringBuffer sb = new StringBuffer(1024);
+        StringBuilder sb = new StringBuilder(1024);
         sb.append("Provinces that Require an SC (for this variant):\n");
         boolean allOK = true;
 
-        for (int i = 0; i < allProvs.length; i++) {
-            Province p = allProvs[i];
+        for (Province p : allProvs) {
             if (p.hasSupplyCenter()) {
                 MapMetadata.InfoEntry ie = mmd.getInfoEntry(p);
                 if (ie.getSCPt().equals(MTHelper.ORIGIN)) {
@@ -146,16 +145,15 @@ public class MTChecker {
      * Check that unit positions (including coasts, for multi-coastal) have been set.
      */
     private String checkUnits() {
-        StringBuffer sbMain = new StringBuffer(1024);
+        StringBuilder sbMain = new StringBuilder(1024);
         sbMain.append("Provinces That Require NON-dislodged Unit Positions:\n");
         boolean allOK = true;
 
-        for (int i = 0; i < allProvs.length; i++) {
-            Province p = allProvs[i];
+        for (Province p : allProvs) {
             MapMetadata.InfoEntry ie = mmd.getInfoEntry(p);
             boolean isOK = true;
 
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("    ");
             sb.append(p.getShortName());
             sb.append(": missing unit position(s): ");
@@ -173,9 +171,9 @@ public class MTChecker {
 
             // if we are multi-coastal, we must print all coast data.
             Coast[] multiCoasts = p.getValidDirectionalCoasts();
-            for (int mcIdx = 0; mcIdx < multiCoasts.length; mcIdx++) {
-                if (ie.getUnitPt(multiCoasts[mcIdx]).equals(MTHelper.ORIGIN)) {
-                    sb.append(multiCoasts[mcIdx].getName());
+            for (Coast multiCoast : multiCoasts) {
+                if (ie.getUnitPt(multiCoast).equals(MTHelper.ORIGIN)) {
+                    sb.append(multiCoast.getName());
                     sb.append("; ");
                     allOK = false;
                     isOK = false;
@@ -202,16 +200,15 @@ public class MTChecker {
      * For DISLODGED units.
      */
     private String checkDislodgedUnits() {
-        StringBuffer sbMain = new StringBuffer(1024);
+        StringBuilder sbMain = new StringBuilder(1024);
         sbMain.append("Provinces That Require Dislodged Unit Positions:\n");
         boolean allOK = true;
 
-        for (int i = 0; i < allProvs.length; i++) {
-            Province p = allProvs[i];
+        for (Province p : allProvs) {
             MapMetadata.InfoEntry ie = mmd.getInfoEntry(p);
             boolean isOK = true;
 
-            StringBuffer sb = new StringBuffer(128);
+            StringBuilder sb = new StringBuilder(128);
             sb.append("    ");
             sb.append(p.getShortName());
             sb.append(": missing unit position(s): ");
@@ -229,9 +226,9 @@ public class MTChecker {
 
             // if we are multi-coastal, we must print all coast data.
             Coast[] multiCoasts = p.getValidDirectionalCoasts();
-            for (int mcIdx = 0; mcIdx < multiCoasts.length; mcIdx++) {
-                if (ie.getDislodgedUnitPt(multiCoasts[mcIdx]).equals(MTHelper.ORIGIN)) {
-                    sb.append(multiCoasts[mcIdx].getName());
+            for (Coast multiCoast : multiCoasts) {
+                if (ie.getDislodgedUnitPt(multiCoast).equals(MTHelper.ORIGIN)) {
+                    sb.append(multiCoast.getName());
                     sb.append("; ");
                     allOK = false;
                     isOK = false;
@@ -256,14 +253,14 @@ public class MTChecker {
      * Check that all Provinces have labels; isBrief = brief (or full) label
      */
     private String checkProvinceNames(boolean isBrief) {
-        StringBuffer sb = new StringBuffer(1024);
+        StringBuilder sb = new StringBuilder(1024);
         boolean allOK = true;
 
-        for (int i = 0; i < allProvs.length; i++) {
-            TextInfo ti = (isBrief) ? mtl.getBriefTextInfo(allProvs[i]) : mtl.getFullTextInfo(allProvs[i]);
+        for (Province province : allProvs) {
+            TextInfo ti = (isBrief) ? mtl.getBriefTextInfo(province) : mtl.getFullTextInfo(province);
             if (!ti.isPlaced()) {
                 sb.append("    ");
-                sb.append(allProvs[i].getShortName());
+                sb.append(province.getShortName());
                 if (isBrief) {
                     sb.append(": missing brief label");
                 } else {

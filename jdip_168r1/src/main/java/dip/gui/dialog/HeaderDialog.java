@@ -82,7 +82,7 @@ public class HeaderDialog extends XDialog {
     public final static String ACTION_ACCEPT = "ACTION_ACCEPT";
 
 
-    private static JButton sizerButton = new JButton(TEXT_CANCEL);        // used to size buttons
+    private static final JButton sizerButton = new JButton(TEXT_CANCEL);        // used to size buttons
     protected JEditorPane header = null;
     private String defaultCloseButtonAction = null;
     private String returnedAction = null;
@@ -90,7 +90,7 @@ public class HeaderDialog extends XDialog {
     private JComponent separator = null;
     private Container content = new JPanel();
     private JPanel btnPanelHolder = null;    // holds btnPanel, and separator (if present)
-    private ArrayList<Component> btnList = null;
+    private ArrayList<JButton> btnList = null;
 
 
     /**
@@ -158,7 +158,7 @@ public class HeaderDialog extends XDialog {
         btnPanel.add(component);
 
         if (component instanceof JButton) {
-            btnList.add(component);
+            btnList.add((JButton) component);
             equalizeButtons();
         }
     }// addToButtonPanel()
@@ -187,7 +187,7 @@ public class HeaderDialog extends XDialog {
      * Index 0 is the leftmost button.
      */
     public JButton getButton(int i) {
-        return (JButton) btnList.get(i);
+        return btnList.get(i);
     }// getButton()
 
     /**
@@ -294,11 +294,9 @@ public class HeaderDialog extends XDialog {
             throw new IllegalArgumentException();
         }
 
-        Iterator iter = btnList.iterator();
-        while (iter.hasNext()) {
-            JButton b = (JButton) iter.next();
-            if (actionCommand.equals(b.getActionCommand())) {
-                b.setEnabled(enabled);
+        for (JButton btn : btnList) {
+            if (actionCommand.equals(btn.getActionCommand())) {
+                btn.setEnabled(enabled);
                 break;
             }
         }

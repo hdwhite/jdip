@@ -31,7 +31,6 @@ import dip.world.variant.VariantManager;
 import dip.world.variant.data.Variant;
 
 import javax.swing.*;
-import java.util.Iterator;
 import java.util.Set;
 
 
@@ -105,13 +104,11 @@ public class VariantInfoWriter {
         System.arraycopy(oldArgs, 0, newArgs, 0, oldArgs.length);
 
         // make 9th argument: 'rules settings'
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
 
         RuleOptions ro = world.getRuleOptions();
-        Set allOpts = ro.getAllOptions();
-        Iterator iter = allOpts.iterator();
-        while (iter.hasNext()) {
-            RuleOptions.Option opt = (RuleOptions.Option) iter.next();
+        Set<RuleOptions.Option> allOpts = ro.getAllOptions();
+        for (RuleOptions.Option opt : allOpts) {
             RuleOptions.OptionValue optVal = ro.getOptionValue(opt);
 
             sb.append("<p><b>");
