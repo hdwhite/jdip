@@ -35,7 +35,7 @@ jar {
     baseName = "jdip"
     manifest {
         attributes(
-                'Main-Class': 'dip.gui.splash',
+                'Main-Class': 'info.jdip.gui.splash',
                 "Class-Path": configurations.compile.collect { 'lib/' + it.getName() }.join(' ')
         )
     }

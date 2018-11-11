@@ -12,7 +12,7 @@ dependencies {
 jar {
     baseName = "InspectorTool"
     manifest {
-        attributes 'Main-Class': 'jdip.plugin.inspector.Inspector'
+        attributes 'Main-Class': 'info.jdip.plugin.inspector.Inspector'
     }
 }
 

@@ -2,7 +2,7 @@
 <project name="jDip_plugin_inspector" default="build" basedir=".">
 	
 	<!--
-		BUILD file for jdip plugins: Inspector
+		BUILD file for jdip plugins: info.jdip.plugin.inspector.Inspector
 	-->
 	
 	<!-- unique properties for this plugin -->

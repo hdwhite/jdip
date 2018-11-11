@@ -16,17 +16,17 @@
  */
 package org.nukesoft.jdipFacade;
 
-import dip.order.Order;
-import dip.order.OrderException;
-import dip.order.OrderFactory;
-import dip.order.OrderFormatOptions;
-import dip.order.OrderParser;
-import dip.order.Orderable;
-import dip.order.result.Result;
-import dip.world.Phase.PhaseType;
-import dip.world.Power;
-import dip.world.TurnState;
-import dip.world.World;
+import info.jdip.order.Order;
+import info.jdip.order.OrderException;
+import info.jdip.order.OrderFactory;
+import info.jdip.order.OrderFormatOptions;
+import info.jdip.order.OrderParser;
+import info.jdip.order.Orderable;
+import info.jdip.order.result.Result;
+import info.jdip.world.Phase.PhaseType;
+import info.jdip.world.Power;
+import info.jdip.world.TurnState;
+import info.jdip.world.World;
 import org.nukesoft.jdipFacade.exception.JdipException;
 import org.nukesoft.jdipFacade.exception.PowerNotFoundException;
 import org.nukesoft.jdipFacade.exception.StateError;

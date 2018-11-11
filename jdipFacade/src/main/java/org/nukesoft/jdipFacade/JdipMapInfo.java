@@ -16,11 +16,11 @@
  */
 package org.nukesoft.jdipFacade;
 
-import dip.world.Coast;
-import dip.world.Location;
-import dip.world.Province;
-import dip.world.Unit;
-import dip.world.World;
+import info.jdip.world.Coast;
+import info.jdip.world.Location;
+import info.jdip.world.Province;
+import info.jdip.world.Unit;
+import info.jdip.world.World;
 import org.nukesoft.jdipFacade.exception.ProvinceNotFoundException;
 import org.nukesoft.jdipFacade.exception.StateError;
 import org.nukesoft.jdipFacade.exception.UnitNotFoundException;
