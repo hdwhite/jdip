@@ -1,4 +1,7 @@
 apply plugin: 'java'
+apply plugin: 'application'
+
+
 
 repositories {
 
@@ -15,6 +18,7 @@ dependencies {
 
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+
     testImplementation(
             'org.junit.jupiter:junit-jupiter-api:5.1.0'
     )
@@ -31,12 +35,13 @@ test {
     useJUnitPlatform()
 }
 
+mainClassName = 'info.jdip.gui.splash'
 jar {
     baseName = "jdip"
     manifest {
         attributes(
-                'Main-Class': 'info.jdip.gui.splash',
-                "Class-Path": configurations.compile.collect { 'lib/' + it.getName() }.join(' ')
+                'Main-Class': mainClassName,
+                "Class-Path": configurations.runtimeClasspath.collect { 'lib/' + it.getName() }.join(' ')
         )
     }
 }
@@ -68,32 +73,27 @@ file('resource/variants/symbols').eachDir { dir ->
     }
 }
 
-task zipDist(type: Zip) {
-    baseName = "jdip"
-    from configurations.runtime.allArtifacts.files
-    from(configurations.runtime) {
-        into 'lib'
-    }
-    from(configurations.variants.allArtifacts.files) {
-        into 'variants'
-    }
-    from(configurations.symbols.allArtifacts.files) {
-        into 'variants'
-    }
-    from('etc/scripts') {
-        include 'jdip.bat'
-        include 'jdip.sh'
-    }
-    from('.') {
-        include 'README.TXT'
-        include 'LICENSE.TXT'
-        include 'HISTORY.TXT'
-        include 'CHANGELOG.TXT'
-    }
-}
 
-artifacts {
-    archives zipDist
+
+distributions {
+    main {
+        baseName = "jdip"
+        contents{
+            from(configurations.variants.allArtifacts.files) {
+                into 'variants'
+            }
+            from(configurations.symbols.allArtifacts.files) {
+                into 'variants'
+            }
+
+            from('.') {
+                include 'README.TXT'
+                include 'LICENSE.TXT'
+                include 'HISTORY.TXT'
+                include 'CHANGELOG.TXT'
+            }
+        }
+    }
 }
 
 
