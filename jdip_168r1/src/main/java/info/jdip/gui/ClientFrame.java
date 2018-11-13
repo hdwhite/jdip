@@ -82,6 +82,8 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Locale;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -317,15 +319,15 @@ public class ClientFrame extends JFrame {
         // from the command line
         // use the preferred path, if set, and not overridden from command line
         variantDirPath = (variantDirPath == null) ? GeneralPreferencePanel.getVariantDir() : variantDirPath;
-        File toolDirPath = null;
-        if (System.getProperty("user.dir") == null) {
-            variantDirPath = (variantDirPath == null) ? new File(".", VARIANT_DIR) : variantDirPath;
-            toolDirPath = new File(".", TOOL_DIR);
-        } else {
-            variantDirPath = (variantDirPath == null) ? new File(System.getProperty("user.dir"), VARIANT_DIR) : variantDirPath;
-            toolDirPath = new File(System.getProperty("user.dir"), TOOL_DIR);
-        }
 
+        Path applicationHome = Paths.get(System.getProperty("application.home") == null ? "." : System.getProperty("application.home")).toAbsolutePath().normalize();
+        if (applicationHome.endsWith("bin")) {
+            applicationHome = applicationHome.getParent();
+        }
+        if (variantDirPath == null) {
+            variantDirPath = applicationHome.resolve(VARIANT_DIR).toFile();
+        }
+        File toolDirPath = applicationHome.resolve(TOOL_DIR).toFile();
         Log.println("Using variant directory: ", variantDirPath);
 
         // parse variants

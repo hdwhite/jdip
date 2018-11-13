@@ -11,7 +11,7 @@ public class BordersTest extends DATCTest {
     @BeforeAll
     public static void setTestCaseLocation(){
         Locale.setDefault(Locale.US);
-        testSuite = new TestSuite(new File("build/distributions"));
+        testSuite = new TestSuite(new File("build/tmp/variants"));
         testCaseLocation = "etc/test_data/borders.txt";
         testSuite.parseCases(new File(testCaseLocation));
 

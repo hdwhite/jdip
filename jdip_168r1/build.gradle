@@ -8,8 +8,6 @@ repositories {
     jcenter()
 }
 
-//version = '1.7.0 Preview Release 1'
-
 
 dependencies {
 
@@ -25,7 +23,6 @@ dependencies {
     testRuntimeOnly(
             'org.junit.jupiter:junit-jupiter-engine:5.1.0'
     )
-    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.3.1'
 
 
@@ -35,55 +32,45 @@ test {
     useJUnitPlatform()
 }
 
-mainClassName = 'info.jdip.gui.splash'
-jar {
-    baseName = "jdip"
-    manifest {
-        attributes(
-                'Main-Class': mainClassName,
-                "Class-Path": configurations.runtimeClasspath.collect { 'lib/' + it.getName() }.join(' ')
-        )
-    }
-}
-
-configurations.create('variants')
-//instead of creating one task for each variant we can loop throw filesystem and create them dynamically
-file('resource/variants').eachDirMatch(~/(?!symbols).*/) { dir ->
+file('resource/variants').eachDir { dir ->
     def taskName = "${dir.name}Variants"
     def task = tasks.create(name: taskName, type: Zip) {
         baseName = taskName
         from fileTree(dir)
+        destinationDir file("build/tmp/variants")
+        group='variants'
     }
     test.dependsOn(task)
-    artifacts {
-        variants tasks.findByName(taskName)
-    }
+    run.dependsOn(task)
+
 }
-// symbols need different handling
-configurations.create('symbols')
-file('resource/variants/symbols').eachDir { dir ->
+file('resource/symbols').eachDir { dir ->
     def taskName = "${dir.name}Symbols"
     def task = tasks.create(name: taskName, type: Zip) {
         baseName = taskName
         from fileTree(dir)
+        destinationDir file("build/tmp/variants")
+        group='variants'
+
     }
     test.dependsOn(task)
-    artifacts {
-        symbols tasks.findByName(taskName)
-    }
+    run.dependsOn(task)
 }
 
 
+mainClassName = 'info.jdip.gui.splash'
 
 distributions {
     main {
         baseName = "jdip"
         contents{
-            from(configurations.variants.allArtifacts.files) {
-                into 'variants'
-            }
-            from(configurations.symbols.allArtifacts.files) {
-                into 'variants'
+            tasks.each {
+                task ->
+                    if (task.group == 'variants') {
+                        from(task){
+                            into 'variants'
+                        }
+                    }
             }
 
             from('.') {
@@ -95,5 +82,10 @@ distributions {
         }
     }
 }
+
+run{
+    workingDir("build/tmp")
+}
+
 
 
