@@ -70,6 +70,7 @@ import jcmdline.Parameter;
 import jcmdline.StringParam;
 import jcmdline.VersionCmdLineHandler;
 import org.apache.batik.util.XMLResourceDescriptor;
+import org.slf4j.Logger;
 import org.xml.sax.XMLReader;
 
 import javax.swing.*;
@@ -83,6 +84,8 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Locale;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * The main class for starting the client... everything starts here.
  * <p>
@@ -93,6 +96,9 @@ import java.util.Locale;
  * <p>
  */
 public class ClientFrame extends JFrame {
+    private static final Logger logger = getLogger(ClientFrame.class);
+
+
     // public property constants for PropertyChange events
     /**
      * Event indicating that a World object was created
@@ -1012,17 +1018,6 @@ public class ClientFrame extends JFrame {
         // set variant path if given
         if (argVariantPath.isSet()) {
             variantDirPath = argVariantPath.getFile();
-        }
-
-        // do logging
-        if (argLogFile.isSet()) {
-            if ("stdout".equalsIgnoreCase(argLogFile.getFile().getName())) {
-                Log.setLogging(null);
-            } else {
-                Log.setLogging(argLogFile.getFile());
-            }
-        } else {
-            Log.setLogging(Log.LOG_TO_MEMORY, null);
         }
 
         // set flags

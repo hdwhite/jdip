@@ -22,6 +22,8 @@
 //
 package info.jdip.gui;
 
+import org.slf4j.Logger;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,10 +31,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Method;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * A very fast statup Splash screen, using AWT.
  */
 public final class splash {
+    private static final Logger logger = getLogger(splash.class);
+
     private static final String SPLASH_GRAPHIC = "resource/common/splash/splash.jpg";
     private static splashRunner sprunner = null;
 
@@ -80,7 +86,7 @@ public final class splash {
             //time = (System.currentTimeMillis() - time);
             //System.out.println("splash.main() INVOKED: "+time);
         } catch (Exception e) {
-            System.err.println(e);
+            logger.error("There was a problem running ClientFrame", e);
             e.printStackTrace();
         }
 
@@ -120,11 +126,8 @@ public final class splash {
 
             // print an error to stderr
             //
-            System.err.println("jDip requires Java version 1.4 or greater to be installed.");
-            System.err.println("The detected Java version is: " + version + ", by " + vendor);
-            System.err.println("An updated version of Java may be obtained from:");
-            System.err.println("   http://www.java.com");
-            System.err.println();
+            logger.error("jDip requires Java version 1.4 or greater to be installed.The detected Java version is: {}, by {}", version, vendor);
+
 
 
             // use an AWT to prevent loading of swing classes just to display a
@@ -210,8 +213,8 @@ public final class splash {
                 frame = new Frame("test");
             } catch (Throwable t) {
                 // be a bit facetious
-                System.err.println("jDip requires a computer with a mouse, keyboard, monitor,");
-                System.err.println("and graphical environment (e.g., XWindows) to run.");
+                logger.error("jDip requires a computer with a mouse, keyboard, monitor,");
+                logger.error("and graphical environment (e.g., XWindows) to run.");
                 System.exit(1);
             }
 

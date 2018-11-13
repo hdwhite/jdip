@@ -13,8 +13,8 @@ dependencies {
     // Add all the jar dependencies from the lib folder.
     compile fileTree(dir: 'lib', include: ['*.jar'])
 
-    testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     testImplementation(
             'org.junit.jupiter:junit-jupiter-api:5.1.0'
     )
