@@ -1,4 +1,10 @@
-image: openjdk:8
+image: gradle:jdk8
+# Disable the Gradle daemon for Continuous Integration servers as correctness
+# is usually a priority over speed in CI environments. Using a fresh
+# runtime for each build is more reliable since the runtime is completely
+# isolated from any previous builds.
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 stages:
   - build
@@ -8,7 +14,7 @@ stages:
 build:
   stage: build
   script:
-    - ./gradlew compileJava
+    - gradle compileJava
   artifacts:
     paths:
       - jdip_168r1/build
@@ -23,7 +29,7 @@ test:
   stage: test
   script:
     - find . -name build -print0 | xargs -0 -I{.} find {.} -exec touch {} +
-    - ./gradlew test
+    - gradle test
   artifacts:
     reports:
       junit: jdip_168r1/build/test-results/test/TEST-*.xml
@@ -39,7 +45,7 @@ package:
     - build
   script:
     - find . -name build -print0 | xargs -0 -I{.} find {.} -exec touch {} +
-    - ./gradlew assemble
+    - gradle assemble
   artifacts:
     paths:
       - jdip_168r1/build/distributions/*.zip
