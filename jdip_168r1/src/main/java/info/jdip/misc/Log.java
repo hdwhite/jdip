@@ -22,11 +22,9 @@
 //
 package info.jdip.misc;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Date;
+import org.slf4j.Logger;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * A very simple logging class that logs all data to stdout. Note that this
@@ -39,10 +37,8 @@ import java.util.Date;
  * <p>
  */
 public final class Log {
-    /**
-     * Set logging to NONE
-     */
-    public static final int LOG_NONE = 0;
+    private static final Logger logger = getLogger(Log.class);
+
 
     /**
      * Set logging to memory only
@@ -52,43 +48,8 @@ public final class Log {
     /**
      * Set logging to file only
      */
-    public static final int LOG_TO_FILE = 2;
+    private static boolean isLogging = true;
 
-    private static final int LOG_BUFFER_SIZE = 150;
-    private static int logLevel = LOG_NONE;
-    private static boolean isLogging = false;
-    private static BufferedWriter bw = null;
-
-    private static String[] buffer = null;
-    private static int bufferNext = 0;
-	
-	/*
-		HOW the buffer works
-		a) string array of given size
-		b) two position (start, next)
-			start: start of buffer
-			
-			next: where next position in buffer is; this is start + 1
-				  unless start is at 0; then next == start.
-				  if start is at (length-1 '2' for a buffer length of 3)
-				  then next = 0;
-				  
-		this prevents us from shifting the string array around in memory
-		e.g.: for a buffer length of 3, using data a-z:
-		
-		0: a	START (0)
-		1: b
-		2: c	
-		
-		at this point our buffer is full; we want to add 'd':
-		
-		0: d	
-		1: b	START (1) 	(start is incremented by 1)
-		2: c
-		
-	
-	
-	*/
 
 
     /**
@@ -99,109 +60,11 @@ public final class Log {
 
 
     /**
-     * Enables or disables logging; optionally allows logging to a file.
-     * File may be null; null file with 'LOG_TO_FILE' logs to stdout.
-     */
-    public synchronized static void setLogging(int value, File file) {
-        if (value != LOG_NONE && value != LOG_TO_MEMORY && value != LOG_TO_FILE) {
-            throw new IllegalArgumentException("Bad setLogging() value: " + value);
-        }
-
-        if (value == LOG_NONE) {
-            close();
-            bw = null;
-            buffer = null;
-            bufferNext = 0;
-        } else {
-            // enable memory buffer
-            buffer = new String[LOG_BUFFER_SIZE];
-            bufferNext = 0;
-        }
-
-        if (value == LOG_TO_FILE) {
-            if (file == null) {
-                // log to stdout (no file specified)
-                System.out.println("*********** logging started ***********");
-                System.out.println((new Date()).toString());
-                System.out.println("***************************************");
-            } else {
-                // log to file
-                try {
-                    bw = new BufferedWriter(new FileWriter(file, true));
-                    bw.newLine();
-                    bw.write("*********** logging started ***********");
-                    bw.newLine();
-                    bw.write((new Date()).toString());
-                    bw.newLine();
-                    bw.write("***************************************");
-                    bw.newLine();
-                    bw.flush();
-                } catch (IOException e) {
-                    System.err.println(e);
-                }
-            }
-        }
-
-        logLevel = value;
-        isLogging = (logLevel != LOG_NONE);
-    }// setLogging()
-
-    /**
      * Check if logging is enabled or disabled
      */
     public static boolean isLogging() {
-        return isLogging;
+        return true;
     }// isLogging()
-
-    /**
-     * Enables logging to file. Null file logs to stdout.
-     */
-    public static void setLogging(File file) {
-        setLogging(LOG_TO_FILE, file);
-    }// setLogging()
-
-    /**
-     * Flushes and closes the log file (if writing to stdout, this has no effect)
-     */
-    public synchronized static void close() {
-        if (bw != null) {
-            try {
-                bw.flush();
-            } catch (IOException e) {
-                System.err.println(e);
-            } finally {
-                try {
-                    bw.close();
-                } catch (IOException e2) {
-                }
-            }
-        }
-    }// close()
-
-    /**
-     * Print the given Object to the output file / stdout
-     * via the Object's toString() method.
-     */
-    public static void print(Object s) {
-        if (isLogging) {
-            synchronized (Log.class) {
-                final String str = s.toString();
-                memLog(str);
-                if (logLevel == LOG_TO_FILE) {
-                    if (bw == null) {
-                        System.out.print(s);
-                    } else {
-                        try {
-                            bw.write(str);
-                            bw.flush();
-                        } catch (IOException e) {
-                            System.err.print(e);
-                        }
-                    }
-                }
-            }
-        }
-    }// print()
 
 
     /**
@@ -210,39 +73,17 @@ public final class Log {
      * newline.
      */
     public static void println(Object s) {
-        if (isLogging) {
-            synchronized (Log.class) {
-                final String str = s.toString();
-                memLog(str);
-                if (logLevel == LOG_TO_FILE) {
-                    if (bw == null) {
-                        System.out.println(s);
-                    } else {
-                        try {
-                            bw.write(str);
-                            bw.newLine();
-                            bw.flush();
-                        } catch (IOException e) {
-                            System.err.println(e);
-                        }
-                    }
-                }
-            }
-        }
-    }// println()
+        logger.info(s.toString());
+
+    }
 
 
     /**
      * Print text followed by a boolean
      */
     public static void println(Object s0, boolean b) {
-        if (isLogging) {
-            StringBuffer sb = new StringBuffer(256);
-            sb.append(s0);
-            sb.append(b);
-            println(sb);
-        }
-    }// println()
+        logger.info("Object: {}, Boolean: {}", s0, b);
+    }
 
     /**
      * Print text followed by an array; comma-seperated array print; can be null
@@ -355,52 +196,6 @@ public final class Log {
         }
     }// println()
 
-
-    /**
-     * Add to the memory buffer. Unsynchronized!
-     */
-    private static void memLog(String s) {
-        buffer[bufferNext] = s;
-        bufferNext++;
-        bufferNext = (bufferNext >= buffer.length) ? 0 : bufferNext;
-    }// memLog()
-
-
-    /**
-     * Returns null if no memory buffer.
-     */
-    public static synchronized String getMemoryBuffer() {
-        if (buffer == null) {
-            return null;
-        }
-
-        StringBuilder sb = new StringBuilder(8192);
-
-        // print out buffer contents, starting from 'bufferNext' to end of
-        // array, then continuing from beginning to 'bufferNext -1'.
-        // if we hit a null entry, stop. (buffer not full)
-        for (int i = bufferNext; i < buffer.length; i++) {
-            final String s = buffer[i];
-            if (s == null) {
-                break;
-            }
-
-            sb.append(s);
-            sb.append('\n');
-        }
-
-        for (int i = 0; i < bufferNext; i++) {
-            final String s = buffer[i];
-            if (s == null) {
-                break;
-            }
-
-            sb.append(s);
-            sb.append('\n');
-        }
-
-        return sb.toString();
-    }// getMemoryBuffer()
 
 }// class Log
 

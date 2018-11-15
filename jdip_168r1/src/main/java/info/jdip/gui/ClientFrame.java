@@ -70,6 +70,7 @@ import jcmdline.Parameter;
 import jcmdline.StringParam;
 import jcmdline.VersionCmdLineHandler;
 import org.apache.batik.util.XMLResourceDescriptor;
+import org.slf4j.Logger;
 import org.xml.sax.XMLReader;
 
 import javax.swing.*;
@@ -81,7 +82,11 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Locale;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * The main class for starting the client... everything starts here.
@@ -93,6 +98,9 @@ import java.util.Locale;
  * <p>
  */
 public class ClientFrame extends JFrame {
+    private static final Logger logger = getLogger(ClientFrame.class);
+
+
     // public property constants for PropertyChange events
     /**
      * Event indicating that a World object was created
@@ -311,15 +319,15 @@ public class ClientFrame extends JFrame {
         // from the command line
         // use the preferred path, if set, and not overridden from command line
         variantDirPath = (variantDirPath == null) ? GeneralPreferencePanel.getVariantDir() : variantDirPath;
-        File toolDirPath = null;
-        if (System.getProperty("user.dir") == null) {
-            variantDirPath = (variantDirPath == null) ? new File(".", VARIANT_DIR) : variantDirPath;
-            toolDirPath = new File(".", TOOL_DIR);
-        } else {
-            variantDirPath = (variantDirPath == null) ? new File(System.getProperty("user.dir"), VARIANT_DIR) : variantDirPath;
-            toolDirPath = new File(System.getProperty("user.dir"), TOOL_DIR);
-        }
 
+        Path applicationHome = Paths.get(System.getProperty("application.home") == null ? "." : System.getProperty("application.home")).toAbsolutePath().normalize();
+        if (applicationHome.endsWith("bin")) {
+            applicationHome = applicationHome.getParent();
+        }
+        if (variantDirPath == null) {
+            variantDirPath = applicationHome.resolve(VARIANT_DIR).toFile();
+        }
+        File toolDirPath = applicationHome.resolve(TOOL_DIR).toFile();
         Log.println("Using variant directory: ", variantDirPath);
 
         // parse variants
@@ -1012,17 +1020,6 @@ public class ClientFrame extends JFrame {
         // set variant path if given
         if (argVariantPath.isSet()) {
             variantDirPath = argVariantPath.getFile();
-        }
-
-        // do logging
-        if (argLogFile.isSet()) {
-            if ("stdout".equalsIgnoreCase(argLogFile.getFile().getName())) {
-                Log.setLogging(null);
-            } else {
-                Log.setLogging(argLogFile.getFile());
-            }
-        } else {
-            Log.setLogging(Log.LOG_TO_MEMORY, null);
         }
 
         // set flags

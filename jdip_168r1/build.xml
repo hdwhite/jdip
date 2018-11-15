@@ -319,34 +319,34 @@
 		
 		
 		<!-- SymbolPack: simple -->
-		<zip compress="true"   destfile="${variant.dir}/simpleSymbols.zip"
-				basedir="${resource.dir}/variants/symbols/simple"
-				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+		<zip compress="true" destfile="${variant.dir}/simpleSymbols.zip"
+			 basedir="/resource/symbols/simple"
+			 excludes="*~ *.zip"
+			 includes="*.xml *.jpg *.png *.svg *.gif"/>
        
 		<!-- SymbolPack: period -->
-		<zip compress="true"   destfile="${variant.dir}/periodSymbols.zip"
-				basedir="${resource.dir}/variants/symbols/period"
-				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+		<zip compress="true" destfile="${variant.dir}/periodSymbols.zip"
+			 basedir="/resource/symbols/period"
+			 excludes="*~ *.zip"
+			 includes="*.xml *.jpg *.png *.svg *.gif"/>
 		
 		<!-- SymbolPack: modern -->
-		<zip compress="true"   destfile="${variant.dir}/modernSymbols.zip"
-				basedir="${resource.dir}/variants/symbols/modern"
-				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+		<zip compress="true" destfile="${variant.dir}/modernSymbols.zip"
+			 basedir="/resource/symbols/modern"
+			 excludes="*~ *.zip"
+			 includes="*.xml *.jpg *.png *.svg *.gif"/>
 		
 		<!-- SymbolPack: imperium -->
-		<zip compress="true"   destfile="${variant.dir}/imperiumSymbols.zip"
-				basedir="${resource.dir}/variants/symbols/imperium"
-				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+		<zip compress="true" destfile="${variant.dir}/imperiumSymbols.zip"
+			 basedir="/resource/symbols/imperium"
+			 excludes="*~ *.zip"
+			 includes="*.xml *.jpg *.png *.svg *.gif"/>
 		
 		<!-- SymbolPack: ancmed -->
-		<zip compress="true"   destfile="${variant.dir}/ancmedSymbols.zip"
-				basedir="${resource.dir}/variants/symbols/ancient_med"
-				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+		<zip compress="true" destfile="${variant.dir}/ancmedSymbols.zip"
+			 basedir="/resource/symbols/ancient_med"
+			 excludes="*~ *.zip"
+			 includes="*.xml *.jpg *.png *.svg *.gif"/>
 				
 	</target>
 	

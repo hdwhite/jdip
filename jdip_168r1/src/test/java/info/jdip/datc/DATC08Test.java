@@ -9,7 +9,7 @@ public class DATC08Test extends DATCTest {
 
     @BeforeAll
     public static void setTestCaseLocation() {
-        testSuite = new TestSuite(new File("build/distributions"));
+        testSuite = new TestSuite(new File("build/tmp/variants"));
         testCaseLocation = "etc/test_data/datc_v2.4_08.txt";
         testSuite.parseCases(new File(testCaseLocation));
     }

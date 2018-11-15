@@ -1,11 +1,12 @@
 apply plugin: 'java'
+apply plugin: 'application'
+
+
 
 repositories {
 
     jcenter()
 }
-
-//version = '1.7.0 Preview Release 1'
 
 
 dependencies {
@@ -13,15 +14,15 @@ dependencies {
     // Add all the jar dependencies from the lib folder.
     compile fileTree(dir: 'lib', include: ['*.jar'])
 
-    testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+
     testImplementation(
             'org.junit.jupiter:junit-jupiter-api:5.1.0'
     )
     testRuntimeOnly(
             'org.junit.jupiter:junit-jupiter-engine:5.1.0'
     )
-    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.3.1'
 
 
@@ -31,69 +32,60 @@ test {
     useJUnitPlatform()
 }
 
-jar {
-    baseName = "jdip"
-    manifest {
-        attributes(
-                'Main-Class': 'info.jdip.gui.splash',
-                "Class-Path": configurations.compile.collect { 'lib/' + it.getName() }.join(' ')
-        )
-    }
-}
-
-configurations.create('variants')
-//instead of creating one task for each variant we can loop throw filesystem and create them dynamically
-file('resource/variants').eachDirMatch(~/(?!symbols).*/) { dir ->
+file('resource/variants').eachDir { dir ->
     def taskName = "${dir.name}Variants"
     def task = tasks.create(name: taskName, type: Zip) {
         baseName = taskName
         from fileTree(dir)
+        destinationDir file("build/tmp/variants")
+        group='variants'
     }
     test.dependsOn(task)
-    artifacts {
-        variants tasks.findByName(taskName)
-    }
+    run.dependsOn(task)
+
 }
-// symbols need different handling
-configurations.create('symbols')
-file('resource/variants/symbols').eachDir { dir ->
+file('resource/symbols').eachDir { dir ->
     def taskName = "${dir.name}Symbols"
     def task = tasks.create(name: taskName, type: Zip) {
         baseName = taskName
         from fileTree(dir)
+        destinationDir file("build/tmp/variants")
+        group='variants'
+
     }
     test.dependsOn(task)
-    artifacts {
-        symbols tasks.findByName(taskName)
+    run.dependsOn(task)
+}
+
+
+mainClassName = 'info.jdip.gui.splash'
+
+distributions {
+    main {
+        baseName = "jdip"
+        contents{
+            tasks.each {
+                task ->
+                    if (task.group == 'variants') {
+                        from(task){
+                            into 'variants'
+                        }
+                    }
+            }
+
+            from('.') {
+                include 'README.TXT'
+                include 'LICENSE.TXT'
+                include 'HISTORY.TXT'
+                include 'CHANGELOG.TXT'
+            }
+        }
     }
 }
 
-task zipDist(type: Zip) {
-    baseName = "jdip"
-    from configurations.runtime.allArtifacts.files
-    from(configurations.runtime) {
-        into 'lib'
-    }
-    from(configurations.variants.allArtifacts.files) {
-        into 'variants'
-    }
-    from(configurations.symbols.allArtifacts.files) {
-        into 'variants'
-    }
-    from('etc/scripts') {
-        include 'jdip.bat'
-        include 'jdip.sh'
-    }
-    from('.') {
-        include 'README.TXT'
-        include 'LICENSE.TXT'
-        include 'HISTORY.TXT'
-        include 'CHANGELOG.TXT'
-    }
+run{
+    workingDir("build/tmp")
 }
 
-artifacts {
-    archives zipDist
-}
 
 

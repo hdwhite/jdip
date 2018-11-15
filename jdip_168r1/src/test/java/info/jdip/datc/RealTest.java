@@ -9,7 +9,7 @@ public class RealTest extends DATCTest {
 
     @BeforeAll
     public static void setTestCaseLocation() {
-        testSuite = new TestSuite(new File("build/distributions"));
+        testSuite = new TestSuite(new File("build/tmp/variants"));
         testCaseLocation = "etc/test_data/real.txt";
         testSuite.parseCases(new File(testCaseLocation));
     }
