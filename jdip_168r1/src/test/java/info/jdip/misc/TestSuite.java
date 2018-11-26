@@ -22,21 +22,13 @@
 //
 package info.jdip.misc;
 
-import info.jdip.order.DefineState;
-import info.jdip.order.Move;
 import info.jdip.order.Order;
-import info.jdip.order.OrderException;
 import info.jdip.order.OrderFactory;
 import info.jdip.order.OrderParser;
-import info.jdip.order.Orderable;
-import info.jdip.order.result.ConvoyPathResult;
 import info.jdip.order.result.OrderResult;
 import info.jdip.order.result.Result;
 import info.jdip.process.StdAdjudicator;
-import info.jdip.world.Location;
-import info.jdip.world.Phase;
 import info.jdip.world.Position;
-import info.jdip.world.Power;
 import info.jdip.world.Province;
 import info.jdip.world.RuleOptions;
 import info.jdip.world.TurnState;
@@ -45,6 +37,8 @@ import info.jdip.world.World;
 import info.jdip.world.WorldFactory;
 import info.jdip.world.variant.VariantManager;
 import info.jdip.world.variant.data.Variant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -55,7 +49,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -178,6 +171,7 @@ import java.util.Set;
  * </pre>
  */
 public final class TestSuite {
+    private static final Logger logger = LoggerFactory.getLogger(TestSuite.class);
     // constants
     private static final String VARIANT_ALL = "variant_all";
     private static final String CASE = "case";
@@ -201,19 +195,18 @@ public final class TestSuite {
     private static final String[] KEY_TYPES_WITH_LIST = {ORDERS, PRESTATE_SUPPLYCENTER_OWNERS, PRESTATE_RESULTS,
             PRESTATE_DISLODGED, POSTSTATE_DISLODGED, POSTSTATE, PRESTATE};
     private static final String VARIANT_DIR = "variants";
-    private static float parseTime = -1;
     private static boolean isAdjudicatorLogged = true;
     private static boolean isLogging = true;
     private static boolean isPerfTest = false;
     private static boolean isRegression = false;
     private static String inFileName = null;
     private static int benchTimes = 1;
+    private final List<Case> cases = new ArrayList<>(10);
+    private final List<String> failedCaseNames = new ArrayList<>(10);
     private Map<String, List<String>> keyMap = null;
-    private final List<TestSuite.Case> cases = new ArrayList<>(10);
     private World world = null;
     private TurnState templateTurnState;
     private StdAdjudicator stdJudge = null;
-    private final List<String> failedCaseNames = new ArrayList<>(10);
     // VARIANT_ALL name
     private String variantName = null;
     private File variantsDir;
@@ -267,23 +260,19 @@ public final class TestSuite {
         }
 
 
-
         TestSuite ts = new TestSuite();
 
-        println("TestSuite Results: (", new Date(), ")");
-        println("=======================================================================");
-        println("  test case file: ", inFileName);
+        logger.info("TestSuite Results: ({})", new Date());
+        logger.info("Test case file: {}", inFileName);
 
 
         File file = new File(inFileName);
+        TestStatistics testStatistics = new TestStatistics(System.currentTimeMillis(),benchTimes);
 
-        long startTime = System.currentTimeMillis();
         ts.parseCases(file);
-        parseTime = (System.currentTimeMillis() - startTime) / 1000f;
-        println("  initialization complete.");
-//		println("  variant: ", variantName);
-
-        ts.evaluate();
+        testStatistics.parsingFinished(System.currentTimeMillis());
+        logger.info("  initialization complete.");
+        ts.evaluate(testStatistics);
     }// main()
 
     private static void printUsageAndExit() {
@@ -320,70 +309,6 @@ public final class TestSuite {
         return n;
     }// getTimes()
 
-    // fast internal logging
-    // this allows just references to be passed. Although references are copied, this is a
-    // fast operation in java. If logging is turned off, no string concatenation need be
-    // performed.
-	/*
-		-perftest speed increased from 550 orders/second to about 700 orders/second. That's
-		a HUGE speedup (~33%); this is just on the DATC.txt test case set.
-
-
-	*/
-    private static void println(String s1) {
-        if (isLogging) {
-            System.out.println(s1);
-        }
-    }
-
-    private static void println(String s1, int i1) {
-        if (isLogging) {
-            StringBuilder sb = new StringBuilder(256);
-            sb.append(s1);
-            sb.append(i1);
-            System.out.println(sb.toString());
-        }
-    }
-
-    private static void println(String s1, int i1, String s2) {
-        if (isLogging) {
-            StringBuilder sb = new StringBuilder(256);
-            sb.append(s1);
-            sb.append(i1);
-            sb.append(s2);
-            System.out.println(sb.toString());
-        }
-    }
-
-    private static void println(String s1, Object o2) {
-        if (isLogging) {
-            StringBuilder sb = new StringBuilder(256);
-            sb.append(s1);
-            sb.append(o2);
-            System.out.println(sb.toString());
-        }
-    }
-
-    private static void println(String s1, Object o2, Object o3) {
-        if (isLogging) {
-            StringBuilder sb = new StringBuilder(256);
-            sb.append(s1);
-            sb.append(o2);
-            sb.append(o3);
-            System.out.println(sb.toString());
-        }
-    }
-
-    private static void println(String s1, Object o2, Object o3, Object o4) {
-        if (isLogging) {
-            StringBuilder sb = new StringBuilder(256);
-            sb.append(s1);
-            sb.append(o2);
-            sb.append(o3);
-            sb.append(o4);
-            System.out.println(sb.toString());
-        }
-    }
 
     private void initVariant() {
         try {
@@ -407,149 +332,111 @@ public final class TestSuite {
             // by the GUI)
             world.setRuleOptions(RuleOptions.createFromVariant(variant));
         } catch (Exception e) {
-            println("Init error: ", e);
-            e.printStackTrace();
+            logger.error("Init error: ", e);
             throw new RuntimeException(e);
         }
     }// init()
 
-    public void evaluate() {
-        int nOrders = 0;
-        int nPass = 0;
-        int nFail = 0;
-        int nCases = 0;
-
-        List<String> unRezParadoxes = new LinkedList<>();
-
-        long startMillis = System.currentTimeMillis();    // start timing!
+    public void evaluate(TestStatistics statistics) {
 
         // all cases in an array
         final Case[] allCases = cases.toArray(new Case[cases.size()]);
 
         if (isRegression) {
-            // no stats are kept in regression mode, because we're in an
-            // infinite loop.
-            //
-            int rCount = 0;
-            System.out.print("Running cases in an infinite loop");
-
-            while (true) {
-                for (Case currentCase : allCases) {
-                    // world: setup
-                    world.setTurnState(currentCase.getCurrentTurnState());
-                    world.setTurnState(currentCase.getPreviousTurnState());
-
-                    stdJudge = new StdAdjudicator(OrderFactory.getDefault(), currentCase.getCurrentTurnState());
-                    stdJudge.process();
-
-                    // cleanup: remove turnstates from world
-                    world.removeAllTurnStates();
-
-                    // cleanup: clear results in currentTurnSTate
-                    // this is absolutely essential!!
-                    currentCase.getCurrentTurnState().getResultList().clear();
-
-                    // print a '.' every 1000 iterations
-                    rCount++;
-                    if (rCount == 1000) {
-                        System.out.print('.');
-                        rCount = 0;
-                    }
-                }
-            }
+            regression(allCases);
+            return;
         } else if (isPerfTest) {
-            // performance mode. We need to track stats here,
-            // but there is no logging or output except stats.
-            //
-            for (int i = 0; i < benchTimes; i++) {
-                for (Case currentCase : allCases) {
-                    // world: setup
-                    world.setTurnState(currentCase.getCurrentTurnState());
-                    world.setTurnState(currentCase.getPreviousTurnState());
+            performance(statistics, allCases);
+        } else {
+            normalMode(statistics, allCases);
+        }
 
-                    nOrders += currentCase.getOrders().length;
 
-                    // adjudicate
-                    // we don't check results when in performance mode.
-                    //
-                    stdJudge = new StdAdjudicator(OrderFactory.getDefault(), currentCase.getCurrentTurnState());
-                    stdJudge.process();
+        // print stats
+        //
+        statistics.endTime(System.currentTimeMillis());
 
-                    nCases++;
+        statistics.printStatistics(isPerfTest);
 
-                    // cleanup: remove turnstates from world
-                    world.removeAllTurnStates();
 
-                    // cleanup: clear results in currentTurnSTate
-                    // this is absolutely essential!!
-                    currentCase.getCurrentTurnState().getResultList().clear();
+        // exit
+        System.exit(statistics.failed());
+    }// evaluate()
+
+    private void normalMode(TestStatistics counters , Case[] allCases) {
+        // 'typical' mode (testing).
+        // we keep stats and may or may not have logging
+        //
+        for (Case currentCase : allCases) {
+            // world: setup
+            world.setTurnState(currentCase.getCurrentTurnState());
+            world.setTurnState(currentCase.getPreviousTurnState());
+
+            logger.info("Case: {}", currentCase.getName());
+
+            printState(currentCase);
+
+            printOrders(currentCase);
+            counters.addOrders(currentCase.getOrders().size());
+
+            stdJudge = new StdAdjudicator(OrderFactory.getDefault(), currentCase.getCurrentTurnState());
+            stdJudge.process();
+
+            // add unresolved paradoxes to list, so we know which cases they are
+            if (stdJudge.isUnresolvedParadox()) {
+                counters.addUnresolved(currentCase.getName());
+            }
+
+            logger.info("Adjudications results:");
+            if (stdJudge.getNextTurnState() == null) {
+                logger.info("Next Phase: NONE. Game has been won.");
+            } else {
+                logger.info("Next Phase: {} ", stdJudge.getNextTurnState().getPhase());
+            }
+            List<Result> resultList = stdJudge.getTurnState().getResultList();
+            if (isLogging) {
+                for (Result r : resultList) {
+                    logger.info("Result: {}", r);
                 }
             }
-        } else {
-            // 'typical' mode (testing).
-            // we keep stats and may or may not have logging
-            //
+
+            logger.info("Post state");
+            if (compareState(currentCase, stdJudge.getNextTurnState())) {
+                counters.pass();
+            } else {
+                counters.fail(currentCase.getName());
+                failedCaseNames.add(currentCase.getName());
+            }
+            counters.newCase();
+
+            // cleanup: remove turnstates from world
+            world.removeAllTurnStates();
+
+            // cleanup: clear results in currentTurnSTate
+            // this is absolutely essential!!
+            currentCase.getCurrentTurnState().getResultList().clear();
+        }
+    }
+
+    private void performance(TestStatistics counters, Case[] allCases) {
+        // performance mode. We need to track stats here,
+        // but there is no logging or output except stats.
+        //
+        for (int i = 0; i < benchTimes; i++) {
             for (Case currentCase : allCases) {
                 // world: setup
                 world.setTurnState(currentCase.getCurrentTurnState());
                 world.setTurnState(currentCase.getPreviousTurnState());
 
-                // print case name
-                println("\n\n");
-                println("=CASE==================================================================");
-                println("  ", currentCase.getName());
-
-                // print pre-state
-                printState(currentCase);
-
-                // print orders
-                println("=ORDERS================================================================");
-                printOrders(currentCase);
-                nOrders += currentCase.getOrders().length;
+                counters.addOrders(currentCase.getOrders().size());
 
                 // adjudicate
-                println("=ADJUDICATION==========================================================");
-
+                // we don't check results when in performance mode.
+                //
                 stdJudge = new StdAdjudicator(OrderFactory.getDefault(), currentCase.getCurrentTurnState());
                 stdJudge.process();
 
-                // print adjudication results, if not performance testing
-                // also print & check post conditions, if not performance testing
-                if (!isAdjudicatorLogged) {
-                    println("  [adjudicator logging disabled]");
-                }
-
-                // add unresolved paradoxes to list, so we know which cases they are
-                if (stdJudge.isUnresolvedParadox()) {
-                    unRezParadoxes.add(currentCase.getName());
-                }
-
-                println("=ADJUDICATION RESULTS==================================================");
-                if (stdJudge.getNextTurnState() == null) {
-                    println("=NEXT PHASE: NONE. Game has been won.");
-                } else {
-                    println("=NEXT PHASE: ", stdJudge.getNextTurnState().getPhase());
-                }
-                List resultList = stdJudge.getTurnState().getResultList();
-                Iterator resultIter = resultList.iterator();
-                while (resultIter.hasNext() && isLogging) {
-                    Result r = (Result) resultIter.next();
-                    println("  ", r);
-                }
-
-                // check post conditions
-                println("=POST-STATE============================================================");
-
-                if (compareState(currentCase, stdJudge.getNextTurnState())) {
-                    nPass++;
-                } else {
-                    nFail++;
-                    failedCaseNames.add(currentCase.getName());
-                }
-
-                println("=======================================================================");
-
-                nCases++;
+                counters.newCase();
 
                 // cleanup: remove turnstates from world
                 world.removeAllTurnStates();
@@ -559,101 +446,42 @@ public final class TestSuite {
                 currentCase.getCurrentTurnState().getResultList().clear();
             }
         }
-
-
-        // print stats
-        //
-        long time = System.currentTimeMillis() - startMillis;    // end timing!
-        println("End: ", new Date());
-
-        // total time: includes setup/adjudication/comparison
-        float orderTime = (float) time / (float) nOrders;
-        float thruPut = 1000.0f / orderTime;
-        float score = (float) nPass / (float) nCases * 100.0f;
-
-        println("\nFailed Cases:");
-        println("=============");
-        Iterator iter = failedCaseNames.iterator();
-        while (iter.hasNext()) {
-            println("   ", iter.next());
-        }
-        println("   [total: " + failedCaseNames.size() + "]");
-
-        println("\nUnresolved Paradoxes:");
-        println("=====================");
-        iter = unRezParadoxes.iterator();
-        while (iter.hasNext()) {
-            println("   " + iter.next());
-        }
-        println("   [total: ", unRezParadoxes.size(), "]");
-
-        // print to log
-        println("\nStatistics:");
-        println("===========");
-        println("    Case parse time: " + parseTime + " seconds.");
-        if (isPerfTest) {
-            println("    " + nCases + " cases evaluated. Pass/Fail rate not available with -perftest option.");
-            println("    Adjudication Performance for " + benchTimes + " iterations:");
-        } else {
-            println("    " + nCases + " cases evaluated. " + nPass + " passed, " + nFail + " failed; " + score + "%  pass rate.");
-            println("    Times [includes setup, adjudication, and post-adjudication comparision]");
-        }
-        println("      " + nOrders + " orders processed in " + time + " ms; " + orderTime + " ms/order average");
-        println("      Throughput: " + thruPut + " orders/second");
-
-        // if in 'brief' mode, only print out summary statistics
-        if (!isLogging) {
-            System.out.println("\nStatistics for \"" + inFileName + "\":");
-            System.out.println("    Case parse time: " + parseTime + " seconds.");
-            if (isPerfTest) {
-                System.out.println("    " + nCases + " cases evaluated. Pass/Fail rate not available with -perftest option.");
-                System.out.println("    Adjudication Performance for " + benchTimes + " iterations:");
-            } else {
-                System.out.println("    " + nCases + " cases evaluated. " + nPass + " passed, " + nFail + " failed; " + score + "% pass rate.");
-                System.out.println("    Times [includes setup, adjudication, and post-adjudication comparision]");
-            }
-            System.out.println("      " + nOrders + " orders processed in " + time + " ms; " + orderTime + " ms/order average");
-            System.out.println("      Throughput: " + thruPut + " orders/second");
-
-            if (isPerfTest) {
-                printPerfStatsBrief(benchTimes, nOrders, time, thruPut);
-            }
-        }
-
-        // exit
-        System.exit(nFail);
-    }// evaluate()
-
-    /**
-     * Briefly print performance stats for cut/paste
-     */
-    private void printPerfStatsBrief(int nIter, int nOrder, float timeTotal, float thruput) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("**\t");    // start line; asterisks
-
-        // file name only [no path]
-        File file = new File(inFileName);
-        sb.append(file.getName());
-        sb.append("\t");
-
-        // # of iterations
-        sb.append(nIter);
-        sb.append("\t");
-
-        // # of orders
-        sb.append(nOrder);
-        sb.append("\t");
-
-        // total time (ms)
-        sb.append(timeTotal);
-        sb.append("\t");
-
-        // thruput (orders / second)
-        sb.append(thruput);
-        sb.append("\t");
-
-        System.out.println(sb);
     }
+
+    private void regression(Case[] allCases) {
+        // no stats are kept in regression mode, because we're in an
+        // infinite loop.
+        //
+        int rCount = 0;
+        System.out.print("Running cases in an infinite loop");
+
+        while (true) {
+            for (Case currentCase : allCases) {
+                // world: setup
+                world.setTurnState(currentCase.getCurrentTurnState());
+                world.setTurnState(currentCase.getPreviousTurnState());
+
+                stdJudge = new StdAdjudicator(OrderFactory.getDefault(), currentCase.getCurrentTurnState());
+                stdJudge.process();
+
+                // cleanup: remove turnstates from world
+                world.removeAllTurnStates();
+
+                // cleanup: clear results in currentTurnSTate
+                // this is absolutely essential!!
+                currentCase.getCurrentTurnState().getResultList().clear();
+
+                // print a '.' every 1000 iterations
+                rCount++;
+                if (rCount == 1000) {
+                    System.out.print('.');
+                    rCount = 0;
+                }
+            }
+        }
+    }
+
+
 
     // prints state settings...
     private void printState(Case c) {
@@ -664,36 +492,31 @@ public final class TestSuite {
         TurnState turnState = c.getCurrentTurnState();
         //Position position = turnState.getPosition();
 
-        println("=PHASE=================================================================");
-        println("  ", turnState.getPhase());
+        logger.info("Phase: {}", turnState.getPhase());
 
         // if we have some results to display, for prior state, do that now.
-        if (isLogging && c.getResults().length > 0) {
+        if (isLogging && c.getResults().size() > 0) {
             // print
-            println("=PRESTATE_RESULTS======================================================");
-            println("  From ", c.getPreviousTurnState().getPhase());
-            OrderResult[] or = c.getResults();
-            for (OrderResult anOr : or) {
-                println("    ", anOr);
+            logger.info("Pre state results from {}:", c.getPreviousTurnState().getPhase());
+            for (OrderResult anOr : c.getResults()) {
+                logger.info("Order result: {}", anOr);
             }
         }
 
 
         // print non-dislodged units
-        if (c.getPreState().length > 0) {
-            println("=PRE-STATE=============================================================");
-            DefineState[] dsOrds = c.getPreState();
-            for (DefineState dsOrd : dsOrds) {
-                println("   ", dsOrd);
+        if (c.getPreState().size() > 0) {
+            logger.info("Pre state:");
+            for (Order dsOrd : c.getPreState()) {
+                logger.info("Define state: {}", dsOrd);
             }
         }
 
         // print dislodged units
-        if (c.getPreDislodged().length > 0) {
-            println("=PRE-STATE DISLODGED===================================================");
-            DefineState[] dsOrds = c.getPreDislodged();
-            for (DefineState dsOrd : dsOrds) {
-                println("   ", dsOrd);
+        if (c.getPreDislodged().size() > 0) {
+            logger.info("Pre state dislodged:");
+            for (Order dsOrd : c.getPreDislodged()) {
+                logger.info("Define state: {}", dsOrd);
             }
         }
     }// printState()
@@ -703,13 +526,13 @@ public final class TestSuite {
      */
     private void printOrders(Case currentCase) {
         if (isLogging) {
-            Order[] orders = currentCase.getOrders();
-            for (Order order : orders) {
-                println("  ", order.toString());
+            logger.info("Orders:");
+            for (Order order : currentCase.getOrders()) {
+                logger.info("Order: {}", order);
             }
 
-            if (orders.length == 0) {
-                println("  [none]");
+            if (currentCase.getOrders().size() == 0) {
+                logger.info("No orders");
             }
         }
     }// printOrders()
@@ -735,7 +558,7 @@ public final class TestSuite {
     private boolean compareState(Case c, TurnState resolvedTS) {
         // special case: check for a win.
         if (resolvedTS == null) {
-            println("The game has been won. No new TurnState object is created.");
+            logger.info("The game has been won. No new TurnState object is created.");
             return true;
         }
 
@@ -767,18 +590,16 @@ public final class TestSuite {
         //
         Set<UnitPos> caseUnits = new HashSet<>();
 
-        DefineState[] dsOrds = c.getPostState();
-        for (DefineState dsOrd : dsOrds) {
+        for (Order dsOrd : c.getPostState()) {
             if (!caseUnits.add(new UnitPos(dsOrd, false))) {
-                println("ERROR: duplicate POSTSTATE position: " + dsOrd);
+                logger.error("Duplicate POSTSTATE position: {}", dsOrd);
                 return false;
             }
         }
 
-        dsOrds = c.getPostDislodged();
-        for (DefineState dsOrd : dsOrds) {
+        for (Order dsOrd : c.getPostDislodged()) {
             if (!caseUnits.add(new UnitPos(dsOrd, true))) {
-                println("ERROR: duplicate POSTSTATE_DISLODGED position: " + dsOrd);
+                logger.error("Duplicate POSTSTATE_DISLODGED position: {}", dsOrd);
                 return false;
             }
         }
@@ -803,7 +624,7 @@ public final class TestSuite {
         // the differences.
         //
         if (!missing.isEmpty() || !added.isEmpty()) {
-            println("  CompareState: FAILED: unit positions follow.");
+            logger.info("CompareState: FAILED: unit positions follow.");
 
             // print adds
             printSet(added, "+");
@@ -816,7 +637,7 @@ public final class TestSuite {
 
             return false;
         } else {
-            println("  CompareState: PASSED");
+            logger.info("  CompareState: PASSED");
         }
 
         return true;
@@ -834,7 +655,7 @@ public final class TestSuite {
             sb.append(" ");
             sb.append(up);
 
-            println(sb.toString());
+            logger.info(sb.toString());
         }
     }// printSet()
 
@@ -850,7 +671,7 @@ public final class TestSuite {
         return world;
     }
 
-    public List<TestSuite.Case> getAllCases() {
+    public List<Case> getAllCases() {
         return cases;
     }
 
@@ -941,7 +762,9 @@ public final class TestSuite {
                                 getListForKeyType(PRESTATE_SUPPLYCENTER_OWNERS),        // pre-state: sc owners
                                 getListForKeyType(PRESTATE_DISLODGED),        // pre-dislodged
                                 getListForKeyType(POSTSTATE_DISLODGED),        // post-dislodged
-                                getListForKeyType(PRESTATE_RESULTS)            // results (of prior phase)
+                                getListForKeyType(PRESTATE_RESULTS) // results (of prior phase)
+                                , templateTurnState
+                                , world, OrderParser.getInstance()
                         );
                         cases.add(aCase);
                     } else {
@@ -971,8 +794,7 @@ public final class TestSuite {
                 lineCount++;
             }// while()
         } catch (IOException e) {
-            println("ERROR: I/O error reading case file \"", caseFile, "\"");
-            println("EXCEPTION: ", e);
+            logger.error("I/O error reading case file "+ caseFile,e);
             throw new RuntimeException(e);
         } finally {
             if (br != null) {
@@ -982,8 +804,7 @@ public final class TestSuite {
                 }
             }
         }
-
-        println("  parsed " + cases.size() + " cases.");
+        logger.info("Parsed {} cases.", cases.size());
     }// parseCases()
 
     // returns null if string is a comment line.
@@ -1085,7 +906,7 @@ public final class TestSuite {
         /**
          * Create a UnitPos
          */
-        public UnitPos(DefineState ds, boolean isDislodged) {
+        public UnitPos(Order ds, boolean isDislodged) {
             this.unit = new Unit(ds.getPower(), ds.getSourceUnitType());
             unit.setCoast(ds.getSource().getCoast());
             this.province = ds.getSource().getProvince();
@@ -1143,319 +964,6 @@ public final class TestSuite {
             return 0;    // very very bad! just an easy shortcut
         }
     }// inner class UnitPos
-
-    /**
-     * Holds a Case
-     */
-    public final class Case {
-        private DefineState[] preState = null;
-        private DefineState[] postState = null;
-        private DefineState[] preDislodged = null;
-        private DefineState[] postDislodged = null;
-        private DefineState[] supplySCOwners = null;    // all types are 'army'
-        private OrderResult[] results = null;
-
-        private Order[] orders = null;
-        private final String name;
-        private Phase phase = null;
-        private OrderParser of = null;
-        private TurnState currentTS = null;
-        private TurnState previousTS = null;
-
-        // tsTemplate: template turnstate to create the current, and (if needed) previous
-        // turnstates.
-        public Case(String name, String phaseName, List pre, List ord,
-                    List post, List supplySCOwnersList, List preDislodgedList,
-                    List postDislodgedList, List orderResultList) {
-            this.name = name;
-            List<Object> temp = new ArrayList<>(50); //todo: this one is used for too much stuff...
-            Iterator iter = null;
-            of = OrderParser.getInstance();
-
-
-            // phase
-            if (phaseName != null) {
-                phase = Phase.parse(phaseName);
-                if (phase == null) {
-                    System.out.println("ERROR: case " + name);
-                    System.out.println("ERROR: cannot parse phase " + phaseName);
-                    throw new IllegalStateException("cannot parse phase: " + phaseName);
-                }
-            }
-
-            // set phase to template phase, if no phase was assigned.
-            phase = (phaseName == null) ? templateTurnState.getPhase() : phase;
-
-            // setup current turnstate from template
-            // use phase, if appropriate.
-            currentTS = new TurnState(phase);
-            currentTS.setPosition(templateTurnState.getPosition().cloneExceptUnits());
-            currentTS.setWorld(world);
-
-            // setup previous phase, in case we need it.
-            previousTS = new TurnState(phase.getPrevious());
-            previousTS.setPosition(templateTurnState.getPosition().cloneExceptUnits());
-            previousTS.setWorld(world);
-
-            // pre
-            temp.clear();
-            iter = pre.iterator();
-            while (iter.hasNext()) {
-                String line = (String) iter.next();
-                Order order = parseOrder(line, currentTS, true);
-                temp.add(order);
-            }
-            preState = temp.toArray(new DefineState[temp.size()]);
-
-
-            // ord
-            temp.clear();
-            iter = ord.iterator();
-            while (iter.hasNext()) {
-                String line = (String) iter.next();
-                Order order = parseOrder(line, currentTS, false);
-                temp.add(order);
-            }
-            orders = temp.toArray(new Order[temp.size()]);
-
-
-            // post
-            temp.clear();
-            iter = post.iterator();
-            while (iter.hasNext()) {
-                String line = (String) iter.next();
-                Order order = parseOrder(line, currentTS, true);
-                temp.add(order);
-            }
-            postState = temp.toArray(new DefineState[temp.size()]);
-
-            // prestate dislodged
-            if (preDislodgedList != null) {
-                temp.clear();
-                iter = preDislodgedList.iterator();
-                while (iter.hasNext()) {
-                    String line = (String) iter.next();
-                    Order order = parseOrder(line, currentTS, true);
-                    temp.add(order);
-                }
-                this.preDislodged = temp.toArray(new DefineState[temp.size()]);
-            }
-
-            // poststate dislodged
-            if (postDislodgedList != null) {
-                temp.clear();
-                iter = postDislodgedList.iterator();
-                while (iter.hasNext()) {
-                    String line = (String) iter.next();
-                    Order order = parseOrder(line, currentTS, true);
-                    temp.add(order);
-                }
-                this.postDislodged = temp.toArray(new DefineState[temp.size()]);
-            }
-
-            // supply-center owners
-            if (supplySCOwnersList != null) {
-                temp.clear();
-                iter = supplySCOwnersList.iterator();
-                while (iter.hasNext()) {
-                    String line = (String) iter.next();
-                    Order order = parseOrder(line, currentTS, true);
-                    temp.add(order);
-                }
-                this.supplySCOwners = temp.toArray(new DefineState[temp.size()]);
-            }
-
-
-            // OrderResults
-            //
-            // THE BEST way to do this would be to setup the case, and then run
-            // the adjudicator to get the results, checking the ajudicator results
-            // against the 'prestate' positions. This way we would have all the same
-            // results that the adjudicator would normally generate.
-            //
-            if (orderResultList != null) {
-                List<OrderResult> orderResults = new ArrayList<>();
-                iter = orderResultList.iterator();
-                while (iter.hasNext()) {
-                    String line = (String) iter.next();
-                    OrderResult.ResultType ordResultType = null;
-
-                    // success or failure??
-                    if (line.startsWith("success")) {
-                        ordResultType = OrderResult.ResultType.SUCCESS;
-                    } else if (line.startsWith("failure")) {
-                        ordResultType = OrderResult.ResultType.FAILURE;
-                    } else {
-                        System.out.println("ERROR");
-                        System.out.println("case: " + name);
-                        System.out.println("line: " + line);
-                        System.out.println("PRESTATE_RESULTS: must prepend orders with \"SUCCESS:\" or \"FAILURE:\".");
-                        throw new RuntimeException("PRESTATE_RESULTS: must prepend orders with \"SUCCESS:\" or \"FAILURE:\".");
-                    }
-
-                    // remove after first colon, and parse the order
-                    line = line.substring(line.indexOf(':') + 1);
-                    Order order = parseOrder(line, previousTS, false);
-
-                    // was order a convoyed move? because then we have to add a
-                    // convoyed move result.
-                    //
-                    if (order instanceof Move) {
-                        Move mv = (Move) order;
-                        if (mv.isConvoying()) {
-                            // NOTE: we cheat; path src/dest ok, middle is == src
-                            Province[] path = new Province[3];
-                            path[0] = mv.getSource().getProvince();
-                            path[1] = path[0];
-                            path[2] = mv.getDest().getProvince();
-                            orderResults.add(new ConvoyPathResult(order, path));
-                        }
-                    }
-
-
-                    // create/add order result
-                    orderResults.add(new OrderResult(order, ordResultType, " (prestate)"));
-                }
-                this.results = orderResults.toArray(new OrderResult[orderResults.size()]);
-
-                // add results to previous turnstate
-                previousTS.setResultList(new ArrayList<>(orderResults));
-
-                // add positions/ownership/orders to current turnstate
-                //
-                // add orders, first clearing any existing orders in the turnstate
-                currentTS.clearAllOrders();
-                for (Order order : orders) {
-                    List<Orderable> orderList = currentTS.getOrders(order.getPower());
-                    orderList.add(order);
-                    currentTS.setOrders(order.getPower(), orderList);
-                }
-
-                // get position
-                Position position = currentTS.getPosition();
-
-                // ensure all powers are active
-                Power[] powers = world.getMap().getPowers();
-                for (Power power : powers) {
-                    position.setEliminated(power, false);
-                }
-
-                // Add non-dislodged units
-                for (DefineState state : preState) {
-                    Unit unit = new Unit(state.getPower(), state.getSourceUnitType());
-                    unit.setCoast(state.getSource().getCoast());
-                    position.setUnit(state.getSource().getProvince(), unit);
-                }
-
-                // Add dislodged units
-                for (DefineState state : preDislodged) {
-                    Unit unit = new Unit(state.getPower(), state.getSourceUnitType());
-                    unit.setCoast(state.getSource().getCoast());
-                    position.setDislodgedUnit(state.getSource().getProvince(), unit);
-                }
-
-                // Set supply center owners
-                // if we have ANY supply center owners, we erase the template
-                // if we do not have any, we assume the template is correct
-                // no need to validate units
-                if (supplySCOwners.length > 0) {
-                    // first erase old info
-                    final Province[] provinces = position.getProvinces();
-
-                    for (Province province : provinces) {
-                        if (position.hasSupplyCenterOwner(province)) {
-                            position.setSupplyCenterOwner(province, null);
-                        }
-                    }
-
-                    // add new info
-                    for (DefineState state : supplySCOwners) {
-                        position.setSupplyCenterOwner(state.getSource().getProvince(), state.getPower());
-                    }
-                }
-            }
-
-        }// Case()
-
-        @Override
-        public String toString() {
-            return name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public DefineState[] getPreState() {
-            return preState;
-        }
-
-        public DefineState[] getPostState() {
-            return postState;
-        }
-
-        public DefineState[] getPreDislodged() {
-            return preDislodged;
-        }
-
-        public DefineState[] getPostDislodged() {
-            return postDislodged;
-        }
-
-        public DefineState[] getSCOwners() {
-            return supplySCOwners;
-        }
-
-        public Phase getPhase() {
-            return phase;
-        }
-
-        public Order[] getOrders() {
-            return orders;
-        }
-
-        public OrderResult[] getResults() {
-            return results;
-        }
-
-        public TurnState getCurrentTurnState() {
-            return currentTS;
-        }
-
-        public TurnState getPreviousTurnState() {
-            return previousTS;
-        }
-
-        private Order parseOrder(String s, TurnState ts, boolean isDefineState) {
-            try {
-                // no guessing (but not locked); we must ALWAYS specify the power.
-                Order o = of.parse(OrderFactory.getDefault(), s, null, ts, false, false);
-
-                if (isDefineState) {
-                    if (o instanceof DefineState) {
-                        // we just want to check if the DefineState order does not have
-                        // an undefined coast for a fleet unit.
-                        Location newLoc = o.getSource().getValidatedSetup(o.getSourceUnitType());
-
-                        // create a new DefineState with a validated loc
-                        o = OrderFactory.getDefault().createDefineState(o.getPower(),
-                                newLoc, o.getSourceUnitType());
-                    } else {
-                        throw new OrderException("A DefineState order is required here.");
-                    }
-                }
-
-                return o;
-            } catch (OrderException e) {
-                System.out.println("ERROR");
-                System.out.println("parseOrder() OrderException: " + e);
-                System.out.println("Case: " + name);
-                System.out.println("failure line: " + s);
-                throw new RuntimeException(e);
-            }
-        }// parseOrder()
-
-    }// class Case
 
 }// class TestSuite
 
