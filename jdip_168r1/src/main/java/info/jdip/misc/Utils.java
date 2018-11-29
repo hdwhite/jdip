@@ -24,6 +24,8 @@ package info.jdip.misc;
 
 import info.jdip.gui.dialog.ErrorDialog;
 import info.jdip.gui.swing.XJEditorPane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -73,6 +75,7 @@ import java.util.regex.Pattern;
  * 	</pre>
  */
 public class Utils {
+    private static final Logger logger = LoggerFactory.getLogger(Utils.class);
     // public constants
     public static final Border EMPTY_BORDER_5 = new EmptyBorder(5, 5, 5, 5);
     public static final Border EMPTY_BORDER_10 = new EmptyBorder(10, 10, 10, 10);
@@ -1008,7 +1011,7 @@ public class Utils {
         try {
             resourceBundle = ResourceBundle.getBundle(BASE_RESOURCE_FILE, locale, classLoader);
         } catch (MissingResourceException mre) {
-            System.err.println(mre);
+            logger.error("Could not find a resource",mre);
             popupError(null, "ERROR: Cannot Start", "Resource File cannot be found!\n" + mre.getMessage());
             System.exit(1);
         }

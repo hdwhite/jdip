@@ -22,7 +22,6 @@
 //
 package info.jdip.order;
 
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.world.Coast;
 import info.jdip.world.Location;
@@ -33,10 +32,13 @@ import info.jdip.world.Power;
 import info.jdip.world.Province;
 import info.jdip.world.TurnState;
 import info.jdip.world.Unit;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Parses text to create an Order object.
@@ -101,6 +103,8 @@ import java.util.StringTokenizer;
  * 	</pre>
  */
 public class OrderParser {
+    private static final Logger logger = getLogger(OrderParser.class);
+
     // il8n constants
     private static final String OF_POWER_NOT_RECOGNIZED = "OF_POWER_NOT_RECOGNIZED";
     private static final String OF_UNIT_NOT_RECOGNIZED = "OF_UNIT_NOT_RECOGNIZED";
@@ -292,8 +296,7 @@ public class OrderParser {
         Map map = turnState.getWorld().getMap();
         String preText = preprocess(text, map);
 
-        Log.println("OP: Input:", text);
-        Log.println("OP: preprocessed:", preText);
+        logger.debug("Input: {}, preprocessed: {}", text, preText);
 
         return parse(preText, position, map, power, turnState, orderFactory, locked, guess);
     }// parse()
@@ -326,7 +329,7 @@ public class OrderParser {
             sb.setLength(0);
             sb.append(ncOrd);
         } catch (OrderException e) {
-            Log.println("OrderException: order: ", sb);
+            logger.debug("Order: {}", sb);
             throw new OrderException(Utils.getLocalString(OF_COAST_INVALID, e.getMessage()));
         }
 
@@ -402,7 +405,7 @@ public class OrderParser {
 
         // if we're not allowed to guess, and power is null, error.
         if (!guessing && power == null) {
-            Log.println("OrderException: order: ", ord);
+            logger.debug("Order: {}", ord);
             String pTok = getToken(st);
             throw new OrderException(Utils.getLocalString(OF_POWER_NOT_RECOGNIZED, pTok));
         }
@@ -415,7 +418,7 @@ public class OrderParser {
             assert (power != null);
 
             if (!power.equals(defaultPower)) {
-                Log.println("OrderException: order: ", ord);
+                logger.debug("Order: {}", ord);
                 throw new OrderException(Utils.getLocalString(OF_POWER_LOCKED, defaultPower));
             }
         }
@@ -466,7 +469,7 @@ public class OrderParser {
             Power tempPower = getPowerFromLocation(false, position, turnState, src);
             if (power != null) {
                 if (!tempPower.equals(power)) {
-                    Log.println("OrderException: order: ", ord);
+                    logger.debug("Order: {}", ord);
                     throw new OrderException(Utils.getLocalString(OF_BAD_FOR_POWER, power));
                 }
             }
@@ -520,7 +523,7 @@ public class OrderParser {
                             supSrc, supPower, supUnitType, supDest);
                 } else if (!token.equals("h")) {
                     // anything BUT a hold is ok.
-                    Log.println("OrderException: order: ", ord);
+                    logger.debug("Order: {}", ord);
                     throw new OrderException(Utils.getLocalString(OF_SUPPORT_NO_MOVE));
                 }
             }
@@ -539,7 +542,7 @@ public class OrderParser {
             // verify that there is an "m"
             token = getToken(st, Utils.getLocalString(OF_CONVOY_NO_MOVE_OR_DEST));
             if (!token.equalsIgnoreCase("m")) {
-                Log.println("OrderException: order: ", ord);
+                logger.debug("Order: {}", ord);
                 throw new OrderException(Utils.getLocalString(OF_CONVOY_NO_MOVE_SPEC));
             }
 
@@ -567,7 +570,7 @@ public class OrderParser {
             return orderFactory.createDefineState(power, src, srcUnitType);
         }
 
-        Log.println("OrderException: order: ", ord);
+        logger.debug("Order: {}", ord);
         throw new OrderException(Utils.getLocalString(OF_UNKNOWN_ORDER, orderType));
     }// parse
 

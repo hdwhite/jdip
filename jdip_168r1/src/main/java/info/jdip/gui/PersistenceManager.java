@@ -29,7 +29,6 @@ import info.jdip.gui.report.ResultWriter;
 import info.jdip.gui.swing.XJFileChooser;
 import info.jdip.judge.gui.FlocImportDialog;
 import info.jdip.judge.parser.JudgeImport;
-import info.jdip.misc.Log;
 import info.jdip.misc.SimpleFileFilter;
 import info.jdip.misc.Utils;
 import info.jdip.world.Phase;
@@ -37,6 +36,8 @@ import info.jdip.world.TurnState;
 import info.jdip.world.World;
 import info.jdip.world.variant.VariantManager;
 import info.jdip.world.variant.data.Variant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,6 +57,7 @@ import java.util.LinkedList;
  * Also sets the main frame title.
  */
 public class PersistenceManager {
+    private static final Logger logger = LoggerFactory.getLogger(PersistenceManager.class);
     // i18n constants
     private static final String CONFIRM_TEXT = "PM.dialog.confirm.location.text";
     private static final String CONFIRM_TITLE = "PM.dialog.confirm.title";
@@ -167,21 +169,19 @@ public class PersistenceManager {
 
             // wait for any active threads in persistTG; if there are none,
             final int activeCount = persistTG.activeCount();
-            Log.println("PM::exit(): threads pending: ", activeCount);
+            logger.debug("Threads pending: {}", activeCount);
 
             final Thread[] pendingThreads = new Thread[activeCount];
             final int actualCount = persistTG.enumerate(pendingThreads);
-            Log.println("PM::exit(): actual threads pending: ", actualCount);
+            logger.debug("Actual threads pending: ", actualCount);
 
             for (Thread pendingThread : pendingThreads) {
                 if (pendingThread.isAlive()) {
                     try {
-                        Log.println("PM::exit(): waiting on ", pendingThread.getName());
+                        logger.debug("Waiting on ", pendingThread.getName());
                         pendingThread.join(THREAD_WAIT);
-                        Log.println("    done.");
-                    } catch (Throwable t) {
-                        Log.println("PM::exit(): uncaught exception:");
-                        Log.println(t);
+                    } catch (InterruptedException e) {
+                        logger.error("Interrupted while waiting...", e);
                     }
                 }
             }
@@ -194,8 +194,7 @@ public class PersistenceManager {
             try {
                 clientFrame.dispose();
             } catch (Exception e) {
-                Log.println("PM::exit(): exception during clientFrame.dispose():");
-                Log.println(e);
+                logger.error( "Exception during clientFrame.dispose()",e);
             }
 
             System.exit(0);
@@ -275,7 +274,7 @@ public class PersistenceManager {
         if (!(world.getGameSetup() instanceof GUIGameSetup)) {
             // use a default game setup, if none exists
             // note in log file.
-            Log.println("PM: no GuiGameSetup; creating a default.");
+            logger.debug( "No GuiGameSetup; creating a default.");
             world.setGameSetup(new DefaultGUIGameSetup());
         }
     }// openWorld()
@@ -586,7 +585,7 @@ public class PersistenceManager {
         try {
             World w = clientFrame.getWorld();
 
-            Log.println("PM::writeGameFile(): saving GUIGameSetup");
+            logger.trace( "saving GUIGameSetup");
 
             // notify the GameSetup object to update its
             // state
@@ -596,10 +595,10 @@ public class PersistenceManager {
             }
 
             // save data, update saved flags
-            Log.println("PM::writeGameFile(): saving world....");
+            logger.trace( "saving world....");
             World.save(fileName, w);
 
-            Log.println("PM::writeGameFile(): world saved ok.");
+            logger.trace( "world saved ok.");
             setChanged(false);
             return true;
         } catch (Exception e) {

@@ -22,7 +22,8 @@
 //
 package info.jdip.tool;
 
-import info.jdip.misc.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +39,7 @@ import java.util.jar.Manifest;
  * Manages Tool plugins.
  */
 public class ToolManager {
+    private static final Logger logger = LoggerFactory.getLogger(ToolManager.class);
     // constants
     private static final String TOOL_EXT_JAR = "Tool.jar";
 
@@ -75,7 +77,7 @@ public class ToolManager {
             try {
                 foundToolURLs[i] = foundToolFiles[i].toURI().toURL();
             } catch (java.net.MalformedURLException e) {
-                Log.println("ERROR: ToolManager: could not convert to URL: ", foundToolFiles[i]);
+                logger.error("Could not convert to URL: {}", foundToolFiles[i], e);
             }
 
             // do not attempt if URL is null.
@@ -88,8 +90,8 @@ public class ToolManager {
                     jarFile.close();
                 } catch (IOException e) {
                     mainClassNames[i] = null;
-                    Log.println("ERROR: ToolManager: could not find main-class attribute in manifest for tool: ",
-                            foundToolFiles[i], "; reason: ", e.getMessage());
+                    logger.error("Could not find main-class attribute in manifest for tool: {}",
+                            foundToolFiles[i], e.getMessage());
                 }
             }
         }
@@ -106,7 +108,7 @@ public class ToolManager {
                     Tool tool = (Tool) tm.toolClassLoader.loadClass(mainClassNames[i]).getDeclaredConstructor().newInstance();
                     list.add(tool);
                 } catch (Throwable e) {
-                    Log.println("ERROR: loading Tool: " + e);
+                    logger.error("There was a problem loading Tool: {}", e);
                 }
             }
         }
@@ -138,14 +140,14 @@ public class ToolManager {
         List<File> fileList = new ArrayList<>();
 
         for (File searchPath : searchPaths) {
-            Log.println("Searching for tools on: ", searchPath);
+            logger.info("Searching for tools on: {}", searchPath);
             File[] list = searchPath.listFiles();
             if (list != null) {
                 for (File file : list) {
                     if (file.isFile()) {
                         String fileName = file.getPath();
                         if (fileName.endsWith(TOOL_EXT_JAR)) {
-                            Log.println("found tool: ", file);
+                            logger.info("Found tool: {}", file);
                             fileList.add(file);
                         }
                     }

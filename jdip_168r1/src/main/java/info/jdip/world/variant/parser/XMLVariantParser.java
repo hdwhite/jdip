@@ -23,7 +23,6 @@
 package info.jdip.world.variant.parser;
 
 import info.jdip.misc.LRUCache;
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.world.Coast;
 import info.jdip.world.Phase;
@@ -36,6 +35,8 @@ import info.jdip.world.variant.data.MapGraphic;
 import info.jdip.world.variant.data.ProvinceData;
 import info.jdip.world.variant.data.SupplyCenter;
 import info.jdip.world.variant.data.Variant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -61,6 +62,7 @@ import java.util.List;
  * Parses an XML Variant description.
  */
 public class XMLVariantParser implements VariantParser {
+    private static final Logger logger = LoggerFactory.getLogger(XMLVariantParser.class);
     // XML Element constants
     public static final String EL_VARIANTS = "VARIANTS";
     public static final String EL_VARIANT = "VARIANT";
@@ -160,8 +162,7 @@ public class XMLVariantParser implements VariantParser {
      */
     public void parse(InputStream is, URL variantPackageURL)
             throws IOException, SAXException {
-        Log.println("XMLVariantParser: Parsing: ", variantPackageURL);
-        long time = System.currentTimeMillis();
+        logger.debug("Parsing: {}", variantPackageURL);
 
         // cleanup cache (very important to remove references!)
         AdjCache.clear();
@@ -174,7 +175,7 @@ public class XMLVariantParser implements VariantParser {
         AdjCache.setVariantPackageURL(variantPackageURL);
         doc = docBuilder.parse(is);
         procVariants();
-        Log.printTimed(time, "   time: ");
+        logger.trace("Parsing finished.");
     }// parse()
 
 

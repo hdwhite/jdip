@@ -26,7 +26,6 @@ import info.jdip.gui.ClientMenu;
 import info.jdip.gui.map.RenderCommandFactory.RenderCommand;
 import info.jdip.gui.order.GUIOrder;
 import info.jdip.gui.order.GUIOrder.MapInfo;
-import info.jdip.misc.Log;
 import info.jdip.order.Orderable;
 import info.jdip.world.Coast;
 import info.jdip.world.Location;
@@ -41,6 +40,8 @@ import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.util.CSSConstants;
 import org.apache.batik.util.RunnableQueue;
 import org.apache.batik.util.SVGConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.svg.SVGDocument;
@@ -63,6 +64,7 @@ import java.util.Map;
  * using File | Export Map As... | SVG and looking at the SVG output.
  */
 public class DefaultMapRenderer2 extends MapRenderer2 {
+    private static final Logger logger = LoggerFactory.getLogger(DefaultMapRenderer2.class);
     // Symbol Names
     //
     /**
@@ -207,7 +209,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
             throws MapException {
         super(mp);
         this.symbolPack = sp;
-        Log.printTimed(mapPanel.startTime, "DMR2 constructor start");
+        logger.trace("DMR2 constructor start");
 
         // init variables
         worldMap = mapPanel.getClientFrame().getWorld().getMap();
@@ -302,7 +304,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
             });
         }
 
-        Log.printTimed(mapPanel.startTime, "DMR2 constructor end");
+        logger.trace("DMR2 constructor end");
     }// DefaultMapRenderer()
 
 
@@ -373,7 +375,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     protected void orderCreated(final GUIOrder order) {
         execRenderCommand(new RenderCommand(this) {
             public void execute() {
-                Log.println("DMR2: orderCreated(): ", order);
+                logger.debug("OrderCreated(): {}", order);
 
                 MapInfo mapInfo = new DMRMapInfo(turnState);
                 order.updateDOM(mapInfo);
@@ -391,7 +393,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     protected void orderDeleted(final GUIOrder order) {
         execRenderCommand(new RenderCommand(this) {
             public void execute() {
-                Log.println("DMR2: orderDeleted(): ", order);
+                logger.debug("Deleted order {}", order);
 
                 MapInfo mapInfo = new DMRMapInfo(turnState);
                 order.removeFromDOM(mapInfo);
@@ -408,7 +410,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     protected void multipleOrdersCreated(final GUIOrder[] orders) {
         execRenderCommand(new RenderCommand(this) {
             public void execute() {
-                Log.println("DMR2: multipleOrdersCreated(): ", orders);
+                logger.debug("Created orders: {} ", (Object) orders);
                 MapInfo mapInfo = new DMRMapInfo(turnState);
 
                 // render orders and update provinces
@@ -429,7 +431,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     protected void multipleOrdersDeleted(final GUIOrder[] orders) {
         execRenderCommand(new RenderCommand(this) {
             public void execute() {
-                Log.println("DMR2: multipleOrdersDeleted(): ", orders);
+                logger.debug("Deleted Orders: {} ", (Object) orders);
                 MapInfo mapInfo = new DMRMapInfo(turnState);
 
                 // render orders and update provinces
@@ -451,7 +453,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     protected void displayablePowersChanged(final Power[] diplayPowers) {
         execRenderCommand(new RenderCommand(this) {
             public void execute() {
-                Log.println("DMR2: displayablePowersChanged()");
+                logger.info("Updating orders because displayable powers have changed.");
 
                 // update all orders
                 unsyncUpdateAllOrders();
@@ -597,7 +599,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
      * tree and have no associated SVGElement.
      */
     protected void unsyncDestroyAllOrders() {
-        Log.println("DMR2::unsyncDestroyAllOrders()");
+        logger.info("Removing unsync orders from order tree.");
         MapInfo mapInfo = new DMRMapInfo(turnState);
         for (Orderable orderable : turnState.getAllOrders()) {
             GUIOrder order = (GUIOrder) orderable;

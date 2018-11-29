@@ -21,7 +21,6 @@
 //
 package info.jdip.order;
 
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.process.Adjudicator;
 import info.jdip.process.OrderState;
@@ -32,12 +31,15 @@ import info.jdip.world.Power;
 import info.jdip.world.RuleOptions;
 import info.jdip.world.TurnState;
 import info.jdip.world.Unit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Implementation of the Hold order.
  */
 public class Hold extends Order {
+    private static final Logger logger = LoggerFactory.getLogger(Hold.class);
     // il8n
     private static final String HOLD_FORMAT = "HOLD_FORMAT";
 
@@ -142,7 +144,7 @@ public class Hold extends Order {
      * Hold order evaluation logic.
      */
     public void evaluate(Adjudicator adjudicator) {
-        Log.println("--- evaluate() info.jdip.order.Hold ---");
+        logger.trace( "--- evaluate() info.jdip.order.Hold ---");
 
         OrderState thisOS = adjudicator.findOrderStateBySrc(getSource());
 
@@ -150,14 +152,14 @@ public class Hold extends Order {
         thisOS.setDefMax(thisOS.getSupport(false));
         thisOS.setDefCertain(thisOS.getSupport(true));
 
-        if (Log.isLogging()) {
-            Log.println("   order: ", this);
-            Log.println("   initial evalstate: ", thisOS.getEvalState());
-            Log.println("     def-max: ", thisOS.getDefMax());
-            Log.println("    def-cert: ", thisOS.getDefCertain());
-            Log.println("  # supports: ", thisOS.getDependentSupports().length);
-            Log.println("  dislodged?: ", thisOS.getDislodgedState());
-        }
+        logger.debug("Order: {}", this);
+        logger.debug("initial evalstate: {}, def-max: {}, def-cert: {}, supports: {}, dislodged: {}",
+                thisOS.getEvalState(),
+                thisOS.getDefMax(),
+                thisOS.getDefCertain(),
+                thisOS.getDependentSupports().length,
+                thisOS.getDislodgedState()
+        );
 
         if (thisOS.getEvalState() == Tristate.UNCERTAIN) {
             // if no moves against this order, we must succeed.
@@ -168,7 +170,7 @@ public class Hold extends Order {
             }
         }
 
-        Log.println("  final evalState: ", thisOS.getEvalState());
+        logger.debug("Final evalState: {}", thisOS.getEvalState());
     }// evaluate()
 
 }// class Hold

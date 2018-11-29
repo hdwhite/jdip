@@ -29,7 +29,6 @@ import info.jdip.gui.map.MapMetadata.InfoEntry;
 import info.jdip.gui.map.MapPanel;
 import info.jdip.gui.map.MapRenderer2;
 import info.jdip.gui.map.RenderCommandFactory.RenderCommand;
-import info.jdip.misc.Log;
 import info.jdip.world.Coast;
 import info.jdip.world.Position;
 import info.jdip.world.Power;
@@ -51,6 +50,7 @@ import java.util.HashMap;
  */
 
 public class MTHelper {
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(MTHelper.class);
     final static Point2D.Float ORIGIN = new Point2D.Float(0, 0);
     final static DecimalFormat df = new DecimalFormat("0.#");
 
@@ -99,7 +99,7 @@ public class MTHelper {
      */
     public void setAllUnits() {
         long time = System.currentTimeMillis();
-        Log.printTimed(time, "info.jdip.plugin.maptool.MTHelper::setAllUnits() start");
+        logger.debug(" start");
         for (Province province : allProvs) {
             Unit unit = null;
             Unit unit2 = null;
@@ -119,7 +119,7 @@ public class MTHelper {
             position.setUnit(province, unit);
             position.setDislodgedUnit(province, unit2);
         }
-        Log.printTimed(time, "info.jdip.plugin.maptool.MTHelper::setAllUnits() complete");
+        logger.debug("complete");
     }// setAllUnits()
 
     /**

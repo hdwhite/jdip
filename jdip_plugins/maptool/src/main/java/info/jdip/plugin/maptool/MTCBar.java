@@ -27,12 +27,13 @@ import info.jdip.gui.map.MapRenderer2;
 import info.jdip.gui.map.RenderCommandFactory.RenderCommand;
 import info.jdip.gui.map.ViewControlBar;
 import info.jdip.gui.order.GUIOrder;
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.world.Coast;
 import info.jdip.world.Location;
 import info.jdip.world.Province;
 import org.apache.batik.swing.JSVGCanvas;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.events.MouseEvent;
 import org.w3c.dom.svg.SVGMatrix;
 import org.w3c.dom.svg.SVGPoint;
@@ -49,6 +50,7 @@ import java.awt.event.ActionListener;
  * info.jdip.plugin.maptool.MapTool control bar
  */
 public class MTCBar extends ViewControlBar {
+    private static final Logger logger = LoggerFactory.getLogger(MTCBar.class);
     // modes
     final static int SET_UNIT = 0;
     final static int SET_DISLODGED_UNIT = 1;
@@ -195,7 +197,7 @@ public class MTCBar extends ViewControlBar {
      */
     public void mouseClicked(MouseEvent me, Location loc) {
         if (loc == null) {
-            Log.println("info.jdip.plugin.maptool.MapTool: invalid location; ignored.");
+            logger.info( "Invalid location {}; ignored.",loc);
             return;
         }
 

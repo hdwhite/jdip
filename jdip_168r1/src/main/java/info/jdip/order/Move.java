@@ -21,7 +21,6 @@
 //
 package info.jdip.order;
 
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.order.result.ConvoyPathResult;
 import info.jdip.order.result.DependentMoveFailedResult;
@@ -38,6 +37,8 @@ import info.jdip.world.Province;
 import info.jdip.world.RuleOptions;
 import info.jdip.world.TurnState;
 import info.jdip.world.Unit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,6 +52,7 @@ import java.util.List;
  * section 4.A.3.
  */
 public class Move extends Order {
+    private static final Logger logger = LoggerFactory.getLogger(Move.class);
     // il8n constants
 	/*
 	private static final String MOVE_VAL_CONVOY_WARNING = "MOVE_VAL_CONVOY_WARNING";
@@ -755,7 +757,7 @@ public class Move extends Order {
                 if (move.getDest().isProvinceEqual(this.getSource())
                         && move.getSource().isProvinceEqual(this.getDest())
                         && !this.isConvoying() && !move.isConvoying()) {
-                    Log.println("Head2Head possible between: ", this, ", ", dependentOS.getOrder());
+                    logger.info("Head2Head possible between {} and {}.", this, dependentOS.getOrder());
                     thisOS.setHeadToHead(dependentOS);
                 }
             } else if (order instanceof Support) {
@@ -894,7 +896,7 @@ public class Move extends Order {
      * </pre>
      */
     public void evaluate(Adjudicator adjudicator) {
-        Log.println("--- evaluate() info.jdip.order.Move ---");
+        logger.trace( "--- evaluate() info.jdip.order.Move ---");
 
         OrderState thisOS = adjudicator.findOrderStateBySrc(getSource());
 
@@ -915,19 +917,17 @@ public class Move extends Order {
         thisOS.setAtkSelfSupportMax(thisOS.getSelfSupport(false));
         thisOS.setAtkSelfSupportCertain(thisOS.getSelfSupport(true));
 
-
-        if (Log.isLogging()) {
-            Log.println("   order: ", this);
-            Log.println("   initial evalstate: ", thisOS.getEvalState());
-            Log.println("     atk-max: ", thisOS.getAtkMax());
-            Log.println("    atk-cert: ", thisOS.getAtkCertain());
-            Log.println("     self-atk-max: ", thisOS.getAtkSelfSupportMax());
-            Log.println("    self-atk-cert: ", thisOS.getAtkSelfSupportCertain());
-            Log.println("  # nonself supports: ", thisOS.getDependentSupports().length);
-            Log.println("  #    self supports: ", thisOS.getDependentSelfSupports().length);
-            Log.println("  dislodged?: ", thisOS.getDislodgedState());
-        }
-
+        logger.debug("Order: {}", this);
+        logger.debug("Initial evalstate: {}, atk-max: {}, atk-cert: {}, self-atk-max: {}, self-atk-cert: {}, nonself supports: {}, self supports {}, dislodged: {}",
+                thisOS.getEvalState(),
+                thisOS.getAtkMax(),
+                thisOS.getAtkCertain(),
+                thisOS.getAtkSelfSupportMax(),
+                thisOS.getAtkSelfSupportCertain(),
+                thisOS.getDependentSupports().length,
+                thisOS.getDependentSelfSupports().length,
+                thisOS.getDislodgedState()
+        );
 
         // evaluate
         if (thisOS.getEvalState() == Tristate.UNCERTAIN) {
@@ -938,7 +938,7 @@ public class Move extends Order {
                 Move h2hMove = (Move) thisOS.getHeadToHead().getOrder();
                 if (this.isConvoying() || h2hMove.isConvoying()) {
                     // we need to change h2h status!
-                    Log.println("     HeadToHead removed (convoy detected)");
+                    logger.debug( "HeadToHead removed (convoy detected)");
                     thisOS.setHeadToHead(null);
                 }
             }
@@ -950,7 +950,7 @@ public class Move extends Order {
                 Path path = new Path(adjudicator);
                 Tristate convoyPathResult = path.getConvoyRouteEvaluation(this, null, null);
 
-                Log.println("  isByConvoy() true; convoyPathRouteEval() = ", convoyPathResult);
+                logger.debug("isByConvoy() true; convoyPathRouteEval(): {}", convoyPathResult);
 
                 if (convoyPathResult == Tristate.FAILURE) {
                     // 2.a
@@ -985,9 +985,8 @@ public class Move extends Order {
                 isDestEmpty = true;
             }
 
-            Log.println("   isDestAMove: ", String.valueOf(isDestAMove));
-            Log.println("   isDestEmpty: ", String.valueOf(isDestEmpty));
-            Log.println("   isHeadToHead: ", String.valueOf(thisOS.isHeadToHead()));
+            logger.debug("isDestAMove: {}, isDestEmpty: {}, isHeadToHead: {}",
+                    isDestAMove, isDestEmpty,thisOS.isHeadToHead());
 
 
             // some setup
@@ -1007,24 +1006,20 @@ public class Move extends Order {
 
             OrderState[] dml = thisOS.getDependentMovesToDestination();
 
-            Log.println("  # dep dest moves: ", dml.length);
+            logger.info("Dependent moves to destination: {}", dml.length);
 
             for (OrderState os : dml) {
-                if (Log.isLogging()) {
-                    Log.println(" checking against dependent move: ", os.getOrder());
-                    Log.println("       :(dep) atkMax = " + os.getAtkMax() + ";  atkCertain = " + os.getAtkCertain());
-                    Log.println("       :(dep) selfAtkMax = " + os.getAtkSelfSupportMax() + ";  selfAtkCertain = " + os.getAtkSelfSupportCertain());
-                    Log.println("       : isHeadToHead() = " + os.isHeadToHead() + "; evalState() = " + os.getEvalState() + ";");
-                    if (os.getDislodger() != null) {
-                        Log.println("       : dislodger = " + os.getDislodger().getOrder());
-                    } else {
-                        Log.println("       : dislodger = " + os.getDislodger());
-                    }
-                }
+                logger.debug("Checking against dependent move:{} ", os.getOrder());
+                logger.debug("atkMax: {}, atkCertain: {}, selfAtkMax: {}, selfAtkCertain: {}, isHeadToHead: {}, evalState: {}, dislodger: {}",
+                        os.getAtkMax(), os.getAtkCertain(),
+                        os.getAtkSelfSupportMax(), os.getAtkSelfSupportCertain(),
+                        os.isHeadToHead(), os.getEvalState(),
+                        os.getDislodger() != null ? os.getDislodger().getOrder() : null
+                );
 
                 if (os.getEvalState() == Tristate.SUCCESS) {
                     // 3.a.3.a: someone's already better than us.
-                    Log.println("    -- they're better than us!");
+                    logger.debug( "they're better than us!");
                     isBetterThanAllOtherMoves = false;
                     thisOS.setEvalState(Tristate.FAILURE);
                     adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED));
@@ -1034,7 +1029,7 @@ public class Move extends Order {
                     // 3.d
                     if (os.isHeadToHead() && (os.getEvalState() == Tristate.UNCERTAIN || !isDependentHTHResolved(os))) {
                         // we can't evaluate yet; remain uncertain (3.d.1)
-                        Log.println("   -- can't tell if head-to-head battle caused dislodgement!");
+                        logger.debug( "can't tell if head-to-head battle caused dislodgement!");
                         isBetterThanAllOtherMoves = false;
                     } else if (!os.isHeadToHead()
                             || (os.isHeadToHead() && os.getDislodger() != os.getHeadToHead()))    // 3.d.3
@@ -1049,7 +1044,7 @@ public class Move extends Order {
                         // 3.b.1, 3.b.2 are accounted for within this else block
                         //
                         if ((attack_max + self_attack_max) <= (os.getAtkCertain() + os.getAtkSelfSupportCertain())) {
-                            Log.println("   -- attack_max <= os.getAtkCertain() + getAtkSelfSupportCertain() ...");
+                            logger.debug( "attack_max <= os.getAtkCertain() + getAtkSelfSupportCertain() ...");
 							
 							/*
 								If the other move has not found a convoy route, 
@@ -1059,9 +1054,9 @@ public class Move extends Order {
 								second argument if the first is true.
 							*/
                             if (((Move) os.getOrder()).isConvoying() && !os.hasFoundConvoyPath()) {
-                                Log.println("      however, no convoy route for dependent move exists (or exists yet).");
+                                logger.debug( "however, no convoy route for dependent move exists (or exists yet).");
                             } else {
-                                Log.println("      so we must fail.");
+                                logger.debug( "so we must fail.");
                                 // 3.a.3.c: we can never be better than this pairing. Ever. Fail, unless destination
                                 // is part of a head-to-head battle which was dislodged by a unit involved in the
                                 // head-to-head battle. [3.d]
@@ -1082,12 +1077,12 @@ public class Move extends Order {
 							*/
                             if (((Move) os.getOrder()).isConvoying() && !os.hasFoundConvoyPath()
                                     && os.getEvalState() == Tristate.FAILURE) {
-                                Log.println("   -- dependent move ignored (no valid corresponding convoy path).");
+                                logger.debug( "dependent move ignored (no valid corresponding convoy path).");
                             } else {
                                 // 3.a.3.b: we are not better than *all* the unevaluated moves to destination
                                 // this doesn't mean we fail, though, since the other moves strength calculations
                                 // may not be final
-                                Log.println("   -- atk_certain <= os.getAtkMax() + getAtkSelfSupportMax(); not conclusively better!");
+                                logger.debug( "atk_certain <= os.getAtkMax() + getAtkSelfSupportMax(); not conclusively better!");
                                 isBetterThanAllOtherMoves = false;
                             }
                         }
@@ -1096,7 +1091,7 @@ public class Move extends Order {
                 }
             }// while()
 
-            Log.println("  isBetterThanAllOtherMoves: ", String.valueOf(isBetterThanAllOtherMoves));
+            logger.debug("isBetterThanAllOtherMoves: {}", isBetterThanAllOtherMoves);
 
 
             // Note that if we are not better than all other moves to the destination province, we
@@ -1113,7 +1108,7 @@ public class Move extends Order {
                         thisOS.setEvalState(Tristate.FAILURE);
                         //adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_BOUNCE));
                         adjudicator.addBouncedResult(thisOS, thisOS.getHeadToHead());
-                        Log.println("    (hth) final evalState() = ", thisOS.getEvalState());
+                        logger.debug("(hth) final evalState(): {}", thisOS.getEvalState());
                         return;
                     }
                 } else if (!isDestAMove)    // less priority than isHeadToHead()
@@ -1122,7 +1117,7 @@ public class Move extends Order {
                         thisOS.setEvalState(Tristate.FAILURE);
                         //adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_BOUNCE));
                         adjudicator.addBouncedResult(thisOS, destOS);
-                        Log.println("    (dam) final evalState() = ", thisOS.getEvalState());
+                        logger.debug("(dam) final evalState(): {}", thisOS.getEvalState());
                         return;
                     }
                 }
@@ -1131,7 +1126,7 @@ public class Move extends Order {
             // see if we are better w/o self support.
             // this will influence dislodges
             final boolean isBwoss = isBetterWithoutSelfSupport(thisOS);
-            Log.println("       isBetterWithoutSelfSupport() = ", String.valueOf(isBwoss));
+            logger.debug("isBetterWithoutSelfSupport(): {}", isBwoss);
 
             // at this point, 3.a.3.a is complete, and 3.a.3.c is complete (for defender & other move orders).
             // however, we must complete 3.a.3.b
@@ -1144,12 +1139,12 @@ public class Move extends Order {
             if (isBetterThanAllOtherMoves) {
                 if (isDestEmpty) {
                     // 3.a.3.b: case 1. [empty province: special case of 3.a.3.b]
-                    Log.println("  isDestEmpty(): prior eval state: ", thisOS.getEvalState());
+                    logger.debug("isDestEmpty(): prior eval state: {}", thisOS.getEvalState());
                     thisOS.setEvalState(Tristate.SUCCESS);
                 } else if (thisOS.isHeadToHead()) {
                     // 3.a.3.b: case 3. [also known as: 3.a.3.c.1.b]
                     // CHANGED: 10/2002 to fix a couple of bugs
-                    Log.println("  isHTH evaluation");
+                    logger.debug( "isHTH evaluation");
                     OrderState hthOS = thisOS.getHeadToHead();
                     if ((attack_certain) > (hthOS.getAtkMax() + hthOS.getAtkSelfSupportMax())) {
                         if (!isBwoss || isDestSamePower(hthOS)) {
@@ -1168,7 +1163,7 @@ public class Move extends Order {
                         }
                     }
                 } else if (isDestAMove) {
-                    Log.println("     dest is a Move");
+                    logger.debug( "dest is a Move");
                     if (destOS.getEvalState() == Tristate.SUCCESS) {
                         // regardless of our strength (1 or >1) we will succeed if destination unit moved out.
                         // this covers parts of 3.a.3.b/4 and 3.b.2 self support
@@ -1195,15 +1190,15 @@ public class Move extends Order {
                         // unless, of course, we could be dislodging ourselves. In that case, we cannot
                         // complete the evaluation.
                         if (isDestSamePower(destOS)) {
-                            Log.println("      dest is the same power!");
+                            logger.debug( "dest is the same power!");
 
                             // cannot dislodge self; but we will succeed unless other unit failed; if
                             // other unit is uncertain, then we remain uncertain.
                             if (destOS.getEvalState() == Tristate.SUCCESS) {
-                                Log.println("           but left the province.");
+                                logger.debug( "but left the province.");
                                 thisOS.setEvalState(Tristate.SUCCESS);
                             } else if (destOS.getEvalState() == Tristate.FAILURE) {
-                                Log.println("           and failed, so we can't self-dislodged!.");
+                                logger.debug( "and failed, so we can't self-dislodged!.");
                                 thisOS.setEvalState(Tristate.FAILURE);
                                 adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_NO_SELF_DISLODGE));
                             }
@@ -1214,7 +1209,7 @@ public class Move extends Order {
                                 if (destOS.getEvalState() == Tristate.FAILURE) {
                                     destOS.setDislodgedState(Tristate.YES);
                                     destOS.setDislodger(thisOS);
-                                    Log.println("       Dislodged. (3.a.3.b.1)");
+                                    logger.debug( "Dislodged. (3.a.3.b.1)");
                                     //adjudicator.addResult(destOS, ResultType.FAILURE, Utils.getLocalString(MOVE_DISLODGED));
                                     adjudicator.addDislodgedResult(destOS);
                                 } else if (destOS.getEvalState() == Tristate.UNCERTAIN) {
@@ -1226,16 +1221,16 @@ public class Move extends Order {
                                 // self-support. This normally fails, unless the
                                 // unit actually moves out (which includes a convoy,
                                 // if head-to-head).
-                                Log.println("       Dest unit not eval'd; remaining uncertain.");
+                                logger.debug( "Dest unit not eval'd; remaining uncertain.");
                             } else {
                                 thisOS.setEvalState(Tristate.FAILURE);
-                                Log.println("       Failed. (not better w/o self support)");
+                                logger.debug( "Failed. (not better w/o self support)");
                                 adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED));
                             }
                         }
                     }
                 } else {
-                    Log.println("     dest is not a Move");
+                    logger.debug( "dest is not a Move");
                     // 3.a.3.b: case 4	[typical case of 3.a.3.b]
                     if (attack_certain > destOS.getDefMax()) {
                         //OLD: if( isDestSamePower(destOS) )
@@ -1246,7 +1241,7 @@ public class Move extends Order {
                             thisOS.setEvalState(Tristate.SUCCESS);
                             destOS.setDislodgedState(Tristate.YES);
                             destOS.setDislodger(thisOS);
-                            Log.println("           Dislodged. (3.a.3.b typical)");
+                            logger.debug( "Dislodged. (3.a.3.b typical)");
                             //adjudicator.addResult(destOS, ResultType.FAILURE, Utils.getLocalString(MOVE_DISLODGED));
                             adjudicator.addDislodgedResult(destOS);
                         }
@@ -1258,11 +1253,11 @@ public class Move extends Order {
         // If we have been marked as a 'maybe dislodged' and we are successfull,
         // we cannot be dislodged.
         if (thisOS.getEvalState() == Tristate.SUCCESS && thisOS.getDislodgedState() == Tristate.MAYBE) {
-            Log.println("    -- successfull; MAYBE dislodged converted to NOT dislodged.");
+            logger.info( "successfull; MAYBE dislodged converted to NOT dislodged.");
             thisOS.setDislodgedState(Tristate.NO);
         }
 
-        Log.println("    final evalState() = ", thisOS.getEvalState());
+        logger.debug("final evalState(): {}", thisOS.getEvalState());
     }// evaluate()
 
 
@@ -1295,19 +1290,19 @@ public class Move extends Order {
      */
     private boolean isBetterWithoutSelfSupport(OrderState thisOS) {
         OrderState[] dml = thisOS.getDependentMovesToDestination();
-        Log.println("   Move::isBetterWithoutSelfSupport(); dml.length: ", dml.length);
+        logger.debug("Dependent moves to destination: {}", dml.length);
 
         for (OrderState os : dml) {
             // 3.d
             if (os.isHeadToHead() && (os.getEvalState() == Tristate.UNCERTAIN || !isDependentHTHResolved(os))) {
                 // we can't evaluate yet; remain uncertain
-                Log.println("          -- but we're not sure yet...");
+                logger.debug("-- but we're not sure yet...");
                 return false;
             } else if (!os.isHeadToHead()
                     || (os.isHeadToHead() && os.getDislodger() != os.getHeadToHead())) {
-                Log.println("          checking atkCertain <= atk max + atk selfsupport max");
+                logger.debug("-- checking atkCertain <= atk max + atk selfsupport max");
                 if (thisOS.getAtkCertain() <= (os.getAtkMax() + os.getAtkSelfSupportMax())) {
-                    Log.println("          -- but we're definately worse...");
+                    logger.debug("-- but we're definately worse...");
                     return false;
                 }
             }

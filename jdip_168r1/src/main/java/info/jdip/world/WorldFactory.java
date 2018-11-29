@@ -22,7 +22,6 @@
 //
 package info.jdip.world;
 
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.order.OrderException;
 import info.jdip.world.variant.data.BorderData;
@@ -30,6 +29,8 @@ import info.jdip.world.variant.data.InitialState;
 import info.jdip.world.variant.data.ProvinceData;
 import info.jdip.world.variant.data.SupplyCenter;
 import info.jdip.world.variant.data.Variant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +42,8 @@ import java.util.StringTokenizer;
  * A WorldFactory creates World objects from XML map data.
  */
 public class WorldFactory {
+    private static final Logger logger = LoggerFactory.getLogger(WorldFactory.class);
+
     // il8n
     private static final String WF_PROV_NON_UNIQUE = "WF_PROV_NON_UNIQUE";
     private static final String WF_PROV_MISMATCH = "WF_PROV_MISMATCH";
@@ -91,7 +94,7 @@ public class WorldFactory {
             throw new IllegalArgumentException();
         }
 
-        Log.println("WorldFactory.createWorld(): " + variant.getName());
+        logger.debug( "WorldFactory.createWorld(): {}", variant.getName());
 
         List<Province> provinces = new ArrayList<>(100);
         HashMap<String, Province> provNameMap = new HashMap<>();    // mapping of names->provinces

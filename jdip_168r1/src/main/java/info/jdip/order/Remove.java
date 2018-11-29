@@ -21,7 +21,6 @@
 //
 package info.jdip.order;
 
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.process.Adjudicator;
 import info.jdip.process.OrderState;
@@ -31,12 +30,15 @@ import info.jdip.world.Power;
 import info.jdip.world.RuleOptions;
 import info.jdip.world.TurnState;
 import info.jdip.world.Unit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Implementation of the Remove order.
  */
 public class Remove extends Order {
+    private static final Logger logger = LoggerFactory.getLogger(Remove.class);
     // il8n constants
     private static final String REMOVE_FORMAT = "REMOVE_FORMAT";
 
@@ -145,8 +147,8 @@ public class Remove extends Order {
      * must be handled by the adjustment adjudicator.
      */
     public void evaluate(Adjudicator adjudicator) {
-        Log.println("--- evaluate() info.jdip.order.Disband ---");
-        Log.println("   order: ", this);
+        logger.debug("Order: {}", this);
+
 
         OrderState thisOS = adjudicator.findOrderStateBySrc(getSource());
         if (thisOS.getEvalState() == Tristate.UNCERTAIN) {

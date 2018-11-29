@@ -55,6 +55,8 @@ import jcmdline.FileParam;
 import jcmdline.HelpCmdLineHandler;
 import jcmdline.Parameter;
 import jcmdline.VersionCmdLineHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -97,6 +99,7 @@ import java.util.StringTokenizer;
  * 	</pre>
  */
 public class TestParser {
+    private static final Logger logger = LoggerFactory.getLogger(TestParser.class);
     // constants
     private static final String VARIANT_DIR = "variants";
     private static final String KEY_VARIANT = "variant";
@@ -160,7 +163,7 @@ public class TestParser {
      */
     private TestParser(File input, boolean isLogging) {
         this.isLogging = isLogging;
-        System.out.println("TestParser started on: " + new Date());
+        logger.info("TestParser started on: {}", new Date());
         //Log.setLogging(isLogging);
         parseCaseFile(input);
         runTest();
@@ -314,19 +317,17 @@ public class TestParser {
         }
 
         // print stats
-        System.out.println(numprocessed + " order(s) parsed");
-        System.out.println(failedCases.size() + " order(s) failed");
+        logger.info("Order(s) parsed: {} failed: {}", numprocessed, failedCases.size());
 
         if (failedCases.size() > 0) {
-            System.out.println("\nFailed orders, and failure reasons follow:");
+            logger.info("Failed orders, and failure reasons follow:");
 
             for (String failedCase : failedCases) {
-                System.out.println(failedCase);
-                System.out.println();
+                logger.info(failedCase);
             }
         }
 
-        System.out.println("TestParser completed on " + new Date());
+        logger.info("TestParser completed on {}", new Date());
 
         // clean or error exit
         if (failedCases.size() > 0) {
@@ -344,8 +345,7 @@ public class TestParser {
     private void checkORP(ORPair orp, Order o, List<String> failedCases) {
         String[] toks = getORPTokens(orp.getResult());
         if (toks.length == 0) {
-            System.out.println("ERROR: in result of order pair starting at line: " + orp.getLineNumber());
-            System.out.println("No result type was given.");
+            logger.error("No result type was given in result of order pair starting at line {}.", orp.getLineNumber());
             System.exit(1);
         }
 
@@ -354,8 +354,7 @@ public class TestParser {
         for (String[] orderArg : ORDER_ARGS) {
             if (toks[0].equalsIgnoreCase(orderArg[0])) {
                 if (toks.length != orderArg.length) {
-                    System.out.println("ERROR: in result of order pair starting at line: " + orp.getLineNumber());
-                    System.out.println("Invalid number of arguments; " + (orderArg.length - 1) + " are required.");
+                    logger.error("Invalid number of arguments in result of order pair starting at line: {}. {} are required", orp.getLineNumber(), (orderArg.length - 1));
                     System.exit(1);
                 } else {
                     params = orderArg;
@@ -365,8 +364,7 @@ public class TestParser {
 
         // order not found.
         if (params == null) {
-            System.out.println("ERROR: in result of order pair starting at line: " + orp.getLineNumber());
-            System.out.println("Order type \"" + toks[0] + "\" not found.");
+            logger.error(" Order type {} not found in result of order pair starting at line {}.", toks[0], orp.getLineNumber());
             System.exit(1);
         }
 
@@ -473,8 +471,7 @@ public class TestParser {
         // is tok a valid Power name? if not, error-exit
         Power power = map.getPower(tok);
         if (power == null) {
-            System.out.println("ERROR: in result of order pair starting at line: " + orp.getLineNumber());
-            System.out.println("Power \"" + tok + "\" not found.");
+            logger.error("Power{} not found in result of order pair starting at line {}. ", tok, orp.getLineNumber());
             System.exit(1);
         }
 
@@ -501,8 +498,7 @@ public class TestParser {
         // is tok a valid Power name? if not, error-exit
         Location loc = map.parseLocation(tok);
         if (loc == null) {
-            System.out.println("ERROR: in result of order pair starting at line: " + orp.getLineNumber());
-            System.out.println("Location \"" + tok + "\" not recognized.");
+            logger.error("Location {} not recognized in result of order pair starting at line {}. ", tok, orp.getLineNumber());
             System.exit(1);
         }
 
@@ -539,8 +535,7 @@ public class TestParser {
         // is tok a valid Power name? if not, error-exit
         Unit.Type ut = Unit.Type.parse(tok);
         if (ut == null || ut == Unit.Type.UNDEFINED) {
-            System.out.println("ERROR: in result of order pair starting at line: " + orp.getLineNumber());
-            System.out.println("Unit Type \"" + tok + "\" was not found.");
+            logger.error("Unit Type {} was not found in result of order pair starting at line {}. ", tok, orp.getLineNumber());
             System.exit(1);
         }
 
@@ -578,8 +573,7 @@ public class TestParser {
         } else if (tok.equalsIgnoreCase("false")) {
             bool = false;
         } else {
-            System.out.println("ERROR: in result of order pair starting at line: " + orp.getLineNumber());
-            System.out.println("Boolean value \"" + tok + "\" must be \"true\" or \"false\".");
+            logger.error("Boolean value {} must be \"true\" or \"false\" in result of order pair starting at line {}", tok, orp.getLineNumber());
             System.exit(1);
         }
 
@@ -644,7 +638,7 @@ public class TestParser {
             // error if it cannot be found!!
             Variant variant = VariantManager.getVariant(variantName, VariantManager.VERSION_NEWEST);
             if (variant == null) {
-                System.out.println("ERROR: cannot find variant: " + variantName);
+                logger.error("ERROR: cannot find variant: {}", variantName);
                 System.exit(1);
             }
 
@@ -657,9 +651,7 @@ public class TestParser {
             // by the GUI)
             world.setRuleOptions(RuleOptions.createFromVariant(variant));
         } catch (Exception e) {
-            System.out.println("ERROR: could not create variant.");
-            System.out.println(e);
-            e.printStackTrace();
+            logger.error("Could not create variant " + variantName, e);
             System.exit(1);
         }
 
@@ -671,11 +663,11 @@ public class TestParser {
             pos.setDislodgedUnit(prov, null);
         }
 
-        System.out.println("Variant \"" + variantName + "\" loaded successfully.");
+        logger.info("Variant {} loaded successfully.", variantName);
 
         // setup the order parser
         op = OrderParser.getInstance();
-        System.out.println("OrderParser created.");
+        logger.trace("OrderParser created.");
     }// setupVariant()
 
     /**
@@ -699,7 +691,7 @@ public class TestParser {
             pos.setUnit(ds.getSource().getProvince(), unit);
             count++;
         }
-        System.out.println(count + " (non-dislodged) unit positions set.");
+        logger.info("(non-dislodged) unit positions set: {}", count);
 
 
         count = 0;
@@ -712,7 +704,7 @@ public class TestParser {
             pos.setDislodgedUnit(ds.getSource().getProvince(), unit);
             count++;
         }
-        System.out.println(count + " (dislodged) unit positions set.");
+        logger.info("(dislodged) unit positions set: {}", count);
     }// setupPositions()
 
     /**
@@ -820,8 +812,7 @@ public class TestParser {
                             accum.add(line);
                         } else {
                             // no accumulator? we don't want no non-blank lines with werdz
-                            System.out.println("ERROR: line: " + lnr.getLineNumber());
-                            System.out.println("Unknown action or non-comment line.");
+                            logger.error("Unknown action or non-comment line: {}", lnr.getLineNumber());
                             System.exit(1);
                         }
                     }
@@ -830,8 +821,7 @@ public class TestParser {
                 line = lnr.readLine();
             }
         } catch (IOException e) {
-            System.out.println("ERROR reading the case file \"" + caseFile + "\".");
-            System.out.println(e);
+            logger.error("There was a problem reading the case file {}.", caseFile, e);
             System.exit(1);
         } finally {
             if (lnr != null) {
@@ -842,8 +832,7 @@ public class TestParser {
             }
         }
 
-        System.out.println("Case file succesfully parsed.");
-        System.out.println(cases.size() + " order/result pairs read.");
+        logger.info("Case file successfully parsed. Order/result pairs read: {}", cases.size());
     }// parseCaseFile()
 
     /**
@@ -862,8 +851,7 @@ public class TestParser {
     }// getKeyword()
 
     private void lnrErrorExit(LineNumberReader lnr, String msg) {
-        System.out.println("ERROR: line: " + lnr.getLineNumber());
-        System.out.println("SETUP block already defined.");
+        logger.error("SETUP block already defined on line {}.", lnr.getLineNumber());
         System.exit(1);
     }// lnrErrorExit()
 
@@ -891,9 +879,7 @@ public class TestParser {
                 throw new OrderException("A DefineState order (e.g., \"England: A Lon\" is required.");
             }
         } catch (OrderException e) {
-            System.out.println("ERROR in SETUP or SETUPDISLODGED position.");
-            System.out.println("      line: " + line);
-            System.out.println("parseOrder() OrderException: " + e);
+            logger.error("Problem in SETUP or SETUPDISLODGED position on line {}", line, e);
             System.exit(1);
         }
 

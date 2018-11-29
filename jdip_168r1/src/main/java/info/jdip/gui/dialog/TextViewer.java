@@ -27,9 +27,10 @@ import info.jdip.gui.dialog.prefs.GeneralPreferencePanel;
 import info.jdip.gui.swing.XJEditorPane;
 import info.jdip.gui.swing.XJFileChooser;
 import info.jdip.gui.swing.XJScrollPane;
-import info.jdip.misc.Log;
 import info.jdip.misc.SimpleFileFilter;
 import info.jdip.misc.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -73,6 +74,7 @@ import java.util.regex.Pattern;
  * lazy-loading of text. This improves perceived responsiveness.
  */
 public class TextViewer extends HeaderDialog {
+    private static final Logger logger = LoggerFactory.getLogger(TextViewer.class);
     /**
      * Content Type: text/html
      */
@@ -159,7 +161,7 @@ public class TextViewer extends HeaderDialog {
                     try {
                         doc.insertString(0, sb.toString(), null);
                     } catch (BadLocationException ble) {
-                        Log.println("TextViewer error: ", ble);
+                        logger.warn("TextViewer error", ble);
                     }
                 }
             }// processDroppedFiles()
@@ -205,12 +207,9 @@ public class TextViewer extends HeaderDialog {
                         if (action == TransferHandler.MOVE) {
                             doc.remove(selStart, selEnd - selStart);
                         }
-
-                    } catch (BadLocationException ble) {
-                        // do nothing
-                    } catch (IllegalStateException ise) {
+                    } catch (BadLocationException| IllegalStateException ise) {
                         // could happen, say, if the clipboard is unavailable
-                        Log.println("TextViewer::exportToClipboard(): " + ise);
+                        logger.warn("Could not export to clipboard.", ise);
                     }
                 }
             }

@@ -22,12 +22,12 @@
 //
 package info.jdip.judge.parser;
 
-import info.jdip.misc.Log;
 import info.jdip.order.NJudgeOrderParser;
 import info.jdip.order.NJudgeOrderParser.NJudgeOrder;
 import info.jdip.order.OrderException;
 import info.jdip.order.OrderFactory;
 import info.jdip.world.Phase.PhaseType;
+import org.slf4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,6 +38,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 
 /**
  * Parses Move, Retreat, and Adjustment phase orders.
@@ -45,6 +47,8 @@ import java.util.regex.PatternSyntaxException;
  * This assumes that orders never span lines.
  */
 public class JudgeOrderParser {
+    private static final Logger logger = getLogger(JudgeOrderParser.class);
+
     /**
      * Parse Season and Year for these orders
      */
@@ -186,7 +190,7 @@ public class JudgeOrderParser {
                 if (m.lookingAt()) {
                     orderList.add(parser.parse(map, orderFactory, phaseType, line));
                 } else {
-                    Log.println("parseOrders() stopped at line: ", line);
+                    logger.debug("stopped at line: {}", line);
                     break;
                 }
 

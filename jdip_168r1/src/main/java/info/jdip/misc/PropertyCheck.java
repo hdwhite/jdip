@@ -1,5 +1,8 @@
 package info.jdip.misc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,6 +15,7 @@ import java.util.Properties;
  * other files).
  */
 public class PropertyCheck {
+    private static final Logger logger = LoggerFactory.getLogger(PropertyCheck.class);
     final Properties[] props;
     final String[] names;
 
@@ -28,7 +32,7 @@ public class PropertyCheck {
     public static void main(String args[])
             throws IOException {
         if (args.length < 2) {
-            System.err.println("PropertyCheck: 2 or more properties files must be specified.");
+            logger.error("Only {} properties have been specified. Two or more properties files must be specified.", args.length);
             System.exit(1);
         }
 
@@ -40,9 +44,8 @@ public class PropertyCheck {
         for (int i = 0; i < props.length; i++) {
             Properties p = props[i];
 
-            System.out.println("\n\nCHECKING: " + names[i]);
-            System.out.println("Missing Keys:");
-            System.out.println("---------------------------------------------");
+            logger.info("CHECKING: {}", names[i]);
+            logger.info("Missing Keys:");
             boolean noneMissing = true;
 
             for (int j = 0; j < props.length; j++) {
@@ -56,7 +59,7 @@ public class PropertyCheck {
                     while (e.hasMoreElements()) {
                         final String key = (String) e.nextElement();
                         if (p.getProperty(key) == null) {
-                            System.out.println(" " + key + "  (from " + name + ")");
+                            logger.info("Missing {} (from {}) ", key, name);
                             noneMissing = false;
                         }
                     }
@@ -64,7 +67,7 @@ public class PropertyCheck {
             }
 
             if (noneMissing) {
-                System.out.println("no keys missing.");
+                logger.info("no keys missing.");
             }
         }
     }// check()

@@ -23,13 +23,14 @@
 package info.jdip.world.variant;
 
 import info.jdip.gui.dialog.ErrorDialog;
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.world.variant.data.MapGraphic;
 import info.jdip.world.variant.data.SymbolPack;
 import info.jdip.world.variant.data.Variant;
 import info.jdip.world.variant.parser.XMLSymbolParser;
 import info.jdip.world.variant.parser.XMLVariantParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -74,6 +75,7 @@ import java.util.Set;
  * <br>
  */
 public class VariantManager {
+    private static final Logger logger = LoggerFactory.getLogger(VariantManager.class);
     /**
      * Version Constant representing the most recent version of a Variant or SymbolPack
      */
@@ -126,8 +128,7 @@ public class VariantManager {
      */
     public static synchronized void init(File[] searchPaths, boolean isValidating)
             throws javax.xml.parsers.ParserConfigurationException, NoVariantsException {
-        long ttime = System.currentTimeMillis();
-        Log.println("VariantManager.init()");
+        logger.trace( "VariantManager.init()");
 
         if (searchPaths == null || searchPaths.length == 0) {
             throw new IllegalArgumentException();
@@ -158,7 +159,7 @@ public class VariantManager {
             dbf.setAttribute("http://apache.org/xml/properties/input-buffer-size", 4096);
             dbf.setAttribute("http://apache.org/xml/features/nonvalidating/load-external-dtd", Boolean.FALSE);
         } catch (Exception e) {
-            Log.println("VM: Could not set XML feature.", e);
+            logger.warn("VM: Could not set XML feature.", e);
         }
 
         dbf.setValidating(isValidating);
@@ -251,7 +252,7 @@ public class VariantManager {
             throw new NoVariantsException(msg.toString());
         }
 
-        Log.printTimed(ttime, "VariantManager: variant parsing time: ");
+        logger.trace("Variant parsing finished.");
 
         ///////////////// SYMBOLS /////////////////////////
 
@@ -331,8 +332,8 @@ public class VariantManager {
 
             throw new NoVariantsException(msg.toString());
         }
-        Log.printTimed(ttime, "VariantManager: total parsing time: ");
-    }// init()
+        logger.trace("Parsing finished.");
+    }
 
     /**
      * Returns the known Variants. If multiple versions of a Variant
@@ -452,7 +453,7 @@ public class VariantManager {
         // automatically. Log this method, though
         float spVersion = symbolPackVersion;
         if (spVersion <= 0.0f) {
-            Log.println("WARNING: VariantManager.getSymbolPack() called with symbolPackVersion of <= 0.0f. Check parameters.");
+            logger.warn( "VariantManager.getSymbolPack() called with symbolPackVersion of <= 0.0f. Check parameters.");
             spVersion = VERSION_NEWEST;
         }
 
@@ -616,8 +617,7 @@ public class VariantManager {
                     try {
                         return new URL(sb.toString());
                     } catch (MalformedURLException e) {
-                        Log.println("Could not convert ", url, " to a JAR url.");
-                        Log.println("Exception: ", e);
+                        logger.warn("Could not convert {} to a JAR url.", url, e);
                     }
                 }
             }

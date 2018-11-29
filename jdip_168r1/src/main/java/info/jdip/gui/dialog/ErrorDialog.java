@@ -23,9 +23,10 @@
 package info.jdip.gui.dialog;
 
 import info.jdip.gui.ClientFrame;
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,6 +51,7 @@ import java.util.Properties;
  * Various error dialogs, which use HTML templates to display errors.
  */
 public class ErrorDialog extends TextViewer {
+    private static final Logger logger = LoggerFactory.getLogger(ErrorDialog.class);
     // i18n constants
     private static final String NO_MESSAGE = Utils.getLocalString("ErrorDlg.nomessage");
     private static final String UNKNOWN = Utils.getLocalString("ErrorDlg.unknown");
@@ -147,9 +149,7 @@ public class ErrorDialog extends TextViewer {
         args[1] = getMsg(e);
         args[2] = getStackTrace(e);
 
-        Log.println("SeriousError: ", args[0]);
-        Log.println("  message: ", args[1]);
-        Log.println("  stack trace:\n", args[2]);
+        logger.error("There was a serious issue.", e);
 
         String text = Utils.getText(Utils.getLocalString(SERIOUS_TEMPLATE));
 
@@ -185,9 +185,8 @@ public class ErrorDialog extends TextViewer {
         args[1] = getMsg(e);
         args[2] = getStackTrace(e);
 
-        Log.println("FatalError: ", args[0]);
-        Log.println("  message: ", args[1]);
-        Log.println("  stack trace:\n", args[2]);
+        logger.error("There was a fatal issue.", e);
+
 
         String text = Utils.getText(Utils.getLocalString(FATAL_TEMPLATE));
         ErrorDialog ed = ErrorDialog.getOneButtonDialog(parent,
@@ -218,10 +217,8 @@ public class ErrorDialog extends TextViewer {
         args[2] = getStackTrace(e);
         args[3] = (fileName == null) ? UNKNOWN : fileName;
 
-        Log.println("FileIOError: ", args[0]);
-        Log.println("  message: ", args[1]);
-        Log.println("  file: ", args[3]);
-        Log.println("  stack trace:\n", args[2]);
+        logger.error("There was an IO error in file {}", fileName, e);
+
 
         String text = null;
         if (e instanceof FileNotFoundException) {
@@ -266,10 +263,8 @@ public class ErrorDialog extends TextViewer {
         args[2] = getStackTrace(e);
         args[3] = (connection == null) ? UNKNOWN : connection;
 
-        Log.println("NetworkIOError: ", args[0]);
-        Log.println("  message: ", args[1]);
-        Log.println("  connection: ", args[3]);
-        Log.println("  stack trace:\n", args[2]);
+        logger.error("There was a network issue on connection {}", connection,e);
+
 
         String text = null;
         boolean submittable = false;
@@ -310,9 +305,8 @@ public class ErrorDialog extends TextViewer {
         args[1] = getMsg(e);
         args[2] = getStackTrace(e);
 
-        Log.println("GeneralError: ", args[0]);
-        Log.println("  message: ", args[1]);
-        Log.println("  stack trace:\n", args[2]);
+        logger.error("There was an issue.",e);
+
 
         String text = Utils.getText(Utils.getLocalString(GENERAL_TEMPLATE));
         ErrorDialog ed = getOneButtonDialog(parent,
@@ -675,15 +669,14 @@ public class ErrorDialog extends TextViewer {
                 }
             }
         } catch (Exception e) {
-            Log.println("ERROR: could not send bug report.");
-            Log.println(e);
+            logger.error("Could not send bug report.", e);
         } finally {
             try {
                 if (wr != null) {
                     wr.close();
                 }
             } catch (Exception e) {
-                Log.println("ErrorDialog: ", e);
+                logger.warn("Cannot close output writer", e);
             }
 
             try {
@@ -691,7 +684,7 @@ public class ErrorDialog extends TextViewer {
                     rd.close();
                 }
             } catch (Exception e) {
-                Log.println("ErrorDialog: ", e);
+                logger.warn("Cannot close buffered reader", e);
             }
         }
 

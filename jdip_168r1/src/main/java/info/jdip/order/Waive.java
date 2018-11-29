@@ -21,7 +21,6 @@
 //
 package info.jdip.order;
 
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.process.Adjudicator;
 import info.jdip.process.OrderState;
@@ -31,12 +30,15 @@ import info.jdip.world.Power;
 import info.jdip.world.RuleOptions;
 import info.jdip.world.TurnState;
 import info.jdip.world.Unit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A Waive order; a power may explicitly choose not to build a unit.
  * in that case, a Waive order may be issued.
  */
 public class Waive extends Order {
+    private static final Logger logger = LoggerFactory.getLogger(Waive.class);
     // il8n constants
     private static final String WAIVE_FORMAT = "WAIVE_FORMAT";
 
@@ -151,8 +153,7 @@ public class Waive extends Order {
      * Extra build orders are NOT considered in the evaluate() method here.
      */
     public void evaluate(Adjudicator adjudicator) {
-        Log.println("--- evaluate() info.jdip.order.Waive ---");
-        Log.println("   order: ", this);
+        logger.debug("Order: {}", this);
 
         OrderState thisOS = adjudicator.findOrderStateBySrc(getSource());
 

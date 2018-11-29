@@ -23,7 +23,6 @@
 package info.jdip.gui.order;
 
 import info.jdip.gui.map.MapMetadata;
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.order.Hold;
 import info.jdip.order.Orderable;
@@ -34,6 +33,8 @@ import info.jdip.world.Province;
 import info.jdip.world.Unit;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.util.SVGConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.svg.SVGElement;
 import org.w3c.dom.svg.SVGGElement;
 import org.w3c.dom.svg.SVGPolygonElement;
@@ -44,6 +45,7 @@ import java.awt.geom.Point2D;
  * GUIOrder subclass of Hold order.
  */
 public class GUIHold extends Hold implements GUIOrder {
+    private static final Logger logger = LoggerFactory.getLogger(GUIHold.class);
     // i18n keys
 
     // instance variables
@@ -178,22 +180,22 @@ public class GUIHold extends Hold implements GUIOrder {
 
     public void removeFromDOM(MapInfo mapInfo) {
         if (group != null) {
-            Log.println("GUIHold: removeFromDOM(): group=", group);
+            logger.debug("Group: {}", group);
             SVGGElement powerGroup = mapInfo.getPowerSVGGElement(power, LAYER_TYPICAL);
             GUIOrderUtils.removeChild(powerGroup, group);
             group = null;
             numSupports = -1;
         }
-    }// removeFromDOM()
+    }
 
 
     public void updateDOM(MapInfo mapInfo) {
-        Log.println("GUIHold::updateDOM(): group,support: ", group, String.valueOf(numSupports));
+        logger.debug("Group: {}, support: {}", group, numSupports);
 
         // if we are not displayable, we exit, after remove the order (if
         // it was created)
         if (!GUIOrderUtils.isDisplayable(power, mapInfo)) {
-            Log.println("GUIHold::updateDOM(): not displayable.");
+            logger.info( "Power {} is not displayable.",power);
             removeFromDOM(mapInfo);
             return;
         }
@@ -205,7 +207,7 @@ public class GUIHold extends Hold implements GUIOrder {
         int support = GUIOrderUtils.getMatchingSupportCount(mapInfo,
                 src.getProvince(), src.getProvince());
         if (numSupports == support && group != null) {
-            Log.println("GUIHold::updateDOM(): no change. returning. calc support: ", String.valueOf(support));
+            logger.debug("No change. returning. calc support: {}", support);
             return;    // no change
         }
 
@@ -218,20 +220,20 @@ public class GUIHold extends Hold implements GUIOrder {
         // in our group
         if (group == null) {
             // create group
-            Log.println("GUIHold::updateDOM(): creating group.");
+            logger.trace( "Creating group.");
             group = (SVGGElement) mapInfo.getDocument().createElementNS(
                     SVGDOMImplementation.SVG_NAMESPACE_URI, SVGConstants.SVG_G_TAG);
 
             mapInfo.getPowerSVGGElement(power, LAYER_TYPICAL).appendChild(group);
         } else {
             // remove group children
-            Log.println("GUIHold::updateDOM(): removing group children.");
+            logger.trace( "Removing group children.");
             GUIOrderUtils.deleteChildren(group);
         }
 
         // now, render the order
         //
-        Log.println("GUIHold::updateDOM(): rendering order.");
+        logger.trace( "Rendering order.");
         SVGElement element = null;
 
         // create hilight line

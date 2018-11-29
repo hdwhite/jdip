@@ -22,6 +22,9 @@
 //
 package info.jdip.misc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.*;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -40,14 +43,15 @@ import java.util.prefs.Preferences;
  * if they desire.
  */
 public class SharedPrefs {
+    private static final Logger logger = LoggerFactory.getLogger(SharedPrefs.class);
     // the class we want to be the root node.
     private static Class sharedRootNodeClass = null;
 
-    static {
+    static {  //TODO: We should move this static block into a method
         try {
             sharedRootNodeClass = Class.forName("info.jdip.gui.ClientFrame");
         } catch (ClassNotFoundException e) {
-            System.err.println("ERROR: could not find class: info.jdip.gui.ClientFrame");
+            logger.error("Could not find class: info.jdip.gui.ClientFrame");
         }
     }
 
@@ -93,7 +97,7 @@ public class SharedPrefs {
         try {
             prefs.flush();
         } catch (BackingStoreException bse) {
-            Log.println(bse);
+            logger.info( "There was a problem saving preferences",bse);
         }
     }// savePrefs()
 

@@ -22,9 +22,10 @@
 //
 package info.jdip.world.variant.parser;
 
-import info.jdip.misc.Log;
 import info.jdip.world.variant.data.BorderData;
 import info.jdip.world.variant.data.ProvinceData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -44,6 +45,7 @@ import java.util.StringTokenizer;
  * Parses an XML ProvinceData description.
  */
 public class XMLProvinceParser implements ProvinceParser {
+    private static final Logger logger = LoggerFactory.getLogger(XMLProvinceParser.class);
     // Element constants
     public static final String EL_PROVINCES = "PROVINCES";
     public static final String EL_PROVINCE = "PROVINCE";
@@ -97,13 +99,13 @@ public class XMLProvinceParser implements ProvinceParser {
      */
     public void parse(InputStream is)
             throws IOException, SAXException {
-        long time = System.currentTimeMillis();
+        logger.trace("Province parsing started.");
         provinceList.clear();
         borderList.clear();
 
         doc = docBuilder.parse(is);
         procProvinceData();
-        Log.printTimed(time, "   province parse time: ");
+        logger.trace("Province parsing finished.");
     }// parse()
 
 

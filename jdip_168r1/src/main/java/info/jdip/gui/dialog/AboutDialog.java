@@ -27,8 +27,9 @@ import cz.autel.dmi.HIGLayout;
 import info.jdip.gui.ClientFrame;
 import info.jdip.gui.swing.SwingWorker;
 import info.jdip.gui.swing.XJScrollPane;
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -46,6 +47,7 @@ import java.util.Properties;
  * The cached copy is created at startup. It really helps speed! (at the expense of memory...)
  */
 public class AboutDialog extends HeaderDialog {
+    private static final Logger logger = LoggerFactory.getLogger(AboutDialog.class);
     // i18n constants
     public static final String TITLE = "AboutDialog.title";
     public static final String LOADING = "AboutDialog.loading";
@@ -106,18 +108,18 @@ public class AboutDialog extends HeaderDialog {
             if (loader == null) {
                 loader = new SwingWorker() {
                     public Object construct() {
-                        long time = System.currentTimeMillis();
+                        logger.trace("AboutDialog construct started");
                         AboutDialog ad = new AboutDialog(parent);
                         ad.pack();
                         ad.setSize(new Dimension(450, 575));
-                        Log.printTimed(time, "AboutDialog construct() complete: ");
+                        logger.trace("AboutDialog construct complete");
                         return ad;
                     }// construct()
                 };
 
                 loader.start(Thread.MIN_PRIORITY);
             } else {
-                Log.println("AboutDialog waiting...");
+                logger.trace("AboutDialog waiting...");
                 dialogInstance = (AboutDialog) loader.get();
                 loader = null;
             }

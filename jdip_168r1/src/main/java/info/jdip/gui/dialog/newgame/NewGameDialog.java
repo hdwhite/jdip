@@ -26,10 +26,11 @@ import info.jdip.gui.ClientFrame;
 import info.jdip.gui.dialog.HeaderDialog;
 import info.jdip.gui.swing.SwingWorker;
 import info.jdip.misc.Help;
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.world.World;
 import info.jdip.world.variant.data.Variant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,6 +43,7 @@ import java.awt.event.WindowEvent;
  * A cached copy is kept, and is initially created at startup.
  */
 public class NewGameDialog extends HeaderDialog {
+    private static final Logger logger = LoggerFactory.getLogger(NewGameDialog.class);
     // i18n constants
     public static final String TITLE_F2F = "NGD.title.f2f";
     private static final String TITLE = "NGD.title";
@@ -151,19 +153,19 @@ public class NewGameDialog extends HeaderDialog {
             if (loader == null) {
                 loader = new SwingWorker() {
                     public Object construct() {
-                        long time = System.currentTimeMillis();
+                        logger.trace("NGD construct() started.");
                         NewGameDialog ngd = new NewGameDialog(parent);
                         ngd = new NewGameDialog(parent);
                         ngd.pack();
                         ngd.setSize(Utils.getScreenSize(0.67f, 0.82f));
-                        Log.printTimed(time, "NGD construct() complete: ");
+                        logger.trace("NGD construct() complete.");
                         return ngd;
                     }// construct()
                 };
 
                 loader.start(Thread.MIN_PRIORITY);
             } else {
-                Log.println("NGD waiting...");
+                logger.trace( "NGD waiting...");
                 dialogInstance = (NewGameDialog) loader.get();
                 loader = null;
             }
