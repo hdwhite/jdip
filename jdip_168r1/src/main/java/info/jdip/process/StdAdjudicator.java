@@ -22,7 +22,6 @@
 //
 package info.jdip.process;
 
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.order.Build;
 import info.jdip.order.Convoy;
@@ -57,6 +56,8 @@ import info.jdip.world.TurnState;
 import info.jdip.world.Unit;
 import info.jdip.world.VictoryConditions;
 import info.jdip.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ import java.util.Map;
  * classes (1 for each phase).
  */
 public class StdAdjudicator implements Adjudicator {
+    private static final Logger logger = LoggerFactory.getLogger(StdAdjudicator.class);
     // il8n messages
     private static final String STDADJ_DUP_ORDER = "STDADJ_DUP_ORDER";
     private static final String STDADJ_MV_NO_UNIT = "STDADJ_MV_NO_UNIT";
@@ -281,7 +283,7 @@ public class StdAdjudicator implements Adjudicator {
      * Add a BouncedResult to the result list
      */
     public final void addBouncedResult(OrderState os, OrderState bouncer) {
-        Log.println("Bounce Result added: ", os.getOrder(), "; by ", bouncer.getSourceProvince());
+        logger.info("Bounce Result added: {}, by: {}", os.getOrder(), bouncer.getSourceProvince());
         BouncedResult br = new BouncedResult(os.getOrder());
         br.setBouncer(bouncer.getSourceProvince());
         resultList.add(br);
@@ -291,7 +293,7 @@ public class StdAdjudicator implements Adjudicator {
      * Add a DislodgedResult to the result list
      */
     public final void addDislodgedResult(OrderState os) {
-        Log.println("Bounce Result added: ", os.getOrder(), "; from: ", os.getDislodger().getSourceProvince());
+        logger.info("Dislodged Result added: {}, from: {}", os.getOrder(), os.getDislodger().getSourceProvince());
         DislodgedResult dr = new DislodgedResult(os.getOrder(), null);
         dr.setDislodger(os.getDislodger().getSourceProvince());
         resultList.add(dr);
@@ -503,11 +505,7 @@ public class StdAdjudicator implements Adjudicator {
             }
         }
 
-        if (Log.isLogging()) {
-            Log.println("order counts:");
-            Log.println("      moves to evaluate: ", totalMoves);
-            Log.println("  non-moves to evaluate: ", totalNonMoves);
-        }
+        logger.debug("Moves to evaluate: {}, Non-moves to evaluate: {}", totalMoves, totalNonMoves);
 
 
         // if we have no move orders, we have nothing to evaluate
@@ -536,7 +534,7 @@ public class StdAdjudicator implements Adjudicator {
             for (OrderState os : orderStates) {
                 // convert maybe->certain
                 if (os.getDislodgedState() == Tristate.MAYBE) {
-                    Log.println("dislodged: maybe -> yes: ", os.getOrder());
+                    logger.debug("dislodged: maybe -> yes: {}", os.getOrder());
 
                     os.setDislodgedState(Tristate.YES);
 
@@ -593,26 +591,26 @@ public class StdAdjudicator implements Adjudicator {
         if (statReporting) {
             for (Result r : resultList) {
                 if (r instanceof BouncedResult) {
-                    Log.println("-- setting stats for: BouncedResult: ", r);
+                    logger.debug("setting stats for: BouncedResult: {}", r);
                     BouncedResult br = (BouncedResult) r;
 
                     OrderState defOS = findOrderStateBySrc(br.getBouncer());
                     OrderState atkOS = findOrderStateBySrc(br.getOrder().getSource());
 
-                    Log.println("   bouncer: ", br.getBouncer());
-                    Log.println("   attacker: ", br.getOrder().getSource());
+                    logger.debug("bouncer: {}", br.getBouncer());
+                    logger.debug("attacker: {}", br.getOrder().getSource());
 
                     br.setAttackStrength(atkOS.getAtkCertain());
                     br.setDefenseStrength(defOS.getDefCertain());
                 } else if (r instanceof DislodgedResult) {
-                    Log.println("-- setting stats for: DislodgedResult: ", r);
+                    logger.debug("setting stats for: DislodgedResult: {}", r);
                     DislodgedResult dr = (DislodgedResult) r;
 
                     OrderState atkOS = findOrderStateBySrc(dr.getDislodger());
                     OrderState defOS = findOrderStateBySrc(dr.getOrder().getSource());
 
-                    Log.println("   dislodger: ", dr.getDislodger());
-                    Log.println("   defender: ", dr.getOrder().getSource());
+                    logger.debug("dislodger: {}", dr.getDislodger());
+                    logger.debug("defender: {}", dr.getOrder().getSource());
 
                     dr.setAttackStrength(atkOS.getAtkCertain());
                     dr.setDefenseStrength(defOS.getDefCertain());
@@ -819,25 +817,19 @@ public class StdAdjudicator implements Adjudicator {
             if (totalMoveOrderCount > 0
                     && nMovesEvaluated <= lastNumMovesEvaluated
                     && nNonMovesEvaluated <= lastNumNonMovesEvaluated) {
-                if (Log.isLogging()) {
-                    Log.println("**** PARADOX ****");
-                    Log.println(" 	nMovesEvaluated = ", nMovesEvaluated);
-                    Log.println(" 	lastNumMovesEvaluated = ", lastNumMovesEvaluated);
-                    Log.println(" 	nNonMovesEvaluated = ", nNonMovesEvaluated);
-                    Log.println(" 	lastNumNonMovesEvaluated = ", lastNumNonMovesEvaluated);
-                }
+                logger.warn("Paradox detected (nMovesEvaluated: {}, lastNumMovesEvaluated: {}, nNonMovesEvaluated: {}, lastNumNonMovesEvaluated: {})",
+                        nMovesEvaluated,
+                        lastNumMovesEvaluated,
+                        nNonMovesEvaluated,
+                        lastNumNonMovesEvaluated
+                );
 
                 return false;
             }
 
-            // print iteration statistics
-            if (Log.isLogging()) {
-                Log.println("-------- iteration statistics --------");
-                Log.println("    iteration: ", iterations);
-                Log.println("       orders: " + nNonMovesEvaluated + " of " + totalNonMoveOrderCount + " (non-move) evaluated");
-                Log.println("  move orders: " + nMovesEvaluated + " of " + totalMoveOrderCount + " evaluated");
-                Log.println("--------------------------------------");
-            }
+            logger.debug("Iteration: {}", iterations);
+            logger.debug("Orders: {} of {} (non-move) evaluated", nNonMovesEvaluated, totalNonMoveOrderCount);
+            logger.debug("Move orders: {} of {} evaluated", nMovesEvaluated, totalMoveOrderCount);
 
             // set last evaluated, so next iteration can be compared.
             lastNumMovesEvaluated = nMovesEvaluated;
@@ -884,16 +876,10 @@ public class StdAdjudicator implements Adjudicator {
             addResult(new Result(null,
                     Utils.getLocalString(STDADJ_MV_UNRESOLVED_PARADOX, paradoxBreakAttempt)));
 
-            if (Log.isLogging()) {
-                Log.println("paradox: order status:");
-                Log.println("======================");
-
-                for (OrderState os : orderStates) {
-                    Log.println("  > ", os.getOrder(), " ", os.getEvalState());
-                }
-
-                Log.println("======================");
-            }// if(logging)
+            logger.debug("paradox: order status:");
+            for (OrderState os : orderStates) {
+                logger.debug(">{} {} ", os.getOrder(), os.getEvalState());
+            }
 
             isUnRezParadox = true;
             return false;
@@ -919,7 +905,7 @@ public class StdAdjudicator implements Adjudicator {
      */
     private void breakCircularParadox() {
         final int nCircular = markCircularMoves();
-        Log.println(":: circular chains found: ", nCircular);
+        logger.info("Circular chains found: {}", nCircular);
 
         if (nCircular > 0) {
             for (OrderState os : orderStates) {
@@ -955,7 +941,7 @@ public class StdAdjudicator implements Adjudicator {
      */
     private void breakParadoxSzykman() {
         addResult(new Result(null, Utils.getLocalString(STDADJ_MV_SZYKMAN_NOTICE)));
-        Log.println("breakParadoxSzykman(): entered");
+        logger.trace("Applying Szykman Rule to break paradox.");
 
         for (OrderState os : orderStates) {
             if (os.getEvalState() == Tristate.UNCERTAIN
@@ -963,13 +949,13 @@ public class StdAdjudicator implements Adjudicator {
                 Move move = (Move) os.getOrder();
 
                 if (move.isConvoying()) {
-                    Log.println("  checking move: ", move);
+                    logger.debug("Checking move: {}", move);
 
                     for (OrderState itos : getConvoyList(move)) {
 
-                        Log.println("    convoy: ", itos.getOrder(), "  evalstate:", itos.getEvalState());
+                        logger.debug("Convoy: {}, evalState: {}", itos.getOrder(), itos.getEvalState());
                         if (itos.getEvalState() == Tristate.UNCERTAIN) {
-                            Log.println("    *** Syzkman rule applied to this move!!!");
+                            logger.info("*** Syzkman rule applied to this move!!!");
                             os.setEvalState(Tristate.FAILURE);
                             addResult(os, ResultType.FAILURE, Utils.getLocalString(STDADJ_MV_SZYKMAN_MOVE_FAILED));
                             break;
@@ -978,8 +964,8 @@ public class StdAdjudicator implements Adjudicator {
                 }
             }
         }
-        Log.println("breakParadoxSzykman(): exit");
-    }// breakParadoxSzykman()
+        logger.trace("Finished with Szykman Rule.");
+    }
 
 
     /**
@@ -988,7 +974,7 @@ public class StdAdjudicator implements Adjudicator {
      * so that dependencies are minimized.
      */
     protected void verifyOrders() {
-        Log.println("verifying orders...");
+        logger.trace( "verifying orders...");
         int nRemainingToVerify = orderStates.length;
         int nLastVerified = 1;    // reset in while() loop
 
@@ -1014,9 +1000,8 @@ public class StdAdjudicator implements Adjudicator {
         // detect condition where all orders did not verify.
         // this is an error.
         if (nRemainingToVerify > 0) {
-            Log.println("ERROR: StdAdjudicator: incomplete verification.");
-            Log.println("   Orders remaining to verify: ", nRemainingToVerify);
-            Log.println("   Orders last verified: ", nLastVerified);
+            logger.error("StdAdjudicator: incomplete verification. Orders remaining to verify: {}, Orders last verified:",
+                    nRemainingToVerify, nLastVerified);
 
             throw new IllegalStateException("Verification Error");
         }
@@ -1131,11 +1116,7 @@ public class StdAdjudicator implements Adjudicator {
             }
         }
 
-        if (Log.isLogging()) {
-            Log.println("order counts:");
-            Log.println("      moves to evaluate: ", totalMoves);
-            Log.println("  non-moves to evaluate: ", totalNonMoves);
-        }
+        logger.info("Moves to evaluate {}, Non-moves to evaluate: {}", totalMoves, totalNonMoves);
 
         // evaluate the orders in a loop. There should NOT be a paradox here.
         //
@@ -1187,7 +1168,7 @@ public class StdAdjudicator implements Adjudicator {
                 nextPosition.setUnit(destProvince, newUnit);
                 nextPosition.setLastOccupier(destProvince, newUnit.getPower());
 
-                Log.println("  moved: unit from ", os.getSourceProvince(), " to ", destProvince);
+                logger.info("Moved: unit from {} to {}.", os.getSourceProvince(), destProvince);
             }
         }
 

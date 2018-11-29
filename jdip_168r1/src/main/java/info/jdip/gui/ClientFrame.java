@@ -48,7 +48,6 @@ import info.jdip.gui.swing.XJFileChooser;
 import info.jdip.gui.undo.UndoRedoManager;
 import info.jdip.gui.undo.UndoResolve;
 import info.jdip.misc.Help;
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.order.OrderFormatOptions;
 import info.jdip.order.Orderable;
@@ -98,14 +97,13 @@ import static org.slf4j.LoggerFactory.getLogger;
  * <p>
  */
 public class ClientFrame extends JFrame {
-    private static final Logger logger = getLogger(ClientFrame.class);
-
-
-    // public property constants for PropertyChange events
     /**
      * Event indicating that a World object was created
      */
     public static final String EVT_WORLD_CREATED = "EVT_WORLD_CREATED";
+
+
+    // public property constants for PropertyChange events
     /**
      * Event indicating the World was destroyed (!)
      */
@@ -142,12 +140,12 @@ public class ClientFrame extends JFrame {
      * Event indicating that MapMetadata object is ready
      */
     public static final String EVT_MMD_READY = "EVT_MMD_READY";
-
-    // order events
     /**
      * Event indicating an order was created
      */
     public static final String EVT_ORDER_CREATED = "EVT_ORDER_CREATED";
+
+    // order events
     /**
      * Event indicating an order was deleted
      */
@@ -160,23 +158,23 @@ public class ClientFrame extends JFrame {
      * Event indicating multiple orders were deleted (cleared)
      */
     public static final String EVT_MULTIPLE_ORDERS_DELETED = "EVT_MULTIPLE_ORDERS_DELETED";
-
-    // power events
     /**
      * Event indicating the Powers that may be displayed have changed.
      */
     public static final String EVT_DISPLAYABLE_POWERS_CHANGED = "EVT_DISPLAYABLE_POWERS_CHANGED";
+
+    // power events
     /**
      * Event indicating the Powers for which orders may be entered have changed.
      */
     public static final String EVT_ORDERABLE_POWERS_CHANGED = "EVT_ORDERABLE_POWERS_CHANGED";
-
-
-    // modes [for EVT_MODE_CHANGED]
     /**
      * Order Mode: orders may be entered in this mode.
      */
     public static final String MODE_ORDER = "MODE_ORDER";
+
+
+    // modes [for EVT_MODE_CHANGED]
     /**
      * Edit Mode: units/ownership/etc. may be changed in this mode.
      */
@@ -189,7 +187,7 @@ public class ClientFrame extends JFrame {
      * "None" Mode: no World object is active
      */
     public static final String MODE_NONE = "MODE_NONE";
-
+    private static final Logger logger = getLogger(ClientFrame.class);
     // private constants
     private static final String PROGRAM_NAME = Utils.getLocalString("PROGRAM_NAME");
     private static final int VERSION_MAJOR = 1;
@@ -234,16 +232,15 @@ public class ClientFrame extends JFrame {
      */
     public ClientFrame(String args[]) {
         super();
-        long ttime = System.currentTimeMillis();        // total time
-        long dtime = ttime;                                // delta time
-
+        logger.trace("Initializing");
         // parse command-line args
         parseCmdLine(args);
-        dtime = Log.printDelta(dtime, "CF: arg parse time: ");
+        logger.trace("Parsed command line arguments.");
 
-        Log.println("   mem max: ", String.valueOf(Runtime.getRuntime().maxMemory()));
-        Log.println("   mem total: ", String.valueOf(Runtime.getRuntime().totalMemory()));
-        Log.println("   mem free: ", String.valueOf(Runtime.getRuntime().freeMemory()));
+        logger.info("mem max: {}, total: {}, free: {}",
+                Runtime.getRuntime().maxMemory(),
+                Runtime.getRuntime().totalMemory(),
+                Runtime.getRuntime().freeMemory());
 
 
         // set Batik XMLReader based on JAXP XMLReader.
@@ -252,13 +249,13 @@ public class ClientFrame extends JFrame {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             XMLReader xmlReader = factory.newSAXParser().getXMLReader();
             XMLResourceDescriptor.setXMLParserClassName(xmlReader.getClass().getName());
-            Log.println("Batik XMLReader: ", XMLResourceDescriptor.getXMLParserClassName());
+            logger.debug("Batik XMLReader: {}", XMLResourceDescriptor.getXMLParserClassName());
         } catch (Exception e) {
             ErrorDialog.displayFatal(this, e);
         }
 
 
-        Log.println("Applying GUI enhancements: " + applyGUIEnhancements);
+        logger.debug("Applying GUI enhancements: {}", applyGUIEnhancements);
 
         if (applyGUIEnhancements) {
             // setup per-OS options
@@ -300,15 +297,15 @@ public class ClientFrame extends JFrame {
                     // for WebStart compatibility
                     UIManager.put("ClassLoader", com.jgoodies.looks.LookUtils.class.getClassLoader());
                 }
-                Log.println(lafClassName);
+                logger.debug("Look and feel class name: {}",lafClassName);
                 UIManager.setLookAndFeel(lafClassName);
             } catch (Exception e) {
                 // do nothing; swing will load default L&F
-                Log.println(e);
+                logger.info("Could not set look and feel.",e);
             }
         }
 
-        dtime = Log.printDelta(dtime, "CF: LAF setup time: ");
+        logger.trace("LAF setup complete.");
 
         // set exception handler
         GUIExceptionHandler.registerHandler();
@@ -328,12 +325,12 @@ public class ClientFrame extends JFrame {
             variantDirPath = applicationHome.resolve(VARIANT_DIR).toFile();
         }
         File toolDirPath = applicationHome.resolve(TOOL_DIR).toFile();
-        Log.println("Using variant directory: ", variantDirPath);
+        logger.info("Using variant directory: {}", variantDirPath);
 
         // parse variants
         initVariantManager();
 
-        dtime = Log.printDelta(dtime, "CF: variant setup time: ");
+        logger.trace("Variant setup complete.");
 
         // init Tools
         ToolManager.init(new File[]{toolDirPath});
@@ -342,7 +339,7 @@ public class ClientFrame extends JFrame {
         for (Tool tool : tools) {
             tool.setToolProxy(toolProxy);
         }
-        dtime = Log.printDelta(dtime, "CF: tool setup time: ");
+        logger.trace("Tool setup complete.");
 
 
         // set frame icon
@@ -350,12 +347,12 @@ public class ClientFrame extends JFrame {
 
         // init help system
         Help.init();
-        dtime = Log.printDelta(dtime, "CF: help init time: ");
+        logger.trace("Help init complete.");
 
         // setup menu
         clientMenu = new ClientMenu(this);
         setJMenuBar(clientMenu.getJMenuBar());
-        dtime = Log.printDelta(dtime, "CF: menu setup time: ");
+        logger.trace("Menu setup complete.");
 
         // init special filedialog class
         //
@@ -371,7 +368,7 @@ public class ClientFrame extends JFrame {
 
         // persistence (must come after menus are defined)
         persistMan = new PersistenceManager(this);
-        dtime = Log.printDelta(dtime, "CF: PersistenceManager setup time: ");
+        logger.trace("PersistenceManager setup complete.");
 
         // frame listener, handles JFrame close events
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -387,7 +384,7 @@ public class ClientFrame extends JFrame {
 
         // setup drag-and-drop support
         new DropTarget(this, new CFDropTargetListener());
-        dtime = Log.printDelta(dtime, "CF: point A: ");
+        logger.trace("Point A:");
 
         // create default split pane
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false);
@@ -395,23 +392,23 @@ public class ClientFrame extends JFrame {
         splitPane.setVisible(false);
         splitPane.setDividerSize(10);
         splitPane.setResizeWeight(1);
-        dtime = Log.printDelta(dtime, "CF: point B: ");
+        logger.trace("Point B:");
 
         // create statusbar
         statusBar = new StatusBar();
         statusBar.setText(ClientFrame.PROGRAM_NAME + " " + getVersion());
-        dtime = Log.printDelta(dtime, "CF: point c: ");
+        logger.trace("Point C:");
 
         // PhaseSelector
         phaseSel = new PhaseSelector(this);
-        dtime = Log.printDelta(dtime, "CF: point d: ");
+        logger.trace("Point D:");
 
         // add mode listener for this object
         addPropertyChangeListener(new ModeListener());
 
         // set initial mode
         fireChangeMode(MODE_NONE);
-        dtime = Log.printDelta(dtime, "CF: point e: ");
+        logger.trace("Point E:");
 
         // register menu listeners
         MenuHandler mh = new MenuHandler();
@@ -419,7 +416,7 @@ public class ClientFrame extends JFrame {
 
         // get default order formatting options
         orderFormatOptions = DisplayPreferencePanel.getOrderFormatOptions();
-        dtime = Log.printDelta(dtime, "CF: point f: ");
+        logger.trace("Point F:");
 
         // setup layout
         getContentPane().setLayout(new BorderLayout());
@@ -431,9 +428,7 @@ public class ClientFrame extends JFrame {
         fireChangeMode(MODE_NONE);
         toFront();
         splash.destroy();
-        dtime = Log.printDelta(dtime, "CF: frame setup time: ");
-
-        Log.printTimed(ttime, "ClientFrame() startup time: ");
+        logger.trace("Frame setup complete.");
     }// ClientFrame()
 
     /**
@@ -945,9 +940,9 @@ public class ClientFrame extends JFrame {
      */
     public void dbgPrintListeners() {
         PropertyChangeListener[] pcls = getPropertyChangeListeners();
-        System.out.println("ClientFrame listeners: " + pcls.length);
+        logger.debug("ClientFrame listeners: " + pcls.length);
         for (PropertyChangeListener pcl : pcls) {
-            System.out.println("     " + pcl.getClass().getName());
+            logger.debug("Listener : {}", pcl.getClass().getName());
         }
     }// dbgPrintListeners()
 
@@ -1013,7 +1008,7 @@ public class ClientFrame extends JFrame {
         // if Locale has been set, use it.
         if (argLocale.isSet()) {
             Locale locale = new Locale(argLocale.getValue().toLowerCase());
-            System.out.println("Using Language: " + locale.getLanguage() + " [" + locale.getDisplayLanguage() + "]");
+            logger.info("Using Language: {} [{}]",locale.getLanguage(),locale.getDisplayLanguage());
             Utils.loadLocale(locale);
         }
 

@@ -24,6 +24,8 @@ import info.jdip.world.World;
 import info.jdip.world.WorldFactory;
 import info.jdip.world.variant.VariantManager;
 import info.jdip.world.variant.data.Variant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,6 +62,7 @@ import java.util.List;
  * N.B.: note the potential naming conflict between info.jdip.world.Map and java.util.Map.
  */
 public class AIDemo {
+    private static final Logger logger = LoggerFactory.getLogger(AIDemo.class);
     // constants
     /**
      * Directory name where variants are stored
@@ -111,7 +114,7 @@ public class AIDemo {
         } else {
             defaultVariantSearchDir = new File(System.getProperty("user.dir"), VARIANT_DIR);
         }
-        System.out.println("Variant diretory: " + defaultVariantSearchDir);
+        logger.info("Variant diretory: " + defaultVariantSearchDir);
 
         // Parse the variants in the variant directory/directories.
         // if no variants are found, this will display (using a Swing dialog)
@@ -119,7 +122,7 @@ public class AIDemo {
         // we generally do not want to.
         //
         VariantManager.init(new File[]{defaultVariantSearchDir}, false);
-        System.out.println("VariantManager initilization complete.");
+        logger.trace("VariantManager initilization complete.");
 
         // Load the variant (VARIANT_NAME) that we want.
         // Throw an error if it isn't found!
@@ -128,14 +131,14 @@ public class AIDemo {
         if (variant == null) {
             throw new IOException("Cannot find variant " + VARIANT_NAME);
         }
-        System.out.println("Variant " + VARIANT_NAME + " found.");
+        logger.info("Variant " + VARIANT_NAME + " found.");
 
         // Create the World object. The World object contains the a info.jdip.world.Map,
         // which contains Province and Power information, as well as TurnStates,
         // which hold turn and Position information.
         //
         World newWorld = WorldFactory.getInstance().createWorld(variant);
-        System.out.println("World created!");
+        logger.trace("World created!");
 
         // Set the RuleOptions in the World. This sets the RuleOptions to their
         // defaults, which is usually what we want.
@@ -146,44 +149,34 @@ public class AIDemo {
         //
         Map map = newWorld.getMap();
         Power[] powers = map.getPowers();
-        System.out.println("\nPowers in this game:");
-        for (Power power : powers) {
-            System.out.println("  " + power);
-        }
+        logger.info("Powers in this game: {}", (Object) powers);
 
         // how do we get a specific power?
         //
         Power aPower = map.getPower("france");
-        System.out.println("\ngetPower(): " + aPower);
-        System.out.println("People from " + aPower + " are called " + aPower.getAdjective());
+        logger.info("People from {} are called {}.", aPower, aPower.getAdjective());
 
         // what about a province?
         //
         Province prov = map.getProvince("spa");
-        System.out.println("\nProvince testing:");
-        System.out.println("  prov full name: " + prov.getFullName());
-        System.out.println("  prov abbreviation: " + prov.getShortName());
-        System.out.println("  all TOUCHING provinces:");
+        logger.info("Province testing. Full name: {} prov abbreviation: {}", prov.getFullName(), prov.getShortName());
+
         Location[] touchLocs = prov.getAdjacentLocations(Coast.TOUCHING);
-        for (Location touchLoc : touchLocs) {
-            System.out.println("    " + touchLoc.getProvince());
-        }
+        logger.info("All TOUCHING provinces: {}", (Object) touchLocs);
+
 
 
         // what about a Location? (A Location is a Province + a Coast)
         //
         Location loc1 = map.parseLocation("spa/sc");    // South Coast of Spain
         Location loc2 = map.parseLocation("spa/nc");    // North Coast of Spain
-        System.out.println("\nLocation testing:");
-        System.out.println("  " + loc1.toLongString() + " and " + loc2.toLongString());
-        System.out.println("  same location?: " + loc1.equals(loc2));
-        System.out.println("  same province?: " + loc1.isProvinceEqual(loc2));
-        System.out.println("  adjacent? " + loc1.isAdjacent(loc2));
-        System.out.println("  adjacent Locations to " + loc1.toString() + ":");
+        logger.info("Location testing:");
+        logger.info("{} and {}",loc1.toLongString(), loc2.toLongString());
+        logger.info("Same location: {}", loc1.equals(loc2));
+        logger.info("Same province: {}", loc1.isProvinceEqual(loc2));
+        logger.info("Adjacent: {}", loc1.isAdjacent(loc2));
         Location[] adjLocs = loc1.getProvince().getAdjacentLocations(loc1.getCoast());
-        for (Location adjLoc : adjLocs) {
-            System.out.println("    " + adjLoc);
-        }
+        logger.info("Adjacent Locations to {}: {}", (Object) adjLocs);
 
         // a test: the province "spa" and the location "spa/sc" as well as
         // "spa/nc" all share the EXACT SAME Province reference. This is not true
@@ -192,9 +185,9 @@ public class AIDemo {
         //
         // It is always safe to use equals() if you are not sure.
         //
-        System.out.println("\nEqualities:");
-        System.out.println("   loc1 and prov: same province? " + loc1.isProvinceEqual(prov));
-        System.out.println("   loc2 and prov: same province? " + (loc2.getProvince() == prov));    // referential equality!
+        logger.info("Equalities:");
+        logger.info("Loc1 and prov: same province? {}", loc1.isProvinceEqual(prov));
+        logger.info("Loc2 and prov: same province? {}", (loc2.getProvince() == prov));    // referential equality!
 
         return newWorld;
     }// createStandardWorld()
@@ -248,7 +241,7 @@ public class AIDemo {
         u.setCoast(Coast.LAND);
         pos.setUnit(map.getProvince("lvn"), u);
 
-        System.out.println("\nInitial position created.");
+        logger.debug("Initial position created.");
         return pos;
     }// createPosition()
 

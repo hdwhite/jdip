@@ -7,6 +7,8 @@ repositories {
 
 dependencies {
     compile project(':jdip_168r1')
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+
 }
 
 jar {

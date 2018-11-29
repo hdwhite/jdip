@@ -21,7 +21,6 @@
 //
 package info.jdip.order;
 
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.process.Adjudicator;
 import info.jdip.process.OrderState;
@@ -35,12 +34,15 @@ import info.jdip.world.Province;
 import info.jdip.world.RuleOptions;
 import info.jdip.world.TurnState;
 import info.jdip.world.Unit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of the Build order.
  */
 
 public class Build extends Order {
+    private static final Logger logger = LoggerFactory.getLogger(Build.class);
     // il8n constants
     private static final String BUILD_MULTICOAST = "BUILD_MULTICOAST";
     private static final String BUILD_HOME_SUPPLY = "BUILD_HOME_SUPPLY";
@@ -222,8 +224,7 @@ public class Build extends Order {
      * Extra build orders are NOT considered in the evaluate() method here.
      */
     public void evaluate(Adjudicator adjudicator) {
-        Log.println("--- evaluate() info.jdip.order.Build ---");
-        Log.println("   order: ", this);
+        logger.debug("Order: {}", this);
 
         OrderState thisOS = adjudicator.findOrderStateBySrc(getSource());
 

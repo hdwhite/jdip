@@ -30,7 +30,6 @@ import info.jdip.gui.StatusBar;
 import info.jdip.gui.dialog.ErrorDialog;
 import info.jdip.gui.dialog.prefs.GeneralPreferencePanel;
 import info.jdip.gui.map.RenderCommandFactory.RenderCommand;
-import info.jdip.misc.Log;
 import info.jdip.misc.Utils;
 import info.jdip.order.ValidationOptions;
 import info.jdip.world.Position;
@@ -53,6 +52,8 @@ import org.apache.batik.swing.svg.GVTTreeBuilderEvent;
 import org.apache.batik.swing.svg.SVGDocumentLoaderAdapter;
 import org.apache.batik.swing.svg.SVGDocumentLoaderEvent;
 import org.apache.batik.util.XMLResourceDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.svg.SVGDocument;
 
@@ -78,6 +79,7 @@ import java.net.URL;
  * <p>
  */
 public class MapPanel extends JPanel {
+    private static final Logger logger = LoggerFactory.getLogger(MapPanel.class);
     /**
      * Default cursor
      */
@@ -237,7 +239,7 @@ public class MapPanel extends JPanel {
         super(new BorderLayout());
 
         startTime = System.currentTimeMillis();
-        Log.printTimed(startTime, "MapPanel() constructor start.");
+        logger.trace("Construction started.");
 
         this.clientFrame = clientFrame;
         this.statusBar = clientFrame.getStatusBar();
@@ -278,7 +280,7 @@ public class MapPanel extends JPanel {
         // setup default controlbar
         setControlBar(null);
 
-        Log.printTimed(startTime, "MapPanel() constructor end.");
+        logger.trace("Construction finished.");
     }// MapPanel()
 
 
@@ -286,7 +288,7 @@ public class MapPanel extends JPanel {
      * Set the SVG Document from XML Document
      */
     private void setDocument(Document xmlDoc, Variant variant) {
-        Log.println("MP: setDocument()");
+        logger.trace( "MP: setDocument()");
 
         // setup private loader-listeners
         gvtRenderListener = new MP_GVTRenderListener();
@@ -325,7 +327,7 @@ public class MapPanel extends JPanel {
             omd.setURLObject(VariantManager.getVariantPackageJarURL(variant));
         } else {
             // shouldn't happen.
-            Log.println("ERROR: MapPanel::setDocument(): object model replacement? SVGOMDocument not found. URI not set.");
+            logger.warn( "Object model replacement? SVGOMDocument not found. URI not set.");
         }
     }// setDocument()
 
@@ -443,7 +445,7 @@ public class MapPanel extends JPanel {
      * Sets View or Order control bar, as appropriate, based on the mode
      */
     private void setControlBar() {
-        Log.println("MP::setControlBar())");
+        logger.trace( "MP::setControlBar())");
         ControlBar cb = null;
 
         if (turnState == null) {
@@ -582,8 +584,7 @@ public class MapPanel extends JPanel {
             world = null;
             turnState = null;
         } catch (Exception e) {
-            Log.println("MapPanel::close() exception...");
-            Log.println(e);
+            logger.error( "Exception releasing resources...", e);
         }
     }// close()
 
@@ -734,7 +735,7 @@ public class MapPanel extends JPanel {
         private boolean loaded = false;
 
         public void gvtRenderingStarted(GVTTreeRendererEvent e) {
-            Log.printTimed(startTime, "MapPanel() GVTRender start.");
+            logger.trace("GVTRender start.");
             if (!loaded) {
                 statusBar.incPBValue();
                 statusBar.setText(Utils.getLocalString(GVT_RENDER_STARTED));
@@ -742,7 +743,7 @@ public class MapPanel extends JPanel {
         }// gvtRenderingStarted()
 
         public void gvtRenderingCompleted(GVTTreeRendererEvent e) {
-            Log.printTimed(startTime, "MapPanel() GVTRender completing...");
+            logger.trace("GVTRender completing...");
             if (!loaded) {
                 statusBar.incPBValue();
                 statusBar.setText(Utils.getLocalString(GVT_RENDER_EXTRACTING));
@@ -822,7 +823,7 @@ public class MapPanel extends JPanel {
                 statusBar.setText(Utils.getLocalString(GVT_RENDER_COMPLETED));
                 //svgCanvas.removeGVTTreeRendererListener(this);
                 statusBar.hidePB();
-                Log.printTimed(startTime, "MapPanel() GVTRender completed.");
+                logger.trace("GVTRender completed.");
             }
             loaded = true;
         }// gvtRenderingCompleted()
@@ -834,19 +835,20 @@ public class MapPanel extends JPanel {
      */
     private class MP_DocumentListener extends SVGDocumentLoaderAdapter {
         public void documentLoadingStarted(SVGDocumentLoaderEvent e) {
-            Log.printTimed(startTime, "MapPanel() DocumentLoad started.");
+            logger.debug("DocumentLoad started.");
             clientFrame.getClientMenu().setViewRenderItemsEnabled(false);
             statusBar.incPBValue();
             //statusBar.setText(Utils.getLocalString(DOC_LOAD_STARTED));
         }// documentLoadingStarted()
 
         public void documentLoadingFailed(SVGDocumentLoaderEvent e) {
+            logger.error("DocumentLoad failed.");
             statusBar.setText(Utils.getLocalString(DOC_LOAD_FAILED));
             statusBar.hidePB();
         }// documentLoadingFailed()
 
         public void documentLoadingCompleted(SVGDocumentLoaderEvent e) {
-            Log.printTimed(startTime, "MapPanel() DocumentLoad completed.");
+            logger.debug("DocumentLoad completed.");
             statusBar.incPBValue();
             statusBar.setText(Utils.getLocalString(DOC_LOAD_COMPLETED));
             svgCanvas.removeSVGDocumentLoaderListener(this);
@@ -858,18 +860,19 @@ public class MapPanel extends JPanel {
      */
     private class MP_GVTTreeBuilderListener extends GVTTreeBuilderAdapter {
         public void gvtBuildStarted(GVTTreeBuilderEvent e) {
-            Log.printTimed(startTime, "MapPanel() GVTTreeBuild completed.");
+            logger.debug("GVTTreeBuild completed.");
             statusBar.incPBValue();
             statusBar.setText(Utils.getLocalString(GVT_BUILD_STARTED));
         }// documentLoadingStarted()
 
         public void gvtBuildFailed(GVTTreeBuilderEvent e) {
+            logger.error("GVTTreeBuild failed.");
             statusBar.setText(Utils.getLocalString(GVT_BUILD_FAILED));
             statusBar.hidePB();
         }// documentLoadingFailed()
 
         public void gvtBuildCompleted(GVTTreeBuilderEvent e) {
-            Log.printTimed(startTime, "MapPanel() GVTTreeBuild completed.");
+            logger.debug("GVTTreeBuild completed.");
             statusBar.incPBValue();
             statusBar.setText(Utils.getLocalString(GVT_BUILD_COMPLETED));
             svgCanvas.removeGVTTreeBuilderListener(this);

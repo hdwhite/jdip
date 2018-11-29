@@ -32,9 +32,9 @@ import info.jdip.gui.map.MapRenderer2;
 import info.jdip.gui.swing.AssocJComboBox;
 import info.jdip.gui.swing.XJFileChooser;
 import info.jdip.misc.LRUCache;
-import info.jdip.misc.Log;
 import info.jdip.misc.SharedPrefs;
 import info.jdip.misc.Utils;
+import org.slf4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,6 +48,8 @@ import java.util.Map;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * General preferences.
  * <p>
@@ -55,6 +57,8 @@ import java.util.prefs.Preferences;
  * functionality.
  */
 public class GeneralPreferencePanel extends PreferencePanel {
+    private static final Logger logger = getLogger(GeneralPreferencePanel.class);
+
     // constants
     public static final int BORDER = 10;
 
@@ -470,7 +474,7 @@ public class GeneralPreferencePanel extends PreferencePanel {
         if (text != null) {
             file = new File(text);
             if (!file.isDirectory()) {
-                Log.println("GPP.getVariantDir(): not a directory : ", text);
+                logger.debug("Location {} is not a directory", text);
                 return null;
             }
         }

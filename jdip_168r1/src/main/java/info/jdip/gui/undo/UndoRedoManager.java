@@ -25,7 +25,8 @@ package info.jdip.gui.undo;
 import info.jdip.gui.ClientFrame;
 import info.jdip.gui.ClientMenu;
 import info.jdip.gui.OrderDisplayPanel;
-import info.jdip.misc.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
@@ -38,6 +39,7 @@ import java.util.ListIterator;
  * This is not a singleton.
  */
 public class UndoRedoManager extends UndoManager {
+    private static final Logger logger = LoggerFactory.getLogger(UndoRedoManager.class);
     // the max number of undo/redo events we can hold
     private static final int MAX_UNDOS = 1000;
 
@@ -116,18 +118,6 @@ public class UndoRedoManager extends UndoManager {
     }// undoOrRedo()
 
     /**
-     * For debugging: lists edits.
-     */
-    public void dumpEdits() {
-        if (Log.isLogging()) {
-            Log.println("UndoRedoManager: " + edits.size() + " edits");
-            for (int i = 0; i < edits.size(); i++) {
-                Log.println("  " + i + ": " + edits.get(i));
-            }
-        }
-    }// dumpEdits()
-
-    /**
      * Returns the OrderDisplayPanel associated with this UndoRedo manager.
      */
     public synchronized OrderDisplayPanel getOrderDisplayPanel() {
@@ -189,7 +179,7 @@ public class UndoRedoManager extends UndoManager {
      * but cannot undo or see another power's moves.
      */
     public synchronized void filterF2F() {
-        Log.println("UndoRedoManager::filterF2F()");
+        logger.trace( "UndoRedoManager::filterF2F()");
 
         ListIterator listIter = edits.listIterator(edits.size());
 
@@ -209,7 +199,7 @@ public class UndoRedoManager extends UndoManager {
         }
 
         // trim the edits (trimEdits() does nothing if from > to)
-        Log.println("  trimEdits(): ", String.valueOf(from), "->", String.valueOf(edits.size() - 1));
+        logger.debug("Trimming edits from {} to {}", from, (edits.size() - 1));
         trimEdits(from, edits.size() - 1);
         refreshMenu();
     }// filterF2F()
@@ -226,7 +216,7 @@ public class UndoRedoManager extends UndoManager {
      * the game.
      */
     public synchronized void simplify() {
-        Log.println("UndoRedoManager::simplify()");
+        logger.trace( "UndoRedoManager::simplify()");
 
         //dumpEdits();
 
@@ -265,7 +255,7 @@ public class UndoRedoManager extends UndoManager {
         }
 
         // trim the edits (trimEdits() does nothing if from > to)
-        Log.println("  trimEdits(): ", String.valueOf(from), "->", String.valueOf(to));
+        logger.debug("Trimming edits from {} to {} ", from, to);
         trimEdits(from, to);
         refreshMenu();
     }// simplify()

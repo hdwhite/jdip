@@ -23,6 +23,8 @@
 package info.jdip.gui.dialog;
 
 import info.jdip.misc.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -46,6 +48,7 @@ import java.util.Iterator;
  * TODO: get (on windows) ".lnk" file targets so shortcuts work correctly.
  */
 public abstract class FileDropTargetListener extends DropTargetAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(FileDropTargetListener.class);
 
     public void drop(DropTargetDropEvent dtde) {
         if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
@@ -76,7 +79,7 @@ public abstract class FileDropTargetListener extends DropTargetAdapter {
                 }
             } catch (UnsupportedFlavorException | IOException e) {
                 // fail silently
-                System.out.println(e);
+                logger.warn("There was a problem when accepting file",e);
             }
         }
 

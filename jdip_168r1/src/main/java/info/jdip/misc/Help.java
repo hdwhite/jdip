@@ -23,6 +23,8 @@
 package info.jdip.misc;
 
 import info.jdip.gui.swing.SwingWorker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
@@ -34,6 +36,7 @@ import java.net.URL;
  * help to GUI elements.
  */
 public class Help {
+    private static final Logger logger = LoggerFactory.getLogger(Help.class);
     private static final String HELP_FILE_NAME = "help/applicationhelp.hs";
     private static HKeeper hk = null;
     private static SwingWorker loaderThread = null;
@@ -53,24 +56,24 @@ public class Help {
     public synchronized static void init() {
         loaderThread = new SwingWorker() {
             public Object construct() {
-                long time = System.currentTimeMillis();
+                logger.debug("Constructing Help.");
                 HKeeper keeper = new HKeeper();
 
                 try {
                     final String helpFileName = Utils.getResourceBasePrefix() + HELP_FILE_NAME;
 
                     URL url = HelpSet.findHelpSet(Utils.getClassLoader(), helpFileName, Utils.getLocale());
-                    Log.println("HelpSet URL: ", url);
+                    logger.debug("HelpSet URL: {}", url);
                     keeper.helpSet = new HelpSet(null, url);
                 } catch (Exception e) {
-                    Log.println("Help not available: ", e);
+                    logger.warn("Help not available: ", e);
                     //ErrorDialog.displaySerious(null, e);
                     return null;
                 }
 
                 keeper.helpBroker = keeper.helpSet.createHelpBroker("main_help_window");
                 keeper.helpBroker.initPresentation();
-                Log.printTimed(time, "Help construct() complete: ");
+                logger.debug("Help construction complete.");
                 return keeper;
             }// construct()
         };

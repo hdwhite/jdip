@@ -22,12 +22,12 @@
 //
 package info.jdip.gui.map;
 
-import info.jdip.misc.Log;
 import info.jdip.world.Coast;
 import info.jdip.world.Power;
 import info.jdip.world.Province;
 import info.jdip.world.variant.data.Symbol;
 import info.jdip.world.variant.data.SymbolPack;
+import org.slf4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -37,6 +37,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 
 /**
  * Extracts map information, and SVG Elements, from the SVG file.
@@ -44,6 +46,7 @@ import java.util.StringTokenizer;
  * <p>
  */
 public class MapMetadata {
+    private static final Logger logger = getLogger(MapMetadata.class);
     /**
      * jDip namespace constant
      */
@@ -584,7 +587,7 @@ public class MapMetadata {
                             new Point2D.Float(0, 0),
                             new Point2D.Float(0, 0));
                     infoMap.put(province, ie);
-                    Log.println("MMD: added empty entry for province ", province);
+                    logger.debug("Added empty entry for province: {}", province);
                 } else {
                     throw new MapException("Missing PROVINCE placement information for province: " + province);
                 }

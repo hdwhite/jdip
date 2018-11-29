@@ -22,6 +22,9 @@
 //
 package info.jdip.gui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -98,6 +101,7 @@ import java.util.StringTokenizer;
  * </pre>
  */
 public class HTMLFormat {
+    private static final Logger logger = LoggerFactory.getLogger(HTMLFormat.class);
     //
     private static final String VAR_PREFIX = "@@";
 
@@ -224,14 +228,14 @@ public class HTMLFormat {
         try {
             objs = (Object[]) map.get(key);
         } catch (ClassCastException e) {
-            System.err.println("ERROR: HTMLFormat: value for key \"" + key + "\" not an array.");
+            logger.error("Value for key {} is not an array.", key);
             return;
         }
 
         if (index.length() > 0) {
             sb.append(objs[parseOrLookupInt(index)]);
         } else {
-            System.err.println("ERROR: HTMLFormat: invalid index given for array value key \"" + key + "\"");
+            logger.error("Invalid index given for array value key {}.", key);
         }
     }// replaceArray()
 
@@ -251,7 +255,7 @@ public class HTMLFormat {
         if (st.hasMoreTokens()) {
             tok0 = st.nextToken();
         } else {
-            System.err.println("HTMLFormat: for: loop without start/end parameters!");
+            logger.error("Loop without start/end parameters!");
             return;
         }
 
@@ -268,7 +272,7 @@ public class HTMLFormat {
                 start = 0;
                 end = objs.length;
             } catch (ClassCastException e) {
-                System.err.println("ERROR: HTMLFormat: for: parameter \"" + tok0 + "\" is not an array!");
+                logger.error("Parameter {} is not an array.", tok0);
                 return;
             }
         } else {
@@ -305,7 +309,7 @@ public class HTMLFormat {
         try {
             return Integer.parseInt(text);
         } catch (NumberFormatException e) {
-            System.err.println("HTMLFormat: could not parse \"" + text + "\" as Integer");
+            logger.error("Could not parse {} as an Integer", text);
         }
 
         return 0;
@@ -320,7 +324,7 @@ public class HTMLFormat {
             }
         }
 
-        System.err.println("HTMLFormat: could not parse key \"" + key + "\" as Integer");
+        logger.error("Could not parse key {} as an Integer", key);
         return 0;
     }// parseIntegerFromMap()
 

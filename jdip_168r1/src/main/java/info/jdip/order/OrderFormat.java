@@ -21,12 +21,13 @@
 //
 package info.jdip.order;
 
-import info.jdip.misc.Log;
 import info.jdip.world.Coast;
 import info.jdip.world.Location;
 import info.jdip.world.Power;
 import info.jdip.world.Province;
 import info.jdip.world.Unit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.StringTokenizer;
 
@@ -104,6 +105,7 @@ import java.util.StringTokenizer;
  * by OrderFormatOptions.
  */
 public class OrderFormat {
+    private static final Logger logger = LoggerFactory.getLogger(OrderFormat.class);
 
 
     // keywords
@@ -457,7 +459,7 @@ public class OrderFormat {
             final String[] tokens = text.split(":", 3);
 
             if (tokens.length == 0) {
-                Log.println("OrderFormat: cannot parse: {", text, "}");
+                logger.warn("Cannot parse: {}", text);
                 return EMPTY;
             }
 
@@ -532,15 +534,13 @@ public class OrderFormat {
             try {
                 return cls.getMethod(name.substring(0, name.length() - 2)).invoke(order);
             } catch (Exception e) {
-                Log.println("OrderFormat::getViaReflection() cannot reflect method \"", name, "\"");
-                Log.println("OrderFormat::getViaReflection() exception details:\n", e);
+                logger.warn("Cannot reflect method {}", name, e);
             }
         } else {
             try {
                 return cls.getDeclaredField(name).get(order);
             } catch (Exception e) {
-                Log.println("OrderFormat::getViaReflection() cannot reflect field \"", name, "\"");
-                Log.println("OrderFormat::getViaReflection() exception details:\n", e);
+                logger.warn("Cannot reflect field {}", name, e);;
             }
         }
 

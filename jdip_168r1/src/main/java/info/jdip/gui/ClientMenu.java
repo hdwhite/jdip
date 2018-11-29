@@ -30,6 +30,8 @@ import info.jdip.tool.Tool;
 import info.jdip.tool.ToolManager;
 import info.jdip.world.Power;
 import info.jdip.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -125,10 +127,10 @@ public class ClientMenu {
     public static final Item REPORTS_MAP_INFO = new Item("REPORTS_MAP_INFO");
     // Help menu
     public static final Item HELP_ABOUT = new Item("HELP_ABOUT");
-
     // Tools menu
     // NOTE: Items are created by the Tools themselves
     public static final Item HELP_CONTENTS = new Item("HELP_CONTENTS");
+    private static final Logger logger = LoggerFactory.getLogger(ClientMenu.class);
     private static final String BLANK_ICON = "resource/common/icons/16x16/blank.gif";
     // View:Orders submenu
     private static final Item VIEW_ORDERS_ALLPOWERS = new Item("VIEW_ORDERS_ALLPOWERS");
@@ -878,10 +880,7 @@ public class ClientMenu {
     public void setActionMethod(Item item, Object target, String methodName) {
         // disallow null args
         if (target == null || methodName == null || item == null) {
-            System.err.println("setActionMethod()");
-            System.err.println("  item: " + item);
-            System.err.println("  target: " + target);
-            System.err.println("  methodName: " + methodName);
+            logger.error("Some arguments are null... item: {}, target: {}, methodName: {}", item, target, methodName);
             throw new IllegalArgumentException("Null argument(s)");
         }
 
@@ -1113,10 +1112,7 @@ public class ClientMenu {
          * debugging
          */
         private void debugOut(Exception e) {
-            System.out.println("ReflexiveActionListener:");
-            System.out.println("   target: " + target);
-            System.out.println("   targetMethod: " + targetMethod);
-            System.out.println("   cause: " + e.getCause());
+            logger.debug("ReflexiveActionListener target: {} targetMethod: {} cause: {}",target,targetMethod, e.getCause());
         }
     }// inner class ReflexiveActionListener
 

@@ -26,7 +26,6 @@ import info.jdip.gui.AbstractCFPListener;
 import info.jdip.gui.ClientFrame;
 import info.jdip.gui.map.RenderCommandFactory.RenderCommand;
 import info.jdip.gui.order.GUIOrder;
-import info.jdip.misc.Log;
 import info.jdip.order.Orderable;
 import info.jdip.world.Location;
 import info.jdip.world.Power;
@@ -34,6 +33,8 @@ import info.jdip.world.TurnState;
 import info.jdip.world.Unit;
 import org.apache.batik.swing.JSVGCanvas;
 import org.apache.batik.util.RunnableQueue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.svg.SVGDocument;
 
 import java.util.Iterator;
@@ -46,6 +47,7 @@ import java.util.LinkedList;
  * <code>renderQueue</code> object.
  */
 public abstract class MapRenderer2 {
+    private static final Logger logger = LoggerFactory.getLogger(MapRenderer2.class);
 
     // constant key values for getRenderSetting()
     //
@@ -112,7 +114,7 @@ public abstract class MapRenderer2 {
      * JSVGCanvas and SVGDocument of MapPanel <b>must not be null</b>
      */
     public MapRenderer2(MapPanel mp) {
-        Log.printTimed(mp.startTime, "MR2 constructor start");
+        logger.trace("MR2 constructor start");
         mapPanel = mp;
 
         svgCanvas = mapPanel.getJSVGCanvas();
@@ -123,7 +125,7 @@ public abstract class MapRenderer2 {
 
         tempQueue = new LinkedList<>();
 
-        Log.printTimed(mp.startTime, "MR2 constructor end");
+        logger.trace("MR2 constructor end");
     }// MapRenderer()
 
     /**
@@ -168,7 +170,7 @@ public abstract class MapRenderer2 {
             }
         }
 
-        Log.println("MR2::getRunnableQueue(): RQ null ... exiting?");
+        logger.trace( "RQ null ... exiting?");
         return null;
     }// getRunnableQueue()
 
@@ -188,13 +190,12 @@ public abstract class MapRenderer2 {
 
             // dequeue pending events
             isReady = true;
-            Log.println("MR2:execRenderCommand(): first RCSetTurnstate: ", rc);
+            logger.debug("First RCSetTurnstate: {}", rc);
             clearAndExecute(rc, null);
 
             // dequeue pending events, if any
             if (!tempQueue.isEmpty()) {
-                Log.println("MR2::execRenderCommand(): removing pending events from queue. size: ",
-                        String.valueOf(tempQueue.size()));
+                logger.debug("Removing pending events from queue. size: {}", tempQueue.size());
 
                 RunnableQueue rq = getRunnableQueue();
                 if (rq != null) {
@@ -208,14 +209,14 @@ public abstract class MapRenderer2 {
         } else if (isReady) {
             // a RCSetTurnstate() has been issued. We can accept render events.
             // if we have queued events, add them.
-            Log.println("MR2::execRenderCommand(): adding to RunnableQueue: ", rc);
+            logger.debug("Adding to RunnableQueue: {}", rc);
             RunnableQueue rq = getRunnableQueue();
             if (rq != null) {
                 rq.invokeLater(rc);
             }
         } else {
             // we are not yet ready -- add the rendering events to a temporary queue.
-            Log.println("MR2::execRenderCommand(): adding to tempQueue: ", rc);
+            logger.debug("Adding to tempQueue: {}", rc);
             tempQueue.add(rc);
         }
     }// execRenderCommand()
@@ -279,7 +280,7 @@ public abstract class MapRenderer2 {
      * Adds the given commands (or none, if null) to the queue.
      */
     protected void clearAndExecute(RenderCommand rc1, RenderCommand rc2) {
-        Log.println("MR2::clearAndExecute()");
+        logger.trace( "MR2::clearAndExecute()");
 
         RunnableQueue rq = getRunnableQueue();
         if (rq != null) {
@@ -289,7 +290,7 @@ public abstract class MapRenderer2 {
                 while (iter.hasNext()) {
                     Object obj = iter.next();
                     if (obj instanceof RenderCommand) {
-                        Log.println("   killing: ", obj);
+                        logger.debug("Killing: {}", obj);
                         ((RenderCommand) obj).die();
                     }
                 }

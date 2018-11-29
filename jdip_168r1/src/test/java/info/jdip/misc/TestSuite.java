@@ -297,12 +297,12 @@ public final class TestSuite {
         try {
             n = Integer.parseInt(s);
         } catch (NumberFormatException e) {
-            System.err.println("ERROR: invalid argument: " + in);
+            logger.error("Invalid argument: {}", in);
             printUsageAndExit();
         }
 
         if (n <= 0) {
-            System.err.println("Benchmark repitition out of range; must be greater than 0");
+            logger.error("Benchmark repetition out of range; must be greater than 0");
             printUsageAndExit();
         }
 

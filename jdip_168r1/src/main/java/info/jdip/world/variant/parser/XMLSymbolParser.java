@@ -22,11 +22,12 @@
 //
 package info.jdip.world.variant.parser;
 
-import info.jdip.misc.Log;
 import info.jdip.misc.XMLUtils;
 import info.jdip.world.variant.VariantManager;
 import info.jdip.world.variant.data.Symbol;
 import info.jdip.world.variant.data.SymbolPack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -54,6 +55,7 @@ import java.util.Map;
  * Parses a SymbolPack description.
  */
 public class XMLSymbolParser implements SymbolParser {
+    private static final Logger logger = LoggerFactory.getLogger(XMLSymbolParser.class);
     // Element constants
     public static final String EL_SYMBOLS = "SYMBOLS";
     public static final String EL_DESCRIPTION = "DESCRIPTION";
@@ -107,13 +109,12 @@ public class XMLSymbolParser implements SymbolParser {
      */
     public synchronized void parse(InputStream is, URL symbolPackURL)
             throws IOException, SAXException {
-        Log.println("XMLSymbolParser: Parsing: ", symbolPackURL);
-        long time = System.currentTimeMillis();
+        logger.debug("Parsing: {}", symbolPackURL);
         symbolPack = null;
         this.symbolPackURL = symbolPackURL;
         doc = docBuilder.parse(is);
         procSymbolData();
-        Log.printTimed(time, "    time: ");
+        logger.trace("Parsing finished.");
     }// parse()
 
 

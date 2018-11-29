@@ -21,13 +21,15 @@
 //
 package info.jdip.order;
 
-import info.jdip.misc.Log;
+import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * This object controls, in detail, how orders are formatted.
@@ -48,6 +50,8 @@ import java.io.IOException;
  * <p>
  */
 public class OrderFormatOptions implements Cloneable {
+    private static final Logger logger = getLogger(OrderFormatOptions.class);
+
 
     // constants
     //
@@ -338,7 +342,7 @@ public class OrderFormatOptions implements Cloneable {
 
             d.close();
         } catch (IOException e) {
-            Log.println("OrderFormatOptions::decode() error\n", e);
+            logger.error("OrderFormatOptions error", e);
         }
 
         return defaultOptions;
@@ -651,8 +655,8 @@ public class OrderFormatOptions implements Cloneable {
         try {
             return super.clone();
         } catch (CloneNotSupportedException e) {
-            Log.println("OrderFormat::clone() error: ", e);
-            throw new IllegalStateException();
+            logger.error("There was a problem with cloning", e);
+            throw new RuntimeException(e);
         }
     }
 }// class OrderFormatOptions
