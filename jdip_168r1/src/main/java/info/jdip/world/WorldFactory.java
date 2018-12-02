@@ -94,7 +94,7 @@ public class WorldFactory {
             throw new IllegalArgumentException();
         }
 
-        logger.debug( "WorldFactory.createWorld(): {}", variant.getName());
+        logger.info("Creating world for the variant: {} - {} (aliases: {})", variant.getName(),variant.getVersion(),(Object) variant.getAliases());
 
         List<Province> provinces = new ArrayList<>(100);
         HashMap<String, Province> provNameMap = new HashMap<>();    // mapping of names->provinces
