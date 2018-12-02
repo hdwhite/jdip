@@ -56,7 +56,8 @@ public class Help {
     public synchronized static void init() {
         loaderThread = new SwingWorker() {
             public Object construct() {
-                logger.debug("Constructing Help.");
+                Thread.currentThread().setName("HelpWorker");
+                logger.trace("Constructing Help.");
                 HKeeper keeper = new HKeeper();
 
                 try {
@@ -73,7 +74,7 @@ public class Help {
 
                 keeper.helpBroker = keeper.helpSet.createHelpBroker("main_help_window");
                 keeper.helpBroker.initPresentation();
-                logger.debug("Help construction complete.");
+                logger.trace("Help construction complete.");
                 return keeper;
             }// construct()
         };

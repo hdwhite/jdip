@@ -296,7 +296,7 @@ public class OrderParser {
         Map map = turnState.getWorld().getMap();
         String preText = preprocess(text, map);
 
-        logger.debug("Input: {}, preprocessed: {}", text, preText);
+        logger.debug("Input order: {}", preText);
 
         return parse(preText, position, map, power, turnState, orderFactory, locked, guess);
     }// parse()

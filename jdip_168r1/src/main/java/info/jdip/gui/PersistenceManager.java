@@ -173,7 +173,7 @@ public class PersistenceManager {
 
             final Thread[] pendingThreads = new Thread[activeCount];
             final int actualCount = persistTG.enumerate(pendingThreads);
-            logger.debug("Actual threads pending: ", actualCount);
+            logger.debug("Actual threads pending: {}", actualCount);
 
             for (Thread pendingThread : pendingThreads) {
                 if (pendingThread.isAlive()) {

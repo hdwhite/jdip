@@ -860,7 +860,7 @@ public class MapPanel extends JPanel {
      */
     private class MP_GVTTreeBuilderListener extends GVTTreeBuilderAdapter {
         public void gvtBuildStarted(GVTTreeBuilderEvent e) {
-            logger.debug("GVTTreeBuild completed.");
+            logger.trace("GVTTreeBuild completed.");
             statusBar.incPBValue();
             statusBar.setText(Utils.getLocalString(GVT_BUILD_STARTED));
         }// documentLoadingStarted()
@@ -872,7 +872,7 @@ public class MapPanel extends JPanel {
         }// documentLoadingFailed()
 
         public void gvtBuildCompleted(GVTTreeBuilderEvent e) {
-            logger.debug("GVTTreeBuild completed.");
+            logger.trace("GVTTreeBuild completed.");
             statusBar.incPBValue();
             statusBar.setText(Utils.getLocalString(GVT_BUILD_COMPLETED));
             svgCanvas.removeGVTTreeBuilderListener(this);

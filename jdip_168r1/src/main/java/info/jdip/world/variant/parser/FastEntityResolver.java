@@ -64,7 +64,7 @@ public class FastEntityResolver implements EntityResolver {
     public InputSource resolveEntity(String publicID, String systemID) {
         if (!isValidating) {
             // log the request
-            logger.info("XML:Entity resolution ignored: {};{}", publicID, systemID);
+            logger.debug("XML:Entity resolution ignored: {};{}", publicID, systemID);
 
             // return an empty InputSource
             InputSource is = new InputSource(new StringReader(""));
