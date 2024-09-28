@@ -40,6 +40,9 @@
 <PROVINCES>
 		<!-- name, abbreviation, and adjacency data for all provinces -->
 		<!-- virtually identical to Judge format -->
+		<PROVINCE shortname="swi" fullname="Switzerland">
+			<ADJACENCY type="mv" refs="swi" />
+		</PROVINCE>
 		<PROVINCE shortname="adr" fullname="Adriatic Sea">
 			<ADJACENCY type="xc" refs="alb apu ven tri ion" />
 		</PROVINCE>

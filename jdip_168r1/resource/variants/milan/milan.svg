@@ -182,10 +182,10 @@
 			<jdipNS:POWERCOLOR power="austria" color="red" />
 			<jdipNS:POWERCOLOR power="england" color="blue" />
 			<jdipNS:POWERCOLOR power="france" color="deepskyblue" />
-			<jdipNS:POWERCOLOR power="germany" color="gray" />
-			<jdipNS:POWERCOLOR power="italy" color="olive" />
-			<jdipNS:POWERCOLOR power="russia" color="white" />
-			<jdipNS:POWERCOLOR power="turkey" color="yellow" />
+			<jdipNS:POWERCOLOR power="germany" color="dimgrey" />
+			<jdipNS:POWERCOLOR power="italy" color="#608000" />
+			<jdipNS:POWERCOLOR power="russia" color="gainsboro" />
+			<jdipNS:POWERCOLOR power="turkey" color="darkgoldenrod" />
 			<!-- crowded variant colors -->
 			<jdipNS:POWERCOLOR power="balkan" color="#36E600" />
 			<jdipNS:POWERCOLOR power="lowland" color="#E67700" />
@@ -269,7 +269,7 @@
 		<jdipNS:PROVINCE name="por"><jdipNS:UNIT x="193 " y="1023"/><jdipNS:DISLODGED_UNIT x="180.5 " y="1010.5"/><jdipNS:SUPPLY_CENTER x="151 " y="1060"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="pru"><jdipNS:UNIT x="877 " y="700"/><jdipNS:DISLODGED_UNIT x="864.5 " y="687.5"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="rom"><jdipNS:UNIT x="700.4" y="1052.6"/><jdipNS:DISLODGED_UNIT x="690" y="1038.3"/><jdipNS:SUPPLY_CENTER x="719" y="1087"/></jdipNS:PROVINCE>
- 		<jdipNS:PROVINCE name="ruh"><jdipNS:UNIT x="648 " y="789"/><jdipNS:DISLODGED_UNIT x="635.5 " y="776.5"/></jdipNS:PROVINCE>
+ 		<jdipNS:PROVINCE name="ruh"><jdipNS:UNIT x="648 " y="789"/><jdipNS:DISLODGED_UNIT x="635.5 " y="776.5"/><jdipNS:SUPPLY_CENTER x="637" y="767"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="rum"><jdipNS:UNIT x="1108" y="977"/><jdipNS:DISLODGED_UNIT x="1095.5" y="964.5"/><jdipNS:SUPPLY_CENTER x="1083" y="1014"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="sav"><jdipNS:UNIT x="634.1" y="972"/><jdipNS:DISLODGED_UNIT x="623.7" y="981.1"/></jdipNS:PROVINCE>
 		<jdipNS:PROVINCE name="ser"><jdipNS:UNIT x="945 " y="1060"/><jdipNS:DISLODGED_UNIT x="932.5 " y="1047.5"/><jdipNS:SUPPLY_CENTER x="936 " y="1021"/></jdipNS:PROVINCE>
@@ -335,18 +335,18 @@
 		
 		/* default region coloring, by power */
 		
-		.nopower 	{fill:antiquewhite;		stroke:#000000;stroke-width:1}
+		.nopower 	{fill:wheat;			stroke:#000000;stroke-width:1}
 		.water		{fill:lightblue;		stroke:#000000;stroke-width:1}
 		
-		.neutral	{fill:lightgray;		stroke:#000000;stroke-width:1}
+		.neutral	{fill:darkgray;			stroke:#000000;stroke-width:1}
 
 		.austria 	{fill:indianred;		stroke:#000000;stroke-width:1}
 		.england 	{fill:mediumslateblue;	stroke:#000000;stroke-width:1}
 		.france 	{fill:skyblue;			stroke:#000000;stroke-width:1}
 		.germany 	{fill:dimgray;			stroke:#000000;stroke-width:1}
 		.italy 		{fill:olivedrab;		stroke:#000000;stroke-width:1}
-		.russia 	{fill:whitesmoke;		stroke:#000000;stroke-width:1}
-		.turkey 	{fill:gold;				stroke:#000000;stroke-width:1}
+		.russia 	{fill:lightgrey;		stroke:#000000;stroke-width:1}
+		.turkey 	{fill:goldenrod;		stroke:#000000;stroke-width:1}
 		
 		/* unit colors, by power note that underscores are not supported */
 		
@@ -354,9 +354,9 @@
 		.unitengland 	{fill:blue;			fill-opacity:0.85}
 		.unitfrance 	{fill:deepskyblue;	fill-opacity:0.85}
 		.unitgermany 	{fill:dimgray;		fill-opacity:0.85}
-		.unititaly 		{fill:olive;		fill-opacity:0.85}
-		.unitrussia 	{fill:white;		fill-opacity:1.0}
-		.unitturkey 	{fill:yellow;		fill-opacity:0.85}
+		.unititaly 		{fill:#608000;		fill-opacity:0.85}
+		.unitrussia 	{fill:gainsboro;	fill-opacity:1.0}
+		.unitturkey 	{fill:darkgoldenrod;	fill-opacity:0.85}
 		
 		/* supply center styles */
 		

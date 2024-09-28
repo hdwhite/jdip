@@ -178,10 +178,10 @@
 			<jdipNS:POWERCOLOR power="austria" color="red"/>
 			<jdipNS:POWERCOLOR power="england" color="blue"/>
 			<jdipNS:POWERCOLOR power="france" color="deepskyblue"/>
-			<jdipNS:POWERCOLOR power="germany" color="gray"/>
-			<jdipNS:POWERCOLOR power="italy" color="olive"/>
-			<jdipNS:POWERCOLOR power="russia" color="white"/>
-			<jdipNS:POWERCOLOR power="turkey" color="yellow"/>
+			<jdipNS:POWERCOLOR power="germany" color="dimgrey"/>
+			<jdipNS:POWERCOLOR power="italy" color="#608000"/>
+			<jdipNS:POWERCOLOR power="russia" color="gainsboro"/>
+			<jdipNS:POWERCOLOR power="turkey" color="darkgoldenrod"/>
 			<jdipNS:POWERCOLOR power="norway" color="#E600E3"/>
 			<jdipNS:POWERCOLOR power="spain" color="#529A70"/>
 		</jdipNS:POWERCOLORS>
@@ -557,18 +557,18 @@
 		
 		/* default region coloring, by power */
 		
-		.nopower 	{fill:antiquewhite;		stroke:#000000;stroke-width:1}
+		.nopower 	{fill:wheat;			stroke:#000000;stroke-width:1}
 		.water		{fill:lightblue;		stroke:#000000;stroke-width:1}
 		
-		.neutral	{fill:lightgray;		stroke:#000000;stroke-width:1}
+		.neutral	{fill:darkgray;			stroke:#000000;stroke-width:1}
 
 		.austria 	{fill:indianred;		stroke:#000000;stroke-width:1}
 		.england 	{fill:mediumslateblue;	stroke:#000000;stroke-width:1}
 		.france 	{fill:skyblue;			stroke:#000000;stroke-width:1}
 		.germany 	{fill:dimgray;			stroke:#000000;stroke-width:1}
 		.italy 		{fill:olivedrab;		stroke:#000000;stroke-width:1}
-		.russia 	{fill:whitesmoke;		stroke:#000000;stroke-width:1}
-		.turkey 	{fill:gold;				stroke:#000000;stroke-width:1}
+		.russia 	{fill:lightgrey;		stroke:#000000;stroke-width:1}
+		.turkey 	{fill:goldenrod;		stroke:#000000;stroke-width:1}
 		.norway 	{fill:#E600E3;fill-opacity:0.65;stroke:#000000;stroke-width:1}
 		.spain 		{fill:#529A70;fill-opacity:0.65;stroke:#000000;stroke-width:1}
 		
@@ -578,11 +578,11 @@
 		.unitengland 	{fill:blue;			fill-opacity:0.85}
 		.unitfrance 	{fill:deepskyblue;	fill-opacity:0.85}
 		.unitgermany 	{fill:dimgray;		fill-opacity:0.85}
-		.unititaly 		{fill:olive;		fill-opacity:0.85}
-		.unitrussia 	{fill:white;		fill-opacity:1.0}
-		.unitturkey 	{fill:yellow;		fill-opacity:0.85}
-		.unitnorway		{fill:#E600E3;fill-opacity:0.85}
-		.unitspain		{fill:#529A70;fill-opacity:0.85}
+		.unititaly 		{fill:#608000;		fill-opacity:0.85}
+		.unitrussia 	{fill:gainsboro;	fill-opacity:1.0}
+		.unitturkey 	{fill:darkgoldenrod;	fill-opacity:0.85}
+		.unitnorway		{fill:#E600E3;		fill-opacity:0.85}
+		.unitspain		{fill:#529A70;		fill-opacity:0.85}
 		
 		/* supply center styles */
 		
@@ -595,8 +595,8 @@
 		.scitaly 	{fill:black;stroke:black;}
 		.scrussia	{fill:black;stroke:black;}
 		.scturkey	{fill:black;stroke:black;}
-		.scnorway		{fill:black;stroke:black;} 
-		.scspain		{fill:black;stroke:black;} 
+		.scnorway	{fill:black;stroke:black;} 
+		.scspain	{fill:black;stroke:black;} 
 		
 		/* order drawing styles, stroke and fill colors should not be specified */
 		

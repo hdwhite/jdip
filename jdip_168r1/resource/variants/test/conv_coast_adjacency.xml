@@ -43,6 +43,9 @@
 		<!-- The areas Denmark and Sweden are made convoyable coasts. -->
 		<!-- Berlin and Denmark are connected for fleets. -->
 		<!-- That means that fleets can move from Berlin to Denmark and vice versa, but armies cannot -->
+		<PROVINCE shortname="swi" fullname="Switzerland">
+			<ADJACENCY type="mv" refs="swi" />
+		</PROVINCE>
 		<PROVINCE shortname="adr" fullname="Adriatic Sea">
 			<ADJACENCY type="xc" refs="alb apu ven tri ion" />
 		</PROVINCE>
