@@ -233,7 +233,7 @@ public class MapConvert
 	*	Get the java.util.Map of ProvObj objects. These are mapped
 	*	by the (lowercased) first shortname of the ProvObj. Umodifiable.
 	*/
-	public Map getProvObjMap()
+	public Map<String, ProvObj> getProvObjMap()
 	{
 		return pmap.getMap();
 	}// getProvObjMap()
@@ -255,10 +255,10 @@ public class MapConvert
 		// create a link to itself
 		// example: variant: loeb9, Ireland
 		//
-		Iterator iter = provList.iterator();
+		Iterator<ProvObj> iter = provList.iterator();
 		while(iter.hasNext())
 		{
-			((ProvObj) iter.next()).fixAdjacency();
+			iter.next().fixAdjacency();
 		}
 		
 		// STEP 4: actually write out province data
@@ -268,7 +268,7 @@ public class MapConvert
 		iter = provList.iterator();
 		while(iter.hasNext())
 		{
-			sb.append( ((ProvObj) iter.next()).toXML() );
+			sb.append(iter.next().toXML());
 		}
 	}// makeXMLData()
 
@@ -305,10 +305,10 @@ public class MapConvert
 				//
                 HashMap<String, Boolean> borderMap = new HashMap<>();
 
-				Iterator iter = provinces.iterator();
+				Iterator<ProvObj> iter = provinces.iterator();
 				while(iter.hasNext())
 				{
-					ProvObj po = (ProvObj) iter.next();
+					ProvObj po = iter.next();
 					if(po.hasMX())
 					{
 						for (String provinceName : po.getMXProvs()) {
@@ -334,7 +334,7 @@ public class MapConvert
 	
 	
 	
-	private void makeVariantXMLFile(List provList, File adjacencyFile)
+	private void makeVariantXMLFile(List<ProvObj> provList, File adjacencyFile)
 	throws IOException
 	{
 		final ClassLoader cl = this.getClass().getClassLoader();
@@ -360,7 +360,7 @@ public class MapConvert
 	}// makeVariantFile()
 
 
-    private void makeVariantXMLTemplateData(HashMap<String, String> td, List provList, File adjacencyFile)
+    private void makeVariantXMLTemplateData(HashMap<String, String> td, List<ProvObj> provList, File adjacencyFile)
 	{
 		// DEFAULT unknown data
 		td.put("mapTitle", UNKNOWN_DATA);
@@ -391,11 +391,11 @@ public class MapConvert
 		// powers
 		// these are derived from the chars
 		StringBuffer sb = new StringBuffer();
-		Iterator iter = provList.iterator();
+		Iterator<ProvObj> iter = provList.iterator();
         HashMap<String, Boolean> powerMap = new HashMap<>();
 		while(iter.hasNext())
 		{
-			ProvObj po = (ProvObj) iter.next();
+			ProvObj po = iter.next();
 			final String homeSCPower = po.getHomeSC();
 			if(homeSCPower != null)
 			{
@@ -418,7 +418,7 @@ public class MapConvert
 		iter = provList.iterator();
 		while(iter.hasNext())
 		{
-			ProvObj po = (ProvObj) iter.next();
+			ProvObj po = iter.next();
 			
 			if(po.isNeutralSC())
 			{
@@ -520,7 +520,7 @@ public class MapConvert
 		*	Returns the Map of province names.
 		*	Unmodifiable.
 		*/
-		public Map getMap()
+		public Map<String, ProvObj> getMap()
 		{
 			return Collections.unmodifiableMap(map);
 		}

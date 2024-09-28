@@ -145,7 +145,7 @@ public class OrderFormat {
      * For null values, when debugging, print the word "null"
      * followed by the type (indicated by cls).
      */
-    private static String handleNull(Class cls) {
+    private static String handleNull(Class<?> cls) {
         assert (cls != null);
         StringBuilder sb = new StringBuilder(64);
         sb.append("null(");

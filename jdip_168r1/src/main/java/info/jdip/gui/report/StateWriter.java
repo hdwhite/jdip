@@ -83,7 +83,7 @@ public class StateWriter {
     private final Power[] displayablePowers;
     private final TurnState turnState;
     private final Power[] allPowers;
-    private final java.util.Map powerMap;
+    private final java.util.Map<Power, List<String>> powerMap;
     private final Adjustment.AdjustmentInfoMap adjMap;
     private final OrderFormatOptions ofo;
 
@@ -200,7 +200,7 @@ public class StateWriter {
 
             // determine the maximum number of rows we will have (not including
             // the power name)
-            List list = (List) powerMap.get(allPowers[i]);
+            List<String> list = powerMap.get(allPowers[i]);
             if (list.size() > nRows) {
                 nRows = list.size();
             }
@@ -219,7 +219,7 @@ public class StateWriter {
                     sb.append("<td>");
                 }
 
-                List list = (List) powerMap.get(allPowers[j]);
+                List<String> list = powerMap.get(allPowers[j]);
                 if (i < list.size()) {
                     sb.append(list.get(i));
                 }
@@ -478,7 +478,7 @@ public class StateWriter {
      * Dislodged units are underlined. Abbreviations
      * for province names are always used.
      */
-    private java.util.Map getUnitsByPower() {
+    private java.util.Map<Power, List<String>> getUnitsByPower() {
         java.util.Map<Power, List<String>> pmap = new HashMap<>();
         for (Power power : allPowers) {
             pmap.put(power, new LinkedList<>());

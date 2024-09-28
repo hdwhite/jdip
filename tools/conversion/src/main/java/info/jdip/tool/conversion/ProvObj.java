@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /** Province object */
-class ProvObj implements Comparable
+class ProvObj implements Comparable<ProvObj>
 {
 	public static final String BORDER_NAME_PREFIX = "mxFrom";
 	
@@ -215,14 +215,9 @@ class ProvObj implements Comparable
 	}
 	
 	/** Comparable implementation */
-	public int compareTo(Object obj) 
+	public int compareTo(ProvObj obj) 
 	{
-		if(obj instanceof ProvObj)
-		{
-			return fullName.compareTo( ((ProvObj) obj).fullName );
-		}
-		
-		throw new IllegalArgumentException();
+		return fullName.compareTo(obj.fullName);
 	}// compareTo()
 	
 	

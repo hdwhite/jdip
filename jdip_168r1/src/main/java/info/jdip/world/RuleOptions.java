@@ -137,7 +137,7 @@ public class RuleOptions implements Serializable {
         }
 
         // this class
-        Class clazz = ruleOpts.getClass();
+        Class<?> clazz = ruleOpts.getClass();
 
         // look up all name-value pairs via reflection.
         Variant.NameValuePair[] nvps = variant.getRuleOptionNVPs();

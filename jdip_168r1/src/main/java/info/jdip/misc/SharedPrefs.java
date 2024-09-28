@@ -45,7 +45,7 @@ import java.util.prefs.Preferences;
 public class SharedPrefs {
     private static final Logger logger = LoggerFactory.getLogger(SharedPrefs.class);
     // the class we want to be the root node.
-    private static Class sharedRootNodeClass = null;
+    private static Class<?> sharedRootNodeClass = null;
 
     static {  //TODO: We should move this static block into a method
         try {

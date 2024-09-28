@@ -674,7 +674,7 @@ public class TestParser {
      * A bunch of DefineState orders used to set unit positions
      * for subsequent order processing.
      */
-    private void setupPositions(List nonDislodged, List dislodged) {
+    private void setupPositions(List<String> nonDislodged, List<String> dislodged) {
         assert (nonDislodged != null);
         assert (dislodged != null);
         assert (turnState != null);
@@ -682,9 +682,9 @@ public class TestParser {
         Position pos = turnState.getPosition();
 
         int count = 0;
-        Iterator iter = nonDislodged.iterator();
+        Iterator<String> iter = nonDislodged.iterator();
         while (iter.hasNext()) {
-            String line = (String) iter.next();
+            String line = iter.next();
             DefineState ds = parseDSOrder(line.trim());
             Unit unit = new Unit(ds.getPower(), ds.getSourceUnitType());
             unit.setCoast(ds.getSource().getCoast());
@@ -697,7 +697,7 @@ public class TestParser {
         count = 0;
         iter = dislodged.iterator();
         while (iter.hasNext()) {
-            String line = (String) iter.next();
+            String line = iter.next();
             DefineState ds = parseDSOrder(line.trim());
             Unit unit = new Unit(ds.getPower(), ds.getSourceUnitType());
             unit.setCoast(ds.getSource().getCoast());
@@ -718,8 +718,8 @@ public class TestParser {
             List<String> accum = null;
             cases = new ArrayList<>(200);
             ORPair currentCase = null;
-            List posList = null;
-            List dislodgedPosList = null;
+            List<String> posList = null;
+            List<String> dislodgedPosList = null;
 
             lnr = new LineNumberReader(new BufferedReader(new FileReader(caseFile)));
             String line = lnr.readLine();

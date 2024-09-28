@@ -31,7 +31,7 @@ import javax.swing.undo.CannotUndoException;
 /**
  * UndoAddOrder is created any time an order is entered.
  */
-public class UndoAddOrder extends XAbstractUndoableEdit implements java.io.Serializable {
+public class UndoAddOrder extends XAbstractUndoableEdit {
     // instance variables
     private final Orderable order;
 

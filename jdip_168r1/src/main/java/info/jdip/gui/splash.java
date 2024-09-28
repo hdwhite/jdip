@@ -79,8 +79,8 @@ public final class splash {
         // successfully compile this class with 1.1 and the rest with 1.4
         // hence the loose coupling.
         try {
-            Class cf = Class.forName("info.jdip.gui.ClientFrame");
-            @SuppressWarnings("unchecked") Method m = cf.getMethod("main", String[].class);
+            Class<?> cf = Class.forName("info.jdip.gui.ClientFrame");
+            Method m = cf.getMethod("main", String[].class);
             Object[] params = new Object[]{args};
             m.invoke(null, params);
             //time = (System.currentTimeMillis() - time);

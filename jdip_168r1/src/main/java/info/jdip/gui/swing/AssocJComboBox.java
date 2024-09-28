@@ -143,10 +143,10 @@ public class AssocJComboBox extends JComboBox<AssocJComboBox.AssociatedObj> {
      * returns null.
      */
     private AssociatedObj getDefaultAO() {
-        ComboBoxModel model = getModel();
+        ComboBoxModel<AssociatedObj> model = getModel();
         final int len = model.getSize();
         for (int i = 0; i < len; i++) {
-            AssociatedObj ao = (AssociatedObj) model.getElementAt(i);
+            AssociatedObj ao = model.getElementAt(i);
             if (ao.isDefault()) {
                 return ao;
             }
@@ -165,10 +165,10 @@ public class AssocJComboBox extends JComboBox<AssocJComboBox.AssociatedObj> {
         if (value instanceof AssociatedObj) {
             return (AssociatedObj) value;
         } else if (value != null) {
-            ComboBoxModel model = getModel();
+            ComboBoxModel<AssociatedObj> model = getModel();
             final int len = model.getSize();
             for (int i = 0; i < len; i++) {
-                AssociatedObj ao = (AssociatedObj) model.getElementAt(i);
+                AssociatedObj ao = model.getElementAt(i);
                 if (value.equals(ao.getValue()) ||
                         value.equals(ao.getDisplay())) {
                     return ao;

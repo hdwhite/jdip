@@ -185,7 +185,7 @@ public class XMLSymbolParser implements SymbolParser {
     /**
      * Parse the symbol data into Symbols and SymbolPacks
      */
-    private void procAndAddSymbolSVG(SymbolPack symbolPack, HashMap scaleMap)
+    private void procAndAddSymbolSVG(SymbolPack symbolPack, HashMap<String, Float> scaleMap)
             throws IOException, SAXException {
         Document svgDoc = null;
 
@@ -237,7 +237,7 @@ public class XMLSymbolParser implements SymbolParser {
         // iterate over hashmap finding all symbols with IDs
         for (Map.Entry<String, Node> me : map.entrySet()) {
             final String name = me.getKey();
-            final Float scale = (Float) scaleMap.get(name);
+            final Float scale = scaleMap.get(name);
             list.add(new Symbol(
                     name,
                     (scale == null) ? Symbol.IDENTITY_SCALE : scale,

@@ -36,7 +36,7 @@ import javax.swing.undo.CompoundEdit;
  * there are multiple edits, then it will just display "Clear Selected".
  */
 
-public class UndoClearSelected extends CompoundEdit implements java.io.Serializable {
+public class UndoClearSelected extends CompoundEdit {
     private final static String PRESENTATION_NAME = "Undo.order.clearselected";
 
     public UndoClearSelected() {

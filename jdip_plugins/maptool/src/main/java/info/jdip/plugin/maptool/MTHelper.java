@@ -54,7 +54,7 @@ public class MTHelper {
     final static Point2D.Float ORIGIN = new Point2D.Float(0, 0);
     final static DecimalFormat df = new DecimalFormat("0.#");
 
-    final java.util.Map textMap;
+    final java.util.Map<String, String> textMap;
     final ClientFrame clientFrame;
     final World world;
     final info.jdip.world.Map worldMap;
@@ -83,7 +83,7 @@ public class MTHelper {
         position = turnState.getPosition();
         doc = mapPanel.getSVGDocument();
 
-        textMap = new HashMap(119);
+        textMap = new HashMap<String, String>(119);
         dmr2 = (DefaultMapRenderer2) mapPanel.getMapRenderer();
     }// info.jdip.plugin.maptool.MTHelper()
 

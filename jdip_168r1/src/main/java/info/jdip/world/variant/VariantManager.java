@@ -187,6 +187,7 @@ public class VariantManager {
                     // replaced with same-name newer versioned variants
                     for (Variant variant : variants) {
                         addVariant(variant, pluginName, pluginURL);
+                    urlCL.close();
                     }
                 } catch (IOException e) {
                     // display error dialog
@@ -200,7 +201,7 @@ public class VariantManager {
 
 
         // if we are in webstart, search for variants within webstart jars
-        Enumeration enm = null;
+        Enumeration<URL> enm = null;
         ClassLoader cl = null;
 
         if (vm.isInWebstart) {
@@ -214,7 +215,7 @@ public class VariantManager {
 
             if (enm != null) {
                 while (enm.hasMoreElements()) {
-                    URL variantURL = (URL) enm.nextElement();
+                    URL variantURL = enm.nextElement();
 
                     // parse variant description file, and create hash entry of variant object -> URL
 
@@ -276,6 +277,7 @@ public class VariantManager {
                 try (InputStream is = new BufferedInputStream(symbolXMLURL.openStream())) {
                     symbolParser.parse(is, pluginURL);
                     addSymbolPack(symbolParser.getSymbolPack(), pluginName, pluginURL);
+                    urlCL.close();
                 } catch (IOException e) {
                     // display error dialog
                     ErrorDialog.displayFileIO(null, e, pluginURL.toString());
@@ -734,7 +736,7 @@ public class VariantManager {
         ClassLoader cl = vm.getClass().getClassLoader();
 
         if (mro != null) {
-            Enumeration enm = null;
+            Enumeration<URL> enm = null;
 
             try {
                 enm = cl.getResources(uri.toString());
@@ -743,7 +745,7 @@ public class VariantManager {
             }
 
             while (enm.hasMoreElements()) {
-                URL url = (URL) enm.nextElement();
+                URL url = enm.nextElement();
 
                 // deconflict. Note that this is not, and cannot be, foolproof;
                 // due to name-mangling by webstart. For example, if two plugins
@@ -786,7 +788,7 @@ public class VariantManager {
         ClassLoader cl = vm.getClass().getClassLoader();
         String deconflictName = getWSPluginName(packURL);
 
-        Enumeration enm = null;
+        Enumeration<URL> enm = null;
 
         try {
             enm = cl.getResources(uri.toString());
@@ -795,7 +797,7 @@ public class VariantManager {
         }
 
         while (enm.hasMoreElements()) {
-            URL url = (URL) enm.nextElement();
+            URL url = enm.nextElement();
 
             // deconflict. Note that this is not, and cannot be, foolproof;
             // due to name-mangling by webstart. For example, if two plugins

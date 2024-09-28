@@ -38,7 +38,7 @@ import java.util.StringTokenizer;
  * PhaseType and SeasonType objects may be compared with referential equality.
  * (For example, "Phase.getSeasonType() == SeasonType.SPRING")
  */
-public class Phase implements java.io.Serializable, Comparable {
+public class Phase implements java.io.Serializable, Comparable<Phase> {
     // internal constants: describes ordering of phases
     // Setup is independent of this ordering.
     // ordering: (for a given year)
@@ -166,8 +166,7 @@ public class Phase implements java.io.Serializable, Comparable {
      * positive integer depending if the given Phase is less than, equal, or
      * greater than (temporally) to this Phase.
      */
-    public int compareTo(Object obj) {
-        Phase phase = (Phase) obj;
+    public int compareTo(Phase phase) {
         int result = 0;
 
         // year is dominant
@@ -361,7 +360,7 @@ public class Phase implements java.io.Serializable, Comparable {
      * <p>
      * SeasonType constants should be used, rather than creating new SeasonType objects.
      */
-    public static class SeasonType implements Serializable, Comparable {
+    public static class SeasonType implements Serializable, Comparable<SeasonType> {
         // always-accepted english constants for SeasonTypes
         protected static final String CONST_SPRING = "SPRING";
         protected static final String CONST_FALL = "FALL";
@@ -453,8 +452,7 @@ public class Phase implements java.io.Serializable, Comparable {
          * <p>
          * Fall always follows Spring.
          */
-        public int compareTo(Object obj) {
-            SeasonType st = (SeasonType) obj;
+        public int compareTo(SeasonType st) {
             return (position - st.position);
         }// compareTo()
 
@@ -560,7 +558,7 @@ public class Phase implements java.io.Serializable, Comparable {
      * <p>
      * PhaseType constants should be used instead of creating new PhaseType objects.
      */
-    public static class PhaseType implements Serializable, Comparable {
+    public static class PhaseType implements Serializable, Comparable<PhaseType> {
         // always-accepted english constants for phase types
         // these MUST be in lower case
         protected static final String CONST_ADJUSTMENT = "adjustment";
@@ -658,8 +656,7 @@ public class Phase implements java.io.Serializable, Comparable {
         /**
          * Temporally compares PhaseType objects
          */
-        public int compareTo(Object obj) {
-            PhaseType pt = (PhaseType) obj;
+        public int compareTo(PhaseType pt) {
             return (position - pt.position);
         }// compareTo()
 
@@ -770,7 +767,7 @@ public class Phase implements java.io.Serializable, Comparable {
      * <p>
      * A YearType is an immutable object.
      */
-    public static class YearType implements Serializable, Comparable {
+    public static class YearType implements Serializable, Comparable<YearType> {
         // instance fields
         protected final int year;
 
@@ -838,8 +835,8 @@ public class Phase implements java.io.Serializable, Comparable {
         /**
          * Temporally compares YearType objects
          */
-        public int compareTo(Object obj) {
-            return (year - ((YearType) obj).year);
+        public int compareTo(YearType yt) {
+            return (year - yt.year);
         }// compareTo()
 
 

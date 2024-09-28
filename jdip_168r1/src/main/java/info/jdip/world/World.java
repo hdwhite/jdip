@@ -225,12 +225,12 @@ public class World implements Serializable {
         }
 
         Phase next = null;
-        Iterator iter = turnStates.keySet().iterator();
+        Iterator<Phase> iter = turnStates.keySet().iterator();
         while (iter.hasNext()) {
-            Phase phase = (Phase) iter.next();
+            Phase phase = iter.next();
             if (current.compareTo(phase) == 0) {
                 if (iter.hasNext()) {
-                    next = (Phase) iter.next();
+                    next = iter.next();
                 }
 
                 break;

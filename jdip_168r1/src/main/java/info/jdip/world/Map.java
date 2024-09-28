@@ -192,9 +192,9 @@ public class Map implements Serializable {
 
         // 2) check for a unique partial match
         //
-        List list = findPartialPowerMatch(powerName);
+        List<Power> list = findPartialPowerMatch(powerName);
         if (list.size() == 1) {
-            return (Power) list.get(0);
+            return list.get(0);
         }
 
         // 3) perform a Levenshtein match against power names.
@@ -250,9 +250,9 @@ public class Map implements Serializable {
         // if there are multiple equivalent matches (ties), without a clear winner,
         // return null.
         if (powerName.length() >= 4) {
-            List list = findPartialPowerMatch(powerName);
+            List<Power> list = findPartialPowerMatch(powerName);
             if (list.size() == 1) {
-                return (Power) list.get(0);
+                return list.get(0);
             }
         }
 
@@ -335,9 +335,9 @@ public class Map implements Serializable {
         // If we tie, return no match. This is a 'partial first match'
         // This is tried BEFORE we try Levenshtein
         //
-        List list = findPartialProvinceMatch(input);
+        List<Province> list = findPartialProvinceMatch(input);
         if (list.size() == 1) {
-            return (Province) list.get(0);
+            return list.get(0);
         }
 
         // tie list. Use a Set so that we get no dupes

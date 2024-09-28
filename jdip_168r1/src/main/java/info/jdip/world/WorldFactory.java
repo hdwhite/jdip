@@ -392,7 +392,7 @@ public class WorldFactory {
      * bul/ec would then be linked to con/ec, bla/ec, rum/ec which
      * do not even exist.
      */
-    private Location makeLocation(HashMap provNameMap, String name, Coast theDefaultCoast)
+    private Location makeLocation(HashMap<String, Province> provNameMap, String name, Coast theDefaultCoast)
             throws InvalidWorldException {
         Coast defaultCoast = theDefaultCoast;
 
@@ -411,7 +411,7 @@ public class WorldFactory {
         }
 
         // name lookup
-        Province province = (Province) provNameMap.get(provinceName.toLowerCase());
+        Province province = provNameMap.get(provinceName.toLowerCase());
         if (province == null) {
             throw new InvalidWorldException(Utils.getLocalString(WF_ADJ_BAD_PROVINCE,
                     name, provinceName, defaultCoast));
@@ -433,7 +433,7 @@ public class WorldFactory {
      * This will return null if there are no border locations, instead of
      * a zero-length array.
      */
-    private Location[] makeBorderLocations(String in, HashMap provNameMap)
+    private Location[] makeBorderLocations(String in, HashMap<String, Province> provNameMap)
             throws InvalidWorldException {
         ArrayList<Location> al = new ArrayList<>(6);
 
@@ -442,7 +442,7 @@ public class WorldFactory {
             String tok = st.nextToken();
 
             Coast coast = Coast.parse(tok);
-            Province province = (Province) provNameMap.get(Coast.getProvinceName(tok).toLowerCase());
+            Province province = provNameMap.get(Coast.getProvinceName(tok).toLowerCase());
             if (province == null) {
                 throw new InvalidWorldException(Utils.getLocalString(WF_BAD_BORDER_LOCATION, tok));
             }
@@ -459,7 +459,7 @@ public class WorldFactory {
 
 
     // verify all names are unique. (hasn't yet been added to the map)
-    private boolean isUnique(HashMap provNameMap, String fullname, String[] shortnames) {
+    private boolean isUnique(HashMap<String, Province> provNameMap, String fullname, String[] shortnames) {
         if (provNameMap.get(fullname.toLowerCase()) != null) {
             return false;
         }

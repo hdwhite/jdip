@@ -200,11 +200,11 @@ public class RPConvert
 		int winningSC = variant.getWinningSCCount();
 		if(winningSC == 0)
 		{
-			Iterator iter = mc.getProvObjList().iterator();
+			Iterator<ProvObj> iter = mc.getProvObjList().iterator();
 			int scCount = 0;
 			while(iter.hasNext())
 			{
-				ProvObj po = (ProvObj) iter.next();
+				ProvObj po = iter.next();
 				if(po.isSC())
 				{
 					scCount++;
@@ -535,7 +535,7 @@ public class RPConvert
 			}
 			catch(Exception e)
 			{
-				if(lnr != null)
+				if(lnr == null)
 				{
 					throw new IOException(e.getMessage());
 				}
@@ -659,7 +659,7 @@ public class RPConvert
 			}
 			catch(Exception e)
 			{
-				if(lnr != null)
+				if(lnr == null)
 				{
 					throw new IOException(e.getMessage());
 				}

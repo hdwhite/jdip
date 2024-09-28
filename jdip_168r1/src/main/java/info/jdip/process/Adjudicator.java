@@ -115,7 +115,7 @@ public interface Adjudicator {
      * note that this will <b>not</b> contain 'null' substitutions (e.g.,
      * no order was specified, and a Hold order was automatically generated).
      */
-    List getSubstitutedOrderStates();
+    List<OrderState> getSubstitutedOrderStates();
 
     //
     //	Result-adding methods

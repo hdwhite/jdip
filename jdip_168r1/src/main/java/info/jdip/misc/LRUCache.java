@@ -49,7 +49,7 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
     /**
      * Override to enable elimination of oldest entries
      */
-    protected boolean removeEldestEntry(Map.Entry eldest) {
+    protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
         return (size() > maxsize);
     }// removeEldestEntry()
 

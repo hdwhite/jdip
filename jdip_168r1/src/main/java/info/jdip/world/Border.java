@@ -129,7 +129,7 @@ public class Border implements Serializable {
     private final Phase.PhaseType[] phases;        // if null, applies to all phases
     private final Unit.Type[] unitTypes;    // if null, applies to all unit types
     private final String description; // description
-    private final Class[] orderClasses;    // if null, applies to all order types
+    private final Class<?>[] orderClasses;    // if null, applies to all order types
     // not determinants in canTransit()
     private final int baseMoveModifier;    // support modifier (defaults to 0)
     private final String id;            // identifying name
@@ -353,9 +353,9 @@ public class Border implements Serializable {
     /**
      * Parses the order types
      */
-    private Class[] parseOrders(String in)
+    private Class<?>[] parseOrders(String in)
             throws InvalidBorderException {
-        final Class[] classes = parseClasses2Objs(in);
+        final Class<?>[] classes = parseClasses2Objs(in);
 
         if (classes.length == 0) {
             return null;
@@ -368,10 +368,10 @@ public class Border implements Serializable {
     /**
      * Internal parser helper method
      */
-    private Class[] parseClasses2Objs(String in)
+    private Class<?>[] parseClasses2Objs(String in)
             throws InvalidBorderException {
 
-        ArrayList<Class> list = new ArrayList<>(10);
+        ArrayList<Class<?>> list = new ArrayList<>(10);
         StringTokenizer st = new StringTokenizer(in, ", ");
         while (st.hasMoreTokens()) {
             String tok = st.nextToken();
@@ -434,7 +434,7 @@ public class Border implements Serializable {
      * <p>
      * Null arguments are not permitted.
      */
-    public boolean canTransit(Location fromLoc, Unit.Type unit, Phase phase, Class orderClass) {
+    public boolean canTransit(Location fromLoc, Unit.Type unit, Phase phase, Class<?> orderClass) {
 		/*
 		System.out.println("border: "+id);
 		System.out.println("  "+fromLoc.getProvince()+":"+fromLoc.getCoast()+", "+phase);
@@ -471,7 +471,7 @@ public class Border implements Serializable {
             // check order
             if (orderClasses != null) {
                 nResults++;
-                for (Class orderClass1 : orderClasses) {
+                for (Class<?> orderClass1 : orderClasses) {
                     if (orderClass == orderClass1) {
                         failResults++;
                         break;

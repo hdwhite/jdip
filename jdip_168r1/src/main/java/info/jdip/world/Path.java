@@ -468,7 +468,7 @@ public class Path {
      * <li>the evaluation state of the Convoy order must not be Tristate.FAILURE</li>
      * </ol>
      */
-    public List getLegalConvoyRoute(Location src, Location dest) {
+    public List<Location> getLegalConvoyRoute(Location src, Location dest) {
         List<Location> path = new ArrayList<>(12);
         PathEvaluator pe = new LegalConvoyPathEvaluator(src, dest);
         findPathBreadthFirst(src, dest, src, path, pe);
@@ -604,9 +604,9 @@ public class Path {
         // Step 5: We have one or more possible routes to check.
         // If we find that a route is invalid, we will remove it
         // from adjacency list.
-        Iterator iter = adjLocs.iterator();
+        Iterator<Location> iter = adjLocs.iterator();
         while (iter.hasNext()) {
-            Location location = (Location) iter.next();
+            Location location = iter.next();
 
             if (path.contains(location)) {
                 // if adjacent province already in the path, we are going

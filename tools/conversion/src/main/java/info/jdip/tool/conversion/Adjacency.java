@@ -131,7 +131,7 @@ class Adjacency
 		sb.append(getLoc().getCoastType());
 		sb.append("\" refs=\"");
 		
-		Iterator iter = getAdjLocs().iterator();
+		Iterator<Loc> iter = getAdjLocs().iterator();
 		while(iter.hasNext())
 		{
 			sb.append( iter.next() );

@@ -383,7 +383,7 @@ public class AIDemo {
      * successful and (if adjudicator statistical reporting is enabled) the
      * attack:defense statistics involved).
      */
-    private void evaluateOrders(World world, Position position, List[] orderSets) {
+    private void evaluateOrders(World world, Position position, List<Order>[] orderSets) {
 		/*
 			we will evaluate by finding the BEST order that takes the sc
 			(first check via hasUnit())

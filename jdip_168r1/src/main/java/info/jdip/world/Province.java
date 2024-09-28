@@ -389,7 +389,7 @@ public class Province implements java.io.Serializable, Comparable<Province> {
     /**
      * Checks if unit can transit from a Location to this Province.
      */
-    public boolean canTransit(Location fromLoc, Unit.Type unit, Phase phase, Class orderClass) {
+    public boolean canTransit(Location fromLoc, Unit.Type unit, Phase phase, Class<?> orderClass) {
         return (getTransit(fromLoc, unit, phase, orderClass) == null);
     }// canTransit()
 
@@ -404,7 +404,7 @@ public class Province implements java.io.Serializable, Comparable<Province> {
      * Checks if unit can transit from a Location to this Province. Returns the first
      * failing Border order; returns null if Transit is successfull.
      */
-    public Border getTransit(Location fromLoc, Unit.Type unit, Phase phase, Class orderClass) {
+    public Border getTransit(Location fromLoc, Unit.Type unit, Phase phase, Class<?> orderClass) {
         if (borders != null) {
             for (Border border : borders) {
                 if (!border.canTransit(fromLoc, unit, phase, orderClass)) {

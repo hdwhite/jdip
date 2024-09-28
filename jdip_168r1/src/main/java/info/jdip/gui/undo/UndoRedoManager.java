@@ -181,13 +181,13 @@ public class UndoRedoManager extends UndoManager {
     public synchronized void filterF2F() {
         logger.trace( "UndoRedoManager::filterF2F()");
 
-        ListIterator listIter = edits.listIterator(edits.size());
+        ListIterator<UndoableEdit> listIter = edits.listIterator(edits.size());
 
         int from = Integer.MAX_VALUE;
 
         while (listIter.hasPrevious()) {
             final int idx = listIter.previousIndex();
-            UndoableEdit ue = (UndoableEdit) listIter.previous();
+            UndoableEdit ue = listIter.previous();
 
             //Log.println("  checking: ", String.valueOf(idx), ": ", ue.getClass().getName());
 
@@ -227,7 +227,7 @@ public class UndoRedoManager extends UndoManager {
         // We wait until after we find the first UndoResolve to avoid destroying
         // any edits (if any) in the current unresolved turnstate.
         //
-        ListIterator listIter = edits.listIterator(edits.size());
+        ListIterator<UndoableEdit> listIter = edits.listIterator(edits.size());
         boolean foundResolved = false;
 
         int from = Integer.MAX_VALUE;
@@ -235,7 +235,7 @@ public class UndoRedoManager extends UndoManager {
 
         while (listIter.hasPrevious()) {
             final int idx = listIter.previousIndex();
-            UndoableEdit ue = (UndoableEdit) listIter.previous();
+            UndoableEdit ue = listIter.previous();
 
             //Log.println("  checking: ", String.valueOf(idx), ": ", ue.getClass().getName());
 

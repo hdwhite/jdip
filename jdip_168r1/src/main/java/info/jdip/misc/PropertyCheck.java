@@ -55,7 +55,7 @@ public class PropertyCheck {
                     // print which file it was from.
                     //
                     final String name = names[j];
-                    Enumeration e = props[j].propertyNames();
+                    Enumeration<?> e = props[j].propertyNames();
                     while (e.hasMoreElements()) {
                         final String key = (String) e.nextElement();
                         if (p.getProperty(key) == null) {
