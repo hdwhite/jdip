@@ -71,7 +71,8 @@
 		<PROVINCE shortname="aus" fullname="Ausonian Sea">
 			<ADJACENCY type="xc" refs="ion mes lib got pun sic tyn nea" />
 		</PROVINCE>
-		<PROVINCE shortname="bal" fullname="Baleares">
+		<PROVINCE shortname="bal" fullname="Baleares" isConvoyableCoast="true">
+			<ADJACENCY type="mv" refs="" />
 			<ADJACENCY type="xc" refs="tar sag ber lig" />
 		</PROVINCE>
 		<PROVINCE shortname="bay" fullname="Bayuda">
@@ -115,9 +116,11 @@
 			<ADJACENCY type="xc" refs="sad lig tyn" />
 		</PROVINCE>
 		<PROVINCE shortname="cre" fullname="Crete">
+			<ADJACENCY type="mv" refs="" />
 			<ADJACENCY type="xc" refs="aeg min egy lib mes" />
 		</PROVINCE>
 		<PROVINCE shortname="cyp" fullname="Cyprus">
+			<ADJACENCY type="mv" refs="" />
 			<ADJACENCY type="xc" refs="cil syr egy" />
 		</PROVINCE>
 		<PROVINCE shortname="cyr" fullname="Cyrene">

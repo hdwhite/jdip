@@ -581,7 +581,7 @@ public class Support extends Order {
                         //
                         logger.debug( "move is convoying:");
 
-                        if (depMoveOS.getEvalState() == Tristate.FAILURE) {
+                        if (depMoveOS.getEvalState() == Tristate.FAILURE && !depMoveOS.hasFoundConvoyPath()) {
                             // 2.c.1
                             logger.debug( "but move failed, so won't cut support.");
                             evalResult = pickState(evalResult, Tristate.SUCCESS);

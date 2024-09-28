@@ -269,8 +269,7 @@
 		<ADJACENCY type="xc" refs="mao spa-nc spa-sc"/>
 	</PROVINCE>
 	<PROVINCE fullname="Prussia" shortname="pru">
-		<ADJACENCY type="mv" refs="war sil"/>
-		<ADJACENCY type="mv" refs="ber lvn"/>
+		<ADJACENCY type="mv" refs="war sil ber lvn"/>
 		<ADJACENCY type="xc" refs="ber bal lvn"/>
 	</PROVINCE>
 	<PROVINCE fullname="Rome" shortname="rom">

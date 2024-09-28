@@ -328,8 +328,9 @@
 			.centertext		{font: 8px black Arial;text-anchor:middle;}
 			 
 			/* Nations */
-			.water       {fill:#E6E6FF; stroke:black; stroke-linejoin:round}
-			.nopower      {fill:#FFF0F0; stroke:black; stroke-linejoin:round}
+			.water		{fill:#E6E6FF; stroke:black; stroke-linejoin:round}
+			.nopower	{fill:#FFF0F0; stroke:black; stroke-linejoin:round}
+			.unordered	{fill:red; stroke:black; fill-opacity:0.90;}
 			
 			.alamanni   {fill:#FFFF00; stroke:black}
 			.franci     {fill:#00FFFF; stroke:black}
@@ -512,7 +513,7 @@
 		
 		<polyline class="water" points="298,0 298,4 302,3 307,4 304,13 314,18 322,17 322,25 317,29 325,31 332,25 337,25 345,16 348,15 358,20 364,32 371,36 376,43 377,30 402,20 406,13 418,7 434,5 437,8 435,9 437,14 443,18 450,17 451,19 465,11 457,8 459,0"/>
 		
-		<g class="river" style="filter:url(#riv)">
+		<g class="river">
 			<polyline points="210,91 213,92 215,92 229,85 234,83 238,83 246,85 250,87 253,103 258,112 268,131 270,132 277,130 279,131 280,135 279,146 279,151 266,171 264,186 266,190 282,189 286,188 294,185 295,174 298,171 320,160 327,161 339,156 342,155 345,156 354,162 358,163 360,165 364,165 376,173 385,173 388,168 392,168 397,170 400,169 402,169 406,174 413,174 423,182 431,182 439,183 443,181 447,184 444,190 444,216 445,218 440,223 441,228 447,235 447,241 464,241 468,248 474,254 478,251 483,251 492,256 496,253 499,253 500,256 497,259 501,263 506,266 507,273 519,272 523,275 527,275 532,272 535,272 545,275 566,265 573,266 580,264 585,258 586,255 581,249 584,245 584,237 586,235 589,235 592,241 599,243 610,243"/>
 			<use xlink:href="#displayArrow" x="80" y="421"/>
 			<use xlink:href="#displayArrow" transform="translate(551,362),rotate(180)" />
@@ -833,7 +834,7 @@
 	
 	<!-- credit block -->
 	<g transform="translate(35,510)">
-		<text class="title" x="0" y="0" style="filter:url(#name)">IMPERIUM</text>
+		<text class="title" x="0" y="0">IMPERIUM</text>
 		<text class="credits" x="0" y="12">
 			Imperium Variant by Martin Asal
 		</text>

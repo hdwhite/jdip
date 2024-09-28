@@ -322,7 +322,7 @@ public class MapPanelSVGAction {
                 return;
             }
 
-            new Thread(getPMTG(mp), "jdipExportThread") {
+            new Runnable() {
                 public void run() {
                     // get the file
                     File file = getSaveFile(mp.getClientFrame(), simpleFileFilter);
@@ -362,7 +362,7 @@ public class MapPanelSVGAction {
                         }
                     }
                 }// run()
-            }.start(); // Thread()
+            }.run(); // Runnable()
         }// actionPerformed()
     }// nested class Export
 
