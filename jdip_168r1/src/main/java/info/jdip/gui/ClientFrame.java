@@ -276,9 +276,9 @@ public class ClientFrame extends JFrame {
             String lafClassName = UIManager.getSystemLookAndFeelClassName();
             assert (lafClassName != null);
 
-            if (Utils.isWindows()) {
+            if (Utils.isWindows()) { //TODO: Fix Windows Look and Feel.
                 // higher-fidelity windows LAF
-                lafClassName = "com.jgoodies.looks.windows.WindowsLookAndFeel";
+                // lafClassName = "com.jgoodies.looks.windows.WindowsLookAndFeel";
 
                 // enable this to use the Java (not windows system) default font.
                 // UIManager.put("Application.useSystemFontSettings", Boolean.FALSE);

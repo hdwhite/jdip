@@ -243,7 +243,7 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane {
         }// GraphicJListCellRenderer()
 
 
-        public Component getListCellRendererComponent(JList list, ListItem value, int index,
+        public Component getListCellRendererComponent(JList<? extends ListItem> list, ListItem value, int index,
                                                       boolean isSelected, boolean cellHasFocus) {
 
             setText(value.getLabel());

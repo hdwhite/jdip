@@ -237,14 +237,14 @@ public class SVGUtils {
      * <li>Province (checks all short names via getShortNames())
      * </ul>
      */
-    public static Map tagFinderSVG(List<String> lookList, Node root) {
+    public static Map<?, ?> tagFinderSVG(List<String> lookList, Node root) {
         return tagFinderSVG(lookList, root, false);
     }// tagFinderSVG
 
     /**
      * As above, but allows any SVG element to be returned
      */
-    public static Map tagFinderSVG(List<String> lookList, Node root, boolean anySVGElement) {
+    public static Map<?, ?> tagFinderSVG(List<String> lookList, Node root, boolean anySVGElement) {
         List<String> list = new ArrayList<>(lookList);
         Map<String, Node> map = new HashMap<>((4 * lookList.size()) / 3);
 

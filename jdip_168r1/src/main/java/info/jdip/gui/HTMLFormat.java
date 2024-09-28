@@ -106,7 +106,7 @@ public class HTMLFormat {
     private static final String VAR_PREFIX = "@@";
 
     //
-    private Map map = null;
+    private Map<?, ?> map = null;
     private StringBuffer sb = null;
 
     // formatters
@@ -129,7 +129,7 @@ public class HTMLFormat {
         return new HTMLFormat();
     }// getInstance()
 
-    public String format(String html, Map map) {
+    public String format(String html, Map<?, ?> map) {
         this.map = map;
         sb.setLength(0);
 

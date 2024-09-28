@@ -2,11 +2,11 @@ apply plugin: 'java'
 
 repositories {
 
-    jcenter()
+    mavenCentral()
 }
 
 jar {
-    baseName = "judgeconvert"
+    archiveBaseName = "judgeconvert"
     manifest {
         attributes 'Main-Class': 'info.jdip.tool.conversion.MapConvert'
     }
@@ -14,7 +14,7 @@ jar {
 
 // this project builds two jars with different manifest
 task jar1(type: Jar) {
-    baseName = "rpconvert"
+    archiveBaseName = "rpconvert"
     manifest {
         attributes 'Main-Class': 'jdip.tool.conversion.RPConvert'
     }
@@ -22,21 +22,21 @@ task jar1(type: Jar) {
     from(sourceSets.main.output)
 }
 
-task zipDist( type: Zip) {
-    baseName = "conversion-tools"
-    from  configurations.runtime.allArtifacts.files
+task zipDist(type: Zip) {
+    archiveBaseName = "conversion-tools"
+    from configurations.runtimeClasspath.allArtifacts.files
     from fileTree('etc') {
         exclude '*manifest*'
     }
 }
 artifacts {
     archives zipDist
-    runtime jar1 //only jar1 is mentioned, jar is included by default
+    runtimeOnly jar1 //only jar1 is mentioned, jar is included by default
 }
 
 
 dependencies {
 
     // Add all the jar dependencies from the lib folder. 
-    compile fileTree(dir: 'lib', include: ['*.jar'])
+    implementation fileTree(dir: 'lib', include: ['*.jar'])
 }

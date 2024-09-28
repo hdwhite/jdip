@@ -446,9 +446,9 @@ public class HeaderDialog extends XDialog {
     private void equalizeButtons() {
         Dimension maxPref = sizerButton.getPreferredSize();
 
-        Iterator iter = btnList.iterator();
+        Iterator<JButton> iter = btnList.iterator();
         while (iter.hasNext()) {
-            JButton btn = (JButton) iter.next();
+            JButton btn = iter.next();
             Dimension size = btn.getPreferredSize();
             maxPref.width = (size.width > maxPref.width) ? size.width : maxPref.width;
             maxPref.height = (size.height > maxPref.height) ? size.height : maxPref.height;

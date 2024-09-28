@@ -227,7 +227,7 @@ public class AboutDialog extends HeaderDialog {
             // into a 2D array later.
             sortProps = new SortProp[p.size()];
 
-            Enumeration enm = p.propertyNames();
+            Enumeration<?> enm = p.propertyNames();
             int idx = 0;
             while (enm.hasMoreElements()) {
                 try {
@@ -290,7 +290,7 @@ public class AboutDialog extends HeaderDialog {
     /**
      * inner class to create a sorted system property list
      */
-    private class SortProp implements Comparable {
+    private class SortProp implements Comparable<SortProp> {
         private final String name;
         private final String value;
 
@@ -307,8 +307,8 @@ public class AboutDialog extends HeaderDialog {
             return value;
         }
 
-        public int compareTo(Object obj) {
-            return name.compareTo(((SortProp) obj).name);
+        public int compareTo(SortProp obj) {
+            return name.compareTo(obj.name);
         }// compareTo()
     }// inner class SortProp
 

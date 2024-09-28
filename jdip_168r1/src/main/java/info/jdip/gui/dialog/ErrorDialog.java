@@ -835,7 +835,7 @@ public class ErrorDialog extends TextViewer {
             ArrayList<String> list = new ArrayList<>();
             try {
                 Properties props = System.getProperties();
-                Enumeration propEnum = props.propertyNames();
+                Enumeration<?> propEnum = props.propertyNames();
                 while (propEnum.hasMoreElements()) {
                     final String propName = (String) propEnum.nextElement();
                     if (!propName.equals("line.separator")) {

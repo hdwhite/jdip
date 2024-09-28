@@ -527,7 +527,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
          * Get an iterator. Note that this <b>always</b> returns an iterator
          * on a <b>copy</b> of the F2FState.
          */
-        public synchronized Iterator iterator() {
+        public synchronized Iterator<?> iterator() {
             final F2FState copy = new F2FState(this);
             return copy.submittedMap.entrySet().iterator();
         }// iterator()

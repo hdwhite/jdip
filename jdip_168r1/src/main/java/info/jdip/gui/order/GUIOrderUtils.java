@@ -68,7 +68,7 @@ final class GUIOrderUtils {
      * GUIOrder.BORDER_INVALID is appended to the StringBuffer, if 'false' is returned.
      */
     public static boolean checkBorder(GUIOrder guiOrder, Location location, Unit.Type unitType, Phase phase, StringBuffer sb) {
-        Class baseClass = guiOrder.getClass().getSuperclass();
+        Class<?> baseClass = guiOrder.getClass().getSuperclass();
         Border border = location.getProvince().getTransit(location, unitType, phase, baseClass);
         if (border != null) {
             sb.append(Utils.getLocalString(GUIOrder.BORDER_INVALID, guiOrder.getFullName(), border.getDescription()));

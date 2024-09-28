@@ -926,7 +926,7 @@ public class ClientMenu {
      */
     public static class Item {
         private static final Icon blank = Utils.getIcon(BLANK_ICON);
-        private static final int MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();  //TODO: DEPRECATED IN JAVA 11 FOR A METHOD INTRODUCED IN JAVA 10
+        private static final int MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();  //TODO: DEPRECATED IN JAVA 11 FOR A METHOD INTRODUCED IN JAVA 10
         // mneumonic: highlited letter in menu item text
         // accelerator: e.g., ^S for "Save"
         private String name = null;

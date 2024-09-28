@@ -5,17 +5,18 @@ apply plugin: 'application'
 
 repositories {
 
-    jcenter()
+    mavenCentral()
 }
 
 
 dependencies {
 
     // Add all the jar dependencies from the lib folder.
-    compile fileTree(dir: 'lib', include: ['*.jar'])
+    implementation fileTree(dir: 'lib', include: ['*.jar'])
 
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation group: 'com.jgoodies', name: 'jgoodies-common', version: '1.8.1'
 
     testImplementation(
             'org.junit.jupiter:junit-jupiter-api:5.1.0'
@@ -36,9 +37,9 @@ test {
 file('resource/variants').eachDir { dir ->
     def taskName = "${dir.name}Variants"
     def task = tasks.create(name: taskName, type: Zip) {
-        baseName = taskName
+        archiveBaseName = taskName
         from fileTree(dir)
-        destinationDir file("build/tmp/variants")
+        destinationDirectory.set(file("build/tmp/variants"))
         group='variants'
     }
     test.dependsOn(task)
@@ -48,9 +49,9 @@ file('resource/variants').eachDir { dir ->
 file('resource/symbols').eachDir { dir ->
     def taskName = "${dir.name}Symbols"
     def task = tasks.create(name: taskName, type: Zip) {
-        baseName = taskName
+        archiveBaseName = taskName
         from fileTree(dir)
-        destinationDir file("build/tmp/variants")
+        destinationDirectory.set(file("build/tmp/variants"))
         group='variants'
 
     }
@@ -58,12 +59,13 @@ file('resource/symbols').eachDir { dir ->
     run.dependsOn(task)
 }
 
-
-mainClassName = 'info.jdip.gui.splash'
+application {
+    mainClass.set('info.jdip.gui.splash')
+}
 
 distributions {
     main {
-        baseName = "jdip"
+        distributionBaseName = "jdip"
         contents{
             tasks.each {
                 task ->

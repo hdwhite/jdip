@@ -59,7 +59,7 @@ public class ValidationOptionsDialog extends HeaderDialog {
     private ValidationOptions.DescriptiveOption[] dopts = null;
 
     // GUI components
-    private JList optionList = null;
+    private JList<?> optionList = null;
 
     // GUI components: on radio button panel
     private JEditorPane description = null;

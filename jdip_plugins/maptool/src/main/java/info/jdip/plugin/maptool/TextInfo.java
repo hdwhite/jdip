@@ -22,12 +22,12 @@ package info.jdip.plugin.maptool;//
 //
 
 import info.jdip.world.Province;
-import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.util.SVGConstants;
 import org.w3c.dom.Node;
 import org.w3c.dom.svg.SVGDocument;
 import org.w3c.dom.svg.SVGMatrix;
 import org.w3c.dom.svg.SVGTextElement;
+import org.apache.batik.anim.dom.SVGDOMImplementation;
 
 import java.awt.geom.Point2D;
 

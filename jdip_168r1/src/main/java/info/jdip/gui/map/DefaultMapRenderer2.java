@@ -1122,7 +1122,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     private void checkSymbols()
             throws MapException {
         // check symbol presence
-        Map map = SVGUtils.tagFinderSVG(Arrays.asList(SYMBOLS), doc.getRootElement());
+        Map<?, ?> map = SVGUtils.tagFinderSVG(Arrays.asList(SYMBOLS), doc.getRootElement());
         for (String symbol : SYMBOLS) {
             if (map.get(symbol) == null) {
                 throw new MapException("Missing required <symbol> or <g> element with id=\"" + symbol + "\".");
@@ -1213,7 +1213,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
         }
 
         // try to find as many of the above names as possible
-        Map map = SVGUtils.tagFinderSVG(uscoreProvList, doc.getRootElement(), true);
+        Map<?, ?> map = SVGUtils.tagFinderSVG(uscoreProvList, doc.getRootElement(), true);
 
         // safety check
         assert (uscoreProvList.size() == lookupProvList.size());

@@ -140,14 +140,14 @@ public class ResultWriter {
      * a specific power).
      */
     private String getGeneralResults() {
-        List resultList = turnState.getResultList();
+        List<Result> resultList = turnState.getResultList();
 
         // we want only results with a 'null' power.
         // these results are addressed to all.
         List<Result> generalResults = new ArrayList<>(32);
-        Iterator iter = resultList.iterator();
+        Iterator<Result> iter = resultList.iterator();
         while (iter.hasNext()) {
-            Result r = (Result) iter.next();
+            Result r = iter.next();
             if (r.getPower() == null) {
                 generalResults.add(r);
             }
@@ -182,14 +182,14 @@ public class ResultWriter {
      */
     private String getPerPowerResults() {
         // Seperate results into OrderResults and 'regular' Results
-        List<Result> orderResults = new ArrayList<>(128);
+        List<OrderResult> orderResults = new ArrayList<>(128);
         List<Result> otherResults = new ArrayList<>(64);
 
         List<Result> resultList = turnState.getResultList();
         for (Result r : resultList) {
             if (r.getPower() != null) {
                 if (r instanceof OrderResult) {
-                    orderResults.add(r);
+                    orderResults.add((OrderResult)r);
                 } else {
                     otherResults.add(r);
                 }
@@ -258,15 +258,15 @@ public class ResultWriter {
      * there are multiple failure reasons, they are indented underneath
      * the order.
      */
-    private void printOrderResultsForPower(StringBuffer sb, Power power, List results) {
+    private void printOrderResultsForPower(StringBuffer sb, Power power, List<OrderResult> results) {
         // create a mapping of orders -> a list of results. As we find results, add
         // it to the map.
         LinkedHashMap<Orderable, List<OrderResult>> ordMap = new LinkedHashMap<>(17);
         ArrayList<OrderResult> substList = new ArrayList<>();
 
-        Iterator iter = results.iterator();
+        Iterator<OrderResult> iter = results.iterator();
         while (iter.hasNext()) {
-            OrderResult or = (OrderResult) iter.next();
+            OrderResult or = iter.next();
             Orderable order = or.getOrder();
 
             // only use orders for the given power.
@@ -317,16 +317,16 @@ public class ResultWriter {
 
 
         // iterate through ordMap, chaining the results, if there are more than one.
-        iter = ordMap.values().iterator();
+        Iterator<List<OrderResult>> listIter = ordMap.values().iterator();
         while (iter.hasNext()) {
             Orderable order = null;
             boolean hasFailed = false;
-            List list = (List) iter.next();
+            List<OrderResult> list = listIter.next();
 
             // find if we have failed or not
-            Iterator it = list.iterator();
+            Iterator<OrderResult> it = list.iterator();
             while (it.hasNext()) {
-                OrderResult or = (OrderResult) it.next();
+                OrderResult or = it.next();
                 ResultType rt = or.getResultType();
 
                 order = or.getOrder();
@@ -369,9 +369,9 @@ public class ResultWriter {
             } else {
                 sb.append("<div class=\"indent1cm\" style=\"margin-bottom:3pt;\">");
 
-                it = nonEmptyList.iterator();
+                Iterator<String> stringIter = nonEmptyList.iterator();
                 while (it.hasNext()) {
-                    final String msg = (String) it.next();
+                    final String msg = stringIter.next();
                     sb.append("<i> ");
                     sb.append(msg);
                     sb.append(" </i>\n");

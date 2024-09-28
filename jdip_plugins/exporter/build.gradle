@@ -2,22 +2,22 @@ apply plugin: 'java'
 
 repositories {
 
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    compile project(':jdip_168r1')
+    implementation project(':jdip_168r1')
 }
 
 jar {
-    baseName = "ExportTool"
+    archiveBaseName = "ExportTool"
     manifest {
         attributes 'Main-Class': 'info.jdip.plugin.export.Exporter'
     }
 }
 
-task zipDist( type: Zip) {
-    from  configurations.runtime.allArtifacts.files
+task zipDist(type: Zip) {
+    from configurations.runtimeClasspath.allArtifacts.files
     from fileTree('etc/dist') 
 }
 

@@ -286,7 +286,7 @@ public abstract class MapRenderer2 {
         if (rq != null) {
             synchronized (rq.getIteratorLock()) {
                 // kill our pending render events
-                Iterator iter = rq.iterator();
+                Iterator<?> iter = rq.iterator();
                 while (iter.hasNext()) {
                     Object obj = iter.next();
                     if (obj instanceof RenderCommand) {

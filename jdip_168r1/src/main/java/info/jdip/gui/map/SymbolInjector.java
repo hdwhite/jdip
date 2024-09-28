@@ -146,14 +146,14 @@ public class SymbolInjector {
         // find all <g> or <symbol> under defs with same tag names.
         // if found, replace with our own symbols. If not found, add them.
         //
-        HashMap defsElementMap = elementMapper(defs, ID_ATTRIBUTE);
+        HashMap<String, Element> defsElementMap = elementMapper(defs, ID_ATTRIBUTE);
 
         final Symbol[] symbols = sp.getSymbols();
         assert (symbols != null);
         assert (symbols.length > 0);
 
         for (Symbol symbol : symbols) {
-            Element element = (Element) defsElementMap.get(symbol.getName());
+            Element element = defsElementMap.get(symbol.getName());
             if (element == null) {
                 // does not exist! add
                 defs.appendChild(getSymbolElement(symbol));
@@ -193,7 +193,7 @@ public class SymbolInjector {
      * an org.w3c.Element. An Exception is thrown if an element with a
      * duplicate attribute value (case-sensitive) is found.
      */
-    private HashMap elementMapper(Element start, String attrName)
+    private HashMap<String, Element> elementMapper(Element start, String attrName)
             throws IOException {
         HashMap<String, Element> map = new HashMap<>(31);
         elementMapperWalker(map, start, attrName);

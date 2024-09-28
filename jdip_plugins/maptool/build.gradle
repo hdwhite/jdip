@@ -2,24 +2,26 @@ apply plugin: 'java'
 
 repositories {
 
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    compile project(':jdip_168r1')
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    implementation project(':jdip_168r1')
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.16'
+    implementation group: 'org.apache.xmlgraphics', name: 'batik-anim', version: '1.8'
+    implementation group: 'org.apache.xmlgraphics', name: 'batik-swing', version: '1.17'
 
 }
 
 jar {
-    baseName = "MapTool"
+    archiveBaseName = "MapTool"
     manifest {
         attributes 'Main-Class': 'info.jdip.plugin.maptool.MapTool'
     }
 }
 
-task zipDist( type: Zip) {
-    from  configurations.runtime.allArtifacts.files
+task zipDist(type: Zip) {
+    from configurations.runtimeClasspath.allArtifacts.files
     from fileTree('etc/dist') 
 }
 
