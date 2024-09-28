@@ -180,8 +180,8 @@
 			<jdipNS:POWERCOLOR power="france" color="deepskyblue"/>
 			<jdipNS:POWERCOLOR power="germany" color="gray"/>
 			<jdipNS:POWERCOLOR power="italy" color="green"/>
-			<jdipNS:POWERCOLOR power="russia" color="white"/>
-			<jdipNS:POWERCOLOR power="turkey" color="yellow"/>
+			<jdipNS:POWERCOLOR power="russia" color="gainsboro"/>
+			<jdipNS:POWERCOLOR power="turkey" color="darkgoldenrod"/>
 		</jdipNS:POWERCOLORS>
 		
 		<jdipNS:SYMBOLSIZE name="Fleet" width="20" height="20"/>
@@ -336,18 +336,18 @@
 		
 		/* default region coloring, by power */
 		
-		.nopower 	{fill:antiquewhite;	stroke:#000000;stroke-width:1}
+		.nopower 	{fill:wheat;		stroke:#000000;stroke-width:1}
 		.water		{fill:lightblue;	stroke:#000000;stroke-width:1}
 		
-		.neutral	{fill:lightgray;	stroke:#000000;stroke-width:1}
+		.neutral	{fill:darkgrey;		stroke:#000000;stroke-width:1}
 
 		.austria 	{fill:indianred;	stroke:#000000;stroke-width:1}
 		.britain 	{fill:steelblue;	stroke:#000000;stroke-width:1}
 		.france 	{fill:skyblue;		stroke:#000000;stroke-width:1}
 		.germany 	{fill:darkslategray;	stroke:#000000;stroke-width:1}
 		.italy 		{fill:seagreen;		stroke:#000000;stroke-width:1}
-		.russia 	{fill:whitesmoke;	stroke:#000000;stroke-width:1}
-		.turkey 	{fill:gold;		stroke:#000000;stroke-width:1}
+		.russia 	{fill:lightgrey;	stroke:#000000;stroke-width:1}
+		.turkey 	{fill:goldenrod;	stroke:#000000;stroke-width:1}
 		
 		/* unit colors, by power note that underscores are not supported */
 		
@@ -355,9 +355,9 @@
 		.unitbritain 	{fill:blue;		fill-opacity:0.85}
 		.unitfrance 	{fill:deepskyblue;	fill-opacity:0.85}
 		.unitgermany 	{fill:gray;		fill-opacity:0.85}
-		.unititaly 	{fill:green;		fill-opacity:0.85}
-		.unitrussia 	{fill:white;		fill-opacity:1.0}
-		.unitturkey 	{fill:yellow;		fill-opacity:0.85}
+		.unititaly 		{fill:green;		fill-opacity:0.85}
+		.unitrussia 	{fill:gainsboro;		fill-opacity:1.0}
+		.unitturkey 	{fill:darkgoldenrod;		fill-opacity:0.85}
 		
 		/* supply center styles */
 		
