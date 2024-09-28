@@ -65,7 +65,7 @@ class Template
 	
 	
 	/** Parse the template */
-	public String parse(HashMap values)
+	public String parse(HashMap<?, ?> values)
 	throws IOException
 	{
 		if(values == null)
@@ -110,7 +110,7 @@ class Template
 	}// parse()
 	
 	/** Handle text between braces */
-	private void parseBetweenBraces(String text, StringBuffer sb, HashMap values)
+	private void parseBetweenBraces(String text, StringBuffer sb, HashMap<?, ?> values)
 	throws IOException
 	{
 		Object obj = values.get(text);

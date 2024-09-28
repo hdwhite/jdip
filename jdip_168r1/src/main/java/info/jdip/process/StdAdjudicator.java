@@ -677,9 +677,9 @@ public class StdAdjudicator implements Adjudicator {
         }
 
         // Step 12a:
-        // Set supply center ownership, if we *were* in the FALL season.
+        // Set supply center ownership, if we are approaching an ADJUSTMENT.
         // this must occur before we can see if adjustment phase is to be skipped
-        if (oldPhase.getSeasonType() == Phase.SeasonType.FALL) {
+        if (nextPhase.getPhaseType() == Phase.PhaseType.ADJUSTMENT) {
             setSCOwners();
         }
 
@@ -745,6 +745,12 @@ public class StdAdjudicator implements Adjudicator {
                 Phase p = nextTurnState.getPhase().getNext();
                 nextTurnState.setPhase(p);
                 addResult(new Result(null, Utils.getLocalString(STDADJ_MV_PHASE_ADV_ALL_DESTROYED)));
+
+                // If it's an ADJUSTMENT incoming, we need to set SC owners
+                if (nextTurnState.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT)
+                {
+                    setSCOwners();
+                }
             }
         }
 
@@ -1178,9 +1184,31 @@ public class StdAdjudicator implements Adjudicator {
             setSCOwners();
         }
 
-
         // Step 11:
-        // Determine if next phase is an Adjustmeent phase. If so, determine
+        // See if victory conditions have been met; if they have, there is no need
+        // for any additional phases.
+        Adjustment.AdjustmentInfoMap adjustmentMap = Adjustment.getAdjustmentInfo(nextTurnState, ruleOpts, world.getMap().getPowers());
+        VictoryConditions vc = world.getVictoryConditions();
+        if (vc.evaluate(this, adjustmentMap)) {
+            // finish current turnstate
+            turnState.setResolved(true);
+            resultList.addAll(vc.getEvaluationResults());
+            TimeResult completed = new TimeResult(STDADJ_COMPLETED);
+            addResult(completed);
+
+            // nextTurnState:
+            nextTurnState.setEnded(true);
+            nextTurnState.setResolved(true);
+
+            List<Result> nextResults = nextTurnState.getResultList();
+            nextResults.addAll(vc.getEvaluationResults());
+            nextResults.add(completed);
+
+            return;
+        }
+
+        // Step 12:
+        // Determine if next phase is an Adjustment phase. If so, determine
         // if we can skip it.
         checkAdjustmentPhase();
 
