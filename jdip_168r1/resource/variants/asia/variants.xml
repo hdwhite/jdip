@@ -194,5 +194,15 @@
 		<INITIALSTATE province="irk" 	power="siberia" 	unit="army"/>
 		<INITIALSTATE province="kam" 	power="siberia" 	unit="fleet"/>
 		<INITIALSTATE province="wes" 	power="siberia" 	unit="army"/>
+
+		<!-- initial country borders -->
+		<INFLUENCE province="chq" power="china" />
+		<INFLUENCE province="hkg" power="china" />
+		<INFLUENCE province="syr" power="persia" />
+		<INFLUENCE province="yem" power="persia" />
+		<INFLUENCE province="ukr" power="russia" />
+		<INFLUENCE province="liv" power="russia" />
+		<INFLUENCE province="war" power="russia" />
+		<INFLUENCE province="esb" power="siberia" />
 	</VARIANT>
 </VARIANTS>

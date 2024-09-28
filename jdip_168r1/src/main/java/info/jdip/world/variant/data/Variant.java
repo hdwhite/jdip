@@ -40,6 +40,7 @@ public class Variant implements Cloneable, Comparable<Variant> {
     private Power[] powers = null;
     private Phase phase = null;
     private InitialState[] istate = null;
+    private Influence[] influence = null;
     private SupplyCenter[] supplyCenters = null;
     private ProvinceData[] provinceData = null;
     private int vcNumSCForVictory = 0;
@@ -157,6 +158,20 @@ public class Variant implements Cloneable, Comparable<Variant> {
      */
     public void setInitialStates(List<InitialState> stateList) {
         istate = stateList.toArray(new InitialState[stateList.size()]);
+    }// setInitialStates()
+
+    /**
+     * The starting Influences.
+     */
+    public Influence[] getInfluences() {
+        return influence;
+    }
+
+    /**
+     * Sets the Influences, from a List
+     */
+    public void setInfluences(List<Influence> influenceList) {
+        influence = influenceList.toArray(new Influence[influenceList.size()]);
     }// setInitialStates()
 
     /**

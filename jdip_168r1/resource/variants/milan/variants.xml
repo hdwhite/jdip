@@ -187,6 +187,27 @@
 		<INITIALSTATE province="mil" power="italy" unit="army" />
 		<INITIALSTATE province="vie" power="austria" unit="army" />
 		<INITIALSTATE province="war" power="russia" unit="army" />
+		<!-- initial country borders -->
+		<INFLUENCE province="arm" power="turkey" />
+		<INFLUENCE province="apu" power="italy" />
+		<INFLUENCE province="boh" power="austria" />
+		<INFLUENCE province="bur" power="france" />
+		<INFLUENCE province="cly" power="britain" />
+		<INFLUENCE province="fin" power="russia" />
+		<INFLUENCE province="gal" power="austria" />
+		<INFLUENCE province="gas" power="france" />
+		<INFLUENCE province="lvn" power="russia" />
+		<INFLUENCE province="pic" power="france" />
+		<INFLUENCE province="pru" power="germany" />
+		<INFLUENCE province="ruh" power="germany" />
+		<INFLUENCE province="sav" power="italy" />
+		<INFLUENCE province="sil" power="germany" />
+		<INFLUENCE province="syr" power="turkey" />
+		<INFLUENCE province="tyr" power="austria" />
+		<INFLUENCE province="ukr" power="russia" />
+		<INFLUENCE province="ven" power="italy" />
+		<INFLUENCE province="wal" power="britain" />
+		<INFLUENCE province="yor" power="britain" />
 	</VARIANT>
 
 	<VARIANT name="Crowded Milan" version="1.0" aliases="crowdedmilan, crowded_milan">
@@ -289,6 +310,28 @@
 		<INITIALSTATE province="por" power="spain" unit="fleet" />
 		<INITIALSTATE province="spa" power="spain" unit="army" />
 		<INITIALSTATE province="tun" power="spain" unit="fleet" />
+		<!-- initial country borders -->
+		<INFLUENCE province="alb" power="balkan" />
+		<INFLUENCE province="arm" power="turkey" />
+		<INFLUENCE province="apu" power="italy" />
+		<INFLUENCE province="boh" power="austria" />
+		<INFLUENCE province="bur" power="france" />
+		<INFLUENCE province="cly" power="britain" />
+		<INFLUENCE province="fin" power="russia" />
+		<INFLUENCE province="gal" power="austria" />
+		<INFLUENCE province="gas" power="france" />
+		<INFLUENCE province="lvn" power="russia" />
+		<INFLUENCE province="naf" power="spain" />
+		<INFLUENCE province="pic" power="france" />
+		<INFLUENCE province="pru" power="germany" />
+		<INFLUENCE province="sav" power="italy" />
+		<INFLUENCE province="sil" power="germany" />
+		<INFLUENCE province="syr" power="turkey" />
+		<INFLUENCE province="tyr" power="austria" />
+		<INFLUENCE province="ukr" power="russia" />
+		<INFLUENCE province="ven" power="italy" />
+		<INFLUENCE province="wal" power="britain" />
+		<INFLUENCE province="yor" power="britain" />
 	</VARIANT>
 
 </VARIANTS>

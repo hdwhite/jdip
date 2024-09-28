@@ -310,6 +310,15 @@
 		<INITIALSTATE power="france"   province="par" unit="army" />
 		<INITIALSTATE power="france"   province="tou" unit="army" />
 		<INITIALSTATE power="france"   province="pro" unit="army" />
+
+		<!-- initial country borders -->
+		<INFLUENCE province="cha" power="burgundy" />
+		<INFLUENCE province="ang" power="england" />
+		<INFLUENCE province="num" power="england" />
+		<INFLUENCE province="wal" power="england" />
+		<INFLUENCE province="anj" power="france" />
+		<INFLUENCE province="poi" power="france" />
+		<INFLUENCE province="lim" power="france" />
 	</VARIANT>
 	
 	
@@ -372,6 +381,15 @@
 		<INITIALSTATE power="france"   province="par" unit="army" />
 		<INITIALSTATE power="france"   province="tou" unit="army" />
 		<INITIALSTATE power="france"   province="pro" unit="army" />
+
+		<!-- initial country borders -->
+		<INFLUENCE province="cha" power="burgundy" />
+		<INFLUENCE province="ang" power="england" />
+		<INFLUENCE province="num" power="england" />
+		<INFLUENCE province="wal" power="england" />
+		<INFLUENCE province="anj" power="france" />
+		<INFLUENCE province="poi" power="france" />
+		<INFLUENCE province="lim" power="france" />
 	</VARIANT>
 		
 </VARIANTS>

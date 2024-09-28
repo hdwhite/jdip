@@ -260,6 +260,30 @@
 		<INITIALSTATE province="nor" power="norway" unit="army" />
 		<INITIALSTATE province="den" power="norway" unit="fleet" />
 		<INITIALSTATE province="swe" power="norway" unit="fleet" />
+		
+		<!-- initial country borders -->
+		<INFLUENCE province="arm" power="turkey" />
+		<INFLUENCE province="apu" power="italy" />
+		<INFLUENCE province="boh" power="austria" />
+		<INFLUENCE province="bur" power="france" />
+		<INFLUENCE province="cat" power="spain" />
+		<INFLUENCE province="cly" power="britain" />
+		<INFLUENCE province="fin" power="russia" />
+		<INFLUENCE province="gal" power="austria" />
+		<INFLUENCE province="gas" power="france" />
+		<INFLUENCE province="kaz" power="russia" />
+		<INFLUENCE province="lvn" power="russia" />
+		<INFLUENCE province="nav" power="spain" />
+		<INFLUENCE province="pic" power="france" />
+		<INFLUENCE province="pie" power="italy" />
+		<INFLUENCE province="ruh" power="germany" />
+		<INFLUENCE province="sib" power="russia" />
+		<INFLUENCE province="syr" power="turkey" />
+		<INFLUENCE province="tus" power="italy" />
+		<INFLUENCE province="tyr" power="austria" />
+		<INFLUENCE province="ukr" power="russia" />
+		<INFLUENCE province="wal" power="britain" />
+		<INFLUENCE province="yor" power="britain" />
 	</VARIANT>
 </VARIANTS>
 

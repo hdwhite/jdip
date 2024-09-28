@@ -26,6 +26,7 @@ import info.jdip.misc.Utils;
 import info.jdip.order.OrderException;
 import info.jdip.world.variant.data.BorderData;
 import info.jdip.world.variant.data.InitialState;
+import info.jdip.world.variant.data.Influence;
 import info.jdip.world.variant.data.ProvinceData;
 import info.jdip.world.variant.data.SupplyCenter;
 import info.jdip.world.variant.data.Variant;
@@ -319,7 +320,30 @@ public class WorldFactory {
                 throw new InvalidWorldException(Utils.getLocalString(WF_BAD_IS_UNIT, initState.getProvinceName()));
             }
         }
+        
+		// set initial influences [derived from INFLUENCE elements in XML file]
+		Influence[] influences = variant.getInfluences();
+		for (Influence curProvince : influences)
+		{
+			// a province and power is required, no matter what
+			Power power = map.getPowerMatching(curProvince.getPowerName());
+			Province province = map.getProvinceMatching(curProvince.getProvinceName());
 
+			// n/a if we use a validating parser
+			if(power == null)
+			{
+				throw new InvalidWorldException(Utils.getLocalString(WF_BAD_IS_POWER));
+			}
+
+			// n/a if we use a validating parser
+			if(province == null)
+			{
+				throw new InvalidWorldException(Utils.getLocalString(WF_BAD_IS_PROVINCE));
+			}
+
+			// set 'lastOccupier' for province
+			pos.setLastOccupier(province, power);
+		}
 
         // set the victory conditions
         // make sure we have at least one victory condition!

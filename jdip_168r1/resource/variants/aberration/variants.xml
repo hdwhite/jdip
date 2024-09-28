@@ -307,5 +307,35 @@
 		<INITIALSTATE province="ath" power="byzantium" unit="army" />
 		<INITIALSTATE province="con" power="byzantium" unit="fleet" />
 		<INITIALSTATE province="smy" power="byzantium" unit="fleet" />
+
+		<!-- initial country borders -->
+		<INFLUENCE province="lor" power="burgundy" />
+		<INFLUENCE province="ruh" power="burgundy" />
+		<INFLUENCE province="swa" power="burgundy" />
+		<INFLUENCE province="tus" power="sicily" />
+		<INFLUENCE province="apu" power="sicily" />
+		<INFLUENCE province="umb" power="sicily" />
+		<INFLUENCE province="cym" power="eire" />
+		<INFLUENCE province="uls" power="eire" />
+		<INFLUENCE province="cly" power="eire" />
+		<INFLUENCE province="lem" power="hungary" />
+		<INFLUENCE province="cro" power="hungary" />
+		<INFLUENCE province="tra" power="hungary" />
+		<INFLUENCE province="ala" power="israel" />
+		<INFLUENCE province="egy" power="israel" />
+		<INFLUENCE province="sin" power="israel" />
+		<INFLUENCE province="gal" power="poland" />
+		<INFLUENCE province="liv" power="poland" />
+		<INFLUENCE province="mas" power="poland" />
+		<INFLUENCE province="sil" power="poland" />
+		<INFLUENCE province="cat" power="spain" />
+		<INFLUENCE province="est" power="spain" />
+		<INFLUENCE province="gib" power="spain" />
+		<INFLUENCE province="pod" power="ukraine" />
+		<INFLUENCE province="don" power="ukraine" />
+		<INFLUENCE province="tau" power="ukraine" />
+		<INFLUENCE province="ait" power="byzantium" />
+		<INFLUENCE province="pis" power="byzantium" />
+		<INFLUENCE province="thr" power="byzantium" />
 	</VARIANT>
 </VARIANTS>

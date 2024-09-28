@@ -232,7 +232,6 @@
 		<SUPPLYCENTER province="ven" homepower="Italy" owner="Italy"/>
 		<SUPPLYCENTER province="war" homepower="Poland" owner="Poland"/>
 
-		
 		<!-- unit placement -->
 		<INITIALSTATE province="edi" power="Britain" unit="fleet"/>
 		<INITIALSTATE province="gib" power="Britain" unit="fleet"/>
@@ -272,6 +271,33 @@
 		<INITIALSTATE province="kie" power="Ukraine" unit="army"/>
 		<INITIALSTATE province="ode" power="Ukraine" unit="army"/>
 		<INITIALSTATE province="sev" power="Ukraine" unit="fleet"/>
+
+		<!-- Initial country borders -->
+		<INFLUENCE province="cly" power="britain" />
+		<INFLUENCE province="wal" power="britain" />
+		<INFLUENCE province="yor" power="britain" />
+		<INFLUENCE province="sin" power="egypt" />
+		<INFLUENCE province="als" power="france" />
+		<INFLUENCE province="auv" power="france" />
+		<INFLUENCE province="bri" power="france" />
+		<INFLUENCE province="pic" power="france" />
+		<INFLUENCE province="ruh" power="germany" />
+		<INFLUENCE province="sax" power="germany" />
+		<INFLUENCE province="apu" power="italy" />
+		<INFLUENCE province="pie" power="italy" />
+		<INFLUENCE province="tus" power="italy" />
+		<INFLUENCE province="pru" power="poland" />
+		<INFLUENCE province="sil" power="poland" />
+		<INFLUENCE province="cau" power="russia" />
+		<INFLUENCE province="crp" power="russia" />
+		<INFLUENCE province="sib" power="russia" />
+		<INFLUENCE province="ura" power="russia" />
+		<INFLUENCE province="vol" power="russia" />
+		<INFLUENCE province="and" power="spain" />
+		<INFLUENCE province="nav" power="spain" />
+		<INFLUENCE province="ana" power="turkey" />
+		<INFLUENCE province="don" power="ukraine" />
+		<INFLUENCE province="pod" power="ukraine" />
 	</VARIANT>
 	
 	<VARIANT name="Modern (with Wings)" version="1.0">
@@ -497,6 +523,33 @@
 		<INITIALSTATE province="kie" power="Ukraine" unit="army"/>
 		<INITIALSTATE province="ode" power="Ukraine" unit="army"/>
 		<INITIALSTATE province="sev" power="Ukraine" unit="fleet"/>
+
+		<!-- Initial country borders -->
+		<INFLUENCE province="cly" power="britain" />
+		<INFLUENCE province="wal" power="britain" />
+		<INFLUENCE province="yor" power="britain" />
+		<INFLUENCE province="sin" power="egypt" />
+		<INFLUENCE province="als" power="france" />
+		<INFLUENCE province="auv" power="france" />
+		<INFLUENCE province="bri" power="france" />
+		<INFLUENCE province="pic" power="france" />
+		<INFLUENCE province="ruh" power="germany" />
+		<INFLUENCE province="sax" power="germany" />
+		<INFLUENCE province="apu" power="italy" />
+		<INFLUENCE province="pie" power="italy" />
+		<INFLUENCE province="tus" power="italy" />
+		<INFLUENCE province="pru" power="poland" />
+		<INFLUENCE province="sil" power="poland" />
+		<INFLUENCE province="cau" power="russia" />
+		<INFLUENCE province="crp" power="russia" />
+		<INFLUENCE province="sib" power="russia" />
+		<INFLUENCE province="ura" power="russia" />
+		<INFLUENCE province="vol" power="russia" />
+		<INFLUENCE province="and" power="spain" />
+		<INFLUENCE province="nav" power="spain" />
+		<INFLUENCE province="ana" power="turkey" />
+		<INFLUENCE province="don" power="ukraine" />
+		<INFLUENCE province="pod" power="ukraine" />
 	</VARIANT>
 	
 	<VARIANT name="Modern Shift" version="1.0" aliases="modern_shift">
@@ -661,5 +714,32 @@
 		<INITIALSTATE province="kie" power="Spain" unit="army"/>
 		<INITIALSTATE province="ode" power="Spain" unit="army"/>
 		<INITIALSTATE province="sev" power="Spain" unit="fleet"/>
+		
+		<!-- Initial country borders -->
+		<INFLUENCE province="cly" power="ukraine" />
+		<INFLUENCE province="wal" power="ukraine" />
+		<INFLUENCE province="yor" power="ukraine" />
+		<INFLUENCE province="sin" power="germany" />
+		<INFLUENCE province="als" power="russia" />
+		<INFLUENCE province="auv" power="russia" />
+		<INFLUENCE province="bri" power="russia" />
+		<INFLUENCE province="pic" power="russia" />
+		<INFLUENCE province="ruh" power="turkey" />
+		<INFLUENCE province="sax" power="turkey" />
+		<INFLUENCE province="apu" power="britain" />
+		<INFLUENCE province="pie" power="britain" />
+		<INFLUENCE province="tus" power="britain" />
+		<INFLUENCE province="pru" power="egypt" />
+		<INFLUENCE province="sil" power="egypt" />
+		<INFLUENCE province="cau" power="italy" />
+		<INFLUENCE province="crp" power="italy" />
+		<INFLUENCE province="sib" power="italy" />
+		<INFLUENCE province="ura" power="italy" />
+		<INFLUENCE province="vol" power="italy" />
+		<INFLUENCE province="and" power="poland" />
+		<INFLUENCE province="nav" power="poland" />
+		<INFLUENCE province="ana" power="france" />
+		<INFLUENCE province="don" power="spain" />
+		<INFLUENCE province="pod" power="spain" />
 	</VARIANT>
 </VARIANTS>

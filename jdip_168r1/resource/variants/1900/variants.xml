@@ -306,6 +306,35 @@
 		<INITIALSTATE province="tri" power="austria" unit="army" />
 		<INITIALSTATE province="vie" power="austria" unit="army" />
 		<INITIALSTATE province="war" power="russia" unit="army" />
+		
+		<!-- initial country borders -->
+		<INFLUENCE province="als" power="germany" />
+		<INFLUENCE province="arm" power="turkey" />
+		<INFLUENCE province="apu" power="italy" />
+		<INFLUENCE province="boh" power="austria" />
+		<INFLUENCE province="bur" power="france" />
+		<INFLUENCE province="cly" power="britain" />
+		<INFLUENCE province="fin" power="russia" />
+		<INFLUENCE province="gal" power="austria" />
+		<INFLUENCE province="gas" power="france" />
+		<INFLUENCE province="hej" power="turkey" />
+		<INFLUENCE province="ire" power="britain" />
+		<INFLUENCE province="kon" power="turkey" />
+		<INFLUENCE province="lvo" power="russia" />
+		<INFLUENCE province="mac" power="turkey" />
+		<INFLUENCE province="pal" power="turkey" />
+		<INFLUENCE province="pic" power="france" />
+		<INFLUENCE province="pie" power="italy" />
+		<INFLUENCE province="pru" power="germany" />
+		<INFLUENCE province="sib" power="russia" />
+		<INFLUENCE province="sil" power="germany" />
+		<INFLUENCE province="sou" power="france" />
+		<INFLUENCE province="tun" power="france" />
+		<INFLUENCE province="tyr" power="austria" />
+		<INFLUENCE province="ukr" power="russia" />
+		<INFLUENCE province="ven" power="italy" />
+		<INFLUENCE province="wal" power="britain" />
+		<INFLUENCE province="yor" power="britain" />
 	</VARIANT>
 	
 </VARIANTS>

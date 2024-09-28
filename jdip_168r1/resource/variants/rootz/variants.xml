@@ -307,6 +307,48 @@
 		<INITIALSTATE province="ven2" power="italy2" unit="army" />
 		<INITIALSTATE province="vie2" power="austria2" unit="army" />
 		<INITIALSTATE province="war2" power="russia2" unit="army" />
+		
+		<!-- initial country borders -->
+		<INFLUENCE province="arm1" power="turkey1" />
+		<INFLUENCE province="apu1" power="italy1" />
+		<INFLUENCE province="boh1" power="austria1" />
+		<INFLUENCE province="bur1" power="france1" />
+		<INFLUENCE province="cly1" power="britain1" />
+		<INFLUENCE province="fin1" power="russia1" />
+		<INFLUENCE province="gal1" power="austria1" />
+		<INFLUENCE province="gas1" power="france1" />
+		<INFLUENCE province="lvn1" power="russia1" />
+		<INFLUENCE province="pic1" power="france1" />
+		<INFLUENCE province="pie1" power="italy1" />
+		<INFLUENCE province="pru1" power="germany1" />
+		<INFLUENCE province="ruh1" power="germany1" />
+		<INFLUENCE province="sil1" power="germany1" />
+		<INFLUENCE province="syr1" power="turkey1" />
+		<INFLUENCE province="tus1" power="italy1" />
+		<INFLUENCE province="tyr1" power="austria1" />
+		<INFLUENCE province="ukr1" power="russia1" />
+		<INFLUENCE province="wal1" power="britain1" />
+		<INFLUENCE province="yor1" power="britain1" />
+		<INFLUENCE province="arm2" power="turkey2" />
+		<INFLUENCE province="apu2" power="italy2" />
+		<INFLUENCE province="boh2" power="austria2" />
+		<INFLUENCE province="bur2" power="france2" />
+		<INFLUENCE province="cly2" power="britain2" />
+		<INFLUENCE province="fin2" power="russia2" />
+		<INFLUENCE province="gal2" power="austria2" />
+		<INFLUENCE province="gas2" power="france2" />
+		<INFLUENCE province="lvn2" power="russia2" />
+		<INFLUENCE province="pic2" power="france2" />
+		<INFLUENCE province="pie2" power="italy2" />
+		<INFLUENCE province="pru2" power="germany2" />
+		<INFLUENCE province="ruh2" power="germany2" />
+		<INFLUENCE province="sil2" power="germany2" />
+		<INFLUENCE province="syr2" power="turkey2" />
+		<INFLUENCE province="tus2" power="italy2" />
+		<INFLUENCE province="tyr2" power="austria2" />
+		<INFLUENCE province="ukr2" power="russia2" />
+		<INFLUENCE province="wal2" power="britain2" />
+		<INFLUENCE province="yor2" power="britain2" />
 	</VARIANT>
 </VARIANTS>
 

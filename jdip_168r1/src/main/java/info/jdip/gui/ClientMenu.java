@@ -255,7 +255,7 @@ public class ClientMenu {
         menu.add(makeCBMenuItem(VIEW_SUPPLY_CENTERS, true, false));
         menu.add(makeCBMenuItem(VIEW_UNORDERED, false, false));
         menu.add(makeCBMenuItem(VIEW_SHOW_MAP, true, false));
-        menu.add(makeCBMenuItem(VIEW_INFLUENCE, false, false));
+        menu.add(makeCBMenuItem(VIEW_INFLUENCE, true, false));
         menu.add(new JSeparator());
         menu.add(makeMenuItem(VIEW_SELECT_MAP, true));
         menuBar.add(menu);

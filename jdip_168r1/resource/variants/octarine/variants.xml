@@ -226,5 +226,27 @@
 		<INITIALSTATE province="sdi" power="Agatea" unit="fleet" unitcoast="nc" />
 		<INITIALSTATE province="ter" power="XXXX" unit="fleet" unitcoast="sc" />
 		<INITIALSTATE province="vor" power="Hublands" unit="army" />
+		
+		<!-- initial country borders -->
+		<INFLUENCE province="hon" power="Agatea" />
+		<INFLUENCE province="lig" power="Agatea" />
+		<INFLUENCE province="tit" power="Agatea" />
+		<INFLUENCE province="wun" power="Agatea" />
+		<INFLUENCE province="rrk" power="Genua" />
+		<INFLUENCE province="vie" power="Genua" />
+		<INFLUENCE province="yap" power="Genua" />
+		<INFLUENCE province="koo" power="Hublands" />
+		<INFLUENCE province="tro" power="Hublands" />
+		<INFLUENCE province="her" power="Klatch" />
+		<INFLUENCE province="ymi" power="Klatch" />
+		<INFLUENCE province="ist" power="Morpork" />
+		<INFLUENCE province="sto" power="Morpork" />
+		<INFLUENCE province="bri" power="Muntab" />
+		<INFLUENCE province="far" power="Muntab" />
+		<INFLUENCE province="oro" power="Muntab" />
+		<INFLUENCE province="csh" power="Ogg" />
+		<INFLUENCE province="rmt" power="Ogg" />
+		<INFLUENCE province="oct" power="Ogg" />
+		<INFLUENCE province="dij" power="XXXX" />
 	</VARIANT>
 </VARIANTS>
