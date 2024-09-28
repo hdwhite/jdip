@@ -225,27 +225,15 @@ public class SCHistoryWriter {
         //
         ArrayList<TurnState> turnList = new ArrayList<>(100);    // array of TurnStates
 
-        // add initial phase
-        turnList.add(world.getInitialTurnState());
-
-        Iterator iter = world.getAllTurnStates().iterator();
+        Iterator<TurnState> iter = world.getAllTurnStates().iterator();
         while (iter.hasNext()) {
-            // we want the RETREAT or MOVE phase for a fall season,
-            // but not both (a unit could retreat into a SC; thus we need to check)
-            //
-            TurnState ts = (TurnState) iter.next();
+            // we want the MOVE phase for a SPRING season in case of ADJUSTMENT being skipped,
+            // but use ADJUSTMENT if that is the current phase
+            TurnState ts = iter.next();
             Phase phase = ts.getPhase();
-            if (phase.getSeasonType() == Phase.SeasonType.FALL) {
-                if (phase.getPhaseType() == Phase.PhaseType.MOVEMENT) {
-                    if (iter.hasNext()) {
-                        TurnState nextTS = (TurnState) iter.next();
-                        if (nextTS.getPhase().getPhaseType() == Phase.PhaseType.RETREAT) {
-                            ts = nextTS;
-                        }
-                    }
-
-                    turnList.add(ts);
-                }
+            if ((phase.getSeasonType() == Phase.SeasonType.SPRING && phase.getPhaseType() == Phase.PhaseType.MOVEMENT) ||
+                (phase.getPhaseType() == Phase.PhaseType.ADJUSTMENT && !iter.hasNext())) {
+                turnList.add(ts);
             }
         }
 
@@ -312,29 +300,16 @@ public class SCHistoryWriter {
 
         sb.append("</tr>");
 
-        // First make the Start (Initial Row).
-        sb.append(makeSCCountTableRow(world.getInitialTurnState()));
-
-        // make all other rows.
-        Iterator iter = world.getAllTurnStates().iterator();
+        // make the rows.
+        Iterator<TurnState> iter = world.getAllTurnStates().iterator();
         while (iter.hasNext()) {
-            // we want the RETREAT or MOVE phase for a fall season,
-            // but not both.
-            // (a unit could retreat into a SC; thus we need to check)
-            //
-            TurnState ts = (TurnState) iter.next();
+            // we want the MOVE phase for a SPRING season in case of ADJUSTMENT being skipped,
+            // but use ADJUSTMENT if that is the current phase
+            TurnState ts = iter.next();
             Phase phase = ts.getPhase();
-            if (phase.getSeasonType() == Phase.SeasonType.FALL) {
-                if (phase.getPhaseType() == Phase.PhaseType.MOVEMENT) {
-                    if (iter.hasNext()) {
-                        TurnState nextTS = (TurnState) iter.next();
-                        if (nextTS.getPhase().getPhaseType() == Phase.PhaseType.RETREAT) {
-                            ts = nextTS;
-                        }
-                    }
-
-                    sb.append(makeSCCountTableRow(ts));
-                }
+            if ((phase.getSeasonType() == Phase.SeasonType.SPRING && phase.getPhaseType() == Phase.PhaseType.MOVEMENT) ||
+                (phase.getPhaseType() == Phase.PhaseType.ADJUSTMENT && !iter.hasNext())) {
+                sb.append(makeSCCountTableRow(ts));
             }
         }
 

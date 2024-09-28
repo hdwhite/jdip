@@ -731,41 +731,41 @@
 			<GAME_LENGTH value="35" />
 		</VICTORYCONDITIONS>
  		<!-- supply centers -->
-		<SUPPLYCENTER province="ank" homepower="turkey" owner="turkey"/>
+		<SUPPLYCENTER province="ank" homepower="turkey"/>
 		<SUPPLYCENTER province="bel" homepower="lowland" owner="lowland"/>
-		<SUPPLYCENTER province="ber" homepower="germany" owner="germany"/>
+		<SUPPLYCENTER province="ber" homepower="germany"/>
 	 	<SUPPLYCENTER province="bre" homepower="france" owner="france"/>
-		<SUPPLYCENTER province="bud" homepower="austria" owner="austria"/>
-		<SUPPLYCENTER province="bul" homepower="balkan" owner="balkan"/>
-	 	<SUPPLYCENTER province="con" homepower="turkey" owner="turkey"/>
-		<SUPPLYCENTER province="den" homepower="norway" owner="norway"/>
+		<SUPPLYCENTER province="bud" homepower="austria"/>
+		<SUPPLYCENTER province="bul" homepower="balkan"/>	
+	 	<SUPPLYCENTER province="con" homepower="turkey"/>
+		<SUPPLYCENTER province="den" homepower="norway"/>
 		<SUPPLYCENTER province="edi" homepower="britain" owner="britain"/>
-		<SUPPLYCENTER province="gre" homepower="balkan" owner="balkan"/>
-		<SUPPLYCENTER province="hol" homepower="lowland" owner="lowland"/>
+		<SUPPLYCENTER province="gre" homepower="balkan"/>
+		<SUPPLYCENTER province="hol" homepower="lowland"/>
 		<SUPPLYCENTER province="kie" homepower="germany" owner="germany"/>
-		<SUPPLYCENTER province="lvp" homepower="britain" owner="britain"/>
-		<SUPPLYCENTER province="lon" homepower="britain" owner="britain"/>
-	 	<SUPPLYCENTER province="mar" homepower="france" owner="france"/>
+		<SUPPLYCENTER province="lvp" homepower="britain"/>
+		<SUPPLYCENTER province="lon" homepower="britain"/>
+	 	<SUPPLYCENTER province="mar" homepower="france"/>
 	 	<SUPPLYCENTER province="mos" homepower="russia" owner="russia"/>
-		<SUPPLYCENTER province="mun" homepower="germany" owner="germany"/>
+		<SUPPLYCENTER province="mun" homepower="germany"/>
 	 	<SUPPLYCENTER province="nap" homepower="italy" owner="italy"/>
-		<SUPPLYCENTER province="nor" homepower="norway" owner="norway"/>
-	 	<SUPPLYCENTER province="par" homepower="france" owner="france"/>
-		<SUPPLYCENTER province="por" homepower="spain" owner="spain"/>
-	 	<SUPPLYCENTER province="rom" homepower="italy" owner="italy"/>
-		<SUPPLYCENTER province="rum" homepower="balkan" owner="balkan"/>
-		<SUPPLYCENTER province="ruh" homepower="lowland" owner="lowland"/>
+		<SUPPLYCENTER province="nor" homepower="norway"/>
+	 	<SUPPLYCENTER province="par" homepower="france"/>
+		<SUPPLYCENTER province="por" homepower="spain"/>
+	 	<SUPPLYCENTER province="rom" homepower="italy"/>
+		<SUPPLYCENTER province="rum" homepower="balkan"/>
+		<SUPPLYCENTER province="ruh" homepower="lowland"/>
 		<SUPPLYCENTER province="ser" homepower="balkan" owner="balkan"/>
-	 	<SUPPLYCENTER province="sev" homepower="russia" owner="russia"/>
+	 	<SUPPLYCENTER province="sev" homepower="russia"/>
 	 	<SUPPLYCENTER province="smy" homepower="turkey" owner="turkey"/>
 		<SUPPLYCENTER province="spa" homepower="spain" owner="spain"/>
-	 	<SUPPLYCENTER province="stp" homepower="russia" owner="russia"/>
+	 	<SUPPLYCENTER province="stp" homepower="russia"/>
 		<SUPPLYCENTER province="swe" homepower="norway" owner="norway"/>
 		<SUPPLYCENTER province="tri" homepower="austria" owner="austria"/>
-		<SUPPLYCENTER province="tun" homepower="spain" owner="spain"/>
-	 	<SUPPLYCENTER province="ven" homepower="italy" owner="italy"/>
-		<SUPPLYCENTER province="vie" homepower="austria" owner="austria"/>
-	 	<SUPPLYCENTER province="war" homepower="russia" owner="russia"/>
+		<SUPPLYCENTER province="tun" homepower="spain"/>
+	 	<SUPPLYCENTER province="ven" homepower="italy"/>
+		<SUPPLYCENTER province="vie" homepower="austria"/>
+	 	<SUPPLYCENTER province="war" homepower="russia"/>
 		<!-- unit placement -->
 		<INITIALSTATE province="tri" power="austria" unit="army" />
 		<INITIALSTATE province="ser" power="balkan"  unit="army" />
@@ -902,40 +902,40 @@
 			<WINNING_SUPPLY_CENTERS value="18" />
 		</VICTORYCONDITIONS>
 		<!-- supply centers -->
-		<SUPPLYCENTER province="ank" homepower="turkey" />
+		<SUPPLYCENTER province="ank" homepower="turkey" owner="germany" />
 		<SUPPLYCENTER province="bel" />
-		<SUPPLYCENTER province="ber" homepower="germany" />
-	 	<SUPPLYCENTER province="bre" homepower="france" />
-		<SUPPLYCENTER province="bud" homepower="austria" />
+		<SUPPLYCENTER province="ber" homepower="germany" owner="turkey" />
+	 	<SUPPLYCENTER province="bre" homepower="france" owner="austria" />
+		<SUPPLYCENTER province="bud" homepower="austria" owner="britain" />
 		<SUPPLYCENTER province="bul" />
-	 	<SUPPLYCENTER province="con" homepower="turkey" />
+	 	<SUPPLYCENTER province="con" homepower="turkey" owner="germany" />
 		<SUPPLYCENTER province="den" />
-		<SUPPLYCENTER province="edi" homepower="britain" />
+		<SUPPLYCENTER province="edi" homepower="britain" owner="italy" />
 		<SUPPLYCENTER province="gre" />
 		<SUPPLYCENTER province="hol" />
-		<SUPPLYCENTER province="kie" homepower="germany" />
-		<SUPPLYCENTER province="lvp" homepower="britain" />
-		<SUPPLYCENTER province="lon" homepower="britain" />
-	 	<SUPPLYCENTER province="mar" homepower="france" />
-	 	<SUPPLYCENTER province="mos" homepower="russia" />
-		<SUPPLYCENTER province="mun" homepower="germany" />
-	 	<SUPPLYCENTER province="nap" homepower="italy" />
+		<SUPPLYCENTER province="kie" homepower="germany" owner="turkey" />
+		<SUPPLYCENTER province="lvp" homepower="britain" owner="italy" />
+		<SUPPLYCENTER province="lon" homepower="britain" owner="italy" />
+	 	<SUPPLYCENTER province="mar" homepower="france" owner="austria" />
+	 	<SUPPLYCENTER province="mos" homepower="russia" owner="france" />
+		<SUPPLYCENTER province="mun" homepower="germany" owner="turkey" />
+	 	<SUPPLYCENTER province="nap" homepower="italy" owner="russia" />
 		<SUPPLYCENTER province="nor" />
-	 	<SUPPLYCENTER province="par" homepower="france" />
+	 	<SUPPLYCENTER province="par" homepower="france" owner="austria" />
 		<SUPPLYCENTER province="por" />
-	 	<SUPPLYCENTER province="rom" homepower="italy" />
+	 	<SUPPLYCENTER province="rom" homepower="italy" owner="russia" />
 		<SUPPLYCENTER province="rum" />
 		<SUPPLYCENTER province="ser" />
-	 	<SUPPLYCENTER province="sev" homepower="russia" />
-	 	<SUPPLYCENTER province="smy" homepower="turkey" />
+	 	<SUPPLYCENTER province="sev" homepower="russia" owner="france" />
+	 	<SUPPLYCENTER province="smy" homepower="turkey" owner="germany" />
 		<SUPPLYCENTER province="spa" />
-	 	<SUPPLYCENTER province="stp" homepower="russia" />
+	 	<SUPPLYCENTER province="stp" homepower="russia" owner="france" />
 		<SUPPLYCENTER province="swe" />
-		<SUPPLYCENTER province="tri" homepower="austria" />
+		<SUPPLYCENTER province="tri" homepower="austria" owner="britain" />
 		<SUPPLYCENTER province="tun" />
-	 	<SUPPLYCENTER province="ven" homepower="italy" />
-		<SUPPLYCENTER province="vie" homepower="austria" />
-	 	<SUPPLYCENTER province="war" homepower="russia" />	
+	 	<SUPPLYCENTER province="ven" homepower="italy" owner="russia" />
+		<SUPPLYCENTER province="vie" homepower="austria" owner="britain" />
+	 	<SUPPLYCENTER province="war" homepower="russia" owner="france" />	
 		<!-- unit placement -->
 		<INITIALSTATE province="ank" power="germany" unit="fleet" />
 		<INITIALSTATE province="ber" power="turkey" unit="army" />
@@ -999,63 +999,63 @@
 			<WINNING_SUPPLY_CENTERS value="18" />
 		</VICTORYCONDITIONS>
 		<!-- supply centers -->
-		<SUPPLYCENTER province="ank" homepower="turkey" />
+		<SUPPLYCENTER province="ank" homepower="turkey" owner="germany" />
 		<SUPPLYCENTER province="bel" />
-		<SUPPLYCENTER province="ber" homepower="germany" />
-	 	<SUPPLYCENTER province="bre" homepower="france" />
-		<SUPPLYCENTER province="bud" homepower="austria" />
+		<SUPPLYCENTER province="ber" homepower="germany" owner="turkey" />
+	 	<SUPPLYCENTER province="bre" homepower="france" owner="russia" />
+		<SUPPLYCENTER province="bud" homepower="austria" owner="france" />
 		<SUPPLYCENTER province="bul" />
-	 	<SUPPLYCENTER province="con" homepower="turkey" />
+	 	<SUPPLYCENTER province="con" homepower="turkey" owner="germany" />
 		<SUPPLYCENTER province="den" />
-		<SUPPLYCENTER province="edi" homepower="britain" />
+		<SUPPLYCENTER province="edi" homepower="britain" owner="austria" />
 		<SUPPLYCENTER province="gre" />
 		<SUPPLYCENTER province="hol" />
-		<SUPPLYCENTER province="kie" homepower="germany" />
-		<SUPPLYCENTER province="lvp" homepower="britain" />
-		<SUPPLYCENTER province="lon" homepower="britain" />
-	 	<SUPPLYCENTER province="mar" homepower="france" />
-	 	<SUPPLYCENTER province="mos" homepower="russia" />
-		<SUPPLYCENTER province="mun" homepower="germany" />
-	 	<SUPPLYCENTER province="nap" homepower="italy" />
+		<SUPPLYCENTER province="kie" homepower="germany" owner="turkey" />
+		<SUPPLYCENTER province="lvp" homepower="britain" owner="austria" />
+		<SUPPLYCENTER province="lon" homepower="britain" owner="austria" />
+	 	<SUPPLYCENTER province="mar" homepower="france" owner="russia" />
+	 	<SUPPLYCENTER province="mos" homepower="russia" owner="italy" />
+		<SUPPLYCENTER province="mun" homepower="germany" owner="turkey" />
+	 	<SUPPLYCENTER province="nap" homepower="italy" owner="britain" />
 		<SUPPLYCENTER province="nor" />
-	 	<SUPPLYCENTER province="par" homepower="france" />
+	 	<SUPPLYCENTER province="par" homepower="france" owner="russia" />
 		<SUPPLYCENTER province="por" />
-	 	<SUPPLYCENTER province="rom" homepower="italy" />
+	 	<SUPPLYCENTER province="rom" homepower="italy" owner="britain" />
 		<SUPPLYCENTER province="rum" />
 		<SUPPLYCENTER province="ser" />
-	 	<SUPPLYCENTER province="sev" homepower="russia" />
-	 	<SUPPLYCENTER province="smy" homepower="turkey" />
+	 	<SUPPLYCENTER province="sev" homepower="russia" owner="italy" />
+	 	<SUPPLYCENTER province="smy" homepower="turkey" owner="germany" />
 		<SUPPLYCENTER province="spa" />
-	 	<SUPPLYCENTER province="stp" homepower="russia" />
+	 	<SUPPLYCENTER province="stp" homepower="russia" owner="italy" />
 		<SUPPLYCENTER province="swe" />
-		<SUPPLYCENTER province="tri" homepower="austria" />
+		<SUPPLYCENTER province="tri" homepower="austria" owner="france" />
 		<SUPPLYCENTER province="tun" />
-	 	<SUPPLYCENTER province="ven" homepower="italy" />
-		<SUPPLYCENTER province="vie" homepower="austria" />
-	 	<SUPPLYCENTER province="war" homepower="russia" />
+	 	<SUPPLYCENTER province="ven" homepower="italy" owner="britain" />
+		<SUPPLYCENTER province="vie" homepower="austria" owner="france" />
+	 	<SUPPLYCENTER province="war" homepower="russia" owner="italy" />
 		<!-- unit placement -->
 		<INITIALSTATE province="ank" power="germany" unit="fleet" />
 		<INITIALSTATE province="ber" power="turkey" unit="army" />
-		<INITIALSTATE province="bre" power="austria" unit="fleet" />
-		<INITIALSTATE province="bud" power="britain" unit="army" />
+		<INITIALSTATE province="bre" power="russia" unit="fleet" />
+		<INITIALSTATE province="bud" power="france" unit="army" />
 		<INITIALSTATE province="con" power="germany" unit="army" />
-		<INITIALSTATE province="edi" power="italy" unit="fleet" />
+		<INITIALSTATE province="edi" power="austria" unit="fleet" />
 		<INITIALSTATE province="kie" power="turkey" unit="fleet" />
-		<INITIALSTATE province="lvp" power="italy" unit="army" />
-		<INITIALSTATE province="lon" power="italy" unit="fleet" />
-		<INITIALSTATE province="mar" power="austria" unit="army" />
-		<INITIALSTATE province="mos" power="france" unit="army" />
+		<INITIALSTATE province="lvp" power="austria" unit="army" />
+		<INITIALSTATE province="lon" power="austria" unit="fleet" />
+		<INITIALSTATE province="mar" power="russia" unit="army" />
+		<INITIALSTATE province="mos" power="italy" unit="army" />
 		<INITIALSTATE province="mun" power="turkey" unit="army" />
-		<INITIALSTATE province="nap" power="russia" unit="fleet" />
-		<INITIALSTATE province="par" power="austria" unit="army" />
-		<INITIALSTATE province="rom" power="russia" unit="army" />
-		<INITIALSTATE province="sev" power="france" unit="fleet" />
+		<INITIALSTATE province="nap" power="britain" unit="fleet" />
+		<INITIALSTATE province="par" power="russia" unit="army" />
+		<INITIALSTATE province="rom" power="britain" unit="army" />
+		<INITIALSTATE province="sev" power="italy" unit="fleet" />
 		<INITIALSTATE province="smy" power="germany" unit="army" />
-		<INITIALSTATE province="stp" power="france" unit="fleet" unitcoast="sc" />
-		<INITIALSTATE province="tri" power="britain" unit="fleet" />
-		<INITIALSTATE province="ven" power="russia" unit="army" />
-		<INITIALSTATE province="vie" power="britain" unit="army" />
-		<INITIALSTATE province="war" power="france" unit="army" />
+		<INITIALSTATE province="stp" power="italy" unit="fleet" unitcoast="sc" />
+		<INITIALSTATE province="tri" power="france" unit="fleet" />
+		<INITIALSTATE province="ven" power="britain" unit="army" />
+		<INITIALSTATE province="vie" power="france" unit="army" />
+		<INITIALSTATE province="war" power="italy" unit="army" />
 	</VARIANT>
 	
 	<VARIANT name="Shift-Around" version="1.0" aliases="shift_around, shiftaround">
@@ -1099,40 +1099,40 @@
 			<WINNING_SUPPLY_CENTERS value="18" />
 		</VICTORYCONDITIONS>
 		<!-- supply centers -->
-		<SUPPLYCENTER province="ank" homepower="turkey" />
+		<SUPPLYCENTER province="ank" homepower="turkey" owner="germany" />
 		<SUPPLYCENTER province="bel" />
-		<SUPPLYCENTER province="ber" homepower="germany" />
-	 	<SUPPLYCENTER province="bre" homepower="france" />
-		<SUPPLYCENTER province="bud" homepower="austria" />
+		<SUPPLYCENTER province="ber" homepower="germany" owner="turkey" />
+	 	<SUPPLYCENTER province="bre" homepower="france" owner="austria" />
+		<SUPPLYCENTER province="bud" homepower="austria" owner="france" />
 		<SUPPLYCENTER province="bul" />
-	 	<SUPPLYCENTER province="con" homepower="turkey" />
+	 	<SUPPLYCENTER province="con" homepower="turkey" owner="germany" />
 		<SUPPLYCENTER province="den" />
-		<SUPPLYCENTER province="edi" homepower="britain" />
+		<SUPPLYCENTER province="edi" homepower="britain" owner="russia" />
 		<SUPPLYCENTER province="gre" />
 		<SUPPLYCENTER province="hol" />
-		<SUPPLYCENTER province="kie" homepower="germany" />
-		<SUPPLYCENTER province="lvp" homepower="britain" />
-		<SUPPLYCENTER province="lon" homepower="britain" />
-	 	<SUPPLYCENTER province="mar" homepower="france" />
-	 	<SUPPLYCENTER province="mos" homepower="russia" />
-		<SUPPLYCENTER province="mun" homepower="germany" />
-	 	<SUPPLYCENTER province="nap" homepower="italy" />
+		<SUPPLYCENTER province="kie" homepower="germany" owner="turkey" />
+		<SUPPLYCENTER province="lvp" homepower="britain" owner="russia" />
+		<SUPPLYCENTER province="lon" homepower="britain" owner="russia" />
+	 	<SUPPLYCENTER province="mar" homepower="france" owner="austria" />
+	 	<SUPPLYCENTER province="mos" homepower="russia" owner="italy" />
+		<SUPPLYCENTER province="mun" homepower="germany" owner="turkey" />
+	 	<SUPPLYCENTER province="nap" homepower="italy" owner="britain" />
 		<SUPPLYCENTER province="nor" />
-	 	<SUPPLYCENTER province="par" homepower="france" />
+	 	<SUPPLYCENTER province="par" homepower="france" owner="austria" />
 		<SUPPLYCENTER province="por" />
-	 	<SUPPLYCENTER province="rom" homepower="italy" />
+	 	<SUPPLYCENTER province="rom" homepower="italy" owner="britain" />
 		<SUPPLYCENTER province="rum" />
 		<SUPPLYCENTER province="ser" />
-	 	<SUPPLYCENTER province="sev" homepower="russia" />
-	 	<SUPPLYCENTER province="smy" homepower="turkey" />
+	 	<SUPPLYCENTER province="sev" homepower="russia" owner="italy" />
+	 	<SUPPLYCENTER province="smy" homepower="turkey" owner="germany" />
 		<SUPPLYCENTER province="spa" />
-	 	<SUPPLYCENTER province="stp" homepower="russia" />
+	 	<SUPPLYCENTER province="stp" homepower="russia" owner="italy" />
 		<SUPPLYCENTER province="swe" />
-		<SUPPLYCENTER province="tri" homepower="austria" />
+		<SUPPLYCENTER province="tri" homepower="austria" owner="france" />
 		<SUPPLYCENTER province="tun" />
-	 	<SUPPLYCENTER province="ven" homepower="italy" />
-		<SUPPLYCENTER province="vie" homepower="austria" />
-	 	<SUPPLYCENTER province="war" homepower="russia" />
+	 	<SUPPLYCENTER province="ven" homepower="italy" owner="britain" />
+		<SUPPLYCENTER province="vie" homepower="austria" owner="france" />
+	 	<SUPPLYCENTER province="war" homepower="russia" owner="italy" />
 		<!-- unit placement -->
 		<INITIALSTATE province="ank" power="germany" unit="fleet" />
 		<INITIALSTATE province="ber" power="turkey" unit="army" />

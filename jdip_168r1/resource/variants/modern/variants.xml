@@ -556,70 +556,70 @@
 
  	 	
 		<!-- supply centers -->
-		<SUPPLYCENTER province="ada" homepower="Turkey" owner="Turkey"/>
-		<SUPPLYCENTER province="ale" homepower="Egypt" owner="Egypt"/>
-		<SUPPLYCENTER province="ank" homepower="Turkey" owner="Turkey"/>
-		<SUPPLYCENTER province="asw" homepower="Egypt" owner="Egypt"/>
+		<SUPPLYCENTER province="ada" homepower="Turkey" owner="France"/>
+		<SUPPLYCENTER province="ale" homepower="Egypt" owner="Germany"/>
+		<SUPPLYCENTER province="ank" homepower="Turkey" owner="France"/>
+		<SUPPLYCENTER province="asw" homepower="Egypt" owner="Germany"/>
 		<SUPPLYCENTER province="aus"/>
-		<SUPPLYCENTER province="bar" homepower="Spain" owner="Spain"/>
+		<SUPPLYCENTER province="bar" homepower="Spain" owner="Poland"/>
 		<SUPPLYCENTER province="bel"/>
-		<SUPPLYCENTER province="ber" homepower="Germany" owner="Germany"/>
+		<SUPPLYCENTER province="ber" homepower="Germany" owner="Turkey"/>
 		<SUPPLYCENTER province="bie"/>
-		<SUPPLYCENTER province="bor" homepower="France" owner="France"/>
+		<SUPPLYCENTER province="bor" homepower="France" owner="Russia"/>
 		<SUPPLYCENTER province="bul"/>
-		<SUPPLYCENTER province="cai" homepower="Egypt" owner="Egypt"/>
+		<SUPPLYCENTER province="cai" homepower="Egypt" owner="Germany"/>
 		<SUPPLYCENTER province="cro"/>
 		<SUPPLYCENTER province="cze"/>
 		<SUPPLYCENTER province="den"/>
-		<SUPPLYCENTER province="edi" homepower="Britain" owner="Britain"/>
-		<SUPPLYCENTER province="fra" homepower="Germany" owner="Germany"/>
-		<SUPPLYCENTER province="gda" homepower="Poland" owner="Poland"/>
+		<SUPPLYCENTER province="edi" homepower="Britain" owner="Ukraine"/>
+		<SUPPLYCENTER province="fra" homepower="Germany" owner="Turkey"/>
+		<SUPPLYCENTER province="gda" homepower="Poland" owner="Egypt"/>
 		<SUPPLYCENTER province="geo"/>
-		<SUPPLYCENTER province="gib" homepower="Britain" owner="Britain"/>
-		<SUPPLYCENTER province="gor" homepower="Russia" owner="Russia"/>
+		<SUPPLYCENTER province="gib" homepower="Britain" owner="Ukraine"/>
+		<SUPPLYCENTER province="gor" homepower="Russia" owner="Italy"/>
 		<SUPPLYCENTER province="gre"/>
-		<SUPPLYCENTER province="ham" homepower="Germany" owner="Germany"/>
+		<SUPPLYCENTER province="ham" homepower="Germany" owner="Turkey"/>
 		<SUPPLYCENTER province="hol"/>
 		<SUPPLYCENTER province="hun"/>
 		<SUPPLYCENTER province="irn"/>
 		<SUPPLYCENTER province="ire"/>
 		<SUPPLYCENTER province="isr"/>
-		<SUPPLYCENTER province="ist" homepower="Turkey" owner="Turkey"/>
-		<SUPPLYCENTER province="izm" homepower="Turkey" owner="Turkey"/>
-		<SUPPLYCENTER province="kha" homepower="Ukraine" owner="Ukraine"/>
-		<SUPPLYCENTER province="kie" homepower="Ukraine" owner="Ukraine"/>
-		<SUPPLYCENTER province="kra" homepower="Poland" owner="Poland"/>
+		<SUPPLYCENTER province="ist" homepower="Turkey" owner="France"/>
+		<SUPPLYCENTER province="izm" homepower="Turkey" owner="France"/>
+		<SUPPLYCENTER province="kha" homepower="Ukraine" owner="Spain"/>
+		<SUPPLYCENTER province="kie" homepower="Ukraine" owner="Spain"/>
+		<SUPPLYCENTER province="kra" homepower="Poland" owner="Egypt"/>
 		<SUPPLYCENTER province="lib"/>
 		<SUPPLYCENTER province="lit"/>
-		<SUPPLYCENTER province="liv" homepower="Britain" owner="Britain"/>
-		<SUPPLYCENTER province="lon" homepower="Britain" owner="Britain"/>
-		<SUPPLYCENTER province="lyo" homepower="France" owner="France"/>
-		<SUPPLYCENTER province="mad" homepower="Spain" owner="Spain"/>
-		<SUPPLYCENTER province="mar" homepower="France" owner="France"/>
-		<SUPPLYCENTER province="mil" homepower="Italy" owner="Italy"/>
+		<SUPPLYCENTER province="liv" homepower="Britain" owner="Ukraine"/>
+		<SUPPLYCENTER province="lon" homepower="Britain" owner="Ukraine"/>
+		<SUPPLYCENTER province="lyo" homepower="France" owner="Russia"/>
+		<SUPPLYCENTER province="mad" homepower="Spain" owner="Poland"/>
+		<SUPPLYCENTER province="mar" homepower="France" owner="Russia"/>
+		<SUPPLYCENTER province="mil" homepower="Italy" owner="Britain"/>
 		<SUPPLYCENTER province="mon"/>
 		<SUPPLYCENTER province="mor"/>
-		<SUPPLYCENTER province="mos" homepower="Russia" owner="Russia"/>
-		<SUPPLYCENTER province="mun" homepower="Germany" owner="Germany"/>
-		<SUPPLYCENTER province="mur" homepower="Russia" owner="Russia"/>
-		<SUPPLYCENTER province="nap" homepower="Italy" owner="Italy"/>
+		<SUPPLYCENTER province="mos" homepower="Russia" owner="Italy"/>
+		<SUPPLYCENTER province="mun" homepower="Germany" owner="Turkey"/>
+		<SUPPLYCENTER province="mur" homepower="Russia" owner="Italy"/>
+		<SUPPLYCENTER province="nap" homepower="Italy" owner="Britain"/>
 		<SUPPLYCENTER province="nor"/>
-		<SUPPLYCENTER province="ode" homepower="Ukraine" owner="Ukraine"/>
-		<SUPPLYCENTER province="par" homepower="France" owner="France"/>
+		<SUPPLYCENTER province="ode" homepower="Ukraine" owner="Spain"/>
+		<SUPPLYCENTER province="par" homepower="France" owner="Russia"/>
 		<SUPPLYCENTER province="por"/>
-		<SUPPLYCENTER province="rom" homepower="Italy" owner="Italy"/>
-		<SUPPLYCENTER province="ros" homepower="Russia" owner="Russia"/>
+		<SUPPLYCENTER province="rom" homepower="Italy" owner="Britain"/>
+		<SUPPLYCENTER province="ros" homepower="Russia" owner="Italy"/>
 		<SUPPLYCENTER province="rum"/>
 		<SUPPLYCENTER province="sau"/>
 		<SUPPLYCENTER province="ser"/>
-		<SUPPLYCENTER province="sev" homepower="Ukraine" owner="Ukraine"/>
-		<SUPPLYCENTER province="sve" homepower="Spain" owner="Spain"/>
-		<SUPPLYCENTER province="stp" homepower="Russia" owner="Russia"/>
+		<SUPPLYCENTER province="sev" homepower="Ukraine" owner="Spain"/>
+		<SUPPLYCENTER province="sve" homepower="Spain" owner="Poland"/>
+		<SUPPLYCENTER province="stp" homepower="Russia" owner="Italy"/>
 		<SUPPLYCENTER province="swe"/>
 		<SUPPLYCENTER province="swi"/>
 		<SUPPLYCENTER province="tun"/>
-		<SUPPLYCENTER province="ven" homepower="Italy" owner="Italy"/>
-		<SUPPLYCENTER province="war" homepower="Poland" owner="Poland"/>
+		<SUPPLYCENTER province="ven" homepower="Italy" owner="Britain"/>
+		<SUPPLYCENTER province="war" homepower="Poland" owner="Egypt"/>
 
 		
 		<!-- unit placement -->

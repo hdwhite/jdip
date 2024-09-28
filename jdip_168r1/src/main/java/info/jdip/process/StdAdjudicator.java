@@ -268,7 +268,7 @@ public class StdAdjudicator implements Adjudicator {
      * note that this will <b>not</b> contain 'null' substitutions (e.g.,
      * no order was specified, and a Hold order was automatically generated).
      */
-    public List getSubstitutedOrderStates() {
+    public List<OrderState> getSubstitutedOrderStates() {
         return substOrders;
     }// getSubstitutedOrderStates()
 
@@ -329,9 +329,9 @@ public class StdAdjudicator implements Adjudicator {
         Power[] powers = world.getMap().getPowers();
 
         for (Power power : powers) {
-            Iterator iter = turnState.getOrders(power).iterator();
+            Iterator<Orderable> iter = turnState.getOrders(power).iterator();
             while (iter.hasNext()) {
-                Orderable order = (Orderable) iter.next();
+                Orderable order = iter.next();
                 if (order.getPower() != power) {
                     // remove order: it is invalid (and
                     // likely a bug or a cheat attempt)
@@ -1023,10 +1023,10 @@ public class StdAdjudicator implements Adjudicator {
         // ensure that each dislodged unit has one, and only one, order.
         //
         // during the retreat phase, we are only concerned with dislodged units.
-        List orderList = turnState.getAllOrders();
+        List<Orderable> orderList = turnState.getAllOrders();
         ArrayList<OrderState> osList = new ArrayList<>(orderList.size());
 
-        for (Object anOrderList : orderList) {
+        for (Orderable anOrderList : orderList) {
             Order order = (Order) anOrderList;
             OrderState os = new OrderState(order);
             Province province = os.getSourceProvince();
@@ -1539,9 +1539,9 @@ public class StdAdjudicator implements Adjudicator {
                 // the first fleet extracted will similarly be first alphabetically.
                 // if there are only 2 units, it doesn't matter.
                 boolean foundFleet = false;
-                Iterator tieIter = ties.iterator();
+                Iterator<Province> tieIter = ties.iterator();
                 while (tieIter.hasNext() && !foundFleet) {
-                    Province province = (Province) tieIter.next();
+                    Province province = tieIter.next();
                     Unit unit = position.getUnit(province);
                     if (unit.getType().equals(Unit.Type.FLEET)) {
                         foundFleet = true;
@@ -1664,7 +1664,7 @@ public class StdAdjudicator implements Adjudicator {
      * <p>
      * The returned List is guaranteed to be filled with Move orders only
      */
-    private List findMovesTo(Province moveDest) {
+    private List<Order> findMovesTo(Province moveDest) {
         ArrayList<Order> list = new ArrayList<>(6); //todo: i kind of feel this method should return this list
 
         for (OrderState os : orderStates) {
