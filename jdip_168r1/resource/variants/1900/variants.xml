@@ -41,6 +41,7 @@
 			active (true|false) "true"
 			adjective CDATA #REQUIRED
 			altnames CDATA #IMPLIED
+			emergency (true|false) "false"
 			>
 	
 	<!ELEMENT STARTINGTIME EMPTY>
@@ -205,17 +206,6 @@
 		<p style="margin-top:0pt;">
 			Author: Baron M. Powell<br>
 		</p>
-		
-		<h2>GM Notes</h2>
-		<p style="margin-top:0pt;">
-			The Suez Canal Rules will have to be adjudicated manually as half 
-			strength attacks are not supported by the current version of jDip.
-		</p>
-		<p>
-			Russia is assigned an additional dummy Supply Centre to allow for 
-			the Steamroller rule. Should Russia lose all its home SCs, the 
-			additional unit will have to be deleted manually.
-		</p>
 		]]></DESCRIPTION> 
 		<MAP adjacencyURI="1900_adjacency.xml">
 			<MAP_GRAPHIC ref="standard" default="true" />
@@ -230,7 +220,7 @@
 		<POWER name="France" active="true" adjective="French" /> 
 		<POWER name="Germany" active="true" adjective="German" /> 
 		<POWER name="Italy" active="true" adjective="Italian" />
-		<POWER name="Russia" active="true" adjective="Russian" />
+		<POWER name="Russia" active="true" adjective="Russian" emergency="true" />
 		<POWER name="Turkey" active="true" adjective="Turkish" altnames="Ottoman Empire" /> 
 		<STARTINGTIME turn="Spring, 1900, Movement" />
 		<VICTORYCONDITIONS>
@@ -250,8 +240,6 @@
 	 	<SUPPLYCENTER province="con" homepower="turkey" owner="turkey"/>
 	 	<SUPPLYCENTER province="dam" homepower="turkey" owner="turkey"/>
 		<SUPPLYCENTER province="den" />
- 	 	<!-- dummy supply center for Russian steamroller rule -->
-	 	<SUPPLYCENTER province="dum" owner="russia"/>
 		<SUPPLYCENTER province="edi" homepower="britain" owner="britain"/>
 		<SUPPLYCENTER province="egy" owner="britain"/>
 		<SUPPLYCENTER province="gre" />

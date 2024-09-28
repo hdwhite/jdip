@@ -24,6 +24,7 @@
 				shortname CDATA #REQUIRED
 				fullname CDATA #REQUIRED
 				isConvoyableCoast (true|false) "false"
+				isImpassable (true|false) "false"
 				borders IDREFS #IMPLIED
 				>	
 	
@@ -100,7 +101,7 @@
 		<ADJACENCY type="sc" refs="gre aeg con"/>
 	</PROVINCE>
 	<PROVINCE fullname="Burgundy" shortname="bur">
-		<ADJACENCY type="mv" refs="mar gas par pic bel ruh mun sav"/>
+		<ADJACENCY type="mv" refs="mar gas par pic bel ruh mun sav swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="Clyde" shortname="cly">
 		<ADJACENCY type="mv" refs="edi lvp"/>
@@ -213,13 +214,13 @@
 		<ADJACENCY type="xc" refs="nao iri eng bre gas spa-nc por spa-sc naf wes"/>
 	</PROVINCE>
 	<PROVINCE fullname="Milan" shortname="mil">
-		<ADJACENCY type="mv" refs="sav tyr ven rom"/>
+		<ADJACENCY type="mv" refs="sav tyr ven rom swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="Moscow" shortname="mos">
 		<ADJACENCY type="mv" refs="stp lvn war ukr sev"/>
 	</PROVINCE>
 	<PROVINCE fullname="Munich" shortname="mun">
-		<ADJACENCY type="mv" refs="bur ruh kie ber sil boh tyr"/>
+		<ADJACENCY type="mv" refs="bur ruh kie ber sil boh tyr swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="Naples" shortname="nap">
 		<ADJACENCY type="mv" refs="rom apu"/>
@@ -286,7 +287,7 @@
 	</PROVINCE>
 	<PROVINCE fullname="Savoy" shortname="sav">
 		<UNIQUENAME name="svy" />
-		<ADJACENCY type="mv" refs="mar bur mil rom"/>
+		<ADJACENCY type="mv" refs="mar bur mil rom swi"/>
 		<ADJACENCY type="xc" refs="mar lyo rom"/>
 	</PROVINCE>
 	<PROVINCE fullname="Serbia" shortname="ser">
@@ -328,9 +329,9 @@
 		<ADJACENCY type="mv" refs="fin den nor"/>
 		<ADJACENCY type="xc" refs="fin bot bal den ska nor"/>
 	</PROVINCE>
-	<PROVINCE fullname="Switzerland" shortname="swi">
+	<PROVINCE shortname="swi" fullname="Switzerland" isImpassable="true">
 		<UNIQUENAME name="switz" />
-		<ADJACENCY type="mv" refs="swi"/>
+		<ADJACENCY type="mv" refs="bur mun tyr mil sav mar" />
 	</PROVINCE>
 	<PROVINCE fullname="Syria" shortname="syr">
 		<ADJACENCY type="mv" refs="smy arm"/>
@@ -348,7 +349,7 @@
 		<UNIQUENAME name="tyl" />
 		<UNIQUENAME name="trl" />
 		<UNIQUENAME name="alp" />
-		<ADJACENCY type="mv" refs="mun boh vie tri ven mil"/>
+		<ADJACENCY type="mv" refs="mun boh vie tri ven mil swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="Tyrrhenian Sea" shortname="tys">
 		<UNIQUENAME name="tyrhennian sea" />

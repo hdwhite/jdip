@@ -61,6 +61,7 @@ public class XMLProvinceParser implements ProvinceParser {
     public static final String ATT_TYPE = "type";
     public static final String ATT_REFS = "refs";
     public static final String ATT_CONVOYABLE_COAST = "isConvoyableCoast";
+	public static final String ATT_IMPASSABLE = "isImpassable";
     public static final String ATT_ID = "id";
     public static final String ATT_DESCRIPTION = "description";
     public static final String ATT_UNIT_TYPES = "unitTypes";
@@ -173,6 +174,9 @@ public class XMLProvinceParser implements ProvinceParser {
 
             // convoyable coast
             provinceData.setConvoyableCoast(Boolean.valueOf(elProvince.getAttribute(ATT_CONVOYABLE_COAST)));
+
+			// impassable
+			provinceData.setImpassable(Boolean.valueOf(elProvince.getAttribute(ATT_IMPASSABLE)));
 
             // borders data (optional); a list of references, seperated by commas/spaces
             String borders = elProvince.getAttribute(ATT_BORDERS).trim();

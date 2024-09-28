@@ -95,6 +95,7 @@ public class XMLVariantParser implements VariantParser {
     public static final String ATT_ADJACENCYURI = "adjacencyURI";
     public static final String ATT_NAME = "name";
     public static final String ATT_ACTIVE = "active";
+	public static final String ATT_EMERGENCY = "emergency";
     public static final String ATT_ADJECTIVE = "adjective";
     public static final String ATT_ALTNAMES = "altnames";
     public static final String ATT_TURN = "turn";
@@ -300,6 +301,7 @@ public class XMLVariantParser implements VariantParser {
                 element = (Element) nodes.item(j);
                 String name = element.getAttribute(ATT_NAME);
                 final boolean isActive = Boolean.valueOf(element.getAttribute(ATT_ACTIVE));
+				final boolean hasEmergency = Boolean.valueOf(element.getAttribute(ATT_EMERGENCY));
                 String adjective = element.getAttribute(ATT_ADJECTIVE);
                 String[] altNames = Utils.parseCSVXE(element.getAttribute(ATT_ALTNAMES));
 
@@ -307,7 +309,7 @@ public class XMLVariantParser implements VariantParser {
                 names[0] = name;
                 System.arraycopy(altNames, 0, names, 1, altNames.length);
 
-                Power power = new Power(names, adjective, isActive);
+                Power power = new Power(names, adjective, isActive, hasEmergency);
                 powerList.add(power);
             }
             variant.setPowers(powerList);

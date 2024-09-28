@@ -37,6 +37,8 @@ import info.jdip.world.Province;
 import info.jdip.world.RuleOptions;
 import info.jdip.world.TurnState;
 import info.jdip.world.Unit;
+
+import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +70,7 @@ public class Move extends Order {
     private static final String MOVE_EVAL_BAD_ROUTE = "MOVE_EVAL_BAD_ROUTE";
     private static final String MOVE_FAILED = "MOVE_FAILED";
     private static final String MOVE_FAILED_NO_SELF_DISLODGE = "MOVE_FAILED_NO_SELF_DISLODGE";
+	private static final String MOVE_FAILED_IMPASSABLE = "MOVE_FAILED_IMPASSABLE";
     private static final String MOVE_FORMAT = "MOVE_FORMAT";
     private static final String MOVE_FORMAT_EXPLICIT_CONVOY = "MOVE_FORMAT_EXPLICIT_CONVOY";
     private static final String CONVOY_PATH_MUST_BE_EXPLICIT = "CONVOY_PATH_MUST_BE_EXPLICIT";
@@ -931,6 +934,15 @@ public class Move extends Order {
 
         // evaluate
         if (thisOS.getEvalState() == Tristate.UNCERTAIN) {
+            // moves to impassable spaces fail
+            if(order.getDest().getProvince().isImpassable())
+			{
+				thisOS.setEvalState(Tristate.FAILURE);
+				logger.debug("Failed. (destination is impassable)");
+				adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_IMPASSABLE));
+				return;
+			}
+
             // re-evaluate head-to-head status. we may be convoyed, so,
             // this could be a head-to-head move.
             //
@@ -942,7 +954,6 @@ public class Move extends Order {
                     thisOS.setHeadToHead(null);
                 }
             }
-
 
             // 2.a-c
             if (isConvoying()) {

@@ -114,7 +114,7 @@ public class WorldFactory {
             }
 
             // create Province object
-            Province province = new Province(provinceData.getFullName(), shortNames, i, provinceData.getConvoyableCoast());
+            Province province = new Province(provinceData.getFullName(), shortNames, i, provinceData.getConvoyableCoast(), provinceData.getImpassable());
 
             // add Province data to list
             provinces.add(province);

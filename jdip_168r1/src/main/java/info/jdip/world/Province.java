@@ -69,11 +69,12 @@ import java.util.HashSet;
 public class Province implements java.io.Serializable, Comparable<Province> {
 
     // immutable persistent fields
-    private final String fullName;                // fullName MUST BE UNIQUE
-    private final String shortNames[];            // always has AT LEAST one, and all are globally unique
+    private final String fullName;              // fullName MUST BE UNIQUE
+    private final String shortNames[];          // always has AT LEAST one, and all are globally unique
     private final int index;                    // contiguous index
     private final boolean isConvoyableCoast;    // 'true' if coast is convoyable
-    private final Adjacency adjacency;            // adjacency data
+    private final boolean isImpassable;         // 'true' if province is impassable
+    private final Adjacency adjacency;          // adjacency data
 
     // publicly immutable non-final persistent fields
     // (because of difficulties with creation)
@@ -94,7 +95,7 @@ public class Province implements java.io.Serializable, Comparable<Province> {
      * These are created by a WorldFactory, or through de-serialization.
      * Null names are not allowed. At least one shortName is required.
      */
-    public Province(String fullName, String[] shortNames, int index, boolean isConvoyableCoast) {
+    public Province(String fullName, String[] shortNames, int index, boolean isConvoyableCoast, boolean isImpassable) {
         if (fullName == null || shortNames == null) {
             throw new IllegalArgumentException("null full or short name(s)");
         }
@@ -111,6 +112,7 @@ public class Province implements java.io.Serializable, Comparable<Province> {
         this.shortNames = shortNames;
         this.index = index;
         this.isConvoyableCoast = isConvoyableCoast;
+        this.isImpassable = isImpassable;
         this.adjacency = new Adjacency();
     }// Province()
 
@@ -443,6 +445,13 @@ public class Province implements java.io.Serializable, Comparable<Province> {
      */
     public boolean isConvoyableCoast() {
         return isConvoyableCoast;
+    }// isConvoyableCoast()
+
+    /**
+     * If this province is impassable, this will return <code>true</code>.
+     */
+    public boolean isImpassable() {
+        return isImpassable;
     }// isConvoyableCoast()
 
     /**

@@ -26,7 +26,7 @@ package info.jdip.world;
 /**
  * A Power represents player in the game.
  */
-public class Power implements Comparable, java.io.Serializable {
+public class Power implements Comparable<Power>, java.io.Serializable {
     /**
      * An empty array of Power objects.
      */
@@ -39,6 +39,7 @@ public class Power implements Comparable, java.io.Serializable {
     // immutable fields
     private final String[] names;        // length >= 1
     private final boolean isActive;
+	private final boolean hasEmergency;
     private final String adjective;
 
 
@@ -60,7 +61,7 @@ public class Power implements Comparable, java.io.Serializable {
      * Power uses instance equality, so two Power() objects created with the same arguments
      * will NOT be the same.
      */
-    public Power(String[] names, String adjective, boolean isActive) {
+	public Power(String[] names, String adjective, boolean isActive, boolean hasEmergency) {
         if (names == null || adjective == null) {
             throw new IllegalArgumentException("null argument(s)");
         }
@@ -76,6 +77,7 @@ public class Power implements Comparable, java.io.Serializable {
         this.names = names;
         this.adjective = adjective;
         this.isActive = isActive;
+		this.hasEmergency = hasEmergency;
     }// Power()
 
 
@@ -108,6 +110,10 @@ public class Power implements Comparable, java.io.Serializable {
         return isActive;
     }
 
+	/** Determines if this power can enact emergency measures. */
+	public boolean hasEmergency() {
+        return hasEmergency;
+    }
 
     /**
      * Implementation of Object.hashCode()
@@ -137,8 +143,7 @@ public class Power implements Comparable, java.io.Serializable {
     /**
      * Implementation of Comparable interface
      */
-    public int compareTo(Object obj) {
-        Power power = (Power) obj;
+    public int compareTo(Power power) {
         return getName().compareTo(power.getName());
     }// compareTo()
 

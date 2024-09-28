@@ -328,7 +328,8 @@ public class Variant implements Cloneable, Comparable<Variant> {
                 Power old = powers[i];
                 powers[i] = new Power(old.getNames(),
                         old.getAdjective(),
-                        values[i]);
+                        values[i],
+                        old.hasEmergency());
             }
         }
     }// setActiveState()
@@ -451,7 +452,8 @@ public class Variant implements Cloneable, Comparable<Variant> {
                 Power thisPower = powers[i];
                 variant.powers[i] = new Power(thisPower.getNames(),
                         thisPower.getAdjective(),
-                        thisPower.isActive());
+                        thisPower.isActive(),
+                        thisPower.hasEmergency());
             }
         }
 

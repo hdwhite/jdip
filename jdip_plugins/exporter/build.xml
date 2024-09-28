@@ -9,7 +9,7 @@
 	<property name="plugin.name" value="ExportTool"/>
 	
 	<!-- where jdip.jar is, and any associated jdip libraries -->
-	<property name="jdip.base" value="../../jdip_1_5"/>
+	<property name="jdip.base" value="../../jdip_168r1"/>
 	
 	<!-- build properties -->
 	<property name="debug" value="true"/>

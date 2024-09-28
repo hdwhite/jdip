@@ -24,6 +24,7 @@
 				shortname CDATA #REQUIRED
 				fullname CDATA #REQUIRED
 				isConvoyableCoast (true|false) "false"
+				isImpassable (true|false) "false"
 				borders IDREFS #IMPLIED
 				>	
 	
@@ -39,9 +40,9 @@
 ]>
 <!-- Youngtown adjacency -->
 <PROVINCES>
-	<PROVINCE fullname="Switzerland" shortname="swi">
+	<PROVINCE fullname="Switzerland" shortname="swi" isImpassable="true">
 		<UNIQUENAME name="switz" />
-		<ADJACENCY type="mv" refs="swi"/>
+		<ADJACENCY type="mv" refs="bur mun tyr pie mar"/>
 	</PROVINCE>
 	<PROVINCE fullname="Adriatic Sea" shortname="adr">
 		<UNIQUENAME name="adriatic" />
@@ -126,7 +127,7 @@
 		<ADJACENCY type="mv" refs="pic par gas"/>
 		<ADJACENCY type="xc" refs="mat eng pic gas"/>
 	</PROVINCE>
-	<PROVINCE fullname="Brunie" shortname="bru">
+	<PROVINCE fullname="Brunei" shortname="bru">
 		<ADJACENCY type="mv" refs="bor"/>
 		<ADJACENCY type="xc" refs="sch bor gos"/>
 	</PROVINCE>
@@ -140,7 +141,7 @@
 	</PROVINCE>
 	<PROVINCE fullname="Burgundy" shortname="bur">
 		<UNIQUENAME name="burg" />
-		<ADJACENCY type="mv" refs="par pic bel ruh mun mar gas"/>
+		<ADJACENCY type="mv" refs="par pic bel ruh mun mar gas swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="Burma" shortname="brm">
 		<UNIQUENAME name="burm" />
@@ -412,7 +413,7 @@
 	</PROVINCE>
 	<PROVINCE fullname="Marseilles" shortname="mar">
 		<UNIQUENAME name="mars" />
-		<ADJACENCY type="mv" refs="spa gas bur pie"/>
+		<ADJACENCY type="mv" refs="spa gas bur pie swi"/>
 		<ADJACENCY type="xc" refs="spa-sc pie gol"/>
 	</PROVINCE>
 	<PROVINCE fullname="Mid-Atlantic Ocean" shortname="mao">
@@ -421,7 +422,7 @@
 		<UNIQUENAME name="mid" />
 		<ADJACENCY type="xc" refs="obb nat iri eng bre gas spa-nc spa-sc por wme mor sat"/>
 	</PROVINCE>
-	<PROVINCE fullname="Monte Negro" shortname="mon">
+	<PROVINCE fullname="Montenegro" shortname="mon">
 		<ADJACENCY type="mv" refs="tri bud ser alb"/>
 		<ADJACENCY type="xc" refs="adr tri alb"/>
 	</PROVINCE>
@@ -433,7 +434,7 @@
 		<ADJACENCY type="mv" refs="lvn stp oms sev ukr war"/>
 	</PROVINCE>
 	<PROVINCE fullname="Munich" shortname="mun">
-		<ADJACENCY type="mv" refs="bur ruh kie sax boh tyr"/>
+		<ADJACENCY type="mv" refs="bur ruh kie sax boh tyr swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="North Atlantic Ocean" shortname="nat">
 		<UNIQUENAME name="nao" />
@@ -576,7 +577,7 @@
 		<ADJACENCY type="xc" refs="bre eng bel"/>
 	</PROVINCE>
 	<PROVINCE fullname="Piedmont" shortname="pie">
-		<ADJACENCY type="mv" refs="mar tyr ven tus"/>
+		<ADJACENCY type="mv" refs="mar tyr ven tus swi"/>
 		<ADJACENCY type="xc" refs="mar tus gol"/>
 	</PROVINCE>
 	<PROVINCE fullname="Portugal" shortname="por">
@@ -767,7 +768,7 @@
 	</PROVINCE>
 	<PROVINCE fullname="Tyrolia" shortname="tyr">
 		<UNIQUENAME name="trl" />
-		<ADJACENCY type="mv" refs="pie mun boh vie tri ven"/>
+		<ADJACENCY type="mv" refs="pie mun boh vie tri ven swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="Ukraine" shortname="ukr">
 		<UNIQUENAME name="ukraina" />

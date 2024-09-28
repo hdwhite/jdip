@@ -702,12 +702,12 @@ public class OrderFormat {
     public static String getFormatExample(OrderFormatOptions ofo, OrderFactory of) {
         // this is about the ONLY time Province or Power objects are
         // created using 'new'
-        Province prov1 = new Province("Livonia", new String[]{"lvn"}, 0, false);
-        Province prov2 = new Province("St. Petersburg", new String[]{"stp"}, 0, false);
-        Province prov3 = new Province("Golf of Bothnia", new String[]{"gob"}, 0, false);
+        Province prov1 = new Province("Livonia", new String[]{"lvn"}, 0, false, false);
+        Province prov2 = new Province("St. Petersburg", new String[]{"stp"}, 0, false, false);
+        Province prov3 = new Province("Golf of Bothnia", new String[]{"gob"}, 0, false, false);
 
-        Power power1 = new Power(new String[]{"Russia"}, "Russian", true);
-        Power power2 = new Power(new String[]{"German"}, "German", true);
+        Power power1 = new Power(new String[]{"Russia"}, "Russian", true, false);
+        Power power2 = new Power(new String[]{"German"}, "German", true, false);
 
         Location src = new Location(prov1, Coast.SEA);
         Location supSrc = new Location(prov2, Coast.SOUTH);

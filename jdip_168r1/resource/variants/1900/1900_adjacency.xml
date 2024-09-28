@@ -38,6 +38,12 @@
 				>
 ]>
 <PROVINCES>
+		<BORDER_DEFINITIONS>
+			<BORDER id="mxFromEGY" from="egy" description="" baseMoveModifier="-1" />
+			<BORDER id="mxFromHEJ" from="hej" description="" baseMoveModifier="-1" />
+			<BORDER id="mxFromMID" from="mid" description="" baseMoveModifier="-1" />
+		</BORDER_DEFINITIONS>
+
 		<!-- name, abbreviation, and adjacency data for all provinces -->
 		<!-- virtually identical to Judge format -->
 		<PROVINCE shortname="adr" fullname="Adriatic Sea">
@@ -146,7 +152,7 @@
 			<ADJACENCY type="mv" refs="lvp yor cly" />
 			<ADJACENCY type="xc" refs="nth nws cly yor" />
 		</PROVINCE>
-		<PROVINCE shortname="egy" fullname="Egypt">
+		<PROVINCE shortname="egy" fullname="Egypt" borders="mxFromMID">
 			<ADJACENCY type="mv" refs="cyr pal hej" />
 			<ADJACENCY type="xc" refs="cyr eas pal hej mid" />
 		</PROVINCE>
@@ -183,7 +189,7 @@
 			<ADJACENCY type="mv" refs="mac" />
 			<ADJACENCY type="xc" refs="mac-wc mac-ec aeg ion" />
 		</PROVINCE>
-		<PROVINCE shortname="hej" fullname="Hejaz">
+		<PROVINCE shortname="hej" fullname="Hejaz" borders="mxFromMID">
 			<ADJACENCY type="mv" refs="egy pal ara" />
 			<ADJACENCY type="xc" refs="egy mid" />
 		</PROVINCE>
@@ -238,7 +244,7 @@
 			<ADJACENCY type="mv" refs="spa pie gas bur swi" />
 			<ADJACENCY type="xc" refs="spa-ec gly pie" />
 		</PROVINCE>
-		<PROVINCE shortname="mid" fullname="Mid-Atlantic Ocean">
+		<PROVINCE shortname="mid" fullname="Mid-Atlantic Ocean" borders="mxFromEGY mxFromHEJ">
 			<UNIQUENAME name="MAO" />
 			<ADJACENCY type="xc" refs="nat ire iri eng bre gas spa-nc por spa-wc gib mor egy hej" />
 		</PROVINCE>

@@ -24,6 +24,7 @@
 				shortname CDATA #REQUIRED
 				fullname CDATA #REQUIRED
 				isConvoyableCoast (true|false) "false"
+				isImpassable (true|false) "false"
 				borders IDREFS #IMPLIED
 				>	
 	
@@ -40,8 +41,8 @@
 <PROVINCES>
 		<!-- name, abbreviation, and adjacency data for all provinces -->
 		<!-- virtually identical to Judge format -->
-		<PROVINCE shortname="swi" fullname="Switzerland">
-			<ADJACENCY type="mv" refs="swi" />
+		<PROVINCE shortname="swi" fullname="Switzerland" isImpassable="true">
+			<ADJACENCY type="mv" refs="bur mun tyr pie mar" />
 		</PROVINCE>
 		<PROVINCE shortname="adr" fullname="Adriatic Sea">
 			<ADJACENCY type="xc" refs="alb apu ven tri ion" />
@@ -99,7 +100,7 @@
 			<ADJACENCY type="sc" refs="gre aeg con" />
 		</PROVINCE>
 		<PROVINCE shortname="bur" fullname="Burgundy">
-			<ADJACENCY type="mv" refs="mar gas par pic bel ruh mun" />
+			<ADJACENCY type="mv" refs="mar gas par pic bel ruh mun swi" />
 		</PROVINCE>
 		<PROVINCE shortname="cly" fullname="Clyde">
 			<ADJACENCY type="mv" refs="edi lvp" />
@@ -196,7 +197,7 @@
 		</PROVINCE>
 		
 		<PROVINCE shortname="mar" fullname="Marseilles">
-			<ADJACENCY type="mv" refs="spa pie gas bur" />
+			<ADJACENCY type="mv" refs="spa pie gas bur swi" />
 			<ADJACENCY type="xc" refs="spa-sc lyo pie" />
 		</PROVINCE>
 		<PROVINCE shortname="mao" fullname="Mid-Atlantic Ocean">
@@ -212,7 +213,7 @@
 			<ADJACENCY type="mv" refs="stp lvn war ukr sev" />
 		</PROVINCE>
 		<PROVINCE shortname="mun" fullname="Munich">
-			<ADJACENCY type="mv" refs="bur ruh kie ber sil boh tyr" />
+			<ADJACENCY type="mv" refs="bur ruh kie ber sil boh tyr swi" />
 		</PROVINCE>
 		<PROVINCE shortname="naf" fullname="North Africa">
 			<UNIQUENAME name="nora" />
@@ -258,7 +259,7 @@
 			<ADJACENCY type="xc" refs="bre eng bel" />
 		</PROVINCE>
 		<PROVINCE shortname="pie" fullname="Piedmont">
-			<ADJACENCY type="mv" refs="mar tus ven tyr" />
+			<ADJACENCY type="mv" refs="mar tus ven tyr swi" />
 			<ADJACENCY type="xc" refs="mar lyo tus" />
 		</PROVINCE>
 		<PROVINCE shortname="por" fullname="Portugal">
@@ -340,7 +341,7 @@
 			<UNIQUENAME name="tyl" />
 			<UNIQUENAME name="trl" />
 			<UNIQUENAME name="alp" />
-			<ADJACENCY type="mv" refs="mun boh vie tri ven pie" />
+			<ADJACENCY type="mv" refs="mun boh vie tri ven pie swi" />
 		</PROVINCE>
 		<PROVINCE shortname="tys" fullname="Tyrrhenian Sea">
 			<UNIQUENAME name="tyrhennian sea" />

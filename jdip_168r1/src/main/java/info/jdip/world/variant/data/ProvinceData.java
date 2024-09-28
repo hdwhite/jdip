@@ -36,6 +36,7 @@ public class ProvinceData {
     private String[] adj_provinces = null;
     private String[] adj_types = null;
     private boolean isConvoyableCoast = false;
+    private boolean isImpassable = false;
     private String[] borders = null;
 
     /**
@@ -109,6 +110,21 @@ public class ProvinceData {
     }
 
     /**
+     * Gets whether this Province is impassable.
+     */
+    public boolean getImpassable() {
+        return isImpassable;
+    }
+
+    /**
+     * Sets whether this Province is impassable.
+     */
+    public void setImpassable(boolean value) {
+        isImpassable = value;
+    }
+
+
+    /**
      * Gets the Border ID names for this province (if any)
      */
     public String[] getBorders() {
@@ -139,6 +155,8 @@ public class ProvinceData {
         sb.append(adj_types.length);
         sb.append(",isConvoyableCoast=");
         sb.append(isConvoyableCoast);
+        sb.append(",isImpassable=");
+        sb.append(isImpassable);
         sb.append(",#borders=");
         sb.append(borders.length);
         sb.append(']');

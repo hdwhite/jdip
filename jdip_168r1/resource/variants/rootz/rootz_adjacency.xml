@@ -24,6 +24,7 @@
 				shortname CDATA #REQUIRED
 				fullname CDATA #REQUIRED
 				isConvoyableCoast (true|false) "false"
+				isImpassable (true|false) "false"
 				borders IDREFS #IMPLIED
 				>	
 	
@@ -38,9 +39,9 @@
 				>
 ]>
 <PROVINCES>
-	<PROVINCE fullname="Switzerland" shortname="swi">
+	<PROVINCE fullname="Switzerland" shortname="swi" isImpassable="true">
 		<UNIQUENAME name="switz" />
-		<ADJACENCY type="mv" refs="swi"/>
+		<ADJACENCY type="mv" refs="bur1 mun1 tyr1 pie1 mar1 bur2 mun2 tyr2 pie2 mar2" />
 	</PROVINCE>
 	<PROVINCE fullname="Adriatic Sea One" shortname="adr1">
 		<UNIQUENAME name="adriatic1" />
@@ -113,7 +114,7 @@
 	</PROVINCE>
 	<PROVINCE fullname="Burgundy One" shortname="bur1">
 		<UNIQUENAME name="burgundy1" />
-		<ADJACENCY type="mv" refs="mar1 gas1 par1 pic1 bel1 ruh1 mun1"/>
+		<ADJACENCY type="mv" refs="mar1 gas1 par1 pic1 bel1 ruh1 mun1 swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="Clyde One" shortname="cly1">
 		<UNIQUENAME name="clyde1" />
@@ -227,7 +228,7 @@
 	<PROVINCE fullname="Marseilles One" shortname="mar1">
 		<UNIQUENAME name="marseilles1" />
 		<UNIQUENAME name="mars1" />
-		<ADJACENCY type="mv" refs="spa1 pie2 gas1 bur1"/>
+		<ADJACENCY type="mv" refs="spa1 pie2 gas1 bur1 swi"/>
 		<ADJACENCY type="xc" refs="spa1/sc lyo2 pie2"/>
 	</PROVINCE>
 	<PROVINCE fullname="Mid-Atlantic Ocean One" shortname="mao1">
@@ -243,7 +244,7 @@
 	</PROVINCE>
 	<PROVINCE fullname="Munich One" shortname="mun1">
 		<UNIQUENAME name="munich1" />
-		<ADJACENCY type="mv" refs="bur1 ruh1 kie1 ber1 sil1 boh1 tyr1"/>
+		<ADJACENCY type="mv" refs="bur1 ruh1 kie1 ber1 sil1 boh1 tyr1 swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="Naples One" shortname="nap1">
 		<UNIQUENAME name="naples1" />
@@ -289,7 +290,7 @@
 	</PROVINCE>
 	<PROVINCE fullname="Piedmont One" shortname="pie1">
 		<UNIQUENAME name="piedmont1" />
-		<ADJACENCY type="mv" refs="mar2 tus1 ven1 tyr1"/>
+		<ADJACENCY type="mv" refs="mar2 tus1 ven1 tyr1 swi"/>
 		<ADJACENCY type="xc" refs="mar2 lyo1 tus1"/>
 	</PROVINCE>
 	<PROVINCE fullname="Portugal One" shortname="por1">
@@ -381,7 +382,7 @@
 		<UNIQUENAME name="tyrolia1" />
 		<UNIQUENAME name="tyl1" />
 		<UNIQUENAME name="trl1" />
-		<ADJACENCY type="mv" refs="mun1 boh1 vie1 tri1 ven1 pie1"/>
+		<ADJACENCY type="mv" refs="mun1 boh1 vie1 tri1 ven1 pie1 swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="Tyrrhenian Sea One" shortname="tys1">
 		<UNIQUENAME name="tyrr1" />
@@ -503,7 +504,7 @@
 	</PROVINCE>
 	<PROVINCE fullname="Burgundy Two" shortname="bur2">
 		<UNIQUENAME name="burgundy2" />
-		<ADJACENCY type="mv" refs="mar2 gas2 par2 pic2 bel2 ruh2 mun2"/>
+		<ADJACENCY type="mv" refs="mar2 gas2 par2 pic2 bel2 ruh2 mun2 swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="Clyde Two" shortname="cly2">
 		<UNIQUENAME name="clyde2" />
@@ -622,7 +623,7 @@
 	<PROVINCE fullname="Marseilles Two" shortname="mar2">
 		<UNIQUENAME name="marseilles2" />
 		<UNIQUENAME name="mars2" />
-		<ADJACENCY type="mv" refs="spa2 pie1 gas2 bur2"/>
+		<ADJACENCY type="mv" refs="spa2 pie1 gas2 bur2 swi"/>
 		<ADJACENCY type="xc" refs="spa2/sc lyo1 pie1"/>
 	</PROVINCE>
 	<PROVINCE fullname="Mid-Atlantic Ocean Two" shortname="mao2">
@@ -638,7 +639,7 @@
 	</PROVINCE>
 	<PROVINCE fullname="Munich Two" shortname="mun2">
 		<UNIQUENAME name="munich2" />
-		<ADJACENCY type="mv" refs="bur2 ruh2 kie2 ber2 sil2 boh2 tyr2"/>
+		<ADJACENCY type="mv" refs="bur2 ruh2 kie2 ber2 sil2 boh2 tyr2 swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="Naples Two" shortname="nap2">
 		<UNIQUENAME name="naples2" />
@@ -684,7 +685,7 @@
 	</PROVINCE>
 	<PROVINCE fullname="Piedmont Two" shortname="pie2">
 		<UNIQUENAME name="piedmont2" />
-		<ADJACENCY type="mv" refs="mar1 tus2 ven2 tyr2"/>
+		<ADJACENCY type="mv" refs="mar1 tus2 ven2 tyr2 swi"/>
 		<ADJACENCY type="xc" refs="mar1 lyo2 tus2"/>
 	</PROVINCE>
 	<PROVINCE fullname="Portugal Two" shortname="por2">
@@ -776,7 +777,7 @@
 		<UNIQUENAME name="tyrolia2" />
 		<UNIQUENAME name="tyl2" />
 		<UNIQUENAME name="trl2" />
-		<ADJACENCY type="mv" refs="mun2 boh2 vie2 tri2 ven2 pie2"/>
+		<ADJACENCY type="mv" refs="mun2 boh2 vie2 tri2 ven2 pie2 swi"/>
 	</PROVINCE>
 	<PROVINCE fullname="Tyrrhenian Sea Two" shortname="tys2">
 		<UNIQUENAME name="tyrr2" />
