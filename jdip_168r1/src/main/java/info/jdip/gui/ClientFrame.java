@@ -87,6 +87,8 @@ import java.util.Locale;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+@SuppressWarnings("unused")
+
 /**
  * The main class for starting the client... everything starts here.
  * <p>

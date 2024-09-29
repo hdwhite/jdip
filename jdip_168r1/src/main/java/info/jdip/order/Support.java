@@ -470,6 +470,7 @@ public class Support extends Order {
      * 2) support IS cut if there are multiple convoy routes, and at least
      * one convoy route is successful. (FAILURE)
      * 3) if this cannot yet be determined, UNCERTAIN
+     * 4) Run step 2.b.1
      *
      *
      * NOTE: for multiple attacks:
@@ -622,6 +623,22 @@ public class Support extends Order {
 								Log.println("** no 2000 rule used: leaving uncertain");
 								evalResult = pickState(evalResult, Tristate.UNCERTAIN);
 								*/
+                            } else if (getSupportedDest().isProvinceEqual(depMove.getSource())) {
+                                logger.debug( "Unit attacking destination; not cut");
+                                // 2.b.1 [support cannot be cut by an attack to where support is being given]
+                                // determine if we *could* become dislodged. 2.b.1.a (we *are* dislodged)
+                                // is determined earlier; 2.b.1.b/c are determined here. Self-supports not considered.
+                                if (depMoveOS.getAtkMax() <= thisOS.getDefCertain()) {
+                                    // 2.b.1.c
+                                    // if the support is not given over a difficult passable border
+                                    if (mod >= 0) {
+                                        logger.debug( "Support is not over DPB; not cut");
+                                        evalResult = pickState(evalResult, Tristate.SUCCESS);
+                                    }
+                                } else {
+                                    // 2.b.1.b
+                                    evalResult = pickState(evalResult, Tristate.UNCERTAIN);
+                                }
                             } else {
                                 // 2.c.3.a
                                 // depends upon route; if route is SUCCESS, we fail; if route is FAILURE,

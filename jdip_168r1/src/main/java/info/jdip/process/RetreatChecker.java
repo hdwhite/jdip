@@ -153,7 +153,8 @@ public class RetreatChecker {
         for (Location location : adjacent) {
             if (!position.hasUnit(location.getProvince())
                     && !isDislodgersSpace(from, location)
-                    && !isContestedSpace(location)) {
+                    && !isContestedSpace(location)
+                    && !location.getProvince().isImpassable()) {
                 retreatLocations.add(location);
             }
         }
@@ -171,7 +172,8 @@ public class RetreatChecker {
         for (Location location : adjacent) {
             if (!position.hasUnit(location.getProvince())
                     && !isDislodgersSpace(from, location)
-                    && !isContestedSpace(location)) {
+                    && !isContestedSpace(location)
+                    && !location.getProvince().isImpassable()) {
                 return true;
             }
         }
