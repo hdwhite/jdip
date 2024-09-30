@@ -170,6 +170,7 @@
 			<ADJACENCY type="xc" refs="bel nth hel kie" />
 		</PROVINCE>
 		<PROVINCE shortname="ion" fullname="Ionian Sea">
+			<UNIQUENAME name="ionian" />
 			<ADJACENCY type="xc" refs="tun tys nap apu adr alb gre aeg eas" />
 		</PROVINCE>
 		<PROVINCE shortname="iri" fullname="Irish Sea">

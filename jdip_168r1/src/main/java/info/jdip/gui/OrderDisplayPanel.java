@@ -612,7 +612,7 @@ public class OrderDisplayPanel extends JPanel {
         // they should all be DisplayOrder objects.
         for (int i = 0; i < selected.size(); i++) {
             selectedOrders[i] = (selected.get(i)).getOrder();
-            assert (removeOrderFromTS(selectedOrders[i]));
+            removeOrderFromTS(selectedOrders[i]);
         }
 
         if (selectedOrders.length == 1) {
