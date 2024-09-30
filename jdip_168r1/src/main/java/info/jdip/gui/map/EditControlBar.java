@@ -60,12 +60,12 @@ public class EditControlBar extends ViewControlBar {
     private static final String BUTTON_TEXT_ARMY = "EdtConBar.button.text.army";
     private static final String BUTTON_TEXT_FLEET = "EdtConBar.button.text.fleet";
     private static final String BUTTON_TEXT_WING = "EdtConBar.button.text.wing";
-    private static final String BUTTON_TEXT_SC = "EdtConBar.button.text.sc";
+    private static final String BUTTON_TEXT_OWNER = "EdtConBar.button.text.owner";
     private static final String BUTTON_TEXT_REMOVE = "EdtConBar.button.text.remove";
     private static final String TOOLTIP_ARMY = "EdtConBar.tooltip.army";
     private static final String TOOLTIP_FLEET = "EdtConBar.tooltip.fleet";
     private static final String TOOLTIP_WING = "EdtConBar.tooltip.wing";
-    private static final String TOOLTIP_SC = "EdtConBar.tooltip.sc";
+    private static final String TOOLTIP_OWNER = "EdtConBar.tooltip.owner";
     private static final String TOOLTIP_REMOVE = "EdtConBar.tooltip.remove";
     private static final String BUTTON_TEXT_DISLODGED = "EdtConBar.button.text.dislodged";
     private static final String TOOLTIP_DISLODGED = "EdtConBar.tooltip.dislodged";
@@ -75,7 +75,7 @@ public class EditControlBar extends ViewControlBar {
     private static final String ERR_NO_FLEET_IN_LANDLOCKED = "EdtConBar.err.nofleetland";
     private static final String ERR_NO_UNIT_TO_REMOVE = "EdtConBar.err.nounit_remove";
     private static final String ERR_NO_SC = "EdtConBar.err.no_sc";
-    private static final String CLICK_TO_SET_SC = "EdtConBar.click.set_sc";
+    private static final String CLICK_TO_SET_OWNER = "EdtConBar.click.set_owner";
     private static final String CLICK_TO_REMOVE = "EdtConBar.click.remove";
     private static final String CLICK_TO_ADD_FLEET = "EdtConBar.click.add_fleet";
     private static final String CLICK_TO_ADD_ARMY = "EdtConBar.click.add_army";
@@ -199,8 +199,8 @@ public class EditControlBar extends ViewControlBar {
         }
 
 
-        bSC = new JToggleButton(Utils.getLocalString(BUTTON_TEXT_SC));
-        bSC.setToolTipText(Utils.getLocalString(TOOLTIP_SC));
+        bSC = new JToggleButton(Utils.getLocalString(BUTTON_TEXT_OWNER));
+        bSC.setToolTipText(Utils.getLocalString(TOOLTIP_OWNER));
         bSC.addActionListener(tl);
         add(bSC);
         bg.add(bSC);
@@ -360,7 +360,7 @@ public class EditControlBar extends ViewControlBar {
 
                 undoManager.addEdit(new UndoEditAddUnit(undoManager, position, province, wing, isDislodged()));
             }
-            if (CLICK_TO_SET_SC.equals(currentAction)) {
+            if (CLICK_TO_SET_OWNER.equals(currentAction)) {
                 // change supply center ownership
                 Power oldPower = position.getSupplyCenterOwner(province);
                 changeSCOwner(province, currentPower);
@@ -413,6 +413,7 @@ public class EditControlBar extends ViewControlBar {
      */
     public void changeSCOwner(Province province, Power newPower) {
         position.setSupplyCenterOwner(province, newPower);
+        position.setLastOccupier(province, newPower);
 
         update(province);
         orderDisplayPanel.revalidateAllOrders();
@@ -466,8 +467,8 @@ public class EditControlBar extends ViewControlBar {
             }
         } else if (CLICK_TO_ADD_WING.equals(currentAction) && currentPower != null) {
             return true;
-        } else if (CLICK_TO_SET_SC.equals(currentAction)) {
-            if (province.hasSupplyCenter()) {
+        } else if (CLICK_TO_SET_OWNER.equals(currentAction)) {
+            if (province.hasSupplyCenter() || !province.isSea()) {
                 return true;
             } else {
                 mapPanel.statusBarUtils.displayProvinceInfo(loc, Utils.getLocalString(ERR_NO_SC));
@@ -500,7 +501,7 @@ public class EditControlBar extends ViewControlBar {
                 powerBox.setSelectedItem(POWER_NONE);
                 defaultAction = CLICK_TO_REMOVE;
             } else if (selectedButton == bSC) {
-                defaultAction = CLICK_TO_SET_SC;
+                defaultAction = CLICK_TO_SET_OWNER;
             }
 
             currentAction = defaultAction;

@@ -299,7 +299,7 @@ public class ResultWriter {
         while (iter.hasNext()) {
             substOrderFound = true;
 
-            OrderResult or = (OrderResult) iter.next();
+            OrderResult or = iter.next();
 
             if (or.getOrder() != null) {
                 sb.append(or.getOrder().toFormattedString(ofo));    // use OrderFormat
@@ -318,7 +318,7 @@ public class ResultWriter {
 
         // iterate through ordMap, chaining the results, if there are more than one.
         Iterator<List<OrderResult>> listIter = ordMap.values().iterator();
-        while (iter.hasNext()) {
+        while (listIter.hasNext()) {
             Orderable order = null;
             boolean hasFailed = false;
             List<OrderResult> list = listIter.next();
