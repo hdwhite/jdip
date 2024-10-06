@@ -13,8 +13,9 @@
 	<property name="base.build.dir" value="${base.dir}/build"/>		<!-- base BUILD dir -->
 	<property name="testsrc.dir" value="${base.build.dir}/testsrc"/><!-- defines the testsrc} attribute -->
 	<property name="build.dir" value="${base.build.dir}/classes"/>	<!-- create a typical build -->
+	<property name="tmp.dir" value="${base.build.dir}/tmp"/>
 	<property name="dist.dir" value="${base.build.dir}/jardist"/>		<!-- create distribution .jar files -->
-	<property name="variant.dir" value="${build.dir}/variants"/>	<!-- dir where variant packs end up in-->
+	<property name="variant.dir" value="${tmp.dir}/variants"/>	<!-- dir where variant packs end up in-->
 	<property name="javadoc.dir" value="${base.build.dir}/javadoc"/>		<!-- create javadocs only -->
 	<property name="webstart.dir" value="${base.build.dir}/webstart"/>	<!-- create working webstart package -->
 	<property name="resource.dir" value="${base.dir}/resource/"/>	<!-- jdip runtime resources -->
@@ -134,21 +135,21 @@
 	
 	
 	
-	<!-- cleans the build directory -->
+	<!-- cleans the build directory
 	<target name="clean" description="Delete build/ directory">
 		<delete dir="${base.build.dir}"/>
-	</target>
+	</target> -->
 	
-	<!-- for TESTING something -->
-	<target name="test" depends="build" description="temp-test">
+	<!-- for TESTING something 
+	<target name="test" depends="build" description="temp-test"> -->
 		<!-- convert etc.dir to absolute path -->
-		<property name="absolute.etc.dir" location="${etc.dir}"/>
+<!--		<property name="absolute.etc.dir" location="${etc.dir}"/>
 
 		<java classname="info.jdip.order.NJudgeOrderParser" fork="yes" dir="${build.dir}">
 			<classpath  refid="run.class.path"/>
 			<jvmarg  value="-ea"/>
 		</java>
-	</target>	
+	</target> -->
 	
 	<!-- init -->
 	<target name="init">
@@ -167,25 +168,26 @@
 		<mkdir dir="${packaged.dist.dir}"/>
 	</target>
 	
+	<!--
 	<target name="help">
 		<echo message="To see all targets, please use the command: ant -projecthelp"/>
-	</target>
+	</target> -->
 	
-    <!-- build (compile) -->
-	<target name="build" depends="init" description="Build jDip">
+    <!-- build (compile) 
+	<target name="build" depends="init" description="Build jDip"> -->
 		<!-- Compile splash.java with a 1.1 target -->
-		<javac srcdir="${src.dir}" destdir="${build.dir}" includes="dip/gui/splash.java" target="1.1" debug="true">
+<!--		<javac srcdir="${src.dir}" destdir="${build.dir}" includes="dip/gui/splash.java" target="1.1" debug="true">
 			<classpath refid="compile.class.path"/>
-		</javac>
+		</javac> -->
 		
 		<!-- Compile the java code from ${src} into ${build} -->
-		<javac srcdir="${src.dir}" destdir="${build.dir}" includes="dip/**/*.java" excludes="dip/gui/splash.java" source="1.4" debug="true">
+<!--		<javac srcdir="${src.dir}" destdir="${build.dir}" includes="dip/**/*.java" excludes="dip/gui/splash.java" source="1.4" debug="true">
 			<classpath refid="compile.class.path"/>
-		</javac>
+		</javac> -->
 		
 		<!-- Copy a resources to another directory -->
         <!-- exclude files ending in ~ (editor backup files) -->
-		<copy todir="${build.dir}/resource/il8n">
+<!--		<copy todir="${build.dir}/resource/il8n">
 			<fileset dir="${resource.dir}/il8n">
 				<patternset refid="exclude.backup.files"/>
 			</fileset>
@@ -199,156 +201,156 @@
 			<fileset dir="${resource.dir}/help">
 				<patternset refid="exclude.backup.files"/>
 			</fileset>
-		</copy>
+		</copy> -->
 
         <!-- build the variants -->
         <!-- Variant Package: Standard Variants -->
-		<zip  compress="true" destfile="${variant.dir}/stdVariants.zip"
+<!--		<zip  compress="true" destfile="${variant.dir}/stdVariants.zip"
 				basedir="${resource.dir}/variants/stdVariants"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 
        <!-- Variant Package: 1900 -->
-		<zip  compress="true" destfile="${variant.dir}/1900Variants.zip"
+<!--		<zip  compress="true" destfile="${variant.dir}/1900Variants.zip"
 				basedir="${resource.dir}/variants/1900"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 
          <!-- Variant Package: SailHo! -->
-		<zip compress="true"   destfile="${variant.dir}/sailhoVariants.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/sailhoVariants.zip"
 				basedir="${resource.dir}/variants/sailho"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 
         <!-- Variant Package: Pure -->
-		<zip compress="true"   destfile="${variant.dir}/pureVariants.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/pureVariants.zip"
 				basedir="${resource.dir}/variants/pure"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
         
 		<!-- Variant Package: Hundred -->
-		<zip compress="true"   destfile="${variant.dir}/hundredVariants.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/hundredVariants.zip"
 				basedir="${resource.dir}/variants/hundred"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
         
 		<!-- Variant Package: Youngstown -->
-		<zip compress="true"   destfile="${variant.dir}/youngstownVariants.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/youngstownVariants.zip"
 				basedir="${resource.dir}/variants/youngstown"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 
         <!-- Variant Package: Test -->
-		<zip compress="true"   destfile="${variant.dir}/testVariants.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/testVariants.zip"
 				basedir="${resource.dir}/variants/test"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 
  		<!-- Variant Package: Loeb9 -->
-		<zip compress="true"   destfile="${variant.dir}/loeb9Variants.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/loeb9Variants.zip"
 				basedir="${resource.dir}/variants/loeb9"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 		
 		<!-- Variant Package: RootZ -->
-		<zip compress="true"   destfile="${variant.dir}/rootzVariants.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/rootzVariants.zip"
 				basedir="${resource.dir}/variants/rootz"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 		
 		<!-- Variant Package: Milan -->
-		<zip compress="true"   destfile="${variant.dir}/milanVariants.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/milanVariants.zip"
 				basedir="${resource.dir}/variants/milan"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 				
 		<!-- Variant Package: Chaos (nJudge compatible) -->
-		<zip compress="true"   destfile="${variant.dir}/ChaosNJudgeVariant.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/ChaosNJudgeVariant.zip"
 				basedir="${resource.dir}/variants/chaos"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 				
 		<!-- Variant Package: Chaos (DPJudge compatible) -->
-		<zip compress="true"   destfile="${variant.dir}/ChaosDPJudgeVariant.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/ChaosDPJudgeVariant.zip"
 				basedir="${resource.dir}/variants/chaos_dp"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 				
 		<!-- Variant Package: Imperium -->
-		<zip compress="true"   destfile="${variant.dir}/ImperiumVariants.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/ImperiumVariants.zip"
 				basedir="${resource.dir}/variants/imperium"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 				
 		<!-- Variant Package: Octarine -->
-		<zip compress="true"   destfile="${variant.dir}/octarineVariants.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/octarineVariants.zip"
 				basedir="${resource.dir}/variants/octarine"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 				
 		<!-- Variant Package: Asia -->
-		<zip compress="true"   destfile="${variant.dir}/AsiaVariants.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/AsiaVariants.zip"
 				basedir="${resource.dir}/variants/asia"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 				
 		<!-- Variant Package: Modern -->
-		<zip compress="true"   destfile="${variant.dir}/modernVariants.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/modernVariants.zip"
 				basedir="${resource.dir}/variants/modern"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 				
 		<!-- Variant Package: Ancient Med -->
-		<zip compress="true"   destfile="${variant.dir}/ancmedVariant.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/ancmedVariant.zip"
 				basedir="${resource.dir}/variants/ancient_med"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 				
 		<!-- Variant Package: Renaissance -->
-		<zip compress="true"   destfile="${variant.dir}/renaissanceVariant.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/renaissanceVariant.zip"
 				basedir="${resource.dir}/variants/renaissance"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 				
 		<!-- Variant Package: Aberration V -->
-		<zip compress="true"   destfile="${variant.dir}/aberrationVariant.zip"
+<!--		<zip compress="true"   destfile="${variant.dir}/aberrationVariant.zip"
 				basedir="${resource.dir}/variants/aberration"
 				excludes="*~ *.zip"
-				includes="*.xml *.jpg *.png *.svg *.gif"/>
+				includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 		
 		
 		
 		<!-- SymbolPack: simple -->
-		<zip compress="true" destfile="${variant.dir}/simpleSymbols.zip"
+<!--		<zip compress="true" destfile="${variant.dir}/simpleSymbols.zip"
 			 basedir="/resource/symbols/simple"
 			 excludes="*~ *.zip"
-			 includes="*.xml *.jpg *.png *.svg *.gif"/>
+			 includes="*.xml *.jpg *.png *.svg *.gif"/> -->
        
 		<!-- SymbolPack: period -->
-		<zip compress="true" destfile="${variant.dir}/periodSymbols.zip"
+<!--		<zip compress="true" destfile="${variant.dir}/periodSymbols.zip"
 			 basedir="/resource/symbols/period"
 			 excludes="*~ *.zip"
-			 includes="*.xml *.jpg *.png *.svg *.gif"/>
+			 includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 		
 		<!-- SymbolPack: modern -->
-		<zip compress="true" destfile="${variant.dir}/modernSymbols.zip"
+<!--		<zip compress="true" destfile="${variant.dir}/modernSymbols.zip"
 			 basedir="/resource/symbols/modern"
 			 excludes="*~ *.zip"
-			 includes="*.xml *.jpg *.png *.svg *.gif"/>
+			 includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 		
 		<!-- SymbolPack: imperium -->
-		<zip compress="true" destfile="${variant.dir}/imperiumSymbols.zip"
+<!--		<zip compress="true" destfile="${variant.dir}/imperiumSymbols.zip"
 			 basedir="/resource/symbols/imperium"
 			 excludes="*~ *.zip"
-			 includes="*.xml *.jpg *.png *.svg *.gif"/>
+			 includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 		
 		<!-- SymbolPack: ancmed -->
-		<zip compress="true" destfile="${variant.dir}/ancmedSymbols.zip"
+<!--		<zip compress="true" destfile="${variant.dir}/ancmedSymbols.zip"
 			 basedir="/resource/symbols/ancient_med"
 			 excludes="*~ *.zip"
-			 includes="*.xml *.jpg *.png *.svg *.gif"/>
+			 includes="*.xml *.jpg *.png *.svg *.gif"/> -->
 				
-	</target>
+<!--	</target> -->
 	
 	
 	<!-- run PMD checker -->
@@ -420,9 +422,15 @@
 
 		<!-- exclude any tools (source and jar) -->
 		<jar compress="true" 
-			jarfile="${dist.dir}/jdip.jar" basedir="${build.dir}"
-			excludes="variants/** maptool/** tools/** **/*.zip **/*.db **/*.jar **/*.MF **/misc/TestPars*.class **/misc/Convert*.class ${test.results.dir}/**" 
+			jarfile="${dist.dir}/jdip.jar" basedir="${build.dir}/java/main"
+			excludes="tmp/** variants/** maptool/** tools/** **/*.zip **/*.db **/*.jar **/*.MF **/misc/TestPars*.class **/misc/Convert*.class ${test.results.dir}/**" 
 			manifest="${build.dir}/MANIFEST.MF"/>
+		
+		<jar compress="true" 
+			jarfile="${dist.dir}/jdip.jar" basedir="${base.build.dir}/resources/main"
+			excludes="tmp/** variants/** maptool/** tools/** **/*.zip **/*.db **/*.jar **/*.MF **/misc/TestPars*.class **/misc/Convert*.class ${test.results.dir}/**" 
+			manifest="${build.dir}/MANIFEST.MF"
+			update="true"/>
 		
 		<!-- make empty 'tool' plugin dir -->
 		<mkdir dir="${dist.dir}/${plugin.dir}"/>
@@ -470,13 +478,13 @@
 	</target>
 
 	<!-- run; we must build first if required -->
-	<target name="run" depends="build" description="Runs jDip">
+<!--	<target name="run" depends="build" description="Runs jDip">
 		<java classname="info.jdip.gui.ClientFrame" fork="yes" dir="${build.dir}">
 			<classpath  refid="run.class.path"/>
 			<jvmarg  value="-ea"/>
 			<jvmarg  value="-Xss1024K"/>
 		</java>
-	</target>
+	</target> -->
 	
 	<!-- run from splash -->
 	<target name="runsplash" depends="build" description="Runs jDip w/splash">
@@ -580,11 +588,11 @@
 			<zipfileset dir="${dist.dir}" prefix="jdip"/>
 		</zip>
 		
-		<!-- create the .zip javadocs -->
+		<!-- create the .zip javadocs
 		<antcall target="javadoc"/>
 		<zip destfile="${packaged.dist.dir}/jdip-${version}-javadocs.zip">
 			<zipfileset dir="${javadoc.dir}" prefix="javadoc"/>
-		</zip>
+		</zip> -->
 		
 		<!-- create multiplatform install -->
 		<antcall target="install"/>
@@ -604,7 +612,7 @@
 	</target>
 	
 
-    <!-- create javadocs; no dependencies -->
+    <!-- create javadocs; no dependencies
 	<target name="javadoc" description="Create JavaDoc documentation">
 		<mkdir  dir="${javadoc.dir}"/>
 		<javadoc
@@ -618,7 +626,7 @@
 				<include  name="dip/**"/>
 			</packageset>
 		</javadoc>
-	</target>
+	</target> -->
 
     <!-- JUnitDoclet -->
 	<target name="junitdoclet" depends="build" description="Excecute JUnitDoclet">
