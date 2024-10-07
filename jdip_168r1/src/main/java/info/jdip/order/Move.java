@@ -806,86 +806,82 @@ public class Move extends Order {
      * 1) calculate support of this move (certain & uncertain)
      *
      * 2) if this is a convoyed move, evaluate convoy route
-     * a) if convoy route fails, move fails
-     * b) if convoy route uncertain, cannot evaluate move yet
-     * c) if convoy route ok, move can be evaluated.
+     *     a) if convoy route fails, move fails
+     *     b) if convoy route uncertain, cannot evaluate move yet
+     *     c) if convoy route ok, move can be evaluated.
      *
      * 3) determine order of unit in destination space
-     * a) no unit, or unit with Support/Convoy/Hold order
-     * 1) calculate strengths of all other moves to destination (if present)
-     * this is calculated by the evaluate() method for each Move order, so
-     * several iterations may be required before strengths are in the 'useful'
-     * area.
-     * 2) calculate defending unit strength (if present; if not, defense_max == 0)
-     * this is calculated by the evaluate() method for the respective order, similar
-     * to 3.a.1
-     * 3) compare attack_certain (of this move) to attack_max of all other attacks,
-     * and defense_max of destination.
-     * a) if another Move order to destination succeeded, then FAILURE
-     * b) if attack_certain > *all* of the defenders' (attack_max && defense_max)
-     * SUCCESS, unless defender is of the same power, in which case FAILURE
-     * if SUCCESS, defender (if present) is dislodged
-     * c) if attack_max <= *any* of the defenders' attack_certain or defense_certain
-     * FAILURE (since there would be no way to overcome this difference,
-     * regardless of support!)
-     * this is a "BOUNCE" [note: this is a key point]
-     * d) otherwise, we remain UNCERTAIN
-     * b) self support
-     * in cases with self support, the following changes to 3.a are noted below:
-     * 1) self support is used to determine strength against other moves (standoffs)
-     * to the destination province.
-     * 2) self support is NOT used to determine strength against *this* move to the
-     * destination province. Self-support can never be used to dislodge a unit,
-     * however, if a unit has enough strength to dislodge, self-support does not
-     * prohibit dislodgement.
+     *     a) no unit, or unit with Support/Convoy/Hold order
+     *         1) calculate strengths of all other moves to destination (if present)
+     *            this is calculated by the evaluate() method for each Move order, so
+     *            several iterations may be required before strengths are in the 'useful'
+     *            area.
+     *         2) calculate defending unit strength (if present; if not, defense_max == 0)
+     *            this is calculated by the evaluate() method for the respective order, similar
+     *            to 3.a.1
+     *         3) compare attack_certain (of this move) to attack_max of all other attacks,
+     *            and defense_max of destination.
+     *             a) if another Move order to destination succeeded, then FAILURE
+     *             b) if attack_certain > *all* of the defenders' (attack_max && defense_max)
+     *                SUCCESS, unless defender is of the same power, in which case FAILURE
+     *                if SUCCESS, defender (if present) is dislodged
+     *             c) if attack_max <= *any* of the defenders' attack_certain or defense_certain
+     *                FAILURE (since there would be no way to overcome this difference,
+     *                regardless of support!)
+     *                this is a "BOUNCE" [note: this is a key point]
+     *             d) otherwise, we remain UNCERTAIN
+     *     b) self support
+     *        in cases with self support, the following changes to 3.a are noted below:
+     *         1) self support is used to determine strength against other moves (standoffs)
+     *            to the destination province.
+     *         2) self support is NOT used to determine strength against *this* move to the
+     *            destination province. Self-support can never be used to dislodge a unit,
+     *            however, if a unit has enough strength to dislodge, self-support does not
+     *            prohibit dislodgement.
      *
-     * MODIFICATION (6/2/02): Self support *may* be used to determine the strength
-     * of this move to the destination province; if the unit in the destination province
-     * has succesfully moved out, we must compare against all other moves to dest (as in 1) but the
-     * self support can cause us to prevail against other moves to dest as well. Self-support
-     * cannot be used in the dislodge calculation, nor can it prohibit dislodgement.
+     *     MODIFICATION (6/2/02): Self support *may* be used to determine the strength
+     *     of this move to the destination province; if the unit in the destination province
+     *     has succesfully moved out, we must compare against all other moves to dest (as in 1) but the
+     *     self support can cause us to prevail against other moves to dest as well. Self-support
+     *     cannot be used in the dislodge calculation, nor can it prohibit dislodgement.
      *
-     *
-     * b) unit with Move order, NOT head-to-head (see below for definition)
-     * evaluate as 3.a.1-3 however:
-     * 1)	if we are stronger: (guaranteed success, unless self)
-     * a) if destination move FAILURE, unit is dislodged, unless self; if self, we fail
-     * b) if destination move SUCCESS, unit is not dislodged, we succeed (if self or not)
-     * c) if destination move UNCERTAIN, unit is "maybe" dislodged, unless self;
-     * if self, we remain uncertain
-     * 2)	if we are not stronger  (equal-strength)
-     * a) we fail, ONLY if we are 'definately' not stronger (atk.max < def.certain)
-     * b) if destination move SUCCESS, we succeed
-     * c) if destination move UNCERTAIN, we remain uncertain.
-     * c) unit is a head-to-head MOVE order
-     * definition: 	destination unit is moving to this space, and NEITHER unit is convoyed
-     * (note: this is set when dependencies are determined)
-     *
-     * 1) evaluate as 3.a.1-3, with the following caveats applied to this vs. head-to-head move:
-     * - we use atk_certain/atk_max of 'head-to-head' unit
-     * a) same as 3.a.3.a
-     * b) same as 3.a.3.b [opposing unit dislodged; NOT a 'maybe' dislodged]
-     * BUT, opposing unit move is marked FAILURE
-     * c) same as 3.a.3.c
-     * d) same as 3.a.3.d
-     *
-     * d) comparing against head to head:
-     * if comparing against a head-to-head battle, where a unit may be dislodged, remain
-     * uncertain until we know if the unit is dislodged; if unit dislodged by head-to-head
-     * player, it cannot affect other battles
-     * A->B
-     * B->A
-     * D->B	(and dislodges B)	: no change
-     * HOWEVER,
-     * A->B, B->A, C->A, and A dislodges B (head to head), C can move to A.
-     * B does not standoff C because it was dislodged by A in a head-to-head battle.
-     *
-     * This is seen in DATC cases 5.A and 7.H (if no "by convoy" is used).
-     * 1) isHeadToHead() && EvalState == UNCERTAIN *or* head-to-head part unevaluated:
-     * UNCERTAIN result.
-     * 2) isHeadToHead() && EvalState == FAILURE:
-     * if disloger == head-to-head, then ignore (do nothing)
-     * 3) otherwise, process normally.
+     *     c) unit with Move order, NOT head-to-head (see below for definition)
+     *        evaluate as 3.a.1-3 however:
+     *         1)	if we are stronger: (guaranteed success, unless self)
+     *             a) if destination move FAILURE, unit is dislodged, unless self; if self, we fail
+     *             b) if destination move SUCCESS, unit is not dislodged, we succeed (if self or not)
+     *             c) if destination move UNCERTAIN, unit is "maybe" dislodged, unless self;
+     *                if self, we remain uncertain
+     *         2)	if we are not stronger  (equal-strength)
+     *             a) we fail, ONLY if we are 'definately' not stronger (atk.max < def.certain)
+     *             b) if destination move SUCCESS, we succeed
+     *             c) if destination move UNCERTAIN, we remain uncertain.
+     *     d) unit is a head-to-head MOVE order
+     *        definition: 	destination unit is moving to this space, and NEITHER unit is convoyed
+     *        (note: this is set when dependencies are determined)
+     *         1) evaluate as 3.a.1-3, with the following caveats applied to this vs. head-to-head move:
+     *            - we use atk_certain/atk_max of 'head-to-head' unit
+     *             a) same as 3.a.3.a
+     *             b) same as 3.a.3.b [opposing unit dislodged; NOT a 'maybe' dislodged]
+     *                BUT, opposing unit move is marked FAILURE
+     *             c) same as 3.a.3.c
+     *             d) same as 3.a.3.d
+     *     e) comparing against head to head:
+     *        if comparing against a head-to-head battle, where a unit may be dislodged, remain
+     *        uncertain until we know if the unit is dislodged; if unit dislodged by head-to-head
+     *        player, it cannot affect other battles
+     *        A->B
+     *        B->A
+     *        D->B	(and dislodges B)	: no change
+     *        HOWEVER,
+     *        A->B, B->A, C->A, and A dislodges B (head to head), C can move to A.
+     *        B does not standoff C because it was dislodged by A in a head-to-head battle.
+     *        This is seen in DATC cases 5.A and 7.H (if no "by convoy" is used).
+     *         1) isHeadToHead() && EvalState == UNCERTAIN *or* head-to-head part unevaluated:
+     *            UNCERTAIN result.
+     *         2) isHeadToHead() && EvalState == FAILURE:
+     *            if disloger == head-to-head, then ignore (do nothing)
+     *         3) otherwise, process normally.
      *
      *
      *
@@ -1115,7 +1111,7 @@ public class Move extends Order {
             // we attack at (minimum) strength==1. Thus we can never be "definately worse", (but we can tie).
             if (!isDestEmpty) {
                 if (thisOS.isHeadToHead()) {
-                    if (attack_max <= thisOS.getHeadToHead().getAtkCertain()) {
+                    if (attack_max <= thisOS.getHeadToHead().getAtkCertain() + thisOS.getHeadToHead().getAtkSelfSupportCertain()) {
                         thisOS.setEvalState(Tristate.FAILURE);
                         //adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_BOUNCE));
                         adjudicator.addBouncedResult(thisOS, thisOS.getHeadToHead());
