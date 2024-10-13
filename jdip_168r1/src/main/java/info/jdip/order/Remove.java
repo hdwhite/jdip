@@ -137,6 +137,7 @@ public class Remove extends Order {
      * Empty method: Remove orders do not require dependency determination.
      */
     public void determineDependencies(Adjudicator adjudicator) {
+      // Remove orders do not require dependency determination.
     }
 
 

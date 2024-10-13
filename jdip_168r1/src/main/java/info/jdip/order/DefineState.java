@@ -44,9 +44,9 @@ public class DefineState extends Order {
 
 
     // constants: names
-    private static final String orderNameBrief = "";
-    private static final String orderNameFull = "Setup";
-    private static final transient String orderFormatString = Utils.getLocalString(DEFSTATE_FORMAT);
+    private static final String OrderNameBrief = "";
+    private static final String OrderNameFull = "Setup";
+    private static final transient String OrderFormatString = Utils.getLocalString(DEFSTATE_FORMAT);
 
 
     protected DefineState(Power power, Location src, Unit.Type srcUnit)
@@ -64,17 +64,17 @@ public class DefineState extends Order {
     }// DefineState()
 
     public String getFullName() {
-        return orderNameFull;
+        return OrderNameFull;
     }// getName()
 
     public String getBriefName() {
-        return orderNameBrief;
+        return OrderNameBrief;
     }// getBriefName()
 
 
     // order formatting
     public String getDefaultFormat() {
-        return orderFormatString;
+        return OrderFormatString;
     }// getFormatBrief()
 
 
@@ -107,6 +107,7 @@ public class DefineState extends Order {
      * a game state). For example, info.jdip.misc.TestSuite uses DefineState orders
      * to define the units and their positions for a test scenario.
      */
+    @Override
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
         // DefineState orders always fail validation.
@@ -125,6 +126,7 @@ public class DefineState extends Order {
      * Empty method: DefineState orders do not require dependency determination.
      */
     public void determineDependencies(Adjudicator adjudicator) {
+      // DefineState orders do not require dependency determination.
     }
 
     /**

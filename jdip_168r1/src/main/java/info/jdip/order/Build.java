@@ -53,8 +53,8 @@ public class Build extends Order {
 
 
     // constants: names
-    private static final String orderNameBrief = "B";
-    private static final String orderNameFull = "Build";
+    private static final String OrderNameBrief = "B";
+    private static final String OrderNameFull = "Build";
     private static final transient String orderFormatString = Utils.getLocalString(BUILD_FORMAT);
 
 
@@ -73,11 +73,11 @@ public class Build extends Order {
     }// Build()
 
     public String getFullName() {
-        return orderNameFull;
+        return OrderNameFull;
     }// getName()
 
     public String getBriefName() {
-        return orderNameBrief;
+        return OrderNameBrief;
     }// getBriefName()
 
 
@@ -91,7 +91,7 @@ public class Build extends Order {
 
         sb.append(power);
         sb.append(": ");
-        sb.append(orderNameBrief);
+        sb.append(OrderNameBrief);
         sb.append(' ');
         sb.append(srcUnitType.getShortName());
         sb.append(' ');
@@ -106,7 +106,7 @@ public class Build extends Order {
 
         sb.append(power);
         sb.append(": ");
-        sb.append(orderNameFull);
+        sb.append(OrderNameFull);
         sb.append(' ');
         sb.append(srcUnitType.getFullName());
         sb.append(' ');
@@ -116,6 +116,7 @@ public class Build extends Order {
     }// toFullString()
 
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Build) {
             return super.equals(obj);
@@ -152,9 +153,10 @@ public class Build extends Order {
      * cannot know what other orders have been submitted), such as if too many
      * build orders are submitted. verify() could, but currently does not.
      */
+    @Override
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
-        checkSeasonAdjustment(state, orderNameFull);
+        checkSeasonAdjustment(state, OrderNameFull);
         checkPower(power, state, true);
 
         Province province = src.getProvince();
@@ -211,6 +213,7 @@ public class Build extends Order {
      * Empty method: Build orders do not require dependency determination.
      */
     public void determineDependencies(Adjudicator adjudicator) {
+      // Build orders do not require dependency determination.
     }
 
 
