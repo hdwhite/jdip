@@ -355,7 +355,7 @@ public abstract class Order implements Orderable, java.io.Serializable {
      * <br>
      * Example: France: Army Spain/sc
      */
-    protected final void appendFull(StringBuffer sb) {
+    protected final void appendFull(StringBuilder sb) {
         sb.append(power);
         sb.append(": ");
         sb.append(srcUnitType.getFullName());
@@ -369,7 +369,7 @@ public abstract class Order implements Orderable, java.io.Serializable {
      * <br>
      * Example: France: Army spa/sc
      */
-    protected final void appendBrief(StringBuffer sb) {
+    protected final void appendBrief(StringBuilder sb) {
         sb.append(power);
         sb.append(": ");
         sb.append(srcUnitType.getShortName());

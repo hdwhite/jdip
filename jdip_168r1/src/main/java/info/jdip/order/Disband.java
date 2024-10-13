@@ -43,9 +43,9 @@ public class Disband extends Order {
     private static final String DISBAND_FORMAT = "DISBAND_FORMAT";
 
     // constants: names
-    private static final String orderNameBrief = "D";
-    private static final String orderNameFull = "Disband";
-    private static final transient String orderFormatString = Utils.getLocalString(DISBAND_FORMAT);
+    private static final String OrderNameBrief = "D";
+    private static final String OrderNameFull = "Disband";
+    private static final transient String OrderFormatString = Utils.getLocalString(DISBAND_FORMAT);
 
 
     /**
@@ -63,42 +63,43 @@ public class Disband extends Order {
     }// Disband()
 
     public String getFullName() {
-        return orderNameFull;
+        return OrderNameFull;
     }// getName()
 
     public String getBriefName() {
-        return orderNameBrief;
+        return OrderNameBrief;
     }// getBriefName()
 
 
     // order formatting
     public String getDefaultFormat() {
-        return orderFormatString;
+        return OrderFormatString;
     }// getFormatBrief()
 
 
     public String toBriefString() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
 
         super.appendBrief(sb);
         sb.append(' ');
-        sb.append(orderNameBrief);
+        sb.append(OrderNameBrief);
 
         return sb.toString();
     }// toBriefString()
 
 
     public String toFullString() {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
 
         super.appendFull(sb);
         sb.append(' ');
-        sb.append(orderNameFull);
+        sb.append(OrderNameFull);
 
         return sb.toString();
     }// toFullString()
 
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Disband) {
             return super.equals(obj);
@@ -107,10 +108,11 @@ public class Disband extends Order {
     }// equals()
 
 
+    @Override
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
         // step 0
-        checkSeasonRetreat(state, orderNameFull);
+        checkSeasonRetreat(state, OrderNameFull);
         checkPower(power, state, false);    // inactive units can disband!
 
         // step 1
@@ -132,6 +134,7 @@ public class Disband extends Order {
      * Empty method: Disband orders do not require dependency determination.
      */
     public void determineDependencies(Adjudicator adjudicator) {
+      // Disband orders do not require dependency determination.
     }
 
 

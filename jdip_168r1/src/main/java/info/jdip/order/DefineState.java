@@ -79,14 +79,14 @@ public class DefineState extends Order {
 
 
     public String toBriefString() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         super.appendBrief(sb);
         return sb.toString();
     }// toBriefString()
 
 
     public String toFullString() {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
         super.appendFull(sb);
         return sb.toString();
     }// toFullString()

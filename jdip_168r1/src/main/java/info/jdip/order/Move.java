@@ -38,7 +38,6 @@ import info.jdip.world.RuleOptions;
 import info.jdip.world.TurnState;
 import info.jdip.world.Unit;
 
-import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,10 +55,6 @@ import java.util.List;
 public class Move extends Order {
     private static final Logger logger = LoggerFactory.getLogger(Move.class);
     // il8n constants
-	/*
-	private static final String MOVE_VAL_CONVOY_WARNING = "MOVE_VAL_CONVOY_WARNING";
-	private static final String MOVE_VAL_ARMY_CONVOY = "MOVE_VAL_ARMY_CONVOY";
-	*/
     private static final String MOVE_VAL_SRC_EQ_DEST = "MOVE_VAL_SRC_EQ_DEST";
     private static final String MOVE_VAL_UNIT_ADJ = "MOVE_VAL_UNIT_ADJ";
     private static final String MOVE_VAL_ADJ_UNLESS_CONVOY = "MOVE_VAL_ADJ_UNLESS_CONVOY";
@@ -78,19 +73,19 @@ public class Move extends Order {
 
 
     // constants: names
-    private static final String orderNameBrief = "M";
-    private static final String orderNameFull = "Move";
-    private static final transient String orderFormatString = Utils.getLocalString(MOVE_FORMAT);
-    private static final transient String orderFormatExCon = Utils.getLocalString(MOVE_FORMAT_EXPLICIT_CONVOY);    // explicit convoy format
+    private static final String OrderNameBrief = "M";
+    private static final String OrderNameFull = "Move";
+    private static final transient String OrderFormatString = Utils.getLocalString(MOVE_FORMAT);
+    private static final transient String OrderFormatExCon = Utils.getLocalString(MOVE_FORMAT_EXPLICIT_CONVOY);    // explicit convoy format
 
     // instance variables
     protected Location dest = null;
     protected ArrayList<Province[]> convoyRoutes = null;    // contains *defined* convoy routes; null if none.
-    protected boolean _isViaConvoy = false;                    // 'true' if army was explicitly ordered to convoy.
-    protected boolean _isConvoyIntent = false;                // 'true' if we determine that intent is to convoy. MUST be set to same initial value as _isViaConvoy
-    protected boolean _isAdjWithPossibleConvoy = false;        // 'true' if an army with an adjacent move has a possible convoy route move too
-    protected boolean _fmtIsAdjWithConvoy = false;            // for OrderFormat ONLY. 'true' if explicit convoy AND has land route.
-    protected boolean _hasLandRoute = false;                    // 'true' if move has an overland route.
+    protected boolean isViaConvoy = false;                    // 'true' if army was explicitly ordered to convoy.
+    protected boolean isConvoyIntent = false;                // 'true' if we determine that intent is to convoy. MUST be set to same initial value as _isViaConvoy
+    protected boolean isAdjWithPossibleConvoy = false;        // 'true' if an army with an adjacent move has a possible convoy route move too
+    protected boolean fmtIsAdjWithConvoy = false;            // for OrderFormat ONLY. 'true' if explicit convoy AND has land route.
+    protected boolean hasLandRoute = false;                    // 'true' if move has an overland route.
 
     /**
      * Creates a Move order
@@ -117,8 +112,8 @@ public class Move extends Order {
         }
 
         this.dest = dest;
-        this._isViaConvoy = isConvoying;
-        this._isConvoyIntent = this._isViaConvoy;        // intent: same initial value as _isViaConvoy
+        this.isViaConvoy = isConvoying;
+        this.isConvoyIntent = this.isViaConvoy;        // intent: same initial value as _isViaConvoy
     }// Move()
 
     /**
@@ -174,7 +169,7 @@ public class Move extends Order {
      * Dec-16-2003 DATC 6.G.8.
      */
     public boolean isViaConvoy() {
-        return _isViaConvoy;
+        return isViaConvoy;
     }// isExplicitConvoy()
 
 
@@ -187,7 +182,7 @@ public class Move extends Order {
      * until <code>validate()</code> has been called.
      */
     public boolean isAdjWithPossibleConvoy() {
-        return _isAdjWithPossibleConvoy;
+        return isAdjWithPossibleConvoy;
     }// isAdjWithPossibleConvoy()
 
 
@@ -214,7 +209,7 @@ public class Move extends Order {
      * the value of this method.
      */
     public boolean isConvoyIntent() {
-        return _isConvoyIntent;
+        return isConvoyIntent;
     }// isConvoyIntent()
 
 
@@ -246,22 +241,22 @@ public class Move extends Order {
 
 
     public String getFullName() {
-        return orderNameFull;
+        return OrderNameFull;
     }// getFullName()
 
     public String getBriefName() {
-        return orderNameBrief;
+        return OrderNameBrief;
     }// getBriefName()
 
 
     // order formatting
     public String getDefaultFormat() {
-        return (convoyRoutes == null) ? orderFormatString : orderFormatExCon;
+        return (convoyRoutes == null) ? OrderFormatString : OrderFormatExCon;
     }// getDefaultFormat()
 
 
     public String toBriefString() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
 
 
         if (convoyRoutes != null) {
@@ -295,7 +290,7 @@ public class Move extends Order {
 
 
     public String toFullString() {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
 
         if (convoyRoutes != null) {
             // print all explicit routes
@@ -338,6 +333,7 @@ public class Move extends Order {
     }// equals()
 
 
+    @Override
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
         // NOTE: the first time we validate(), _isViaConvoy == _isConvoyIntent.
@@ -345,7 +341,7 @@ public class Move extends Order {
 
         // basic checks
         //
-        checkSeasonMovement(state, orderNameFull);
+        checkSeasonMovement(state, OrderNameFull);
         checkPower(power, state, true);
         super.validate(state, valOpts, ruleOpts);
 
@@ -403,7 +399,7 @@ public class Move extends Order {
 
                 // we didn't fail; thus, we intend to convoy (because it is at least possible).
                 if (!isViaConvoy()) {
-                    _isConvoyIntent = true;
+                    isConvoyIntent = true;
                 }
             } else {
                 // we are adjacent
@@ -418,17 +414,17 @@ public class Move extends Order {
                 if (!isViaConvoy()
                         && srcUnitType == Unit.Type.ARMY) {
                     Path path = new Path(position);
-                    _isAdjWithPossibleConvoy = path.isPossibleConvoyRoute(src, dest);
+                    isAdjWithPossibleConvoy = path.isPossibleConvoyRoute(src, dest);
                 }
 
                 // for order format:
                 // set _fmtIsAdjWithConvoy iff we are EXPLICITLY ordered to convoy,
                 // and we are an adjacent move (we are an adjacent move if we
                 // reached this point in the code)
-                _fmtIsAdjWithConvoy = isViaConvoy();
+                fmtIsAdjWithConvoy = isViaConvoy();
 
                 // set if we can move via a land route.
-                _hasLandRoute = true;
+                hasLandRoute = true;
             }
         }
     }// validate()
@@ -479,16 +475,16 @@ public class Move extends Order {
      * Format a convoy route into a String
      */
     protected String formatConvoyRoute(final Province[] route, boolean isBrief, boolean useHyphen) {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
         formatConvoyRoute(sb, route, isBrief, useHyphen);
         return sb.toString();
     }// formatConvoyRoute()
 
 
     /**
-     * Format a convoy route into a StringBuffer
+     * Format a convoy route into a StringBuilder
      */
-    protected void formatConvoyRoute(StringBuffer sb, final Province[] route, boolean isBrief, boolean useHyphen) {
+    protected void formatConvoyRoute(StringBuilder sb, final Province[] route, boolean isBrief, boolean useHyphen) {
         if (isBrief) {
             sb.append(route[0].getShortName());
         } else {
@@ -566,9 +562,9 @@ public class Move extends Order {
                             // if we are explicitly being convoyed, and there is a land route,
                             // but no convoy route, we use the land route.
                             //
-                            if (isViaConvoy() && _hasLandRoute) {
+                            if (isViaConvoy() && hasLandRoute) {
                                 // we don't fail, but mention that there is no convoy route. (text order result)
-                                _isConvoyIntent = false;
+                                isConvoyIntent = false;
                                 adjudicator.addResult(thisOS, Utils.getLocalString(MOVE_VER_NO_ROUTE));
                             } else {
                                 // all paths failed.
@@ -584,8 +580,8 @@ public class Move extends Order {
                             // ordered to convoy ("by convoy") and there is a land route,
                             // but no convoy route, we use the land route.
                             //
-                            if (isViaConvoy() && _hasLandRoute) {
-                                _isConvoyIntent = false;
+                            if (isViaConvoy() && hasLandRoute) {
+                                isConvoyIntent = false;
                                 adjudicator.addResult(thisOS, Utils.getLocalString(MOVE_VER_NO_ROUTE));
                             } else {
                                 thisOS.setEvalState(Tristate.FAILURE);
@@ -615,7 +611,7 @@ public class Move extends Order {
                     for (Province[] path : paths) {
                         Province p = evalPath(adjudicator, path);
                         if (p != null) {
-                            _isConvoyIntent = true;
+                            isConvoyIntent = true;
                             adjudicator.addResult(thisOS, ResultType.TEXT, Utils.getLocalString(MOVE_VER_CONVOY_INTENT, p));
                             break;
                         }
@@ -1069,7 +1065,6 @@ public class Move extends Order {
                                 // head-to-head battle. [3.d]
                                 isBetterThanAllOtherMoves = false;
                                 thisOS.setEvalState(Tristate.FAILURE);
-                                //adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_BOUNCE));
                                 adjudicator.addBouncedResult(thisOS, os);
                                 return;
                             }
@@ -1113,21 +1108,17 @@ public class Move extends Order {
                 if (thisOS.isHeadToHead()) {
                     if (attack_max <= thisOS.getHeadToHead().getAtkCertain() + thisOS.getHeadToHead().getAtkSelfSupportCertain()) {
                         thisOS.setEvalState(Tristate.FAILURE);
-                        //adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_BOUNCE));
                         adjudicator.addBouncedResult(thisOS, thisOS.getHeadToHead());
                         logger.debug("(hth) final evalState(): {}", thisOS.getEvalState());
                         return;
                     }
-                } else if (!isDestAMove)    // less priority than isHeadToHead()
-                {
-                    if (attack_max <= destOS.getDefCertain()) {
+                } else if (!isDestAMove && attack_max <= destOS.getDefCertain()) { // less priority than isHeadToHead()
                         thisOS.setEvalState(Tristate.FAILURE);
-                        //adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_BOUNCE));
                         adjudicator.addBouncedResult(thisOS, destOS);
                         logger.debug("(dam) final evalState(): {}", thisOS.getEvalState());
                         return;
                     }
-                }
+                
             }
 
             // see if we are better w/o self support.
@@ -1165,7 +1156,6 @@ public class Move extends Order {
 
                             if (hthOS.getEvalState() == Tristate.UNCERTAIN) {
                                 hthOS.setEvalState(Tristate.FAILURE);    // they lose
-                                //adjudicator.addResult(hthOS, ResultType.FAILURE, Utils.getLocalString(MOVE_DISLODGED_HTH));
                             }
                         }
                     }
@@ -1178,17 +1168,15 @@ public class Move extends Order {
                     } else if (attack_certain == 1) {
                         // 3.a.3.b: case 4	[typical case of 3.a.3.b]
                         // if destination evalstate is uncertain, we too are uncertain
-                        if (destOS.getEvalState() == Tristate.FAILURE) {
-                            // we only fail for certain iff we are 'definately weaker'
-                            // which is defined as attack_max <= defense_certain
-                            // remember, our "certain support" could increase later
-                            if (attack_max <= 1) {
+                        // we only fail for certain iff we are 'definately weaker'
+                        // which is defined as attack_max <= defense_certain
+                        // remember, our "certain support" could increase later
+                        if (destOS.getEvalState() == Tristate.FAILURE && attack_max <= 1) {
                                 thisOS.setEvalState(Tristate.FAILURE);
-                                //adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_DEP)); // OLD
                                 adjudicator.addResult(new DependentMoveFailedResult(thisOS.getOrder(), destOS.getOrder()));
                             }
                             // else: we remain uncertain.
-                        }
+                        
                         // else: we remain uncertain
                     } else {
                         // now we are covering attack_certain > 1, and dest eval state is not a success
@@ -1217,7 +1205,6 @@ public class Move extends Order {
                                     destOS.setDislodgedState(Tristate.YES);
                                     destOS.setDislodger(thisOS);
                                     logger.debug( "Dislodged. (3.a.3.b.1)");
-                                    //adjudicator.addResult(destOS, ResultType.FAILURE, Utils.getLocalString(MOVE_DISLODGED));
                                     adjudicator.addDislodgedResult(destOS);
                                 } else if (destOS.getEvalState() == Tristate.UNCERTAIN) {
                                     destOS.setDislodgedState(Tristate.MAYBE);
@@ -1240,7 +1227,6 @@ public class Move extends Order {
                     logger.debug( "dest is not a Move");
                     // 3.a.3.b: case 4	[typical case of 3.a.3.b]
                     if (attack_certain > destOS.getDefMax()) {
-                        //OLD: if( isDestSamePower(destOS) )
                         if (!isBwoss || isDestSamePower(destOS)) {
                             thisOS.setEvalState(Tristate.FAILURE);
                             adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_NO_SELF_DISLODGE));
@@ -1249,7 +1235,6 @@ public class Move extends Order {
                             destOS.setDislodgedState(Tristate.YES);
                             destOS.setDislodger(thisOS);
                             logger.debug( "Dislodged. (3.a.3.b typical)");
-                            //adjudicator.addResult(destOS, ResultType.FAILURE, Utils.getLocalString(MOVE_DISLODGED));
                             adjudicator.addDislodgedResult(destOS);
                         }
                     }

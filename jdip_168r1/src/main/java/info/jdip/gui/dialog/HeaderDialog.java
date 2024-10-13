@@ -128,6 +128,7 @@ public class HeaderDialog extends XDialog {
     /**
      * Get the content panel
      */
+    @Override
     public Container getContentPane() {
         return content;
     }// getContentPane()
@@ -136,6 +137,7 @@ public class HeaderDialog extends XDialog {
      * Set the dialog content; this may be
      * called at any time.
      */
+    @Override
     public void setContentPane(Container container) {
         if (container == null) {
             throw new IllegalArgumentException();
@@ -456,7 +458,7 @@ public class HeaderDialog extends XDialog {
 
         iter = btnList.iterator();
         while (iter.hasNext()) {
-            JButton btn = (JButton) iter.next();
+            JButton btn = iter.next();
             btn.setPreferredSize(maxPref);
         }
     }// equalizeButtons()

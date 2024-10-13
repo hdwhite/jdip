@@ -106,8 +106,8 @@ public class ExportPreferencePanel extends PreferencePanel {
 
 
         // layout
-        int h1[] = {BORDER, 0, 5, 0, 1, 0, 1, 0, 1, 0, (BORDER * 2), 0, 5, 0, 1, 0, 1, 0, BORDER};
-        int w1[] = {BORDER, INDENT, 0, 0, BORDER};
+        int[] h1 = {BORDER, 0, 5, 0, 1, 0, 1, 0, 1, 0, (BORDER * 2), 0, 5, 0, 1, 0, 1, 0, BORDER};
+        int[] w1 = {BORDER, INDENT, 0, 0, BORDER};
 
         HIGLayout l1 = new HIGLayout(w1, h1);
         l1.setColumnWeight(4, 1);
@@ -230,7 +230,7 @@ public class ExportPreferencePanel extends PreferencePanel {
         q = (q < 0.0f || q > 1.0f) ? DEFAULT_JPG_QUALITY : q;
 
         // jpg quality slider (0-100 int)
-        jpgQuality = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+        jpgQuality = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 100);
         jpgQuality.setMajorTickSpacing(10);
         jpgQuality.setMinorTickSpacing(5);
         jpgQuality.setPaintTicks(true);
@@ -299,7 +299,7 @@ public class ExportPreferencePanel extends PreferencePanel {
 
         // set preference nodes
         prefs.putInt(NODE_PNG_BPP, (Integer) pngBPP.getSelectedValue());
-        prefs.putFloat(NODE_EXPORT_JPG_QUALITY, ((float) jpgQuality.getValue() / 100.0f));
+        prefs.putFloat(NODE_EXPORT_JPG_QUALITY, (jpgQuality.getValue() / 100.0f));
 
         int w = 0;
         int h = 0;

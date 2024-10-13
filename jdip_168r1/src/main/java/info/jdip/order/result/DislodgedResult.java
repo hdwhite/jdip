@@ -133,6 +133,7 @@ public class DislodgedResult extends OrderResult {
      * Creates an appropriate internationalized text message given the
      * set and unset parameters.
      */
+    @Override
     public String getMessage(OrderFormatOptions ofo) {
 		/*
 		0 : province not specified
@@ -185,8 +186,9 @@ public class DislodgedResult extends OrderResult {
     /**
      * Primarily for debugging.
      */
+    @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer(256);
+        StringBuilder sb = new StringBuilder(256);
         sb.append(super.toString());
 
         // add retreats

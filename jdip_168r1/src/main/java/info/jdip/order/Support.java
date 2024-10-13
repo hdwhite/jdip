@@ -63,10 +63,10 @@ public class Support extends Order {
     private static final String SUPPORT_FORMAT_NONMOVE = "SUPPORT_FORMAT_NONMOVE";
 
     // constants: names
-    private static final String orderNameBrief = "S";
-    private static final String orderNameFull = "Support";
-    private static final transient String orderFormatString_move = Utils.getLocalString(SUPPORT_FORMAT_MOVE);
-    private static final transient String orderFormatString_nonmove = Utils.getLocalString(SUPPORT_FORMAT_NONMOVE);
+    private static final String OrderNameBrief = "S";
+    private static final String OrderNameFull = "Support";
+    private static final transient String OrderFormatString_move = Utils.getLocalString(SUPPORT_FORMAT_MOVE);
+    private static final transient String OrderFormatString_nonmove = Utils.getLocalString(SUPPORT_FORMAT_NONMOVE);
 
     // instance variables
     protected Location supSrc = null;
@@ -205,29 +205,29 @@ public class Support extends Order {
 
 
     public String getFullName() {
-        return orderNameFull;
+        return OrderNameFull;
     }// getName()
 
     public String getBriefName() {
-        return orderNameBrief;
+        return OrderNameBrief;
     }// getBriefName()
 
 
     public String getDefaultFormat() {
         if (isSupportingHold()) {
-            return orderFormatString_nonmove;
+            return OrderFormatString_nonmove;
         }
 
-        return orderFormatString_move;
+        return OrderFormatString_move;
     }// getFormatBrief()
 
 
     public String toBriefString() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
 
         super.appendBrief(sb);
         sb.append(' ');
-        sb.append(orderNameBrief);
+        sb.append(OrderNameBrief);
         sb.append(' ');
         sb.append(supUnitType.getShortName());
         sb.append(' ');
@@ -243,11 +243,11 @@ public class Support extends Order {
 
 
     public String toFullString() {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
 
         super.appendFull(sb);
         sb.append(' ');
-        sb.append(orderNameFull);
+        sb.append(OrderNameFull);
         sb.append(' ');
         sb.append(supUnitType.getFullName());
         sb.append(' ');
@@ -262,6 +262,7 @@ public class Support extends Order {
     }// toFullString()
 
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Support) {
             final Support support = (Support) obj;
@@ -275,10 +276,11 @@ public class Support extends Order {
     }// equals()
 
 
+    @Override
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
         // v.0: 	check season/phase, basic validation
-        checkSeasonMovement(state, orderNameFull);
+        checkSeasonMovement(state, OrderNameFull);
         checkPower(power, state, true);
         super.validate(state, valOpts, ruleOpts);
 
@@ -503,7 +505,6 @@ public class Support extends Order {
                 thisOS.getDefCertain(),
                 thisOS.getAtkMax(),
                 thisOS.getAtkCertain(),
-                thisOS.getDependentSupports().length,
                 thisOS.getDependentSupports().length,
                 thisOS.getDependentMovesToSource().length,
                 thisOS.getDislodgedState()
@@ -750,15 +751,13 @@ public class Support extends Order {
         if (!isSupportingHold()) {
             // if so, get the OrderState at the destination
             OrderState destOS = adjudicator.findOrderStateBySrc(getSupportedDest());
-            if (destOS != null) {
-                if (destOS.getOrder() instanceof Convoy) {
-                    // destination of the supported move has a convoy
-                    // see if it matches the convoyedMove
-                    Convoy convoy = (Convoy) destOS.getOrder();
-                    if (convoy.getConvoySrc().equals(convoyedMove.getSource())
-                            && convoy.getConvoyDest().equals(convoyedMove.getDest())) {
-                        return convoy;
-                    }
+            if (destOS != null && destOS.getOrder() instanceof Convoy) {
+                // destination of the supported move has a convoy
+                // see if it matches the convoyedMove
+                Convoy convoy = (Convoy) destOS.getOrder();
+                if (convoy.getConvoySrc().equals(convoyedMove.getSource())
+                        && convoy.getConvoyDest().equals(convoyedMove.getDest())) {
+                    return convoy;
                 }
             }
         }

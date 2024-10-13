@@ -124,9 +124,9 @@ public class GUIMoveExplicit extends Move implements GUIOrder {
         src = move.getSource();
         srcUnitType = move.getSourceUnitType();
         dest = move.getDest();
-        _isViaConvoy = move.isViaConvoy();
-        _isAdjWithPossibleConvoy = move.isAdjWithPossibleConvoy();
-        _isConvoyIntent = isConvoyIntent();
+        isViaConvoy = move.isViaConvoy();
+        isAdjWithPossibleConvoy = move.isAdjWithPossibleConvoy();
+        isConvoyIntent = isConvoyIntent();
 
         // set completed
         isComplete = true;
@@ -311,9 +311,9 @@ public class GUIMoveExplicit extends Move implements GUIOrder {
         src = null;
         srcUnitType = null;
         dest = null;
-        _isViaConvoy = false;
-        _isAdjWithPossibleConvoy = false;
-        _isConvoyIntent = false;
+        isViaConvoy = false;
+        isAdjWithPossibleConvoy = false;
+        isConvoyIntent = false;
 
         isConvoyableArmy = false;
         isComplete = false;

@@ -44,9 +44,9 @@ public class Hold extends Order {
     private static final String HOLD_FORMAT = "HOLD_FORMAT";
 
     // constants: names
-    private static final String orderNameBrief = "H";
-    private static final String orderNameFull = "Hold";
-    private static final transient String orderFormatString = Utils.getLocalString(HOLD_FORMAT);
+    private static final String OrderNameBrief = "H";
+    private static final String OrderNameFull = "Hold";
+    private static final transient String OrderFormatString = Utils.getLocalString(HOLD_FORMAT);
 
 
     /**
@@ -65,50 +65,52 @@ public class Hold extends Order {
 
 
     public String getFullName() {
-        return orderNameFull;
+        return OrderNameFull;
     }// getName()
 
     public String getBriefName() {
-        return orderNameBrief;
+        return OrderNameBrief;
     }// getBriefName()
 
 
     // format-strings for orders
     public String getDefaultFormat() {
-        return orderFormatString;
+        return OrderFormatString;
     }// getFormatBrief()
 
 
     public String toBriefString() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
 
         super.appendBrief(sb);
         sb.append(' ');
-        sb.append(orderNameBrief);
+        sb.append(OrderNameBrief);
 
         return sb.toString();
     }// toBriefString()
 
 
     public String toFullString() {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
 
         super.appendFull(sb);
         sb.append(' ');
-        sb.append(orderNameFull);
+        sb.append(OrderNameFull);
 
         return sb.toString();
     }// toFullString()
 
 
+    @Override
     public boolean equals(Object obj) {
         return obj instanceof Hold && super.equals(obj);
     }// equals()
 
 
+    @Override
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
-        checkSeasonMovement(state, orderNameFull);
+        checkSeasonMovement(state, OrderNameFull);
         checkPower(power, state, false);    // inactive powers can issue Hold orders
         super.validate(state, valOpts, ruleOpts);
 
@@ -161,15 +163,13 @@ public class Hold extends Order {
                 thisOS.getDislodgedState()
         );
 
-        if (thisOS.getEvalState() == Tristate.UNCERTAIN) {
-            // if no moves against this order, we must succeed.
-            // Otherwise, MOVE orders will determine if we are dislodged and thus fail.
-            if (thisOS.getDependentMovesToSource().length == 0) {
-                thisOS.setEvalState(Tristate.SUCCESS);
-                thisOS.setDislodgedState(Tristate.NO);
-            }
+        // if no moves against this order, we must succeed.
+        // Otherwise, MOVE orders will determine if we are dislodged and thus fail.
+        if (thisOS.getEvalState() == Tristate.UNCERTAIN && thisOS.getDependentMovesToSource().length == 0) {
+            thisOS.setEvalState(Tristate.SUCCESS);
+            thisOS.setDislodgedState(Tristate.NO);
         }
-
+        
         logger.debug("Final evalState: {}", thisOS.getEvalState());
     }// evaluate()
 

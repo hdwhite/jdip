@@ -87,7 +87,7 @@ public class Build extends Order {
 
 
     public String toBriefString() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
 
         sb.append(power);
         sb.append(": ");
@@ -102,7 +102,7 @@ public class Build extends Order {
 
 
     public String toFullString() {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
 
         sb.append(power);
         sb.append(": ");

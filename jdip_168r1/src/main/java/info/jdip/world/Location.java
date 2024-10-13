@@ -179,7 +179,7 @@ public class Location {
      * Returns the short Location name (as per appendBrief()) as a String
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer(8);
+        StringBuilder sb = new StringBuilder(8);
         appendBrief(sb);
         return sb.toString();
     }// toString()
@@ -188,7 +188,7 @@ public class Location {
      * Returns the full (long) Locatin name (as per appendFull()) as a String
      */
     public String toLongString() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
         appendFull(sb);
         return sb.toString();
     }// toString()
@@ -197,7 +197,7 @@ public class Location {
     /**
      * Append the brief Location name to the StringBuffer (e.g., spa/sc)
      */
-    public void appendBrief(StringBuffer sb) {
+    public void appendBrief(StringBuilder sb) {
         sb.append(province.getShortName());
         if (coast.isDirectional()) {
             sb.append('/');
@@ -209,7 +209,7 @@ public class Location {
     /**
      * Append the full Location name to the StringBuffer. (e.g., Spain/South Coast)
      */
-    public void appendFull(StringBuffer sb) {
+    public void appendFull(StringBuilder sb) {
         sb.append(province);
         if (coast.isDirectional()) {
             sb.append('(');

@@ -54,9 +54,9 @@ public class Convoy extends Order {
     private static final String CONVOY_TO_SAME_PROVINCE = "CONVOY_TO_SAME_PROVINCE";
 
     // constants: names
-    private static final String orderNameBrief = "C";
-    private static final String orderNameFull = "Convoy";
-    private static final transient String orderFormatString = Utils.getLocalString(CONVOY_FORMAT);
+    private static final String OrderNameBrief = "C";
+    private static final String OrderNameFull = "Convoy";
+    private static final transient String OrderFormatString = Utils.getLocalString(CONVOY_FORMAT);
 
     // instance variables
     protected Location convoySrc = null;
@@ -130,25 +130,25 @@ public class Convoy extends Order {
 
 
     public String getFullName() {
-        return orderNameFull;
+        return OrderNameFull;
     }// getName()
 
     public String getBriefName() {
-        return orderNameBrief;
+        return OrderNameBrief;
     }// getBriefName()
 
 
     public String getDefaultFormat() {
-        return orderFormatString;
+        return OrderFormatString;
     }// getFormatBrief()
 
 
     public String toBriefString() {
-        StringBuffer sb = new StringBuffer(64);
+        StringBuilder sb = new StringBuilder(64);
 
         super.appendBrief(sb);
         sb.append(' ');
-        sb.append(orderNameBrief);
+        sb.append(OrderNameBrief);
         sb.append(' ');
         sb.append(convoyUnitType.getShortName());
         sb.append(' ');
@@ -161,11 +161,11 @@ public class Convoy extends Order {
 
 
     public String toFullString() {
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
 
         super.appendFull(sb);
         sb.append(' ');
-        sb.append(orderNameFull);
+        sb.append(OrderNameFull);
         sb.append(' ');
         sb.append(convoyUnitType.getFullName());
         sb.append(' ');
@@ -177,6 +177,7 @@ public class Convoy extends Order {
     }// toFullString()
 
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Convoy) {
             Convoy convoy = (Convoy) obj;
@@ -189,10 +190,11 @@ public class Convoy extends Order {
     }// equals()
 
 
+    @Override
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
         // v.0: 	check phase, basic validation
-        checkSeasonMovement(state, orderNameFull);
+        checkSeasonMovement(state, OrderNameFull);
         checkPower(power, state, true);
         super.validate(state, valOpts, ruleOpts);
 
@@ -269,27 +271,25 @@ public class Convoy extends Order {
             boolean foundMatchingMove = false;
 
             OrderState matchingOS = adjudicator.findOrderStateBySrc(getConvoySrc());
-            if (matchingOS != null) {
-                if (matchingOS.getOrder() instanceof Move) {
-                    Move convoyedMove = (Move) matchingOS.getOrder();
+            if (matchingOS != null && matchingOS.getOrder() instanceof Move) {
+                Move convoyedMove = (Move) matchingOS.getOrder();
 
-                    // check that Move has been verified; if it has not,
-                    // we should just immediately verify it (though we could
-                    // wait for the adjudicator to do so).
+                // check that Move has been verified; if it has not,
+                // we should just immediately verify it (though we could
+                // wait for the adjudicator to do so).
+                if (!matchingOS.isVerified()) {
+                    convoyedMove.verify(adjudicator);
+
+                    // but if it doesn't verify, then we have a
+                    // dependency-error.
                     if (!matchingOS.isVerified()) {
-                        convoyedMove.verify(adjudicator);
-
-                        // but if it doesn't verify, then we have a
-                        // dependency-error.
-                        if (!matchingOS.isVerified()) {
-                            throw new IllegalStateException("Verify dependency error.");
-                        }
+                        throw new IllegalStateException("Verify dependency error.");
                     }
+                }
 
-                    if (convoyedMove.isConvoying()
-                            && getConvoyDest().isProvinceEqual(convoyedMove.getDest())) {
-                        foundMatchingMove = true;
-                    }
+                if (convoyedMove.isConvoying()
+                        && getConvoyDest().isProvinceEqual(convoyedMove.getDest())) {
+                    foundMatchingMove = true;
                 }
             }
 

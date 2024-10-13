@@ -44,16 +44,16 @@ public class PreferenceDialog extends HeaderDialog {
     private static final String HEADER_LOCATION = "PreferenceDialog.header";
 
     // GUI
-    private final ClientFrame parent;
+    private final ClientFrame parentFrame;
     private final JTabbedPane tabPane;
     private PreferencePanel[] tabbedPanels;        // make static, & create just once?
 
 
     private PreferenceDialog(ClientFrame parent) {
         super(parent, Utils.getLocalString(TITLE), true);
-        this.parent = parent;
+        this.parentFrame = parent;
 
-        tabPane = new JTabbedPane(JTabbedPane.TOP);
+        tabPane = new JTabbedPane(SwingConstants.TOP);
 
         setHeaderText(Utils.getText(Utils.getLocalString(HEADER_LOCATION)));
         setContentPane(tabPane);
@@ -75,10 +75,11 @@ public class PreferenceDialog extends HeaderDialog {
     }// displayDialog()
 
     private void createPanels() {
-        tabbedPanels = new PreferencePanel[3];
-        tabbedPanels[0] = new GeneralPreferencePanel(parent);
-        tabbedPanels[1] = new DisplayPreferencePanel(parent);
-        tabbedPanels[2] = new ExportPreferencePanel(parent);
+        tabbedPanels = new PreferencePanel[] {
+            new GeneralPreferencePanel(parentFrame),
+            new DisplayPreferencePanel(parentFrame),
+            new ExportPreferencePanel(parentFrame)
+        };
 
         for (PreferencePanel panel : tabbedPanels) {
             tabPane.addTab(panel.getName(), panel);
@@ -89,6 +90,7 @@ public class PreferenceDialog extends HeaderDialog {
     /**
      * Apply or Cancel settings after closing dialog
      */
+    @Override
     public void close(String actionCommand) {
         super.close(actionCommand);
 

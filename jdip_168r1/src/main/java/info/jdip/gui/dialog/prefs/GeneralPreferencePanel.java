@@ -130,19 +130,13 @@ public class GeneralPreferencePanel extends PreferencePanel {
         saveDir = new JTextField();
         saveDir.setEditable(false);
         browseSaveDir = new JButton(Utils.getLocalString(GPP_SAVE_DIR_BUTTON));
-        browseSaveDir.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                directoryBrowse();
-            }// actionPerformed()
-        });
+        browseSaveDir.addActionListener((ActionEvent e) -> directoryBrowse());
 
 
         clearMRU = new JButton(Utils.getLocalString(GPP_CLEAR_MRU_BUTTON));
-        clearMRU.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                clearFileList();
-                cf.getClientMenu().updateRecentFiles();
-            }// actionPerformed()
+        clearMRU.addActionListener((ActionEvent e) -> {
+            clearFileList();
+            cf.getClientMenu().updateRecentFiles();
         });
 
         // setup associative arrays for comboboxes
@@ -199,9 +193,9 @@ public class GeneralPreferencePanel extends PreferencePanel {
         mapP.add(mapLabels);
 
         // layout
-        int h1[] = {BORDER, 0, 8, 0, 8, 0, 8, 0, 3, 0, 7, 36,    // upto row 12
+        int[] h1 = {BORDER, 0, 8, 0, 8, 0, 8, 0, 3, 0, 7, 36,    // upto row 12
                 0, 3, 0, 10, 0, 8, 0, BORDER};
-        int w1[] = {BORDER, 10, 0, 5, 0, BORDER};
+        int[] w1 = {BORDER, 10, 0, 5, 0, BORDER};
 
         HIGLayout l1 = new HIGLayout(w1, h1);
         l1.setColumnWeight(3, 1);
@@ -499,7 +493,7 @@ public class GeneralPreferencePanel extends PreferencePanel {
 
         File file = null;
         int choice = chooser.showDialog(frame, Utils.getLocalString(XJFileChooser.BTN_DIR_SELECT));
-        if (choice == JDirectoryChooser.APPROVE_OPTION) {
+        if (choice == JFileChooser.APPROVE_OPTION) {
             file = chooser.getSelectedFile().getAbsoluteFile();
             if (immediateCommit && file != null) {
                 Preferences prefs = SharedPrefs.getUserNode();
@@ -528,7 +522,7 @@ public class GeneralPreferencePanel extends PreferencePanel {
         chooser.setDialogTitle(Utils.getLocalString(DIALOG_TITLE));
         int choice = chooser.showDialog(cf,
                 Utils.getLocalString(XJFileChooser.BTN_DIR_SELECT));
-        if (choice == JDirectoryChooser.APPROVE_OPTION) {
+        if (choice == JFileChooser.APPROVE_OPTION) {
             saveDir.setText(chooser.getSelectedFile().getAbsolutePath());
         }
     }// directoryBrowse()

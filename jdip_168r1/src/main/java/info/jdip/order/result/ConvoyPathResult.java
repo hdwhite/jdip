@@ -78,6 +78,7 @@ public class ConvoyPathResult extends OrderResult {
      * Creates an appropriate internationalized text message given the
      * convoy path.
      */
+    @Override
     public String getMessage(OrderFormatOptions ofo) {
 		/*
 		arguments:
@@ -102,6 +103,7 @@ public class ConvoyPathResult extends OrderResult {
     /**
      * Primarily for debugging.
      */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(256);
         sb.append(super.toString());

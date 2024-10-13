@@ -232,7 +232,7 @@ public class ClientFrame extends JFrame {
     /**
      * Create a ClientFrame, the main screen for the GUI Client.
      */
-    public ClientFrame(String args[]) {
+    public ClientFrame(String[] args) {
         super();
         logger.trace("Initializing");
         // parse command-line args
@@ -265,34 +265,12 @@ public class ClientFrame extends JFrame {
                 System.setProperty("apple.laf.useScreenMenuBar", "true");
                 System.setProperty("com.apple.mrj.application.apple.menu.about.name", PROGRAM_NAME);
                 System.setProperty("apple.awt.showGrowBox", "true");    // may no longer need
-				/*
-				NOTE: brushed metal is disabled; a bug in the Cocoa implementation causes
-				dialogs to behave strangely when this is enabled.
-				//
-				//System.setProperty("apple.awt.brushMetalLook", "true");
-				*/
             }
 
             // replace bad-looking (metal, motif) LAFs with better-looking
             // ones.
             String lafClassName = UIManager.getSystemLookAndFeelClassName();
             assert (lafClassName != null);
-
-            if (Utils.isWindows()) { //TODO: Fix Windows Look and Feel.
-                // higher-fidelity windows LAF
-                // lafClassName = "com.jgoodies.looks.windows.WindowsLookAndFeel";
-
-                // enable this to use the Java (not windows system) default font.
-                // UIManager.put("Application.useSystemFontSettings", Boolean.FALSE);
-            } else if (!Utils.isOSX()) {
-                // keep synth; switch if Motif / Metal
-                if (lafClassName.contains("MotifLookAndFeel") ||
-                        lafClassName.contains("MetalLookAndFeel")) {
-                    // good generic LAF
-                    lafClassName = "com.jgoodies.looks.plastic.PlasticLookAndFeel";
-                }
-            }
-
 
             try {
                 if (lafClassName.contains("jgoodies")) {

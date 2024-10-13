@@ -60,6 +60,7 @@ public class DependentMoveFailedResult extends OrderResult {
      * Creates an appropriate internationalized text
      * message given the set and unset parameters.
      */
+    @Override
     public String getMessage(OrderFormatOptions ofo) {
 		/*
 		{0} : the dependent order, formatted with OrderFormat
@@ -74,6 +75,7 @@ public class DependentMoveFailedResult extends OrderResult {
     /**
      * Primarily for debugging.
      */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(256);
         sb.append(super.toString());

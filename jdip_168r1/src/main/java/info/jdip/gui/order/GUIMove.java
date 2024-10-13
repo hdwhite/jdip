@@ -113,9 +113,9 @@ public class GUIMove extends Move implements GUIOrder {
         src = move.getSource();
         srcUnitType = move.getSourceUnitType();
         dest = move.getDest();
-        _isViaConvoy = move.isViaConvoy();
-        _isAdjWithPossibleConvoy = move.isAdjWithPossibleConvoy();
-        _isConvoyIntent = isConvoyIntent();
+        isViaConvoy = move.isViaConvoy();
+        isAdjWithPossibleConvoy = move.isAdjWithPossibleConvoy();
+        isConvoyIntent = isConvoyIntent();
 
         // set completed
         currentLocNum = REQ_LOC;
@@ -212,9 +212,9 @@ public class GUIMove extends Move implements GUIOrder {
         src = null;
         srcUnitType = null;
         dest = null;
-        _isViaConvoy = false;
-        _isAdjWithPossibleConvoy = false;
-        _isConvoyIntent = false;
+        isViaConvoy = false;
+        isAdjWithPossibleConvoy = false;
+        isConvoyIntent = false;
 
         return true;
     }// clearLocations()
@@ -263,7 +263,7 @@ public class GUIMove extends Move implements GUIOrder {
     public void setParam(Parameter param, Object value) {
         if (param == BY_CONVOY) {
             if (value instanceof Boolean) {
-                _isViaConvoy = (Boolean) value;
+                isViaConvoy = (Boolean) value;
             } else {
                 throw new IllegalArgumentException();
             }
