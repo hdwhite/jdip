@@ -58,28 +58,28 @@ public class HeaderDialog extends XDialog {
     /**
      * Default margin between button bar edge and components
      */
-    public final static int BTN_BAR_EDGE = 5;
+    public static final int BTN_BAR_EDGE = 5;
     /**
      * Default spacint between buttun bar buttons
      */
-    public final static int BTN_BAR_BETWEEN = 10;
+    public static final int BTN_BAR_BETWEEN = 10;
 
     /**
      * OK Button Action Command; constant across languages
      */
-    public final static String ACTION_OK = "ACTION_OK";
+    public static final String ACTION_OK = "ACTION_OK";
     /**
      * Close Button Action Command; constant across languages
      */
-    public final static String ACTION_CLOSE = "ACTION_CLOSE";
+    public static final String ACTION_CLOSE = "ACTION_CLOSE";
     /**
      * Cancel Button Action Command; constant across languages
      */
-    public final static String ACTION_CANCEL = "ACTION_CANCEL";
+    public static final String ACTION_CANCEL = "ACTION_CANCEL";
     /**
      * Accept button Action Command; constant across languages
      */
-    public final static String ACTION_ACCEPT = "ACTION_ACCEPT";
+    public static final String ACTION_ACCEPT = "ACTION_ACCEPT";
 
 
     private static final JButton sizerButton = new JButton(TEXT_CANCEL);        // used to size buttons

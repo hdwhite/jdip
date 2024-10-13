@@ -23,7 +23,6 @@
 package info.jdip.gui.dialog.newgame;
 
 import info.jdip.world.Phase.YearType;
-
 import javax.swing.*;
 
 /**
@@ -35,7 +34,6 @@ import javax.swing.*;
  * [setMinimum()] to 1.
  */
 public class BCSpinner extends JSpinner {
-
     /**
      * Create a BCSpinner
      */
@@ -81,7 +79,6 @@ public class BCSpinner extends JSpinner {
 
 
     private static class YearTypeEditor extends JSpinner.DefaultEditor {
-
         YearTypeEditor(JSpinner spinner) {
             super(spinner);
             JFormattedTextField ftf = getTextField();
@@ -94,8 +91,8 @@ public class BCSpinner extends JSpinner {
 
     private static class SpinnerYearTypeModel extends AbstractSpinnerModel {
         private YearType value;
-        private int minimum, maximum;
-
+        private int minimum;
+        private int maximum;
 
         /**
          * Create a SpinnerYearTypeModel. 0 is not a valid min, max, or stepSize value.
@@ -213,10 +210,3 @@ public class BCSpinner extends JSpinner {
     }// inner class SpinnerYearTypeModel
 
 }// class BCSpinner
-
-
-
-
-
-
-

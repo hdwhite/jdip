@@ -79,18 +79,16 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane {
 			SymbolPack, if any; if there isn't a preferred Symbolpack, 
 			then no SymbolPack change is made.
 		*/
-        mapSelector.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    ListItem item = mapSelector.getSelectedItem();
-                    if (item != null) {
-                        MapGraphic mg = (MapGraphic) item.getReference();
-                        if (mg.getPreferredSymbolPackName() != null) {
-                            symbolSelector.setSelectedItemByName(mg.getPreferredSymbolPackName());
-                        }
+        mapSelector.addListSelectionListener((ListSelectionEvent e) -> {
+            if (!e.getValueIsAdjusting()) {
+                ListItem item = mapSelector.getSelectedItem();
+                if (item != null) {
+                    MapGraphic mg = (MapGraphic) item.getReference();
+                    if (mg.getPreferredSymbolPackName() != null) {
+                        symbolSelector.setSelectedItemByName(mg.getPreferredSymbolPackName());
                     }
                 }
-            }// valueChanged()
+            }
         });
 
         // fill *after* we add all change listeners
@@ -108,8 +106,8 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane {
         // create unit option panel with checkboxes inside
         //
         JPanel symbolPanel = new JPanel();
-        int w1[] = {50, 0, 0};        // cols
-        int h1[] = {0, 0, 0, 0};        // rows
+        int[] w1 = {50, 0, 0};        // cols
+        int[] h1 = {0, 0, 0, 0};        // rows
 
         HIGLayout l1 = new HIGLayout(w1, h1);
         l1.setColumnWeight(3, 1);
@@ -302,7 +300,7 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane {
             underDesc = new JPanel(new BorderLayout());
 
             jsp = new XJScrollPane(list);
-            jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
             makeSPLayout();
         }// SelectorPanel()
@@ -412,8 +410,8 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane {
          * layout the SelectorPanel
          */
         private void makeSPLayout() {
-            int w1[] = {0, BORDER_10, 0};            // cols
-            int h1[] = {0, BORDER_5, 0, 0};        // rows
+            int[] w1 = {0, BORDER_10, 0};            // cols
+            int[] h1 = {0, BORDER_5, 0, 0};        // rows
 
             HIGLayout l1 = new HIGLayout(w1, h1);
             l1.setColumnWeight(3, 1);
@@ -494,11 +492,9 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane {
             ImageIcon ii = null;
             if (iconURL != null) {
                 ii = new ImageIcon(iconURL);
-                if (ii != null) {
-                    if (ii.getIconWidth() > MAX_ICON_WIDTH || ii.getIconHeight() > MAX_ICON_HEIGHT) {
+                if (ii != null && (ii.getIconWidth() > MAX_ICON_WIDTH || ii.getIconHeight() > MAX_ICON_HEIGHT)) {
                         ii = Utils.scaleDown(ii, MAX_ICON_WIDTH, MAX_ICON_HEIGHT);
                     }
-                }
             }
 
             this.icon = ii;
@@ -516,11 +512,9 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane {
             ImageIcon ii = null;
             if (iconURL != null) {
                 ii = new ImageIcon(iconURL);
-                if (ii != null) {
-                    if (ii.getIconWidth() > MAX_ICON_WIDTH || ii.getIconHeight() > MAX_ICON_HEIGHT) {
+                if (ii != null && (ii.getIconWidth() > MAX_ICON_WIDTH || ii.getIconHeight() > MAX_ICON_HEIGHT)) {
                         ii = Utils.scaleDown(ii, MAX_ICON_WIDTH, MAX_ICON_HEIGHT);
                     }
-                }
             }
 
             this.icon = ii;

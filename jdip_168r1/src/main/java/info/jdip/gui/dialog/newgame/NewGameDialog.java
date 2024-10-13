@@ -70,7 +70,7 @@ public class NewGameDialog extends HeaderDialog {
         this.clientFrame = parent;
 
         // create tab pane
-        tabPane = new JTabbedPane(JTabbedPane.TOP);
+        tabPane = new JTabbedPane(SwingConstants.TOP);
 
         // create tabbed panels
         tabMapAndUnits = new NGDMapAndUnits();
@@ -93,12 +93,12 @@ public class NewGameDialog extends HeaderDialog {
         // dialog setup
         setHeaderText(Utils.getText(Utils.getLocalString(HEADER_LOCATION)));
         addTwoButtons(makeCancelButton(), makeOKButton(), false, true);
-        defaultButton = getDefaultButton();
         createDefaultContentBorder(tabPane);
         setContentPane(tabPane);
 
         // ensure list selection is visible
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowOpened(WindowEvent e) {
                 tabVariant.ensureSelectionIsVisible();
             }
@@ -130,12 +130,7 @@ public class NewGameDialog extends HeaderDialog {
         createCachedDialog(parent);
 
         dialogInstance.setTitle(title);
-
-        if (helpID == null) {
-            dialogInstance.setHelpID(info.jdip.misc.Help.HelpID.NewGame);
-        } else {
-            dialogInstance.setHelpID(helpID);
-        }
+        dialogInstance.setHelpID(helpID == null ? info.jdip.misc.Help.HelpID.NewGame : helpID);
 
         Utils.centerIn(dialogInstance, parent);
         dialogInstance.tabPane.setSelectedIndex(0);    // always reset to first tab
@@ -155,7 +150,6 @@ public class NewGameDialog extends HeaderDialog {
                     public Object construct() {
                         logger.trace("NGD construct() started.");
                         NewGameDialog ngd = new NewGameDialog(parent);
-                        ngd = new NewGameDialog(parent);
                         ngd.pack();
                         ngd.setSize(Utils.getScreenSize(0.67f, 0.82f));
                         logger.trace("NGD construct() complete.");
@@ -175,6 +169,7 @@ public class NewGameDialog extends HeaderDialog {
     /**
      * Handle dialog closing
      */
+    @Override
     public void close(String actionCommand) {
         if (isOKorAccept(actionCommand)) {
             doOK();
@@ -201,8 +196,8 @@ public class NewGameDialog extends HeaderDialog {
         return world;
     }// getWorld()
 
-
-    protected NGDStartOptions getStartOptionsPanel() {
+    protected NGDStartOptions getStartOptionsPanel()
+    {
         return tabOptions;
     }// getStartOptionsPanel()
 
@@ -213,7 +208,6 @@ public class NewGameDialog extends HeaderDialog {
     protected NGDMapAndUnits getMAUPanel() {
         return tabMapAndUnits;
     }// getMAUPanel()
-
 
     /**
      * Adds a tab
@@ -246,7 +240,6 @@ public class NewGameDialog extends HeaderDialog {
         }
     }// setTabsEnabled()
 
-
     /**
      * All tabs must implement this interface. This helps
      * control and standardizes common tab functions.
@@ -271,6 +264,4 @@ public class NewGameDialog extends HeaderDialog {
         void enablingChanged(boolean enabled);
 
     }// interface NGDTabPane
-
-
 }// class NewGameDialog

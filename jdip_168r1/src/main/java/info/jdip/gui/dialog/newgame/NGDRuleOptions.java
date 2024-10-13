@@ -79,19 +79,13 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
         optionList = new JList<>(optionListModel);
         optionList.setFixedCellWidth(100);
         optionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        optionList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                updateChoices();
-            }
+        optionList.addListSelectionListener((ListSelectionEvent e) -> {
+            updateChoices();
         });
 
         // reset button
         reset = new JButton(Utils.getLocalString(BUTTON_RESET));
-        reset.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                resetData();
-            }
-        });
+        reset.addActionListener((ActionEvent e) -> resetData());
 
         // description text
         description = Utils.createTextLabel(true);
@@ -130,6 +124,7 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
     /**
      * Enables & Disables controls on this panel
      */
+    @Override
     public void setEnabled(boolean value) {
         optionList.setEnabled(value);
         reset.setEnabled(value);
@@ -229,8 +224,8 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
      */
     private void makeLayout() {
         // layout subpanel (description + radio buttons)
-        int w1[] = {25, 0, 5};    //            9  10 11 12 13 14 15  16,17  18,19
-        int h1[] = {10, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 10, 0, 5, 0, 5};
+        int[] w1 = {25, 0, 5};    //            9  10 11 12 13 14 15  16,17  18,19
+        int[] h1 = {10, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 10, 0, 5, 0, 5};
 
         HIGLayout l1 = new HIGLayout(w1, h1);
         l1.setColumnWeight(2, 1);

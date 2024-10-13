@@ -60,7 +60,7 @@ public class NGDVariantSelect extends JPanel implements NewGameDialog.NGDTabPane
 
 
     // instance variables
-    private final ClientFrame parent;
+    private final ClientFrame parentFrame;
     private final NewGameDialog ngd;
     private final boolean isLoading = false;
 
@@ -74,7 +74,7 @@ public class NGDVariantSelect extends JPanel implements NewGameDialog.NGDTabPane
      * Create a Variant Selection panel
      */
     protected NGDVariantSelect(ClientFrame parent, NewGameDialog ngd) {
-        this.parent = parent;
+        this.parentFrame = parent;
         this.ngd = ngd;
 
         // textPanel setup
@@ -93,11 +93,7 @@ public class NGDVariantSelect extends JPanel implements NewGameDialog.NGDTabPane
         variantList = new JList<>(listModel);
         variantList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         variantList.setPrototypeCellValue("MMMMMMMMMMMMMM");
-        variantList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                doVariantListSelection();
-            }
-        });
+        variantList.addListSelectionListener((ListSelectionEvent e) -> doVariantListSelection());
 
 
         // create layout
@@ -171,7 +167,7 @@ public class NGDVariantSelect extends JPanel implements NewGameDialog.NGDTabPane
             world.setRuleOptions(ruleOpts);
         } catch (InvalidWorldException iwe) {
             world = null;
-            ErrorDialog.displayGeneral(parent, iwe);
+            ErrorDialog.displayGeneral(parentFrame, iwe);
         }
 
         return world;
@@ -252,13 +248,13 @@ public class NGDVariantSelect extends JPanel implements NewGameDialog.NGDTabPane
      */
     private void makeLayout() {
         JScrollPane descSP = new XJScrollPane(textPanel);
-        descSP.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        descSP.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         JScrollPane varSP = new XJScrollPane(variantList);
-        varSP.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        varSP.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        int w1[] = {BORDER, 0, 15, 0, BORDER};    // cols
-        int h1[] = {2 * BORDER, 0, 5, 0, BORDER};    // rows
+        int[] w1 = {BORDER, 0, 15, 0, BORDER};    // cols
+        int[] h1 = {2 * BORDER, 0, 5, 0, BORDER};    // rows
 
         HIGLayout l1 = new HIGLayout(w1, h1);
         l1.setColumnWeight(4, 1);

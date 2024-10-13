@@ -83,11 +83,9 @@ public class NGDStartOptions extends JPanel implements NewGameDialog.NGDTabPane 
         vcDuration = makeCustomSpinner(true);
 
         reset = new JButton(Utils.getLocalString(BUTTON_RESET));
-        reset.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (original != null) {
-                    resetData();
-                }
+        reset.addActionListener((ActionEvent e) -> {
+            if (original != null) {
+                resetData();
             }
         });
 
@@ -123,6 +121,7 @@ public class NGDStartOptions extends JPanel implements NewGameDialog.NGDTabPane 
     /**
      * Enables & Disables controls on this panel
      */
+    @Override
     public void setEnabled(boolean value) {
         phaseBox.setEnabled(value);
         year.setEnabled(value);
@@ -176,8 +175,8 @@ public class NGDStartOptions extends JPanel implements NewGameDialog.NGDTabPane 
      * Layout the panel
      */
     private void makeLayout() {
-        int w1[] = {BORDER, 15, 0, 0, BORDER};
-        int h1[] = {BORDER, 0, 10, 0, 5, 0, 20, 0, 5, 0, 5, 0, 5, 0, 5, 0, 0, 5, 0, BORDER};
+        int[] w1 = {BORDER, 15, 0, 0, BORDER};
+        int[] h1 = {BORDER, 0, 10, 0, 5, 0, 20, 0, 5, 0, 5, 0, 5, 0, 5, 0, 0, 5, 0, BORDER};
 
         // create 'minipanels': these put labels and spinners horizontally adjacent
         JPanel timePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
