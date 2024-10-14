@@ -171,7 +171,7 @@ POSTSTATE_DISLODGED
 END
 
 
-# Both convoys will fail if Syzkman is used. Otherwise, failure will result
+# Both convoys will fail if Szykman is used. Otherwise, failure will result
 # with 1976, 1982, and 2000 rules.
 CASE 9.E [Two disrupted convoys paradox; Szykman used]
 PRESTATE_SETPHASE Spring 1901, Movement
@@ -200,7 +200,7 @@ END
 
 
 
-# Adjudication results are for Syzkman
+# Adjudication results are for Szykman
 #
 CASE 9.F [Disrupted convoy support paradox with no resolution; Szykman used]
 PRESTATE_SETPHASE Spring 1901, Movement
@@ -214,11 +214,11 @@ PRESTATE
 	England: F Finland
 	England: F Livonia
 ORDERS
-	Germany: A Denmark - Finland						# syzkman'd
+	Germany: A Denmark - Finland						# szykman'd
 	Germany: F Sweden Convoys A Denmark - Finland				# ok
 	Germany: A Norway Supports A Denmark - Finland				# ok
 	Russia:  F Gulf of Bothnia Convoys A St Petersburg - Sweden		# dislodged, and destroyed
-	Russia:  A St Petersburg - Sweden					# syzkman'd
+	Russia:  A St Petersburg - Sweden					# szykman'd
 	Russia:  F Baltic Sea Supports A St Petersburg - Sweden			# ok
 	England: F Finland Supports F Livonia - Gulf of Bothnia			# ok
 	England: F Livonia - Gulf of Bothnia					# ok
@@ -233,7 +233,7 @@ POSTSTATE
 END
 
 
-# Syzkman results are given.
+# Szykman results are given.
 CASE 9.G [Disrupted convoy support with two resolutions; Szykman used]
 PRESTATE_SETPHASE Spring 1901, Movement
 PRESTATE

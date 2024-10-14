@@ -178,20 +178,6 @@ public class Border implements Serializable {
         // fields we don't need to parse
         this.from = from;
         this.description = description;
-		
-		/*
-		System.out.println("BORDER created:");
-		System.out.println("    ID: "+id);
-		System.out.println("    from: "+toList(from));
-		System.out.println("    seasons: "+toList(seasons));
-		System.out.println("    phases:  "+toList(phases));
-		System.out.println("    unitTypes: "+toList(unitTypes));
-		System.out.println("    orderClasses: "+toList(orderClasses));
-		System.out.println("    yearMin: "+yearMin);
-		System.out.println("    yearMax: "+yearMax);
-		System.out.println("    yearModifier: "+yearModifier);
-		System.out.println("    bmm: "+baseMoveModifier);
-		*/
     }// Border()
 
 
@@ -321,8 +307,6 @@ public class Border implements Serializable {
                 }
             }
         }
-
-        return;
     }// parseYear()
 
 
@@ -435,95 +419,63 @@ public class Border implements Serializable {
      * Null arguments are not permitted.
      */
     public boolean canTransit(Location fromLoc, Unit.Type unit, Phase phase, Class<?> orderClass) {
-		/*
-		System.out.println("border: "+id);
-		System.out.println("  "+fromLoc.getProvince()+":"+fromLoc.getCoast()+", "+phase);
-		*/
-
         // check from
-        int nResults = 0;
-        int failResults = 0;
-        boolean fromMatched = false;
-
+        // we only apply criteria if 'from' was not specified, or
+        // from was specified, and it matches.
         if (from != null) {
+            boolean fromMatched = false;
             for (Location location : from) {
                 if (location.equalsLoosely(fromLoc)) {
                     fromMatched = true;
                     break;
                 }
             }
+
+            if (!fromMatched) {
+                return true;
+            }
         }
 
-        // we only apply criteria if 'from' was not specified, or
-        // from was specified, and it matches.
-        if (from == null || fromMatched) {
-            // check unit type
-            if (unitTypes != null) {
-                nResults++;
-                for (Unit.Type unitType : unitTypes) {
-                    if (unitType.equals(unit)) {
-                        failResults++;
-                        break;
-                    }
-                }
-            }
+        // check unit type
+        if (unitTypes != null && !Arrays.asList(unitTypes).contains(unit)) {
+            return true;
+        }
 
-            // check order
-            if (orderClasses != null) {
-                nResults++;
-                for (Class<?> orderClass1 : orderClasses) {
-                    if (orderClass == orderClass1) {
-                        failResults++;
-                        break;
-                    }
-                }
-            }
+        // check order
+        if (orderClasses != null && !Arrays.asList(orderClasses).contains(orderClass)) {
+            return true;
+        }
 
-            // check phase (season, phase, and year)
-            if (seasons != null) {
-                nResults++;
-                for (Phase.SeasonType season : seasons) {
-                    if (phase.getSeasonType().equals(season)) {
-                        failResults++;
-                        break;
-                    }
-                }
-            }
+        // check phase (season, phase, and year)
+        if (seasons != null && !Arrays.asList(seasons).contains(phase.getSeasonType()))  {
+            return true;
+        }
 
-            if (phases != null) {
-                nResults++;
-                for (Phase.PhaseType phase1 : phases) {
-                    if (phase.getPhaseType().equals(phase1)) {
-                        failResults++;
-                        break;
-                    }
-                }
-            }
+        if (phases != null && !Arrays.asList(phases).contains(phase.getPhaseType())) {
+            return true;
+        }
 
-            // we always check the year
-            if (yearModifier != YEAR_NOT_SPECIFIED) {
-                nResults++;
-                final int theYear = phase.getYear();
-                if (yearModifier == YEAR_ODD) {
-                    failResults += ((theYear & 1) == 1) ? 1 : 0;
-                } else if (yearModifier == YEAR_EVEN) {
-                    failResults += ((theYear & 1) == 1) ? 0 : 1;
-                } else {
-                    failResults += ((yearMin <= theYear) && (theYear <= yearMax)) ? 1 : 0;
-                }
+        // we always check the year
+        if (yearModifier != YEAR_NOT_SPECIFIED) {
+            final int theYear = phase.getYear();
+            if (yearModifier == YEAR_ODD && (theYear & 1) == 0) {
+                return true;
+            }
+            if (yearModifier == YEAR_EVEN && (theYear & 1) == 1) {
+                return true;
+            }
+            if((yearMin > theYear) || (theYear > yearMax)) {
+                return true;
             }
         }
 		
-		/*
-		System.out.println("  fromMatched: "+fromMatched);
-		System.out.println("  nResults: "+nResults);
-		System.out.println("  failResults: "+failResults);
-		*/
-
         // only return 'false' if EVERYTHING has failed, or,
         // nothing was tested
-        assert (failResults <= nResults);
-        return (failResults < nResults || nResults == 0);
+        return unitTypes == null &&
+               orderClasses == null &&
+               seasons == null &&
+               phases == null &&
+               yearModifier == YEAR_NOT_SPECIFIED;
     }// canTransit()
 
 

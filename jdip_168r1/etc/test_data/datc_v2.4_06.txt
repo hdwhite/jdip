@@ -2100,7 +2100,7 @@ END
 
 # simple convoy paradox with additional convoy
 # (paradox rules only apply to paradox core)
-# SYZKMAN resolution
+# SZYKMAN resolution
 CASE 6.F.14
 PRESTATE_SETPHASE Spring 1901, Movement
 PRESTATE
@@ -2155,7 +2155,7 @@ END
 
 
 # Pandin's extended paradox
-# 2000 rules used, because, syzkman only is used by jdip
+# 2000 rules used, because, szykman only is used by jdip
 # when 2000 rules break down.
 #
 CASE 6.F.17 (Pandin's extended paradox)
@@ -2187,7 +2187,7 @@ POSTSTATE
 	Germany: F bel
 	#
 	#
-	# syzkman used (preferred)
+	# szykman used (preferred)
 	# NOTE: these have not been checked! check these!!
 	#England: F lon
 	#England: F wal
@@ -2199,7 +2199,7 @@ POSTSTATE
 END
 
 
-# betrayal paradox--via Syzkman
+# betrayal paradox--via Szykman
 CASE 6.F.18
 PRESTATE_SETPHASE Spring 1901, Movement
 PRESTATE
@@ -2252,7 +2252,7 @@ END
 
 
 # unwanted multi-route convoy paradox
-# 2000 rule / Syzkman rule / All Hold rule give same results
+# 2000 rule / Szykman rule / All Hold rule give same results
 #
 CASE 6.F.20
 PRESTATE_SETPHASE Spring 1901, Movement
@@ -2315,7 +2315,7 @@ POSTSTATE_DISLODGED
 END
 
 
-# second-order paradox w/2 resolutions; syzkman preferred
+# second-order paradox w/2 resolutions; szykman preferred
 CASE 6.F.22
 PRESTATE_SETPHASE Spring 1901, Movement
 PRESTATE
@@ -2399,7 +2399,7 @@ POSTSTATE_DISLODGED
 END
 
 # Second-order paradox with two exclusive convoys
-# Syzkman results; no units should move.
+# Szykman results; no units should move.
 CASE 6.F.23
 PRESTATE_SETPHASE Spring 1901, Movement
 PRESTATE
@@ -2801,7 +2801,7 @@ END
 # This was to test the adjudicator before it could
 # detect 'intent' as per the rules.
 #
-# poststate valid for 2000 rules / Syzkman rule for paradoxes
+# poststate valid for 2000 rules / Szykman rule for paradoxes
 #
 CASE 6.G.11.mod
 PRESTATE_SETPHASE Spring 1901, Movement

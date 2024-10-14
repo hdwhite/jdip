@@ -134,7 +134,7 @@ public class StdAdjudicator implements Adjudicator {
     private OrderState[] orderStates = null;
     private boolean isUnRezParadox = false;
     private int paradoxBreakAttempt = 0;
-    private int syzkmanAppliedCount = 0;
+    private int szykmanAppliedCount = 0;
     private boolean statReporting = false;
     private boolean isPOCEnabled = false;
     private TurnState nextTurnState = null;
@@ -408,12 +408,6 @@ public class StdAdjudicator implements Adjudicator {
         // set OrderStates from our temporary list
         orderStates = osList.toArray(new OrderState[osList.size()]);
 
-        // null out unitList & orderList -- we don't need them (and shouldn't use them)
-        // (we'll get an NPE if we accidentaly use them later)
-        unitList = null;
-        orderList = null;
-        osList = null;
-
         // integrity check: osList && osMap should have the same number of entries.
         assert (orderStates.length == osMap.size());
 
@@ -555,12 +549,10 @@ public class StdAdjudicator implements Adjudicator {
                 // ensure all dislodged units have a dislodged result (needed to process
                 // Order.evalute() methods can create dislodged results if they are
                 //    certain a unit was dislodged.
-                if (os.getDislodgedState() == Tristate.YES) {
-                    // inactive powers will have their units disbanded, during step 12
-                    // (creating the next turnstate).
-                    if (os.getPower().isActive()) {
-                        areAnyUnitsDislodged = true;
-                    }
+                // inactive powers will have their units disbanded, during step 12
+                // (creating the next turnstate).
+                if (os.getDislodgedState() == Tristate.YES && os.getPower().isActive()) {
+                    areAnyUnitsDislodged = true;
                 }
             }
         }
@@ -573,13 +565,7 @@ public class StdAdjudicator implements Adjudicator {
         // CHANGE [5/03]: dislodged units cannot be successful
         for (OrderState os : orderStates) {
             if (os.getEvalState() == Tristate.UNCERTAIN) {
-                //Log.println("uncertain: uncertain -> yes: ", os.getOrder()+"; dislodged: ",os.getDislodgedState());
-                if (os.getDislodgedState() == Tristate.YES) {
-                    os.setEvalState(Tristate.FAILURE);
-                    // we have already created a DISLODGED result, which is equivalent to failure.
-                } else {
-                    os.setEvalState(Tristate.SUCCESS);
-                }
+                os.setEvalState(os.getDislodgedState() == Tristate.YES ? Tristate.FAILURE : Tristate.SUCCESS);
             }
 
             if (os.getEvalState() == Tristate.SUCCESS) {
@@ -643,6 +629,63 @@ public class StdAdjudicator implements Adjudicator {
         nextTurnState.setPosition(nextPosition);
         nextTurnState.setWorld(turnState.getWorld());
 
+        nextPosition = createNextPosition(nextPosition);
+
+        // Step 12a:
+        // Set supply center ownership, if we are approaching an ADJUSTMENT.
+        // this must occur before we can see if adjustment phase is to be skipped
+        if (nextPhase.getPhaseType() == Phase.PhaseType.ADJUSTMENT) {
+            setSCOwners();
+        }
+
+
+        // Step 12b:
+        // See if victory conditions have been met; if they have, there is no need
+        // for any additional phases, nor do we care about dislodged units.
+        Adjustment.AdjustmentInfoMap adjustmentMap = Adjustment.getAdjustmentInfo(nextTurnState, ruleOpts, world.getMap().getPowers());
+        VictoryConditions vc = world.getVictoryConditions();
+        if (vc.evaluate(this, adjustmentMap)) {
+            // finish current turnstate
+            turnState.setResolved(true);
+            resultList.addAll(vc.getEvaluationResults());
+            TimeResult completed = new TimeResult(STDADJ_COMPLETED);
+            addResult(completed);
+
+            // nextTurnState:
+            nextTurnState.setEnded(true);
+            nextTurnState.setResolved(true);
+
+            return;
+        }
+
+        // Step 12c:
+        // If the next phase is an adjustment phase, and there are no adjustments to make,
+        // then skip it.
+        checkAdjustmentPhase();
+
+        // Step 13:
+        // in cases where there are dislodged units, but the dislodged units have
+        // no valid retreats, they are destroyed, instead of just dislodged.
+        //
+        // if all dislodged units are destroyed, then the phase is advanced by one
+        // to eliminate retreat phase (since all units were destroyed.)
+        //
+        if (areAnyUnitsDislodged) {
+            checkDislodgedUnits(nextTurnState, nextPosition);
+        }
+
+        // Timestamp: Adjudication completed.
+        turnState.setResolved(true);
+        addResult(new TimeResult(STDADJ_COMPLETED));
+    }// adjudicateMoves()
+
+    /**
+     * All units that have moved, are moved. All units that have been dislodged, are dislodged.
+     * Any other units stay in the same place.
+     */
+    private Position createNextPosition(Position nextPosition)
+    {
+        
         // create units in the appropriate place.
         for (OrderState os : orderStates) {
             Order order = os.getOrder();
@@ -675,89 +718,52 @@ public class StdAdjudicator implements Adjudicator {
                 nextPosition.setLastOccupier(sourceProvince, newUnit.getPower());
             }
         }
+        return nextPosition;
+    }
 
-        // Step 12a:
-        // Set supply center ownership, if we are approaching an ADJUSTMENT.
-        // this must occur before we can see if adjustment phase is to be skipped
-        if (nextPhase.getPhaseType() == Phase.PhaseType.ADJUSTMENT) {
-            setSCOwners();
-        }
+    /**
+     * Step 13:
+     * in cases where there are dislodged units, but the dislodged units have
+     * no valid retreats, they are destroyed, instead of just dislodged.
+     *
+     * if all dislodged units are destroyed, then the phase is advanced by one
+     * to eliminate retreat phase (since all units were destroyed.)
+     */
+    private void checkDislodgedUnits(TurnState nextTurnState, Position nextPosition)
+    {
+        RetreatChecker rc = new RetreatChecker(nextTurnState, resultList);
+        boolean areAllDestroyed = true;
 
+        final Province[] provinces = nextPosition.getProvinces();
+        for (Province prov : provinces) {
+            Unit unit = nextPosition.getDislodgedUnit(prov);
+            if (unit != null) {
+                if (rc.hasRetreats(new Location(prov, unit.getCoast()))) {
+                    areAllDestroyed = false;
+                } else {
+                    // destroy the unit
+                    nextPosition.setDislodgedUnit(prov, null);
 
-        // Step 12b:
-        // See if victory conditions have been met; if they have, there is no need
-        // for any additional phases, nor do we care about dislodged units.
-        Adjustment.AdjustmentInfoMap adjustmentMap = Adjustment.getAdjustmentInfo(nextTurnState, ruleOpts, world.getMap().getPowers());
-        VictoryConditions vc = world.getVictoryConditions();
-        if (vc.evaluate(this, adjustmentMap)) {
-            // finish current turnstate
-            turnState.setResolved(true);
-            resultList.addAll(vc.getEvaluationResults());
-            TimeResult completed = new TimeResult(STDADJ_COMPLETED);
-            addResult(completed);
-
-            // nextTurnState:
-            nextTurnState.setEnded(true);
-            nextTurnState.setResolved(true);
-
-            List<Result> nextResults = nextTurnState.getResultList();
-            nextResults.addAll(vc.getEvaluationResults());
-            nextResults.add(completed);
-
-            return;
-        }
-
-        // Step 12c:
-        // If the next phase is an adjustment phase, and there are no adjustments to make,
-        // then skip it.
-        checkAdjustmentPhase();
-
-        // Step 13:
-        // in cases where there are dislodged units, but the dislodged units have
-        // no valid retreats, they are destroyed, instead of just dislodged.
-        //
-        // if all dislodged units are destroyed, then the phase is advanced by one
-        // to eliminate retreat phase (since all units were destroyed.)
-        //
-        if (areAnyUnitsDislodged) {
-            RetreatChecker rc = new RetreatChecker(nextTurnState, resultList);
-            boolean areAllDestroyed = true;
-
-            final Province[] provinces = nextPosition.getProvinces();
-            for (Province prov : provinces) {
-                Unit unit = nextPosition.getDislodgedUnit(prov);
-                if (unit != null) {
-                    if (rc.hasRetreats(new Location(prov, unit.getCoast()))) {
-                        areAllDestroyed = false;
-                    } else {
-                        // destroy the unit
-                        nextPosition.setDislodgedUnit(prov, null);
-
-                        // create unit destroyed message
-                        addResult(new Result(unit.getPower(),
-                                Utils.getLocalString(STDADJ_MV_UNIT_DESTROYED, unit.getType().getFullName(), prov)));
-                    }
-                }
-            }
-
-            if (areAllDestroyed) {
-                // advance phase by 1. Inform players why.
-                Phase p = nextTurnState.getPhase().getNext();
-                nextTurnState.setPhase(p);
-                addResult(new Result(null, Utils.getLocalString(STDADJ_MV_PHASE_ADV_ALL_DESTROYED)));
-
-                // If it's an ADJUSTMENT incoming, we need to set SC owners
-                if (nextTurnState.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT)
-                {
-                    setSCOwners();
+                    // create unit destroyed message
+                    addResult(new Result(unit.getPower(),
+                            Utils.getLocalString(STDADJ_MV_UNIT_DESTROYED, unit.getType().getFullName(), prov)));
                 }
             }
         }
 
-        // Timestamp: Adjudication completed.
-        turnState.setResolved(true);
-        addResult(new TimeResult(STDADJ_COMPLETED));
-    }// adjudicateMoves()
+        if (areAllDestroyed) {
+            // advance phase by 1. Inform players why.
+            Phase p = nextTurnState.getPhase().getNext();
+            nextTurnState.setPhase(p);
+            addResult(new Result(null, Utils.getLocalString(STDADJ_MV_PHASE_ADV_ALL_DESTROYED)));
+
+            // If it's an ADJUSTMENT incoming, we need to set SC owners
+            if (nextTurnState.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT)
+            {
+                setSCOwners();
+            }
+        }
+    }
 
 
     /**
@@ -870,7 +876,7 @@ public class StdAdjudicator implements Adjudicator {
      * to break the paradox, until we succeed or still have a paradox.
      * <p>
      * If a paradox remain even after multiple applications of the
-     * Syzkman rule, we return <code>false</code> and add a result
+     * Szykman rule, we return <code>false</code> and add a result
      * indicating we have an unresolved paradox.
      */
     private boolean canBreakParadox() {
@@ -878,7 +884,7 @@ public class StdAdjudicator implements Adjudicator {
         assert (paradoxBreakAttempt >= 1);
 
         // prevent infinite loop.....
-        if (syzkmanAppliedCount > 10) {
+        if (szykmanAppliedCount > 10) {
             addResult(new Result(null,
                     Utils.getLocalString(STDADJ_MV_UNRESOLVED_PARADOX, paradoxBreakAttempt)));
 
@@ -897,7 +903,7 @@ public class StdAdjudicator implements Adjudicator {
             return true;
         } else {
             // try szykman
-            syzkmanAppliedCount++;
+            szykmanAppliedCount++;
             breakParadoxSzykman();
             return true;
         }
@@ -961,7 +967,7 @@ public class StdAdjudicator implements Adjudicator {
 
                         logger.debug("Convoy: {}, evalState: {}", itos.getOrder(), itos.getEvalState());
                         if (itos.getEvalState() == Tristate.UNCERTAIN) {
-                            logger.info("*** Syzkman rule applied to this move!!!");
+                            logger.info("*** Szykman rule applied to this move!!!");
                             os.setEvalState(Tristate.FAILURE);
                             addResult(os, ResultType.FAILURE, Utils.getLocalString(STDADJ_MV_SZYKMAN_MOVE_FAILED));
                             break;
@@ -1006,7 +1012,7 @@ public class StdAdjudicator implements Adjudicator {
         // detect condition where all orders did not verify.
         // this is an error.
         if (nRemainingToVerify > 0) {
-            logger.error("StdAdjudicator: incomplete verification. Orders remaining to verify: {}, Orders last verified:",
+            logger.error("StdAdjudicator: incomplete verification. Orders remaining to verify: {}, Orders last verified: {}",
                     nRemainingToVerify, nLastVerified);
 
             throw new IllegalStateException("Verification Error");
@@ -1067,12 +1073,6 @@ public class StdAdjudicator implements Adjudicator {
 
         // set OrderStates from our temporary list
         orderStates = osList.toArray(new OrderState[osList.size()]);
-
-        // null out unitList & orderList -- we don't need them (and shouldn't use them)
-        // (we'll get an NPE if we use them later)
-        dislodgedUnitProvs = null;
-        orderList = null;
-        osList = null;
 
         // integrity check: osList && osMap should have the same number of entries.
         assert (orderStates.length == osMap.size());
@@ -1277,38 +1277,46 @@ public class StdAdjudicator implements Adjudicator {
             List<Orderable> orders = turnState.getOrders(power);
             for (Orderable orderable : orders) {
                 Order order = (Order) orderable;
+                boolean validOrder = true;
 
                 if (order instanceof Remove && adjAmount > 0) {
                     addResult(new OrderResult(order, Utils.getLocalString(STDADJ_ADJ_IGNORED_MUST_BUILD)));
+                    validOrder = false;
                 } else if (order instanceof Build && adjAmount < 0) {
                     addResult(new OrderResult(order, Utils.getLocalString(STDADJ_ADJ_IGNORED_MUST_REMOVE)));
+                    validOrder = false;
                 } else if (adjAmount == 0) {
                     addResult(new OrderResult(order, Utils.getLocalString(STDADJ_ADJ_IGNORED_NO_CHANGE)));
+                    validOrder = false;
                 } else if (orderCount >= Math.abs(adjAmount)) {
                     addResult(new OrderResult(order, Utils.getLocalString(STDADJ_ADJ_IGNORED_TOO_MANY)));
-                } else {
-                    try {
-                        order.validate(turnState, valOpts, ruleOpts);
+                    validOrder = false;
+                }
+                if (!validOrder) {
+                    continue;
+                }
 
-                        // we only add legal orders, that haven't *already* been added
-                        if (osMap.get(order.getSource().getProvince()) == null) {
-                            OrderState os = new OrderState(order);
-                            osMap.put(os.getSourceProvince(), os);
-                            osList.add(os);
-                            orderCount++;
-                        } else {
-                            // duplicate or duplicate for space; we already have
-                            // a valid order.
-                            addResult(new OrderResult(order, ResultType.FAILURE,
-                                    Utils.getLocalString(STDADJ_ADJ_IGNORED_DUPLICATE,
-                                            order.getSource().getProvince())));
-                        }
-                    } catch (OrderWarning ow) {
-                        // just in case we didn't turn off all warnings; do nothing
-                    } catch (OrderException oe) {
-                        addResult(new OrderResult(order, ResultType.VALIDATION_FAILURE,
-                                Utils.getLocalString(STDADJ_ADJ_IGNORED_INVALID, oe.getMessage())));
+                try {
+                    order.validate(turnState, valOpts, ruleOpts);
+
+                    // we only add legal orders, that haven't *already* been added
+                    if (osMap.get(order.getSource().getProvince()) == null) {
+                        OrderState os = new OrderState(order);
+                        osMap.put(os.getSourceProvince(), os);
+                        osList.add(os);
+                        orderCount++;
+                    } else {
+                        // duplicate or duplicate for space; we already have
+                        // a valid order.
+                        addResult(new OrderResult(order, ResultType.FAILURE,
+                                Utils.getLocalString(STDADJ_ADJ_IGNORED_DUPLICATE,
+                                        order.getSource().getProvince())));
                     }
+                } catch (OrderWarning ow) {
+                    // just in case we didn't turn off all warnings; do nothing
+                } catch (OrderException oe) {
+                    addResult(new OrderResult(order, ResultType.VALIDATION_FAILURE,
+                            Utils.getLocalString(STDADJ_ADJ_IGNORED_INVALID, oe.getMessage())));
                 }
             }// while(orders-for-power)
 
@@ -1334,7 +1342,6 @@ public class StdAdjudicator implements Adjudicator {
 
         // set OrderStates from our temporary list
         orderStates = osList.toArray(new OrderState[osList.size()]);
-        osList = null;    // prevent accidental re-use
 
         assert (osMap.size() == orderStates.length);
 
@@ -1363,7 +1370,7 @@ public class StdAdjudicator implements Adjudicator {
             // WARNING: this is a low-performance process [array resized]; if this happens with
             // any frequency, reconsider approach
             if (os.getEvalState() == Tristate.FAILURE) {
-                osMap.remove(os);
+                osMap.values().remove(os);
 
                 // safe... can't use an index...
                 List<OrderState> list = Arrays.asList(orderStates);

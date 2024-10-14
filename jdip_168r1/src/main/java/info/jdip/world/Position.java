@@ -140,11 +140,7 @@ public class Position implements java.io.Serializable {
         }
 
         for (Power power : powers) {
-            if (pmap.get(power) == null) {
-                setEliminated(power, true);
-            } else {
-                setEliminated(power, false);
-            }
+            setEliminated(power, pmap.get(power) == null);
         }
     }// setEliminationStatus()
 

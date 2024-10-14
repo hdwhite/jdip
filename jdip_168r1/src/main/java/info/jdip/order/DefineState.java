@@ -44,9 +44,9 @@ public class DefineState extends Order {
 
 
     // constants: names
-    private static final String OrderNameBrief = "";
-    private static final String OrderNameFull = "Setup";
-    private static final transient String OrderFormatString = Utils.getLocalString(DEFSTATE_FORMAT);
+    private static final String ORDER_NAME_BRIEF = "";
+    private static final String ORDER_NAME_FULL = "Setup";
+    private static final transient String ORDER_FORMAT_STRING = Utils.getLocalString(DEFSTATE_FORMAT);
 
 
     protected DefineState(Power power, Location src, Unit.Type srcUnit)
@@ -64,17 +64,17 @@ public class DefineState extends Order {
     }// DefineState()
 
     public String getFullName() {
-        return OrderNameFull;
+        return ORDER_NAME_FULL;
     }// getName()
 
     public String getBriefName() {
-        return OrderNameBrief;
+        return ORDER_NAME_BRIEF;
     }// getBriefName()
 
 
     // order formatting
     public String getDefaultFormat() {
-        return OrderFormatString;
+        return ORDER_FORMAT_STRING;
     }// getFormatBrief()
 
 

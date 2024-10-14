@@ -70,7 +70,7 @@ public class Province implements java.io.Serializable, Comparable<Province> {
 
     // immutable persistent fields
     private final String fullName;              // fullName MUST BE UNIQUE
-    private final String shortNames[];          // always has AT LEAST one, and all are globally unique
+    private final String[] shortNames;          // always has AT LEAST one, and all are globally unique
     private final int index;                    // contiguous index
     private final boolean isConvoyableCoast;    // 'true' if coast is convoyable
     private final boolean isImpassable;         // 'true' if province is impassable

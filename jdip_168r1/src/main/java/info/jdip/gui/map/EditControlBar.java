@@ -412,7 +412,9 @@ public class EditControlBar extends ViewControlBar {
      * Change the supply center owner of a province; does not generate an undo/redo event. Revalidates orders.
      */
     public void changeSCOwner(Province province, Power newPower) {
-        position.setSupplyCenterOwner(province, newPower);
+        if(province.hasSupplyCenter()) {
+            position.setSupplyCenterOwner(province, newPower);
+        }
         position.setLastOccupier(province, newPower);
 
         update(province);
