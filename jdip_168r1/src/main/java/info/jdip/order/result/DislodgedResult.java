@@ -170,12 +170,12 @@ public class DislodgedResult extends OrderResult {
         // create messageformat arguments
         Object[] args =
                 {
-                        ((dislodger == null) ? 0 : 1),    // {0}; 0 if no province specified
+                        ((dislodger == null) ? 0 : 1),                               // {0}; 0 if no province specified
                         fmtDislodger,                                                // {1}
-                        atkStrength,                                    // {2}
-                        defStrength,                                    // {3}
-                        ((retreatLocations == null) ? -1 : retreatLocations.length),  // {4}
-                        retreats.toString() // {5}
+                        atkStrength,                                                 // {2}
+                        defStrength,                                                 // {3}
+                        ((retreatLocations == null) ? -1 : retreatLocations.length), // {4}
+                        retreats.toString()                                          // {5}
                 };
 
         // return formatted message

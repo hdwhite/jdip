@@ -89,7 +89,7 @@ public class Utils {
 
     // private constants
     private static final int TEXT_INSETS = 5;
-    private static final String HEX[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+    private static final String[] HEX = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
     private static final String RESOURCE_BASE_DIR = "resource/";
     private static final String BASE_RESOURCE_FILE = "resource/il8n/i18ntext";
     private static final String COMMON_RESOURCE_FILE = "resource/common/common";
@@ -98,11 +98,11 @@ public class Utils {
 
     // private regex
     private static final Pattern REAL_COMMAS = Pattern.compile(",(?=([^\"]*\"[^\"]*\")*(?![^\"]*\"))");
-    private final static Component component = new Component() {
+    private static final Component component = new Component() {
     };
-    private final static MediaTracker tracker = new MediaTracker(component);
-    private final static boolean isOSX;
-    private final static boolean isWindows;
+    private static final MediaTracker tracker = new MediaTracker(component);
+    private static final boolean IS_OSX;
+    private static final boolean IS_WINDOWS;
     private static ClassLoader classLoader = null;
     private static Utils singleton = null;
     private static ResourceBundle resourceBundle = null;
@@ -116,8 +116,8 @@ public class Utils {
         classLoader = singleton.getClass().getClassLoader();
         toolkit = Toolkit.getDefaultToolkit();
 
-        isOSX = (System.getProperty("mrj.version", null) != null);
-        isWindows = (System.getProperty("os.name", "").toLowerCase().contains("windows"));
+        IS_OSX = (System.getProperty("mrj.version", null) != null);
+        IS_WINDOWS = (System.getProperty("os.name", "").toLowerCase().contains("windows"));
 
         // if a locale cannot be found, automatically defaults
         // to the closest locale, or (at worst) BASE_RESOURCE_FILE.
@@ -268,14 +268,14 @@ public class Utils {
     /**
      * Create a &lt;font&gt; tag with the given color.
      */
-    public static void setFontColor(StringBuffer sb, Color color) {
+    public static void setFontColor(StringBuilder sb, Color color) {
         setFontColor(sb, color.getRed(), color.getGreen(), color.getBlue());
     }// setFontColor()
 
     /**
      * Create a &lt;font&gt; tag with the given color.
      */
-    public static void setFontColor(StringBuffer sb, int r, int g, int b) {
+    public static void setFontColor(StringBuilder sb, int r, int g, int b) {
         sb.append("<font color=\"#");
         fastToHex(sb, r);
         fastToHex(sb, g);
@@ -385,9 +385,9 @@ public class Utils {
      ********************************************************************/
     public static String getText(String name) {
 
-        StringBuffer sb = null;
+        StringBuilder sb = null;
         try (BufferedReader br = new BufferedReader(getInputStreamReader(name))) {
-            sb = new StringBuffer(4096);
+            sb = new StringBuilder(4096);
 
             String line = br.readLine();
             while (line != null) {
@@ -739,11 +739,11 @@ public class Utils {
             if (idx == 3)    // not enough values, if idx is less than 2
             {
                 try {
-                    int rgb[] = new int[3];
+                    int[] rgb = new int[3];
                     for (int i = 0; i < sRGB.length; i++) {
                         if (sRGB[i].endsWith("%") && sRGB[i].length() > 1) {
                             final int percent = Integer.parseInt(sRGB[i].substring(0, sRGB[i].length() - 1));
-                            rgb[i] = (int) (255.0f * ((float) percent / 100.0f));
+                            rgb[i] = (int) (255.0f * (percent / 100.0f));
                         } else {
                             rgb[i] = Integer.parseInt(sRGB[i]);
                         }
@@ -779,7 +779,7 @@ public class Utils {
      * prepends a '#' sign if withPound is true.
      */
     public static String colorToHex(Color color, boolean withPound) {
-        StringBuffer sb = new StringBuffer(9);
+        StringBuilder sb = new StringBuilder(9);
         if (withPound) {
             sb.append('#');
         }
@@ -795,7 +795,7 @@ public class Utils {
      * <code>#RRGGBB</code>. Alpha values are not used.
      */
     public static String colorToHTMLHex(Color color) {
-        StringBuffer sb = new StringBuffer(8);
+        StringBuilder sb = new StringBuilder(8);
         sb.append('#');
         fastToHex(sb, color.getRed());
         fastToHex(sb, color.getBlue());
@@ -846,6 +846,7 @@ public class Utils {
             jep = new JEditorPane() {
                 final boolean mayFocus = isFocusable;
 
+                @Override
                 public boolean isFocusable() {
                     return mayFocus;
                 }
@@ -854,6 +855,7 @@ public class Utils {
             jep = new XJEditorPane() {
                 final boolean mayFocus = isFocusable;
 
+                @Override
                 public boolean isFocusable() {
                     return mayFocus;
                 }
@@ -916,8 +918,8 @@ public class Utils {
      */
     public static ImageIcon scaleDown(final ImageIcon src, final int maxW, final int maxH) {
         if (src.getIconWidth() >= maxW || src.getIconHeight() >= maxH) {
-            int w = maxW;
-            int h = maxH;
+            int w;
+            int h;
             final float aspect = (float) src.getIconWidth() / (float) src.getIconHeight();
 
             if (src.getIconWidth() >= src.getIconHeight()) {
@@ -991,7 +993,7 @@ public class Utils {
      * could have lookup table and index via shifting...
      * this is ONLY for values of i between [0,255]
      */
-    private static void fastToHex(StringBuffer sb, int i) {
+    private static void fastToHex(StringBuilder sb, int i) {
         sb.append(HEX[i >> 4]);
         sb.append(HEX[i & 0x0000000F]);
     }// fastToHex()
@@ -1025,11 +1027,13 @@ public class Utils {
         JTextField jtf = new JTextField(cols);
         AbstractDocument doc = (AbstractDocument) jtf.getDocument();
         doc.setDocumentFilter(new DocumentFilter() {
+            @Override
             public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attr)
                     throws BadLocationException {
                 this.replace(fb, offset, 0, text, attr);
             }// insertString()
 
+            @Override
             public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attr)
                     throws BadLocationException {
                 fb.replace(offset, length, getValidWordString(text), attr);
@@ -1079,11 +1083,13 @@ public class Utils {
         JTextField jtf = new JTextField(cols);
         AbstractDocument doc = (AbstractDocument) jtf.getDocument();
         doc.setDocumentFilter(new DocumentFilter() {
+            @Override
             public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attr)
                     throws BadLocationException {
                 this.replace(fb, offset, 0, text, attr);
             }// insertString()
 
+            @Override
             public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attr)
                     throws BadLocationException {
                 fb.replace(offset, length, getValidEmailString(text), attr);
@@ -1137,11 +1143,13 @@ public class Utils {
         JTextField jtf = new JTextField(cols);
         AbstractDocument doc = (AbstractDocument) jtf.getDocument();
         doc.setDocumentFilter(new DocumentFilter() {
+            @Override
             public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attr)
                     throws BadLocationException {
                 replace(fb, offset, 0, text, attr);
             }// insertString()
 
+            @Override
             public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attr)
                     throws BadLocationException {
                 fb.replace(offset, length, getValidURLString(text), attr);
@@ -1225,39 +1233,40 @@ public class Utils {
 
         // cleanup
         for (int i = 0; i < matches.length; i++) {
-            if (matches[i].length() > 0) {
-                StringBuilder sb = new StringBuilder(matches[i]);
-                // step 1: remove (if present) start/end quotes
-                if (sb.charAt(0) == '\"') {
-                    sb.deleteCharAt(0);
-                }
-
-                if (sb.charAt(sb.length() - 1) == '\"') {
-                    sb.deleteCharAt(sb.length() - 1);
-                }
-
-
-                // step 2: replace double quotes (excel-style) with single quote
-                // disabled. if this is enabled, step 3 should probably be disabled.
-				/*
-				int idx = 0;
-				while( (idx = sb.indexOf("\"\"", idx)) != -1 )
-				{
-					idx += 1;
-					sb.deleteCharAt(idx);
-				}
-				*/
-
-                // step 3: replace 'quoted quotes' (e.g.: \") with single quote
-                int idx = 0;
-                while ((idx = sb.indexOf("\\\"", idx)) != -1) {
-                    sb.deleteCharAt(idx);
-                    idx += 1;
-                }
-
-                // replace our string
-                matches[i] = sb.toString();
+            if (matches[i].isEmpty()) {
+                continue;
             }
+
+            StringBuilder sb = new StringBuilder(matches[i]);
+            // step 1: remove (if present) start/end quotes
+            if (sb.charAt(0) == '\"') {
+                sb.deleteCharAt(0);
+            }
+
+            if (sb.charAt(sb.length() - 1) == '\"') {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+
+            // step 2: replace double quotes (excel-style) with single quote
+            // disabled. if this is enabled, step 3 should probably be disabled.
+            /*
+            int idx = 0;
+            while( (idx = sb.indexOf("\"\"", idx)) != -1 )
+            {
+                idx += 1;
+                sb.deleteCharAt(idx);
+            }
+            */
+
+            // step 3: replace 'quoted quotes' (e.g.: \") with single quote
+            int idx = 0;
+            while ((idx = sb.indexOf("\\\"", idx)) != -1) {
+                sb.deleteCharAt(idx);
+                idx += 1;
+            }
+
+            // replace our string
+            matches[i] = sb.toString();
         }
 
         return matches;
@@ -1387,14 +1396,14 @@ public class Utils {
      * Detect if we are running on Mac OS X
      */
     public static boolean isOSX() {
-        return isOSX;
+        return IS_OSX;
     }// isOSX()
 
     /**
      * Detect if we are running on Windows
      */
     public static boolean isWindows() {
-        return isWindows;
+        return IS_WINDOWS;
     }// isWindows()
 
     /**

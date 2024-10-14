@@ -85,14 +85,14 @@ public final class OrderState {
     private Order order = null;
 
 
-    private int defense_max = MAX_VALUE;
-    private int defense_certain = 1;                    // always can defend at 1
+    private int DEFENSE_MAX = MAX_VALUE;
+    private int DEFENSE_CERTAIN = 1;                    // always can defend at 1
 
-    private int attack_max = MAX_VALUE;
-    private int attack_certain = 0;                    // can't always can attack at 1. E.g DPB
+    private int ATTACK_MAX = MAX_VALUE;
+    private int ATTACK_CERTAIN = 0;                    // can't always can attack at 1. E.g DPB
 
-    private int selfsupport_atk_max = MAX_VALUE;
-    private int selfsupport_atk_certain = 0;            // we may not be self-supporting, so start at 0
+    private int SELF_SUPPORT_ATK_MAX = MAX_VALUE;
+    private int SELF_SUPPORT_ATK_CERTAIN = 0;            // we may not be self-supporting, so start at 0
 
     private int retreatStr = MIN_VALUE;                // retreat strength (for DPB support)
 
@@ -195,84 +195,84 @@ public final class OrderState {
      * Get maximum defense value
      */
     public int getDefMax() {
-        return defense_max;
+        return DEFENSE_MAX;
     }
 
     /**
      * Set the maximum defense.
      */
     public void setDefMax(int value) {
-        defense_max = value;
+        DEFENSE_MAX = value;
     }
 
     /**
      * Get certain defense value
      */
     public int getDefCertain() {
-        return defense_certain;
+        return DEFENSE_CERTAIN;
     }
 
     /**
      * Set the certain defense.
      */
     public void setDefCertain(int value) {
-        defense_certain = value;
+        DEFENSE_CERTAIN = value;
     }
 
     /**
      * Get maximum attack value
      */
     public int getAtkMax() {
-        return attack_max;
+        return ATTACK_MAX;
     }
 
     /**
      * Set the maximum attack value.
      */
     public void setAtkMax(int value) {
-        attack_max = value;
+        ATTACK_MAX = value;
     }
 
     /**
      * Get certain attack value
      */
     public int getAtkCertain() {
-        return attack_certain;
+        return ATTACK_CERTAIN;
     }
 
     /**
      * Set the certain attack value.
      */
     public void setAtkCertain(int value) {
-        attack_certain = value;
+        ATTACK_CERTAIN = value;
     }
 
     /**
      * Get maximum self-support attack value
      */
     public int getAtkSelfSupportMax() {
-        return selfsupport_atk_max;
+        return SELF_SUPPORT_ATK_MAX;
     }
 
     /**
      * Set the attack max including self-support
      */
     public void setAtkSelfSupportMax(int value) {
-        selfsupport_atk_max = value;
+        SELF_SUPPORT_ATK_MAX = value;
     }
 
     /**
      * Get certain self-support attack value.
      */
     public int getAtkSelfSupportCertain() {
-        return selfsupport_atk_certain;
+        return SELF_SUPPORT_ATK_CERTAIN;
     }
 
     /**
      * Set the attack certain including self-support
      */
     public void setAtkSelfSupportCertain(int value) {
-        selfsupport_atk_certain = value;
+        SELF_SUPPORT_ATK_CERTAIN = value;
     }
 
     /**

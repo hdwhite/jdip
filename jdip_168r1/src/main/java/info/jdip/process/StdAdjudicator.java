@@ -1508,57 +1508,55 @@ public class StdAdjudicator implements Adjudicator {
             Province[] provinces = position.getProvinces();
             for (Province province : provinces) {
                 Unit unit = position.getUnit(province);
+                if (unit == null) {
+                    continue;
+                }
 
-                if (unit != null) {
-                    OrderState os = findOrderStateBySrc(province);
-                    if (os == null) {
-                        if (unit.getPower().equals(power)) {
-                            int hsDist = 9999;
-                            for (Province homeSupplyCenter : homeSupplyCenters) {
-                                final int d = path.getMinDistance(province, homeSupplyCenter);
-                                hsDist = (d < hsDist) ? d : hsDist;
-                            }
+                OrderState os = findOrderStateBySrc(province);
+                if (os == null && unit.getPower().equals(power)) {
+                    int hsDist = 9999;
+                    for (Province homeSupplyCenter : homeSupplyCenters) {
+                        final int d = path.getMinDistance(province, homeSupplyCenter);
+                        hsDist = (d < hsDist) ? d : hsDist;
+                    }
 
-                            if (hsDist > maxDist) {
-                                ties.clear();
-                                ties.add(province);
-                                maxDist = hsDist;
-                            } else if (hsDist == maxDist) {
-                                ties.add(province);
-                            }
-                        }
+                    if (hsDist > maxDist) {
+                        ties.clear();
+                        ties.add(province);
+                        maxDist = hsDist;
+                    } else if (hsDist == maxDist) {
+                        ties.add(province);
                     }
                 }
             }
 
-            if (ties.size() == 0) {
+            if (ties.isEmpty()) {
                 addResult(new Result(power, Utils.getLocalString(STDADJ_ADJ_NO_MORE_DISBANDS)));
                 return;    // exit if no more units!!
-            } else {
-                // complex case, DPTG compliant.
-                //
-                // first, sort the list alphabetically by full name
-                // (that's why Province implements Comparable)
-                Collections.sort(ties);
+            }
+            // complex case, DPTG compliant.
+            //
+            // first, sort the list alphabetically by full name
+            // (that's why Province implements Comparable)
+            Collections.sort(ties);
 
-                // now, extract the first Fleet we find; if none found, extract the first
-                // unit in the list. The first unit extracted will be alphabetically first;
-                // the first fleet extracted will similarly be first alphabetically.
-                // if there are only 2 units, it doesn't matter.
-                boolean foundFleet = false;
-                Iterator<Province> tieIter = ties.iterator();
-                while (tieIter.hasNext() && !foundFleet) {
-                    Province province = tieIter.next();
-                    Unit unit = position.getUnit(province);
-                    if (unit.getType().equals(Unit.Type.FLEET)) {
-                        foundFleet = true;
-                        createDisbandOrder(osList, province);
-                    }
+            // now, extract the first Fleet we find; if none found, extract the first
+            // unit in the list. The first unit extracted will be alphabetically first;
+            // the first fleet extracted will similarly be first alphabetically.
+            // if there are only 2 units, it doesn't matter.
+            boolean foundFleet = false;
+            Iterator<Province> tieIter = ties.iterator();
+            while (tieIter.hasNext() && !foundFleet) {
+                Province province = tieIter.next();
+                Unit unit = position.getUnit(province);
+                if (unit.getType().equals(Unit.Type.FLEET)) {
+                    foundFleet = true;
+                    createDisbandOrder(osList, province);
                 }
+            }
 
-                if (!foundFleet) {
-                    createDisbandOrder(osList, ties.getFirst());
-                }
+            if (!foundFleet) {
+                createDisbandOrder(osList, ties.getFirst());
             }
         }
     }// createRemoveOrders()

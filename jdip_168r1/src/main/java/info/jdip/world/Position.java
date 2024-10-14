@@ -130,11 +130,9 @@ public class Position implements java.io.Serializable {
                 }
 
                 // finally, see if we own a supply center
-                power = pd.getSCOwner();
-                if (power != null) {
-                    if (pmap.get(power) == null) {
-                        pmap.put(power, new Object());
-                    }
+                power = pd.getScOwner();
+                if (power != null && pmap.get(power) == null) {
+                    pmap.put(power, new Object());
                 }
             }
         }
@@ -150,7 +148,7 @@ public class Position implements java.io.Serializable {
      */
     public void setSupplyCenterOwner(Province province, Power power) {
         ProvinceData pd = getProvinceData(province);
-        pd.setSCOwner(power);
+        pd.setScOwner(power);
     }// setSupplyCenterOwner()
 
 
@@ -159,7 +157,7 @@ public class Position implements java.io.Serializable {
      */
     public void setSupplyCenterHomePower(Province province, Power power) {
         ProvinceData pd = getProvinceData(province);
-        pd.setSCHomePower(power);
+        pd.setScHomePower(power);
     }// setSupplyCenterHomePower()
 
 
@@ -193,7 +191,7 @@ public class Position implements java.io.Serializable {
     public Power getSupplyCenterHomePower(Province province) {
         ProvinceData pd = provArray[province.getIndex()];
         if (pd != null) {
-            return pd.getSCHomePower();
+            return pd.getScHomePower();
         }
         return null;
     }// getSupplyCenterHomePower()
@@ -205,7 +203,7 @@ public class Position implements java.io.Serializable {
     public Power getSupplyCenterOwner(Province province) {
         ProvinceData pd = provArray[province.getIndex()];
         if (pd != null) {
-            return pd.getSCOwner();
+            return pd.getScOwner();
         }
         return null;
     }// getSupplyCenterOwner()
@@ -431,7 +429,7 @@ public class Position implements java.io.Serializable {
         int arrSize = 0;
         for (int i = 0; i < provArray.length; i++) {
             ProvinceData pd = provArray[i];
-            if (pd != null && pd.getSCHomePower() == power) {
+            if (pd != null && pd.getScHomePower() == power) {
                 tmpProvArray[arrSize] = map.reverseIndex(i);
                 arrSize++;
             }
@@ -450,7 +448,7 @@ public class Position implements java.io.Serializable {
      */
     public boolean hasAnOwnedHomeSC(Power power) {
         for (ProvinceData pd : provArray) {
-            if (pd != null && pd.getSCHomePower() == power && pd.getSCOwner() == power) {
+            if (pd != null && pd.getScHomePower() == power && pd.getScOwner() == power) {
                 return true;
             }
         }
@@ -468,7 +466,7 @@ public class Position implements java.io.Serializable {
         int arrSize = 0;
         for (int i = 0; i < provArray.length; i++) {
             ProvinceData pd = provArray[i];
-            if (pd != null && pd.getSCOwner() == power) {
+            if (pd != null && pd.getScOwner() == power) {
                 tmpProvArray[arrSize] = map.reverseIndex(i);
                 arrSize++;
             }
@@ -515,10 +513,8 @@ public class Position implements java.io.Serializable {
             }
         }
 
-        for (Power key : powerMap.keySet()) {
-            PowerData pd = powerMap.get(key);
-
-            pos.powerMap.put(key, pd.normClone());
+        for (Map.Entry<Power, PowerData> curPower : powerMap.entrySet()) {
+            pos.powerMap.put(curPower.getKey(), curPower.getValue().normClone());
         }
 
         return pos;
@@ -539,10 +535,8 @@ public class Position implements java.io.Serializable {
             }
         }
 
-        for (Power key : powerMap.keySet()) {
-            PowerData pd = powerMap.get(key);
-
-            pos.powerMap.put(key, pd.normClone());
+        for (Map.Entry<Power, PowerData> curPower : powerMap.entrySet()) {
+            pos.powerMap.put(curPower.getKey(), curPower.getValue().normClone());
         }
 
         return pos;
@@ -562,10 +556,8 @@ public class Position implements java.io.Serializable {
             }
         }
 
-        for (Power key : powerMap.keySet()) {
-            PowerData pd = powerMap.get(key);
-
-            pos.powerMap.put(key, pd.normClone());
+        for (Map.Entry<Power, PowerData> curPower : powerMap.entrySet()) {
+            pos.powerMap.put(curPower.getKey(), curPower.getValue().normClone());
         }
 
         return pos;
@@ -671,8 +663,8 @@ public class Position implements java.io.Serializable {
         // instance variables
         private Unit unit = null;
         private Unit dislodgedUnit = null;
-        private Power SCOwner = null;
-        private Power SCHomePower = null;
+        private Power scOwner = null;
+        private Power scHomePower = null;
         private Power lastOccupier = null;
 
         // unit set/get
@@ -703,27 +695,27 @@ public class Position implements java.io.Serializable {
 
         // SC set/get
         public boolean isSCAHome() {
-            return (SCHomePower != null);
+            return (scHomePower != null);
         }
 
         public boolean isSCOwned() {
-            return (SCOwner != null);
+            return (scOwner != null);
         }
 
-        public Power getSCOwner() {
-            return SCOwner;
+        public Power getScOwner() {
+            return scOwner;
         }
 
-        public void setSCOwner(Power p) {
-            SCOwner = p;
+        public void setScOwner(Power p) {
+            scOwner = p;
         }
 
-        public Power getSCHomePower() {
-            return SCHomePower;
+        public Power getScHomePower() {
+            return scHomePower;
         }
 
-        public void setSCHomePower(Power p) {
-            SCHomePower = p;
+        public void setScHomePower(Power p) {
+            scHomePower = p;
         }
 
         // occupier set/get
@@ -750,8 +742,8 @@ public class Position implements java.io.Serializable {
             }
 
             // shallow copy Powers [Power is immutable]
-            pd.SCOwner = this.SCOwner;
-            pd.SCHomePower = this.SCHomePower;
+            pd.scOwner = this.scOwner;
+            pd.scHomePower = this.scHomePower;
             pd.lastOccupier = this.lastOccupier;
 
             return pd;
@@ -764,7 +756,7 @@ public class Position implements java.io.Serializable {
         public ProvinceData cloneExceptUnits() {
             // don't create an object if there is no ownership info.
             // this also compacts the Position map!
-            if (SCOwner == null && SCHomePower == null && lastOccupier == null) {
+            if (scOwner == null && scHomePower == null && lastOccupier == null) {
                 return null;
             }
 
@@ -772,8 +764,8 @@ public class Position implements java.io.Serializable {
             ProvinceData pd = new ProvinceData();
 
             // shallow copy Power [Power is immutable]
-            pd.SCOwner = this.SCOwner;
-            pd.SCHomePower = this.SCHomePower;
+            pd.scOwner = this.scOwner;
+            pd.scHomePower = this.scHomePower;
             pd.lastOccupier = this.lastOccupier;
 
             return pd;
@@ -785,7 +777,7 @@ public class Position implements java.io.Serializable {
         public ProvinceData cloneExceptDislodged() {
             // don't create an object if there is no ownership info.
             // this also compacts the Position map!
-            if (SCOwner == null && SCHomePower == null && unit == null && lastOccupier == null) {
+            if (scOwner == null && scHomePower == null && unit == null && lastOccupier == null) {
                 return null;
             }
 
@@ -793,8 +785,8 @@ public class Position implements java.io.Serializable {
             ProvinceData pd = new ProvinceData();
 
             // shallow copy Power [Power is immutable]
-            pd.SCOwner = this.SCOwner;
-            pd.SCHomePower = this.SCHomePower;
+            pd.scOwner = this.scOwner;
+            pd.scHomePower = this.scHomePower;
             pd.lastOccupier = this.lastOccupier;
 
             // deep copy unit

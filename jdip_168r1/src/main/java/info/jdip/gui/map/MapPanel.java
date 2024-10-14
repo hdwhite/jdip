@@ -117,7 +117,7 @@ public class MapPanel extends JPanel {
     /**
      * update text message
      */
-    private static final String updateMessage = Utils.getLocalString("MapPanel.update.text");
+    private static final String UPDATE_MESSAGE = Utils.getLocalString("MapPanel.update.text");
 
     /** Set Default Cursor */
     static {
@@ -641,8 +641,8 @@ public class MapPanel extends JPanel {
             maxZoom = tmp;
         }
 
-        svgCanvas.setMinimumScale(((double) minZoom / 100.0));
-        svgCanvas.setMaximumScale(((double) maxZoom / 100.0));
+        svgCanvas.setMinimumScale(minZoom / 100.0);
+        svgCanvas.setMaximumScale(maxZoom / 100.0);
     }// setScalingParameters()
 
     /**
@@ -734,6 +734,7 @@ public class MapPanel extends JPanel {
     private class MP_GVTRenderListener extends GVTTreeRendererAdapter {
         private boolean loaded = false;
 
+        @Override
         public void gvtRenderingStarted(GVTTreeRendererEvent e) {
             logger.trace("GVTRender start.");
             if (!loaded) {
@@ -742,6 +743,7 @@ public class MapPanel extends JPanel {
             }
         }// gvtRenderingStarted()
 
+        @Override
         public void gvtRenderingCompleted(GVTTreeRendererEvent e) {
             logger.trace("GVTRender completing...");
             if (!loaded) {
@@ -834,6 +836,7 @@ public class MapPanel extends JPanel {
      * NOTE: we use setDocument(), and thus this really isn't used.
      */
     private class MP_DocumentListener extends SVGDocumentLoaderAdapter {
+        @Override
         public void documentLoadingStarted(SVGDocumentLoaderEvent e) {
             logger.debug("DocumentLoad started.");
             clientFrame.getClientMenu().setViewRenderItemsEnabled(false);
@@ -841,12 +844,14 @@ public class MapPanel extends JPanel {
             //statusBar.setText(Utils.getLocalString(DOC_LOAD_STARTED));
         }// documentLoadingStarted()
 
+        @Override
         public void documentLoadingFailed(SVGDocumentLoaderEvent e) {
             logger.error("DocumentLoad failed.");
             statusBar.setText(Utils.getLocalString(DOC_LOAD_FAILED));
             statusBar.hidePB();
         }// documentLoadingFailed()
 
+        @Override
         public void documentLoadingCompleted(SVGDocumentLoaderEvent e) {
             logger.debug("DocumentLoad completed.");
             statusBar.incPBValue();
@@ -859,18 +864,21 @@ public class MapPanel extends JPanel {
      * Statusbar messages
      */
     private class MP_GVTTreeBuilderListener extends GVTTreeBuilderAdapter {
+        @Override
         public void gvtBuildStarted(GVTTreeBuilderEvent e) {
             logger.trace("GVTTreeBuild completed.");
             statusBar.incPBValue();
             statusBar.setText(Utils.getLocalString(GVT_BUILD_STARTED));
         }// documentLoadingStarted()
 
+        @Override
         public void gvtBuildFailed(GVTTreeBuilderEvent e) {
             logger.error("GVTTreeBuild failed.");
             statusBar.setText(Utils.getLocalString(GVT_BUILD_FAILED));
             statusBar.hidePB();
         }// documentLoadingFailed()
 
+        @Override
         public void gvtBuildCompleted(GVTTreeBuilderEvent e) {
             logger.trace("GVTTreeBuild completed.");
             statusBar.incPBValue();
@@ -884,6 +892,7 @@ public class MapPanel extends JPanel {
      */
     private class MP_PropertyListener extends AbstractCFPListener {
 
+        @Override
         public void actionWorldCreated(World w) {
             if (mapRenderer != null) {
                 throw new IllegalStateException();
@@ -892,12 +901,14 @@ public class MapPanel extends JPanel {
             }
         }// actionWorldCreated()
 
+        @Override
         public void actionWorldDestroyed(World w) {
             if (mapRenderer != null) {
                 close();
             }
         }// actionWorldDestroyed()
 
+        @Override
         public void actionValOptsChanged(ValidationOptions options) {
             if (mapRenderer != null) {
                 // if we have an OrderControl bar or derivitive
@@ -908,6 +919,7 @@ public class MapPanel extends JPanel {
             }
         }// actionValOptsChanged()
 
+        @Override
         public void actionModeChanged(String mode) {
             if (mapRenderer != null) {
                 setControlBar();
@@ -915,50 +927,41 @@ public class MapPanel extends JPanel {
             }
         }// actionModeChanged()
 
+        @Override
         public synchronized void actionTurnstateChanged(TurnState ts) {
             if (mapRenderer != null) {
                 turnState = ts;
                 position = turnState.getPosition();
                 setControlBar();
                 statusBar.clearText();
-            } else {
-                if (!isLoaded) {
-                    // set turnstate & position
-                    turnState = ts;
-                    position = turnState.getPosition();
+                return;
+            }
+            
+            if (!isLoaded) {
+                // set turnstate & position
+                turnState = ts;
+                position = turnState.getPosition();
 
-                    // load URL and resolve
-                    World.VariantInfo vi = world.getVariantInfo();
-                    Variant variant = VariantManager.getVariant(vi.getVariantName(), vi.getVariantVersion());
+                // load URL and resolve
+                World.VariantInfo vi = world.getVariantInfo();
+                Variant variant = VariantManager.getVariant(vi.getVariantName(), vi.getVariantVersion());
 
-                    // TODO: clean this loading logic up
-                    if (variant == null) {
-                        Exception e = new IllegalStateException(
-                                Utils.getLocalString(MP_VARIANT_NOT_FOUND,
-                                        "?",
-                                        "?"));
+                // TODO: clean this loading logic up
+                if (variant == null) {
+                    Exception e = new IllegalStateException(
+                            Utils.getLocalString(MP_VARIANT_NOT_FOUND,
+                                    "?",
+                                    "?"));
 
-                        ErrorDialog.displayGeneral(clientFrame, e);
-                    }
+                    ErrorDialog.displayGeneral(clientFrame, e);
+                }
 
-                    MapGraphic mg = variant.getMapGrapic(vi.getMapName());
+                MapGraphic mg = variant.getMapGrapic(vi.getMapName());
+                if (mg == null) {
+                    // try a default map graphic
+                    mg = variant.getDefaultMapGraphic();
+
                     if (mg == null) {
-                        // try a default map graphic
-                        mg = variant.getDefaultMapGraphic();
-
-                        if (mg == null) {
-                            Exception e = new IllegalStateException(
-                                    Utils.getLocalString(MP_VARIANT_NOT_FOUND,
-                                            vi.getVariantName(),
-                                            vi.getMapName()));
-
-                            ErrorDialog.displayGeneral(clientFrame, e);
-                        }
-                    }
-
-                    URL url = VariantManager.getResource(variant, mg.getURI());
-                    if (url == null) {
-
                         Exception e = new IllegalStateException(
                                 Utils.getLocalString(MP_VARIANT_NOT_FOUND,
                                         vi.getVariantName(),
@@ -966,32 +969,43 @@ public class MapPanel extends JPanel {
 
                         ErrorDialog.displayGeneral(clientFrame, e);
                     }
-
-
-                    symbolPack = VariantManager.getSymbolPack(mg,
-                            vi.getSymbolPackName(), vi.getSymbolPackVersion());
-
-                    // actual loading starts here
-                    //
-                    // setup progress bar
-                    //
-                    statusBar.showPB(0, 9);    // was 7, may make 8 or 9
-                    statusBar.setText(Utils.getLocalString(DOC_LOAD_STARTED));
-
-                    try {
-                        SymbolInjector si = new SymbolInjector(clientFrame, variant,
-                                mg, symbolPack);
-                        statusBar.incPBValue();
-                        si.inject();
-                        statusBar.incPBValue();
-                        setDocument(si.getDocument(), variant);
-                    } catch (Exception e) {
-                        statusBar.setText(Utils.getLocalString(DOC_LOAD_FAILED));
-                        statusBar.hidePB();
-                        ErrorDialog.displayGeneral(clientFrame, e);
-                    }
-                    isLoaded = true;
                 }
+
+                URL url = VariantManager.getResource(variant, mg.getURI());
+                if (url == null) {
+
+                    Exception e = new IllegalStateException(
+                            Utils.getLocalString(MP_VARIANT_NOT_FOUND,
+                                    vi.getVariantName(),
+                                    vi.getMapName()));
+
+                    ErrorDialog.displayGeneral(clientFrame, e);
+                }
+
+
+                symbolPack = VariantManager.getSymbolPack(mg,
+                        vi.getSymbolPackName(), vi.getSymbolPackVersion());
+
+                // actual loading starts here
+                //
+                // setup progress bar
+                //
+                statusBar.showPB(0, 9);    // was 7, may make 8 or 9
+                statusBar.setText(Utils.getLocalString(DOC_LOAD_STARTED));
+
+                try {
+                    SymbolInjector si = new SymbolInjector(clientFrame, variant,
+                            mg, symbolPack);
+                    statusBar.incPBValue();
+                    si.inject();
+                    statusBar.incPBValue();
+                    setDocument(si.getDocument(), variant);
+                } catch (Exception e) {
+                    statusBar.setText(Utils.getLocalString(DOC_LOAD_FAILED));
+                    statusBar.hidePB();
+                    ErrorDialog.displayGeneral(clientFrame, e);
+                }
+                isLoaded = true;
             }
         }// actionTurnstateChanged()
     }// inner class MP_PropertyListener
@@ -1024,14 +1038,14 @@ public class MapPanel extends JPanel {
 
         public void updateStarted(org.apache.batik.bridge.UpdateManagerEvent e) {
             lastModeText = statusBar.getModeText();
-            statusBar.setModeText(updateMessage);
+            statusBar.setModeText(UPDATE_MESSAGE);
         }// updateStarted()
 
 
         public void resetText() {
             // if updateMessage was the last message, we also should clear, otherwise
             // we are always stuck on updateMessage
-            if (lastModeText == null || lastModeText.equals(updateMessage)) {
+            if (lastModeText == null || lastModeText.equals(UPDATE_MESSAGE)) {
                 statusBar.clearModeText();
             } else {
                 statusBar.setModeText(lastModeText);

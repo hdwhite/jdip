@@ -36,7 +36,6 @@ import info.jdip.world.variant.data.Variant;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -79,9 +78,7 @@ public class NGDRuleOptions extends JPanel implements NewGameDialog.NGDTabPane {
         optionList = new JList<>(optionListModel);
         optionList.setFixedCellWidth(100);
         optionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        optionList.addListSelectionListener((ListSelectionEvent e) -> {
-            updateChoices();
-        });
+        optionList.addListSelectionListener((ListSelectionEvent e) -> updateChoices());
 
         // reset button
         reset = new JButton(Utils.getLocalString(BUTTON_RESET));

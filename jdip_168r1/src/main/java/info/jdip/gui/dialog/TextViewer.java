@@ -105,7 +105,7 @@ public class TextViewer extends HeaderDialog {
      */
     private static final int TEXT_INSETS = 5;
 
-    private boolean _isAccepted = false;
+    private boolean isAccepted = false;
     private AcceptListener acceptListener = null;
     private final JEditorPane textPane;
     private final JScrollPane jsp;
@@ -136,10 +136,11 @@ public class TextViewer extends HeaderDialog {
 
                 for (File file : files) {
                     StringBuilder sb = new StringBuilder();
-                    BufferedReader br = null;
 
-                    try {
-                        br = new BufferedReader(new FileReader(file));
+                    try (
+                        BufferedReader br = new BufferedReader(new FileReader(file));
+                    ) {
+                        
                         String line = br.readLine();
                         while (line != null) {
                             sb.append(line);
@@ -148,14 +149,6 @@ public class TextViewer extends HeaderDialog {
                         }
                     } catch (IOException e) {
                         ErrorDialog.displayFileIO(parent, e, file.getName());
-                    } finally {
-                        try {
-                            if (br != null) {
-                                br.close();
-                            }
-                        } catch (IOException e) {
-                            ErrorDialog.displayFileIO(parent, e, file.getName());
-                        }
                     }
 
                     try {
@@ -169,6 +162,7 @@ public class TextViewer extends HeaderDialog {
 
         // allow a modifiable transfer handler
         textPane.setTransferHandler(new javax.swing.TransferHandler() {
+            @Override
             public void exportToClipboard(JComponent comp, Clipboard clip, int action) {
                 if (comp instanceof JTextComponent) {
                     try {
@@ -215,6 +209,7 @@ public class TextViewer extends HeaderDialog {
             }
 
 
+            @Override
             public boolean importData(JComponent comp, Transferable t) {
                 if (comp instanceof JTextComponent && textPane.isEditable()) {
                     // we don't want the BEST flavor, we want the Java String
@@ -269,6 +264,7 @@ public class TextViewer extends HeaderDialog {
                 return false;
             }// importData()
 
+            @Override
             public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
                 if (comp instanceof JTextComponent && textPane.isEditable()) {
                     // any text type is acceptable.
@@ -301,7 +297,7 @@ public class TextViewer extends HeaderDialog {
         setSize(Utils.getScreenSize(0.62f));
         Utils.centerIn(this, getParent());
         setVisible(true);
-        return _isAccepted;
+        return isAccepted;
     }// displayDialog()
 
     /**
@@ -389,6 +385,7 @@ public class TextViewer extends HeaderDialog {
     /**
      * Set Font. Use is not recommended if content type is "text/html".
      */
+    @Override
     public void setFont(Font font) {
         textPane.setFont(font);
     }// setFont()
@@ -444,24 +441,23 @@ public class TextViewer extends HeaderDialog {
     /**
      * Close() override. Calls AcceptListener (if any) on OK or Close actions.
      */
+    @Override
     protected void close(String actionCommand) {
         if (isOKorAccept(actionCommand)) {
             // if no accept() handler, assume accepted.
-            _isAccepted = true;
+            isAccepted = true;
             if (acceptListener != null) {
-                _isAccepted = acceptListener.isAcceptable(this);
+                isAccepted = acceptListener.isAcceptable(this);
                 if (acceptListener.getCloseDialogAfterUnacceptable()) {
                     dispose();
                 }
             }
 
-            if (_isAccepted) {
+            if (isAccepted) {
                 dispose();
             }
-
-            return;
         } else {
-            _isAccepted = false;
+            isAccepted = false;
             dispose();
         }
     }// close()
@@ -539,31 +535,23 @@ public class TextViewer extends HeaderDialog {
      */
     protected void saveContents() {
         File file = null;
-        if (textPane.getContentType().equals("text/html")) {
+        if (textPane.getContentType().equals(CONTENT_HTML)) {
             file = getFileName(SimpleFileFilter.HTML_FILTER);
         } else {
             file = getFileName(SimpleFileFilter.TXT_FILTER);
         }
 
         if (file != null) {
-            FileWriter fw = null;
 
-            try {
+            try (
                 StringWriter sw = new StringWriter();
+                FileWriter fw = new FileWriter(file);
+            ) {
                 textPane.write(sw);
                 String output = inlineStyleSheet(sw.toString());
-
-                fw = new FileWriter(file);
                 fw.write(output);
             } catch (IOException e) {
                 ErrorDialog.displayFileIO((JFrame) getParent(), e, file.toString());
-            } finally {
-                if (fw != null) {
-                    try {
-                        fw.close();
-                    } catch (IOException ioe) {
-                    }
-                }
             }
         }
     }// saveContents()
@@ -572,7 +560,7 @@ public class TextViewer extends HeaderDialog {
      * Insert (inline) the CSS style sheet (if any)
      */
     private String inlineStyleSheet(String text) {
-        if (!textPane.getContentType().equals("text/html")) {
+        if (!textPane.getContentType().equals(CONTENT_HTML)) {
             return text;
         }
 
@@ -665,13 +653,8 @@ public class TextViewer extends HeaderDialog {
         /**
          * Create a TVRunnable
          */
-        public TVRunnable() {
+        protected TVRunnable() {
         }// TVRunnable()
-
-        /**
-         * This method must be implemented by subclasses
-         */
-        public abstract void run();
 
         /**
          * Used internally by lazyLoadDisplayDialog

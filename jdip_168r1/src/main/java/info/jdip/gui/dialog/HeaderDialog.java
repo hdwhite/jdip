@@ -31,7 +31,6 @@ import javax.swing.text.Document;
 import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -216,6 +215,7 @@ public class HeaderDialog extends XDialog {
     /**
      * Do not override this method!
      */
+    @Override
     protected final void close() {
         close(defaultCloseButtonAction);
     }// close()
@@ -276,11 +276,7 @@ public class HeaderDialog extends XDialog {
         btn.setActionCommand(actionCommand);
 
         if (doClose) {
-            btn.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    close(btn.getActionCommand());
-                }
-            });
+            btn.addActionListener((ActionEvent e) -> close(btn.getActionCommand()));
         }
 
         return btn;
@@ -486,6 +482,7 @@ public class HeaderDialog extends XDialog {
         /**
          * We are not opaque; we will paint the background.
          */
+        @Override
         public boolean isOpaque() {
             return false;
         }
@@ -493,6 +490,7 @@ public class HeaderDialog extends XDialog {
         /**
          * We are not focusable.
          */
+        @Override
         public boolean isFocusable() {
             return false;
         }
@@ -501,6 +499,7 @@ public class HeaderDialog extends XDialog {
         /**
          * Overridden to provide painting functionality.
          */
+        @Override
         protected void paintComponent(Graphics g) {
             final int width = getWidth();
             final int height = getHeight();
@@ -519,10 +518,10 @@ public class HeaderDialog extends XDialog {
 
             // paint the separator
             g2d.setPaint(UIManager.getColor("Separator.foreground"));
-            g2d.draw(new Line2D.Float(0, height - 2, width, height - 2));
+            g2d.draw(new Line2D.Float(0, height - 2.0f, width, height - 2.0f));
 
             g2d.setPaint(UIManager.getColor("Separator.background"));
-            g2d.draw(new Line2D.Float(0, height - 1, width, height - 1));
+            g2d.draw(new Line2D.Float(0, height - 1.0f, width, height - 1.0f));
 
             // restore the original paint
             g2d.setPaint(oldPaint);

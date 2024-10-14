@@ -57,7 +57,7 @@ public class AboutDialog extends HeaderDialog {
     public static final String CREDITS_URL = "AboutDialog.location.credits";
 
     private static final String HEADER_LOCATION = "AboutDialog.location.header";
-    private static final String TABLE_HEADERS[] = {Utils.getLocalString("AboutDialog.header.property"),
+    private static final String[] TABLE_HEADERS = {Utils.getLocalString("AboutDialog.header.property"),
             Utils.getLocalString("AboutDialog.header.value")};
 
     private static final String TAB_INFO = "AboutDialog.tab.info";
@@ -88,7 +88,7 @@ public class AboutDialog extends HeaderDialog {
         makeSystemPanel();
         makeLicensePanel();
 
-        tabPane = new JTabbedPane(JTabbedPane.TOP);
+        tabPane = new JTabbedPane(SwingConstants.TOP);
         tabPane.add(Utils.getLocalString(TAB_ABOUT), aboutPanel);
         tabPane.add(Utils.getLocalString(TAB_CREDITS), creditPanel);
         tabPane.add(Utils.getLocalString(TAB_LICENSE), licensePanel);
@@ -155,15 +155,15 @@ public class AboutDialog extends HeaderDialog {
         textPanel.setBorder(new EtchedBorder());
 
         JScrollPane licenseScroller = new XJScrollPane(textPanel);
-        licenseScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        licenseScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         textPanel.setText(Utils.getText(Utils.getLocalString(LICENSE_URL)));
         textPanel.setCaretPosition(0);
         textPanel.repaint();
         licensePanel = new JPanel();
 
-        int w1[] = {SYS_BORDER, 0, SYS_BORDER};
-        int h1[] = {SYS_BORDER, 0, SYS_BORDER};
+        int[] w1 = {SYS_BORDER, 0, SYS_BORDER};
+        int[] h1 = {SYS_BORDER, 0, SYS_BORDER};
 
         HIGLayout l1 = new HIGLayout(w1, h1);
         l1.setColumnWeight(2, 1);
@@ -172,7 +172,6 @@ public class AboutDialog extends HeaderDialog {
 
         HIGConstraints c = new HIGConstraints();
         licensePanel.add(licenseScroller, c.rcwh(2, 2, 1, 1, "lrtb"));
-        //licensePanel.add(new XJScrollPane(editPanel), c.rcwh(2,2,1,1,"lrtb"));
     }// makeAboutPanel()
 
     /**
@@ -181,6 +180,7 @@ public class AboutDialog extends HeaderDialog {
     private void makeSystemPanel() {
         // create table model
         DefaultTableModel tableModel = new DefaultTableModel(getSystemInfo(), TABLE_HEADERS) {
+            @Override
             public boolean isCellEditable(int r, int c) {
                 return false;
             }
@@ -188,20 +188,21 @@ public class AboutDialog extends HeaderDialog {
 
         // create the table
         JTable sysTable = new JTable(tableModel) {
+            @Override
             public boolean isFocusable() {
                 return false;
             }
         };
         sysTable.setRowSelectionAllowed(false);
         sysTable.setColumnSelectionAllowed(false);
-        sysTable.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+        sysTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         sysTable.setShowGrid(true);
 
         // create / layout the panel
         systemPanel = new JPanel();
 
-        int w1[] = {SYS_BORDER, 0, SYS_BORDER};
-        int h1[] = {SYS_BORDER, 0, SYS_BORDER};
+        int[] w1 = {SYS_BORDER, 0, SYS_BORDER};
+        int[] h1 = {SYS_BORDER, 0, SYS_BORDER};
 
         HIGLayout l1 = new HIGLayout(w1, h1);
         l1.setColumnWeight(2, 1);
@@ -274,8 +275,8 @@ public class AboutDialog extends HeaderDialog {
         // create / layout the panel
         JPanel panel = new JPanel();
 
-        int w1[] = {SYS_BORDER, 0, SYS_BORDER};
-        int h1[] = {SYS_BORDER, 0, SYS_BORDER};
+        int[] w1 = {SYS_BORDER, 0, SYS_BORDER};
+        int[] h1 = {SYS_BORDER, 0, SYS_BORDER};
 
         HIGLayout l1 = new HIGLayout(w1, h1);
         l1.setColumnWeight(2, 1);

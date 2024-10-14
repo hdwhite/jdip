@@ -73,10 +73,10 @@ public class Move extends Order {
 
 
     // constants: names
-    private static final String OrderNameBrief = "M";
-    private static final String OrderNameFull = "Move";
-    private static final transient String OrderFormatString = Utils.getLocalString(MOVE_FORMAT);
-    private static final transient String OrderFormatExCon = Utils.getLocalString(MOVE_FORMAT_EXPLICIT_CONVOY);    // explicit convoy format
+    private static final String ORDER_NAME_BRIEF = "M";
+    private static final String ORDER_NAME_FULL = "Move";
+    private static final transient String ORDER_FORMAT_STRING = Utils.getLocalString(MOVE_FORMAT);
+    private static final transient String ORDER_FORMAT_EX_CON = Utils.getLocalString(MOVE_FORMAT_EXPLICIT_CONVOY);    // explicit convoy format
 
     // instance variables
     protected Location dest = null;
@@ -241,17 +241,17 @@ public class Move extends Order {
 
 
     public String getFullName() {
-        return OrderNameFull;
+        return ORDER_NAME_FULL;
     }// getFullName()
 
     public String getBriefName() {
-        return OrderNameBrief;
+        return ORDER_NAME_BRIEF;
     }// getBriefName()
 
 
     // order formatting
     public String getDefaultFormat() {
-        return (convoyRoutes == null) ? OrderFormatString : OrderFormatExCon;
+        return (convoyRoutes == null) ? ORDER_FORMAT_STRING : ORDER_FORMAT_EX_CON;
     }// getDefaultFormat()
 
 
@@ -322,6 +322,7 @@ public class Move extends Order {
     }// toFullString()
 
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Move) {
             Move move = (Move) obj;
@@ -341,91 +342,93 @@ public class Move extends Order {
 
         // basic checks
         //
-        checkSeasonMovement(state, OrderNameFull);
+        checkSeasonMovement(state, ORDER_NAME_FULL);
         checkPower(power, state, true);
         super.validate(state, valOpts, ruleOpts);
 
         // first, validate the unit type and destination, if we are
         // using strict validation.
         //
-        if (valOpts.getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_STRICT)) {
-            final Position position = state.getPosition();
+        if (valOpts.getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
+            return;
+        }
 
-            // a.1
-            if (src.isProvinceEqual(dest)) {
-                throw new OrderException(Utils.getLocalString(MOVE_VAL_SRC_EQ_DEST));
+        final Position position = state.getPosition();
+
+        // a.1
+        if (src.isProvinceEqual(dest)) {
+            throw new OrderException(Utils.getLocalString(MOVE_VAL_SRC_EQ_DEST));
+        }
+
+        // validate Borders
+        Border border = src.getProvince().getTransit(src, srcUnitType, state.getPhase(), this.getClass());
+        if (border != null) {
+            throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
+        }
+
+        // a.2
+        dest = dest.getValidatedWithMove(srcUnitType, src);
+
+        // check that we can transit into destination (check borders)
+        border = dest.getProvince().getTransit(src, srcUnitType, state.getPhase(), this.getClass());
+        if (border != null) {
+            throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
+        }
+
+        // Determine convoying intent for nonadjacent moves that are not explicitly
+        // convoyed (e.g., isViaConvoy() == false). All nonadjacent fleet moves
+        // fail. All nonadjacent army moves without theoretical convoy paths
+        // also fail. _isConvoyIntent is set if there is a theoretical convoy route
+        // and we are not explicitly ordered to convoy.
+        //
+        if (!src.isAdjacent(dest)) {
+            // nonadjacent moves with Fleets/Wings always fail (cannot convoy fleets)
+            if (srcUnitType != Unit.Type.ARMY) {
+                throw new OrderException(Utils.getLocalString(MOVE_VAL_UNIT_ADJ, srcUnitType.getFullNameWithArticle()));
             }
 
-            // validate Borders
-            Border border = src.getProvince().getTransit(src, srcUnitType, state.getPhase(), this.getClass());
-            if (border != null) {
-                throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
+            // determine if explicit/implicit convoys are required
+            final RuleOptions.OptionValue convoyRule = ruleOpts.getOptionValue(RuleOptions.OPTION_CONVOYED_MOVES);
+            if (convoyRule == RuleOptions.VALUE_PATHS_EXPLICIT && convoyRoutes == null) {
+                // no explicit route defined, and at least one should be
+                throw new OrderException(Utils.getLocalString(CONVOY_PATH_MUST_BE_EXPLICIT));
+            } else if (convoyRule == RuleOptions.VALUE_PATHS_IMPLICIT && convoyRoutes != null) {
+                // explicit route IS defined, and shouldn't be
+                throw new OrderException(Utils.getLocalString(CONVOY_PATH_MUST_BE_IMPLICIT));
             }
 
-            // a.2
-            dest = dest.getValidatedWithMove(srcUnitType, src);
+            // nonadjacent moves must have a theoretical convoy path!
+            // (this throws an exception if there is no theoretical convoy path)
+            validateTheoreticalConvoyRoute(position);
 
-            // check that we can transit into destination (check borders)
-            border = dest.getProvince().getTransit(src, srcUnitType, state.getPhase(), this.getClass());
-            if (border != null) {
-                throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
+            // we didn't fail; thus, we intend to convoy (because it is at least possible).
+            if (!isViaConvoy()) {
+                isConvoyIntent = true;
             }
-
-            // Determine convoying intent for nonadjacent moves that are not explicitly
-            // convoyed (e.g., isViaConvoy() == false). All nonadjacent fleet moves
-            // fail. All nonadjacent army moves without theoretical convoy paths
-            // also fail. _isConvoyIntent is set if there is a theoretical convoy route
-            // and we are not explicitly ordered to convoy.
+        } else {
+            // we are adjacent
             //
-            if (!src.isAdjacent(dest)) {
-                // nonadjacent moves with Fleets/Wings always fail (cannot convoy fleets)
-                if (srcUnitType != Unit.Type.ARMY) {
-                    throw new OrderException(Utils.getLocalString(MOVE_VAL_UNIT_ADJ, srcUnitType.getFullNameWithArticle()));
-                }
-
-                // determine if explicit/implicit convoys are required
-                final RuleOptions.OptionValue convoyRule = ruleOpts.getOptionValue(RuleOptions.OPTION_CONVOYED_MOVES);
-                if (convoyRule == RuleOptions.VALUE_PATHS_EXPLICIT && convoyRoutes == null) {
-                    // no explicit route defined, and at least one should be
-                    throw new OrderException(Utils.getLocalString(CONVOY_PATH_MUST_BE_EXPLICIT));
-                } else if (convoyRule == RuleOptions.VALUE_PATHS_IMPLICIT && convoyRoutes != null) {
-                    // explicit route IS defined, and shouldn't be
-                    throw new OrderException(Utils.getLocalString(CONVOY_PATH_MUST_BE_IMPLICIT));
-                }
-
-                // nonadjacent moves must have a theoretical convoy path!
-                // (this throws an exception if there is no theoretical convoy path)
-                validateTheoreticalConvoyRoute(position);
-
-                // we didn't fail; thus, we intend to convoy (because it is at least possible).
-                if (!isViaConvoy()) {
-                    isConvoyIntent = true;
-                }
-            } else {
-                // we are adjacent
-                //
-                // _isAdjWithPossibleConvoy is true iff we are both adjacent
-                // (after all validation/borders checked) and an army, and
-                // there is a theoretical convoy path from src->dest. Also,
-                // this CANNOT be true if we are EXPLICITLY being convoyed
-                // (isViaConvoy() == true); in that case, the convoy is preferred
-                // and will be used despite the land route.
-                //
-                if (!isViaConvoy()
-                        && srcUnitType == Unit.Type.ARMY) {
-                    Path path = new Path(position);
-                    isAdjWithPossibleConvoy = path.isPossibleConvoyRoute(src, dest);
-                }
-
-                // for order format:
-                // set _fmtIsAdjWithConvoy iff we are EXPLICITLY ordered to convoy,
-                // and we are an adjacent move (we are an adjacent move if we
-                // reached this point in the code)
-                fmtIsAdjWithConvoy = isViaConvoy();
-
-                // set if we can move via a land route.
-                hasLandRoute = true;
+            // _isAdjWithPossibleConvoy is true iff we are both adjacent
+            // (after all validation/borders checked) and an army, and
+            // there is a theoretical convoy path from src->dest. Also,
+            // this CANNOT be true if we are EXPLICITLY being convoyed
+            // (isViaConvoy() == true); in that case, the convoy is preferred
+            // and will be used despite the land route.
+            //
+            if (!isViaConvoy()
+                    && srcUnitType == Unit.Type.ARMY) {
+                Path path = new Path(position);
+                isAdjWithPossibleConvoy = path.isPossibleConvoyRoute(src, dest);
             }
+
+            // for order format:
+            // set _fmtIsAdjWithConvoy iff we are EXPLICITLY ordered to convoy,
+            // and we are an adjacent move (we are an adjacent move if we
+            // reached this point in the code)
+            fmtIsAdjWithConvoy = isViaConvoy();
+
+            // set if we can move via a land route.
+            hasLandRoute = true;
         }
     }// validate()
 
@@ -541,87 +544,89 @@ public class Move extends Order {
      */
     public void verify(Adjudicator adjudicator) {
         OrderState thisOS = adjudicator.findOrderStateBySrc(getSource());
-        if (!thisOS.isVerified()) {
-            // if we have already failed, do not evaluate.
-            if (thisOS.getEvalState() == Tristate.UNCERTAIN) {
-                if (isConvoying())    // intent to convoy already determined (e.g., _isViaConvoy is true, so _isConvoyIntent initiall is true)
-                {
-                    if (convoyRoutes != null) // static (explicit) paths
-                    {
-                        // if we have multiple routes, we don't fail until *all* paths fail.
-                        boolean overall = false;
-                        for (final Province[] route : convoyRoutes) {
-                            overall = Path.isRouteLegal(adjudicator, route);
-                            if (overall)    // if at least one is true, then we are OK
-                            {
-                                break;
-                            }
-                        }
+        if (thisOS.isVerified()) {
+            return;
+        }
 
-                        if (!overall) {
-                            // if we are explicitly being convoyed, and there is a land route,
-                            // but no convoy route, we use the land route.
-                            //
-                            if (isViaConvoy() && hasLandRoute) {
-                                // we don't fail, but mention that there is no convoy route. (text order result)
-                                isConvoyIntent = false;
-                                adjudicator.addResult(thisOS, Utils.getLocalString(MOVE_VER_NO_ROUTE));
-                            } else {
-                                // all paths failed.
-                                thisOS.setEvalState(Tristate.FAILURE);
-                                adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_VER_NO_ROUTE));
-                            }
-                        }
-                    } else    // implicit path
-                    {
-                        Path path = new Path(adjudicator);
-                        if (!path.isLegalConvoyRoute(getSource(), getDest())) {
-                            // As for static (explicit) paths, if we are explicitly
-                            // ordered to convoy ("by convoy") and there is a land route,
-                            // but no convoy route, we use the land route.
-                            //
-                            if (isViaConvoy() && hasLandRoute) {
-                                isConvoyIntent = false;
-                                adjudicator.addResult(thisOS, Utils.getLocalString(MOVE_VER_NO_ROUTE));
-                            } else {
-                                thisOS.setEvalState(Tristate.FAILURE);
-                                adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_VER_NO_ROUTE));
-                            }
-                        }
-                    }
-                } else if (isAdjWithPossibleConvoy())    // intent must be determined
+        // if we have already failed, do not evaluate.
+        if (thisOS.getEvalState() == Tristate.UNCERTAIN) {
+            if (isConvoying())    // intent to convoy already determined (e.g., _isViaConvoy is true, so _isConvoyIntent initiall is true)
+            {
+                if (convoyRoutes != null) // static (explicit) paths
                 {
-                    // first, we need to find all paths with possible convoy orders
-                    // between src and dest. If we have an order, by the same power,
-                    // on ONE of these paths, then intent to convoy will be 'true'
-                    //
-                    // Note: this could be put in validate(), where _isAdjWithPossibleConvoy
-                    // is set, for efficiency reasons. However, it is more appropriate and
-                    // makes more sense here.
-                    //
-                    final Province srcProv = getSource().getProvince();
-                    final Province destProv = getDest().getProvince();
-                    final Position pos = adjudicator.getTurnState().getPosition();
-                    Path.FAPEvaluator evaluator = new Path.FleetFAPEvaluator(pos);
-                    Province[][] paths = Path.findAllSeaPaths(evaluator, srcProv, destProv);
-
-                    // now, we need to evaluate each path, to see if that province
-                    // has a fleet of the same power as this order in any legal path.
-                    // If so, the intent is to convoy.
-                    for (Province[] path : paths) {
-                        Province p = evalPath(adjudicator, path);
-                        if (p != null) {
-                            isConvoyIntent = true;
-                            adjudicator.addResult(thisOS, ResultType.TEXT, Utils.getLocalString(MOVE_VER_CONVOY_INTENT, p));
+                    // if we have multiple routes, we don't fail until *all* paths fail.
+                    boolean overall = false;
+                    for (final Province[] route : convoyRoutes) {
+                        overall = Path.isRouteLegal(adjudicator, route);
+                        if (overall)    // if at least one is true, then we are OK
+                        {
                             break;
                         }
                     }
+
+                    if (!overall) {
+                        // if we are explicitly being convoyed, and there is a land route,
+                        // but no convoy route, we use the land route.
+                        //
+                        if (isViaConvoy() && hasLandRoute) {
+                            // we don't fail, but mention that there is no convoy route. (text order result)
+                            isConvoyIntent = false;
+                            adjudicator.addResult(thisOS, Utils.getLocalString(MOVE_VER_NO_ROUTE));
+                        } else {
+                            // all paths failed.
+                            thisOS.setEvalState(Tristate.FAILURE);
+                            adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_VER_NO_ROUTE));
+                        }
+                    }
+                } else    // implicit path
+                {
+                    Path path = new Path(adjudicator);
+                    if (!path.isLegalConvoyRoute(getSource(), getDest())) {
+                        // As for static (explicit) paths, if we are explicitly
+                        // ordered to convoy ("by convoy") and there is a land route,
+                        // but no convoy route, we use the land route.
+                        //
+                        if (isViaConvoy() && hasLandRoute) {
+                            isConvoyIntent = false;
+                            adjudicator.addResult(thisOS, Utils.getLocalString(MOVE_VER_NO_ROUTE));
+                        } else {
+                            thisOS.setEvalState(Tristate.FAILURE);
+                            adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_VER_NO_ROUTE));
+                        }
+                    }
+                }
+            } else if (isAdjWithPossibleConvoy())    // intent must be determined
+            {
+                // first, we need to find all paths with possible convoy orders
+                // between src and dest. If we have an order, by the same power,
+                // on ONE of these paths, then intent to convoy will be 'true'
+                //
+                // Note: this could be put in validate(), where _isAdjWithPossibleConvoy
+                // is set, for efficiency reasons. However, it is more appropriate and
+                // makes more sense here.
+                //
+                final Province srcProv = getSource().getProvince();
+                final Province destProv = getDest().getProvince();
+                final Position pos = adjudicator.getTurnState().getPosition();
+                Path.FAPEvaluator evaluator = new Path.FleetFAPEvaluator(pos);
+                Province[][] paths = Path.findAllSeaPaths(evaluator, srcProv, destProv);
+
+                // now, we need to evaluate each path, to see if that province
+                // has a fleet of the same power as this order in any legal path.
+                // If so, the intent is to convoy.
+                for (Province[] path : paths) {
+                    Province p = evalPath(adjudicator, path);
+                    if (p != null) {
+                        isConvoyIntent = true;
+                        adjudicator.addResult(thisOS, ResultType.TEXT, Utils.getLocalString(MOVE_VER_CONVOY_INTENT, p));
+                        break;
+                    }
                 }
             }
-
-            // we have been verified.
-            thisOS.setVerified(true);
         }
+
+        // we have been verified.
+        thisOS.setVerified(true);
     }// verify()
 
 
@@ -664,21 +669,23 @@ public class Move extends Order {
      * otherwise returns null..
      */
     private Province evalPath(Adjudicator adj, final Province[] path) {
-        if (path.length >= 3) {
-            final Position pos = adj.getTurnState().getPosition();
+        if (path.length < 3) {
+            return null;
+        }
+        
+        final Position pos = adj.getTurnState().getPosition();
 
-            for (int i = 1; i < (path.length - 1); i++) {
-                Province prov = path[i];
-                Unit unit = pos.getUnit(path[i]);
-                if (unit.getPower().equals(this.getPower())) {
-                    final OrderState os = adj.findOrderStateBySrc(prov);
-                    final Order order = os.getOrder();
-                    if (order instanceof Convoy) {
-                        final Convoy convoy = (Convoy) order;
-                        if (convoy.getConvoySrc().isProvinceEqual(this.getSource())
-                                && convoy.getConvoyDest().isProvinceEqual(this.getDest())) {
-                            return prov;
-                        }
+        for (int i = 1; i < (path.length - 1); i++) {
+            Province prov = path[i];
+            Unit unit = pos.getUnit(path[i]);
+            if (unit.getPower().equals(this.getPower())) {
+                final OrderState os = adj.findOrderStateBySrc(prov);
+                final Order order = os.getOrder();
+                if (order instanceof Convoy) {
+                    final Convoy convoy = (Convoy) order;
+                    if (convoy.getConvoySrc().isProvinceEqual(this.getSource())
+                            && convoy.getConvoyDest().isProvinceEqual(this.getDest())) {
+                        return prov;
                     }
                 }
             }

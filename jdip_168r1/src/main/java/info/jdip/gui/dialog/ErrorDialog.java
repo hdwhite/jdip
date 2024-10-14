@@ -93,28 +93,7 @@ public class ErrorDialog extends TextViewer {
     private static final String SUBMIT_TITLE = "ErrorDlg.submit.text.title";
     private static final String SUBMIT_SUCCESS = "ErrorDlg.submit.text.success";
     private static final String SUBMIT_FAILED = "ErrorDlg.submit.text.failed";
-    private final static String ACTION_SUBMIT = "ACTION_SUBMIT";
-
-    // simple testing
-	
-	/*
-	public static void main(String args[])
-	{
-		Exception ex = new NegativeArraySizeException("just a test");
-		java.io.IOException ioe = new java.io.FileNotFoundException("just a test");
-		
-		// display each dialog
-		displayFileIO(null, new FileNotFoundException("file_not_exist"), "TestFile.test");
-		displayFileIO(null, ioe, "TestFile.test");
-		displayFileIO(null, new InvalidClassException("bad version"), "TestFile.test");
-		displayNetIO(null, new UnknownHostException("Unknown host"), "127.0.0.1");
-		displayNetIO(null, new IOException("Some Exception Occured"), "http://127.0.0.1/whoknows.html");
-		displayGeneral(null, ex);
-		displaySerious(null, ex);
-		displayFatal(null, ex);
-	}
-	*/
-
+    private static final String ACTION_SUBMIT = "ACTION_SUBMIT";
 
     /**
      * Create an ErrorDialog
@@ -361,7 +340,7 @@ public class ErrorDialog extends TextViewer {
      * Prepends the jDip and Java version/etc info to the stack trace
      */
     private static String getStackTrace(Throwable t) {
-        StringBuffer sb = new StringBuffer(2048);
+        StringBuilder sb = new StringBuilder(2048);
         StackTraceElement[] ste = t.getStackTrace();
 
         sb.append("jDip version: ");
@@ -412,13 +391,7 @@ public class ErrorDialog extends TextViewer {
 
     private static String getMsg(Throwable t) {
         String msg = t.getLocalizedMessage();
-        if (msg != null) {
-            if (!"".equals(msg)) {
-                return msg;
-            }
-        }
-
-        return NO_MESSAGE;
+        return (msg == null || msg.isEmpty()) ? NO_MESSAGE : msg;
     }// getMsg()
 
     /**
@@ -438,6 +411,7 @@ public class ErrorDialog extends TextViewer {
                                                   String buttonText, Dimension size, boolean resizable,
                                                   boolean submittable, final BugReportInfo bri) {
         ErrorDialog ed = new ErrorDialog(parent, title) {
+            @Override
             protected void close(String actionCommand) {
                 if (ACTION_SUBMIT.equals(actionCommand)) {
                     setButtonEnabled(ACTION_SUBMIT, false);
@@ -487,6 +461,7 @@ public class ErrorDialog extends TextViewer {
                                                    String continueText, Dimension size, boolean resizable,
                                                    boolean submittable, final BugReportInfo bri) {
         ErrorDialog ed = new ErrorDialog(parent, title) {
+            @Override
             protected void close(String actionCommand) {
                 if (ACTION_SUBMIT.equals(actionCommand)) {
                     if (submitBug(parent, bri)) {
@@ -526,7 +501,7 @@ public class ErrorDialog extends TextViewer {
     /**
      * If exception is a Batik exception, with line # info, append
      */
-    private static void appendBatikInfo(StringBuffer sb, Throwable e) {
+    private static void appendBatikInfo(StringBuilder sb, Throwable e) {
         if (e instanceof org.apache.batik.bridge.BridgeException) {
             org.apache.batik.bridge.BridgeException be = (org.apache.batik.bridge.BridgeException) e;
             sb.append("\nBridgeException:");
@@ -792,7 +767,7 @@ public class ErrorDialog extends TextViewer {
          * First adds 'additional info' if any.
          */
         public String getStackTrace() {
-            final StringBuffer sb = new StringBuffer(2048);
+            final StringBuilder sb = new StringBuilder(2048);
 
             sb.append(getInfo());
 
@@ -832,7 +807,7 @@ public class ErrorDialog extends TextViewer {
             sb.append(Utils.isInWebstart());
 
             // ArrayList of strings
-            ArrayList<String> list = new ArrayList<>();
+            ArrayList<String> stringList = new ArrayList<>();
             try {
                 Properties props = System.getProperties();
                 Enumeration<?> propEnum = props.propertyNames();
@@ -843,18 +818,18 @@ public class ErrorDialog extends TextViewer {
                         line.append(propName);
                         line.append(": ");
                         line.append(props.getProperty(propName));
-                        list.add(line.toString());
+                        stringList.add(line.toString());
                     }
                 }
 
-                Collections.sort(list);
+                Collections.sort(stringList);
             } catch (Exception e) {
                 sb.append("\n  Cannot obtain system properties.");
             }
 
 
             // system properties
-            for (String line : list) {
+            for (String line : stringList) {
                 sb.append("\n  ");
                 sb.append(line);
             }

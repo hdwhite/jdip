@@ -44,9 +44,9 @@ public class Hold extends Order {
     private static final String HOLD_FORMAT = "HOLD_FORMAT";
 
     // constants: names
-    private static final String OrderNameBrief = "H";
-    private static final String OrderNameFull = "Hold";
-    private static final transient String OrderFormatString = Utils.getLocalString(HOLD_FORMAT);
+    private static final String ORDER_NAME_BRIEF = "H";
+    private static final String ORDER_NAME_FULL = "Hold";
+    private static final transient String ORDER_FORMAT_STRING = Utils.getLocalString(HOLD_FORMAT);
 
 
     /**
@@ -65,17 +65,17 @@ public class Hold extends Order {
 
 
     public String getFullName() {
-        return OrderNameFull;
+        return ORDER_NAME_FULL;
     }// getName()
 
     public String getBriefName() {
-        return OrderNameBrief;
+        return ORDER_NAME_BRIEF;
     }// getBriefName()
 
 
     // format-strings for orders
     public String getDefaultFormat() {
-        return OrderFormatString;
+        return ORDER_FORMAT_STRING;
     }// getFormatBrief()
 
 
@@ -84,7 +84,7 @@ public class Hold extends Order {
 
         super.appendBrief(sb);
         sb.append(' ');
-        sb.append(OrderNameBrief);
+        sb.append(ORDER_NAME_BRIEF);
 
         return sb.toString();
     }// toBriefString()
@@ -95,7 +95,7 @@ public class Hold extends Order {
 
         super.appendFull(sb);
         sb.append(' ');
-        sb.append(OrderNameFull);
+        sb.append(ORDER_NAME_FULL);
 
         return sb.toString();
     }// toFullString()
@@ -110,7 +110,7 @@ public class Hold extends Order {
     @Override
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
-        checkSeasonMovement(state, OrderNameFull);
+        checkSeasonMovement(state, ORDER_NAME_FULL);
         checkPower(power, state, false);    // inactive powers can issue Hold orders
         super.validate(state, valOpts, ruleOpts);
 

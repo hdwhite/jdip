@@ -373,13 +373,13 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane {
          */
         public void setItems(final Variant variant, final MapGraphic[] mgs) {
             int defaultItem = 0;
-            ListItem[] items = new ListItem[mgs.length];
-            for (int i = 0; i < items.length; i++) {
-                items[i] = new ListItem(variant, mgs[i]);
+            ListItem[] mapGraphicItems = new ListItem[mgs.length];
+            for (int i = 0; i < mapGraphicItems.length; i++) {
+                mapGraphicItems[i] = new ListItem(variant, mgs[i]);
                 defaultItem = (mgs[i].isDefault()) ? i : defaultItem;
             }
 
-            setItems(items);
+            setItems(mapGraphicItems);
             setSelectedIndex(defaultItem);
         }// setItems()
 
@@ -389,13 +389,13 @@ public class NGDMapAndUnits extends JPanel implements NewGameDialog.NGDTabPane {
          */
         public void setItemsWithSymbolPacks() {
             SymbolPack[] symbolPacks = VariantManager.getSymbolPacks();
-            ListItem[] items = new ListItem[symbolPacks.length];
-            for (int i = 0; i < items.length; i++) {
-                items[i] = new ListItem(symbolPacks[i]);
+            ListItem[] symbolPackItems = new ListItem[symbolPacks.length];
+            for (int i = 0; i < symbolPackItems.length; i++) {
+                symbolPackItems[i] = new ListItem(symbolPacks[i]);
             }
 
-            setItems(items);
-            list.setSelectedValue(items[0], true);
+            setItems(symbolPackItems);
+            list.setSelectedValue(symbolPackItems[0], true);
         }// setItemsWithSymbolPacks()
 
         /**

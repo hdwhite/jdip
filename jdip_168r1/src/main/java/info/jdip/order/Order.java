@@ -205,27 +205,27 @@ public abstract class Order implements Orderable, java.io.Serializable {
         OrderState[] orderStates = adjudicator.getOrderStates();
         for (OrderState dependentOS : orderStates) {
             Order order = dependentOS.getOrder();
+            if (order == this) { // always exclude self
+                continue;
+            }
 
-            if (order != this) // always exclude self
-            {
-                if (order instanceof Move
-                        && ((Move) order).getDest().isProvinceEqual(this.getSource())) {
-                    if (depMTS == null) {
-                        depMTS = new ArrayList<>(5);
-                    }
-                    depMTS.add(dependentOS);
-                } else if (order instanceof Support) {
-                    Support support = (Support) order;
+            if (order instanceof Move
+                    && ((Move) order).getDest().isProvinceEqual(this.getSource())) {
+                if (depMTS == null) {
+                    depMTS = new ArrayList<>(5);
+                }
+                depMTS.add(dependentOS);
+            } else if (order instanceof Support) {
+                Support support = (Support) order;
 
-                    // if we don't check for hold-type support (Support.isSupportingHold() == true)
-                    // we will accidentally add move-supports! (bad)
-                    if (support.isSupportingHold()
-                            && support.getSupportedSrc().isProvinceEqual(this.getSource())) {
-                        if (depSup == null) {
-                            depSup = new ArrayList<>(5);
-                        }
-                        depSup.add(dependentOS);
+                // if we don't check for hold-type support (Support.isSupportingHold() == true)
+                // we will accidentally add move-supports! (bad)
+                if (support.isSupportingHold()
+                        && support.getSupportedSrc().isProvinceEqual(this.getSource())) {
+                    if (depSup == null) {
+                        depSup = new ArrayList<>(5);
                     }
+                    depSup.add(dependentOS);
                 }
             }
         }

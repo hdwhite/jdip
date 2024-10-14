@@ -43,9 +43,9 @@ public class Waive extends Order {
     private static final String WAIVE_FORMAT = "WAIVE_FORMAT";
 
     // constants: names
-    private static final String orderNameBrief = "W";
-    private static final String orderNameFull = "Waive";
-    private static final transient String orderFormatString = Utils.getLocalString(WAIVE_FORMAT);
+    private static final String ORDER_NAME_BRIEF = "W";
+    private static final String ORDER_NAME_FULL = "Waive";
+    private static final transient String ORDER_FORMAT_STRING = Utils.getLocalString(WAIVE_FORMAT);
 
 
     /**
@@ -64,16 +64,16 @@ public class Waive extends Order {
     }// Waive()
 
     public String getFullName() {
-        return orderNameFull;
+        return ORDER_NAME_FULL;
     }// getName()
 
     public String getBriefName() {
-        return orderNameBrief;
+        return ORDER_NAME_BRIEF;
     }// getBriefName()
 
 
     public String getDefaultFormat() {
-        return orderFormatString;
+        return ORDER_FORMAT_STRING;
     }// getFormatBrief()
 
 
@@ -82,7 +82,7 @@ public class Waive extends Order {
 
         sb.append(power);
         sb.append(": ");
-        sb.append(orderNameBrief);
+        sb.append(ORDER_NAME_BRIEF);
         sb.append(" build in ");
         src.appendBrief(sb);
 
@@ -95,7 +95,7 @@ public class Waive extends Order {
 
         sb.append(power);
         sb.append(": ");
-        sb.append(orderNameFull);
+        sb.append(ORDER_NAME_FULL);
         sb.append(" build in ");
         src.appendFull(sb);
 
@@ -116,9 +116,10 @@ public class Waive extends Order {
      * and season. The adjudicator must check tricky situations, such as too
      * many or too few build orders.
      */
+    @Override
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
-        checkSeasonAdjustment(state, orderNameFull);
+        checkSeasonAdjustment(state, ORDER_NAME_FULL);
         checkPower(power, state, true);
 
         // not much else to validate; adjudiator must take care of tricky situations.
@@ -138,6 +139,7 @@ public class Waive extends Order {
      * Empty method: Waive orders do not require dependency determination.
      */
     public void determineDependencies(Adjudicator adjudicator) {
+      // Waive orders do not require dependency determination.
     }
 
 

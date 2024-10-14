@@ -140,6 +140,7 @@ public class MetadataDialog extends HeaderDialog {
     /**
      * Handle OK/Cancel selections
      */
+    @Override
     public void close(String actionCommand) {
         super.close(actionCommand);
 
@@ -225,7 +226,7 @@ public class MetadataDialog extends HeaderDialog {
      */
     private JScrollPane makeScrollPane(JComponent c) {
         JScrollPane jsp = new XJScrollPane(c);
-        jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         return jsp;
     }// makeScrollPane()
 
@@ -263,8 +264,8 @@ public class MetadataDialog extends HeaderDialog {
             notes.setBorder(new EtchedBorder());
 
             // layout
-            int w1[] = {BORDER, 10, 0, 5, 0, 10, 5, 0, BORDER};
-            int h1[] = {BORDER, 0, 20, 0, 5, 0, 10, 0, 10, 0, 10, 0, 30, 0, 10, 0, 10, 0, BORDER};
+            int[] w1 = {BORDER, 10, 0, 5, 0, 10, 5, 0, BORDER};
+            int[] h1 = {BORDER, 0, 20, 0, 5, 0, 10, 0, 10, 0, 10, 0, 30, 0, 10, 0, 10, 0, BORDER};
 
             HIGLayout layout = new HIGLayout(w1, h1);
             layout.setColumnWeight(8, 1);
@@ -353,8 +354,8 @@ public class MetadataDialog extends HeaderDialog {
             }
 
             // layout
-            int w1[] = {BORDER, 0, 5, 0, 15, 0, 5, 0, BORDER};
-            int h1[] = {BORDER, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 10, 0, 5, 0, BORDER};
+            int[] w1 = {BORDER, 0, 5, 0, 15, 0, 5, 0, BORDER};
+            int[] h1 = {BORDER, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 10, 0, 5, 0, BORDER};
 
             HIGLayout layout = new HIGLayout(w1, h1);
             layout.setColumnWeight(5, 1);
@@ -374,7 +375,7 @@ public class MetadataDialog extends HeaderDialog {
 
             for (int i = 0; i < email.length; i++) {
                 int row = 2 + (i * 2);
-                this.add(new JLabel(Utils.getLocalString(PDF_EMAIL) + " " + String.valueOf(i + 1)), c.rcwh(row, 6, 1, 1, "r"));
+                this.add(new JLabel(Utils.getLocalString(PDF_EMAIL) + " " + (i + 1)), c.rcwh(row, 6, 1, 1, "r"));
                 this.add(email[i], c.rcwh(row, 8, 1, 1, "l"));
             }
         }// PlayerPanel()
@@ -426,6 +427,7 @@ public class MetadataDialog extends HeaderDialog {
      * Listener to get Tab Icon colors
      */
     private class IconColorListener extends AbstractCFPListener {
+        @Override
         public void actionMMDReady(MapMetadata mmd) {
             MetadataDialog.this.mmd = mmd;
             setTabIcons();

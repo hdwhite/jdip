@@ -353,6 +353,7 @@ public class ClientFrame extends JFrame {
         // frame listener, handles JFrame close events
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 persistMan.exit();
             }
@@ -414,7 +415,7 @@ public class ClientFrame extends JFrame {
     /**
      * It all starts here ....
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         new ClientFrame(args);
     }// main()
 
@@ -920,7 +921,7 @@ public class ClientFrame extends JFrame {
      */
     public void dbgPrintListeners() {
         PropertyChangeListener[] pcls = getPropertyChangeListeners();
-        logger.debug("ClientFrame listeners: " + pcls.length);
+        logger.debug("ClientFrame listeners: {}", pcls.length);
         for (PropertyChangeListener pcl : pcls) {
             logger.debug("Listener : {}", pcl.getClass().getName());
         }
@@ -938,7 +939,7 @@ public class ClientFrame extends JFrame {
     /**
      * Setup command-line options and parse the command line.
      */
-    private void parseCmdLine(String args[]) {
+    private void parseCmdLine(String[] args) {
         // parameterized options
         StringParam argLocale =
                 new StringParam("lang", "force language to the specified ISO-639 2-letter type (e.g., \"de\", \"en\", \"fr\")",
@@ -947,14 +948,14 @@ public class ClientFrame extends JFrame {
         FileParam argLogFile =
                 new FileParam("log", "writes logging information to file or stdout [if \"stdout\" specified]",
                         FileParam.NO_ATTRIBUTES,
-                        StringParam.OPTIONAL,
-                        FileParam.SINGLE_VALUED);
+                        Parameter.OPTIONAL,
+                        Parameter.SINGLE_VALUED);
 
         FileParam argVariantPath =
                 new FileParam("variantpath", "load variant plugins from specified directory",
                         FileParam.IS_DIR & FileParam.IS_READABLE & FileParam.EXISTS,
-                        FileParam.OPTIONAL,
-                        FileParam.SINGLE_VALUED);
+                        Parameter.OPTIONAL,
+                        Parameter.SINGLE_VALUED);
 
         // boolean options
         BooleanParam validateOpt =

@@ -118,6 +118,7 @@ public class Border implements Serializable {
 
     private static final String TOK_YEAR_ODD = "odd";
     private static final String TOK_YEAR_EVEN = "even";
+    private static final String TOK_BAD_YEAR = "Border.error.badyear";
 
 
     // instance fields
@@ -257,54 +258,55 @@ public class Border implements Serializable {
 
         // empty case
         final String text = in.trim();
-        if ("".equals(text)) {
+        if (text.isEmpty()) {
             yearModifier = YEAR_NOT_SPECIFIED;
-        } else {
-            StringTokenizer st = new StringTokenizer(in, ", \t");
-            String value1 = null;
-            String value2 = null;
+            return;
+        }
 
-            if (st.hasMoreTokens()) {
-                value1 = st.nextToken();
-            }
+        StringTokenizer st = new StringTokenizer(in, ", \t");
+        String value1 = null;
+        String value2 = null;
 
-            if (st.hasMoreTokens()) {
-                value2 = st.nextToken();
-            }
+        if (st.hasMoreTokens()) {
+            value1 = st.nextToken();
+        }
 
-            if (st.hasMoreTokens() || value1 == null) {
+        if (st.hasMoreTokens()) {
+            value2 = st.nextToken();
+        }
+
+        if (st.hasMoreTokens() || value1 == null) {
+            throw new InvalidBorderException(
+                    Utils.getLocalString(TOK_BAD_YEAR,
+                            id, "Too few / too many year tokens."));
+        }
+
+        if (TOK_YEAR_ODD.equalsIgnoreCase(value1)) {
+            yearModifier = YEAR_ODD;
+            if (value2 != null) {
                 throw new InvalidBorderException(
-                        Utils.getLocalString("Border.error.badyear",
-                                id, "Too few / too many year tokens."));
+                        Utils.getLocalString(TOK_BAD_YEAR,
+                                id, "Cannot specify even/odd + year"));
             }
+        } else if (TOK_YEAR_EVEN.equalsIgnoreCase(value1)) {
+            yearModifier = YEAR_EVEN;
+            if (value2 != null) {
+                throw new InvalidBorderException(
+                        Utils.getLocalString(TOK_BAD_YEAR,
+                                id, "Cannot specify even/odd + year"));
+            }
+        } else {
+            try {
+                yearMin = Integer.parseInt(value1);
+                yearMax = Integer.parseInt(value2);
 
-            if (TOK_YEAR_ODD.equalsIgnoreCase(value1)) {
-                yearModifier = YEAR_ODD;
-                if (value2 != null) {
-                    throw new InvalidBorderException(
-                            Utils.getLocalString("Border.error.badyear",
-                                    id, "Cannot specify even/odd + year"));
+                if (yearMin > yearMax) {
+                    throw new NumberFormatException();
                 }
-            } else if (TOK_YEAR_EVEN.equalsIgnoreCase(value1)) {
-                yearModifier = YEAR_EVEN;
-                if (value2 != null) {
-                    throw new InvalidBorderException(
-                            Utils.getLocalString("Border.error.badyear",
-                                    id, "Cannot specify even/odd + year"));
-                }
-            } else {
-                try {
-                    yearMin = Integer.parseInt(value1);
-                    yearMax = Integer.parseInt(value2);
-
-                    if (yearMin > yearMax) {
-                        throw new NumberFormatException();
-                    }
-                } catch (NumberFormatException e) {
-                    throw new InvalidBorderException(
-                            Utils.getLocalString("Border.error.badyear",
-                                    id, "Minimum and Maximum year values not specified or illegal."));
-                }
+            } catch (NumberFormatException e) {
+                throw new InvalidBorderException(
+                        Utils.getLocalString(TOK_BAD_YEAR,
+                                id, "Minimum and Maximum year values not specified or illegal."));
             }
         }
     }// parseYear()

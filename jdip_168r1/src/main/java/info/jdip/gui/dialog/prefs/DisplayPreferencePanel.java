@@ -107,8 +107,8 @@ public class DisplayPreferencePanel extends PreferencePanel {
 
         // layout
         //                   2      4      6    8   10     13   15       18    20     22     23
-        int h1[] = {BORDER, 0, 15, 35, 10, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0, 15, 0, 5, 0, 10, 0, 15, 0, BORDER};
-        int w1[] = {BORDER, INDENT, 0, 10, 0, 15, 0, 25, 0, 4, 0, 0, 0, BORDER};
+        int[] h1 = {BORDER, 0, 15, 35, 10, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 0, 15, 0, 5, 0, 10, 0, 15, 0, BORDER};
+        int[] w1 = {BORDER, INDENT, 0, 10, 0, 15, 0, 25, 0, 4, 0, 0, 0, BORDER};
 
         HIGLayout l1 = new HIGLayout(w1, h1);
         l1.setColumnWeight(13, 1);
@@ -424,12 +424,8 @@ public class DisplayPreferencePanel extends PreferencePanel {
             }
 
             if (allowParens) {
-                if (formatValue == OrderFormatOptions.FORMAT_COAST_PAREN_FULL
-                        || formatValue == OrderFormatOptions.FORMAT_COAST_PAREN_BRIEF) {
-                    checkBox.setSelected(true);
-                } else {
-                    checkBox.setSelected(false);
-                }
+                checkBox.setSelected(formatValue == OrderFormatOptions.FORMAT_COAST_PAREN_FULL
+                    || formatValue == OrderFormatOptions.FORMAT_COAST_PAREN_BRIEF);
             }
 
             if (allowPlural) {

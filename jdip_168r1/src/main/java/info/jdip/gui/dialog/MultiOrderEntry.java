@@ -101,7 +101,7 @@ public class MultiOrderEntry {
         tv.setEditable(true);
         tv.setHeaderText(Utils.getText(Utils.getLocalString(HEADER_TEXT_LOCATION)));
         tv.setTitle(Utils.getLocalString(TITLE));
-        tv.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tv.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         tv.addTwoButtons(tv.makeCancelButton(), tv.makeAcceptButton(), false, true);
         tv.setAcceptListener(new Acceptor());
         tv.setText("");

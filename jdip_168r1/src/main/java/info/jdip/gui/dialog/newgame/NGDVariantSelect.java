@@ -40,8 +40,6 @@ import info.jdip.world.variant.data.Variant;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 /**
  * Panel for New Game Dialog that allows selection of a map / variant / map graphic.
  * <p>

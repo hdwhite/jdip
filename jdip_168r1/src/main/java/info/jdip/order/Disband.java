@@ -43,9 +43,9 @@ public class Disband extends Order {
     private static final String DISBAND_FORMAT = "DISBAND_FORMAT";
 
     // constants: names
-    private static final String OrderNameBrief = "D";
-    private static final String OrderNameFull = "Disband";
-    private static final transient String OrderFormatString = Utils.getLocalString(DISBAND_FORMAT);
+    private static final String ORDER_NAME_BRIEF = "D";
+    private static final String ORDER_NAME_FULL = "Disband";
+    private static final transient String ORDER_FORMAT_STRING = Utils.getLocalString(DISBAND_FORMAT);
 
 
     /**
@@ -63,17 +63,17 @@ public class Disband extends Order {
     }// Disband()
 
     public String getFullName() {
-        return OrderNameFull;
+        return ORDER_NAME_FULL;
     }// getName()
 
     public String getBriefName() {
-        return OrderNameBrief;
+        return ORDER_NAME_BRIEF;
     }// getBriefName()
 
 
     // order formatting
     public String getDefaultFormat() {
-        return OrderFormatString;
+        return ORDER_FORMAT_STRING;
     }// getFormatBrief()
 
 
@@ -82,7 +82,7 @@ public class Disband extends Order {
 
         super.appendBrief(sb);
         sb.append(' ');
-        sb.append(OrderNameBrief);
+        sb.append(ORDER_NAME_BRIEF);
 
         return sb.toString();
     }// toBriefString()
@@ -93,7 +93,7 @@ public class Disband extends Order {
 
         super.appendFull(sb);
         sb.append(' ');
-        sb.append(OrderNameFull);
+        sb.append(ORDER_NAME_FULL);
 
         return sb.toString();
     }// toFullString()
@@ -112,7 +112,7 @@ public class Disband extends Order {
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
         // step 0
-        checkSeasonRetreat(state, OrderNameFull);
+        checkSeasonRetreat(state, ORDER_NAME_FULL);
         checkPower(power, state, false);    // inactive units can disband!
 
         // step 1

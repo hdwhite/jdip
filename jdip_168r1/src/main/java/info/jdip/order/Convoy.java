@@ -54,9 +54,9 @@ public class Convoy extends Order {
     private static final String CONVOY_TO_SAME_PROVINCE = "CONVOY_TO_SAME_PROVINCE";
 
     // constants: names
-    private static final String OrderNameBrief = "C";
-    private static final String OrderNameFull = "Convoy";
-    private static final transient String OrderFormatString = Utils.getLocalString(CONVOY_FORMAT);
+    private static final String ORDER_NAME_BRIEF = "C";
+    private static final String ORDER_NAME_FULL = "Convoy";
+    private static final transient String ORDER_FORMAT_STRING = Utils.getLocalString(CONVOY_FORMAT);
 
     // instance variables
     protected Location convoySrc = null;
@@ -130,16 +130,16 @@ public class Convoy extends Order {
 
 
     public String getFullName() {
-        return OrderNameFull;
+        return ORDER_NAME_FULL;
     }// getName()
 
     public String getBriefName() {
-        return OrderNameBrief;
+        return ORDER_NAME_BRIEF;
     }// getBriefName()
 
 
     public String getDefaultFormat() {
-        return OrderFormatString;
+        return ORDER_FORMAT_STRING;
     }// getFormatBrief()
 
 
@@ -148,7 +148,7 @@ public class Convoy extends Order {
 
         super.appendBrief(sb);
         sb.append(' ');
-        sb.append(OrderNameBrief);
+        sb.append(ORDER_NAME_BRIEF);
         sb.append(' ');
         sb.append(convoyUnitType.getShortName());
         sb.append(' ');
@@ -165,7 +165,7 @@ public class Convoy extends Order {
 
         super.appendFull(sb);
         sb.append(' ');
-        sb.append(OrderNameFull);
+        sb.append(ORDER_NAME_FULL);
         sb.append(' ');
         sb.append(convoyUnitType.getFullName());
         sb.append(' ');
@@ -194,66 +194,68 @@ public class Convoy extends Order {
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
         // v.0: 	check phase, basic validation
-        checkSeasonMovement(state, OrderNameFull);
+        checkSeasonMovement(state, ORDER_NAME_FULL);
         checkPower(power, state, true);
         super.validate(state, valOpts, ruleOpts);
 
-        if (valOpts.getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_STRICT)) {
-            Position position = state.getPosition();
-            Province srcProvince = src.getProvince();
+        if (valOpts.getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
+            return;
+        }
 
-            // v.1: src unit type must be a fleet, in a body of water
-            // OR in a convoyable coast.
-            if (!srcUnitType.equals(Unit.Type.FLEET) || (!srcProvince.isSea() && !srcProvince.isConvoyableCoast())) {
-                throw new OrderException(Utils.getLocalString(CONVOY_SEA_FLEETS));
-            }
+        Position position = state.getPosition();
+        Province srcProvince = src.getProvince();
 
-            // validate Borders
-            Border border = src.getProvince().getTransit(src, srcUnitType, state.getPhase(), this.getClass());
-            if (border != null) {
-                throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
-            }
+        // v.1: src unit type must be a fleet, in a body of water
+        // OR in a convoyable coast.
+        if (!srcUnitType.equals(Unit.Type.FLEET) || (!srcProvince.isSea() && !srcProvince.isConvoyableCoast())) {
+            throw new OrderException(Utils.getLocalString(CONVOY_SEA_FLEETS));
+        }
 
-            // v.2: 	a) type-match unit type with current state, and unit must exist
-            // 		b) unit type must be ARMY
-            Unit convoyUnit = position.getUnit(convoySrc.getProvince());
-            convoyUnitType = getValidatedUnitType(convoySrc.getProvince(), convoyUnitType, convoyUnit);
-            if (!convoyUnitType.equals(Unit.Type.ARMY)) {
-                throw new OrderException(Utils.getLocalString(CONVOY_ONLY_ARMIES));
-            }
+        // validate Borders
+        Border border = src.getProvince().getTransit(src, srcUnitType, state.getPhase(), this.getClass());
+        if (border != null) {
+            throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
+        }
 
-            // v.3.a: validate locations: convoySrc & convoyDest
-            convoySrc = convoySrc.getValidatedAndDerived(convoyUnitType, convoyUnit);
-            convoyDest = convoyDest.getValidated(convoyUnitType);
+        // v.2: 	a) type-match unit type with current state, and unit must exist
+        // 		b) unit type must be ARMY
+        Unit convoyUnit = position.getUnit(convoySrc.getProvince());
+        convoyUnitType = getValidatedUnitType(convoySrc.getProvince(), convoyUnitType, convoyUnit);
+        if (!convoyUnitType.equals(Unit.Type.ARMY)) {
+            throw new OrderException(Utils.getLocalString(CONVOY_ONLY_ARMIES));
+        }
 
-            // v.3.b: convoying to self (if we are in a convoyable coast) is illegal!
-            if (srcProvince.isConvoyableCoast() && src.isProvinceEqual(convoyDest)) {
-                throw new OrderException(Utils.getLocalString(CONVOY_SELF_ILLEGAL));
-            }
+        // v.3.a: validate locations: convoySrc & convoyDest
+        convoySrc = convoySrc.getValidatedAndDerived(convoyUnitType, convoyUnit);
+        convoyDest = convoyDest.getValidated(convoyUnitType);
 
-            // v.3.c: origin/destination of convoy must not be same province.
-            if (convoySrc.isProvinceEqual(convoyDest)) {
-                throw new OrderException(Utils.getLocalString(CONVOY_TO_SAME_PROVINCE));
-            }
+        // v.3.b: convoying to self (if we are in a convoyable coast) is illegal!
+        if (srcProvince.isConvoyableCoast() && src.isProvinceEqual(convoyDest)) {
+            throw new OrderException(Utils.getLocalString(CONVOY_SELF_ILLEGAL));
+        }
 
-            // v.4:	a *theoretical* convoy route must exist between
-            //		convoySrc and convoyDest
-            Path path = new Path(position);
-            if (!path.isPossibleConvoyRoute(convoySrc, convoyDest)) {
-                throw new OrderException(Utils.getLocalString(CONVOY_NO_ROUTE,
-                        convoySrc.toLongString(), convoyDest.toLongString()));
-            }
+        // v.3.c: origin/destination of convoy must not be same province.
+        if (convoySrc.isProvinceEqual(convoyDest)) {
+            throw new OrderException(Utils.getLocalString(CONVOY_TO_SAME_PROVINCE));
+        }
 
-            // validate Borders
-            border = convoySrc.getProvince().getTransit(convoySrc, convoyUnitType, state.getPhase(), this.getClass());
-            if (border != null) {
-                throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
-            }
+        // v.4:	a *theoretical* convoy route must exist between
+        //		convoySrc and convoyDest
+        Path path = new Path(position);
+        if (!path.isPossibleConvoyRoute(convoySrc, convoyDest)) {
+            throw new OrderException(Utils.getLocalString(CONVOY_NO_ROUTE,
+                    convoySrc.toLongString(), convoyDest.toLongString()));
+        }
 
-            border = convoyDest.getProvince().getTransit(convoyDest, convoyUnitType, state.getPhase(), this.getClass());
-            if (border != null) {
-                throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
-            }
+        // validate Borders
+        border = convoySrc.getProvince().getTransit(convoySrc, convoyUnitType, state.getPhase(), this.getClass());
+        if (border != null) {
+            throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
+        }
+
+        border = convoyDest.getProvince().getTransit(convoyDest, convoyUnitType, state.getPhase(), this.getClass());
+        if (border != null) {
+            throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
         }
     }// validate();
 

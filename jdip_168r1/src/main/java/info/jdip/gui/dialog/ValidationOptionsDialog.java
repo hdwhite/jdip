@@ -31,7 +31,6 @@ import info.jdip.order.ValidationOptions;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -55,7 +54,7 @@ public class ValidationOptionsDialog extends HeaderDialog {
     private ValidationOptions oldOpts = null;
     private ValidationOptions valOpts = null;
     private ValidationOptions returnedOpts = null;
-    private ClientFrame parent = null;
+    private ClientFrame parentFrame = null;
     private ValidationOptions.DescriptiveOption[] dopts = null;
 
     // GUI components
@@ -67,12 +66,12 @@ public class ValidationOptionsDialog extends HeaderDialog {
     private ButtonGroup buttonGroup = null;
     private RBListener rbListener = null;
 
-    private final StringBuffer sb = new StringBuffer(1024);
+    private final StringBuilder sb = new StringBuilder(1024);
 
 
     private ValidationOptionsDialog(ClientFrame parent, ValidationOptions oldOptions) {
         super(parent, Utils.getLocalString(DIALOG_TITLE), true);
-        this.parent = parent;
+        this.parentFrame = parent;
         this.oldOpts = (oldOptions == null) ? (new ValidationOptions()) : oldOptions;
 
         // clone old options into new validation options.
@@ -132,6 +131,7 @@ public class ValidationOptionsDialog extends HeaderDialog {
         return returnedOpts;
     }// getValidationOptions()
 
+    @Override
     public void close(String actionCommand) {
         returnedOpts = (isOKorAccept(actionCommand)) ? valOpts : oldOpts;
         dispose();
@@ -165,7 +165,7 @@ public class ValidationOptionsDialog extends HeaderDialog {
         Object[] oVals = dopts[currentIndex].getValues();    // possible values
 
         if (bTips.length != bText.length) {
-            Utils.popupError(parent, "Resource Error", "Validation Options " + dopts[currentIndex].getKey() + "; values (" + bText.length + ") / description (" + bTips.length + ") mismatch; must have same number of items.");
+            Utils.popupError(parentFrame, "Resource Error", "Validation Options " + dopts[currentIndex].getKey() + "; values (" + bText.length + ") / description (" + bTips.length + ") mismatch; must have same number of items.");
             return;
         }
 
@@ -202,17 +202,13 @@ public class ValidationOptionsDialog extends HeaderDialog {
         optionList = new JList<>(options);
         optionList.setBorder(new EtchedBorder());
         optionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        optionList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                updatePanel();
-            }
-        });
+        optionList.addListSelectionListener((ListSelectionEvent e) -> updatePanel());
     }// setupList()
 
     private void makeVODLayout() {
         // layout subpanel (description + radio buttons)
-        int w1[] = {25, 0};
-        int h1[] = {10, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0};
+        int[] w1 = {25, 0};
+        int[] h1 = {10, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0};
 
         HIGLayout l1 = new HIGLayout(w1, h1);
         l1.setColumnWeight(2, 1);

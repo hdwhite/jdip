@@ -53,9 +53,9 @@ public class Build extends Order {
 
 
     // constants: names
-    private static final String OrderNameBrief = "B";
-    private static final String OrderNameFull = "Build";
-    private static final transient String orderFormatString = Utils.getLocalString(BUILD_FORMAT);
+    private static final String ORDER_NAME_BRIEF = "B";
+    private static final String ORDER_NAME_FULL = "Build";
+    private static final transient String ORDER_FORMAT_STRING = Utils.getLocalString(BUILD_FORMAT);
 
 
     /**
@@ -73,16 +73,16 @@ public class Build extends Order {
     }// Build()
 
     public String getFullName() {
-        return OrderNameFull;
+        return ORDER_NAME_FULL;
     }// getName()
 
     public String getBriefName() {
-        return OrderNameBrief;
+        return ORDER_NAME_BRIEF;
     }// getBriefName()
 
 
     public String getDefaultFormat() {
-        return orderFormatString;
+        return ORDER_FORMAT_STRING;
     }// getFormatBrief()
 
 
@@ -91,7 +91,7 @@ public class Build extends Order {
 
         sb.append(power);
         sb.append(": ");
-        sb.append(OrderNameBrief);
+        sb.append(ORDER_NAME_BRIEF);
         sb.append(' ');
         sb.append(srcUnitType.getShortName());
         sb.append(' ');
@@ -106,7 +106,7 @@ public class Build extends Order {
 
         sb.append(power);
         sb.append(": ");
-        sb.append(OrderNameFull);
+        sb.append(ORDER_NAME_FULL);
         sb.append(' ');
         sb.append(srcUnitType.getFullName());
         sb.append(' ');
@@ -156,7 +156,7 @@ public class Build extends Order {
     @Override
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
-        checkSeasonAdjustment(state, OrderNameFull);
+        checkSeasonAdjustment(state, ORDER_NAME_FULL);
         checkPower(power, state, true);
 
         Province province = src.getProvince();

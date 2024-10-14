@@ -43,9 +43,9 @@ public class Remove extends Order {
     private static final String REMOVE_FORMAT = "REMOVE_FORMAT";
 
     // constants: names
-    private static final String orderNameBrief = "R";
-    private static final String orderNameFull = "Remove";
-    private static final transient String orderFormatString = Utils.getLocalString(REMOVE_FORMAT);
+    private static final String ORDER_NAME_BRIEF = "R";
+    private static final String ORDER_NAME_FULL = "Remove";
+    private static final transient String ORDER_FORMAT_STRING = Utils.getLocalString(REMOVE_FORMAT);
 
 
     /**
@@ -63,17 +63,17 @@ public class Remove extends Order {
     }// Remove()
 
     public String getFullName() {
-        return orderNameFull;
+        return ORDER_NAME_FULL;
     }// getName()
 
     public String getBriefName() {
-        return orderNameBrief;
+        return ORDER_NAME_BRIEF;
     }// getBriefName()
 
 
     // order formatting
     public String getDefaultFormat() {
-        return orderFormatString;
+        return ORDER_FORMAT_STRING;
     }// getFormatBrief()
 
 
@@ -82,7 +82,7 @@ public class Remove extends Order {
 
         sb.append(power);
         sb.append(": ");
-        sb.append(orderNameBrief);
+        sb.append(ORDER_NAME_BRIEF);
         sb.append(' ');
         sb.append(srcUnitType.getShortName());
         sb.append(' ');
@@ -97,7 +97,7 @@ public class Remove extends Order {
 
         sb.append(power);
         sb.append(": ");
-        sb.append(orderNameFull);
+        sb.append(ORDER_NAME_FULL);
         sb.append(' ');
         sb.append(srcUnitType.getFullName());
         sb.append(' ');
@@ -115,9 +115,10 @@ public class Remove extends Order {
     }// equals()
 
 
+    @Override
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
-        checkSeasonAdjustment(state, orderNameFull);
+        checkSeasonAdjustment(state, ORDER_NAME_FULL);
         super.validate(state, valOpts, ruleOpts);
         checkPower(power, state, false);
 

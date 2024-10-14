@@ -156,6 +156,7 @@ public class XDialog extends JDialog {
     /**
      * Dialog setup, including adding Window-Close listener
      */
+    @Override
     protected void dialogInit() {
         super.dialogInit();
 
@@ -166,6 +167,7 @@ public class XDialog extends JDialog {
         super.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 XDialog.this.close();
             }
@@ -176,15 +178,12 @@ public class XDialog extends JDialog {
     /**
      * Adds the ESC key listener
      */
+    @Override
     protected JRootPane createRootPane() {
         JRootPane rootPane = super.createRootPane();
 
         // install ESC key checking.
-        ActionListener actionListener = new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
-                XDialog.this.close();
-            }
-        };
+        ActionListener actionListener = (ActionEvent actionEvent) -> XDialog.this.close();
 
         KeyStroke strokeESC = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
 
@@ -197,6 +196,7 @@ public class XDialog extends JDialog {
     /**
      * Throws an IllegalArgumentException()
      */
+    @Override
     public void setDefaultCloseOperation(int operation) {
         throw new IllegalArgumentException("override close() instead");
     }// setDefaultCloseOperation()
@@ -211,6 +211,7 @@ public class XDialog extends JDialog {
     }// setHelpID()
 
 
+    @Override
     public void dispose() {
         if (cfl != null) {
             getParent().removePropertyChangeListener(cfl);
@@ -231,10 +232,12 @@ public class XDialog extends JDialog {
         if (getParent() instanceof ClientFrame && !isModal()) {
             final ClientFrame cf = (ClientFrame) getParent();
             cf.addPropertyChangeListener(new AbstractCFPListener() {
+                @Override
                 public void actionWorldCreated(World w) {
                     worldChanged();
                 }
 
+                @Override
                 public void actionWorldDestroyed(World w) {
                     worldChanged();
                 }

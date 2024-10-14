@@ -56,8 +56,8 @@ import java.util.List;
  */
 public class RetreatChecker {
     // instance variables
-    private transient final Position position;
-    private transient final ArrayList<RCMoveResult> filteredMoveResults;
+    private final Position position;
+    private final ArrayList<RCMoveResult> filteredMoveResults;
 
     /**
      * Create a RetreatChecker.
@@ -75,14 +75,12 @@ public class RetreatChecker {
             // but we must take special action to make it work
             World w = current.getWorld();
             if (w.getInitialTurnState() == current) {
-                //Log.println("     no previous turnstate, and we are first; creating results");
                 results = new ArrayList<>();
             } else {
                 throw new IllegalStateException("No Previous Turn State!!");
             }
         } else {
             results = last.getResultList();
-            //Log.println("     last turnstate: ",last.getPhase());
         }
 
         this.position = current.getPosition();
@@ -112,24 +110,6 @@ public class RetreatChecker {
      */
     public boolean isValid(Location from, Location to) {
         Location[] validLocs = getValidLocations(from);
-
-        // debugging
-		/*
-		if(Log.isLogging())
-		{
-			Log.print("   valid retreat locations from ");
-			Log.print(from);
-			Log.print(": ");
-			
-			for(int i=0; i<validLocs.length; i++)
-			{
-				Log.print(validLocs[i]);
-				Log.print(" ");
-			}
-			Log.print("\n");
-		}
-		*/
-
         for (Location validLoc : validLocs) {
             if (validLoc.equals(to)) {
                 return true;
@@ -194,11 +174,9 @@ public class RetreatChecker {
      * dislodged <code>dislodgedLoc</code>
      */
     private boolean isDislodgersSpace(Location dislodgedLoc, Location loc) {
-        for (Object filteredMoveResult : filteredMoveResults) {
-            RCMoveResult rcmr = (RCMoveResult) filteredMoveResult;
-
+        for (RCMoveResult filteredMoveResult : filteredMoveResults) {
             // note: dislodgedLoc is the potential move destination
-            if (rcmr.isDislodger(loc, dislodgedLoc)) {
+            if (filteredMoveResult.isDislodger(loc, dislodgedLoc)) {
                 return true;
             }
         }

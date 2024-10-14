@@ -63,10 +63,10 @@ public class Support extends Order {
     private static final String SUPPORT_FORMAT_NONMOVE = "SUPPORT_FORMAT_NONMOVE";
 
     // constants: names
-    private static final String OrderNameBrief = "S";
-    private static final String OrderNameFull = "Support";
-    private static final transient String OrderFormatString_move = Utils.getLocalString(SUPPORT_FORMAT_MOVE);
-    private static final transient String OrderFormatString_nonmove = Utils.getLocalString(SUPPORT_FORMAT_NONMOVE);
+    private static final String ORDER_NAME_BRIEF = "S";
+    private static final String ORDER_NAME_FULL = "Support";
+    private static final transient String ORDER_FORMAT_STRING_MOVE = Utils.getLocalString(SUPPORT_FORMAT_MOVE);
+    private static final transient String ORDER_FORMAT_STRING_NONMOVE = Utils.getLocalString(SUPPORT_FORMAT_NONMOVE);
 
     // instance variables
     protected Location supSrc = null;
@@ -206,20 +206,20 @@ public class Support extends Order {
 
 
     public String getFullName() {
-        return OrderNameFull;
+        return ORDER_NAME_FULL;
     }// getName()
 
     public String getBriefName() {
-        return OrderNameBrief;
+        return ORDER_NAME_BRIEF;
     }// getBriefName()
 
 
     public String getDefaultFormat() {
         if (isSupportingHold()) {
-            return OrderFormatString_nonmove;
+            return ORDER_FORMAT_STRING_NONMOVE;
         }
 
-        return OrderFormatString_move;
+        return ORDER_FORMAT_STRING_MOVE;
     }// getFormatBrief()
 
 
@@ -228,7 +228,7 @@ public class Support extends Order {
 
         super.appendBrief(sb);
         sb.append(' ');
-        sb.append(OrderNameBrief);
+        sb.append(ORDER_NAME_BRIEF);
         sb.append(' ');
         sb.append(supUnitType.getShortName());
         sb.append(' ');
@@ -248,7 +248,7 @@ public class Support extends Order {
 
         super.appendFull(sb);
         sb.append(' ');
-        sb.append(OrderNameFull);
+        sb.append(ORDER_NAME_FULL);
         sb.append(' ');
         sb.append(supUnitType.getFullName());
         sb.append(' ');
@@ -281,73 +281,74 @@ public class Support extends Order {
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
         // v.0: 	check season/phase, basic validation
-        checkSeasonMovement(state, OrderNameFull);
+        checkSeasonMovement(state, ORDER_NAME_FULL);
         checkPower(power, state, true);
         super.validate(state, valOpts, ruleOpts);
 
-        if (valOpts.getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_STRICT)) {
-            Position position = state.getPosition();
+        if (valOpts.getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
+            return;
+        }
 
-            // validate Borders
-            Border border = src.getProvince().getTransit(src, srcUnitType, state.getPhase(), this.getClass());
-            if (border != null) {
-                throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
+        Position position = state.getPosition();
+
+        // validate Borders
+        Border border = src.getProvince().getTransit(src, srcUnitType, state.getPhase(), this.getClass());
+        if (border != null) {
+            throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
+        }
+
+        // v.1: unit existence / matching
+        Unit supUnit = position.getUnit(supSrc.getProvince());
+        supUnitType = getValidatedUnitType(supSrc.getProvince(), supUnitType, supUnit);
+
+        // v.1.5: supported unit power matching. As per DATC, if specified
+        // supporting Power is missing, we'll add it. If it's incorrect, we'll
+        // change it to the correct power, without throwing an exception.
+        supPower = supUnit.getPower();
+
+        // v.2: location validation
+        supSrc = supSrc.getValidatedAndDerived(supUnitType, supUnit);
+
+        // (v.3) this checks for same-province support, like F trieste SUPPORT trieste
+        // note that this would be caught by the standard adjacency check, but the error
+        // message is then less clear.
+        if (src.isProvinceEqual(supSrc)) {
+            throw new OrderException(Utils.getLocalString(SUPPORT_VAL_NOSELF));
+        }
+
+        // validate Borders
+        border = supSrc.getProvince().getTransit(supSrc, supUnitType, state.getPhase(), this.getClass());
+        if (border != null) {
+            throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
+        }
+
+        // support source (hold) destination (move) validation
+        if (isSupportingHold()) {
+            if (!src.isAdjacent(supSrc.getProvince())) {
+                throw new OrderException(Utils.getLocalString(SUPPORT_VAL_NOMOVE,
+                        src.toLongString(), supSrc.toLongString()));
             }
+            return;
+        }
+        // v.2: location validation
+        supDest = supDest.getValidated(supUnitType);
 
-            // v.1: unit existence / matching
-            Unit supUnit = position.getUnit(supSrc.getProvince());
-            supUnitType = getValidatedUnitType(supSrc.getProvince(), supUnitType, supUnit);
+        // v.3: adjacency check
+        if (!src.isAdjacent(supDest.getProvince())) {
+            throw new OrderException(Utils.getLocalString(SUPPORT_VAL_NOMOVE,
+                    src.toLongString(), supDest.toLongString()));
+        }
 
-            // v.1.5: supported unit power matching. As per DATC, if specified
-            // supporting Power is missing, we'll add it. If it's incorrect, we'll
-            // change it to the correct power, without throwing an exception.
-            supPower = supUnit.getPower();
+        // v.4: check that supSrc and supDest are not the same province
+        // (to support a Hold, supDest must be null)
+        if (supSrc.isProvinceEqual(supDest)) {
+            throw new OrderException(Utils.getLocalString(SUPPORT_VAL_INPLACEMOVE));
+        }
 
-            // v.2: location validation
-            supSrc = supSrc.getValidatedAndDerived(supUnitType, supUnit);
-
-            // (v.3) this checks for same-province support, like F trieste SUPPORT trieste
-            // note that this would be caught by the standard adjacency check, but the error
-            // message is then less clear.
-            if (src.isProvinceEqual(supSrc)) {
-                throw new OrderException(Utils.getLocalString(SUPPORT_VAL_NOSELF));
-            }
-
-            // validate Borders
-            border = supSrc.getProvince().getTransit(supSrc, supUnitType, state.getPhase(), this.getClass());
-            if (border != null) {
-                throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
-            }
-
-            // support source (hold) destination (move) validation
-            if (isSupportingHold()) {
-                if (!src.isAdjacent(supSrc.getProvince())) {
-                    throw new OrderException(Utils.getLocalString(SUPPORT_VAL_NOMOVE,
-                            src.toLongString(), supSrc.toLongString()));
-                }
-            } else {
-                // v.2: location validation
-                supDest = supDest.getValidated(supUnitType);
-
-                // v.3: adjacency check
-                if (!src.isAdjacent(supDest.getProvince())) {
-                    throw new OrderException(Utils.getLocalString(SUPPORT_VAL_NOMOVE,
-                            src.toLongString(), supDest.toLongString()));
-                }
-
-                // v.4: check that supSrc and supDest are not the same province
-                // (to support a Hold, supDest must be null)
-                if (supSrc.isProvinceEqual(supDest)) {
-                    throw new OrderException(Utils.getLocalString(SUPPORT_VAL_INPLACEMOVE));
-                }
-
-                // destination border validation
-                border = supDest.getProvince().getTransit(supDest, supUnitType, state.getPhase(), this.getClass());
-                if (border != null) {
-                    throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
-                }
-            }
-
+        // destination border validation
+        border = supDest.getProvince().getTransit(supDest, supUnitType, state.getPhase(), this.getClass());
+        if (border != null) {
+            throw new OrderException(Utils.getLocalString(ORD_VAL_BORDER, src.getProvince(), border.getDescription()));
         }
     }// validate();
 
