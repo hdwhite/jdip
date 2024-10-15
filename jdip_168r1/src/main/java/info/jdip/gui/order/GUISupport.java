@@ -51,18 +51,18 @@ import java.awt.geom.Point2D;
  */
 public class GUISupport extends Support implements GUIOrder {
     // i18n keys
-    private final static String CLICK_TO_SUPPORT_UNIT = "GUISupport.click_to_sup";
-    private final static String NO_UNIT_TO_SUPPORT = "GUISupport.no_unit_to_sup";
-    private final static String CANNOT_SUPPORT_SELF = "GUISupport.no_self_sup";
-    private final static String CLICK_TO_SUPPORT_FROM = "GUISupport.click_to_sup_from";
-    private final static String CLICK_TO_SUPPORT_HOLD = "GUISupport.click_to_sup_hold";
-    private final static String SUP_DEST_NOT_ADJACENT = "GUISupport.sup_dest_not_adj";
-    private final static String SUPPORTING_THIS_UNIT = "GUISupport.sup_this_unit";
-    private final static String CLICK_TO_SUPPORT_MOVE = "GUISupport.click_to_sup_move";
-    private final static String CLICK_TO_SUPPORT_CONVOYED_MOVE = "GUISupport.click_to_sup_conv_move";
-    private final static String CANNOT_SUPPORT_MOVE_NONADJACENT = "GUISupport.move_nonadj";
-    private final static String CANNOT_SUPPORT_MOVE_GENERAL = "GUISupport.move_bad";
-    private final static String CANNOT_SUPPORT_ACROSS_DPB = "GUISupport.over_dpb";
+    private static final String CLICK_TO_SUPPORT_UNIT = "GUISupport.click_to_sup";
+    private static final String NO_UNIT_TO_SUPPORT = "GUISupport.no_unit_to_sup";
+    private static final String CANNOT_SUPPORT_SELF = "GUISupport.no_self_sup";
+    private static final String CLICK_TO_SUPPORT_FROM = "GUISupport.click_to_sup_from";
+    private static final String CLICK_TO_SUPPORT_HOLD = "GUISupport.click_to_sup_hold";
+    private static final String SUP_DEST_NOT_ADJACENT = "GUISupport.sup_dest_not_adj";
+    private static final String SUPPORTING_THIS_UNIT = "GUISupport.sup_this_unit";
+    private static final String CLICK_TO_SUPPORT_MOVE = "GUISupport.click_to_sup_move";
+    private static final String CLICK_TO_SUPPORT_CONVOYED_MOVE = "GUISupport.click_to_sup_conv_move";
+    private static final String CANNOT_SUPPORT_MOVE_NONADJACENT = "GUISupport.move_nonadj";
+    private static final String CANNOT_SUPPORT_MOVE_GENERAL = "GUISupport.move_bad";
+    private static final String CANNOT_SUPPORT_ACROSS_DPB = "GUISupport.over_dpb";
 
 
     // instance variables
@@ -124,7 +124,7 @@ public class GUISupport extends Support implements GUIOrder {
     }// deriveFrom()
 
 
-    public boolean testLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean testLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         sb.setLength(0);
 
         if (isComplete()) {
@@ -158,7 +158,9 @@ public class GUISupport extends Support implements GUIOrder {
             // no unit in province
             sb.append(Utils.getLocalString(GUIOrder.NO_UNIT, getFullName()));
             return false;
-        } else if (currentLocNum == 1) {
+        }
+        
+        if (currentLocNum == 1) {
             // set Support source (unit receiving support)
             // - If we are not validating, any location with a unit is acceptable (even source)
             // - If we are validating,
@@ -201,50 +203,59 @@ public class GUISupport extends Support implements GUIOrder {
             // no unit in province
             sb.append(Utils.getLocalString(NO_UNIT_TO_SUPPORT));
             return false;
-        } else if (currentLocNum == 2) {
-            // set Supporting-into Location
-            // - If we are not validating, any destination is acceptable (even source)
-            // - If we are validating, we check that the Support is adjacent
-            //
-            if (stateInfo.getValidationOptions().getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
-                // lenient parsing enabled; we'll take anything!
-                sb.append(Utils.getLocalString(CLICK_TO_SUPPORT_FROM, province.getFullName()));
-                return true;
-            }
-
-            // strict parsing is enabled. We are more selective.
-            // This location must be adjacent to the origin
-            //
-            if (src.isAdjacent(province)) {
-                // special case: supportSrc == supportDest; we are supporting a hold.
-                if (supSrc.getProvince() == province) {
-                    // NOTE: no border check required here.
-                    // we are supporting a unit holding in place.
-                    sb.append(Utils.getLocalString(CLICK_TO_SUPPORT_HOLD));
-                    return true;
-                }
-
-                // for supported moves, we must do a Border check
-                if (!GUIOrderUtils.checkBorder(this, location, supUnitType, stateInfo.getPhase(), sb)) {
-                    return false;
-                }
-
-
-                // all other cases (supported move)
-                return checkMove(position, supSrc, location, sb);
-            }
-
-            // supDest is not adjacent to src province
-            sb.append(Utils.getLocalString(SUP_DEST_NOT_ADJACENT, src.toLongString()));
-            return false;
-        } else {
-            // should not occur.
-            throw new IllegalStateException();
+        }
+        
+        if (currentLocNum == 2) {
+            return testSupportDest(stateInfo, location, sb);
         }
 
+        // should not occur.
+        throw new IllegalStateException();
+        
         // NO return here: thus we must appropriately exit within an if/else block above.
     }// testLocation()
 
+    private boolean testSupportDest(StateInfo stateInfo, Location location, StringBuilder sb)
+    {
+        Position position = stateInfo.getPosition();
+        Province province = location.getProvince();
+
+        // set Supporting-into Location
+        // - If we are not validating, any destination is acceptable (even source)
+        // - If we are validating, we check that the Support is adjacent
+        //
+        if (stateInfo.getValidationOptions().getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
+            // lenient parsing enabled; we'll take anything!
+            sb.append(Utils.getLocalString(CLICK_TO_SUPPORT_FROM, province.getFullName()));
+            return true;
+        }
+
+        // strict parsing is enabled. We are more selective.
+        // This location must be adjacent to the origin
+        //
+        if (src.isAdjacent(province)) {
+            // special case: supportSrc == supportDest; we are supporting a hold.
+            if (supSrc.getProvince() == province) {
+                // NOTE: no border check required here.
+                // we are supporting a unit holding in place.
+                sb.append(Utils.getLocalString(CLICK_TO_SUPPORT_HOLD));
+                return true;
+            }
+
+            // for supported moves, we must do a Border check
+            if (!GUIOrderUtils.checkBorder(this, location, supUnitType, stateInfo.getPhase(), sb)) {
+                return false;
+            }
+
+
+            // all other cases (supported move)
+            return checkMove(position, supSrc, location, sb);
+        }
+
+        // supDest is not adjacent to src province
+        sb.append(Utils.getLocalString(SUP_DEST_NOT_ADJACENT, src.toLongString()));
+        return false;
+    }
 
     public boolean clearLocations() {
         if (isComplete()) {
@@ -264,7 +275,7 @@ public class GUISupport extends Support implements GUIOrder {
     }// clearLocations()
 
 
-    public boolean setLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean setLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         if (isComplete()) {
             return false;
         }
@@ -514,7 +525,7 @@ public class GUISupport extends Support implements GUIOrder {
                         SVGConstants.SVG_PATH_TAG);
 
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append("M ");
         GUIOrderUtils.appendFloat(sb, ptSrc.x);    // unit start
@@ -592,7 +603,7 @@ public class GUISupport extends Support implements GUIOrder {
         if (!dependentFound) {
             Point2D.Float[] pts = GUIOrderUtils.makeOctagon(ptSupSrc, radius);
 
-            StringBuffer sb = new StringBuffer(160);
+            StringBuilder sb = new StringBuilder(160);
             for (Point2D.Float pt : pts) {
                 GUIOrderUtils.appendFloat(sb, pt.x);
                 sb.append(',');
@@ -624,7 +635,7 @@ public class GUISupport extends Support implements GUIOrder {
     /**
      * Check a Move between two locations, for adjacency (even by theoretical convoy route).
      */
-    private boolean checkMove(Position position, Location from, Location to, StringBuffer sb) {
+    private boolean checkMove(Position position, Location from, Location to, StringBuilder sb) {
         if (from.isAdjacent(to.getProvince())) {
             sb.append(Utils.getLocalString(CLICK_TO_SUPPORT_MOVE));
             return true;

@@ -221,7 +221,7 @@ public class RPConvert
 		);
 
 		// power (countries)
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (Country country : countries) {
 			sb.append("\t\t<POWER name=\"");
 			sb.append(country.getName());
@@ -253,7 +253,7 @@ public class RPConvert
 		}
 
 		// SC
-		sb = new StringBuffer();
+		sb = new StringBuilder();
 		for (ProvObj po : mc.getProvObjList()) {
 
 			if (po.isNeutralSC()) {
@@ -290,7 +290,7 @@ public class RPConvert
 
 		// initial unit positions
 		// (this is not known)
-		sb = new StringBuffer();
+		sb = new StringBuilder();
 		for (Country country : countries) {
 			/*
 				<INITIALSTATE province="stp" power="russia" unit="fleet" unitcoast="sc" />

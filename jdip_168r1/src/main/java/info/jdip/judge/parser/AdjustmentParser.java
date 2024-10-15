@@ -203,8 +203,8 @@ public class AdjustmentParser {
      */
     private void parseOwnerBlock(String text)
             throws IOException {
-        // map of Powers to StringBuffers
-        HashMap<Power, StringBuffer> pmap = new HashMap<>();
+        // map of Powers to StringBuilder
+        HashMap<Power, StringBuilder> pmap = new HashMap<>();
 
         // parse and re-formulate
         // into a new string
@@ -227,10 +227,10 @@ public class AdjustmentParser {
 
                 // toss into the map
                 currentPower = p;
-                pmap.put(p, new StringBuffer());
+                pmap.put(p, new StringBuilder());
             } else {
                 if (currentPower != null) {
-                    StringBuffer sb = pmap.get(currentPower);
+                    StringBuilder sb = pmap.get(currentPower);
                     sb.append(tok);
                     sb.append(" ");
                 }
@@ -244,7 +244,7 @@ public class AdjustmentParser {
         //
         final Power[] allPowers = map.getPowers();
         for (Power power : allPowers) {
-            StringBuffer sb = pmap.get(power);
+            StringBuilder sb = pmap.get(power);
             if (sb != null) {
                 final String[] provs = sb.toString().split("[\\,]");
 

@@ -141,6 +141,7 @@ public class XJSVGCanvas extends JSVGCanvas {
      * Overrides createListener() to return our own Listener, with
      * several new features we need.
      */
+    @Override
     protected Listener createListener() {
         return new XJSVGCanvasListener();
     }// createListener()
@@ -150,6 +151,7 @@ public class XJSVGCanvas extends JSVGCanvas {
      * Overrides createUserAgent() to return our own UserAgent, which
      * allows selectable validation control of the parser.
      */
+    @Override
     protected UserAgent createUserAgent() {
         return new XJSVGUserAgent();
     }// createUserAgent()
@@ -168,6 +170,7 @@ public class XJSVGCanvas extends JSVGCanvas {
      *
      * @param at an AffineTransform.
      */
+    @Override
     public void setRenderingTransform(AffineTransform at) {
         // check to see that we are not zooming too little
         if (minScale > 0.0 && (at.getScaleX() < minScale || at.getScaleY() < minScale)) {
@@ -243,12 +246,14 @@ public class XJSVGCanvas extends JSVGCanvas {
         }// XJSVGCanvasListener()
 
 
+        @Override
         public void mouseDragged(MouseEvent e) {
             inDrag = true;
             super.mouseDragged(e);
         }// mouseDragged()
 
 
+        @Override
         public void mousePressed(java.awt.event.MouseEvent e) {
             // set drag start coordinates
             dragX = e.getX();
@@ -257,6 +262,7 @@ public class XJSVGCanvas extends JSVGCanvas {
         }// mousePressed()
 
 
+        @Override
         public void mouseReleased(java.awt.event.MouseEvent e) {
             if (inDrag) {
                 int dx = Math.abs(e.getX() - dragX);
@@ -288,6 +294,7 @@ public class XJSVGCanvas extends JSVGCanvas {
         }// mouseReleased()
 
 
+        @Override
         public void keyPressed(java.awt.event.KeyEvent e) {
             if (parent != null) {
                 parent.dispatchEvent(e);
@@ -297,6 +304,7 @@ public class XJSVGCanvas extends JSVGCanvas {
         }// keyPressed()
 
 
+        @Override
         public void keyReleased(java.awt.event.KeyEvent e) {
             if (parent != null) {
                 parent.dispatchEvent(e);
@@ -306,6 +314,7 @@ public class XJSVGCanvas extends JSVGCanvas {
         }// keyReleased()
 
 
+        @Override
         public void keyTyped(java.awt.event.KeyEvent e) {
             if (parent != null) {
                 parent.dispatchEvent(e);
@@ -333,6 +342,7 @@ public class XJSVGCanvas extends JSVGCanvas {
             super();
         }// XJSVGUserAgent()
 
+        @Override
         public boolean isXMLParserValidating() {
             return XJSVGCanvas.this.isValidating;
         }// isXMLParserValidating()
@@ -341,6 +351,7 @@ public class XJSVGCanvas extends JSVGCanvas {
          * Do nothing. We don't want the Batik
          * CursorManager updating our cursor.
          */
+        @Override
         public void setSVGCursor(Cursor c) {
             // do nothing.
         }// setSVGCursor()
@@ -349,6 +360,7 @@ public class XJSVGCanvas extends JSVGCanvas {
         /**
          * Displays an SVG error Exception using an ErrorDialog
          */
+        @Override
         public void displayError(Exception ex) {
             ErrorDialog.displaySerious(findParent(), ex);
         }// displayError()
@@ -357,6 +369,7 @@ public class XJSVGCanvas extends JSVGCanvas {
         /**
          * Displays an SVG error String using an ErrorDialog
          */
+        @Override
         public void displayError(String message) {
             ErrorDialog.displaySerious(findParent(), new Exception(message));
         }// message()

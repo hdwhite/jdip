@@ -74,7 +74,7 @@ public class GUIDefineState extends DefineState implements GUIOrder {
     /**
      * Always returns false.
      */
-    public boolean testLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean testLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         sb.setLength(0);
         sb.append(Utils.getLocalString(GUIOrder.COMPLETE, getFullName()));
         return false;
@@ -90,7 +90,7 @@ public class GUIDefineState extends DefineState implements GUIOrder {
     /**
      * Always returns false.
      */
-    public boolean setLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean setLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         sb.setLength(0);
         sb.append(Utils.getLocalString(GUIOrder.COMPLETE, getFullName()));
         return false;

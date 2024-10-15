@@ -88,7 +88,7 @@ public class GUIHold extends Hold implements GUIOrder {
         currentLocNum = REQ_LOC;
     }// deriveFrom()
 
-    public boolean testLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean testLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         sb.setLength(0);
 
         if (isComplete()) {
@@ -134,7 +134,7 @@ public class GUIHold extends Hold implements GUIOrder {
         return true;
     }// clearLocations()
 
-    public boolean setLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean setLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         if (testLocation(stateInfo, location, sb)) {
             currentLocNum++;
             Unit unit = stateInfo.getPosition().getUnit(location.getProvince());
@@ -285,7 +285,7 @@ public class GUIHold extends Hold implements GUIOrder {
 
         Point2D.Float[] pts = GUIOrderUtils.makeOctagon(center, radius);
 
-        StringBuffer sb = new StringBuffer(160);
+        StringBuilder sb = new StringBuilder(160);
         for (Point2D.Float pt : pts) {
             GUIOrderUtils.appendFloat(sb, pt.x);
             sb.append(',');

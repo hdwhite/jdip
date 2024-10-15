@@ -480,7 +480,7 @@ public class Map implements Serializable {
      * <p>
      * This is a special-purpose method for Order parsing.
      */
-    public void replaceProvinceNames(StringBuffer sb) {
+    public void replaceProvinceNames(StringBuilder sb) {
         // create the whitespace list, if it doesn't exist.
         if (wsNames == null) {
             List<String> list = new ArrayList<>(50);
@@ -527,11 +527,11 @@ public class Map implements Serializable {
      * character or colon(this is done to prevent elimination of the first power,
      * which is required).
      * <p>
-     * <b>NOTE: assumes StringBuffer is all lower-case.</b>
+     * <b>NOTE: assumes StringBuilder is all lower-case.</b>
      * <p>
      * This is a special-purpose method for Order parsing.
      */
-    public void filterPowerNames(StringBuffer sb) {
+    public void filterPowerNames(StringBuilder sb) {
         // find first white space or colon
         int wsIdx = -1;
         for (int i = 0; i < sb.length(); i++) {
@@ -564,8 +564,7 @@ public class Map implements Serializable {
      * If a power token is specified (e.g., France), returns the token as a String.
      * If no token is specified, returns null. If a colon is present, this is
      * much looser than if no colon is present.
-     * <p>
-     * <b>NOTE: assumes StringBuffer is all lower-case, is trimmed, and
+     * <b>NOTE: assumes StringBuilder is all lower-case, is trimmed, and
      * that power names DO NOT contain whitespace.</b>
      * <p>
      * This is a special-purpose method for Order parsing.
@@ -578,7 +577,7 @@ public class Map implements Serializable {
      * xxx-yyy				// returns null (xxx doesn't match a power)
      * </code>
      */
-    public String getFirstPowerToken(StringBuffer sb) {
+    public String getFirstPowerToken(StringBuilder sb) {
         assert (lcPowerNames != null);
 
         // if we find a colon, we will ASSUME that the first token
@@ -628,7 +627,7 @@ public class Map implements Serializable {
      * If no token is specified, returns null. If a colon is present, this is
      * much looser than if no colon is present.
      * <p>
-     * <b>NOTE: assumes StringBuffer is all lower-case, is trimmed, and
+     * <b>NOTE: assumes StringBuilder is all lower-case, is trimmed, and
      * that power names DO NOT contain whitespace.</b>
      * <p>
      * This is a special-purpose method for Order parsing.

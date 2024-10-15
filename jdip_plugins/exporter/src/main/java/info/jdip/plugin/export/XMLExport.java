@@ -107,7 +107,7 @@ class XMLExport {
 		};
 		
 		// we've already converted everything to XML-compatible
-		StringBuffer sb = new StringBuffer(4096);
+		StringBuilder sb = new StringBuilder(4096);
 		sb.append(HEADER);
 		sb.append(Utils.format(TEMPLATE_MAIN, templateArgs));
 		return sb.toString();
@@ -121,7 +121,7 @@ class XMLExport {
      */
     private static String getPositions(TurnState ts) {
 		/*
-		StringBuffer sb = new StringBuffer(4096);
+		StringBuilder sb = new StringBuilder(4096);
 		Position pos = ts.getPosition();
 		
 		final Province[] allProvs = pos.getProvinces();
@@ -220,7 +220,7 @@ class XMLExport {
 		}
 		
 		// output buffer
-		StringBuffer sb = new StringBuffer(4096);
+		StringBuilder sb = new StringBuilder(4096);
 		
 		// first, write out orders and their results.
 		iter = orders.iterator();
@@ -269,7 +269,7 @@ class XMLExport {
     private static String getRetreats(TurnState ts) {
 		/*
 		RetreatChecker rc = new RetreatChecker(ts);
-		StringBuffer sb = new StringBuffer(1024);
+		StringBuilder sb = new StringBuilder(1024);
 		Position pos = ts.getPosition();
 		
 		final Province[] allProvs = pos.getProvinces();
@@ -282,7 +282,7 @@ class XMLExport {
 				Location loc = new Location(p, u.getCoast());
 				Location[] retreatLocs = rc.getValidLocations(loc);
 				
-				StringBuffer locations = new StringBuffer(128);
+				StringBuilder locations = new StringBuilder(128);
 				for(int ri=0; ri<retreatLocs.length; ri++)
 				{
 					retreatLocs[ri].appendBrief(locations);
@@ -310,7 +310,7 @@ class XMLExport {
      */
     private static String getSC(TurnState ts) {
 		/*
-		StringBuffer sb = new StringBuffer(4096);
+		StringBuilder sb = new StringBuilder(4096);
 		TurnState priorTS = ts.getWorld().getPreviousTurnState();
 		priorTS = (priorTS == null) ? ts : priorTS;
 		
@@ -324,7 +324,7 @@ class XMLExport {
 		
 		for(int i=0; i<allPowers.length; i++)
 		{
-			StringBuffer scList = new StringBuffer(1024);
+			StringBuilder scList = new StringBuilder(1024);
 			
 			// get all locations; compare to previous, to determine:
 			// 'lost' 'gained' 'same'
@@ -425,7 +425,7 @@ class XMLExport {
      * and single) as well as brackets.
      */
     private static String toXMLString(CharSequence in) {
-        StringBuffer sb = new StringBuffer(in.toString());
+        StringBuilder sb = new StringBuilder(in.toString());
         replaceAll(sb, "&", "&amp;");    // this must come first!!
         replaceAll(sb, "<", "&lt;");
         replaceAll(sb, ">", "&gt;");
@@ -435,9 +435,9 @@ class XMLExport {
     }// toXMLString()
 
     /**
-     * replace all instances of "search" with "replace" in StringBuffer sb
+     * replace all instances of "search" with "replace" in StringBuilder sb
      */
-    private static void replaceAll(StringBuffer sb, String search, String replace) {
+    private static void replaceAll(StringBuilder sb, String search, String replace) {
         int start = sb.indexOf(search, 0);
         while (start != -1) {
             final int end = start + search.length();

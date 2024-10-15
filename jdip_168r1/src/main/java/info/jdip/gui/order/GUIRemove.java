@@ -88,7 +88,7 @@ public class GUIRemove extends Remove implements GUIOrder {
     }// deriveFrom()
 
 
-    public boolean testLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean testLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         sb.setLength(0);
 
         if (isComplete()) {
@@ -138,7 +138,7 @@ public class GUIRemove extends Remove implements GUIOrder {
     }// clearLocations()
 
 
-    public boolean setLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean setLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         if (testLocation(stateInfo, location, sb)) {
             currentLocNum++;
 

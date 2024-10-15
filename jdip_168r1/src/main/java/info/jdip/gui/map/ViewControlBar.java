@@ -103,6 +103,7 @@ public class ViewControlBar extends ControlBar {
     /**
      * Handles ZoomIn / ZoomOut / Revert key functionality.
      */
+    @Override
     public void keyPressed(DOMKeyEvent ke, Location loc) {
         int charCode = ke.getCharCode();    // note: getKeyCode() DOES NOT WORK
         if (charCode == keyZoomIn) {

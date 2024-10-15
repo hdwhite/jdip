@@ -91,7 +91,7 @@ public class StatusBarUtils {
             return;
         }
 
-        StringBuffer sb = new StringBuffer(128);
+        StringBuilder sb = new StringBuilder(128);
         Province p = loc.getProvince();
         Position position = mp.getPosition();
 
@@ -183,7 +183,7 @@ public class StatusBarUtils {
     /**
      * Get coast information, if appropriate
      */
-    private void getCoast(StringBuffer sb, Unit unit, Province p) {
+    private void getCoast(StringBuilder sb, Unit unit, Province p) {
         if (unit.getType().equals(Unit.Type.FLEET) && p.isMultiCoastal()) {
             sb.append(" (");
             sb.append(unit.getCoast().getName());

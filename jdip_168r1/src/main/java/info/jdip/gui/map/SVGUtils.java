@@ -62,7 +62,7 @@ public class SVGUtils {
     /**
      * Default floating-point format precision
      */
-    private final static float FLOAT_PRECISION = 0.1f;
+    private static final float FLOAT_PRECISION = 0.1f;
 
     /**
      * Sets the title of an SVG element.
@@ -237,14 +237,14 @@ public class SVGUtils {
      * <li>Province (checks all short names via getShortNames())
      * </ul>
      */
-    public static Map<?, ?> tagFinderSVG(List<String> lookList, Node root) {
+    public static Map<String, Node> tagFinderSVG(List<String> lookList, Node root) {
         return tagFinderSVG(lookList, root, false);
     }// tagFinderSVG
 
     /**
      * As above, but allows any SVG element to be returned
      */
-    public static Map<?, ?> tagFinderSVG(List<String> lookList, Node root, boolean anySVGElement) {
+    public static Map<String, Node> tagFinderSVG(List<String> lookList, Node root, boolean anySVGElement) {
         List<String> list = new ArrayList<>(lookList);
         Map<String, Node> map = new HashMap<>((4 * lookList.size()) / 3);
 
@@ -375,16 +375,14 @@ public class SVGUtils {
      * Case Insensitive.
      */
     public static Node findNodeWithID(Node node, String id) {
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-            // check if the current element has an ID attribute
-            if (node.hasAttributes()) {
-                NamedNodeMap attributes = node.getAttributes();
-                Node attrNode = attributes.getNamedItem(SVGConstants.SVG_ID_ATTRIBUTE);    // was ATTR_ID
-                if (attrNode != null) {
-                    String nodeValue = attrNode.getNodeValue();
-                    if (nodeValue.equalsIgnoreCase(id)) {
-                        return node;
-                    }
+        // check if the current element has an ID attribute
+        if (node.getNodeType() == Node.ELEMENT_NODE && node.hasAttributes()) {
+            NamedNodeMap attributes = node.getAttributes();
+            Node attrNode = attributes.getNamedItem(SVGConstants.SVG_ID_ATTRIBUTE);    // was ATTR_ID
+            if (attrNode != null) {
+                String nodeValue = attrNode.getNodeValue();
+                if (nodeValue.equalsIgnoreCase(id)) {
+                    return node;
                 }
             }
         }
@@ -417,8 +415,6 @@ public class SVGUtils {
             Dimension dim = canvas.getSize();
             java.awt.geom.Dimension2D docSize = canvas.getSVGDocumentSize();
 
-            //System.out.println("viewport extents: (getBestFit()): "+dim);
-
             // find out if width or height is larger; we use that to scale.
             double scaleFactor = 0.0;
             if (docSize.getWidth() >= docSize.getHeight()) {
@@ -444,10 +440,10 @@ public class SVGUtils {
 
 
     /**
-     * Formats a Floating-Point value into a StringBuffer,
+     * Formats a Floating-Point value into a StringBuilder,
      * using the jDip default precision.
      */
-    public static void appendFloat(StringBuffer sb, float v) {
+    public static void appendFloat(StringBuilder sb, float v) {
         sb.append(floatToSB(v));
     }// appendFloat()
 

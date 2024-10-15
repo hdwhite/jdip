@@ -202,7 +202,7 @@ public class ResultWriter {
         resultList = null;
 
         // Print results, by power.
-        StringBuffer sb = new StringBuffer(4096);
+        StringBuilder sb = new StringBuilder(4096);
         for (Power power : allPowers) {
             // SKIP power if eliminated.
             if (!position.isEliminated(power)) {
@@ -229,7 +229,7 @@ public class ResultWriter {
     /**
      * Print non order results for a power.
      */
-    private void printNonOrderResultsForPower(StringBuffer sb, Power power, List<Result> results) {
+    private void printNonOrderResultsForPower(StringBuilder sb, Power power, List<Result> results) {
         StringBuilder text = new StringBuilder(1024);
 
         boolean foundAnOtherResult = false;
@@ -258,7 +258,7 @@ public class ResultWriter {
      * there are multiple failure reasons, they are indented underneath
      * the order.
      */
-    private void printOrderResultsForPower(StringBuffer sb, Power power, List<OrderResult> results) {
+    private void printOrderResultsForPower(StringBuilder sb, Power power, List<OrderResult> results) {
         // create a mapping of orders -> a list of results. As we find results, add
         // it to the map.
         LinkedHashMap<Orderable, List<OrderResult>> ordMap = new LinkedHashMap<>(17);

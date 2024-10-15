@@ -121,9 +121,9 @@ public interface GUIOrder extends Orderable {
     //
 
     /**
-     * Tests if a given location is valid. Returns validity, and appends valid/invalid message to StringBuffer.
+     * Tests if a given location is valid. Returns validity, and appends valid/invalid message to StringBuilder.
      */
-    boolean testLocation(StateInfo stateInfo, Location location, StringBuffer sb);
+    boolean testLocation(StateInfo stateInfo, Location location, StringBuilder sb);
 
     /**
      * Clear all set locations. If no locations have been set, this has no effect.
@@ -133,7 +133,7 @@ public interface GUIOrder extends Orderable {
     /**
      * Sets the current location. Otherwise similar to testLocation.
      */
-    boolean setLocation(StateInfo stateInfo, Location location, StringBuffer sb);
+    boolean setLocation(StateInfo stateInfo, Location location, StringBuilder sb);
 
     /**
      * Returns if all Locations have been set and the order is complete.

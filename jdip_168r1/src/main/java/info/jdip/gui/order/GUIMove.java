@@ -121,7 +121,7 @@ public class GUIMove extends Move implements GUIOrder {
         currentLocNum = REQ_LOC;
     }// GUIMove()
 
-    public boolean testLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean testLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         sb.setLength(0);
 
         if (isComplete()) {
@@ -220,7 +220,7 @@ public class GUIMove extends Move implements GUIOrder {
     }// clearLocations()
 
 
-    public boolean setLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean setLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         if (testLocation(stateInfo, location, sb)) {
             if (currentLocNum == 0) {
                 Unit unit = stateInfo.getPosition().getUnit(location.getProvince());
@@ -477,7 +477,7 @@ public class GUIMove extends Move implements GUIOrder {
 		//
 		MapMetadata mmd = mapInfo.getMapMetadata();
 		
-		StringBuffer sb = new StringBuffer(256);
+		StringBuilder sb = new StringBuilder(256);
 		
 		Iterator iter = route.iterator();
 		int count = 0;

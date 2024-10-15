@@ -658,7 +658,7 @@ public class OrderFormat {
 
 
         StringBuilder output = new StringBuilder(256);
-        StringBuffer accum = new StringBuffer(32);
+        StringBuilder accum = new StringBuilder(32);
 
         boolean inBrace = false;
         StringTokenizer st = new StringTokenizer(format, "{}", true);
@@ -669,7 +669,7 @@ public class OrderFormat {
             } else if ("}".equals(tok) && inBrace) {
                 inBrace = false;
                 output.append(procBraceText(ofo, order, accum.toString()));
-                accum = new StringBuffer();
+                accum = new StringBuilder();
             } else {
                 if (inBrace) {
                     accum.append(tok);

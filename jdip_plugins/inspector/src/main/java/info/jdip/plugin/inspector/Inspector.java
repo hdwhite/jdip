@@ -134,7 +134,7 @@ public class Inspector implements Tool {
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (clientFrame.getWorld() != null) {
-                    StringBuffer sb = new StringBuffer(1024);
+                    StringBuilder sb = new StringBuilder(1024);
 
                     TurnState ts = clientFrame.getTurnState();
                     appendTSInfo(sb, ts);
@@ -160,7 +160,7 @@ public class Inspector implements Tool {
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (clientFrame.getWorld() != null) {
-                    StringBuffer sb = new StringBuffer(1024);
+                    StringBuilder sb = new StringBuilder(1024);
 
                     TurnState ts = clientFrame.getTurnState();
                     appendTSInfo(sb, ts);
@@ -183,7 +183,7 @@ public class Inspector implements Tool {
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (clientFrame.getWorld() != null) {
-                    StringBuffer sb = new StringBuffer(1024);
+                    StringBuilder sb = new StringBuilder(1024);
 
                     TurnState ts = clientFrame.getTurnState();
                     appendTSInfo(sb, ts);
@@ -272,7 +272,7 @@ public class Inspector implements Tool {
     /**
      * Appends TurnState info
      */
-    private void appendTSInfo(StringBuffer sb, TurnState ts) {
+    private void appendTSInfo(StringBuilder sb, TurnState ts) {
         sb.append("Phase: ");
         sb.append(ts.getPhase());
         sb.append("\n  resolved?: ");

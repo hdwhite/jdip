@@ -269,7 +269,7 @@ public class Path {
         //
         LinkedList<TreeNode> queue = new LinkedList<>();
         queue.addLast(root);
-        while (queue.size() > 0) {
+        while (!queue.isEmpty()) {
             TreeNode node = queue.removeFirst();
             Province prov = node.getProvince();
             final Location[] locs = prov.getAdjacentLocations(Coast.TOUCHING);
@@ -334,80 +334,79 @@ public class Path {
             // implicit paths.
             return getConvoyRouteEvaluation(move.getSource(), move.getDest(),
                     invalidLoc, actualPath);
-        } else {
-            // explicit path(s). Evaluate them all. Return the successful path
-            // if one is successful.
-            //
-            final Province invalidProvince = (invalidLoc == null) ? null : invalidLoc.getProvince();
-            final Location src = move.getSource();
-            final Location dest = move.getDest();
+        }
 
-            boolean hasUncertainRoute = false;        // true if >= 1 route is uncertain, but not failed.
+        // explicit path(s). Evaluate them all. Return the successful path
+        // if one is successful.
+        //
+        final Province invalidProvince = (invalidLoc == null) ? null : invalidLoc.getProvince();
+        final Location src = move.getSource();
+        final Location dest = move.getDest();
 
-            for (Province[] route : explicitRoutes) {
-                boolean isFailed = true;
-                boolean isUncertain = false;
+        boolean hasUncertainRoute = false;        // true if >= 1 route is uncertain, but not failed.
 
-                for (int i = 1; i < (route.length - 1); i++) {
-                    final Province province = route[i];
-                    OrderState os = adjudicator.findOrderStateBySrc(province);
-                    Orderable order = os.getOrder();
-                    if (order instanceof Convoy) {
-                        Convoy convoy = (Convoy) order;
+        for (Province[] route : explicitRoutes) {
+            boolean isFailed = true;
+            boolean isUncertain = false;
 
-                        if (convoy.getConvoySrc().isProvinceEqual(src)
-                                && convoy.getConvoyDest().isProvinceEqual(dest)) {
-                            if (province.equals(invalidProvince)) {
-                                isFailed = true;
-                                break;
-                            }
+            for (int i = 1; i < (route.length - 1); i++) {
+                final Province province = route[i];
+                OrderState os = adjudicator.findOrderStateBySrc(province);
+                Orderable order = os.getOrder();
+                if (!(order instanceof Convoy)) {
+                    isFailed = true;
+                    break;
+                }
+                Convoy convoy = (Convoy) order;
 
-                            final Tristate evalState = os.getEvalState();
-
-                            // if 'invalidLoc' (invalidProvince) is on the path,
-                            // it is not successfull.
-                            if (!province.equals(invalidLoc)) {
-                                if (evalState == Tristate.FAILURE || os.getDislodgedState() == Tristate.YES) {
-                                    isFailed = true;
-                                    break;
-                                } else if (evalState == Tristate.UNCERTAIN) {
-                                    isUncertain = true;
-                                    break;
-                                } else if (evalState == Tristate.SUCCESS) {
-                                    isUncertain = false;
-                                    isFailed = false;
-                                } else {
-                                    throw new IllegalStateException();
-                                }
-                            }
-                        } else {
-                            isFailed = true;
-                            break;
-                        }
-                    } else {
+                if (convoy.getConvoySrc().isProvinceEqual(src)
+                        && convoy.getConvoyDest().isProvinceEqual(dest)) {
+                    if (province.equals(invalidProvince)) {
                         isFailed = true;
                         break;
                     }
-                }
 
-                // if we found a successful route, we don't need to check other routes
-                // return success. Return path, too.
-                if (!isFailed && !isUncertain) {
-                    if (actualPath != null) {
-                        actualPath.addAll(Arrays.asList(route));
+                    final Tristate evalState = os.getEvalState();
+
+                    // if 'invalidLoc' (invalidProvince) is on the path,
+                    // it is not successfull.
+                    if (!province.equals(invalidLoc)) {
+                        if (evalState == Tristate.FAILURE || os.getDislodgedState() == Tristate.YES) {
+                            isFailed = true;
+                            break;
+                        } else if (evalState == Tristate.UNCERTAIN) {
+                            isUncertain = true;
+                            break;
+                        } else if (evalState == Tristate.SUCCESS) {
+                            isUncertain = false;
+                            isFailed = false;
+                        } else {
+                            throw new IllegalStateException();
+                        }
                     }
-                    return Tristate.SUCCESS;
+                } else {
+                    isFailed = true;
+                    break;
                 }
-
-                // if uncertain, and not yet set, set uncertain flag.
-                hasUncertainRoute = (hasUncertainRoute || isUncertain);
             }
 
-            // we would have returned SUCCESS by now, if successful.
-            // so, if we have not uncertain routes, we fail.
-            //
-            return (hasUncertainRoute) ? Tristate.UNCERTAIN : Tristate.FAILURE;
+            // if we found a successful route, we don't need to check other routes
+            // return success. Return path, too.
+            if (!isFailed && !isUncertain) {
+                if (actualPath != null) {
+                    actualPath.addAll(Arrays.asList(route));
+                }
+                return Tristate.SUCCESS;
+            }
+
+            // if uncertain, and not yet set, set uncertain flag.
+            hasUncertainRoute = (hasUncertainRoute || isUncertain);
         }
+
+        // we would have returned SUCCESS by now, if successful.
+        // so, if we have not uncertain routes, we fail.
+        //
+        return (hasUncertainRoute) ? Tristate.UNCERTAIN : Tristate.FAILURE;
     }// getConvoyRouteEvaluation()
 
     /**
@@ -664,23 +663,6 @@ public class Path {
                     return dist;
                 }
 
-				/* OLD CODE: before Coast.WING (TOUCHING) available
-				for(int i=0; i<Coast.ALL_COASTS.length; i++)
-				{
-					Location[] locs = p.getAdjacentLocations(Coast.ALL_COASTS[i]);
-					for(int j=0; j<locs.length; j++)
-					{
-						Province ckp = locs[j].getProvince();
-
-						if(visited.get(ckp) == null)
-						{
-							nextToCheck.add(ckp);
-							visited.put(ckp, Boolean.TRUE);
-						}
-					}
-				}
-				*/
-
                 // NEW CODE: using Coast.TOUCHING
                 Location[] locs = p.getAdjacentLocations(Coast.TOUCHING);
                 for (Location loc : locs) {
@@ -758,6 +740,7 @@ public class Path {
         /**
          * Evaluate if a Province should be added.
          */
+        @Override
         public boolean evaluate(Province province) {
             return fapPos.hasUnit(province, Unit.Type.FLEET);
         }// evaluate()
@@ -793,6 +776,7 @@ public class Path {
         /**
          * Evaluate if a Province should be added.
          */
+        @Override
         public boolean evaluate(Province province) {
             final Position pos = adj.getTurnState().getPosition();
             if (pos.hasUnit(province, Unit.Type.FLEET)) {
@@ -915,7 +899,7 @@ public class Path {
             LinkedList<TreeNode> queue = new LinkedList<>();
 
             queue.addLast(this);
-            while (queue.size() > 0) {
+            while (!queue.isEmpty()) {
                 TreeNode n = queue.removeFirst();
 
                 if (n.isLeaf()) {
@@ -941,7 +925,7 @@ public class Path {
             LinkedList<TreeNode> queue = new LinkedList<>();
 
             queue.addLast(this);
-            while (queue.size() > 0) {
+            while (!queue.isEmpty()) {
                 TreeNode n = queue.removeFirst();
 
                 if (n.isLeaf() && n.getProvince().equals(end)) {
@@ -986,7 +970,7 @@ public class Path {
             Province[][] px = getAllBranches();
 
             for (Province[] aPx : px) {
-                StringBuffer sb = new StringBuffer(128);
+                StringBuilder sb = new StringBuilder(128);
                 sb.append(aPx[0].getShortName());
                 for (int j = 1; j < aPx.length; j++) {
                     sb.append("-");
@@ -1011,16 +995,16 @@ public class Path {
             Province province = location.getProvince();
             Unit unit = position.getUnit(province);
 
-            if (unit != null && (province.isSea() || province.isConvoyableCoast())) {
-                if (unit.getType() == Unit.Type.FLEET) {
-                    final boolean result = evalFleet(province, unit);
+            if (unit != null &&
+                unit.getType() == Unit.Type.FLEET &&
+                (province.isSea() || province.isConvoyableCoast())) {
 
-                    if (result) {
-                        foundConvoy = true;
-                    }
-
-                    return result;
+                final boolean result = evalFleet(province, unit);
+                if (result) {
+                    foundConvoy = true;
                 }
+
+                return result;
             }
             return false;
         }// evaluate()
@@ -1055,6 +1039,7 @@ public class Path {
         }// LegalConvoyPathEvaluator()
 
         // override: check fleet orders
+        @Override
         protected boolean evalFleet(Province province, Unit unit) {
             OrderState os = adjudicator.findOrderStateBySrc(province);
             Orderable order = os.getOrder();
@@ -1106,6 +1091,7 @@ public class Path {
         }// isFailure()
 
         // override: check fleet orders
+        @Override
         protected boolean evalFleet(Province province, Unit unit) {
             OrderState os = adjudicator.findOrderStateBySrc(province);
             Orderable order = os.getOrder();
@@ -1118,10 +1104,8 @@ public class Path {
                     // we found a correctly matching Convoy order.
                     //
                     // but, if this order should be ignored ('invalid'), we won't consider it.
-                    if (invalid != null) {
-                        if (invalid.getProvince() == province) {
-                            return false;
-                        }
+                    if (invalid != null && invalid.getProvince() == province) {
+                        return false;
                     }
 
                     Tristate evalState = os.getEvalState();

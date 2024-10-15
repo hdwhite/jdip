@@ -210,7 +210,7 @@ public class MapConvert
 		// 
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(adjacencyOutput))) {
 
-			StringBuffer sb = new StringBuffer(4096);
+			StringBuilder sb = new StringBuilder(4096);
 			makeXMLData(sb, pmap.getList());
 
 			// write adjacency data
@@ -239,8 +239,8 @@ public class MapConvert
 	}// getProvObjMap()
 	
 	
-	/** Write province data to stringbuffer */
-	private void makeXMLData(StringBuffer sb, List<ProvObj> provList)
+	/** Write province data to StringBuilder */
+	private void makeXMLData(StringBuilder sb, List<ProvObj> provList)
 	{
 		// STEP 1: check for ice borders; insert appropriate border
 		// STEP 2: check for /mx coasts; insert appropriate borders
@@ -273,7 +273,7 @@ public class MapConvert
 	}// makeXMLData()
 
 
-	private void writeBorders(StringBuffer sb, List<ProvObj> provinces)
+	private void writeBorders(StringBuilder sb, List<ProvObj> provinces)
 	{
 		boolean hasIce = false;
 		boolean hasMX = false;
@@ -390,7 +390,7 @@ public class MapConvert
 
 		// powers
 		// these are derived from the chars
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		Iterator<ProvObj> iter = provList.iterator();
         HashMap<String, Boolean> powerMap = new HashMap<>();
 		while(iter.hasNext())
@@ -414,7 +414,7 @@ public class MapConvert
 		td.put("powers", sb.toString());
 		
 		// SC
-		sb = new StringBuffer();
+		sb = new StringBuilder();
 		iter = provList.iterator();
 		while(iter.hasNext())
 		{

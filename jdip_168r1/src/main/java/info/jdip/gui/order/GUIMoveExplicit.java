@@ -133,7 +133,7 @@ public class GUIMoveExplicit extends Move implements GUIOrder {
     }// GUIMove()
 
 
-    public boolean testLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean testLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         final LocationTestResult result = testLocationLTR(stateInfo, location, sb);
         return result.isValid;
     }// testLocation()
@@ -142,7 +142,7 @@ public class GUIMoveExplicit extends Move implements GUIOrder {
      * More complex version of testLocation(), that returns extended
      * results that can be used by setLocation().
      */
-    private LocationTestResult testLocationLTR(StateInfo stateInfo, Location location, StringBuffer sb) {
+    private LocationTestResult testLocationLTR(StateInfo stateInfo, Location location, StringBuilder sb) {
         sb.setLength(0);
 
         final LocationTestResult result = new LocationTestResult();
@@ -185,7 +185,7 @@ public class GUIMoveExplicit extends Move implements GUIOrder {
             // If the convoy route is explicit only, we MUST create
             // a defined path, if we are actually convoying/convoyable.
             if (currentLocNum == 1) {
-                StringBuffer sbTmp = new StringBuffer();
+                StringBuilder sbTmp = new StringBuilder();
                 if (testNonConvoyDest(stateInfo, location, sbTmp)) {
                     // not a convoyed move. successful.
                     sb.append(sbTmp);
@@ -269,7 +269,7 @@ public class GUIMoveExplicit extends Move implements GUIOrder {
      * check for convoy-acceptability; thus will return false
      * in that case.
      */
-    private boolean testNonConvoyDest(StateInfo stateInfo, Location location, StringBuffer sb) {
+    private boolean testNonConvoyDest(StateInfo stateInfo, Location location, StringBuilder sb) {
         assert (currentLocNum == 1);
 
         final Province province = location.getProvince();
@@ -321,7 +321,7 @@ public class GUIMoveExplicit extends Move implements GUIOrder {
         return true;
     }// clearLocations()
 
-    public boolean setLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean setLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         // WE need to manage isComplete here, as well as
         // setting the tmpConvoyPath
 
@@ -602,7 +602,7 @@ public class GUIMoveExplicit extends Move implements GUIOrder {
 		//
 		MapMetadata mmd = mapInfo.getMapMetadata();
 		
-		StringBuffer sb = new StringBuffer(256);
+		StringBuilder sb = new StringBuilder(256);
 		
 		Iterator iter = route.iterator();
 		int count = 0;

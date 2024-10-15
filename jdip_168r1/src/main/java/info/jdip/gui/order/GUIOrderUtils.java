@@ -65,9 +65,9 @@ final class GUIOrderUtils {
      * Please note that this uses the superclass for any passed GUIOrder
      * object. (e.g., info.jdip.order.Hold for info.jdip.gui.order.GUIHold)
      * <p>
-     * GUIOrder.BORDER_INVALID is appended to the StringBuffer, if 'false' is returned.
+     * GUIOrder.BORDER_INVALID is appended to the StringBuilder, if 'false' is returned.
      */
-    public static boolean checkBorder(GUIOrder guiOrder, Location location, Unit.Type unitType, Phase phase, StringBuffer sb) {
+    public static boolean checkBorder(GUIOrder guiOrder, Location location, Unit.Type unitType, Phase phase, StringBuilder sb) {
         Class<?> baseClass = guiOrder.getClass().getSuperclass();
         Border border = location.getProvince().getTransit(location, unitType, phase, baseClass);
         if (border != null) {
@@ -574,10 +574,10 @@ final class GUIOrderUtils {
     }// toString()
 
     /**
-     * Formats a Floating-Point value into a StringBuffer,
+     * Formats a Floating-Point value into a StringBuilder,
      * using the jDip default precision.
      */
-    public static void appendFloat(StringBuffer sb, float v) {
+    public static void appendFloat(StringBuilder sb, float v) {
         SVGUtils.appendFloat(sb, v);
     }// appendFloat()
 

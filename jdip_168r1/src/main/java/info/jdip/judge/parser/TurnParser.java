@@ -94,7 +94,7 @@ public class TurnParser {
         BufferedReader reader = new BufferedReader(new StringReader(input));
 
         String line = reader.readLine();
-        StringBuffer sb = null;
+        StringBuilder sb = null;
         Turn turn = new Turn();            // current turn
         Turn lastTurn = null;            // previous turn
 
@@ -139,7 +139,7 @@ public class TurnParser {
 
                     lastTurn = turn;
                     turn = new Turn();
-                    sb = new StringBuffer(512);
+                    sb = new StringBuilder(512);
                 }
             } else if (sb != null) {
                 // accumulate text

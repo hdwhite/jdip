@@ -75,8 +75,8 @@ class Template
 		
 		assert (template != null);
 		
-		StringBuffer sb = new StringBuffer(2*template.length());
-		StringBuffer accum = new StringBuffer(1024);
+		StringBuilder sb = new StringBuilder(2*template.length());
+		StringBuilder accum = new StringBuilder(1024);
 		
 		boolean inBrace = false;
 		StringTokenizer st = new StringTokenizer(template, "{}", true);
@@ -91,7 +91,7 @@ class Template
 			{
 				inBrace = false;
 				parseBetweenBraces(accum.toString(), sb, values);
-				accum = new StringBuffer(1024);
+				accum = new StringBuilder(1024);
 			}
 			else
 			{
@@ -110,7 +110,7 @@ class Template
 	}// parse()
 	
 	/** Handle text between braces */
-	private void parseBetweenBraces(String text, StringBuffer sb, HashMap<?, ?> values)
+	private void parseBetweenBraces(String text, StringBuilder sb, HashMap<?, ?> values)
 	throws IOException
 	{
 		Object obj = values.get(text);

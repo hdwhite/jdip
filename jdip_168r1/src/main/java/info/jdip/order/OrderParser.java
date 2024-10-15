@@ -307,9 +307,9 @@ public class OrderParser {
      * formats to a single order entry format that is more easily parsed.
      */
     private String preprocess(String ord, Map map) throws OrderException {
-        // create StringBuffer, after filtering the input string.
+        // create StringBuilder, after filtering the input string.
         // note that this step includes lower-case conversion.
-        StringBuffer sb = filterInput(ord);
+        StringBuilder sb = filterInput(ord);
 
         // replace any long (2-word, via space or hyphen) province names
         // with shorter version.
@@ -786,9 +786,9 @@ public class OrderParser {
 
     }// isTypeToken
 
-    // deletes any strings in the stringBuffer that match
+    // deletes any strings in the StringBuilder that match
     // strings specified in toDelete
-    private void delChars(StringBuffer sb, String[] toDelete) {
+    private void delChars(StringBuilder sb, String[] toDelete) {
         for (String str : toDelete) {
             int idx = sb.indexOf(str);
             while (idx != -1) {
@@ -802,14 +802,14 @@ public class OrderParser {
      * Filters out any ISO control characters; improves the
      * robustness of pasted text parsing. Also replaces any
      * whitespace with a true space character. Returns a new
-     * StringBuffer.
+     * StringBuilder.
      * <p>
      * Also trims and lowercases the input, too
      */
-    private StringBuffer filterInput(String input) {
+    private StringBuilder filterInput(String input) {
         input = input.trim();
 
-        StringBuffer sb = new StringBuffer(input.length());
+        StringBuilder sb = new StringBuilder(input.length());
 
         // delete control chars and whitespace conversion
         for (int i = 0; i < input.length(); i++) {

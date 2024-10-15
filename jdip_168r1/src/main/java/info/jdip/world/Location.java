@@ -195,7 +195,7 @@ public class Location {
 
 
     /**
-     * Append the brief Location name to the StringBuffer (e.g., spa/sc)
+     * Append the brief Location name to the StringBuilder (e.g., spa/sc)
      */
     public void appendBrief(StringBuilder sb) {
         sb.append(province.getShortName());
@@ -207,7 +207,7 @@ public class Location {
 
 
     /**
-     * Append the full Location name to the StringBuffer. (e.g., Spain/South Coast)
+     * Append the full Location name to the StringBuilder. (e.g., Spain/South Coast)
      */
     public void appendFull(StringBuilder sb) {
         sb.append(province);

@@ -324,7 +324,7 @@ public final class Coast implements java.io.Serializable {
         String matchInput = input;
         for (Pattern pattern : patterns) {
             Matcher m = pattern.matcher(matchInput);
-            StringBuffer sb = new StringBuffer(matchInput.length());
+            StringBuilder sb = new StringBuilder(matchInput.length());
 
             boolean result = m.find();
             while (result) {

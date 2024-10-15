@@ -37,7 +37,7 @@ public class Influence
 	/** For debugging only! */
 	public String toString()
 	{
-		StringBuffer sb = new StringBuffer(256);
+		StringBuilder sb = new StringBuilder(256);
 		sb.append(this.getClass().getName());
 		sb.append('[');
 		sb.append("provinceName=");

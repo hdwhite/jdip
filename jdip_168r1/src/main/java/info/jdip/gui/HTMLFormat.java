@@ -107,7 +107,7 @@ public class HTMLFormat {
 
     //
     private Map<?, ?> map = null;
-    private StringBuffer sb = null;
+    private StringBuilder sb = null;
 
     // formatters
     private DecimalFormat decimalFormat = null;
@@ -117,7 +117,7 @@ public class HTMLFormat {
 
 
     protected HTMLFormat() {
-        sb = new StringBuffer(8192);
+        sb = new StringBuilder(8192);
         decimalFormat = new DecimalFormat();
         dateFormat = new SimpleDateFormat();
 
@@ -285,8 +285,8 @@ public class HTMLFormat {
         // is for::: statement; first space cuts this off.
         text = text.substring(text.indexOf(' '));
 
-        // create stringbuffer
-        StringBuffer iterText = new StringBuffer(text.length() + 256);
+        // create stringbuilder
+        StringBuilder iterText = new StringBuilder(text.length() + 256);
 
         // iterate the loop; each time, go through and replace @@ variables
         // with the new values, and add this to the main string buffer.
@@ -341,7 +341,7 @@ public class HTMLFormat {
 
     // probably should be in Utils.java :: also used by OrderParser
     //
-    private void replaceAll(StringBuffer in, String find, String replace) {
+    private void replaceAll(StringBuilder in, String find, String replace) {
         int idx = 0;
         int start = in.indexOf(find, idx);
 
@@ -358,7 +358,7 @@ public class HTMLFormat {
     // looks for "@@" and if followed by any text, followed by "@";
     // looks it up; if array, replace with indexed, otherwise, just print.
     //
-    private void replaceAllVariables(StringBuffer in, int forIndex) {
+    private void replaceAllVariables(StringBuilder in, int forIndex) {
         int idx = 0;
         int start = in.indexOf(VAR_PREFIX, idx);
 

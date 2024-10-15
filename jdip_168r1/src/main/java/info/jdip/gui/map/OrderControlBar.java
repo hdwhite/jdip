@@ -109,9 +109,9 @@ public class OrderControlBar extends ViewControlBar {
     private GUIOrder.StateInfo stateInfo = null;
     private GUIOrderFactory guiOrderFactory = null;
     private GUIOrder currentOrder = null;
-    private StringBuffer sb = null;
+    private StringBuilder sb = null;
     // last location we were over.
-    // recycled stringbuffer
+    // recycled stringbuilder
     private Location lastLoc = null;
     // For dragging
     private Location dragLoc = null;
@@ -130,7 +130,7 @@ public class OrderControlBar extends ViewControlBar {
 
         // init
         guiOrderFactory = mapPanel.getClientFrame().getGUIOrderFactory();
-        sb = new StringBuffer(80);
+        sb = new StringBuilder(80);
 
         // Create GUIOrder StateInfo object
         stateInfo = new GUIOrder.StateInfo();

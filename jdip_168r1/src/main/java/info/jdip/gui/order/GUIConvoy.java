@@ -48,18 +48,18 @@ import java.awt.geom.Point2D;
  */
 public class GUIConvoy extends Convoy implements GUIOrder {
     // i18n keys
-    private final static String ONLY_SEA_OR_CC_FLEETS_CAN_CONVOY = "GUIConvoy.only_fleets_can_convoy";
-    private final static String CLICK_TO_CONVOY = "GUIConvoy.click_to_convoy";
-    private final static String NO_UNIT = "GUIConvoy.no_unit";
-    private final static String CLICK_TO_CONVOY_ARMY = "GUIConvoy.click_to_convoy_army";
-    private final static String CANNOT_CONVOY_LANDLOCKED = "GUIConvoy.no_convoy_landlocked";
-    private final static String MUST_CONVOY_FROM_COAST = "GUIConvoy.must_convoy_from_coast";
-    private final static String CLICK_TO_CONVOY_FROM = "GUIConvoy.click_to_convoy_from";
-    private final static String NO_POSSIBLE_CONVOY_PATH = "GUIConvoy.no_path";
-    private final static String MUST_CONVOY_TO_COAST = "GUIConvoy.must_convoy_to_coast";
+    private static final String ONLY_SEA_OR_CC_FLEETS_CAN_CONVOY = "GUIConvoy.only_fleets_can_convoy";
+    private static final String CLICK_TO_CONVOY = "GUIConvoy.click_to_convoy";
+    private static final String NO_UNIT = "GUIConvoy.no_unit";
+    private static final String CLICK_TO_CONVOY_ARMY = "GUIConvoy.click_to_convoy_army";
+    private static final String CANNOT_CONVOY_LANDLOCKED = "GUIConvoy.no_convoy_landlocked";
+    private static final String MUST_CONVOY_FROM_COAST = "GUIConvoy.must_convoy_from_coast";
+    private static final String CLICK_TO_CONVOY_FROM = "GUIConvoy.click_to_convoy_from";
+    private static final String NO_POSSIBLE_CONVOY_PATH = "GUIConvoy.no_path";
+    private static final String MUST_CONVOY_TO_COAST = "GUIConvoy.must_convoy_to_coast";
 
     // instance variables
-    private transient static final int REQ_LOC = 3;
+    private static final transient int REQ_LOC = 3;
     private transient int currentLocNum = 0;
     private transient Point2D.Float failPt = null;
     private transient SVGGElement group = null;
@@ -105,7 +105,7 @@ public class GUIConvoy extends Convoy implements GUIOrder {
     }// deriveFrom()
 
 
-    public boolean testLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean testLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         sb.setLength(0);
 
         if (isComplete()) {
@@ -253,7 +253,7 @@ public class GUIConvoy extends Convoy implements GUIOrder {
     }// clearLocations()
 
 
-    public boolean setLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean setLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         if (isComplete()) {
             return false;
         }
@@ -433,7 +433,7 @@ public class GUIConvoy extends Convoy implements GUIOrder {
         // draw triangle around supported unit
         Point2D.Float[] triPts = GUIOrderUtils.makeTriangle(ptConvoySrc, radius);
 
-        StringBuffer sb = new StringBuffer(160);
+        StringBuilder sb = new StringBuilder(160);
         for (Point2D.Float triPt : triPts) {
             GUIOrderUtils.appendFloat(sb, triPt.x);
             sb.append(',');

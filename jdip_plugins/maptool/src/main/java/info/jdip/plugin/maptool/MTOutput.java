@@ -185,8 +185,8 @@ public class MTOutput {
      * Converts a Point2D to a x="" y="" style text point.
      * Truncates to a single decimal place, or none if 0.
      */
-    public StringBuffer makeXY(Point2D point) {
-        StringBuffer sb = new StringBuffer(32);
+    public StringBuilder makeXY(Point2D point) {
+        StringBuilder sb = new StringBuilder(32);
         sb.append("x=\"");
         sb.append(MTHelper.formatFloat(point.getX()));
         sb.append("\" y=\"");
@@ -229,7 +229,7 @@ public class MTOutput {
      * Handles Writing of the DOM
      */
     private class DOMWriter {
-        StringBuffer sb = null;        // output buffer
+        StringBuilder sb = null;        // output buffer
 
         /**
          * Constructor
@@ -241,7 +241,7 @@ public class MTOutput {
          * writeTree
          */
         public String writeTree(Node node) {
-            sb = new StringBuffer(4096);
+            sb = new StringBuilder(4096);
             writeNode(node);
             return sb.toString();
         }// writeTree()

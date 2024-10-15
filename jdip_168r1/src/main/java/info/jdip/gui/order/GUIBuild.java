@@ -106,7 +106,7 @@ public class GUIBuild extends Build implements GUIOrder {
     }// deriveFrom()
 
 
-    public boolean testLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean testLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         sb.setLength(0);
 
         if (isComplete()) {
@@ -199,7 +199,7 @@ public class GUIBuild extends Build implements GUIOrder {
     }// clearLocations()
 
 
-    public boolean setLocation(StateInfo stateInfo, Location location, StringBuffer sb) {
+    public boolean setLocation(StateInfo stateInfo, Location location, StringBuilder sb) {
         if (testLocation(stateInfo, location, sb)) {
             currentLocNum++;
 
@@ -377,7 +377,7 @@ public class GUIBuild extends Build implements GUIOrder {
      * <p>
      * returns false if we cannot build here.
      */
-    private boolean checkBuildUnit(StateInfo stateInfo, Province province, Location loc, StringBuffer sb) {
+    private boolean checkBuildUnit(StateInfo stateInfo, Province province, Location loc, StringBuilder sb) {
         if (srcUnitType == null) {
             sb.append(Utils.getLocalString(NOBUILD_NO_UNIT_SELECTED));
             return false;
