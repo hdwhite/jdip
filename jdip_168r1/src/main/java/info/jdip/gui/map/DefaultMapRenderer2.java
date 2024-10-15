@@ -282,25 +282,23 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
         // after adding to DOM, the element is added to the Tracker object.
         RunnableQueue rq = getRunnableQueue();
         if (rq != null) {
-            rq.invokeLater(new Runnable() {
-                public void run() {
-                    synchronized (trackerMap) {
-                        for (Province province : provinces) {
-                            if (province.hasSupplyCenter()) {
-                                // create element
-                                SVGElement element = makeSCUse(province, null);
+            rq.invokeLater(() -> {
+                synchronized (trackerMap) {
+                    for (Province province : provinces) {
+                        if (province.hasSupplyCenter()) {
+                            // create element
+                            SVGElement element = makeSCUse(province, null);
 
-                                // add element to tracker
-                                Tracker tracker = trackerMap.get(province);
-                                tracker.setSCElement(element);
+                            // add element to tracker
+                            Tracker tracker = trackerMap.get(province);
+                            tracker.setSCElement(element);
 
-                                // add to DOM
-                                SVGElement parent = (SVGElement) layerMap.get(LAYER_SC);
-                                parent.appendChild(element);
-                            }
+                            // add to DOM
+                            SVGElement parent = (SVGElement) layerMap.get(LAYER_SC);
+                            parent.appendChild(element);
                         }
                     }
-                }// run()
+                }
             });
         }
 
@@ -322,6 +320,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
      * WARNING: render events must not be processed after or
      * during a call to this method.
      */
+    @Override
     public void close() {
         // super cleanup
         super.close();
@@ -542,51 +541,49 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     private void createDOMOrderTree() {
         RunnableQueue rq = getRunnableQueue();
         if (rq != null) {
-            rq.invokeLater(new Runnable() {
-                public void run() {
-                    SVGGElement orderLayer = (SVGGElement) layerMap.get(LAYER_ORDERS);
+            rq.invokeLater(() -> {
+                SVGGElement orderLayer = (SVGGElement) layerMap.get(LAYER_ORDERS);
 
-                    for (int z = (powerOrderMaps.size() - 1); z >= 0; z--) {
-                        // determine which order layer we should use.
-                        if (z == 0) {
-                            // special case: this has its own explicit group in the SVG file
-                            orderLayer = (SVGGElement) layerMap.get(HIGHEST_ORDER_LAYER);
-                        } else {
-                            // typical case
-                            // these occur under the "OrderLayer" group
-                            // Note that we must create the elements in reverse order, because
-                            // lower z-orders (closer to viewer) must be rendered after (later)
-                            // higher z orders
-                            //
+                for (int z = (powerOrderMaps.size() - 1); z >= 0; z--) {
+                    // determine which order layer we should use.
+                    if (z == 0) {
+                        // special case: this has its own explicit group in the SVG file
+                        orderLayer = (SVGGElement) layerMap.get(HIGHEST_ORDER_LAYER);
+                    } else {
+                        // typical case
+                        // these occur under the "OrderLayer" group
+                        // Note that we must create the elements in reverse order, because
+                        // lower z-orders (closer to viewer) must be rendered after (later)
+                        // higher z orders
+                        //
 
-                            SVGGElement parentLayer = (SVGGElement) layerMap.get(LAYER_ORDERS);
+                        SVGGElement parentLayer = (SVGGElement) layerMap.get(LAYER_ORDERS);
 
-                            // create order layer under ORDER_LAYERS layer (e.g., id="Layer1", or id="Layer2")
-                            orderLayer =
-                                    (SVGGElement) doc.createElementNS(SVGDOMImplementation.SVG_NAMESPACE_URI,
-                                            SVGConstants.SVG_G_TAG);
-                            orderLayer.setAttributeNS(null, SVGConstants.SVG_ID_ATTRIBUTE, Z_LAYER_NAMES[z]);
-                            parentLayer.appendChild(orderLayer);
+                        // create order layer under ORDER_LAYERS layer (e.g., id="Layer1", or id="Layer2")
+                        orderLayer =
+                                (SVGGElement) doc.createElementNS(SVGDOMImplementation.SVG_NAMESPACE_URI,
+                                        SVGConstants.SVG_G_TAG);
+                        orderLayer.setAttributeNS(null, SVGConstants.SVG_ID_ATTRIBUTE, Z_LAYER_NAMES[z]);
+                        parentLayer.appendChild(orderLayer);
 
-                            // now put this into the layer map, so it can be retrieved later
-                            layerMap.put(Z_LAYER_NAMES[z], orderLayer);
-                        }
+                        // now put this into the layer map, so it can be retrieved later
+                        layerMap.put(Z_LAYER_NAMES[z], orderLayer);
+                    }
 
-                        // create an order layer for each power. append the z order ID
-                        for (Power power : powers) {
-                            SVGGElement gElement =
-                                    (SVGGElement) doc.createElementNS(SVGDOMImplementation.SVG_NAMESPACE_URI,
-                                            SVGConstants.SVG_G_TAG);
-                            // make layer name (needs to be unique)
-                            StringBuilder sb = new StringBuilder(32);
-                            sb.append(getPowerName(power));
-                            sb.append('_');
-                            sb.append(String.valueOf(z));
+                    // create an order layer for each power. append the z order ID
+                    for (Power power : powers) {
+                        SVGGElement gElement =
+                                (SVGGElement) doc.createElementNS(SVGDOMImplementation.SVG_NAMESPACE_URI,
+                                        SVGConstants.SVG_G_TAG);
+                        // make layer name (needs to be unique)
+                        StringBuilder sb = new StringBuilder(32);
+                        sb.append(getPowerName(power));
+                        sb.append('_');
+                        sb.append(String.valueOf(z));
 
-                            gElement.setAttributeNS(null, SVGConstants.SVG_ID_ATTRIBUTE, sb.toString());
-                            orderLayer.appendChild(gElement);
-                            powerOrderMaps.get(z).put(power, gElement);
-                        }
+                        gElement.setAttributeNS(null, SVGConstants.SVG_ID_ATTRIBUTE, sb.toString());
+                        orderLayer.appendChild(gElement);
+                        powerOrderMaps.get(z).put(power, gElement);
                     }
                 }
             });
@@ -1360,6 +1357,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
             return doc;
         }
 
+        @Override
         public Power[] getDisplayablePowers() {
             Power[] powers = super.getDisplayablePowers();
             if (powers == null) {

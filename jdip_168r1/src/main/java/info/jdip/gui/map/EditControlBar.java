@@ -46,7 +46,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 
 /**
@@ -148,20 +147,18 @@ public class EditControlBar extends ViewControlBar {
         powerBox = new JComboBox<>(mapPanel.getClientFrame().getWorld().getMap().getPowers());
         powerBox.insertItemAt(POWER_NONE, 0);
         powerBox.setEditable(false);
-        powerBox.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                currentPower = getSelectedPower();
+        powerBox.addItemListener((ItemEvent e) -> {
+            currentPower = getSelectedPower();
 
-                if (currentPower == null) {
-                    // deselect & disable Army / Fleet buttons
-                    bArmy.setEnabled(false);
-                    bFleet.setEnabled(false);
-                    mapPanel.getJSVGCanvas().setCursor(defaultCursor);
-                } else {
-                    bArmy.setEnabled(true);
-                    bFleet.setEnabled(true);
-                }
-            }// itemStateChanged()
+            if (currentPower == null) {
+                // deselect & disable Army / Fleet buttons
+                bArmy.setEnabled(false);
+                bFleet.setEnabled(false);
+                mapPanel.getJSVGCanvas().setCursor(defaultCursor);
+            } else {
+                bArmy.setEnabled(true);
+                bFleet.setEnabled(true);
+            }
         });
 
         powerBox.setMaximumSize(powerBox.getPreferredSize());
@@ -314,19 +311,19 @@ public class EditControlBar extends ViewControlBar {
         if (checkValidity(loc)) {
             Province province = loc.getProvince();
             // Removes first
-            if (CLICK_TO_ADD_FLEET.equals(currentAction) ||
+            if ((CLICK_TO_ADD_FLEET.equals(currentAction) ||
                     CLICK_TO_ADD_ARMY.equals(currentAction) ||
                     CLICK_TO_ADD_WING.equals(currentAction) ||
-                    CLICK_TO_REMOVE.equals(currentAction)) {
-                if (hasUnit(loc.getProvince())) {
-                    // get old unit
-                    Unit oldUnit = (isDislodged()) ? position.getDislodgedUnit(province) : position.getUnit(province);
+                    CLICK_TO_REMOVE.equals(currentAction)) &&
+                hasUnit(loc.getProvince())) {
+                // get old unit
+                Unit oldUnit = (isDislodged()) ? position.getDislodgedUnit(province) : position.getUnit(province);
 
-                    // remove an army or fleet
-                    removeUnit(province, isDislodged());
-                    undoManager.addEdit(new UndoEditRemoveUnit(undoManager, position, province, oldUnit, isDislodged()));
-                }
+                // remove an army or fleet
+                removeUnit(province, isDislodged());
+                undoManager.addEdit(new UndoEditRemoveUnit(undoManager, position, province, oldUnit, isDislodged()));
             }
+
             if (CLICK_TO_ADD_ARMY.equals(currentAction)) {
                 // add an army
                 Unit army = new Unit(currentPower, Unit.Type.ARMY);
@@ -340,11 +337,10 @@ public class EditControlBar extends ViewControlBar {
                 Unit fleet = new Unit(currentPower, Unit.Type.FLEET);
                 if (province.isMultiCoastal()) {
                     Coast coast = loc.getCoast();
-                    if (coast.isDirectional()) {
-                        fleet.setCoast(coast);
-                    } else {
+                    if (!coast.isDirectional()) {
                         return;
                     }
+                    fleet.setCoast(coast);
                 } else {
                     fleet.setCoast(Coast.SINGLE);
                 }
@@ -457,33 +453,38 @@ public class EditControlBar extends ViewControlBar {
             if (province.isSea()) {
                 mapPanel.statusBarUtils.displayProvinceInfo(loc, Utils.getLocalString(ERR_NO_ARMY_IN_SEA));
                 return false;
-            } else {
-                return true;
             }
-        } else if (CLICK_TO_ADD_FLEET.equals(currentAction) && currentPower != null) {
+            return true;
+        }
+        
+        if (CLICK_TO_ADD_FLEET.equals(currentAction) && currentPower != null) {
             if (province.isLandLocked()) {
                 mapPanel.statusBarUtils.displayProvinceInfo(loc, Utils.getLocalString(ERR_NO_FLEET_IN_LANDLOCKED));
                 return false;
-            } else {
-                return true;
             }
-        } else if (CLICK_TO_ADD_WING.equals(currentAction) && currentPower != null) {
             return true;
-        } else if (CLICK_TO_SET_OWNER.equals(currentAction)) {
-            if (province.hasSupplyCenter() || !province.isSea()) {
-                return true;
-            } else {
+        }
+        
+        if (CLICK_TO_ADD_WING.equals(currentAction) && currentPower != null) {
+            return true;
+        }
+        
+        if (CLICK_TO_SET_OWNER.equals(currentAction)) {
+            if (!province.hasSupplyCenter() && province.isSea()) {
                 mapPanel.statusBarUtils.displayProvinceInfo(loc, Utils.getLocalString(ERR_NO_SC));
                 return false;
             }
-        } else if (CLICK_TO_REMOVE.equals(currentAction)) {
-            if (position.hasUnit(province)) {
-                return true;
-            } else {
+            return true;
+        }
+        
+        if (CLICK_TO_REMOVE.equals(currentAction)) {
+            if (!position.hasUnit(province)) {
                 mapPanel.statusBarUtils.displayProvinceInfo(loc, Utils.getLocalString(ERR_NO_UNIT_TO_REMOVE));
                 return false;
             }
+            return true;
         }
+
         return false;
     }// checkValidity()
 
@@ -510,11 +511,7 @@ public class EditControlBar extends ViewControlBar {
 
             // disable dislodged checkbox, iff Supply Center button selected,
             // since supply center ownership has no relationship to dislodged
-            if (selectedButton == bSC) {
-                cbDislodged.setEnabled(false);
-            } else {
-                cbDislodged.setEnabled(true);
-            }
+            cbDislodged.setEnabled(selectedButton != bSC);
         }// actionPerformed()
     }// inner class ToggleListener
 

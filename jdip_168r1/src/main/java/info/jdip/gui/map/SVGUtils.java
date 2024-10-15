@@ -302,15 +302,13 @@ public class SVGUtils {
      */
     private static void nodeWalker(Node node, List<String> list, Map<String, Node> map, boolean anySVGElement) {
         if (node.getNodeType() == Node.ELEMENT_NODE
+                && node.hasAttributes()
                 && ((anySVGElement && node instanceof org.w3c.dom.svg.SVGElement)
                 || (SVGConstants.SVG_G_TAG.equals(node.getNodeName()) || SVGConstants.SVG_SYMBOL_TAG.equals(node.getNodeName())))) {
-            // check if the element has an ID attribute
-            if (node.hasAttributes()) {
-                NamedNodeMap attributes = node.getAttributes();
-                Node attrNode = attributes.getNamedItem(SVGConstants.SVG_ID_ATTRIBUTE);    // was ATTR_ID
-                if (attrNode != null) {
-                    nodeChecker(attrNode, node, list, map);
-                }
+            NamedNodeMap attributes = node.getAttributes();
+            Node attrNode = attributes.getNamedItem(SVGConstants.SVG_ID_ATTRIBUTE);    // was ATTR_ID
+            if (attrNode != null) {
+                nodeChecker(attrNode, node, list, map);
             }
         }
 
@@ -416,7 +414,7 @@ public class SVGUtils {
             java.awt.geom.Dimension2D docSize = canvas.getSVGDocumentSize();
 
             // find out if width or height is larger; we use that to scale.
-            double scaleFactor = 0.0;
+            double scaleFactor;
             if (docSize.getWidth() >= docSize.getHeight()) {
                 scaleFactor = dim.getWidth() / docSize.getWidth();
             } else {

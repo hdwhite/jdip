@@ -164,10 +164,8 @@ public abstract class MapRenderer2 {
      * Return null if this cannot be done (e.g., we are exiting).
      */
     public final RunnableQueue getRunnableQueue() {
-        if (svgCanvas != null) {
-            if (svgCanvas.getUpdateManager() != null) {
-                return svgCanvas.getUpdateManager().getUpdateRunnableQueue();
-            }
+        if (svgCanvas != null && svgCanvas.getUpdateManager() != null) {
+            return svgCanvas.getUpdateManager().getUpdateRunnableQueue();
         }
 
         logger.trace( "RQ null ... exiting?");
@@ -312,14 +310,17 @@ public abstract class MapRenderer2 {
      * Listener class for order updates and TurnState changes
      */
     private class CFPropertyListener extends AbstractCFPListener {
+        @Override
         public void actionOrderCreated(Orderable order) {
             orderCreated((GUIOrder) order);
         }
 
+        @Override
         public void actionOrderDeleted(Orderable order) {
             orderDeleted((GUIOrder) order);
         }
 
+        @Override
         public void actionOrdersCreated(Orderable[] orders) {
             GUIOrder[] guiOrders = new GUIOrder[orders.length];
             for (int i = 0; i < guiOrders.length; i++) {
@@ -329,6 +330,7 @@ public abstract class MapRenderer2 {
             multipleOrdersCreated(guiOrders);
         }
 
+        @Override
         public void actionOrdersDeleted(Orderable[] orders) {
             GUIOrder[] guiOrders = new GUIOrder[orders.length];
             for (int i = 0; i < guiOrders.length; i++) {
@@ -338,10 +340,12 @@ public abstract class MapRenderer2 {
             multipleOrdersDeleted(guiOrders);
         }
 
+        @Override
         public void actionDisplayablePowersChanged(Power[] oldPowers, Power[] newPowers) {
             displayablePowersChanged(newPowers);
         }
 
+        @Override
         public void actionTurnstateChanged(TurnState ts) {
             // OPTIMIZATION:
             // any pending queued events may be deleted, because

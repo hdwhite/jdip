@@ -65,7 +65,7 @@ public abstract class RenderCommandFactory {
     /**
      * All Render updates occur via RenderCommands.
      */
-    public static abstract class RenderCommand implements Runnable {
+    public abstract static class RenderCommand implements Runnable {
         protected final MapRenderer2 mr;
         private boolean alive = true;
 
@@ -121,7 +121,7 @@ public abstract class RenderCommandFactory {
     /**
      * All Render updates occur via RenderCommands.
      */
-    protected static abstract class BooleanRenderCommand extends RenderCommand {
+    protected abstract static class BooleanRenderCommand extends RenderCommand {
         protected final boolean value;
 
         /**
@@ -138,7 +138,7 @@ public abstract class RenderCommandFactory {
     /**
      * Render the entire map
      */
-    protected static abstract class RCRenderAll extends RenderCommand {
+    protected abstract static class RCRenderAll extends RenderCommand {
         /**
          * Constructor
          */
@@ -151,7 +151,7 @@ public abstract class RenderCommandFactory {
     /**
      * Show/hide the map (as opposed to background)
      */
-    protected static abstract class RCShowMap extends BooleanRenderCommand {
+    protected abstract static class RCShowMap extends BooleanRenderCommand {
         /**
          * Constructor
          */
@@ -164,7 +164,7 @@ public abstract class RenderCommandFactory {
     /**
      * Render the entire map
      */
-    protected static abstract class RCSetTurnstate extends RenderCommand {
+    protected abstract static class RCSetTurnstate extends RenderCommand {
         protected final TurnState ts;
 
         /**
@@ -185,7 +185,7 @@ public abstract class RenderCommandFactory {
     /**
      * Render a particular Province
      */
-    protected static abstract class RCRenderProvince extends RenderCommand {
+    protected abstract static class RCRenderProvince extends RenderCommand {
         protected final Province province;
 
         /**
@@ -205,7 +205,7 @@ public abstract class RenderCommandFactory {
     /**
      * Change how labels are displayed
      */
-    protected static abstract class RCSetLabel extends RenderCommand {
+    protected abstract static class RCSetLabel extends RenderCommand {
         protected final Object labelValue;
 
         /**
@@ -227,7 +227,7 @@ public abstract class RenderCommandFactory {
     /**
      * Sets whether Supply Centers are displayed or not.
      */
-    protected static abstract class RCSetDisplaySC extends BooleanRenderCommand {
+    protected abstract static class RCSetDisplaySC extends BooleanRenderCommand {
         /**
          * Constructor
          */
@@ -239,7 +239,7 @@ public abstract class RenderCommandFactory {
     /**
      * Sets if Units are displayed or not.
      */
-    protected static abstract class RCSetDisplayUnits extends BooleanRenderCommand {
+    protected abstract static class RCSetDisplayUnits extends BooleanRenderCommand {
         /**
          * Constructor
          */
@@ -251,7 +251,7 @@ public abstract class RenderCommandFactory {
     /**
      * Sets if Dislodged Units are displayed or not.
      */
-    protected static abstract class RCSetDisplayDislodgedUnits extends BooleanRenderCommand {
+    protected abstract static class RCSetDisplayDislodgedUnits extends BooleanRenderCommand {
         /**
          * Constructor
          */
@@ -263,7 +263,7 @@ public abstract class RenderCommandFactory {
     /**
      * Sets if we highlight units without orders.
      */
-    protected static abstract class RCSetDisplayUnordered extends BooleanRenderCommand {
+    protected abstract static class RCSetDisplayUnordered extends BooleanRenderCommand {
         /**
          * Constructor
          */
@@ -275,7 +275,7 @@ public abstract class RenderCommandFactory {
     /**
      * Sets if we are in Influence mode or not.
      */
-    protected static abstract class RCSetInfluenceMode extends BooleanRenderCommand {
+    protected abstract static class RCSetInfluenceMode extends BooleanRenderCommand {
         /**
          * Constructor
          */
@@ -287,7 +287,7 @@ public abstract class RenderCommandFactory {
     /**
      * Sets which Powers have their orders displayed.
      */
-    protected static abstract class RCSetPowerOrdersDisplayed extends RenderCommand {
+    protected abstract static class RCSetPowerOrdersDisplayed extends RenderCommand {
         protected final Power[] displayedPowers;
 
         /**

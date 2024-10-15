@@ -206,20 +206,18 @@ public class SymbolInjector {
      */
     private void elementMapperWalker(final HashMap<String, Element> map, final Node node, final String attrName)
             throws IOException {
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-            if (node.hasAttributes()) {
-                NamedNodeMap attributes = node.getAttributes();
-                Node attrNode = attributes.getNamedItem(attrName);
-                if (attrNode != null) {
-                    final String attrValue = attrNode.getNodeValue();
-                    if (!"".equals(attrValue)) {
-                        if (map.containsKey(attrValue)) {
-                            throw new IOException("The " + attrName + " attribute has duplicate " +
-                                    "values: " + attrValue);
-                        }
-
-                        map.put(attrValue, (Element) node);
+        if (node.getNodeType() == Node.ELEMENT_NODE && node.hasAttributes()) {
+            NamedNodeMap attributes = node.getAttributes();
+            Node attrNode = attributes.getNamedItem(attrName);
+            if (attrNode != null) {
+                final String attrValue = attrNode.getNodeValue();
+                if (!attrValue.isEmpty()) {
+                    if (map.containsKey(attrValue)) {
+                        throw new IOException("The " + attrName + " attribute has duplicate " +
+                                "values: " + attrValue);
                     }
+
+                    map.put(attrValue, (Element) node);
                 }
             }
         }

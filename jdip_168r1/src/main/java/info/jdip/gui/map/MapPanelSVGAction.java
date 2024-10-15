@@ -49,7 +49,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
@@ -137,6 +136,7 @@ public class MapPanelSVGAction {
             }
 
             new Thread(getPMTG(mp), "jdipPrintThread") {
+                @Override
                 public void run() {
                     PrintTranscoder pt = new PrintTranscoder();
                     pt.addTranscodingHint(PrintTranscoder.KEY_SHOW_PAGE_DIALOG, Boolean.TRUE);
@@ -174,6 +174,7 @@ public class MapPanelSVGAction {
         /**
          * Set JPEG-specific options
          */
+        @Override
         public void setOptions(Transcoder t) {
             super.setOptions(t);
             //t.addTranscodingHint(ImageTranscoder.KEY_BACKGROUND_COLOR, Color.WHITE);
@@ -197,6 +198,7 @@ public class MapPanelSVGAction {
         /**
          * Set PNG options
          */
+        @Override
         public void setOptions(Transcoder t) {
             super.setOptions(t);
             //t.addTranscodingHint(ImageTranscoder.KEY_BACKGROUND_COLOR, Color.WHITE);
@@ -236,6 +238,7 @@ public class MapPanelSVGAction {
             }
 
             new Thread(getPMTG(mp), "jdipExportSVGThread") {
+                @Override
                 public void run() {
                     // get the file
                     File file = getSaveFile(mp.getClientFrame(), SimpleFileFilter.SVG_FILTER);
@@ -254,11 +257,11 @@ public class MapPanelSVGAction {
 
                     // create the transcoder input
                     TranscoderInput input = new TranscoderInput(cloneDoc);
-                    Writer writer = null;
 
-                    try {
+                    try (
+                        Writer writer = new BufferedWriter(new FileWriter(file));
+                    ) {
                         // create the transcoder output -- it must be a Writer!
-                        writer = new BufferedWriter(new FileWriter(file));
                         TranscoderOutput output = new TranscoderOutput(writer);
 
                         // save image
@@ -267,14 +270,6 @@ public class MapPanelSVGAction {
                         writer.flush();
                     } catch (Exception ex) {
                         ErrorDialog.displayFileIO(null, ex, file.getName());
-                    } finally {
-                        if (writer != null) {
-                            try {
-                                writer.close();
-                            } catch (IOException e) {
-                                ErrorDialog.displayFileIO(null, e, file.getName());
-                            }
-                        }
                     }
                 }// run()
             }.start(); // Thread()
@@ -322,47 +317,37 @@ public class MapPanelSVGAction {
                 return;
             }
 
-            new Runnable() {
-                public void run() {
-                    // get the file
-                    File file = getSaveFile(mp.getClientFrame(), simpleFileFilter);
-                    if (file == null) {
-                        return;
-                    }
+            Runnable task = () -> {
+                // get the file
+                File file = getSaveFile(mp.getClientFrame(), simpleFileFilter);
+                if (file == null) {
+                    return;
+                }
 
-                    // set error handler
-                    transcoder.setErrorHandler(new TranscoderErrorHandler());
+                // set error handler
+                transcoder.setErrorHandler(new TranscoderErrorHandler());
 
-                    // set options
-                    setOptions(transcoder);
+                // set options
+                setOptions(transcoder);
 
-                    // create the transcoder input, after cloning the document.
-                    final Document cloneDoc = (Document) document.cloneNode(true);
-                    TranscoderInput input = new TranscoderInput(cloneDoc);
+                // create the transcoder input, after cloning the document.
+                final Document cloneDoc = (Document) document.cloneNode(true);
+                TranscoderInput input = new TranscoderInput(cloneDoc);
 
-                    OutputStream ostream = null;
+                try (
+                    OutputStream ostream = new BufferedOutputStream(new FileOutputStream(file));
+                ) {
+                    // create the transcoder output
+                    TranscoderOutput output = new TranscoderOutput(ostream);
 
-                    try {
-                        // create the transcoder output
-                        ostream = new BufferedOutputStream(new FileOutputStream(file));
-                        TranscoderOutput output = new TranscoderOutput(ostream);
-
-                        // save image
-                        transcoder.transcode(input, output);
-                        ostream.flush();
-                    } catch (Exception ex) {
-                        ErrorDialog.displayFileIO(null, ex, file.getName());
-                    } finally {
-                        if (ostream != null) {
-                            try {
-                                ostream.close();
-                            } catch (IOException e) {
-                                ErrorDialog.displayFileIO(null, e, file.getName());
-                            }
-                        }
-                    }
-                }// run()
-            }.run(); // Runnable()
+                    // save image
+                    transcoder.transcode(input, output);
+                    ostream.flush();
+                } catch (Exception ex) {
+                    ErrorDialog.displayFileIO(null, ex, file.getName());
+                }
+            };
+        task.run();
         }// actionPerformed()
     }// nested class Export
 

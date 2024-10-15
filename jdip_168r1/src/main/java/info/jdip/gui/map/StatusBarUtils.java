@@ -125,12 +125,7 @@ public class StatusBarUtils {
             // Dislodged Unit information
             Unit disUnit = position.getDislodgedUnit(p);
             if (disUnit != null) {
-                if (unit != null) {
-                    sb.append(", ");
-                } else {
-                    sb.append(": ");
-                }
-
+                sb.append(unit == null ? ": " : ", ");
                 sb.append(Utils.getLocalString(SB_DISLOGED) + " ");
                 sb.append(disUnit.getPower().getAdjective());
                 sb.append(' ');
@@ -140,19 +135,9 @@ public class StatusBarUtils {
 
             // Supply Center information
             if (p.hasSupplyCenter()) {
-                if (disUnit != null || unit != null) {
-                    sb.append(", ");
-                } else {
-                    sb.append(": ");
-                }
-
+                sb.append((disUnit == null && unit == null) ? ": " : ", ");
                 Power owner = position.getSupplyCenterOwner(p);
-                if (owner == null) {
-                    sb.append(Utils.getLocalString(SB_UNOWNED));
-                } else {
-                    sb.append(owner.getAdjective());
-                }
-
+                sb.append(owner == null ? Utils.getLocalString(SB_UNOWNED) : owner.getAdjective());
                 sb.append(" " + Utils.getLocalString(SB_SUPPLY_CENTER) + ".");
             } else {
                 if (unit != null || disUnit != null) {
@@ -161,11 +146,7 @@ public class StatusBarUtils {
             }
 
             if (unit == null && disUnit == null && !p.hasSupplyCenter()) {
-                if (appendText == null) {
-                    sb.append('.');
-                } else {
-                    sb.append(':');
-                }
+                sb.append(appendText == null ? '.' : ':');
             }
 
         }

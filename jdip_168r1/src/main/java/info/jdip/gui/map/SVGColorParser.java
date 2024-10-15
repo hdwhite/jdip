@@ -111,6 +111,7 @@ public class SVGColorParser {
         /**
          * Uses String.equals() instead of referential equality
          */
+        @Override
         public Object get(String key) {
             int hash = key.hashCode() & 0x7FFFFFFF;
             int index = hash % table.length;

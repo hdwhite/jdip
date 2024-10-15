@@ -217,18 +217,18 @@ public class MapPanel extends JPanel {
     private Position position = null;
     private TurnState turnState = null;
     private World world = null;
-    private MP_PropertyListener propListener = null;
+    private MPPropertyListener propListener = null;
     private ControlBar controlBar = null;
     private DOMUIEventListener eventListener = null;
     private float scaleFactor = DEFAULT_SCALE_FACTOR;
     private JPanel bottomPanel = null;
-    private MP_UpdateManagerListener uml = null;
+    private MPUpdateManagerListener uml = null;
     private boolean isLoaded = false;
     private boolean isReloading = false;    // if we are reloading a map
     private SymbolPack symbolPack = null;
-    private MP_GVTRenderListener gvtRenderListener = null;
-    private MP_DocumentListener documentListener = null;
-    private MP_GVTTreeBuilderListener treeBuilderListener = null;
+    private MPGVTRenderListener gvtRenderListener = null;
+    private MPDocumentListener documentListener = null;
+    private MPGVTTreeBuilderListener treeBuilderListener = null;
     private Object oldLabelLevel = null;
 
 
@@ -274,7 +274,7 @@ public class MapPanel extends JPanel {
         eventListener = new DOMUIEventListener();
 
         // setup property listener
-        propListener = new MP_PropertyListener();
+        propListener = new MPPropertyListener();
         clientFrame.addPropertyChangeListener(propListener);
 
         // setup default controlbar
@@ -291,16 +291,16 @@ public class MapPanel extends JPanel {
         logger.trace( "MP: setDocument()");
 
         // setup private loader-listeners
-        gvtRenderListener = new MP_GVTRenderListener();
-        documentListener = new MP_DocumentListener();
-        treeBuilderListener = new MP_GVTTreeBuilderListener();
+        gvtRenderListener = new MPGVTRenderListener();
+        documentListener = new MPDocumentListener();
+        treeBuilderListener = new MPGVTTreeBuilderListener();
 
         svgCanvas.addGVTTreeRendererListener(gvtRenderListener);
         svgCanvas.addSVGDocumentLoaderListener(documentListener);
         svgCanvas.addGVTTreeBuilderListener(treeBuilderListener);
 
         // setup update listener
-        uml = new MP_UpdateManagerListener();
+        uml = new MPUpdateManagerListener();
         svgCanvas.addUpdateManagerListener(uml);
 
         // load map. Note that this bypasses the DocumentLoader
@@ -731,7 +731,7 @@ public class MapPanel extends JPanel {
      * This class sets up object/components that depend upon the canvas/map to
      * be loaded, and the GVT tree set up. It is to execute only a single time.
      */
-    private class MP_GVTRenderListener extends GVTTreeRendererAdapter {
+    private class MPGVTRenderListener extends GVTTreeRendererAdapter {
         private boolean loaded = false;
 
         @Override
@@ -835,7 +835,7 @@ public class MapPanel extends JPanel {
      * This class sets up object/components that depend upon the DOM
      * NOTE: we use setDocument(), and thus this really isn't used.
      */
-    private class MP_DocumentListener extends SVGDocumentLoaderAdapter {
+    private class MPDocumentListener extends SVGDocumentLoaderAdapter {
         @Override
         public void documentLoadingStarted(SVGDocumentLoaderEvent e) {
             logger.debug("DocumentLoad started.");
@@ -863,7 +863,7 @@ public class MapPanel extends JPanel {
     /**
      * Statusbar messages
      */
-    private class MP_GVTTreeBuilderListener extends GVTTreeBuilderAdapter {
+    private class MPGVTTreeBuilderListener extends GVTTreeBuilderAdapter {
         @Override
         public void gvtBuildStarted(GVTTreeBuilderEvent e) {
             logger.trace("GVTTreeBuild completed.");
@@ -890,7 +890,7 @@ public class MapPanel extends JPanel {
     /**
      * ClientFrame PropertyChangeListener
      */
-    private class MP_PropertyListener extends AbstractCFPListener {
+    private class MPPropertyListener extends AbstractCFPListener {
 
         @Override
         public void actionWorldCreated(World w) {
@@ -1013,7 +1013,7 @@ public class MapPanel extends JPanel {
     /**
      * Inner class that indicates in the Status Bar when we are drawing
      */
-    private class MP_UpdateManagerListener implements UpdateManagerListener {
+    private class MPUpdateManagerListener implements UpdateManagerListener {
         private String lastModeText = null;
 
         public void managerResumed(org.apache.batik.bridge.UpdateManagerEvent e) {
@@ -1052,7 +1052,7 @@ public class MapPanel extends JPanel {
             }
         }// resetText()
 
-    }// inner class MP_UpdateManagerListener
+    }// inner class MPUpdateManagerListener
 
 }// class MapPanel
 
