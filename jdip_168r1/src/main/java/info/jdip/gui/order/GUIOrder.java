@@ -193,7 +193,7 @@ public interface GUIOrder extends Orderable {
      * GUIOrders which require Parameters must subclass this.
      */
     abstract class Parameter {
-        private transient final String name;
+        private final transient String name;
 
         /**
          * Constructor

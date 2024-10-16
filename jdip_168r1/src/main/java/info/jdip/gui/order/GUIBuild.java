@@ -336,7 +336,8 @@ public class GUIBuild extends Build implements GUIOrder {
         SVGElement[] elements = new SVGElement[2];
 
         // BuildUnit symbol
-        MapMetadata.SymbolSize symbolSize = mmd.getSymbolSize(DefaultMapRenderer2.SYMBOL_BUILDUNIT);
+        MapMetadata.SymbolSize symbolSize = mmd.getSymbolSize(DefaultMapRenderer2.SYMBOL_BUILDUNIT)
+                                               .getScaledSymbolSize(1 / mmd.getZoomFactor());
 
         elements[0] = SVGUtils.createUseElement(
                 mapInfo.getDocument(),
@@ -349,7 +350,7 @@ public class GUIBuild extends Build implements GUIOrder {
 
         // Unit symbol
         final String symbolName = mapInfo.getSymbolName(srcUnitType);
-        symbolSize = mmd.getSymbolSize(symbolName);
+        symbolSize = mmd.getSymbolSize(symbolName).getScaledSymbolSize(1 / mmd.getZoomFactor());;
 
         elements[1] = SVGUtils.createUseElement(
                 mapInfo.getDocument(),

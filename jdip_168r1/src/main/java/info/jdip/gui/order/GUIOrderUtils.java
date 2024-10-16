@@ -56,7 +56,7 @@ final class GUIOrderUtils {
     /**
      * Amount to make DifficultPassableBorder Lines, compared to normal. Should be in the (0, 1.0) range.
      */
-    private final static float DPB_LINE_WIDTH = 0.333f;
+    private static final float DPB_LINE_WIDTH = 0.333f;
 
 
     /**
@@ -459,7 +459,8 @@ final class GUIOrderUtils {
             return widths[widths.length - 1];
         }
 
-        return (support >= 0) ? widths[idx] : (widths[idx] * DPB_LINE_WIDTH);
+        float unscaledWidth = (support >= 0) ? widths[idx] : (widths[idx] * DPB_LINE_WIDTH);
+        return unscaledWidth / mapInfo.getMapMetadata().getZoomFactor();
     }// getLineWidth()
 
 
@@ -482,6 +483,7 @@ final class GUIOrderUtils {
     public static SVGUseElement createFailedOrderSymbol(MapInfo mapInfo, float x, float y) {
         MapMetadata.SymbolSize symbolSize =
                 mapInfo.getMapMetadata().getSymbolSize(DefaultMapRenderer2.SYMBOL_FAILEDORDER);
+        symbolSize = symbolSize.getScaledSymbolSize(1 / mapInfo.getMapMetadata().getZoomFactor());
 
         return SVGUtils.createUseElement(
                 mapInfo.getDocument(),

@@ -55,16 +55,16 @@ public class GUIMove extends Move implements GUIOrder {
     /**
      * Optional. Sets this Move to be by convoy. Value must be a Boolean object (Boolean.TRUE or Boolean.FALSE)
      */
-    public transient static final MoveParameter BY_CONVOY = new MoveParameter("BY_CONVOY");
+    public static final transient MoveParameter BY_CONVOY = new MoveParameter("BY_CONVOY");
 
     // i18n keys
-    private final static String CLICK_TO_SET_DEST = "GUIMove.set.dest";
-    private final static String CANNOT_MOVE_TO_ORIGIN = "GUIMove.cannot_to_origin";
-    private final static String NO_CONVOY_ROUTE = "GUIMove.no_convoy_route";
-    private final static String CANNOT_MOVE_HERE = "GUIMove.cannot_move_here";
+    private static final String CLICK_TO_SET_DEST = "GUIMove.set.dest";
+    private static final String CANNOT_MOVE_TO_ORIGIN = "GUIMove.cannot_to_origin";
+    private static final String NO_CONVOY_ROUTE = "GUIMove.no_convoy_route";
+    private static final String CANNOT_MOVE_HERE = "GUIMove.cannot_move_here";
 
     // instance variables
-    private transient static final int REQ_LOC = 2;
+    private static final transient int REQ_LOC = 2;
     private transient int currentLocNum = 0;
     private transient int numSupports = -9999;
     private transient Point2D.Float failPt = null;
@@ -171,10 +171,12 @@ public class GUIMove extends Move implements GUIOrder {
             if (province == src.getProvince()) {
                 sb.append(Utils.getLocalString(CANNOT_MOVE_TO_ORIGIN));
                 return false;
-            } else if (src.isAdjacent(province)) {
+            }
+            if (src.isAdjacent(province)) {
                 sb.append(Utils.getLocalString(CLICK_TO_SET_DEST));
                 return true;
-            } else if (province.isCoastal() && srcUnitType == Unit.Type.ARMY) {
+            }
+            if (province.isCoastal() && srcUnitType == Unit.Type.ARMY) {
                 // we may have a possible convoy route; if not, say so
                 // NOTE: assume destination coast is Coast.NONE
                 Path path = new Path(position);
@@ -185,7 +187,8 @@ public class GUIMove extends Move implements GUIOrder {
                     sb.append(Utils.getLocalString(NO_CONVOY_ROUTE));
                     return false;
                 }
-            } else if (!GUIOrderUtils.checkBorder(this, location, srcUnitType, stateInfo.getPhase(), sb)) {
+            }
+            if (!GUIOrderUtils.checkBorder(this, location, srcUnitType, stateInfo.getPhase(), sb)) {
                 // text already set by checkBorder() method
                 return false;
             }
@@ -193,10 +196,9 @@ public class GUIMove extends Move implements GUIOrder {
 
             sb.append(Utils.getLocalString(CANNOT_MOVE_HERE));
             return false;
-        } else {
-            // should not occur.
-            throw new IllegalStateException();
         }
+        // should not occur.
+        throw new IllegalStateException();
 
         // NO return here: thus we must appropriately exit within an if/else block above.
     }// testLocation()
@@ -401,9 +403,9 @@ public class GUIMove extends Move implements GUIOrder {
         // respect radius, if there is a unit present in destination.
         // if there is no unit, use radius / 2. (for an Army)
         //
-        Point2D.Float newPtTo = ptTo;
+        Point2D.Float newPtTo;
         Position position = mapInfo.getTurnState().getPosition();
-        float r = 0.0f;
+        float r;
         if (position.hasUnit(dest.getProvince())) {
             Unit.Type destUnitType = position.getUnit(dest.getProvince()).getType();
             r = mmd.getOrderRadius(MapMetadata.EL_MOVE, mapInfo.getSymbolName(destUnitType));

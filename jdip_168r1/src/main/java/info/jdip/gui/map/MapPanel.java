@@ -687,6 +687,15 @@ public class MapPanel extends JPanel {
     }// reloadMap()
 
     /**
+     * Re-renders the map, typically done after a zoom.
+     */
+    public void renderMap() {
+        DMR2RenderCommandFactory rcf = (DMR2RenderCommandFactory) mapRenderer.getRenderCommandFactory();
+        RenderCommand rc = rcf.createRCRenderAllForced(mapRenderer);
+        mapRenderer.execRenderCommand(rc);
+    }// reloadMap()
+
+    /**
      * This code is based on: <br>
      * http://cvs.apache.org/viewcvs.cgi/xml-batik/sources/org/apache/batik/apps/svgbrowser/XMLInputHandler.java?rev=1.7&view=auto
      * <p>

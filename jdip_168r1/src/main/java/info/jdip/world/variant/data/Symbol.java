@@ -32,7 +32,7 @@ public class Symbol {
     /**
      * Default (identity) scale factor
      */
-    public final static float IDENTITY_SCALE = 1.0f;
+    public static final float IDENTITY_SCALE = 1.0f;
 
     private final String name;
     private final Element svgData;

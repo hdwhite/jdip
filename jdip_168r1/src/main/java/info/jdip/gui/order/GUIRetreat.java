@@ -305,12 +305,18 @@ public class GUIRetreat extends Retreat implements GUIOrder {
             float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_RETREAT, MapMetadata.ATT_HILIGHT_OFFSET);
             element = drawOrder(mapInfo, offset, false);
             GUIOrderUtils.makeHilight(element, mapInfo.getMapMetadata(), MapMetadata.EL_RETREAT);
+            float width = Float.parseFloat(mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_RETREAT, MapMetadata.ATT_SHADOW_WIDTH))
+                                         / mapInfo.getMapMetadata().getZoomFactor();
+            element.setAttributeNS(null, SVGConstants.SVG_STROKE_WIDTH_ATTRIBUTE, GUIOrderUtils.floatToString(width));
             group.appendChild(element);
         }
 
         // create real line
         element = drawOrder(mapInfo, 0, true);
         GUIOrderUtils.makeStyled(element, mapInfo.getMapMetadata(), MapMetadata.EL_RETREAT, power);
+        float width = Float.parseFloat(mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_RETREAT, MapMetadata.ATT_WIDTH))
+                                     / mapInfo.getMapMetadata().getZoomFactor();
+        element.setAttributeNS(null, SVGConstants.SVG_STROKE_WIDTH_ATTRIBUTE, GUIOrderUtils.floatToString(width));
         group.appendChild(element);
 
         // draw 'failed' marker, if appropriate.

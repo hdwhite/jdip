@@ -787,13 +787,22 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
     /**
      * Unsynchronized updater: Renders ALL provinces but NOT orders
      */
-    protected void unsyncUpdateAllProvinces() {
+    protected void unsyncUpdateAllProvinces(boolean forced) {
         for (Province province : provinces) {
             Tracker tracker = trackerMap.get(province);
-            unsyncUpdateProvince(tracker, province, false);
+            unsyncUpdateProvince(tracker, province, forced);
+            if (forced) {
+                unsyncUpdateSC(province);
+            }
         }
     }// unsyncUpdateAllProvincesAndOrders()
 
+    /**
+     * Convenience method: non-forced.
+     */
+    protected void unsyncUpdateAllProvinces() {
+        unsyncUpdateAllProvinces(false);
+    }// unsyncUpdateAllProvincesAndOrders()
 
     /**
      * Unsynchronized province updater, used in both update methods.
@@ -892,9 +901,12 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
         Tracker tracker = trackerMap.get(province);
         SVGElement scEl = tracker.getSCElement();
         if (scEl != null) {
+            MapMetadata.SymbolSize symbolSize = mapMeta.getSymbolSize(SYMBOL_SC).getScaledSymbolSize(1 / mapMeta.getZoomFactor());
             Point2D.Float pos = mapMeta.getSCPt(province);
             scEl.setAttributeNS(null, SVGConstants.SVG_X_ATTRIBUTE, String.valueOf(pos.x));
             scEl.setAttributeNS(null, SVGConstants.SVG_Y_ATTRIBUTE, String.valueOf(pos.y));
+            scEl.setAttributeNS(null, SVGConstants.SVG_WIDTH_ATTRIBUTE, symbolSize.getWidth());
+            scEl.setAttributeNS(null, SVGConstants.SVG_HEIGHT_ATTRIBUTE, symbolSize.getHeight());
         }
     }// unsyncUpdateSC()
 
@@ -954,7 +966,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
         }
 
         // get symbol size data
-        MapMetadata.SymbolSize symbolSize = mapMeta.getSymbolSize(symbolID);
+        MapMetadata.SymbolSize symbolSize = mapMeta.getSymbolSize(symbolID).getScaledSymbolSize(1 / mapMeta.getZoomFactor());
         assert (symbolSize != null);
 
         // get the rectangle coordinates
@@ -1018,7 +1030,7 @@ public class DefaultMapRenderer2 extends MapRenderer2 {
      */
     private SVGElement makeSCUse(Province province, Power power) {
         Point2D.Float pos = mapMeta.getSCPt(province);
-        MapMetadata.SymbolSize symbolSize = mapMeta.getSymbolSize(SYMBOL_SC);
+        MapMetadata.SymbolSize symbolSize = mapMeta.getSymbolSize(SYMBOL_SC).getScaledSymbolSize(1 / mapMeta.getZoomFactor());
         return SVGUtils.createUseElement(doc, SYMBOL_SC, null, getSCCSSClass(power), pos.x, pos.y, symbolSize);
     }// makeSCUse()
 

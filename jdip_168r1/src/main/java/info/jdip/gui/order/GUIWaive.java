@@ -309,7 +309,8 @@ public class GUIWaive extends Waive implements GUIOrder {
 
         // A Waive consists of a WaivedBuidl symbol
         //
-        MapMetadata.SymbolSize symbolSize = mmd.getSymbolSize(DefaultMapRenderer2.SYMBOL_WAIVEDBUILD);
+        MapMetadata.SymbolSize symbolSize = mmd.getSymbolSize(DefaultMapRenderer2.SYMBOL_WAIVEDBUILD)
+                                               .getScaledSymbolSize(1 / mmd.getZoomFactor());
 
         return SVGUtils.createUseElement(
                 mapInfo.getDocument(),

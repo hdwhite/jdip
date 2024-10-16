@@ -374,16 +374,22 @@ public class GUIConvoy extends Convoy implements GUIOrder {
             float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_CONVOY, MapMetadata.ATT_HILIGHT_OFFSET);
             elements = drawOrder(mapInfo, offset, false);
             GUIOrderUtils.makeHilight(elements, mapInfo.getMapMetadata(), MapMetadata.EL_CONVOY);
-            for (SVGElement element : elements) {
-                group.appendChild(element);
+            float width = Float.parseFloat(mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_CONVOY, MapMetadata.ATT_SHADOW_WIDTH))
+                                         / mapInfo.getMapMetadata().getZoomFactor();
+            for (int i = 0; i < elements.length ; i++) {
+                elements[i].setAttributeNS(null, SVGConstants.SVG_STROKE_WIDTH_ATTRIBUTE, GUIOrderUtils.floatToString(width));
+                group.appendChild(elements[i]);
             }
         }
 
         // create real line
         elements = drawOrder(mapInfo, 0, true);
         GUIOrderUtils.makeStyled(elements, mapInfo.getMapMetadata(), MapMetadata.EL_CONVOY, power);
-        for (SVGElement element : elements) {
-            group.appendChild(element);
+        float width = Float.parseFloat(mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_CONVOY, MapMetadata.ATT_WIDTH))
+                                     / mapInfo.getMapMetadata().getZoomFactor();
+        for (int i = 0; i < elements.length ; i++) {
+            elements[i].setAttributeNS(null, SVGConstants.SVG_STROKE_WIDTH_ATTRIBUTE, GUIOrderUtils.floatToString(width));
+            group.appendChild(elements[i]);
         }
 
         // draw 'failed' marker, if appropriate.

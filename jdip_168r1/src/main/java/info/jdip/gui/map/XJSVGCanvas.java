@@ -76,6 +76,7 @@ public class XJSVGCanvas extends JSVGCanvas {
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private boolean isValidating = false;
     private double lsx, lsy;                        // last scale x, y values
+    private MapPanel mapPanel;
 
     /**
      * Creates a new XJSVGCanvas.
@@ -88,6 +89,7 @@ public class XJSVGCanvas extends JSVGCanvas {
     public XJSVGCanvas(final MapPanel mapPanel, StatusBar statusBar, SVGUserAgent ua, boolean eventsEnabled, boolean selectableText) {
         super(ua, eventsEnabled, selectableText);
         this.statusBar = statusBar;
+        this.mapPanel = mapPanel;
         setMaximumSize(screenSize);
 
         // fix for incorrect setting of initial SVG size by JSVGScrollPane
@@ -193,6 +195,9 @@ public class XJSVGCanvas extends JSVGCanvas {
 
         // proceed with setting the rendering transform...
         super.setRenderingTransform(at);
+
+        // render map to scale objects
+        mapPanel.renderMap();
     }// setRenderingTransform()
 
     /**

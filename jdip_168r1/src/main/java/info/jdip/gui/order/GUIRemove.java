@@ -255,7 +255,8 @@ public class GUIRemove extends Remove implements GUIOrder {
         failPt = new Point2D.Float(srcPt.x + radius, srcPt.y);
 
         // get symbolsize
-        MapMetadata.SymbolSize symbolSize = mmd.getSymbolSize(DefaultMapRenderer2.SYMBOL_REMOVEUNIT);
+        MapMetadata.SymbolSize symbolSize = mmd.getSymbolSize(DefaultMapRenderer2.SYMBOL_REMOVEUNIT)
+                                               .getScaledSymbolSize(1 / mmd.getZoomFactor());
 
         // create RemoveUnit symbol via a USE element
 

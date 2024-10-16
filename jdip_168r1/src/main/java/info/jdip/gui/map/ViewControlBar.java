@@ -148,6 +148,7 @@ public class ViewControlBar extends ControlBar {
                         // set rendering transform to 'unscaled'
                         AffineTransform t = AffineTransform.getScaleInstance(1, 1);
                         mapPanel.getJSVGCanvas().setRenderingTransform(t);
+                        mapPanel.renderMap();
                     }
                 }
             }

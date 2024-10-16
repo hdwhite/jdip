@@ -303,7 +303,7 @@ public class VariantManager {
 
             if (enm != null) {
                 while (enm.hasMoreElements()) {
-                    URL symbolURL = (URL) enm.nextElement();
+                    URL symbolURL = enm.nextElement();
 
                     // parse variant description file, and create hash entry of variant object -> URL
 

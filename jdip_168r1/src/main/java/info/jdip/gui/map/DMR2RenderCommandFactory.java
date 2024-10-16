@@ -110,7 +110,7 @@ public class DMR2RenderCommandFactory extends RenderCommandFactory {
 
                 // for each province, update the province and orders.
                 dmr2.unsyncRecreateAllOrders();
-                dmr2.unsyncUpdateAllProvinces();
+                dmr2.unsyncUpdateAllProvinces(true);
                 logger.trace("DMR2RCF::createRCRenderAllForced() complete.");
             }// execute()
         };

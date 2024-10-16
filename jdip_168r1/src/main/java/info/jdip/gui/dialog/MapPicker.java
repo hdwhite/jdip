@@ -114,7 +114,7 @@ public class MapPicker extends HeaderDialog {
                 vi.setSymbolPackVersion(sp.getVersion());
 
                 // re-render the map
-                clientFrame.getMapPanel().reloadMap();
+                clientFrame.getMapPanel().renderMap();
 
                 // we've created a change that requires a save to persist.
                 clientFrame.fireStateModified();

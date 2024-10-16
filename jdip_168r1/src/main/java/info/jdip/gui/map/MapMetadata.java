@@ -213,6 +213,10 @@ public class MapMetadata {
      */
     public static final String ATT_SHADOW_WIDTHS = "shadowWidths";
     /**
+     * jDip namespace attribute: order drawing: order shadow line width
+     */
+    public static final String ATT_SHADOW_WIDTH = "shadowWidth";
+    /**
      * jDip namespace attribute: symbol size: symbol width
      */
     public static final String ATT_WIDTH = "width";
@@ -339,6 +343,12 @@ public class MapMetadata {
         return (SymbolSize) displayProps.get(sbKey.toString());
     }// getSymbolSize()
 
+    /**
+     * Gets the current zoom factor.
+     */
+    public float getZoomFactor() {
+        return (float) mp.getXJSVGCanvas().getViewBoxTransform().getScaleX();
+    }// getZoomFactor()
 
     /**
      * Gets a float metadata value
@@ -420,7 +430,7 @@ public class MapMetadata {
      */
     public float getOrderRadius(String orderElement, String symbolName) {
         final float deltaRadius = (Float) getOrderParam(orderElement, ATT_DELTA_RADIUS);
-        return getSymbolSize(symbolName).getRadius(deltaRadius);
+        return getSymbolSize(symbolName).getRadius(deltaRadius) / getZoomFactor();
     }// getOrderRadius()
 
 
@@ -698,6 +708,8 @@ public class MapMetadata {
         putOrderParam(EL_RETREAT, ATT_MARKERID, el.getAttribute(ATT_MARKERID).trim());
         putOrderParam(EL_RETREAT, ATT_HILIGHT_OFFSET, parseFloat(EL_RETREAT, ATT_HILIGHT_OFFSET, el.getAttribute(ATT_HILIGHT_OFFSET)));
         putOrderParam(EL_RETREAT, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim());
+        putOrderParam(EL_RETREAT, ATT_WIDTH, el.getAttribute(ATT_WIDTH).trim());
+        putOrderParam(EL_RETREAT, ATT_SHADOW_WIDTH, el.getAttribute(ATT_SHADOW_WIDTH).trim());
         putOptionalOrderParam(EL_RETREAT, ATT_FILTERID, el.getAttribute(ATT_FILTERID).trim());
 
         // SUPPORT
@@ -708,6 +720,8 @@ public class MapMetadata {
         putOrderParam(EL_SUPPORT, ATT_MARKERID, el.getAttribute(ATT_MARKERID).trim());
         putOrderParam(EL_SUPPORT, ATT_HILIGHT_OFFSET, parseFloat(EL_SUPPORT, ATT_HILIGHT_OFFSET, el.getAttribute(ATT_HILIGHT_OFFSET)));
         putOrderParam(EL_SUPPORT, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim());
+        putOrderParam(EL_SUPPORT, ATT_WIDTH, el.getAttribute(ATT_WIDTH).trim());
+        putOrderParam(EL_SUPPORT, ATT_SHADOW_WIDTH, el.getAttribute(ATT_SHADOW_WIDTH).trim());
         putOptionalOrderParam(EL_SUPPORT, ATT_FILTERID, el.getAttribute(ATT_FILTERID).trim());
 
         // CONVOY
@@ -718,6 +732,8 @@ public class MapMetadata {
         putOrderParam(EL_CONVOY, ATT_MARKERID, el.getAttribute(ATT_MARKERID).trim());
         putOrderParam(EL_CONVOY, ATT_HILIGHT_OFFSET, parseFloat(EL_CONVOY, ATT_HILIGHT_OFFSET, el.getAttribute(ATT_HILIGHT_OFFSET)));
         putOrderParam(EL_CONVOY, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim());
+        putOrderParam(EL_CONVOY, ATT_WIDTH, el.getAttribute(ATT_WIDTH).trim());
+        putOrderParam(EL_CONVOY, ATT_SHADOW_WIDTH, el.getAttribute(ATT_SHADOW_WIDTH).trim());
         putOptionalOrderParam(EL_CONVOY, ATT_FILTERID, el.getAttribute(ATT_FILTERID).trim());
 
         // POWERCOLOR(S)
@@ -989,6 +1005,7 @@ public class MapMetadata {
         private final String r;
         private final float rFloat;
         private final String units;
+        private final Element el;
 
         /**
          * Create a SymbolSize element
@@ -1007,6 +1024,7 @@ public class MapMetadata {
             this.r = (String) tmp[2];
             this.rFloat = (Float) tmp[3];
             this.units = (String) tmp[4];
+            this.el = element;
         }// SymbolSize()
 
         /**
@@ -1041,7 +1059,7 @@ public class MapMetadata {
         /**
          * Computes a Radius given the known radius and a
          * delta (smaller/larger). Delta and Radius are
-         * assumed to have the	same units.
+         * assumed to have thesame units.
          */
         public float getRadius(float delta) {
             return (rFloat + delta);
@@ -1054,6 +1072,20 @@ public class MapMetadata {
             return (SVGUtils.floatToString(rFloat + delta) + getUnits());
         }// getRadiusString()
 
+        /**
+         * Creates a scaled version of the SymbolSize
+         */
+        public SymbolSize getScaledSymbolSize(float scale)
+        {
+            try
+            {
+                return new SymbolSize(w, h, scale, el);
+            }
+            catch (MapException e)
+            {
+                return null;
+            }
+        }// getScaledSymbolSize()
 
         /**
          * Makes all values. Returns an array of length 3;
