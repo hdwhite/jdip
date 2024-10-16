@@ -302,7 +302,8 @@ public class GUIRetreat extends Retreat implements GUIOrder {
         // create hilight line
         String cssStyle = mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_RETREAT, MapMetadata.ATT_HILIGHT_CLASS);
         if (!cssStyle.equalsIgnoreCase("none")) {
-            float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_RETREAT, MapMetadata.ATT_HILIGHT_OFFSET);
+            float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_RETREAT, MapMetadata.ATT_HILIGHT_OFFSET)
+                         / mapInfo.getMapMetadata().getZoomFactor();
             element = drawOrder(mapInfo, offset, false);
             GUIOrderUtils.makeHilight(element, mapInfo.getMapMetadata(), MapMetadata.EL_RETREAT);
             float width = Float.parseFloat(mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_RETREAT, MapMetadata.ATT_SHADOW_WIDTH))

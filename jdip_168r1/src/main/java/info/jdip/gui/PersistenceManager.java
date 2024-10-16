@@ -156,8 +156,6 @@ public class PersistenceManager {
      */
     public void exit() {
         if (confirmDialog()) {
-            GeneralPreferencePanel.saveWindowSettings(clientFrame);
-
             // shutdown Batik renderer. This should stop the occasional
             // IllegalComponentState exceptions when exiting during a
             // render.

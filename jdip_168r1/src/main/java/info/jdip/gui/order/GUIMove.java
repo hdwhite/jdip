@@ -346,7 +346,8 @@ public class GUIMove extends Move implements GUIOrder {
         // create hilight line
         String cssStyle = mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_MOVE, MapMetadata.ATT_HILIGHT_CLASS);
         if (!cssStyle.equalsIgnoreCase("none")) {
-            float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_MOVE, MapMetadata.ATT_HILIGHT_OFFSET);
+            float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_MOVE, MapMetadata.ATT_HILIGHT_OFFSET)
+                         / mapInfo.getMapMetadata().getZoomFactor();
             float width = GUIOrderUtils.getLineWidth(mapInfo, MapMetadata.EL_MOVE, MapMetadata.ATT_SHADOW_WIDTHS, numSupports);
 
             element = drawOrder(mapInfo, offset, false);

@@ -371,7 +371,8 @@ public class GUIConvoy extends Convoy implements GUIOrder {
         // create hilight line
         String cssStyle = mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_CONVOY, MapMetadata.ATT_HILIGHT_CLASS);
         if (!cssStyle.equalsIgnoreCase("none")) {
-            float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_CONVOY, MapMetadata.ATT_HILIGHT_OFFSET);
+            float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_CONVOY, MapMetadata.ATT_HILIGHT_OFFSET)
+                         / mapInfo.getMapMetadata().getZoomFactor();
             elements = drawOrder(mapInfo, offset, false);
             GUIOrderUtils.makeHilight(elements, mapInfo.getMapMetadata(), MapMetadata.EL_CONVOY);
             float width = Float.parseFloat(mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_CONVOY, MapMetadata.ATT_SHADOW_WIDTH))

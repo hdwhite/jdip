@@ -62,7 +62,6 @@ public class GeneralPreferencePanel extends PreferencePanel {
     public static final int BORDER = 10;
 
     // preference nodes keys
-    public static final String NODE_SAVE_WINDOW_SETTINGS = "saveWindowSettings";
     public static final String NODE_DEFAULT_GAME_DIR = "defaultGameDir";
     public static final String NODE_SHOW_RESOLUTION_RESULTS = "showResolutionResults";
 
@@ -89,7 +88,6 @@ public class GeneralPreferencePanel extends PreferencePanel {
     private static final int NUM_RECENT_FILES = 5;
     // UI text i18n constants
     private static final String TAB_NAME = "GPP.tabname";
-    private static final String GPP_SAVE_WINDOW_POS = "GPP.save_window_pos";
     private static final String GPP_SAVE_DIR_TEXT = "GPP.save_dir_text";
     private static final String GPP_SAVE_DIR_BUTTON = "GPP.save_dir_button";
     private static final String GPP_SHOW_RESOLUTION_RESULTS = "GPP.show_resolution_results";
@@ -107,7 +105,6 @@ public class GeneralPreferencePanel extends PreferencePanel {
     private static LRUCache<String, File> fileCache = null;
     private static Collator collator = null;
     // UI Elements
-    private final JCheckBox saveWindowSettings;                // save window settings (position, size)
     private final JTextField saveDir;                        // default save-files directory
     private final JButton browseSaveDir;                    // browse button for setting directory
     private final JButton clearMRU;                        // clears most-recently-used file list
@@ -122,8 +119,6 @@ public class GeneralPreferencePanel extends PreferencePanel {
         this.cf = cf;
 
         // create UI elements
-        saveWindowSettings = new JCheckBox(Utils.getLocalString(GPP_SAVE_WINDOW_POS));
-
         showResolution = new JCheckBox(Utils.getLocalString(GPP_SHOW_RESOLUTION_RESULTS));
 
         saveDir = new JTextField();
@@ -203,7 +198,6 @@ public class GeneralPreferencePanel extends PreferencePanel {
 
 
         HIGConstraints c = new HIGConstraints();
-        add(saveWindowSettings, c.rcwh(2, 2, 4, 1, "l"));
         add(showResolution, c.rcwh(4, 2, 4, 1, "l"));
 
         add(orderP, c.rcwh(6, 2, 4, 1, "l"));
@@ -256,37 +250,6 @@ public class GeneralPreferencePanel extends PreferencePanel {
         return OrderDisplayPanel.parseSortValue(
                 prefs.get(NODE_ORDER_SORTING, null), OrderDisplayPanel.SORT_PROVINCE);
     }// getOrderSortMode()
-
-    public static void getWindowSettings(Component c) {
-        Preferences prefs = SharedPrefs.getUserNode();
-
-        if (prefs.getBoolean(NODE_SAVE_WINDOW_SETTINGS, false)) {
-            int x = prefs.getInt(NODE_WINDOW_X, 50);
-            int y = prefs.getInt(NODE_WINDOW_Y, 50);
-            int w = prefs.getInt(NODE_WINDOW_WIDTH, 600);
-            int h = prefs.getInt(NODE_WINDOW_HEIGHT, 400);
-            c.setSize(w, h);
-            c.setLocation(x, y);
-        } else {
-            c.setSize(Utils.getScreenSize(0.85f));
-            Utils.centerInScreen(c);
-        }
-    }// getWindowSettings()
-
-    public static void saveWindowSettings(Component c) {
-        Preferences prefs = SharedPrefs.getUserNode();
-
-        if (prefs.getBoolean(NODE_SAVE_WINDOW_SETTINGS, false)) {
-            prefs.putInt(NODE_WINDOW_X, c.getX());
-            prefs.putInt(NODE_WINDOW_Y, c.getY());
-            prefs.putInt(NODE_WINDOW_WIDTH, c.getWidth());
-            prefs.putInt(NODE_WINDOW_HEIGHT, c.getHeight());
-        }
-        try {
-            prefs.flush();
-        } catch (BackingStoreException bse) {
-        }
-    }// saveWindowSettings()
 
     // sort before returning; case insensitive
     // CALL THIS the first time
@@ -530,7 +493,6 @@ public class GeneralPreferencePanel extends PreferencePanel {
         Preferences prefs = SharedPrefs.getUserNode();
 
         // apply settings
-        prefs.putBoolean(NODE_SAVE_WINDOW_SETTINGS, saveWindowSettings.isSelected());
         prefs.put(NODE_DEFAULT_GAME_DIR, saveDir.getText());
         prefs.putBoolean(NODE_SHOW_RESOLUTION_RESULTS, showResolution.isSelected());
 
@@ -552,7 +514,6 @@ public class GeneralPreferencePanel extends PreferencePanel {
     }// cancel()
 
     public void setDefault() {
-        saveWindowSettings.setSelected(false);
         showResolution.setSelected(false);
         saveDir.setText("");
 
@@ -572,7 +533,6 @@ public class GeneralPreferencePanel extends PreferencePanel {
         } catch (BackingStoreException bse) {
         }
 
-        saveWindowSettings.setSelected(prefs.getBoolean(NODE_SAVE_WINDOW_SETTINGS, false));
         showResolution.setSelected(prefs.getBoolean(NODE_SHOW_RESOLUTION_RESULTS, true));
         saveDir.setText(prefs.get(NODE_DEFAULT_GAME_DIR, ""));
 

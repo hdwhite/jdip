@@ -239,7 +239,8 @@ public class GUIHold extends Hold implements GUIOrder {
         // create hilight line
         String cssStyle = mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_HOLD, MapMetadata.ATT_HILIGHT_CLASS);
         if (!cssStyle.equalsIgnoreCase("none")) {
-            float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_HOLD, MapMetadata.ATT_HILIGHT_OFFSET);
+            float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_HOLD, MapMetadata.ATT_HILIGHT_OFFSET)
+                         / mapInfo.getMapMetadata().getZoomFactor();
             float width = GUIOrderUtils.getLineWidth(mapInfo, MapMetadata.EL_HOLD, MapMetadata.ATT_SHADOW_WIDTHS, numSupports);
 
             element = drawOrder(mapInfo, offset);

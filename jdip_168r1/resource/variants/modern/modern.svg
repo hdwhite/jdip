@@ -87,83 +87,89 @@
 	  <!ELEMENT jdipNS:HOLD EMPTY>
 	<!ATTLIST jdipNS:HOLD
 	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
-	  deltaRadius CDATA #REQUIRED
-	  strokeCSSStyle CDATA #REQUIRED
+	  deltaRadius CDATA #IMPLIED
+	  strokeCSSStyle CDATA #IMPLIED
 	  filterID CDATA #IMPLIED
-	  hilightOffset CDATA #REQUIRED
-	  hilightCSSClass CDATA #REQUIRED
-	  widths CDATA #REQUIRED
-	  shadowWidths CDATA #REQUIRED
+	  hilightOffset CDATA #IMPLIED
+	  hilightCSSClass CDATA #IMPLIED
+	  widths CDATA #IMPLIED
+	  shadowWidths CDATA #IMPLIED
 	  >
 	  
 	<!ELEMENT jdipNS:DISBAND EMPTY>
 	<!ATTLIST jdipNS:DISBAND
 	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
-	  deltaRadius CDATA #REQUIRED
+	  deltaRadius CDATA #IMPLIED
 	  >
 	
 	<!ELEMENT jdipNS:WAIVE EMPTY>
 	<!ATTLIST jdipNS:WAIVE
 	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
-	  deltaRadius CDATA #REQUIRED
+	  deltaRadius CDATA #IMPLIED
 	>
 	  
 	<!ELEMENT jdipNS:REMOVE EMPTY>
 	<!ATTLIST jdipNS:REMOVE
 	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
-	  deltaRadius CDATA #REQUIRED
+	  deltaRadius CDATA #IMPLIED
 	  >
 	  
 	<!ELEMENT jdipNS:BUILD EMPTY>
 	<!ATTLIST jdipNS:BUILD
 	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
-	  deltaRadius CDATA #REQUIRED
+	  deltaRadius CDATA #IMPLIED
 	  >
 	
 	<!ELEMENT jdipNS:MOVE EMPTY>
 	<!ATTLIST jdipNS:MOVE
 	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
-	  deltaRadius CDATA #REQUIRED
-	  strokeCSSStyle CDATA #REQUIRED
-	  markerID CDATA #REQUIRED
+	  deltaRadius CDATA #IMPLIED
+	  strokeCSSStyle CDATA #IMPLIED
+	  markerID CDATA #IMPLIED
 	  filterID CDATA #IMPLIED
-	  hilightOffset CDATA #REQUIRED
-	  hilightCSSClass CDATA #REQUIRED
-	  widths CDATA #REQUIRED
-	  shadowWidths CDATA #REQUIRED
+	  hilightOffset CDATA #IMPLIED
+	  hilightCSSClass CDATA #IMPLIED
+	  widths CDATA #IMPLIED
+	  shadowWidths CDATA #IMPLIED
 	  >
 	
 	<!ELEMENT jdipNS:RETREAT EMPTY>
 	<!ATTLIST jdipNS:RETREAT
 	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
-	  deltaRadius CDATA #REQUIRED
-	  strokeCSSStyle CDATA #REQUIRED
-	  markerID CDATA #REQUIRED
+	  deltaRadius CDATA #IMPLIED
+	  strokeCSSStyle CDATA #IMPLIED
+	  markerID CDATA #IMPLIED
 	  filterID CDATA #IMPLIED
-	  hilightOffset CDATA #REQUIRED
-	  hilightCSSClass CDATA #REQUIRED
+	  hilightOffset CDATA #IMPLIED
+	  hilightCSSClass CDATA #IMPLIED
+	  width CDATA #IMPLIED
+	  shaodwWidth CDATA #IMPLIED
 	  >
 	
 	<!ELEMENT jdipNS:SUPPORT EMPTY>
 	<!ATTLIST jdipNS:SUPPORT
 	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
-	  deltaRadius CDATA #REQUIRED
-	  strokeCSSStyle CDATA #REQUIRED
-	  markerID CDATA #REQUIRED
+	  deltaRadius CDATA #IMPLIED
+	  strokeCSSStyle CDATA #IMPLIED
+	  markerID CDATA #IMPLIED
 	  filterID CDATA #IMPLIED
-	  hilightOffset CDATA #REQUIRED
-	  hilightCSSClass CDATA #REQUIRED
+	  hilightOffset CDATA #IMPLIED
+	  hilightCSSClass CDATA #IMPLIED
+	  width CDATA #IMPLIED
+	  shaodwWidth CDATA #IMPLIED
 	  >
 	
 	<!ELEMENT jdipNS:CONVOY EMPTY>
 	<!ATTLIST jdipNS:CONVOY
 	  xmlns:jdipNS CDATA #FIXED "http://jdip.sourceforge.org/jdipNS"
-	  deltaRadius CDATA #REQUIRED
-	  strokeCSSStyle CDATA #REQUIRED
-	  markerID CDATA #REQUIRED
+	  deltaRadius CDATA #IMPLIED
+	  strokeCSSStyle CDATA #IMPLIED
+	  markerID CDATA #IMPLIED
 	  filterID CDATA #IMPLIED
-	  hilightOffset CDATA #REQUIRED
-	  hilightCSSClass CDATA #REQUIRED
+	  hilightOffset CDATA #IMPLIED
+	  hilightCSSClass CDATA #IMPLIED
+	  width CDATA #IMPLIED
+	  shaodwWidth CDATA #IMPLIED
 	  >
 ]>
 <svg width="716px" height="580px" viewBox="0 0 716 580" xmlns="http://www.w3.org/2000/svg" 
@@ -189,27 +195,27 @@
 			<jdipNS:POWERCOLOR power="Ukraine"	color="#FF00FF"/>
 		</jdipNS:POWERCOLORS>
 		
-		<jdipNS:SYMBOLSIZE name="Fleet" width="20" height="20"/>
-		<jdipNS:SYMBOLSIZE name="Army" width="20" height="20"/>
-		<jdipNS:SYMBOLSIZE name="Wing" width="20" height="20"/>
-		<jdipNS:SYMBOLSIZE name="DislodgedFleet" width="20" height="20"/>
-		<jdipNS:SYMBOLSIZE name="DislodgedArmy" width="20" height="20"/>
-		<jdipNS:SYMBOLSIZE name="DislodgedWing" width="20" height="20"/>
-		<jdipNS:SYMBOLSIZE name="FailedOrder" width="17" height="17"/>
-		<jdipNS:SYMBOLSIZE name="SupplyCenter" width="10" height="10"/>
-		<jdipNS:SYMBOLSIZE name="BuildUnit" width="25" height="30"/>
-		<jdipNS:SYMBOLSIZE name="RemoveUnit" width="25" height="27"/>
-		<jdipNS:SYMBOLSIZE name="WaivedBuild" width="25" height="25"/>
+		<jdipNS:SYMBOLSIZE name="Fleet" width="28" height="28"/>
+		<jdipNS:SYMBOLSIZE name="Army" width="28" height="28"/>
+		<jdipNS:SYMBOLSIZE name="Wing" width="28" height="28"/>
+		<jdipNS:SYMBOLSIZE name="DislodgedFleet" width="28" height="28"/>
+		<jdipNS:SYMBOLSIZE name="DislodgedArmy" width="28" height="28"/>
+		<jdipNS:SYMBOLSIZE name="DislodgedWing" width="28" height="28"/>
+		<jdipNS:SYMBOLSIZE name="FailedOrder" width="21" height="21"/>
+		<jdipNS:SYMBOLSIZE name="SupplyCenter" width="14" height="14"/>
+		<jdipNS:SYMBOLSIZE name="BuildUnit" width="42" height="42"/>
+		<jdipNS:SYMBOLSIZE name="RemoveUnit" width="35" height="35"/>
+		<jdipNS:SYMBOLSIZE name="WaivedBuild" width="28" height="28"/>
 		
-		<jdipNS:BUILD deltaRadius="0" />
-		<jdipNS:REMOVE deltaRadius="2"/>
-		<jdipNS:DISBAND deltaRadius="2"/>
-		<jdipNS:WAIVE deltaRadius="0"/>
-		<jdipNS:HOLD deltaRadius="3" strokeCSSStyle="varwidthorder" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="4,6,8,10" shadowWidths="6,8,10,12"/>
-		<jdipNS:MOVE deltaRadius="8" strokeCSSStyle="varwidthorder" markerID="arrow" hilightOffset="0" hilightCSSClass="varwidthshadow" widths="4,6,8,10" shadowWidths="6,8,10,12"/>
-		<jdipNS:RETREAT deltaRadius="5" strokeCSSStyle="defaultorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadoworder"/>
-		<jdipNS:SUPPORT deltaRadius="7" strokeCSSStyle="supportorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadowdash"/>
-		<jdipNS:CONVOY deltaRadius="5" strokeCSSStyle="convoyorder" markerID="arrow" hilightOffset="0" hilightCSSClass="shadowdash"/>
+		<jdipNS:BUILD/>
+		<jdipNS:REMOVE/>
+		<jdipNS:DISBAND/>
+		<jdipNS:WAIVE/>
+		<jdipNS:HOLD/>
+		<jdipNS:MOVE/>
+		<jdipNS:RETREAT/>
+		<jdipNS:SUPPORT/>
+		<jdipNS:CONVOY/>
 	</jdipNS:ORDERDRAWING>
 	
 	<jdipNS:PROVINCE_DATA dislodgedUnitOffset="7,-7">
@@ -424,15 +430,12 @@
 			
 			/* Order drawing styles, stroke and fill colors should not be specified */
 			
-			.defaultorder	{stroke-width:4;fill:none;}
-			.supportorder	{stroke-width:4;fill:none;stroke-dasharray:5,5;}
-			.convoyorder	{stroke-dasharray:15,5;stroke-width:4;fill:none;}
+			.defaultorder	{fill:none;}
+			.supportorder	{fill:none;stroke-dasharray:4,4;}
+			.convoyorder	{stroke-dasharray:12,4;fill:none;}
 			
-			.shadoworder	{stroke-width:6;fill:none;stroke:black;}
-			.shadowdash		{stroke-width:6;fill:none;stroke:black;opacity:0.45;}
-			
-			.varwidthorder  {fill:none;}
-			.varwidthshadow {fill:none;stroke:black;}
+			.shadoworder	{fill:none;stroke:black;}
+			.shadowdash		{fill:none;stroke:black;opacity:0.45;}
 			
 		]]>
 		</style>

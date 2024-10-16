@@ -404,7 +404,7 @@ public class ClientFrame extends JFrame {
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(statusBar, BorderLayout.SOUTH);
         pack();
-        GeneralPreferencePanel.getWindowSettings(this);
+        setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
         setVisible(true);
         fireChangeMode(MODE_NONE);
         toFront();

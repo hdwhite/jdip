@@ -232,6 +232,18 @@ public class MapMetadata {
      * Internal constant for a coordinate at (0.0, 0.0)
      */
     private static final Point2D.Float POINT_ZERO = new Point2D.Float(0.0f, 0.0f);
+    private static final String DEFAULT_ORDER = "defaultorder";
+    private static final String SUPPORT_ORDER = "supportorder";
+    private static final String CONVOY_ORDER = "convoyorder";
+    private static final String SHADOW_ORDER = "shadoworder";
+    private static final String SHADOW_DASH = "shadowdash";
+    private static final String ARROW = "arrow";
+    private static final String DEFAULT_WIDTH = "4.2";
+    private static final String DEFAULT_SHADOW_WIDTH = "7";
+    private static final float[] DEFAULT_WIDTHS = {4.2f, 6.3f, 8.4f, 10.5f};
+    private static final float[] DEFAULT_SHADOW_WIDTHS = {7f, 10.5f, 14f, 17.5f};
+    private static final float DEFAULT_DELTA_RADIUS_SMALL = 3.5f;
+    private static final float DEFAULT_DELTA_RADIUS_LARGE = 7f;
     private final MapPanel mp;
     // instance variables
     private final Map<Province, InfoEntry> infoMap;                // placement info
@@ -282,6 +294,17 @@ public class MapMetadata {
             return Float.valueOf(value.trim());
         } catch (NumberFormatException e) {
             throw new MapException(el + " attribute " + att + " value \"" + value + "\" is not specified or not a valid floating point value.");
+        }
+    }// parseFloat()
+
+    /**
+     * Parse a float; if fails, returns null
+     */
+    private static Float parseFloat(String value) {
+        try {
+            return Float.valueOf(value.trim());
+        } catch (NumberFormatException e) {
+            return null;
         }
     }// parseFloat()
 
@@ -652,6 +675,7 @@ public class MapMetadata {
         Element orderRoot = (Element) nl.item(0);
 
         // parse SYMBOLSIZE info
+        // TODO: Implement defaults for SymbolSize
         NodeList ssnl = orderRoot.getElementsByTagNameNS(JDIP_NAMESPACE, EL_SYMBOLSIZE);
         for (int i = 0; i < ssnl.getLength(); i++) {
             parseAndAddSymbolSize((Element) ssnl.item(i));
@@ -660,80 +684,80 @@ public class MapMetadata {
         // HOLD
         Element el = getElement(orderRoot, EL_HOLD);
         checkElement(EL_HOLD, el);
-        putOrderParam(EL_HOLD, ATT_DELTA_RADIUS, parseFloat(EL_HOLD, ATT_DELTA_RADIUS, el.getAttribute(ATT_DELTA_RADIUS)));
-        putOrderParam(EL_HOLD, ATT_STROKESTYLE, el.getAttribute(ATT_STROKESTYLE).trim());
-        putOrderParam(EL_HOLD, ATT_HILIGHT_OFFSET, parseFloat(EL_HOLD, ATT_HILIGHT_OFFSET, el.getAttribute(ATT_HILIGHT_OFFSET)));
-        putOrderParam(EL_HOLD, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim());
-        putOrderParam(EL_HOLD, ATT_WIDTHS, parseFloatArray(EL_HOLD, ATT_WIDTHS, el.getAttribute(ATT_WIDTHS)));
-        putOrderParam(EL_HOLD, ATT_SHADOW_WIDTHS, parseFloatArray(EL_HOLD, ATT_SHADOW_WIDTHS, el.getAttribute(ATT_SHADOW_WIDTHS)));
+        putOrderParam(EL_HOLD, ATT_DELTA_RADIUS, parseFloat(el.getAttribute(ATT_DELTA_RADIUS)), DEFAULT_DELTA_RADIUS_SMALL);
+        putOrderParam(EL_HOLD, ATT_STROKESTYLE, el.getAttribute(ATT_STROKESTYLE).trim(), DEFAULT_ORDER);
+        putOrderParam(EL_HOLD, ATT_HILIGHT_OFFSET, parseFloat(el.getAttribute(ATT_HILIGHT_OFFSET)), 0f);
+        putOrderParam(EL_HOLD, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim(), SHADOW_ORDER);
+        putOrderParam(EL_HOLD, ATT_WIDTHS, parseFloatArray(EL_MOVE, ATT_WIDTHS, el.getAttribute(ATT_WIDTHS)), DEFAULT_WIDTHS);
+        putOrderParam(EL_HOLD, ATT_SHADOW_WIDTHS, parseFloatArray(EL_MOVE, ATT_SHADOW_WIDTHS, el.getAttribute(ATT_SHADOW_WIDTHS)), DEFAULT_SHADOW_WIDTHS);
         putOptionalOrderParam(EL_HOLD, ATT_FILTERID, el.getAttribute(ATT_FILTERID).trim());
 
         // DISBAND
         el = getElement(orderRoot, EL_DISBAND);
         checkElement(EL_DISBAND, el);
-        putOrderParam(EL_DISBAND, ATT_DELTA_RADIUS, parseFloat(EL_DISBAND, ATT_DELTA_RADIUS, el.getAttribute(ATT_DELTA_RADIUS)));
+        putOrderParam(EL_DISBAND, ATT_DELTA_RADIUS, parseFloat(el.getAttribute(ATT_DELTA_RADIUS)), DEFAULT_DELTA_RADIUS_SMALL);
 
         // REMOVE
         el = getElement(orderRoot, EL_REMOVE);
         checkElement(EL_REMOVE, el);
-        putOrderParam(EL_REMOVE, ATT_DELTA_RADIUS, parseFloat(EL_REMOVE, ATT_DELTA_RADIUS, el.getAttribute(ATT_DELTA_RADIUS)));
+        putOrderParam(EL_REMOVE, ATT_DELTA_RADIUS, parseFloat(el.getAttribute(ATT_DELTA_RADIUS)), DEFAULT_DELTA_RADIUS_SMALL);
 
         // BUILD
         el = getElement(orderRoot, EL_BUILD);
         checkElement(EL_BUILD, el);
-        putOrderParam(EL_BUILD, ATT_DELTA_RADIUS, parseFloat(EL_BUILD, ATT_DELTA_RADIUS, el.getAttribute(ATT_DELTA_RADIUS)));
+        putOrderParam(EL_BUILD, ATT_DELTA_RADIUS, parseFloat(el.getAttribute(ATT_DELTA_RADIUS)), 0f);
 
         // WAIVE
         el = getElement(orderRoot, EL_WAIVE);
         checkElement(EL_WAIVE, el);
-        putOrderParam(EL_WAIVE, ATT_DELTA_RADIUS, parseFloat(EL_WAIVE, ATT_DELTA_RADIUS, el.getAttribute(ATT_DELTA_RADIUS)));
+        putOrderParam(EL_WAIVE, ATT_DELTA_RADIUS, parseFloat(el.getAttribute(ATT_DELTA_RADIUS)), 0f);
 
         // MOVE
         el = getElement(orderRoot, EL_MOVE);
         checkElement(EL_MOVE, el);
-        putOrderParam(EL_MOVE, ATT_DELTA_RADIUS, parseFloat(EL_MOVE, ATT_DELTA_RADIUS, el.getAttribute(ATT_DELTA_RADIUS)));
-        putOrderParam(EL_MOVE, ATT_STROKESTYLE, el.getAttribute(ATT_STROKESTYLE).trim());
-        putOrderParam(EL_MOVE, ATT_MARKERID, el.getAttribute(ATT_MARKERID).trim());
-        putOrderParam(EL_MOVE, ATT_HILIGHT_OFFSET, parseFloat(EL_MOVE, ATT_HILIGHT_OFFSET, el.getAttribute(ATT_HILIGHT_OFFSET)));
-        putOrderParam(EL_MOVE, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim());
-        putOrderParam(EL_MOVE, ATT_WIDTHS, parseFloatArray(EL_MOVE, ATT_WIDTHS, el.getAttribute(ATT_WIDTHS)));
-        putOrderParam(EL_MOVE, ATT_SHADOW_WIDTHS, parseFloatArray(EL_MOVE, ATT_SHADOW_WIDTHS, el.getAttribute(ATT_SHADOW_WIDTHS)));
+        putOrderParam(EL_MOVE, ATT_DELTA_RADIUS, parseFloat(el.getAttribute(ATT_DELTA_RADIUS)), DEFAULT_DELTA_RADIUS_SMALL);
+        putOrderParam(EL_MOVE, ATT_STROKESTYLE, el.getAttribute(ATT_STROKESTYLE).trim(), DEFAULT_ORDER);
+        putOrderParam(EL_MOVE, ATT_MARKERID, el.getAttribute(ATT_MARKERID).trim(), ARROW);
+        putOrderParam(EL_MOVE, ATT_HILIGHT_OFFSET, parseFloat(el.getAttribute(ATT_HILIGHT_OFFSET)), 0f);
+        putOrderParam(EL_MOVE, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim(), SHADOW_ORDER);
+        putOrderParam(EL_MOVE, ATT_WIDTHS, parseFloatArray(EL_MOVE, ATT_WIDTHS, el.getAttribute(ATT_WIDTHS)), DEFAULT_WIDTHS);
+        putOrderParam(EL_MOVE, ATT_SHADOW_WIDTHS, parseFloatArray(EL_MOVE, ATT_SHADOW_WIDTHS, el.getAttribute(ATT_SHADOW_WIDTHS)), DEFAULT_SHADOW_WIDTHS);
         putOptionalOrderParam(EL_MOVE, ATT_FILTERID, el.getAttribute(ATT_FILTERID).trim());
 
         // RETREAT
         el = getElement(orderRoot, EL_RETREAT);
         checkElement(EL_RETREAT, el);
-        putOrderParam(EL_RETREAT, ATT_DELTA_RADIUS, parseFloat(EL_RETREAT, ATT_DELTA_RADIUS, el.getAttribute(ATT_DELTA_RADIUS)));
-        putOrderParam(EL_RETREAT, ATT_STROKESTYLE, el.getAttribute(ATT_STROKESTYLE).trim());
-        putOrderParam(EL_RETREAT, ATT_MARKERID, el.getAttribute(ATT_MARKERID).trim());
-        putOrderParam(EL_RETREAT, ATT_HILIGHT_OFFSET, parseFloat(EL_RETREAT, ATT_HILIGHT_OFFSET, el.getAttribute(ATT_HILIGHT_OFFSET)));
-        putOrderParam(EL_RETREAT, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim());
-        putOrderParam(EL_RETREAT, ATT_WIDTH, el.getAttribute(ATT_WIDTH).trim());
-        putOrderParam(EL_RETREAT, ATT_SHADOW_WIDTH, el.getAttribute(ATT_SHADOW_WIDTH).trim());
+        putOrderParam(EL_RETREAT, ATT_DELTA_RADIUS, parseFloat(el.getAttribute(ATT_DELTA_RADIUS)), DEFAULT_DELTA_RADIUS_SMALL);
+        putOrderParam(EL_RETREAT, ATT_STROKESTYLE, el.getAttribute(ATT_STROKESTYLE).trim(), DEFAULT_ORDER);
+        putOrderParam(EL_RETREAT, ATT_MARKERID, el.getAttribute(ATT_MARKERID).trim(), ARROW);
+        putOrderParam(EL_RETREAT, ATT_HILIGHT_OFFSET, parseFloat(el.getAttribute(ATT_HILIGHT_OFFSET)), 0f);
+        putOrderParam(EL_RETREAT, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim(), SHADOW_ORDER);
+        putOrderParam(EL_RETREAT, ATT_WIDTH, el.getAttribute(ATT_WIDTH).trim(), DEFAULT_WIDTH);
+        putOrderParam(EL_RETREAT, ATT_SHADOW_WIDTH, el.getAttribute(ATT_SHADOW_WIDTH).trim(), DEFAULT_SHADOW_WIDTH);
         putOptionalOrderParam(EL_RETREAT, ATT_FILTERID, el.getAttribute(ATT_FILTERID).trim());
 
         // SUPPORT
         el = getElement(orderRoot, EL_SUPPORT);
         checkElement(EL_SUPPORT, el);
-        putOrderParam(EL_SUPPORT, ATT_DELTA_RADIUS, parseFloat(EL_SUPPORT, ATT_DELTA_RADIUS, el.getAttribute(ATT_DELTA_RADIUS)));
-        putOrderParam(EL_SUPPORT, ATT_STROKESTYLE, el.getAttribute(ATT_STROKESTYLE).trim());
-        putOrderParam(EL_SUPPORT, ATT_MARKERID, el.getAttribute(ATT_MARKERID).trim());
-        putOrderParam(EL_SUPPORT, ATT_HILIGHT_OFFSET, parseFloat(EL_SUPPORT, ATT_HILIGHT_OFFSET, el.getAttribute(ATT_HILIGHT_OFFSET)));
-        putOrderParam(EL_SUPPORT, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim());
-        putOrderParam(EL_SUPPORT, ATT_WIDTH, el.getAttribute(ATT_WIDTH).trim());
-        putOrderParam(EL_SUPPORT, ATT_SHADOW_WIDTH, el.getAttribute(ATT_SHADOW_WIDTH).trim());
+        putOrderParam(EL_SUPPORT, ATT_DELTA_RADIUS, parseFloat(el.getAttribute(ATT_DELTA_RADIUS)), DEFAULT_DELTA_RADIUS_LARGE);
+        putOrderParam(EL_SUPPORT, ATT_STROKESTYLE, el.getAttribute(ATT_STROKESTYLE).trim(), SUPPORT_ORDER);
+        putOrderParam(EL_SUPPORT, ATT_MARKERID, el.getAttribute(ATT_MARKERID).trim(), ARROW);
+        putOrderParam(EL_SUPPORT, ATT_HILIGHT_OFFSET, parseFloat(el.getAttribute(ATT_HILIGHT_OFFSET)), 0f);
+        putOrderParam(EL_SUPPORT, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim(), SHADOW_DASH);
+        putOrderParam(EL_SUPPORT, ATT_WIDTH, el.getAttribute(ATT_WIDTH).trim(), DEFAULT_WIDTH);
+        putOrderParam(EL_SUPPORT, ATT_SHADOW_WIDTH, el.getAttribute(ATT_SHADOW_WIDTH).trim(), DEFAULT_SHADOW_WIDTH);
         putOptionalOrderParam(EL_SUPPORT, ATT_FILTERID, el.getAttribute(ATT_FILTERID).trim());
 
         // CONVOY
         el = getElement(orderRoot, EL_CONVOY);
         checkElement(EL_CONVOY, el);
-        putOrderParam(EL_CONVOY, ATT_DELTA_RADIUS, parseFloat(EL_CONVOY, ATT_DELTA_RADIUS, el.getAttribute(ATT_DELTA_RADIUS)));
-        putOrderParam(EL_CONVOY, ATT_STROKESTYLE, el.getAttribute(ATT_STROKESTYLE).trim());
-        putOrderParam(EL_CONVOY, ATT_MARKERID, el.getAttribute(ATT_MARKERID).trim());
-        putOrderParam(EL_CONVOY, ATT_HILIGHT_OFFSET, parseFloat(EL_CONVOY, ATT_HILIGHT_OFFSET, el.getAttribute(ATT_HILIGHT_OFFSET)));
-        putOrderParam(EL_CONVOY, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim());
-        putOrderParam(EL_CONVOY, ATT_WIDTH, el.getAttribute(ATT_WIDTH).trim());
-        putOrderParam(EL_CONVOY, ATT_SHADOW_WIDTH, el.getAttribute(ATT_SHADOW_WIDTH).trim());
+        putOrderParam(EL_CONVOY, ATT_DELTA_RADIUS, parseFloat(el.getAttribute(ATT_DELTA_RADIUS)), DEFAULT_DELTA_RADIUS_LARGE);
+        putOrderParam(EL_CONVOY, ATT_STROKESTYLE, el.getAttribute(ATT_STROKESTYLE).trim(), CONVOY_ORDER);
+        putOrderParam(EL_CONVOY, ATT_MARKERID, el.getAttribute(ATT_MARKERID).trim(), ARROW);
+        putOrderParam(EL_CONVOY, ATT_HILIGHT_OFFSET, parseFloat(el.getAttribute(ATT_HILIGHT_OFFSET)), 0f);
+        putOrderParam(EL_CONVOY, ATT_HILIGHT_CLASS, el.getAttribute(ATT_HILIGHT_CLASS).trim(), SHADOW_DASH);
+        putOrderParam(EL_CONVOY, ATT_WIDTH, el.getAttribute(ATT_WIDTH).trim(), DEFAULT_WIDTH);
+        putOrderParam(EL_CONVOY, ATT_SHADOW_WIDTH, el.getAttribute(ATT_SHADOW_WIDTH).trim(), DEFAULT_SHADOW_WIDTH);
         putOptionalOrderParam(EL_CONVOY, ATT_FILTERID, el.getAttribute(ATT_FILTERID).trim());
 
         // POWERCOLOR(S)
@@ -779,25 +803,20 @@ public class MapMetadata {
         }
     }// checkElement()
 
-    /**
-     * Helper method: set an order parameter
+     /**
+     * Helper method: set an order parameter with a default value
      */
-    private void putOrderParam(String el, String att, Object value)
-            throws MapException {
+    private void putOrderParam(String el, String att, Object value, Object defaultValue) {
         if (el == null || att == null) {
             throw new IllegalArgumentException();
         }
 
-        if (value == null || "".equals(value)) {
-            throw new MapException(el + " attribute " + att + " is missing!");
-        }
-
+        Object storedValue = (value == null || "".equals(value)) ? defaultValue : value;
         StringBuilder sb = new StringBuilder(64);
         sb.append(el);
         sb.append(att);
-        displayProps.put(sb.toString(), value);
+        displayProps.put(sb.toString(), storedValue);
     }// putOrderParam()
-
 
     /**
      * Helper method: set an order parameter, but if it doesn't exist, don't complain.
@@ -870,7 +889,7 @@ public class MapMetadata {
     }// parseCoord()
 
     /**
-     * Parse a float array; if fails, returns a MapException
+     * Parse a float array
      */
     private float[] parseFloatArray(String el, String att, String value)
             throws MapException {
@@ -878,7 +897,7 @@ public class MapMetadata {
         final float[] arr = new float[st.countTokens()];
 
         if (arr.length == 0) {
-            throw new MapException(el + " attribute " + att + " value \"" + value + "\" must contain at least one positive floating point value.");
+            return null;
         }
 
         int count = 0;

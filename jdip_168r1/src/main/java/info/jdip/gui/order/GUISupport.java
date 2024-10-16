@@ -429,10 +429,12 @@ public class GUISupport extends Support implements GUIOrder {
     private void updateDOMHold(MapInfo mapInfo) {
         SVGElement[] elements = null;
 
+        // TODO: Make dashed line properly scale with zooming
         // create hilight line
         String cssStyle = mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_SUPPORT, MapMetadata.ATT_HILIGHT_CLASS);
         if (!cssStyle.equalsIgnoreCase("none")) {
-            float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_SUPPORT, MapMetadata.ATT_HILIGHT_OFFSET);
+            float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_SUPPORT, MapMetadata.ATT_HILIGHT_OFFSET)
+                         / mapInfo.getMapMetadata().getZoomFactor();
             elements = drawSupportedHold(mapInfo, offset);
             GUIOrderUtils.makeHilight(elements, mapInfo.getMapMetadata(), MapMetadata.EL_SUPPORT);
             float width = Float.parseFloat(mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_SUPPORT, MapMetadata.ATT_SHADOW_WIDTH))
@@ -464,7 +466,8 @@ public class GUISupport extends Support implements GUIOrder {
         // create hilight line
         String cssStyle = mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_SUPPORT, MapMetadata.ATT_HILIGHT_CLASS);
         if (!cssStyle.equalsIgnoreCase("none")) {
-            float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_SUPPORT, MapMetadata.ATT_HILIGHT_OFFSET);
+            float offset = mapInfo.getMapMetadata().getOrderParamFloat(MapMetadata.EL_SUPPORT, MapMetadata.ATT_HILIGHT_OFFSET)
+                        / mapInfo.getMapMetadata().getZoomFactor();
             elements = drawSupportedMove(mapInfo, offset, false);
             GUIOrderUtils.makeHilight(elements, mapInfo.getMapMetadata(), MapMetadata.EL_SUPPORT);
             float width = Float.parseFloat(mapInfo.getMapMetadata().getOrderParamString(MapMetadata.EL_SUPPORT, MapMetadata.ATT_SHADOW_WIDTH))
