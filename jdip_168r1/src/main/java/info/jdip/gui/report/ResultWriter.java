@@ -106,7 +106,7 @@ public class ResultWriter {
         tv.setTitle(title.toString());
         tv.setHelpID(Help.HelpID.Dialog_ResultReport);
         tv.setHeaderVisible(false);
-        tv.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        tv.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         tv.lazyLoadDisplayDialog(new TextViewer.TVRunnable() {
             public void run() {
@@ -166,7 +166,7 @@ public class ResultWriter {
         StringBuilder sb = new StringBuilder(2048);
         iter = generalResults.iterator();
         while (iter.hasNext()) {
-            Result r = (Result) iter.next();
+            Result r = iter.next();
             sb.append(r.getMessage(ofo));
             sb.append("<br>\n");
         }
@@ -199,7 +199,6 @@ public class ResultWriter {
         // Sort the results
         Collections.sort(orderResults);
         Collections.sort(otherResults);
-        resultList = null;
 
         // Print results, by power.
         StringBuilder sb = new StringBuilder(4096);
@@ -319,74 +318,77 @@ public class ResultWriter {
         // iterate through ordMap, chaining the results, if there are more than one.
         Iterator<List<OrderResult>> listIter = ordMap.values().iterator();
         while (listIter.hasNext()) {
-            Orderable order = null;
-            boolean hasFailed = false;
-            List<OrderResult> list = listIter.next();
-
-            // find if we have failed or not
-            Iterator<OrderResult> it = list.iterator();
-            while (it.hasNext()) {
-                OrderResult or = it.next();
-                ResultType rt = or.getResultType();
-
-                order = or.getOrder();
-
-                if (rt == ResultType.FAILURE ||
-                        rt == ResultType.DISLODGED ||
-                        rt == ResultType.VALIDATION_FAILURE) {
-                    hasFailed = true;
-                    break;
-                }
-            }
-
-            // print the order
-            // underline order if failure
-            if (hasFailed) {
-                sb.append("<u>");
-                sb.append(order.toFormattedString(ofo));
-                sb.append("</u>");
-            } else {
-                sb.append(order.toFormattedString(ofo));
-            }
-
-            // print the messages; they should always be in italics.
-            // we always print non-empty messages indented and underneath if there are any.
-            //
-            // make a list of non-empty messages. (strings)
-            //
-            List<String> nonEmptyList = new ArrayList<>(list.size());
-            it = list.iterator();
-            while (it.hasNext()) {
-                OrderResult or = (OrderResult) it.next();
-                final String msg = or.getMessage(ofo);
-                if (msg.length() > 0) {
-                    nonEmptyList.add(msg);
-                }
-            }
-
-            if (nonEmptyList.isEmpty()) {
-                sb.append("<br>\n");
-            } else {
-                sb.append("<div class=\"indent1cm\" style=\"margin-bottom:3pt;\">");
-
-                Iterator<String> stringIter = nonEmptyList.iterator();
-                while (it.hasNext()) {
-                    final String msg = stringIter.next();
-                    sb.append("<i> ");
-                    sb.append(msg);
-                    sb.append(" </i>\n");
-                    if (it.hasNext()) {
-                        sb.append("<br>\n");
-                    }
-                }
-
-                sb.append("</div>");
-            }
+            printOrderResult(listIter.next(), sb);
         }
 
         sb.append("</div>");
     }// printOrderResultsForPower()
 
+    private void printOrderResult(List<OrderResult> list, StringBuilder sb) {
+        
+        Orderable order = null;
+        boolean hasFailed = false;
+
+        // find if we have failed or not
+        Iterator<OrderResult> it = list.iterator();
+        while (it.hasNext()) {
+            OrderResult or = it.next();
+            ResultType rt = or.getResultType();
+
+            order = or.getOrder();
+
+            if (rt == ResultType.FAILURE ||
+                    rt == ResultType.DISLODGED ||
+                    rt == ResultType.VALIDATION_FAILURE) {
+                hasFailed = true;
+                break;
+            }
+        }
+
+        // print the order
+        // underline order if failure
+        if (hasFailed) {
+            sb.append("<u>");
+            sb.append(order.toFormattedString(ofo));
+            sb.append("</u>");
+        } else {
+            sb.append(order.toFormattedString(ofo));
+        }
+
+        // print the messages; they should always be in italics.
+        // we always print non-empty messages indented and underneath if there are any.
+        //
+        // make a list of non-empty messages. (strings)
+        //
+        List<String> nonEmptyList = new ArrayList<>(list.size());
+        it = list.iterator();
+        while (it.hasNext()) {
+            OrderResult or = it.next();
+            final String msg = or.getMessage(ofo);
+            if (msg.length() > 0) {
+                nonEmptyList.add(msg);
+            }
+        }
+
+        if (nonEmptyList.isEmpty()) {
+            sb.append("<br>\n");
+            return;
+        }
+
+        sb.append("<div class=\"indent1cm\" style=\"margin-bottom:3pt;\">");
+        Iterator<String> stringIter = nonEmptyList.iterator();
+        while (it.hasNext()) {
+            final String msg = stringIter.next();
+            sb.append("<i> ");
+            sb.append(msg);
+            sb.append(" </i>\n");
+            if (it.hasNext()) {
+                sb.append("<br>\n");
+            }
+        }
+
+        sb.append("</div>");
+    }
 
 }// class ResultWriter
 

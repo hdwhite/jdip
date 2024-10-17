@@ -1108,27 +1108,34 @@ public class ClientFrame extends JFrame {
      */
     private class ModeListener implements PropertyChangeListener {
         public void propertyChange(PropertyChangeEvent evt) {
-            String evtName = evt.getPropertyName();
-
-            if (EVT_MODE_CHANGED.equals(evtName)) {
-                String newMode = (String) evt.getNewValue();
-
-                if (MODE_NONE.equals(newMode)) {
+            switch (evt.getPropertyName()) {
+                case EVT_MODE_CHANGED:
+                switch ((String) evt.getNewValue()) {
+                    case MODE_NONE:
                     statusBar.clearModeText();
-                } else if (MODE_REVIEW.equals(newMode)) {
-                    statusBar.setModeText(Utils.getLocalString("ClientFrame.mode.review"));
+                    break;
 
+                    case MODE_REVIEW:
+                    statusBar.setModeText(Utils.getLocalString("ClientFrame.mode.review"));
                     if (ClientFrame.this.getTurnState().isEnded()) {
                         statusBar.setModeText(Utils.getLocalString("ClientFrame.mode.ended"));
                     }
-                } else if (MODE_EDIT.equals(newMode)) {
+                    break;
+
+                    case MODE_EDIT:
                     statusBar.setModeText(Utils.getLocalString("ClientFrame.mode.edit"));
-                } else if (MODE_ORDER.equals(newMode)) {
+                    break;
+
+                    case MODE_ORDER:
                     statusBar.setModeText(Utils.getLocalString("ClientFrame.mode.order"));
-                } else {
-                    throw new IllegalStateException("invalid mode: " + newMode);
+                    break;
+
+                    default:
+                    throw new IllegalStateException("invalid mode: " + (String) evt.getNewValue());
                 }
-            } else if (EVT_TURNSTATE_CHANGED.equals(evtName)) {
+                break;
+
+                case EVT_TURNSTATE_CHANGED:
                 synchronized (ClientFrame.this) {
                     ClientFrame.this.turnState = (TurnState) evt.getNewValue();
 
@@ -1138,18 +1145,27 @@ public class ClientFrame extends JFrame {
                         fireChangeMode(MODE_ORDER);
                     }
                 }
-            } else if (EVT_DISPLAYABLE_POWERS_CHANGED.equals(evtName)) {
+                break;
+
+                case EVT_DISPLAYABLE_POWERS_CHANGED:
                 synchronized (ClientFrame.this) {
                     ClientFrame.this.displayablePowers = (Power[]) evt.getNewValue();
                 }
-            } else if (EVT_ORDERABLE_POWERS_CHANGED.equals(evtName)) {
+                break;
+
+                case EVT_ORDERABLE_POWERS_CHANGED: 
                 synchronized (ClientFrame.this) {
                     ClientFrame.this.orderablePowers = (Power[]) evt.getNewValue();
                 }
-            } else if (EVT_MMD_READY.equals(evtName)) {
+                break;
+
+                case EVT_MMD_READY:
                 synchronized (ClientFrame.this) {
                     ClientFrame.this.mapMetadata = (MapMetadata) evt.getNewValue();
                 }
+
+                default:
+                return;
             }
         }
     }// class ModeListener

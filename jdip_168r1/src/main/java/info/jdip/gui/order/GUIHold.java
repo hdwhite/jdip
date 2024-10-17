@@ -49,7 +49,7 @@ public class GUIHold extends Hold implements GUIOrder {
     // i18n keys
 
     // instance variables
-    private transient final static int REQ_LOC = 1;
+    private static final transient int REQ_LOC = 1;
     private transient int currentLocNum = 0;
     private transient int numSupports = -1;    // WARNING: this will become '0' when de-serialized; not -1
     private transient Point2D.Float failPt = null;

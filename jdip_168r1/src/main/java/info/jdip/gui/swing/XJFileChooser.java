@@ -53,37 +53,6 @@ public class XJFileChooser {
     private static final String OVERWRITE_TEXT = "XJFileChooser.dialog.overwrite.text.location";
     private static final String OVERWRITE_TITLE = "XJFileChooser.dialog.overwrite.title";
     private static final String TITLE_SAVE_AS = "XJFileChooser.title.saveas";
-	
-	/* 
-	//simple test...
-	public static void main(String[] dsf)
-	throws Exception
-	{
-		System.out.println("hello");
-		
-		XJFileChooser c = XJFileChooser.getXJFileChooser();
-		c.addFileFilter(SimpleFileFilter.JPG_FILTER);
-		System.out.println(c.displayOpen(null));
-		c.dispose();
-		
-		c = XJFileChooser.getXJFileChooser();
-		c.addFileFilter(SimpleFileFilter.PDF_FILTER);
-		c.addFileFilter(SimpleFileFilter.TXT_FILTER);
-		System.out.println(c.displaySave(null));
-		c.dispose();
-
-		c = XJFileChooser.getXJFileChooser();
-		c.addFileFilter(SimpleFileFilter.PNG_FILTER);
-		c.addFileFilter(SimpleFileFilter.TXT_FILTER);
-		System.out.println(c.displaySaveAs(null));
-		c.dispose();
-		
-		// this shoudl fail (no get() called)
-		c.displaySaveAs(null);
-		// this should fail
-		c.displaySaveAs(null);
-	}
-	*/
 
     // class variables
     private static final XJFileChooser instance = new XJFileChooser();
@@ -108,7 +77,7 @@ public class XJFileChooser {
      * Can be used to initialize the XJFileChooser when called
      * to provide faster response later
      */
-    public synchronized static void init() {
+    public static synchronized void init() {
         // does nothing; no longer needed
     }// init()
 
@@ -121,7 +90,7 @@ public class XJFileChooser {
      * means that (usually) only the AcceptAll file filter
      * (which is not a SimpleFileFilter) remains.
      */
-    public synchronized static XJFileChooser getXJFileChooser() {
+    public static synchronized XJFileChooser getXJFileChooser() {
         refcount++;
         if (refcount > 1) {
             throw new IllegalStateException("cannot re-use getXJFileChooser(): " + refcount);
@@ -262,16 +231,6 @@ public class XJFileChooser {
      */
 	/*
 	
-	ELIMINATED: cannot do directories-only with AWT filechooser
-	
-	public File displaySelectDir(Component parent, String title)
-	{
-		final String selectText = Utils.getLocalString(BTN_DIR_SELECT);
-		return display(parent, title, selectText, JFileChooser.OPEN_DIALOG, JFileChooser.DIRECTORIES_ONLY);
-	}// displaySelectDir()
-	*/
-
-
     /**
      * resets the XJFileChooser to its default state
      */
@@ -279,57 +238,6 @@ public class XJFileChooser {
         chooser.reset();
     }// reset()
 
-
-    /**
-     *	Extends JFileChooser; displays a confirmation popup
-     *	if we are a SAVE dialog, and the file already exists.
-     *	This prevents users from accidentally overwriting
-     *	files.
-     *
-     */
-	/*
-	private class CheckedJFileChooser extends JFileChooser
-	{
-		public CheckedJFileChooser()
-		{
-			super((File) null);
-		}
-		
-		
-		// Override to check for overwrite confirmation 
-		public void approveSelection() 
-		{
-			if(getDialogType() != JFileChooser.OPEN_DIALOG)
-			{
-				File selectedFile = fixFileExtension(chooser.getFileFilter(), chooser.getSelectedFile());
-				if(selectedFile != null)
-				{
-					if(	selectedFile.exists() )
-					{
-						String message = Utils.getText(Utils.getLocalString(OVERWRITE_TEXT), selectedFile.getName());
-						
-						int result = JOptionPane.showConfirmDialog(getParent(), 
-										message,
-										Utils.getLocalString(OVERWRITE_TITLE),
-										JOptionPane.YES_NO_OPTION );
-						
-						if(result != JOptionPane.YES_OPTION)
-						{
-							cancelSelection();
-							return;
-						}
-						
-						// fall thru
-					}
-				}
-			}
-			
-			super.approveSelection();
-		}// approveSelection()
-		
-		
-	}// inner class CheckedJFileChooser
-	*/
 
     /**
      * FileChooser interface
@@ -443,25 +351,23 @@ public class XJFileChooser {
         }
 
         // Override to check for overwrite confirmation
+        @Override
         public void approveSelection() {
             if (getDialogType() != JFileChooser.OPEN_DIALOG) {
                 File selectedFile = fixFileExtension(this.getFileFilter(), this.getSelectedFile());
-                if (selectedFile != null) {
-                    if (selectedFile.exists()) {
-                        String message = Utils.getText(Utils.getLocalString(OVERWRITE_TEXT), selectedFile.getName());
+                if (selectedFile != null && selectedFile.exists()) {
+                    String message = Utils.getText(Utils.getLocalString(OVERWRITE_TEXT), selectedFile.getName());
 
-                        int result = JOptionPane.showConfirmDialog(getParent(),
-                                message,
-                                Utils.getLocalString(OVERWRITE_TITLE),
-                                JOptionPane.YES_NO_OPTION);
+                    int result = JOptionPane.showConfirmDialog(getParent(),
+                            message,
+                            Utils.getLocalString(OVERWRITE_TITLE),
+                            JOptionPane.YES_NO_OPTION);
 
-                        if (result != JOptionPane.YES_OPTION) {
-                            cancelSelection();
-                            return;
-                        }
-
-                        // fall thru
+                    if (result != JOptionPane.YES_OPTION) {
+                        cancelSelection();
+                        return;
                     }
+                    // fall thru
                 }
             }
 
@@ -487,10 +393,8 @@ public class XJFileChooser {
             }
         }// setFileFilter()
 
-        public void setCurrentDirectory(File file) {
-            super.setCurrentDirectory(file);
-        }// setCurrentDirectory()
 
+        @Override
         public void setSelectedFile(File file) {
             if (file == null) {
                 super.setSelectedFile(new File(""));

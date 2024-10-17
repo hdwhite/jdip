@@ -40,12 +40,12 @@ public final class splash {
     private static final Logger logger = getLogger(splash.class);
 
     private static final String SPLASH_GRAPHIC = "resource/common/splash/splash.jpg";
-    private static splashRunner sprunner = null;
+    private static SplashRunner sprunner = null;
 
 
     /** */
     private splash() {
-        sprunner = new splashRunner();
+        sprunner = new SplashRunner();
         Thread t = new Thread(sprunner);
         t.setPriority(Thread.MIN_PRIORITY);
         t.start();
@@ -97,7 +97,7 @@ public final class splash {
     /**
      * Destroy the Splash Screen
      */
-    public synchronized static void destroy() {
+    public static synchronized void destroy() {
         if (sprunner != null) {
             sprunner.destroy();
             sprunner = null;
@@ -141,6 +141,7 @@ public final class splash {
                 final Dialog dlg = new Dialog(dlgFrame, "jDip Error", true);
 
                 dlg.addWindowListener(new WindowAdapter() {
+                    @Override
                     public void windowClosing(WindowEvent e) {
                         dlg.setVisible(false);
                         dlg.dispose();
@@ -150,12 +151,10 @@ public final class splash {
 
 
                 Button button = new Button("  OK  ");
-                button.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        dlg.setVisible(false);
-                        dlg.dispose();
-                        dlgFrame.dispose();
-                    }
+                button.addActionListener((ActionEvent e) -> {
+                    dlg.setVisible(false);
+                    dlg.dispose();
+                    dlgFrame.dispose();
                 });
 
                 Panel panel = new Panel(new FlowLayout(FlowLayout.CENTER));
@@ -189,7 +188,7 @@ public final class splash {
     /**
      * Create display components
      */
-    private class splashRunner implements Runnable {
+    private class SplashRunner implements Runnable {
         private Frame frame = null;
         private Window win = null;
         private Image img = null;
@@ -237,9 +236,8 @@ public final class splash {
                 }
             }
 
-            tracker = null;
-
             Canvas canvas = new Canvas() {
+                @Override
                 public void paint(Graphics g) {
                     super.paint(g);
                     if (img != null) {
@@ -255,7 +253,7 @@ public final class splash {
 
                 canvas.setBounds(0, 0, w, h);
                 win.setLayout(null);
-                win.add(canvas);
+                win.add(canvas); 
                 win.setBounds(0, 0, w, h);
                 win.pack();
                 win.setLocation((screenSize.width - w) / 2, (screenSize.height - h) / 2);

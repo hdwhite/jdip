@@ -37,12 +37,13 @@ import javax.swing.undo.CompoundEdit;
  */
 
 public class UndoClearSelected extends CompoundEdit {
-    private final static String PRESENTATION_NAME = "Undo.order.clearselected";
+    private static final String PRESENTATION_NAME = "Undo.order.clearselected";
 
     public UndoClearSelected() {
         super();
     }// UndoClearSelected
 
+    @Override
     public String getPresentationName() {
         if (edits.size() == 1) {
             return super.getPresentationName();
@@ -51,6 +52,7 @@ public class UndoClearSelected extends CompoundEdit {
         }
     }// getPresentationName()
 
+    @Override
     public String getRedoPresentationName() {
         if (edits.size() == 1) {
             return super.getRedoPresentationName();
@@ -59,6 +61,7 @@ public class UndoClearSelected extends CompoundEdit {
         }
     }// getRedoPresentationName()
 
+    @Override
     public String getUndoPresentationName() {
         if (edits.size() == 1) {
             return super.getUndoPresentationName();

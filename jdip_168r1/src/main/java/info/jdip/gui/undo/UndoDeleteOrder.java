@@ -37,7 +37,7 @@ import javax.swing.undo.CannotUndoException;
  */
 public class UndoDeleteOrder extends XAbstractUndoableEdit {
     // instance variables
-    private final static String PRESENTATION_NAME_PREFIX = "Undo.order.delete";
+    private static final String PRESENTATION_NAME_PREFIX = "Undo.order.delete";
     private final Orderable order;
 
 
@@ -46,16 +46,19 @@ public class UndoDeleteOrder extends XAbstractUndoableEdit {
         this.order = order;
     }// UndoDeleteOrder()
 
+    @Override
     public String getPresentationName() {
         return Utils.getLocalString(PRESENTATION_NAME_PREFIX) + " " + order.getFullName();
     }// getPresentationName()
 
+    @Override
     public void redo()
             throws CannotRedoException {
         super.redo();
         undoRedoManager.getOrderDisplayPanel().removeOrder(order, false);
     }// redo()
 
+    @Override
     public void undo()
             throws CannotUndoException {
         super.undo();

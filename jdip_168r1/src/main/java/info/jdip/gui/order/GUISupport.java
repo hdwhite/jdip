@@ -66,7 +66,7 @@ public class GUISupport extends Support implements GUIOrder {
 
 
     // instance variables
-    private transient static final int REQ_LOC = 3;
+    private static final transient int REQ_LOC = 3;
     private transient int currentLocNum = 0;
     private transient boolean dependentFound = false;    // true associated Move or Support order found
     private transient Point2D.Float failPt = null;
@@ -132,70 +132,59 @@ public class GUISupport extends Support implements GUIOrder {
             return false;
         }
 
+        switch (currentLocNum) {
+            case 0:
+                return testSupportOrigin(stateInfo, location, sb);
+            case 1:
+                return testSupportSource(stateInfo, location, sb);
+            case 2:
+                return testSupportDestination(stateInfo, location, sb);
+            default:
+                // should not occur.
+                throw new IllegalStateException();
+        }
 
+        
+        // NO return here: thus we must appropriately exit within an if/else block above.
+    }// testLocation()
+    
+    private boolean testSupportOrigin(StateInfo stateInfo, Location location, StringBuilder sb) {
         Position position = stateInfo.getPosition();
         Province province = location.getProvince();
 
-        if (currentLocNum == 0) {
-            // set Support origin (supporting unit)
-            // we require a unit present. We will check unit ownership too, if appropriate
-            Unit unit = position.getUnit(province);
-            if (unit != null) {
-                if (!stateInfo.canIssueOrder(unit.getPower())) {
-                    sb.append(Utils.getLocalString(GUIOrder.NOT_OWNER, unit.getPower()));
-                    return false;
-                }
-
-                // check borders
-                if (!GUIOrderUtils.checkBorder(this, new Location(province, unit.getCoast()), unit.getType(), stateInfo.getPhase(), sb)) {
-                    return false;
-                }
-
-                sb.append(Utils.getLocalString(GUIOrder.CLICK_TO_ISSUE, getFullName()));
-                return true;
-            }
-
+        // set Support origin (supporting unit)
+        // we require a unit present. We will check unit ownership too, if appropriate
+        Unit unit = position.getUnit(province);
+        if (unit == null) {
             // no unit in province
             sb.append(Utils.getLocalString(GUIOrder.NO_UNIT, getFullName()));
             return false;
         }
-        
-        if (currentLocNum == 1) {
-            // set Support source (unit receiving support)
-            // - If we are not validating, any location with a unit is acceptable (even source)
-            // - If we are validating,
-            //
-            if (stateInfo.getValidationOptions().getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
-                // lenient parsing enabled; we'll take anything with a unit!
-                if (position.hasUnit(province)) {
-                    sb.append(Utils.getLocalString(CLICK_TO_SUPPORT_UNIT));
-                    return true;
-                }
+        if (!stateInfo.canIssueOrder(unit.getPower())) {
+            sb.append(Utils.getLocalString(GUIOrder.NOT_OWNER, unit.getPower()));
+            return false;
+        }
 
-                // no unit in province
-                sb.append(Utils.getLocalString(NO_UNIT_TO_SUPPORT));
-                return false;
-            }
+        // check borders
+        if (!GUIOrderUtils.checkBorder(this, new Location(province, unit.getCoast()), unit.getType(), stateInfo.getPhase(), sb)) {
+            return false;
+        }
 
-            // strict parsing is enabled. We are more selective.
-            // This location must contain a unit, and not be the same as the unit originating support.
-            //
-            if (province == src.getProvince()) {
-                sb.append(Utils.getLocalString(CANNOT_SUPPORT_SELF));
-                return false;
-            } else if (position.hasUnit(province)) {
-                // check borders
-                Unit supUnit = position.getUnit(province);
-                if (!GUIOrderUtils.checkBorder(this, new Location(province, supUnit.getCoast()), supUnit.getType(), stateInfo.getPhase(), sb)) {
-                    return false;
-                }
+        sb.append(Utils.getLocalString(GUIOrder.CLICK_TO_ISSUE, getFullName()));
+        return true;
+        }
 
-                // check base movement modifier (DPB)
-                if (province.getBaseMoveModifier(getSource()) < 0) {
-                    sb.append(Utils.getLocalString(CANNOT_SUPPORT_ACROSS_DPB));
-                    return false;
-                }
+    private boolean testSupportSource(StateInfo stateInfo, Location location, StringBuilder sb) {
+        Position position = stateInfo.getPosition();
+        Province province = location.getProvince();
 
+        // set Support source (unit receiving support)
+        // - If we are not validating, any location with a unit is acceptable (even source)
+        // - If we are validating,
+        //
+        if (stateInfo.getValidationOptions().getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
+            // lenient parsing enabled; we'll take anything with a unit!
+            if (position.hasUnit(province)) {
                 sb.append(Utils.getLocalString(CLICK_TO_SUPPORT_UNIT));
                 return true;
             }
@@ -204,18 +193,38 @@ public class GUISupport extends Support implements GUIOrder {
             sb.append(Utils.getLocalString(NO_UNIT_TO_SUPPORT));
             return false;
         }
+
+        // strict parsing is enabled. We are more selective.
+        // This location must contain a unit, and not be the same as the unit originating support.
+        //
+        if (province == src.getProvince()) {
+            sb.append(Utils.getLocalString(CANNOT_SUPPORT_SELF));
+            return false;
+        }
         
-        if (currentLocNum == 2) {
-            return testSupportDest(stateInfo, location, sb);
+        if (!position.hasUnit(province)) {
+            // no unit in province
+            sb.append(Utils.getLocalString(NO_UNIT_TO_SUPPORT));
+            return false;
         }
 
-        // should not occur.
-        throw new IllegalStateException();
-        
-        // NO return here: thus we must appropriately exit within an if/else block above.
-    }// testLocation()
+        // check borders
+        Unit supUnit = position.getUnit(province);
+        if (!GUIOrderUtils.checkBorder(this, new Location(province, supUnit.getCoast()), supUnit.getType(), stateInfo.getPhase(), sb)) {
+            return false;
+        }
 
-    private boolean testSupportDest(StateInfo stateInfo, Location location, StringBuilder sb)
+        // check base movement modifier (DPB)
+        if (province.getBaseMoveModifier(getSource()) < 0) {
+            sb.append(Utils.getLocalString(CANNOT_SUPPORT_ACROSS_DPB));
+            return false;
+        }
+
+        sb.append(Utils.getLocalString(CLICK_TO_SUPPORT_UNIT));
+        return true;
+    }
+
+    private boolean testSupportDestination(StateInfo stateInfo, Location location, StringBuilder sb)
     {
         Position position = stateInfo.getPosition();
         Province province = location.getProvince();

@@ -103,20 +103,20 @@ public class OrderDisplayPanel extends JPanel {
      * Sort Orders by Order type
      */
     public static final String SORT_ORDER = "SORT_ORDER";
-    public final static String LABEL_SORT_POWER = "OP.sort.button.power";
-    public final static String LABEL_SORT_PROVINCE = "OP.sort.button.province";
-    public final static String LABEL_SORT_UNIT = "OP.sort.button.unit";
-    public final static String LABEL_SORT_ORDER = "OP.sort.button.order";
+    public static final String LABEL_SORT_POWER = "OP.sort.button.power";
+    public static final String LABEL_SORT_PROVINCE = "OP.sort.button.province";
+    public static final String LABEL_SORT_UNIT = "OP.sort.button.unit";
+    public static final String LABEL_SORT_ORDER = "OP.sort.button.order";
     // color constants
-    private final static Color BG_DEFAULT = UIManager.getColor("List.background");
-    private final static Color BG_HILITE = new Color(230, 238, 240);
+    private static final Color BG_DEFAULT = UIManager.getColor("List.background");
+    private static final Color BG_HILITE = new Color(230, 238, 240);
     // i18n constants
-    private final static String ORD_ERR_AMBIGUOUS = "OP.order.err.ambiguous";
-    private final static String ORD_ERR_INVALID = "OP.order.err.invalid";
-    private final static String ORD_ERR_UNEDITABLE = "OP.order.err.uneditable";
-    private final static String ORD_ERR_NOT_ORDERABLE = "OP.order.err.notorderable";
-    private final static String LABEL_SORT = "OP.label.sort";
-    private final static String DLG_TOOMANY_TEXT_LOCATION = "OP.dlg.toomany.text.location";
+    private static final String ORD_ERR_AMBIGUOUS = "OP.order.err.ambiguous";
+    private static final String ORD_ERR_INVALID = "OP.order.err.invalid";
+    private static final String ORD_ERR_UNEDITABLE = "OP.order.err.uneditable";
+    private static final String ORD_ERR_NOT_ORDERABLE = "OP.order.err.notorderable";
+    private static final String LABEL_SORT = "OP.label.sort";
+    private static final String DLG_TOOMANY_TEXT_LOCATION = "OP.dlg.toomany.text.location";
 
 
     // instance variables
@@ -421,8 +421,6 @@ public class OrderDisplayPanel extends JPanel {
         ArrayList<Orderable> ordersDeleted = new ArrayList<>(orders.length);
 
         for (Orderable order : orders) {
-            boolean failed = false;
-
             try {
                 order.validate(turnState, valOpts, world.getRuleOptions());
                 checkAdjustments(order.getPower());
@@ -430,19 +428,17 @@ public class OrderDisplayPanel extends JPanel {
                 map.put(order, ow);
             } catch (OrderException oe) {
                 map.put(order, oe);
-                failed = true;
+                continue;
             }
 
-            if (!failed) {
-                Orderable replacedOrder = addOrderToTS(order);
+            Orderable replacedOrder = addOrderToTS(order);
 
-                // check for duplicates; these are ignored
-                if (!order.equals(replacedOrder)) {
-                    ordersAdded.add(order);
+            // check for duplicates; these are ignored
+            if (!order.equals(replacedOrder)) {
+                ordersAdded.add(order);
 
-                    if (replacedOrder != null) {
-                        ordersDeleted.add(replacedOrder);
-                    }
+                if (replacedOrder != null) {
+                    ordersDeleted.add(replacedOrder);
                 }
             }
         }
@@ -450,7 +446,7 @@ public class OrderDisplayPanel extends JPanel {
         if (!ordersAdded.isEmpty())    // make sure we added at least one order
         {
             Orderable[] tmpDel = null;
-            if (ordersDeleted.size() > 0) {
+            if (!ordersDeleted.isEmpty()) {
                 tmpDel = ordersDeleted.toArray(new Orderable[ordersAdded.size()]);
                 clientFrame.fireMultipleOrdersDeleted(tmpDel);
             }
@@ -556,13 +552,13 @@ public class OrderDisplayPanel extends JPanel {
         Orderable[] deletedOrderArray = null;
 
         //synchronized(clientFrame.getLock())
-        {
+        //{
             // clear the orders from the turnstate.
             // keep cleared orders in a temporary arraylist
             ArrayList<Orderable> deletedOrders = new ArrayList<>(100);
             for (Power orderablePower : orderablePowers) {
                 List<Orderable> orders = turnState.getOrders(orderablePower);
-                if (orders.size() > 0) {
+                if (!orders.isEmpty()) {
                     deletedOrders.addAll(orders);
                     orders.clear();
                 }
@@ -570,7 +566,7 @@ public class OrderDisplayPanel extends JPanel {
 
             // create a temporary order array
             deletedOrderArray = deletedOrders.toArray(new Orderable[deletedOrders.size()]);
-        }
+        //}
 
 
         // if we didn't actually delete anything, don't fire or create
@@ -602,7 +598,7 @@ public class OrderDisplayPanel extends JPanel {
      */
     public synchronized void removeSelected() {
         List<DisplayOrder> selected = orderList.getSelectedValuesList();
-        if (selected.size() == 0) {
+        if (selected.isEmpty()) {
             return;
         }
 
@@ -686,6 +682,7 @@ public class OrderDisplayPanel extends JPanel {
      * Overriden to return the preferred size. This ensures that
      * we resize properly in a JSplitPane.
      */
+    @Override
     public Dimension getMinimumSize() {
         return new Dimension(getPreferredSize());
     }// getMinimumSize()
@@ -712,7 +709,7 @@ public class OrderDisplayPanel extends JPanel {
         Orderable replacedOrder = null;
 
         //synchronized(clientFrame.getLock())
-        {
+        //{
             List<Orderable> orders = turnState.getOrders(order.getPower());
             Iterator<Orderable> iter = orders.iterator();
             while (iter.hasNext()) {
@@ -733,7 +730,7 @@ public class OrderDisplayPanel extends JPanel {
             if (!isDuplicate) {
                 orders.add(order);
             }
-        }
+        //}
 
         return replacedOrder;
     }// addOrderToTS()
@@ -745,10 +742,10 @@ public class OrderDisplayPanel extends JPanel {
      */
     private boolean removeOrderFromTS(Orderable order) {
         //synchronized(clientFrame.getLock())
-        {
+        //{
             List<Orderable> orders = turnState.getOrders(order.getPower());
             return orders.remove(order);
-        }
+        //}
     }// removeOrderFromTS()
 
 
@@ -761,7 +758,6 @@ public class OrderDisplayPanel extends JPanel {
         if (turnState.isResolved()) {
             return false;
         }
-
 
         for (Power orderablePower : orderablePowers) {
             if (orderablePower == order.getPower()) {
@@ -806,8 +802,8 @@ public class OrderDisplayPanel extends JPanel {
      */
     protected void makeLayout() {
         // start layout
-        int w1[] = {0};
-        int h1[] = {0, 5, 0};    // 3 pixels between scroll list & sort buttons
+        int[] w1 = {0};
+        int[] h1 = {0, 5, 0};    // 3 pixels between scroll list & sort buttons
 
         HIGLayout hl = new HIGLayout(w1, h1);
         hl.setColumnWeight(1, 1);
@@ -836,18 +832,16 @@ public class OrderDisplayPanel extends JPanel {
         sortCombo.addItem(Utils.getLocalString(LABEL_SORT_UNIT));
         sortCombo.addItem(Utils.getLocalString(LABEL_SORT_ORDER));
         sortCombo.setSelectedItem(Utils.getLocalString(LABEL_SORT_PROVINCE));
-        sortCombo.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String item = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
-                if (item == Utils.getLocalString(LABEL_SORT_POWER)) {
-                    orderListModel.sort(new DOSortPower());
-                } else if (item == Utils.getLocalString(LABEL_SORT_PROVINCE)) {
-                    orderListModel.sort(new DOSortProvince());
-                } else if (item == Utils.getLocalString(LABEL_SORT_UNIT)) {
-                    orderListModel.sort(new DOSortUnit());
-                } else if (item == Utils.getLocalString(LABEL_SORT_ORDER)) {
-                    orderListModel.sort(new DOSortOrder());
-                }
+        sortCombo.addActionListener((ActionEvent e) -> {
+            String item = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
+            if (item.equals(Utils.getLocalString(LABEL_SORT_POWER))) {
+                orderListModel.sort(new DOSortPower());
+            } else if (item.equals(Utils.getLocalString(LABEL_SORT_PROVINCE))) {
+                orderListModel.sort(new DOSortProvince());
+            } else if (item.equals(Utils.getLocalString(LABEL_SORT_UNIT))) {
+                orderListModel.sort(new DOSortUnit());
+            } else if (item.equals(Utils.getLocalString(LABEL_SORT_ORDER))) {
+                orderListModel.sort(new DOSortOrder());
             }
         });
 
@@ -867,26 +861,32 @@ public class OrderDisplayPanel extends JPanel {
      */
     protected class ODPPropertyListener extends AbstractCFPListener {
 
+        @Override
         public void actionOrderCreated(Orderable order) {
             orderListModel.addOrder(order);
         }// actionOrderCreated()
 
+        @Override
         public void actionOrderDeleted(Orderable order) {
             orderListModel.removeOrder(order);
         }// actionOrderDeleted()
 
+        @Override
         public void actionOrdersCreated(Orderable[] orders) {
             orderListModel.addOrders(orders);
         }// actionOrdersCreated()
 
+        @Override
         public void actionOrdersDeleted(Orderable[] orders) {
             orderListModel.removeOrders(orders);
         }// actionOrdersDeleted()
 
+        @Override
         public void actionOrderablePowersChanged(Power[] oldPowers, Power[] newPowers) {
             orderablePowers = newPowers;
         }// actionOrderablePowersChanged()
 
+        @Override
         public void actionDisplayablePowersChanged(Power[] oldPowers, Power[] newPowers) {
             displayablePowers = newPowers;
             if (turnState != null) {
@@ -894,6 +894,7 @@ public class OrderDisplayPanel extends JPanel {
             }
         }// actionDisplayablePowersChanged()
 
+        @Override
         public void actionValOptsChanged(ValidationOptions options) {
             valOpts = options;
             if (turnState != null) {
@@ -901,12 +902,14 @@ public class OrderDisplayPanel extends JPanel {
             }
         }// actionValOptsChanged()
 
+        @Override
         public synchronized void actionWorldCreated(World w) {
             world = w;
             undoManager = clientFrame.getUndoRedoManager();
             valOpts = clientFrame.getValidationOptions();
         }// actionWorldCreated()
 
+        @Override
         public void actionWorldDestroyed(World w) {
             orderListModel.removeAllOrders();
             orderListModel.setSortComparator(new DOSortProvince());
@@ -918,6 +921,7 @@ public class OrderDisplayPanel extends JPanel {
             orderablePowers = null;
         }// actionWorldDestroyed()
 
+        @Override
         public void actionTurnstateChanged(TurnState ts) {
             turnState = ts;
             if (turnState.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT) {
@@ -931,6 +935,7 @@ public class OrderDisplayPanel extends JPanel {
             orderList.clearSelection();
         }// actionTurnstateChanged()
 
+        @Override
         public synchronized void actionModeChanged(String newMode) {
             if (ClientFrame.MODE_ORDER.equals(newMode)) {
                 isEditable = true;
@@ -1229,6 +1234,7 @@ public class OrderDisplayPanel extends JPanel {
      */
     private class OrderListRenderer extends DefaultListCellRenderer {
 
+        @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index,
                                                       boolean isSelected, boolean cellHasFocus) {
             Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
@@ -1273,12 +1279,14 @@ public class OrderDisplayPanel extends JPanel {
         /**
          * Overridden for performance
          */
+        @Override
         public void invalidate() {
         }
 
         /**
          * Overriden for performance
          */
+        @Override
         public void repaint() {
         }
 

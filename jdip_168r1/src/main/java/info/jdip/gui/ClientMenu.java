@@ -1057,11 +1057,13 @@ public class ClientMenu {
      * Mode Change Listener.
      */
     private class ModeListener extends AbstractCFPListener {
+        @Override
         public void actionWorldCreated(World w) {
             Power[] thePowers = w.getMap().getPowers();
             updatePowers(thePowers);
         }// actionWorldCreated()
 
+        @Override
         public void actionModeChanged(String mode) {
             if (ClientFrame.MODE_NONE.equals(mode)) {
                 setModeNone();

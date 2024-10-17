@@ -80,8 +80,8 @@ public class PersistenceManager {
     private static final String EMPTY = "";
 
     // internal constants
-    private final static String WINDOW_MODIFIED = "windowModified";
-    private final static long THREAD_WAIT = 7500L;
+    private static final String WINDOW_MODIFIED = "windowModified";
+    private static final long THREAD_WAIT = 7500L;
     private final ThreadGroup persistTG;
     // instance variables
     private ClientFrame clientFrame = null;
@@ -103,12 +103,10 @@ public class PersistenceManager {
         setTitle();
 
         // enable modification event listener
-        modListener = new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (!isChanged()) {
-                    setChanged(true);
-                }
-            }// propertyChange()
+        modListener = (PropertyChangeEvent evt) -> {
+            if (!isChanged()) {
+                setChanged(true);
+            }
         };
         clientFrame.addPropertyChangeListener(ClientFrame.EVT_MODIFIED_STATE, modListener);
     }// PersistenceManager()
@@ -176,7 +174,7 @@ public class PersistenceManager {
             for (Thread pendingThread : pendingThreads) {
                 if (pendingThread.isAlive()) {
                     try {
-                        logger.debug("Waiting on ", pendingThread.getName());
+                        logger.debug("Waiting on {}", pendingThread.getName());
                         pendingThread.join(THREAD_WAIT);
                     } catch (InterruptedException e) {
                         logger.error("Interrupted while waiting...", e);
@@ -514,12 +512,10 @@ public class PersistenceManager {
                 ji = new JudgeImport(clientFrame.getGUIOrderFactory(), file, currentWorld);
             }
 
-            if (JudgeImport.JI_RESULT_THISWORLD.equals(ji.getResult())) {
-                // show results (if desired)
-                if (GeneralPreferencePanel.getShowResolutionResults()) {
-                    final TurnState priorTS = clientFrame.getWorld().getPreviousTurnState(clientFrame.getWorld().getLastTurnState());
-                    ResultWriter.displayDialog(clientFrame, priorTS, clientFrame.getOFO());
-                }
+            if (JudgeImport.JI_RESULT_THISWORLD.equals(ji.getResult())
+                && GeneralPreferencePanel.getShowResolutionResults()) {
+                final TurnState priorTS = clientFrame.getWorld().getPreviousTurnState(clientFrame.getWorld().getLastTurnState());
+                ResultWriter.displayDialog(clientFrame, priorTS, clientFrame.getOFO());
             }
 
             if (JudgeImport.JI_RESULT_NEWWORLD.equals(ji.getResult())) {
@@ -596,11 +592,10 @@ public class PersistenceManager {
                 // we don't have the variant AT ALL
                 ErrorDialog.displayVariantNotAvailable(clientFrame, vi);
                 return null;
-            } else {
-                // try most current version: HOWEVER, warn the user that it might not work
-                ErrorDialog.displayVariantVersionMismatch(clientFrame, vi, variant.getVersion());
-                vi.setVariantVersion(variant.getVersion());
             }
+            // try most current version: HOWEVER, warn the user that it might not work
+            ErrorDialog.displayVariantVersionMismatch(clientFrame, vi, variant.getVersion());
+            vi.setVariantVersion(variant.getVersion());
         }
 
         return w;
@@ -648,42 +643,44 @@ public class PersistenceManager {
         title.append(ClientFrame.getProgramName());
 
         // if no file is open, we shouldn't display a gamename/filename
-        if (localWorld != null || clientFrame.getWorld() != null) {
-            // use local world, if not, use clientFrame world
-            World world = (localWorld != null) ? localWorld : clientFrame.getWorld();
+        if (localWorld == null && clientFrame.getWorld() == null) {
+            clientFrame.setTitle(title.toString());
+            return;
+        }
+        // use local world, if not, use clientFrame world
+        World world = (localWorld != null) ? localWorld : clientFrame.getWorld();
 
-            // get game name
-            // game name is optional; doesn't have to be the same as the file name
-            String gameName = world.getGameMetadata().getGameName();
-            gameName = (EMPTY.equals(gameName)) ? null : gameName;
-            title.append(" - ");
+        // get game name
+        // game name is optional; doesn't have to be the same as the file name
+        String gameName = world.getGameMetadata().getGameName();
+        gameName = (EMPTY.equals(gameName)) ? null : gameName;
+        title.append(" - ");
 
-            if (gameName != null) {
-                title.append(gameName);
-                title.append(" [");
-            }
+        if (gameName != null) {
+            title.append(gameName);
+            title.append(" [");
+        }
 
-            // title
-            if (fileName != null) {
-                title.append(fileName.getName());
-            } else {
-                title.append(Utils.getLocalString(UNSAVED_NAME));
-            }
+        // title
+        if (fileName != null) {
+            title.append(fileName.getName());
+        } else {
+            title.append(Utils.getLocalString(UNSAVED_NAME));
+        }
 
-            if (gameName != null) {
-                title.append(']');
-            }
+        if (gameName != null) {
+            title.append(']');
+        }
 
-            // changed flag
-            if (Utils.isOSX()) {
-                // aqua-specific. Draws dot in close button.
-                // http://developer.apple.com/qa/qa2001/qa1146.html
-                clientFrame.getRootPane().putClientProperty(WINDOW_MODIFIED, isChanged);
-            } else {
-                if (isChanged) {
-                    title.append(' ');
-                    title.append(Utils.getLocalString(MODIFIED_INDICATOR));
-                }
+        // changed flag
+        if (Utils.isOSX()) {
+            // aqua-specific. Draws dot in close button.
+            // http://developer.apple.com/qa/qa2001/qa1146.html
+            clientFrame.getRootPane().putClientProperty(WINDOW_MODIFIED, isChanged);
+        } else {
+            if (isChanged) {
+                title.append(' ');
+                title.append(Utils.getLocalString(MODIFIED_INDICATOR));
             }
         }
 
@@ -733,11 +730,11 @@ public class PersistenceManager {
 
     private boolean rewindDialog(Phase phase) {
         Object[] dlgOptions =
-                {
-                        Utils.getLocalString(CONFIRM_BUTTON_REWIND),        // 0
-                        Box.createRigidArea(new Dimension(25, 5)),            // 1
-                        Utils.getLocalString(CONFIRM_BUTTON_CANCEL)            // 2
-                };
+            {
+                Utils.getLocalString(CONFIRM_BUTTON_REWIND),    // 0
+                Box.createRigidArea(new Dimension(25, 5)),      // 1
+                Utils.getLocalString(CONFIRM_BUTTON_CANCEL)     // 2
+            };
 
         String message = Utils.getText(Utils.getLocalString(CONFIRM_REWIND_TEXT), phase.toString());
         String title = Utils.getLocalString(CONFIRM_REWIND_TITLE);
@@ -754,18 +751,18 @@ public class PersistenceManager {
 
     private boolean loadDialog(String gameInfo) {
         Object[] dlgOptions =
-                {
-                        Utils.getLocalString(CONFIRM_BUTTON_LOAD),        // 0
-                        Box.createRigidArea(new Dimension(25, 5)),            // 1
-                        Utils.getLocalString(CONFIRM_BUTTON_CANCEL)            // 2
-                };
+            {
+                Utils.getLocalString(CONFIRM_BUTTON_LOAD),  // 0
+                Box.createRigidArea(new Dimension(25, 5)),  // 1
+                Utils.getLocalString(CONFIRM_BUTTON_CANCEL) // 2
+            };
 
         String message = Utils.getText(Utils.getLocalString(CONFIRM_LOAD_TEXT), gameInfo);
         String title = Utils.getLocalString(CONFIRM_LOAD_TITLE);
 
         int result = JOptionPane.showOptionDialog(clientFrame, message, title,
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-                null, dlgOptions, dlgOptions[2]);
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+            null, dlgOptions, dlgOptions[2]);
 
         // the result returned corresponds to 0-2, as specified in dlgOptions.
         // of course, option 1 (a spacer) cannot be returned.
@@ -782,19 +779,19 @@ public class PersistenceManager {
      * Assumes current World/TurnState are not null.
      */
     public String getSuggestedSaveName() {
-        if (fileName == null) {
-            // game name?
-            String gameName = clientFrame.getWorld().getGameMetadata().getGameName();
-            if (!EMPTY.equals(gameName) && gameName != null) {
-                return gameName;
-            }
-
-            // use variant name
-            //
-            return clientFrame.getWorld().getVariantInfo().getVariantName();
-        } else {
+        if (fileName != null) {
             return fileName.getName();
         }
+        
+        // game name?
+        String gameName = clientFrame.getWorld().getGameMetadata().getGameName();
+        if (!EMPTY.equals(gameName) && gameName != null) {
+            return gameName;
+        }
+
+        // use variant name
+        //
+        return clientFrame.getWorld().getVariantInfo().getVariantName();
     }// getSuggestedSaveName()
 
 

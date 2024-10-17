@@ -43,33 +43,4 @@ public abstract class XAbstractUndoableEdit extends AbstractUndoableEdit {
 
         undoRedoManager = urm;
     }// XAbstractUndoableEdit()
-	
-	/*
-	
-	for debugging. uniqueNum is a incrementing number
-	to track edits.
-	
-	public String toString()
-	{
-		return this.getClass().getName() + "# " + uniqueNum;
-	}// toString()
-	
-	public void undo()
-	{
-		super.undo();
-		System.out.println("  undo(): "+this.getClass().getName()+": -"+uniqueNum);
-	}// undo()
-	
-	public void redo()
-	{
-		super.redo();
-		System.out.println("  redo(): "+this.getClass().getName()+": +"+uniqueNum);
-	}// redo()
-	
-	public void die()
-	{
-		super.die();
-		System.out.println("  die(): "+this.getClass().getName()+": +"+uniqueNum);
-	}// die()
-	*/
 }// class XAbstractUndoableEdit

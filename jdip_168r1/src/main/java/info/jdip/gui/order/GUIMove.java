@@ -137,24 +137,23 @@ public class GUIMove extends Move implements GUIOrder {
             // set Move source
             // we require a unit present. We will check unit ownership too, if appropriate
             Unit unit = position.getUnit(province);
-            if (unit != null) {
-                if (!stateInfo.canIssueOrder(unit.getPower())) {
-                    sb.append(Utils.getLocalString(GUIOrder.NOT_OWNER, unit.getPower()));
-                    return false;
-                }
-
-                if (!GUIOrderUtils.checkBorder(this, new Location(province, unit.getCoast()), unit.getType(), stateInfo.getPhase(), sb)) {
-                    return false;
-                }
-
-
-                sb.append(Utils.getLocalString(GUIOrder.CLICK_TO_ISSUE, getFullName()));
-                return true;
+            if (unit == null) {
+                // no unit in province
+                sb.append(Utils.getLocalString(GUIOrder.NO_UNIT, getFullName()));
+                return false;
             }
 
-            // no unit in province
-            sb.append(Utils.getLocalString(GUIOrder.NO_UNIT, getFullName()));
-            return false;
+            if (!stateInfo.canIssueOrder(unit.getPower())) {
+                sb.append(Utils.getLocalString(GUIOrder.NOT_OWNER, unit.getPower()));
+                return false;
+            }
+
+            if (!GUIOrderUtils.checkBorder(this, new Location(province, unit.getCoast()), unit.getType(), stateInfo.getPhase(), sb)) {
+                return false;
+            }
+
+            sb.append(Utils.getLocalString(GUIOrder.CLICK_TO_ISSUE, getFullName()));
+            return true;
         } else if (currentLocNum == 1) {
             // set move destination
             // - If we are not validating, any destination is acceptable (even source)

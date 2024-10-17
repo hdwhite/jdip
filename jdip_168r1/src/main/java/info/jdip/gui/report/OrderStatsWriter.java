@@ -94,7 +94,7 @@ public class OrderStatsWriter {
         tv.addSingleButton(tv.makeOKButton());
         tv.setTitle(Utils.getLocalString(DIALOG_TITLE));
         tv.setHeaderVisible(false);
-        tv.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        tv.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         tv.lazyLoadDisplayDialog(new TextViewer.TVRunnable() {
             public void run() {
@@ -172,7 +172,7 @@ public class OrderStatsWriter {
 
             float sum = 0.0f;
             int nPowers = 0;            // for computing average....
-            float value = 0.0f;
+            float value;
             for (int i = 0; i < allPowers.length; i++) {
                 switch (type)    // it's just so easy...
                 {
@@ -341,13 +341,9 @@ public class OrderStatsWriter {
                         // self support?
                         final Support sup = (Support) order;
                         final Unit supUnit = ts.getPosition().getUnit(sup.getSupportedSrc().getProvince());
-                        if (supUnit != null) {
-                            if (sup.getPower().equals(supUnit.getPower())) {
-                                s.nSupportsSelf++;
-                                if (success) {
-                                    s.nSupportsSelfOK++;
-                                }
-                            }
+                        if (supUnit != null && sup.getPower().equals(supUnit.getPower())) {
+                            s.nSupportsSelf++;
+                            s.nSupportsSelfOK += (success ? 1 : 0);
                         }
                     }
                 }

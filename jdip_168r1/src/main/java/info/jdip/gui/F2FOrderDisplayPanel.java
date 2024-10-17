@@ -95,13 +95,6 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
     }// F2FOrderDisplayPanel()
 
     /**
-     * Cleanup
-     */
-    public void close() {
-        super.close();
-    }// close()
-
-    /**
      * Sets the tab icons for each power.
      */
     private void setTabIcons() {
@@ -215,14 +208,10 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
 
                 // disable tabs if appropriate
                 Adjustment.AdjustmentInfo adjInfo = f2fAdjMap.get(power);
-                if (turnState.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT) {
-                    if (adjInfo.getAdjustmentAmount() == 0) {
+                if ((turnState.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT
+                  || turnState.getPhase().getPhaseType() == Phase.PhaseType.RETREAT)
+                  && adjInfo.getAdjustmentAmount() == 0) {
                         setTabEnabled(power, false);
-                    }
-                } else if (turnState.getPhase().getPhaseType() == Phase.PhaseType.RETREAT) {
-                    if (adjInfo.getDislodgedUnitCount() == 0) {
-                        setTabEnabled(power, false);
-                    }
                 }
             }
         }
@@ -283,6 +272,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
     /**
      * Create an extended property listener.
      */
+    @Override
     protected AbstractCFPListener createPropertyListener() {
         return new F2FPropertyListener();
     }// createPropertyListener()
@@ -307,8 +297,8 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
         // we want to share the main panel between all tabs
         // main panel layout
         main = new JPanel();
-        int w1[] = {0};
-        int h1[] = {0, 5, 0, 10, 0};
+        int[] w1 = {0};
+        int[] h1 = {0, 5, 0, 10, 0};
 
         HIGLayout hl = new HIGLayout(w1, h1);
         hl.setColumnWeight(1, 1);
@@ -325,7 +315,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
         tabPane = new JTabbedPane();
         tabListener = new TabListener();
         tabPane.addChangeListener(tabListener);
-        tabPane.setTabPlacement(JTabbedPane.TOP);
+        tabPane.setTabPlacement(SwingConstants.TOP);
 
         // set the layout of F2FODP
         setLayout(new BorderLayout());
@@ -645,6 +635,7 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
      * Extended F2FPropertyListener
      */
     protected class F2FPropertyListener extends ODPPropertyListener {
+        @Override
         public void actionTurnstateChanged(TurnState ts) {
             if (resolvedTS != null && !isReviewingResolvedTS) {
                 isReviewingResolvedTS = true;
@@ -683,22 +674,26 @@ public class F2FOrderDisplayPanel extends OrderDisplayPanel {
             }
         }// actionTurnstateChanged()
 
+        @Override
         public void actionTurnstateResolved(TurnState ts) {
             super.actionTurnstateResolved(ts);
             resolvedTS = ts;
         }// actionTurnstateResolved()
 
+        @Override
         public void actionTurnstateAdded(TurnState ts) {
             super.actionTurnstateAdded(ts);
             nextTS = ts;
         }// actionTurnstateAdded()
 
+        @Override
         public void actionMMDReady(MapMetadata mmd) {
             super.actionMMDReady(mmd);
             F2FOrderDisplayPanel.this.mmd = mmd;
             setTabIcons();
         }// actionMMDReady()
 
+        @Override
         public void actionModeChanged(String mode) {
             super.actionModeChanged(mode);
             if (ClientFrame.MODE_ORDER.equals(mode)) {

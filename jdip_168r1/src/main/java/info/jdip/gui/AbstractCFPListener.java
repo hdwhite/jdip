@@ -53,55 +53,88 @@ public abstract class AbstractCFPListener implements PropertyChangeListener {
      * Process PropertyChangeEvents into appropriate sub-methods. Marked final for safety.
      */
     public final void propertyChange(PropertyChangeEvent evt) {
-        final String name = evt.getPropertyName();
-        if (ClientFrame.EVT_WORLD_CREATED.equals(name)) {
-            final World w = (World) evt.getNewValue();
-            actionWorldCreated(w);
-        } else if (ClientFrame.EVT_WORLD_DESTROYED.equals(name)) {
-            final World w = (World) evt.getOldValue();
-            actionWorldDestroyed(w);
-        } else if (ClientFrame.EVT_MODIFIED_STATE.equals(name)) {
-            actionStateModified();
-        } else if (ClientFrame.EVT_TURNSTATE_CHANGED.equals(name)) {
-            final TurnState ts = (TurnState) evt.getNewValue();
-            actionTurnstateChanged(ts);
-        } else if (ClientFrame.EVT_TURNSTATE_ADDED.equals(name)) {
-            final TurnState ts = (TurnState) evt.getNewValue();
-            actionTurnstateAdded(ts);
-        } else if (ClientFrame.EVT_TURNSTATE_REMOVED.equals(name)) {
-            actionTurnstateRemoved();
-        } else if (ClientFrame.EVT_TURNSTATE_RESOLVED.equals(name)) {
-            final TurnState ts = (TurnState) evt.getNewValue();
-            actionTurnstateResolved(ts);
-        } else if (ClientFrame.EVT_MODE_CHANGED.equals(name)) {
-            final String mode = (String) evt.getNewValue();
-            actionModeChanged(mode);
-        } else if (ClientFrame.EVT_VALOPTS_CHANGED.equals(name)) {
-            final ValidationOptions options = (ValidationOptions) evt.getNewValue();
-            actionValOptsChanged(options);
-        } else if (ClientFrame.EVT_MMD_READY.equals(name)) {
-            final MapMetadata mmd = (MapMetadata) evt.getNewValue();
-            actionMMDReady(mmd);
-        } else if (ClientFrame.EVT_ORDER_CREATED.equals(name)) {
-            final Orderable order = (Orderable) evt.getNewValue();
-            actionOrderCreated(order);
-        } else if (ClientFrame.EVT_ORDER_DELETED.equals(name)) {
-            final Orderable order = (Orderable) evt.getOldValue();
-            actionOrderDeleted(order);
-        } else if (ClientFrame.EVT_MULTIPLE_ORDERS_CREATED.equals(name)) {
-            final Orderable[] orders = (Orderable[]) evt.getNewValue();
-            actionOrdersCreated(orders);
-        } else if (ClientFrame.EVT_MULTIPLE_ORDERS_DELETED.equals(name)) {
-            final Orderable[] orders = (Orderable[]) evt.getOldValue();
-            actionOrdersDeleted(orders);
-        } else if (ClientFrame.EVT_DISPLAYABLE_POWERS_CHANGED.equals(name)) {
-            final Power[] newPowers = (Power[]) evt.getNewValue();
-            final Power[] oldPowers = (Power[]) evt.getOldValue();
-            actionDisplayablePowersChanged(oldPowers, newPowers);
-        } else if (ClientFrame.EVT_ORDERABLE_POWERS_CHANGED.equals(name)) {
-            final Power[] newPowers = (Power[]) evt.getNewValue();
-            final Power[] oldPowers = (Power[]) evt.getOldValue();
-            actionOrderablePowersChanged(oldPowers, newPowers);
+        switch (evt.getPropertyName()) {
+            case ClientFrame.EVT_WORLD_CREATED: {
+                final World w = (World) evt.getNewValue();
+                actionWorldCreated(w);
+                break;
+            }
+            case ClientFrame.EVT_WORLD_DESTROYED: {
+                final World w = (World) evt.getOldValue();
+                actionWorldDestroyed(w);
+                break;
+            }
+            case ClientFrame.EVT_MODIFIED_STATE: {
+                actionStateModified();
+                break;
+            }
+            case ClientFrame.EVT_TURNSTATE_CHANGED: {
+                final TurnState ts = (TurnState) evt.getNewValue();
+                actionTurnstateChanged(ts);
+                break;
+            }
+            case ClientFrame.EVT_TURNSTATE_ADDED: {
+                final TurnState ts = (TurnState) evt.getNewValue();
+                actionTurnstateAdded(ts);
+                break;
+            }
+            case ClientFrame.EVT_TURNSTATE_REMOVED: {
+                actionTurnstateRemoved();
+                break;
+            }
+            case ClientFrame.EVT_TURNSTATE_RESOLVED: {
+                final TurnState ts = (TurnState) evt.getNewValue();
+                actionTurnstateResolved(ts);
+                break;
+            }
+            case ClientFrame.EVT_MODE_CHANGED: {
+                final String mode = (String) evt.getNewValue();
+                actionModeChanged(mode);
+                break;
+            }
+            case ClientFrame.EVT_VALOPTS_CHANGED: {
+                final ValidationOptions options = (ValidationOptions) evt.getNewValue();
+                actionValOptsChanged(options);
+                break;
+            }
+            case ClientFrame.EVT_MMD_READY: {
+                final MapMetadata mmd = (MapMetadata) evt.getNewValue();
+                actionMMDReady(mmd);
+                break;
+            }
+            case ClientFrame.EVT_ORDER_CREATED: {
+                final Orderable order = (Orderable) evt.getNewValue();
+                actionOrderCreated(order);
+                break;
+            }
+            case ClientFrame.EVT_ORDER_DELETED: {
+                final Orderable order = (Orderable) evt.getOldValue();
+                actionOrderDeleted(order);
+                break;
+            } case ClientFrame.EVT_MULTIPLE_ORDERS_CREATED: {
+                final Orderable[] orders = (Orderable[]) evt.getNewValue();
+                actionOrdersCreated(orders);
+                break;
+            }
+            case ClientFrame.EVT_MULTIPLE_ORDERS_DELETED: {
+                final Orderable[] orders = (Orderable[]) evt.getOldValue();
+                actionOrdersDeleted(orders);
+                break;
+            }
+            case ClientFrame.EVT_DISPLAYABLE_POWERS_CHANGED: {
+                final Power[] newPowers = (Power[]) evt.getNewValue();
+                final Power[] oldPowers = (Power[]) evt.getOldValue();
+                actionDisplayablePowersChanged(oldPowers, newPowers);
+                break;
+            }
+            case ClientFrame.EVT_ORDERABLE_POWERS_CHANGED: {
+                final Power[] newPowers = (Power[]) evt.getNewValue();
+                final Power[] oldPowers = (Power[]) evt.getOldValue();
+                actionOrderablePowersChanged(oldPowers, newPowers);
+                break;
+            }
+            default:
+                break;
         }
     }// propertyChange()
 

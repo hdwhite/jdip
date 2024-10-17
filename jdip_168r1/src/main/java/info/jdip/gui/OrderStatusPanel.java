@@ -42,8 +42,8 @@ import java.awt.event.ActionListener;
  */
 public class OrderStatusPanel extends XJPanel {
     // i18n constnats
-    private final static String LABEL_ORDER = "OP.label.order";
-    private final static String EMPTY = "";
+    private static final String LABEL_ORDER = "OP.label.order";
+    private static final String EMPTY = "";
 
     // instance variables
     private final JLabel orderFieldLabel;
@@ -66,22 +66,19 @@ public class OrderStatusPanel extends XJPanel {
 
         // setup text field
         orderField = new info.jdip.gui.swing.XJTextField();
-        orderField.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String text = orderField.getText();
+        orderField.addActionListener((ActionEvent e) -> {
+            String text = orderField.getText();
 
-                if (text.equals(EMPTY)) {
-                    return;
-                }
+            if (text.equals(EMPTY)) {
+                return;
+            }
 
-                // add an order; if no error occured, clear
-                // the textfield
-                if (cf.getOrderDisplayPanel() != null) {
-                    if (cf.getOrderDisplayPanel().addOrder(text, true)) {
-                        orderField.setText(EMPTY);
-                        orderField.repaint();
-                    }
-                }
+            // add an order; if no error occured, clear
+            // the textfield
+            if (cf.getOrderDisplayPanel() != null &&
+                cf.getOrderDisplayPanel().addOrder(text, true)) {
+                orderField.setText(EMPTY);
+                orderField.repaint();
             }
         });
 
@@ -125,8 +122,8 @@ public class OrderStatusPanel extends XJPanel {
      */
     private void makeLayout() {
         // start layout
-        int w1[] = {0, 5, 0};
-        int h1[] = {5, 0, 25, 0, 10};
+        int[] w1 = {0, 5, 0};
+        int[] h1 = {5, 0, 25, 0, 10};
 
         HIGLayout hl = new HIGLayout(w1, h1);
         hl.setColumnWeight(3, 1);
@@ -144,32 +141,33 @@ public class OrderStatusPanel extends XJPanel {
      * Property change event listener
      */
     private class OSPPropertyListener extends AbstractCFPListener {
+        @Override
         public void actionOrderCreated(Orderable order) {
             clearOrderText();
         }
 
+        @Override
         public void actionOrderDeleted(Orderable order) {
             clearOrderText();
         }
 
+        @Override
         public void actionOrdersCreated(Orderable[] orders) {
             clearOrderText();
         }
 
+        @Override
         public void actionOrdersDeleted(Orderable[] orders) {
             clearOrderText();
         }
 
+        @Override
         public void actionModeChanged(String mode) {
-            if (ClientFrame.MODE_ORDER.equals(mode)) {
-                orderField.setVisible(true);
-                orderFieldLabel.setVisible(true);
-            } else {
-                orderField.setVisible(false);
-                orderFieldLabel.setVisible(false);
-            }
+            orderField.setVisible(ClientFrame.MODE_ORDER.equals(mode));
+            orderFieldLabel.setVisible(ClientFrame.MODE_ORDER.equals(mode));
         }// actionModeChanged()
 
+        @Override
         public void actionTurnstateChanged(TurnState turnState) {
             Phase tsPhase = turnState.getPhase();
 
@@ -182,10 +180,12 @@ public class OrderStatusPanel extends XJPanel {
         }// actionTurnstateChanged()
 
 
+        @Override
         public void actionWorldCreated(World w) {
             phase.setText(EMPTY);
         }
 
+        @Override
         public void actionWorldDestroyed(World w) {
             phase.setText(EMPTY);
         }

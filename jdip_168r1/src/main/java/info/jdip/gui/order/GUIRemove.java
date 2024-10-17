@@ -49,7 +49,7 @@ public class GUIRemove extends Remove implements GUIOrder {
     public static final String NO_UNITS_TO_REMOVE = "GUIRemove.no_removes";
 
     // instance variables
-    private transient final static int REQ_LOC = 1;
+    private static final transient int REQ_LOC = 1;
     private transient int currentLocNum = 0;
     private transient Point2D.Float failPt = null;
     private transient SVGGElement group = null;

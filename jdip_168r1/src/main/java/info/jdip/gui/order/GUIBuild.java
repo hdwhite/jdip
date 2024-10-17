@@ -50,7 +50,7 @@ public class GUIBuild extends Build implements GUIOrder {
     /**
      * Required. Used to set build Unit.Type. Associated value must be a Unit.Type
      */
-    public transient static final BuildParameter BUILD_UNIT = new BuildParameter("BUILD_UNIT");
+    public static final transient BuildParameter BUILD_UNIT = new BuildParameter("BUILD_UNIT");
 
     // i18n keys
     private static final String BUILD_FLEET_OK = "GUIBuild.ok.fleet";
@@ -68,7 +68,7 @@ public class GUIBuild extends Build implements GUIOrder {
     private static final String NOBUILD_UNOWNED_SC = "GUIBuild.bad.unowned_sc";
 
     // instance variables
-    private transient final static int REQ_LOC = 1;
+    private static final transient int REQ_LOC = 1;
     private transient int currentLocNum = 0;
     private transient Point2D.Float failPt = null;
     private transient SVGGElement group = null;
@@ -118,68 +118,68 @@ public class GUIBuild extends Build implements GUIOrder {
         Position position = stateInfo.getPosition();
         Province province = location.getProvince();
 
-        if (province.hasSupplyCenter()) {
-            Power SCOwner = position.getSupplyCenterOwner(province);
-
-            // general screening, applicable to all build options
-            //
-            if (SCOwner == null) {
-                sb.append(Utils.getLocalString(NOBUILD_UNOWNED_SC));
-                return false;
-            }
-
-            if (position.hasUnit(province)) {
-                sb.append(Utils.getLocalString(NOBUILD_UNIT_PRESENT));
-                return false;
-            }
-
-            if (!stateInfo.canIssueOrder(SCOwner)) {
-                sb.append(Utils.getLocalString(NOBUILD_SC_NOT_CONTROLLED));
-                return false;
-            }
-
-            // indicate if we have no builds available
-            //
-            Adjustment.AdjustmentInfo adjInfo = stateInfo.getAdjustmenInfoMap().get(SCOwner);
-            if (adjInfo.getAdjustmentAmount() <= 0) {
-                sb.append(Utils.getLocalString(NOBUILD_NO_BUILDS_AVAILABLE, SCOwner.getName()));
-                return false;
-            }
-
-
-            // build-option-specific, based upon RuleOptions
-            //
-            RuleOptions ruleOpts = stateInfo.getRuleOptions();
-            if (ruleOpts.getOptionValue(RuleOptions.OPTION_BUILDS) == RuleOptions.VALUE_BUILDS_ANY_OWNED) {
-                return checkBuildUnit(stateInfo, province, location, sb);
-            } else if (ruleOpts.getOptionValue(RuleOptions.OPTION_BUILDS) == RuleOptions.VALUE_BUILDS_ANY_IF_HOME_OWNED) {
-                // check if we have ONE owned home supply center before buidling
-                // in a non-home supply center.
-                //
-                if (SCOwner != position.getSupplyCenterHomePower(province)
-                        && !position.hasAnOwnedHomeSC(SCOwner)) {
-                    sb.append(Utils.getLocalString(NOBUILD_NEED_ONE_OWNED_SC));
-                    return false;    // failed
-                }
-
-                // we (probably) can build here
-                return checkBuildUnit(stateInfo, province, location, sb);
-            } else {
-                // build only in owned HOME supply centers
-                //
-                if (SCOwner == position.getSupplyCenterHomePower(province)) {
-                    // we (probably) can build here
-                    return checkBuildUnit(stateInfo, province, location, sb);
-                }
-
-                // build failure.
-                sb.append(Utils.getLocalString(NOBUILD_NOT_OWNED_HOME_SC));
-                return false;
-            }
-        } else {
+        if (!province.hasSupplyCenter()) {
             sb.append(Utils.getLocalString(NOBUILD_MUST_BE_AN_OWNED_SC));
             return false;
         }
+
+        Power scOwner = position.getSupplyCenterOwner(province);
+        // general screening, applicable to all build options
+        //
+        if (scOwner == null) {
+            sb.append(Utils.getLocalString(NOBUILD_UNOWNED_SC));
+            return false;
+        }
+
+        if (position.hasUnit(province)) {
+            sb.append(Utils.getLocalString(NOBUILD_UNIT_PRESENT));
+            return false;
+        }
+
+        if (!stateInfo.canIssueOrder(scOwner)) {
+            sb.append(Utils.getLocalString(NOBUILD_SC_NOT_CONTROLLED));
+            return false;
+        }
+
+        // indicate if we have no builds available
+        //
+        Adjustment.AdjustmentInfo adjInfo = stateInfo.getAdjustmenInfoMap().get(scOwner);
+        if (adjInfo.getAdjustmentAmount() <= 0) {
+            sb.append(Utils.getLocalString(NOBUILD_NO_BUILDS_AVAILABLE, scOwner.getName()));
+            return false;
+        }
+
+        // build-option-specific, based upon RuleOptions
+        //
+        RuleOptions ruleOpts = stateInfo.getRuleOptions();
+        if (ruleOpts.getOptionValue(RuleOptions.OPTION_BUILDS) == RuleOptions.VALUE_BUILDS_ANY_OWNED) {
+            return checkBuildUnit(stateInfo, province, location, sb);
+        }
+        
+        if (ruleOpts.getOptionValue(RuleOptions.OPTION_BUILDS) == RuleOptions.VALUE_BUILDS_ANY_IF_HOME_OWNED) {
+            // check if we have ONE owned home supply center before buidling
+            // in a non-home supply center.
+            //
+            if (scOwner != position.getSupplyCenterHomePower(province)
+                    && !position.hasAnOwnedHomeSC(scOwner)) {
+                sb.append(Utils.getLocalString(NOBUILD_NEED_ONE_OWNED_SC));
+                return false;    // failed
+            }
+
+            // we (probably) can build here
+            return checkBuildUnit(stateInfo, province, location, sb);
+        }
+
+        // build only in owned HOME supply centers
+        //
+        if (scOwner == position.getSupplyCenterHomePower(province)) {
+            // we (probably) can build here
+            return checkBuildUnit(stateInfo, province, location, sb);
+        }
+
+        // build failure.
+        sb.append(Utils.getLocalString(NOBUILD_NOT_OWNED_HOME_SC));
+        return false;
 
         // NO return here: thus we must appropriately exit within an if/else block above.
     }// testLocation()
@@ -350,7 +350,7 @@ public class GUIBuild extends Build implements GUIOrder {
 
         // Unit symbol
         final String symbolName = mapInfo.getSymbolName(srcUnitType);
-        symbolSize = mmd.getSymbolSize(symbolName).getScaledSymbolSize(1 / mmd.getZoomFactor());;
+        symbolSize = mmd.getSymbolSize(symbolName).getScaledSymbolSize(1 / mmd.getZoomFactor());
 
         elements[1] = SVGUtils.createUseElement(
                 mapInfo.getDocument(),
@@ -388,29 +388,31 @@ public class GUIBuild extends Build implements GUIOrder {
             if (province.isSea()) {
                 sb.append(Utils.getLocalString(NOBUILD_NO_ARMY_IN_SEA));
                 return false;
-            } else {
-                // check borders
-                if (!GUIOrderUtils.checkBorder(this, loc, srcUnitType, stateInfo.getPhase(), sb)) {
-                    return false;
-                }
-
-                sb.append(Utils.getLocalString(BUILD_ARMY_OK));
-                return true;
             }
-        } else if (srcUnitType.equals(Unit.Type.FLEET)) {
+            // check borders
+            if (!GUIOrderUtils.checkBorder(this, loc, srcUnitType, stateInfo.getPhase(), sb)) {
+                return false;
+            }
+
+            sb.append(Utils.getLocalString(BUILD_ARMY_OK));
+            return true;
+        }
+        
+        if (srcUnitType.equals(Unit.Type.FLEET)) {
             if (province.isLandLocked()) {
                 sb.append(Utils.getLocalString(NOBUILD_FLEET_LANDLOCKED));
                 return false;
-            } else {
-                // check borders
-                if (!GUIOrderUtils.checkBorder(this, loc, srcUnitType, stateInfo.getPhase(), sb)) {
-                    return false;
-                }
-
-                sb.append(Utils.getLocalString(BUILD_FLEET_OK));
-                return true;
             }
-        } else if (srcUnitType.equals(Unit.Type.WING)) {
+            // check borders
+            if (!GUIOrderUtils.checkBorder(this, loc, srcUnitType, stateInfo.getPhase(), sb)) {
+                return false;
+            }
+
+            sb.append(Utils.getLocalString(BUILD_FLEET_OK));
+            return true;
+        }
+        
+        if (srcUnitType.equals(Unit.Type.WING)) {
             // check borders
             if (!GUIOrderUtils.checkBorder(this, loc, srcUnitType, stateInfo.getPhase(), sb)) {
                 return false;

@@ -56,7 +56,7 @@ public class GUIWaive extends Waive implements GUIOrder {
     private static final String NOWAIVE_UNOWNED_SC = "GUIWaive.bad.unowned_sc";
 
     // instance variables
-    private transient final static int REQ_LOC = 1;
+    private static final transient int REQ_LOC = 1;
     private transient int currentLocNum = 0;
     private transient Point2D.Float failPt = null;
     private transient SVGGElement group = null;
@@ -106,71 +106,70 @@ public class GUIWaive extends Waive implements GUIOrder {
         Position position = stateInfo.getPosition();
         Province province = location.getProvince();
 
-        if (province.hasSupplyCenter()) {
-            Power SCOwner = position.getSupplyCenterOwner(province);
-
-            // general screening, applicable to all build options
-            //
-            if (SCOwner == null) {
-                sb.append(Utils.getLocalString(NOWAIVE_UNOWNED_SC));
-                return false;
-            }
-
-            if (position.hasUnit(province)) {
-                sb.append(Utils.getLocalString(NOWAIVE_UNIT_PRESENT));
-                return false;
-            }
-
-            if (!stateInfo.canIssueOrder(SCOwner)) {
-                sb.append(Utils.getLocalString(NOWAIVE_SC_NOT_CONTROLLED));
-                return false;
-            }
-
-            // indicate if we have no builds available
-            //
-            Adjustment.AdjustmentInfo adjInfo = stateInfo.getAdjustmenInfoMap().get(SCOwner);
-            if (adjInfo.getAdjustmentAmount() <= 0) {
-                sb.append(Utils.getLocalString(NOWAIVE_NO_BUILDS_AVAILABLE, SCOwner.getName()));
-                return false;
-            }
-
-
-            // build-option-specific, based upon RuleOptions
-            //
-            RuleOptions ruleOpts = stateInfo.getRuleOptions();
-            if (ruleOpts.getOptionValue(RuleOptions.OPTION_BUILDS) == RuleOptions.VALUE_BUILDS_ANY_OWNED) {
-                sb.append(Utils.getLocalString(GUIOrder.COMPLETE, getFullName()));
-                return true;
-            } else if (ruleOpts.getOptionValue(RuleOptions.OPTION_BUILDS) == RuleOptions.VALUE_BUILDS_ANY_IF_HOME_OWNED) {
-                // check if we have ONE owned home supply center before buidling
-                // in a non-home supply center.
-                //
-                if (SCOwner != position.getSupplyCenterHomePower(province)
-                        && !position.hasAnOwnedHomeSC(SCOwner)) {
-                    sb.append(Utils.getLocalString(NOWAIVE_NEED_ONE_OWNED_SC));
-                    return false;    // failed
-                }
-
-                sb.append(Utils.getLocalString(GUIOrder.COMPLETE, getFullName()));
-                return true;
-            } else {
-                // build only in owned HOME supply centers
-                //
-                if (SCOwner == position.getSupplyCenterHomePower(province)) {
-                    sb.append(Utils.getLocalString(GUIOrder.COMPLETE, getFullName()));
-                    return true;
-                }
-
-                // build failure.
-                sb.append(Utils.getLocalString(NOWAIVE_NOT_OWNED_HOME_SC));
-                return false;
-            }
-        } else {
+        if (!province.hasSupplyCenter()) {
             sb.append(Utils.getLocalString(NOWAIVE_MUST_BE_AN_OWNED_SC));
             return false;
         }
 
-        // NO return here: thus we must appropriately exit within an if/else block above.
+        Power scOwner = position.getSupplyCenterOwner(province);
+        // general screening, applicable to all build options
+        //
+        if (scOwner == null) {
+            sb.append(Utils.getLocalString(NOWAIVE_UNOWNED_SC));
+            return false;
+        }
+
+        if (position.hasUnit(province)) {
+            sb.append(Utils.getLocalString(NOWAIVE_UNIT_PRESENT));
+            return false;
+        }
+
+        if (!stateInfo.canIssueOrder(scOwner)) {
+            sb.append(Utils.getLocalString(NOWAIVE_SC_NOT_CONTROLLED));
+            return false;
+        }
+
+        // indicate if we have no builds available
+        //
+        Adjustment.AdjustmentInfo adjInfo = stateInfo.getAdjustmenInfoMap().get(scOwner);
+        if (adjInfo.getAdjustmentAmount() <= 0) {
+            sb.append(Utils.getLocalString(NOWAIVE_NO_BUILDS_AVAILABLE, scOwner.getName()));
+            return false;
+        }
+
+
+        // build-option-specific, based upon RuleOptions
+        //
+        RuleOptions ruleOpts = stateInfo.getRuleOptions();
+        if (ruleOpts.getOptionValue(RuleOptions.OPTION_BUILDS) == RuleOptions.VALUE_BUILDS_ANY_OWNED) {
+            sb.append(Utils.getLocalString(GUIOrder.COMPLETE, getFullName()));
+            return true;
+        }
+        
+        if (ruleOpts.getOptionValue(RuleOptions.OPTION_BUILDS) == RuleOptions.VALUE_BUILDS_ANY_IF_HOME_OWNED) {
+            // check if we have ONE owned home supply center before buidling
+            // in a non-home supply center.
+            //
+            if (scOwner != position.getSupplyCenterHomePower(province)
+                    && !position.hasAnOwnedHomeSC(scOwner)) {
+                sb.append(Utils.getLocalString(NOWAIVE_NEED_ONE_OWNED_SC));
+                return false;    // failed
+            }
+
+            sb.append(Utils.getLocalString(GUIOrder.COMPLETE, getFullName()));
+            return true;
+        }
+
+        // build only in owned HOME supply centers
+        //
+        if (scOwner == position.getSupplyCenterHomePower(province)) {
+            sb.append(Utils.getLocalString(GUIOrder.COMPLETE, getFullName()));
+            return true;
+        }
+
+        // build failure.
+        sb.append(Utils.getLocalString(NOWAIVE_NOT_OWNED_HOME_SC));
+        return false;
     }// testLocation()
 
 

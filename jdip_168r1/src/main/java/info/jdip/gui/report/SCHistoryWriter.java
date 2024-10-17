@@ -108,7 +108,7 @@ public class SCHistoryWriter {
      * an entire game. If MapMetadata is ready,
      * color will be added.
      */
-    public static String SCHistoryToHTML(ClientFrame clientFrame, World w, boolean inColor) {
+    public static String scHistoryToHTML(ClientFrame clientFrame, World w, boolean inColor) {
         return new SCHistoryWriter(clientFrame, w, inColor).getAsHTML();
     }// SCHistoryToHTML()
 
@@ -128,7 +128,7 @@ public class SCHistoryWriter {
 
         tv.lazyLoadDisplayDialog(new TextViewer.TVRunnable() {
             public void run() {
-                setText(SCHistoryToHTML(clientFrame, w, true));
+                setText(scHistoryToHTML(clientFrame, w, true));
             }
         });
     }// displayDialog()
@@ -142,10 +142,10 @@ public class SCHistoryWriter {
 
         // get template objects
         Object[] templateData = new Object[]
-                {
-                        makeSCSummary(),        // {0} : SC summary by power
-                        makeSCCounts()            // {1} : SC counts by power
-                };
+        {
+            makeSCSummary(),        // {0} : SC summary by power
+            makeSCCounts()            // {1} : SC counts by power
+        };
 
         // format into template
         return Utils.format(templateText, templateData);

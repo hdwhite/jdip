@@ -45,7 +45,7 @@ import java.awt.geom.Point2D;
  */
 public class GUIDisband extends Disband implements GUIOrder {
     // instance variables
-    private transient final static int REQ_LOC = 1;
+    private static final transient int REQ_LOC = 1;
     private transient int currentLocNum = 0;
     private transient Point2D.Float failPt = null;
     private transient SVGGElement group = null;

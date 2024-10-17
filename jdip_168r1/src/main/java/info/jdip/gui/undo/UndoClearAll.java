@@ -33,20 +33,23 @@ import javax.swing.undo.CompoundEdit;
  * Just a fancy name for a compound edit.
  */
 public class UndoClearAll extends CompoundEdit {
-    private final static String PRESENTATION_NAME = "Undo.order.clearall";
+    private static final String PRESENTATION_NAME = "Undo.order.clearall";
 
     public UndoClearAll() {
         super();
     }// UndoClearAll()
 
+    @Override
     public String getPresentationName() {
         return Utils.getLocalString(PRESENTATION_NAME);
     }// getPresentationName()
 
+    @Override
     public String getRedoPresentationName() {
         return UIManager.getString("AbstractUndoableEdit.redoText") + " " + Utils.getLocalString(PRESENTATION_NAME);
     }// getRedoPresentationName()
 
+    @Override
     public String getUndoPresentationName() {
         return UIManager.getString("AbstractUndoableEdit.undoText") + " " + Utils.getLocalString(PRESENTATION_NAME);
     }// getUndoPresentationName()

@@ -41,16 +41,19 @@ public class UndoAddOrder extends XAbstractUndoableEdit {
         this.order = order;
     }// UndoAddOrder
 
+    @Override
     public String getPresentationName() {
         return order.getFullName();
     }// getPresentationName()
 
+    @Override
     public void redo()
             throws CannotRedoException {
         super.redo();
         undoRedoManager.getOrderDisplayPanel().addOrder(order, false);
     }// redo()
 
+    @Override
     public void undo()
             throws CannotUndoException {
         super.undo();

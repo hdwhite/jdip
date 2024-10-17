@@ -40,7 +40,7 @@ import java.util.List;
  */
 public class UndoResolve extends XAbstractUndoableEdit {
     // instance variables
-    private final static String PRESENTATION_NAME_PREFIX = "Undo.resolve";
+    private static final String PRESENTATION_NAME_PREFIX = "Undo.resolve";
     private TurnState resolvedTS;
     private TurnState nextTS;
     private List<Result> resolvedTSResults;
@@ -62,11 +62,13 @@ public class UndoResolve extends XAbstractUndoableEdit {
     }// UndoResolve
 
 
+    @Override
     public String getPresentationName() {
         return Utils.getLocalString(PRESENTATION_NAME_PREFIX);
     }// getPresentationName()
 
 
+    @Override
     public void redo()
             throws CannotRedoException {
         super.redo();
@@ -97,6 +99,7 @@ public class UndoResolve extends XAbstractUndoableEdit {
     }// redo()
 
 
+    @Override
     public void undo()
             throws CannotUndoException {
         super.undo();

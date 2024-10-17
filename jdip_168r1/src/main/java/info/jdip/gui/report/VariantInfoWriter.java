@@ -73,7 +73,7 @@ public class VariantInfoWriter {
         tv.addSingleButton(tv.makeOKButton());
         tv.setTitle(Utils.getLocalString(DIALOG_TITLE));
         tv.setHeaderVisible(false);
-        tv.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        tv.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         tv.lazyLoadDisplayDialog(new TextViewer.TVRunnable() {
             public void run() {

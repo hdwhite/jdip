@@ -46,13 +46,13 @@ import java.awt.geom.Point2D;
  */
 public class GUIRetreat extends Retreat implements GUIOrder {
     // i18n keys
-    private final static String UNIT_MUST_DISBAND = "GUIRetreat.must_disband";
-    private final static String CLICK_TO_SET_DEST = "GUIRetreat.set_dest";
-    private final static String CANNOT_RETREAT_HERE = "GUIRetreat.bad_dest";
-    private final static String VALID_RETREAT_LOCS = "GUIRetreat.valid_locs";
+    private static final String UNIT_MUST_DISBAND = "GUIRetreat.must_disband";
+    private static final String CLICK_TO_SET_DEST = "GUIRetreat.set_dest";
+    private static final String CANNOT_RETREAT_HERE = "GUIRetreat.bad_dest";
+    private static final String VALID_RETREAT_LOCS = "GUIRetreat.valid_locs";
 
     // instance variables
-    private transient static final int REQ_LOC = 2;
+    private static final transient int REQ_LOC = 2;
     private transient int currentLocNum = 0;
     private transient Point2D.Float failPt = null;
     private transient SVGGElement group = null;
@@ -98,6 +98,10 @@ public class GUIRetreat extends Retreat implements GUIOrder {
             return false;
         }
 
+        if (currentLocNum < 0 || currentLocNum > 1) {
+            // should not occur.
+            throw new IllegalStateException();
+        }
 
         Position position = stateInfo.getPosition();
         Province province = location.getProvince();
@@ -107,73 +111,70 @@ public class GUIRetreat extends Retreat implements GUIOrder {
             //
             // we require a dislodged unit present. We will check unit ownership too, if appropriate
             Unit unit = position.getDislodgedUnit(province);
-            if (unit != null) {
-                if (!stateInfo.canIssueOrder(unit.getPower())) {
-                    sb.append(Utils.getLocalString(GUIOrder.NOT_OWNER, unit.getPower()));
-                    return false;
-                }
-
-                // determine valid retreat locations
-                RetreatChecker rc = stateInfo.getRetreatChecker();
-                final Location[] retreatLocs = rc.getValidLocations(new Location(province, unit.getCoast()));
-
-                // if we have no valid retreat locations, inform that we must disband
-                if (retreatLocs.length == 0) {
-                    sb.append(Utils.getLocalString(UNIT_MUST_DISBAND));
-                    return false;
-                }
-
-                // check borders
-                if (!GUIOrderUtils.checkBorder(this, new Location(province, unit.getCoast()), unit.getType(), stateInfo.getPhase(), sb)) {
-                    return false;
-                }
-
-                // we can retreat. Inform user of our retreat options.
-                sb.append(Utils.getLocalString(GUIOrder.CLICK_TO_ISSUE, getFullName()));
-                sb.append(getRetLocText(retreatLocs));
-                return true;
-            }
-
-            // no *dislodged* unit in province
-            sb.append(Utils.getLocalString(GUIOrder.NO_DISLODGED_UNIT, getFullName()));
-            return false;
-        } else if (currentLocNum == 1) {
-            // set retreat destination
-            // - If we are not validating, any destination is acceptable (even source)
-            // - If we are validating, we check that the retreat is adjacent or a possible convoy
-            //		route exists.
-            //
-            if (stateInfo.getValidationOptions().getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
-                // lenient parsing enabled; we'll take anything!
-                sb.append(Utils.getLocalString(CLICK_TO_SET_DEST));
-                return true;
-            }
-
-            // strict parsing is enabled. We are more selective.
-            // check destination against possible retreat locations.
-            RetreatChecker rc = stateInfo.getRetreatChecker();
-            final Location[] retreatLocs = rc.getValidLocations(getSource());
-
-            for (Location retreatLoc : retreatLocs) {
-                if (retreatLoc.getProvince() == province) {
-                    sb.append(Utils.getLocalString(CLICK_TO_SET_DEST));
-                    return true;
-                }
-            }
-
-            // check borders
-            if (!GUIOrderUtils.checkBorder(this, location, srcUnitType, stateInfo.getPhase(), sb)) {
+            if (unit == null) {
+                // no *dislodged* unit in province
+                sb.append(Utils.getLocalString(GUIOrder.NO_DISLODGED_UNIT, getFullName()));
                 return false;
             }
 
-            // not a valid retreat destination.
-            sb.append(Utils.getLocalString(CANNOT_RETREAT_HERE));
+            if (!stateInfo.canIssueOrder(unit.getPower())) {
+                sb.append(Utils.getLocalString(GUIOrder.NOT_OWNER, unit.getPower()));
+                return false;
+            }
+
+            // determine valid retreat locations
+            RetreatChecker rc = stateInfo.getRetreatChecker();
+            final Location[] retreatLocs = rc.getValidLocations(new Location(province, unit.getCoast()));
+
+            // if we have no valid retreat locations, inform that we must disband
+            if (retreatLocs.length == 0) {
+                sb.append(Utils.getLocalString(UNIT_MUST_DISBAND));
+                return false;
+            }
+
+            // check borders
+            if (!GUIOrderUtils.checkBorder(this, new Location(province, unit.getCoast()), unit.getType(), stateInfo.getPhase(), sb)) {
+                return false;
+            }
+
+            // we can retreat. Inform user of our retreat options.
+            sb.append(Utils.getLocalString(GUIOrder.CLICK_TO_ISSUE, getFullName()));
             sb.append(getRetLocText(retreatLocs));
-            return false;
-        } else {
-            // should not occur.
-            throw new IllegalStateException();
+            return true;
         }
+
+        // set retreat destination
+        // - If we are not validating, any destination is acceptable (even source)
+        // - If we are validating, we check that the retreat is adjacent or a possible convoy
+        //		route exists.
+        //
+        if (stateInfo.getValidationOptions().getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
+            // lenient parsing enabled; we'll take anything!
+            sb.append(Utils.getLocalString(CLICK_TO_SET_DEST));
+            return true;
+        }
+
+        // strict parsing is enabled. We are more selective.
+        // check destination against possible retreat locations.
+        RetreatChecker rc = stateInfo.getRetreatChecker();
+        final Location[] retreatLocs = rc.getValidLocations(getSource());
+
+        for (Location retreatLoc : retreatLocs) {
+            if (retreatLoc.getProvince() == province) {
+                sb.append(Utils.getLocalString(CLICK_TO_SET_DEST));
+                return true;
+            }
+        }
+
+        // check borders
+        if (!GUIOrderUtils.checkBorder(this, location, srcUnitType, stateInfo.getPhase(), sb)) {
+            return false;
+        }
+
+        // not a valid retreat destination.
+        sb.append(Utils.getLocalString(CANNOT_RETREAT_HERE));
+        sb.append(getRetLocText(retreatLocs));
+        return false;
 
         // NO return here: thus we must appropriately exit within an if/else block above.
     }// testLocation()

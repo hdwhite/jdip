@@ -113,127 +113,135 @@ public class GUIConvoy extends Convoy implements GUIOrder {
             return false;
         }
 
+        switch (currentLocNum) {
+            case 0:
+                return testConvoyOrigin(stateInfo, location, sb);
+            case 1:
+                return testConvoySource(stateInfo, location, sb);
+            case 2:
+                return testConvoyDestination(stateInfo, location, sb);
+            default:
+                // should not occur.
+                throw new IllegalStateException();
+        }
+    }// testLocation()
 
+    private boolean testConvoyOrigin(StateInfo stateInfo, Location location, StringBuilder sb) {
         Position position = stateInfo.getPosition();
         Province province = location.getProvince();
-
-        if (currentLocNum == 0) {
-            // set Convoy origin (supporting unit)
-            // We will check unit ownership too, if appropriate
-            Unit unit = position.getUnit(province);
-            if (unit != null) {
-                if (!stateInfo.canIssueOrder(unit.getPower())) {
-                    sb.append(Utils.getLocalString(GUIOrder.NOT_OWNER, unit.getPower()));
-                    return false;
-                }
-
-                // we require a Fleet in a sea space or convoyable coast to be present.
-                if (unit.getType() == Unit.Type.FLEET) {
-                    if (province.isSea() || province.isConvoyableCoast()) {
-                        // check borders
-                        if (!GUIOrderUtils.checkBorder(this, new Location(province, unit.getCoast()), unit.getType(), stateInfo.getPhase(), sb)) {
-                            return false;
-                        }
-
-                        // order is acceptable
-                        sb.append(Utils.getLocalString(GUIOrder.CLICK_TO_ISSUE, getFullName()));
-                        return true;
-                    } else {
-                        sb.append(Utils.getLocalString(ONLY_SEA_OR_CC_FLEETS_CAN_CONVOY));
-                        return false;
-                    }
-                } else {
-                    sb.append(Utils.getLocalString(ONLY_SEA_OR_CC_FLEETS_CAN_CONVOY));
-                    return false;
-                }
-            }
-
+        // set Convoy origin (supporting unit)
+        // We will check unit ownership too, if appropriate
+        Unit unit = position.getUnit(province);
+        if (unit == null) {
             // no unit in province
             sb.append(Utils.getLocalString(GUIOrder.NO_UNIT, getFullName()));
             return false;
-        } else if (currentLocNum == 1) {
-            // set Convoy source (unit being convoyed)
-            // - If we are not validating, any location with a unit is acceptable (even source)
-            // - If we are validating,
-            //
-            if (stateInfo.getValidationOptions().getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
-                // lenient parsing enabled; we'll take anything with a unit!
-                if (position.hasUnit(province)) {
-                    sb.append(Utils.getLocalString(CLICK_TO_CONVOY));
-                    return true;
-                }
+        }
 
-                // no unit in province
-                sb.append(Utils.getLocalString(NO_UNIT));
-                return false;
-            }
+        if (!stateInfo.canIssueOrder(unit.getPower())) {
+            sb.append(Utils.getLocalString(GUIOrder.NOT_OWNER, unit.getPower()));
+            return false;
+        }
 
-            // strict parsing is enabled. We are more selective.
-            // The location must contain a coastal Army unit
-            //
-            Unit unit = position.getUnit(province);
-            if (unit != null) {
-                if (unit.getType() == Unit.Type.ARMY) {
-                    if (province.isCoastal()) {
-                        // check borders
-                        if (!GUIOrderUtils.checkBorder(this, new Location(province, unit.getCoast()), unit.getType(), stateInfo.getPhase(), sb)) {
-                            return false;
-                        }
+        // we require a Fleet in a sea space or convoyable coast to be present.
+        if (unit.getType() != Unit.Type.FLEET ||
+            (!province.isSea() && !province.isConvoyableCoast())) {
+            sb.append(Utils.getLocalString(ONLY_SEA_OR_CC_FLEETS_CAN_CONVOY));
+            return false;
+        }
 
-                        sb.append(Utils.getLocalString(CLICK_TO_CONVOY_ARMY));
-                        return true;
-                    } else {
-                        sb.append(Utils.getLocalString(CANNOT_CONVOY_LANDLOCKED));
-                        return false;
-                    }
-                } else {
-                    sb.append(Utils.getLocalString(MUST_CONVOY_FROM_COAST));
-                    return false;
-                }
+        // check borders
+        if (!GUIOrderUtils.checkBorder(this, new Location(province, unit.getCoast()), unit.getType(), stateInfo.getPhase(), sb)) {
+            return false;
+        }
+
+        // order is acceptable
+        sb.append(Utils.getLocalString(GUIOrder.CLICK_TO_ISSUE, getFullName()));
+        return true;
+    }
+
+    private boolean testConvoySource(StateInfo stateInfo, Location location, StringBuilder sb) {
+        Position position = stateInfo.getPosition();
+        Province province = location.getProvince();
+        // set Convoy source (unit being convoyed)
+        // - If we are not validating, any location with a unit is acceptable (even source)
+        // - If we are validating,
+        //
+        if (stateInfo.getValidationOptions().getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
+            // lenient parsing enabled; we'll take anything with a unit!
+            if (position.hasUnit(province)) {
+                sb.append(Utils.getLocalString(CLICK_TO_CONVOY));
+                return true;
             }
 
             // no unit in province
             sb.append(Utils.getLocalString(NO_UNIT));
             return false;
-        } else if (currentLocNum == 2) {
-            // set Convoy destination
-            // - If we are not validating, any destination is acceptable (even source)
-            // - If we are validating, we check that a theoretical (possible) convoy route to
-            // 		the destination exists (could exist)
-            //
-            if (stateInfo.getValidationOptions().getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
-                // lenient parsing enabled; we'll take anything!
-                sb.append(Utils.getLocalString(CLICK_TO_CONVOY_FROM, province.getFullName()));
-                return true;
-            }
-
-            // strict parsing is enabled. We are more selective. Check for a possible convoy route.
-            if (province.isCoastal()) {
-                Path path = new Path(position);
-                if (path.isPossibleConvoyRoute(convoySrc, new Location(province, Coast.NONE))) {
-                    // check borders
-                    if (!GUIOrderUtils.checkBorder(this, location, convoyUnitType, stateInfo.getPhase(), sb)) {
-                        return false;
-                    }
-
-                    sb.append(Utils.getLocalString(CLICK_TO_CONVOY_FROM, province.getFullName()));
-                    return true;
-                } else {
-                    sb.append(Utils.getLocalString(NO_POSSIBLE_CONVOY_PATH, convoySrc.getProvince().getFullName()));
-                    return false;
-                }
-            } else {
-                sb.append(Utils.getLocalString(MUST_CONVOY_TO_COAST));
-                return false;
-            }
-        } else {
-            // should not occur.
-            throw new IllegalStateException();
         }
 
-        // NO return here: thus we must appropriately exit within an if/else block above.
-    }// testLocation()
+        // strict parsing is enabled. We are more selective.
+        // The location must contain a coastal Army unit
+        //
+        Unit unit = position.getUnit(province);
+        if (unit == null) {
+            // no unit in province
+            sb.append(Utils.getLocalString(NO_UNIT));
+            return false;
+        }
 
+        if (unit.getType() != Unit.Type.ARMY) {
+            sb.append(Utils.getLocalString(MUST_CONVOY_FROM_COAST));
+            return false;
+        }
+        
+        if (!province.isCoastal()) {
+            sb.append(Utils.getLocalString(CANNOT_CONVOY_LANDLOCKED));
+            return false;
+        }
+        // check borders
+        if (!GUIOrderUtils.checkBorder(this, new Location(province, unit.getCoast()), unit.getType(), stateInfo.getPhase(), sb)) {
+            return false;
+        }
+
+        sb.append(Utils.getLocalString(CLICK_TO_CONVOY_ARMY));
+        return true;
+    }
+
+    private boolean testConvoyDestination(StateInfo stateInfo, Location location, StringBuilder sb) {
+        Position position = stateInfo.getPosition();
+        Province province = location.getProvince();
+        
+        // set Convoy destination
+        // - If we are not validating, any destination is acceptable (even source)
+        // - If we are validating, we check that a theoretical (possible) convoy route to
+        // 		the destination exists (could exist)
+        //
+        if (stateInfo.getValidationOptions().getOption(ValidationOptions.KEY_GLOBAL_PARSING).equals(ValidationOptions.VALUE_GLOBAL_PARSING_LOOSE)) {
+            // lenient parsing enabled; we'll take anything!
+            sb.append(Utils.getLocalString(CLICK_TO_CONVOY_FROM, province.getFullName()));
+            return true;
+        }
+
+        // strict parsing is enabled. We are more selective. Check for a possible convoy route.
+        if (!province.isCoastal()) {
+            sb.append(Utils.getLocalString(MUST_CONVOY_TO_COAST));
+            return false;
+        }
+
+        Path path = new Path(position);
+        if (!path.isPossibleConvoyRoute(convoySrc, new Location(province, Coast.NONE))) {        
+            sb.append(Utils.getLocalString(NO_POSSIBLE_CONVOY_PATH, convoySrc.getProvince().getFullName()));
+            return false;
+        }
+
+        // check borders
+        if (!GUIOrderUtils.checkBorder(this, location, convoyUnitType, stateInfo.getPhase(), sb)) {
+            return false;
+        }
+
+        sb.append(Utils.getLocalString(CLICK_TO_CONVOY_FROM, province.getFullName()));
+        return true;
+    }
 
     public boolean clearLocations() {
         if (isComplete()) {
@@ -258,16 +266,21 @@ public class GUIConvoy extends Convoy implements GUIOrder {
             return false;
         }
 
-        if (testLocation(stateInfo, location, sb)) {
-            if (currentLocNum == 0) {
+        if (!testLocation(stateInfo, location, sb)) {
+            return false;
+        }
+
+        switch (currentLocNum) {
+            case 0:
                 Unit unit = stateInfo.getPosition().getUnit(location.getProvince());
                 src = new Location(location.getProvince(), unit.getCoast());
                 power = unit.getPower();
                 srcUnitType = unit.getType();
                 currentLocNum++;
                 return true;
-            } else if (currentLocNum == 1) {
-                Unit unit = stateInfo.getPosition().getUnit(location.getProvince());
+            
+            case 1:
+                unit = stateInfo.getPosition().getUnit(location.getProvince());
                 convoySrc = new Location(location.getProvince(), unit.getCoast());
                 convoyUnitType = unit.getType();
 
@@ -275,17 +288,18 @@ public class GUIConvoy extends Convoy implements GUIOrder {
                 sb.append("Convoying this unit.");
                 currentLocNum++;
                 return true;
-            } else if (currentLocNum == 2) {
+            
+            case 2:
                 convoyDest = new Location(location.getProvince(), location.getCoast());
 
                 sb.setLength(0);
                 sb.append(Utils.getLocalString(GUIOrder.COMPLETE, getFullName()));
                 currentLocNum++;
                 return true;
-            }
+            
+            default:
+                return false;
         }
-
-        return false;
     }// setLocation()
 
     public boolean isComplete() {

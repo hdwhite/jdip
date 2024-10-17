@@ -30,7 +30,7 @@ import java.awt.*;
  * StatusBar
  */
 public class StatusBar extends JPanel {
-    private final static String INITIAL_MESSAGE = "";
+    private static final String INITIAL_MESSAGE = "";
     private final JTextField text;
     private final JTextField mode;
     private JProgressBar pb = null;
@@ -45,6 +45,7 @@ public class StatusBar extends JPanel {
         add(new javax.swing.JSeparator(), BorderLayout.NORTH);
 
         text = new JTextField(INITIAL_MESSAGE) {
+            @Override
             public boolean isFocusable() {
                 return false;
             }
@@ -57,11 +58,12 @@ public class StatusBar extends JPanel {
         add(text, BorderLayout.CENTER);
 
         mode = new JTextField("", 8) {
+            @Override
             public boolean isFocusable() {
                 return false;
             }
         };
-        mode.setHorizontalAlignment(JTextField.RIGHT);
+        mode.setHorizontalAlignment(SwingConstants.RIGHT);
         mode.setEditable(false);
         mode.setHighlighter(null);
         mode.setOpaque(false);
@@ -141,7 +143,6 @@ public class StatusBar extends JPanel {
      */
     public void incPBValue() {
         if (pb != null) {
-            //System.out.println("incPBValue(): "+pb.getValue()+" -> "+(pb.getValue()+1));
             pb.setValue(pb.getValue() + 1);
         }
     }// incPBValue()

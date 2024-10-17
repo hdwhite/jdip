@@ -69,21 +69,16 @@ public class AssocJComboBox extends JComboBox<AssocJComboBox.AssociatedObj> {
     /**
      * Remove an item, by comparing its AssociatedObj <b>value</b>.
      */
+    @Override
     public void removeItem(final Object obj) {
         super.removeItem(getAOForValue(obj));
-    }// removeItem()
-
-    /**
-     * Remove an AssociatedObj
-     */
-    public void removeItem(final AssociatedObj ao) {
-        super.removeItem(ao);
     }// removeItem()
 
     /**
      * Add an AssociatedObj. Other objects are not allowed to be
      * added, and will throw an exception.
      */
+    @Override
     public void addItem(final AssociatedObj obj) {
         if (obj instanceof AssociatedObj) {
             super.addItem(obj);
@@ -104,21 +99,6 @@ public class AssocJComboBox extends JComboBox<AssocJComboBox.AssociatedObj> {
             setSelectedItem(ao);
         }
     }// reset()
-
-
-    /**
-     * Get the selected AssociatedObj; null if none selected.
-     */
-    public Object getSelectedItem() {
-        return super.getSelectedItem();
-    }// getSelectedItem
-
-    /**
-     * Sets the selected item by its AssociatedObj <b>Value</b>;
-     */
-    public void setSelectedItem(Object obj) {
-        super.setSelectedItem(getAOForValue(obj));
-    }// setSelectedItem()
 
     /**
      * Get the selected AssociatedObj value; if null, it uses the
@@ -164,18 +144,21 @@ public class AssocJComboBox extends JComboBox<AssocJComboBox.AssociatedObj> {
         // short circuit
         if (value instanceof AssociatedObj) {
             return (AssociatedObj) value;
-        } else if (value != null) {
-            ComboBoxModel<AssociatedObj> model = getModel();
-            final int len = model.getSize();
-            for (int i = 0; i < len; i++) {
-                AssociatedObj ao = model.getElementAt(i);
-                if (value.equals(ao.getValue()) ||
-                        value.equals(ao.getDisplay())) {
-                    return ao;
-                }
+        }
+        
+        if (value == null){
+            return null;
+        }
+        
+        ComboBoxModel<AssociatedObj> model = getModel();
+        final int len = model.getSize();
+        for (int i = 0; i < len; i++) {
+            AssociatedObj ao = model.getElementAt(i);
+            if (value.equals(ao.getValue()) ||
+                    value.equals(ao.getDisplay())) {
+                return ao;
             }
         }
-
         return null;
     }// getAOForValue()
 

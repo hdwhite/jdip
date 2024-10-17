@@ -87,9 +87,8 @@ public class RegexFormatter extends DefaultFormatter {
      * @return Object representation of text
      * @throws ParseException if there is an error in the conversion
      */
+    @Override
     public Object stringToValue(String text) throws ParseException {
-        Pattern pattern = getPattern();
-
         if (pattern != null) {
             Matcher matcher = pattern.matcher(text);
 

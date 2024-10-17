@@ -67,12 +67,10 @@ public class UndoRedoManager extends UndoManager {
     /**
      * Add an Edit (UndoableEdit)
      */
+    @Override
     public synchronized boolean addEdit(UndoableEdit anEdit) {
-        //System.out.println("URM: addEdit(): edits (before): "+edits.size());
         checkState();
-        //System.out.println("     added: "+anEdit);
         final boolean retVal = super.addEdit(anEdit);
-        //System.out.println("     addEdit(): edits (after): "+edits.size());
         refreshMenu();
         return retVal;
     }// addEdit()
@@ -80,28 +78,27 @@ public class UndoRedoManager extends UndoManager {
     /**
      * Redo last undo
      */
+    @Override
     public synchronized void redo() {
-        //System.out.println("URM: redo(): edits (before): "+edits.size());
         checkState();
         super.redo();
-        //System.out.println("     redo(): edits (after): "+edits.size());
         refreshMenu();
     }// redo()
 
     /**
      * Undo an UndoableEdit
      */
+    @Override
     public synchronized void undo() {
-        //System.out.println("URM: undo(): edits (before): "+edits.size());
         checkState();
         super.undo();
-        //System.out.println("     undo(): edits (after): "+edits.size());
         refreshMenu();
     }// undo()
 
     /**
      * Throw away all stored edits
      */
+    @Override
     public synchronized void discardAllEdits() {
         checkState();
         super.discardAllEdits();
@@ -111,6 +108,7 @@ public class UndoRedoManager extends UndoManager {
     /**
      * Undo or Redo
      */
+    @Override
     public synchronized void undoOrRedo() {
         checkState();
         super.undoOrRedo();
@@ -189,8 +187,6 @@ public class UndoRedoManager extends UndoManager {
             final int idx = listIter.previousIndex();
             UndoableEdit ue = listIter.previous();
 
-            //Log.println("  checking: ", String.valueOf(idx), ": ", ue.getClass().getName());
-
             if (ue instanceof UndoResolve) {
                 break;
             } else {
@@ -218,8 +214,6 @@ public class UndoRedoManager extends UndoManager {
     public synchronized void simplify() {
         logger.trace( "UndoRedoManager::simplify()");
 
-        //dumpEdits();
-
         // search backwards. After we find the first UndoResolve, keep going
         // backwards, telling those edits to die() and then dequeuing
         // unless they are UndoResolves.
@@ -236,8 +230,6 @@ public class UndoRedoManager extends UndoManager {
         while (listIter.hasPrevious()) {
             final int idx = listIter.previousIndex();
             UndoableEdit ue = listIter.previous();
-
-            //Log.println("  checking: ", String.valueOf(idx), ": ", ue.getClass().getName());
 
             if (ue instanceof UndoResolve) {
                 if (!foundResolved) {

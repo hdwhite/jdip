@@ -129,7 +129,7 @@ public class StateWriter {
         tv.setTitle(title.toString());
         tv.setHelpID(Help.HelpID.Dialog_StatusReport);
         tv.setHeaderVisible(false);
-        tv.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        tv.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         tv.lazyLoadDisplayDialog(new TextViewer.TVRunnable() {
             public void run() {
@@ -188,12 +188,7 @@ public class StateWriter {
         sb.append("<tr>");
         for (int i = 0; i < allPowers.length; i++) {
             // odd columns have bgcolor highlights
-            if ((i & 1) == 0) {
-                sb.append("<th bgcolor=\"F0F8FF\">");
-            } else {
-                sb.append("<th>");
-            }
-
+            sb.append((i & 1) == 0 ? "<th bgcolor=\"F0F8FF\">" : "<th>");
             sb.append("<u>");
             sb.append(allPowers[i]);
             sb.append("</u></th>");
@@ -213,11 +208,7 @@ public class StateWriter {
 
             for (int j = 0; j < allPowers.length; j++) {
                 // odd columns have bg color
-                if ((j & 1) == 0) {
-                    sb.append("<td bgcolor=\"F0F8FF\">");
-                } else {
-                    sb.append("<td>");
-                }
+                sb.append ((j & 1) == 0 ? "<td bgcolor=\"F0F8FF\">" : "<td>");
 
                 List<String> list = powerMap.get(allPowers[j]);
                 if (i < list.size()) {
@@ -262,44 +253,7 @@ public class StateWriter {
 
             sb.append("<div class=\"indent2cm\">");
             if (canShow) {
-                // print submission/elimination information
-                List<Orderable> orders = turnState.getOrders(power);
-                if (orders.size() > 0) {
-                    for (Orderable orderable : orders) {
-                        Order order = (Order) orderable;
-                        sb.append(order.toFormattedString(ofo));
-                        sb.append("<br>\n");
-                    }
-
-                    // but do we have orders for all units?
-                    // indicate if we do not.
-                    // this is phase dependent
-                    Adjustment.AdjustmentInfo adjInfo = adjMap.get(power);
-                    int diff = 0;
-                    if (turnState.getPhase().getPhaseType() == Phase.PhaseType.RETREAT) {
-                        diff = adjInfo.getDislodgedUnitCount() - orders.size();
-                    } else if (turnState.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT) {
-                        diff = Math.abs(adjInfo.getAdjustmentAmount()) - orders.size();
-                    } else if (turnState.getPhase().getPhaseType() == Phase.PhaseType.MOVEMENT) {
-                        diff = adjInfo.getUnitCount() - orders.size();
-                    }
-
-                    if (diff > 0) {
-                        sb.append(Utils.getLocalString(ORD_TOO_FEW, diff));
-                        sb.append("<br>\n");
-                    }
-
-                } else {
-                    // if no orders are submitted, we must mention that, unless power
-                    // has been eliminated....
-                    if (position.isEliminated(power)) {
-                        sb.append(Utils.getLocalString(MSG_POWER_ELIMINATED));
-                    } else {
-                        sb.append(Utils.getLocalString(MSG_NO_ORDERS_SUBMITTED));
-                    }
-
-                    sb.append("<br>\n");
-                }
+                sb.append(getOrderForPower(power));
             } else {
                 // (not available), unless eliminated
                 if (position.isEliminated(power)) {
@@ -317,6 +271,51 @@ public class StateWriter {
         return sb.toString();
     }// getOrders()
 
+    private StringBuilder getOrderForPower(Power power) {
+        StringBuilder sb = new StringBuilder(2048);
+        Position position = turnState.getPosition();
+
+        // print submission/elimination information
+        List<Orderable> orders = turnState.getOrders(power);
+        if (!orders.isEmpty()) {
+            for (Orderable orderable : orders) {
+                Order order = (Order) orderable;
+                sb.append(order.toFormattedString(ofo));
+                sb.append("<br>\n");
+            }
+
+            // but do we have orders for all units?
+            // indicate if we do not.
+            // this is phase dependent
+            Adjustment.AdjustmentInfo adjInfo = adjMap.get(power);
+            int diff = 0;
+            if (turnState.getPhase().getPhaseType() == Phase.PhaseType.RETREAT) {
+                diff = adjInfo.getDislodgedUnitCount() - orders.size();
+            } else if (turnState.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT) {
+                diff = Math.abs(adjInfo.getAdjustmentAmount()) - orders.size();
+            } else if (turnState.getPhase().getPhaseType() == Phase.PhaseType.MOVEMENT) {
+                diff = adjInfo.getUnitCount() - orders.size();
+            }
+
+            if (diff > 0) {
+                sb.append(Utils.getLocalString(ORD_TOO_FEW, diff));
+                sb.append("<br>\n");
+            }
+
+        } else {
+            // if no orders are submitted, we must mention that, unless power
+            // has been eliminated....
+            if (position.isEliminated(power)) {
+                sb.append(Utils.getLocalString(MSG_POWER_ELIMINATED));
+            } else {
+                sb.append(Utils.getLocalString(MSG_NO_ORDERS_SUBMITTED));
+            }
+
+            sb.append("<br>\n");
+        }
+
+        return sb;
+    }
 
     /**
      * Write SC ownership information

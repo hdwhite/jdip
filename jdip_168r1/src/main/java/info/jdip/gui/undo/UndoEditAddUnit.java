@@ -66,16 +66,19 @@ public class UndoEditAddUnit extends XAbstractUndoableEdit {
         urm.getOrderDisplayPanel().revalidateAllOrders();
     }// addUnit()
 
+    @Override
     public String getPresentationName() {
         return Utils.getLocalString(PRESENTATION_NAME, unit.getType().getFullName(), province.getShortName());
     }// getPresentationName()
 
+    @Override
     public void redo()
             throws CannotRedoException {
         super.redo();
         UndoEditAddUnit.addUnit(undoRedoManager, position, province, unit, isDislodged);
     }// redo()
 
+    @Override
     public void undo()
             throws CannotUndoException {
         super.undo();
