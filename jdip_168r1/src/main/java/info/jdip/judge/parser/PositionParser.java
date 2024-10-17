@@ -62,56 +62,6 @@ public class PositionParser {
     private PositionInfo[] posInfo = null;
     private Phase phase = null;
 	
-	/*
-	// for testing only
-	public static void main(String args[])
-	throws IOException, PatternSyntaxException
-	{
-		String in = 
-		"sdkflaakdljf fdakjd slkjdfsa klfd\n"+
-		"dslkafflddfskj fdakjd slkjdfsa klfd\n"+
-		"kldsjfkdskajfdsak fdakjd slkjdfsa klfd\n"+
-		"\n"+
-		
-		// start
-		"Starting position for Spring of 1901.\n"+
-		//"Status of the Movement phase for Fall of 1906.  (realtime.026)\n"+
-		"\n"+
-		"Argentina:Army  Santa Cruz.\n"+
-		"Argentina:Fleet Buenos Aires.\n"+
-		"Argentina:Fleet Chile.\n"+
-		"\n"+
-		"Brazil:  Army  Brasilia.\n"+
-		"Brazil:  Army  Rio de Janeiro.\n"+
-		"Brazil:  Fleet Recife.\n"+
-		"\n"+
-		"Oz:      Fleet New South Wales.\n"+
-		"Oz:      Fleet Victoria.\n"+
-		"Oz:      Fleet Western Australia.\n"+
-		"\n"+
-		"The deadline for the first movement orders is Tue Dec  4 2001 23:30:00 PST.\n"+
-		
-		// ending text
-		"The next phase of 'ferret' will be Movement for Fall of 1901.\n"+
-		"The deadline for orders will be Tue Jan 22 2002 23:30:00 -0500.\n";
-		
-		
-		PositionParser pp = new PositionParser(in);
-		
-		PositionInfo[] pi = pp.getPositionInfo();
-		System.out.println("# of orders: "+pi.length);
-		System.out.println("phase: "+pp.getPhase());
-		
-		for(int i=0; i<pi.length; i++)
-		{
-			System.out.println("  "+pi[i]);
-		}
-		
-		
-	}// main()
-	// end testing method
-	*/
-
     /**
      * Parses the input for Position information, if any is present.
      */

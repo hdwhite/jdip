@@ -91,7 +91,7 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
         cbJudges.setSelectedIndex(0);    // default, if setSelectedItem() fails
         cbJudges.setSelectedItem(lastJudgeUsed);
 
-        progressBar = new JProgressBar(JProgressBar.HORIZONTAL);
+        progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
         progressBar.setIndeterminate(true);
         progressBar.setStringPainted(true);
         enableProgressBar(false);
@@ -130,8 +130,8 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
      */
     private JPanel makeContent() {
 
-        int w1[] = {BORDER, 0, 5, 0, BORDER};
-        int h1[] = {BORDER, 0, 20, 0, 0, BORDER, 0};
+        int[] w1 = {BORDER, 0, 5, 0, BORDER};
+        int[] h1 = {BORDER, 0, 20, 0, 0, BORDER, 0};
 
         HIGLayout l1 = new HIGLayout(w1, h1);
         l1.setColumnWeight(1, 1);
@@ -154,72 +154,75 @@ public class FlocImportDialog extends HeaderDialog implements FlocImportCallback
     /**
      * Handle OK and CANCEL selections
      */
+    @Override
     public void close(String actionCommand) {
-        if (isOKorAccept(actionCommand)) {
-            // check game name text
-            final String judgeName = ((String) cbJudges.getSelectedItem()).trim().toUpperCase();
-            final String gameName = tfGameName.getText().trim();
+        if (isCloseOrCancel(actionCommand) && fi != null) {
+            fi.abort();
+            fi = null;
+            clientFrame.getStatusBar().clearText();
+            super.close(actionCommand);
+            return;
+        }
 
-            boolean invalidJudgeName = (judgeName == null || judgeName.length() != 4);
-            if (!invalidJudgeName) {
-                for (int i = 0; i < judgeName.length(); i++) {
-                    if (!Character.isLetterOrDigit(judgeName.charAt(i))) {
-                        invalidJudgeName = true;
-                    }
+        if (!isOKorAccept(actionCommand)) 
+        {
+            clientFrame.getStatusBar().clearText();
+            super.close(actionCommand);
+            return;
+        }
+        // check game name text
+        final String judgeName = ((String) cbJudges.getSelectedItem()).trim().toUpperCase();
+        final String gameName = tfGameName.getText().trim();
+
+        boolean invalidJudgeName = (judgeName == null || judgeName.length() != 4);
+        if (!invalidJudgeName) {
+            for (int i = 0; i < judgeName.length(); i++) {
+                if (!Character.isLetterOrDigit(judgeName.charAt(i))) {
+                    invalidJudgeName = true;
                 }
             }
+        }
 
-            if (invalidJudgeName) {
-                Utils.popupError(clientFrame,
-                        Utils.getLocalString(NOT_REGISTERED_TITLE),
-                        Utils.getLocalString(INVALID_JUDGE_TEXT));
-                return;
-            }
+        if (invalidJudgeName) {
+            Utils.popupError(clientFrame,
+                    Utils.getLocalString(NOT_REGISTERED_TITLE),
+                    Utils.getLocalString(INVALID_JUDGE_TEXT));
+            return;
+        }
 
-            if (gameName.length() == 0) {
+        if (gameName.length() == 0) {
+            Utils.popupError(clientFrame,
+                    Utils.getLocalString(NOT_REGISTERED_TITLE),
+                    Utils.getLocalString(INVALID_INPUT_TEXT));
+            return;
+        }
+
+        for (int i = 0; i < gameName.length(); i++) {
+            if (!Character.isLetterOrDigit(gameName.charAt(i)) && (gameName.charAt(i) != '_')) {
                 Utils.popupError(clientFrame,
                         Utils.getLocalString(NOT_REGISTERED_TITLE),
                         Utils.getLocalString(INVALID_INPUT_TEXT));
                 return;
             }
-
-            for (int i = 0; i < gameName.length(); i++) {
-                if (!Character.isLetterOrDigit(gameName.charAt(i)) && (gameName.charAt(i) != '_')) {
-                    Utils.popupError(clientFrame,
-                            Utils.getLocalString(NOT_REGISTERED_TITLE),
-                            Utils.getLocalString(INVALID_INPUT_TEXT));
-                    return;
-                }
-            }
-
-
-            // save selected judge
-            Preferences prefs = SharedPrefs.getUserNode();
-            prefs.put(PREFS_LAST_JUDGE_USED, judgeName);
-            SharedPrefs.savePrefs(prefs);
-
-            // disable 'ok', show progress
-            getButton(0).setEnabled(false);
-            enableProgressBar(true);
-
-            // import!
-            fi = new FlocImporter(
-                    gameName,
-                    judgeName,
-                    clientFrame.getGUIOrderFactory(),
-                    this);
-
-            fi.start();
-            return;
-        } else if (isCloseOrCancel(actionCommand)) {
-            if (fi != null) {
-                fi.abort();
-                fi = null;
-            }
         }
 
-        clientFrame.getStatusBar().clearText();
-        super.close(actionCommand);
+        // save selected judge
+        Preferences prefs = SharedPrefs.getUserNode();
+        prefs.put(PREFS_LAST_JUDGE_USED, judgeName);
+        SharedPrefs.savePrefs(prefs);
+
+        // disable 'ok', show progress
+        getButton(0).setEnabled(false);
+        enableProgressBar(true);
+
+        // import!
+        fi = new FlocImporter(
+                gameName,
+                judgeName,
+                clientFrame.getGUIOrderFactory(),
+                this);
+
+        fi.start();
     }// close()
 
 

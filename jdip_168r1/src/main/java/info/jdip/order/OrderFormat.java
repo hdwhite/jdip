@@ -109,25 +109,25 @@ public class OrderFormat {
 
 
     // keywords
-    private final static String ARROW = "_arrow_";
-    private final static String ORDERNAME = "_orderName_";
+    private static final String ARROW = "_arrow_";
+    private static final String ORDERNAME = "_orderName_";
 
 
     // variable-modifying keywords
-    private final static String SHOW_POWER = "showPossesivePower";
-    private final static String POWER_ADJECTIVE = "adjective";
-    private final static String LOC_COAST = "coast";
-    private final static String LOC_PROVINCE = "province";
-    private final static String PATH = "path";
+    private static final String SHOW_POWER = "showPossesivePower";
+    private static final String POWER_ADJECTIVE = "adjective";
+    private static final String LOC_COAST = "coast";
+    private static final String LOC_PROVINCE = "province";
+    private static final String PATH = "path";
 
     // all non-modifying keywords
-    private final static String[] ALL_NONMOD_KEYWORDS = {
+    private static final String[] ALL_NONMOD_KEYWORDS = {
             ARROW,
             ORDERNAME
     };
 
     // all modifying keywords
-    private final static String[] ALL_MOD_KEYWORDS = {
+    private static final String[] ALL_MOD_KEYWORDS = {
             SHOW_POWER,
             POWER_ADJECTIVE,
             LOC_COAST,
@@ -137,8 +137,8 @@ public class OrderFormat {
 
 
     // misc. constants
-    private final static String EMPTY = "";
-    private final static String KEYWORD_ERROR = "!keyword_error!";
+    private static final String EMPTY = "";
+    private static final String KEYWORD_ERROR = "!keyword_error!";
 
 
     /**
@@ -241,39 +241,37 @@ public class OrderFormat {
 
         if (coast == null) {
             text = (ofo.isDebug() ? handleNull(Coast.class) : EMPTY);
-        } else {
-            if (Coast.isDisplayable(coast)) {
-                switch (ofo.getCoastFormat()) {
-                    case OrderFormatOptions.FORMAT_BRIEF:
-                        text = coast.getAbbreviation();
-                        break;
-                    case OrderFormatOptions.FORMAT_FULL:
-                        text = coast.getName();
-                        break;
-                    case OrderFormatOptions.FORMAT_COAST_PAREN_BRIEF: {
-                        StringBuilder sb = new StringBuilder(4);
-                        sb.append('(');
-                        sb.append(coast.getAbbreviation());
-                        sb.append(')');
-                        text = sb.toString();
-                    }
+        } else if (Coast.isDisplayable(coast)) {
+            switch (ofo.getCoastFormat()) {
+                case OrderFormatOptions.FORMAT_BRIEF:
+                    text = coast.getAbbreviation();
                     break;
-                    case OrderFormatOptions.FORMAT_COAST_PAREN_FULL: {
-                        StringBuilder sb = new StringBuilder(16);
-                        sb.append('(');
-                        sb.append(coast.getName());
-                        sb.append(')');
-                        text = sb.toString();
-                    }
+                case OrderFormatOptions.FORMAT_FULL:
+                    text = coast.getName();
                     break;
-                    default:
-                        throw new IllegalStateException();
+                case OrderFormatOptions.FORMAT_COAST_PAREN_BRIEF: {
+                    StringBuilder sb = new StringBuilder(4);
+                    sb.append('(');
+                    sb.append(coast.getAbbreviation());
+                    sb.append(')');
+                    text = sb.toString();
                 }
-            } else if (ofo.isDebug()) {
-                text = coast.getAbbreviation();
-            } else {
-                text = EMPTY;
+                break;
+                case OrderFormatOptions.FORMAT_COAST_PAREN_FULL: {
+                    StringBuilder sb = new StringBuilder(16);
+                    sb.append('(');
+                    sb.append(coast.getName());
+                    sb.append(')');
+                    text = sb.toString();
+                }
+                break;
+                default:
+                    throw new IllegalStateException();
             }
+        } else if (ofo.isDebug()) {
+            text = coast.getAbbreviation();
+        } else {
+            text = EMPTY;
         }
 
         text = applyStyle(ofo.getCoastStyle(), text);
@@ -482,20 +480,17 @@ public class OrderFormat {
                         final String tok = tokens[1].substring(1);
                         final Object obj = procStaticKeyword(ofo, order, tok);
                         return (obj == null) ? tok : obj.toString();
-                    } else {
-                        if (tokens.length == 2) {
-                            // {xxx:?true:} [empty 'false' clause]
-                            return EMPTY;
-                        } else {
-                            assert (tokens.length == 3);
-                            final Object obj = procStaticKeyword(ofo, order, tokens[2]);
-                            return (obj == null) ? tokens[2] : obj.toString();
-                        }
                     }
-                } else {
-                    //process via modifier
-                    out = procModKeyword(ofo, order, out, tokens[1]);
+                    if (tokens.length == 2) {
+                        // {xxx:?true:} [empty 'false' clause]
+                        return EMPTY;
+                    }
+                    assert (tokens.length == 3);
+                    final Object obj = procStaticKeyword(ofo, order, tokens[2]);
+                    return (obj == null) ? tokens[2] : obj.toString();
                 }
+                //process via modifier
+                out = procModKeyword(ofo, order, out, tokens[1]);
             }
         }
 
@@ -571,15 +566,15 @@ public class OrderFormat {
         if (keyword.equals(SHOW_POWER)) {
             if (input == null) {
                 return EMPTY;
-            } else if (input instanceof Power && order != null) {
+            }
+            if (input instanceof Power && order != null) {
                 // only show possessive power if it is not the same as the
                 // source power AND we are set to show posessive powers.
                 if (ofo.getShowPossessivePower()
                         && !order.getPower().equals(input)) {
                     return input;
-                } else {
-                    return EMPTY;
                 }
+                return EMPTY;
             }
         } else if (keyword.equals(POWER_ADJECTIVE)) {
             if (input instanceof Power) {
@@ -599,7 +594,8 @@ public class OrderFormat {
         } else if (keyword.equals(PATH)) {
             if (input == null) {
                 return EMPTY;
-            } else if (input instanceof Location[]) {
+            }
+            if (input instanceof Location[]) {
                 final StringBuilder sb = new StringBuilder(128);
                 final Location[] locs = (Location[]) input;
                 for (int i = 0; i < locs.length; i++) {
@@ -611,7 +607,8 @@ public class OrderFormat {
                     }
                 }
                 return sb.toString();
-            } else if (input instanceof Province[]) {
+            }
+            if (input instanceof Province[]) {
                 final StringBuilder sb = new StringBuilder(128);
                 final Province[] provs = (Province[]) input;
                 for (int i = 0; i < provs.length; i++) {
@@ -686,9 +683,8 @@ public class OrderFormat {
             final String str = output.toString();
             if (str.endsWith(" ") || str.endsWith(ofo.getArrow())) {
                 return str;
-            } else {
-                output.append('.');
             }
+            output.append('.');
         }
 
         return output.toString();

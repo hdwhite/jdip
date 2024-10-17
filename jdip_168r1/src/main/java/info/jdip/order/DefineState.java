@@ -92,6 +92,7 @@ public class DefineState extends Order {
     }// toFullString()
 
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof DefineState) {
             DefineState ds = (DefineState) obj;

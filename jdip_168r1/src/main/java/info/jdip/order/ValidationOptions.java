@@ -86,7 +86,7 @@ public class ValidationOptions implements Serializable, Cloneable {
             opt.setDisplayName(Utils.getLocalString(opt.getKey()));
             opt.setDescription(Utils.getLocalString(opt.getKey() + DESCRIPTION));
 
-            String optionValues[] = opt.getValues();
+            String[] optionValues = opt.getValues();
             int nOpts = optionValues.length;
             String[] names = new String[nOpts];
             String[] descriptions = new String[nOpts];
@@ -129,7 +129,7 @@ public class ValidationOptions implements Serializable, Cloneable {
     // perhaps these should be renamed: OptionInfo, then
     public static class Option {
         private final String key;                // actual name
-        private final String values[];            // allowable values (to set)
+        private final String[] values;            // allowable values (to set)
         private final String defaultValue;        // default value
 
         protected Option(String key, String[] values, String defaultValue) {
@@ -154,8 +154,8 @@ public class ValidationOptions implements Serializable, Cloneable {
     public static class DescriptiveOption extends Option {
         private String displayName;            // il8n name
         private String description;            // il8n description of name
-        private String displayValues[];        // il8n value name
-        private String valueDescriptions[]; // il8n value description (optional)
+        private String[] displayValues;        // il8n value name
+        private String[] valueDescriptions; // il8n value description (optional)
 
         protected DescriptiveOption(ValidationOptions.Option option) {
             super(option.key, option.values, option.defaultValue);

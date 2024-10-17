@@ -392,7 +392,8 @@ public class Move extends Order {
             if (convoyRule == RuleOptions.VALUE_PATHS_EXPLICIT && convoyRoutes == null) {
                 // no explicit route defined, and at least one should be
                 throw new OrderException(Utils.getLocalString(CONVOY_PATH_MUST_BE_EXPLICIT));
-            } else if (convoyRule == RuleOptions.VALUE_PATHS_IMPLICIT && convoyRoutes != null) {
+            }
+            if (convoyRule == RuleOptions.VALUE_PATHS_IMPLICIT && convoyRoutes != null) {
                 // explicit route IS defined, and shouldn't be
                 throw new OrderException(Utils.getLocalString(CONVOY_PATH_MUST_BE_IMPLICIT));
             }
@@ -495,12 +496,7 @@ public class Move extends Order {
         }
 
         for (int i = 1; i < route.length; i++) {
-            if (useHyphen) {
-                sb.append('-');
-            } else {
-                sb.append(" -> ");
-            }
-
+            sb.append(useHyphen ? '-' : " -> ");
 
             if (isBrief) {
                 sb.append(route[i].getShortName());
@@ -549,78 +545,81 @@ public class Move extends Order {
         }
 
         // if we have already failed, do not evaluate.
-        if (thisOS.getEvalState() == Tristate.UNCERTAIN) {
-            if (isConvoying())    // intent to convoy already determined (e.g., _isViaConvoy is true, so _isConvoyIntent initiall is true)
-            {
-                if (convoyRoutes != null) // static (explicit) paths
-                {
-                    // if we have multiple routes, we don't fail until *all* paths fail.
-                    boolean overall = false;
-                    for (final Province[] route : convoyRoutes) {
-                        overall = Path.isRouteLegal(adjudicator, route);
-                        if (overall)    // if at least one is true, then we are OK
-                        {
-                            break;
-                        }
-                    }
+        if (thisOS.getEvalState() != Tristate.UNCERTAIN) {
+            thisOS.setVerified(true);
+            return;
+        }
 
-                    if (!overall) {
-                        // if we are explicitly being convoyed, and there is a land route,
-                        // but no convoy route, we use the land route.
-                        //
-                        if (isViaConvoy() && hasLandRoute) {
-                            // we don't fail, but mention that there is no convoy route. (text order result)
-                            isConvoyIntent = false;
-                            adjudicator.addResult(thisOS, Utils.getLocalString(MOVE_VER_NO_ROUTE));
-                        } else {
-                            // all paths failed.
-                            thisOS.setEvalState(Tristate.FAILURE);
-                            adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_VER_NO_ROUTE));
-                        }
-                    }
-                } else    // implicit path
-                {
-                    Path path = new Path(adjudicator);
-                    if (!path.isLegalConvoyRoute(getSource(), getDest())) {
-                        // As for static (explicit) paths, if we are explicitly
-                        // ordered to convoy ("by convoy") and there is a land route,
-                        // but no convoy route, we use the land route.
-                        //
-                        if (isViaConvoy() && hasLandRoute) {
-                            isConvoyIntent = false;
-                            adjudicator.addResult(thisOS, Utils.getLocalString(MOVE_VER_NO_ROUTE));
-                        } else {
-                            thisOS.setEvalState(Tristate.FAILURE);
-                            adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_VER_NO_ROUTE));
-                        }
-                    }
-                }
-            } else if (isAdjWithPossibleConvoy())    // intent must be determined
+        if (isConvoying())    // intent to convoy already determined (e.g., _isViaConvoy is true, so _isConvoyIntent initiall is true)
+        {
+            if (convoyRoutes != null) // static (explicit) paths
             {
-                // first, we need to find all paths with possible convoy orders
-                // between src and dest. If we have an order, by the same power,
-                // on ONE of these paths, then intent to convoy will be 'true'
-                //
-                // Note: this could be put in validate(), where _isAdjWithPossibleConvoy
-                // is set, for efficiency reasons. However, it is more appropriate and
-                // makes more sense here.
-                //
-                final Province srcProv = getSource().getProvince();
-                final Province destProv = getDest().getProvince();
-                final Position pos = adjudicator.getTurnState().getPosition();
-                Path.FAPEvaluator evaluator = new Path.FleetFAPEvaluator(pos);
-                Province[][] paths = Path.findAllSeaPaths(evaluator, srcProv, destProv);
-
-                // now, we need to evaluate each path, to see if that province
-                // has a fleet of the same power as this order in any legal path.
-                // If so, the intent is to convoy.
-                for (Province[] path : paths) {
-                    Province p = evalPath(adjudicator, path);
-                    if (p != null) {
-                        isConvoyIntent = true;
-                        adjudicator.addResult(thisOS, ResultType.TEXT, Utils.getLocalString(MOVE_VER_CONVOY_INTENT, p));
+                // if we have multiple routes, we don't fail until *all* paths fail.
+                boolean overall = false;
+                for (final Province[] route : convoyRoutes) {
+                    overall = Path.isRouteLegal(adjudicator, route);
+                    if (overall)    // if at least one is true, then we are OK
+                    {
                         break;
                     }
+                }
+
+                if (!overall) {
+                    // if we are explicitly being convoyed, and there is a land route,
+                    // but no convoy route, we use the land route.
+                    //
+                    if (isViaConvoy() && hasLandRoute) {
+                        // we don't fail, but mention that there is no convoy route. (text order result)
+                        isConvoyIntent = false;
+                        adjudicator.addResult(thisOS, Utils.getLocalString(MOVE_VER_NO_ROUTE));
+                    } else {
+                        // all paths failed.
+                        thisOS.setEvalState(Tristate.FAILURE);
+                        adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_VER_NO_ROUTE));
+                    }
+                }
+            } else    // implicit path
+            {
+                Path path = new Path(adjudicator);
+                if (!path.isLegalConvoyRoute(getSource(), getDest())) {
+                    // As for static (explicit) paths, if we are explicitly
+                    // ordered to convoy ("by convoy") and there is a land route,
+                    // but no convoy route, we use the land route.
+                    //
+                    if (isViaConvoy() && hasLandRoute) {
+                        isConvoyIntent = false;
+                        adjudicator.addResult(thisOS, Utils.getLocalString(MOVE_VER_NO_ROUTE));
+                    } else {
+                        thisOS.setEvalState(Tristate.FAILURE);
+                        adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_VER_NO_ROUTE));
+                    }
+                }
+            }
+        } else if (isAdjWithPossibleConvoy())    // intent must be determined
+        {
+            // first, we need to find all paths with possible convoy orders
+            // between src and dest. If we have an order, by the same power,
+            // on ONE of these paths, then intent to convoy will be 'true'
+            //
+            // Note: this could be put in validate(), where _isAdjWithPossibleConvoy
+            // is set, for efficiency reasons. However, it is more appropriate and
+            // makes more sense here.
+            //
+            final Province srcProv = getSource().getProvince();
+            final Province destProv = getDest().getProvince();
+            final Position pos = adjudicator.getTurnState().getPosition();
+            Path.FAPEvaluator evaluator = new Path.FleetFAPEvaluator(pos);
+            Province[][] paths = Path.findAllSeaPaths(evaluator, srcProv, destProv);
+
+            // now, we need to evaluate each path, to see if that province
+            // has a fleet of the same power as this order in any legal path.
+            // If so, the intent is to convoy.
+            for (Province[] path : paths) {
+                Province p = evalPath(adjudicator, path);
+                if (p != null) {
+                    isConvoyIntent = true;
+                    adjudicator.addResult(thisOS, ResultType.TEXT, Utils.getLocalString(MOVE_VER_CONVOY_INTENT, p));
+                    break;
                 }
             }
         }
@@ -932,318 +931,133 @@ public class Move extends Order {
         );
 
         // evaluate
-        if (thisOS.getEvalState() == Tristate.UNCERTAIN) {
-            // moves to impassable spaces fail
-            if(order.getDest().getProvince().isImpassable())
-			{
-				thisOS.setEvalState(Tristate.FAILURE);
-				logger.debug("Failed. (destination is impassable)");
-				adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_IMPASSABLE));
-				return;
-			}
-
-            // re-evaluate head-to-head status. we may be convoyed, so,
-            // this could be a head-to-head move.
-            //
-            if (thisOS.isHeadToHead()) {
-                Move h2hMove = (Move) thisOS.getHeadToHead().getOrder();
-                if (this.isConvoying() || h2hMove.isConvoying()) {
-                    // we need to change h2h status!
-                    logger.debug( "HeadToHead removed (convoy detected)");
-                    thisOS.setHeadToHead(null);
-                }
+        if (thisOS.getEvalState() != Tristate.UNCERTAIN) {
+            // If we have been marked as a 'maybe dislodged' and we are successfull,
+            // we cannot be dislodged.
+            if (thisOS.getEvalState() == Tristate.SUCCESS && thisOS.getDislodgedState() == Tristate.MAYBE) {
+                logger.info( "successfull; MAYBE dislodged converted to NOT dislodged.");
+                thisOS.setDislodgedState(Tristate.NO);
             }
-
-            // 2.a-c
-            if (isConvoying()) {
-                // NOTE: convoy path result may return 'false' if we are uncertain.
-                Path path = new Path(adjudicator);
-                Tristate convoyPathResult = path.getConvoyRouteEvaluation(this, null, null);
-
-                logger.debug("isByConvoy() true; convoyPathRouteEval(): {}", convoyPathResult);
-
-                if (convoyPathResult == Tristate.FAILURE) {
-                    // 2.a
-                    thisOS.setEvalState(Tristate.FAILURE);
-                    adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_EVAL_BAD_ROUTE));
-                    return;
-                } else if (convoyPathResult == Tristate.UNCERTAIN) {
-                    return;    // 2.b (can't evaluate this move yet!)
-                } else if (!thisOS.hasFoundConvoyPath()) {
-                    // else: we just continue (2.c)
-                    // HOWEVER, we can indicate the path taken as a result of this move,
-                    // if we haven't already.
-                    //
-                    List<Province> validPath = new ArrayList<>(10);
-                    path.getConvoyRouteEvaluation(this, null, validPath);
-                    adjudicator.addResult(new ConvoyPathResult(this, validPath));
-                    thisOS.setFoundConvoyPath(true);
-                }
-            }
-
-            // setup: 3.a, 3.b, and 3.c are very similar, except for how dislodged units are
-            // handled. To use the same basic logic, we must determine some things up front.
-            boolean isDestAMove = false;
-            boolean isDestEmpty = false;
-            OrderState destOS = adjudicator.findOrderStateBySrc(getDest());
-
-            if (destOS != null) {
-                if (destOS.getOrder() instanceof Move) {
-                    isDestAMove = true;
-                }
-            } else {
-                isDestEmpty = true;
-            }
-
-            logger.debug("isDestAMove: {}, isDestEmpty: {}, isHeadToHead: {}",
-                    isDestAMove, isDestEmpty,thisOS.isHeadToHead());
-
-
-            // some setup
-            final int attack_certain = thisOS.getAtkCertain();
-            final int attack_max = thisOS.getAtkMax();
-            final int self_attack_certain = thisOS.getAtkSelfSupportCertain();
-            final int self_attack_max = thisOS.getAtkSelfSupportMax();
-
-
-            // 3.a.3
-            //
-            // note: this block will complete 3.a.3.a (only applies to other moves to destination)
-            // first, compare to 'all other' moves to the destination province
-            // this must be done for all cases
-            // "dml" = "destination move list"
-            boolean isBetterThanAllOtherMoves = true;
-
-            OrderState[] dml = thisOS.getDependentMovesToDestination();
-
-            logger.info("Dependent moves to destination: {}", dml.length);
-
-            for (OrderState os : dml) {
-                logger.debug("Checking against dependent move:{} ", os.getOrder());
-                logger.debug("atkMax: {}, atkCertain: {}, selfAtkMax: {}, selfAtkCertain: {}, isHeadToHead: {}, evalState: {}, dislodger: {}",
-                        os.getAtkMax(), os.getAtkCertain(),
-                        os.getAtkSelfSupportMax(), os.getAtkSelfSupportCertain(),
-                        os.isHeadToHead(), os.getEvalState(),
-                        os.getDislodger() != null ? os.getDislodger().getOrder() : null
-                );
-
-                if (os.getEvalState() == Tristate.SUCCESS) {
-                    // 3.a.3.a: someone's already better than us.
-                    logger.debug( "they're better than us!");
-                    thisOS.setEvalState(Tristate.FAILURE);
-                    adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED));
-                    return;
-                }
-                // other order is UNCERTAIN or FAILURE eval state
-                // 3.d
-                if (os.isHeadToHead() && (os.getEvalState() == Tristate.UNCERTAIN || !isDependentHTHResolved(os))) {
-                    // we can't evaluate yet; remain uncertain (3.d.1)
-                    logger.debug( "can't tell if head-to-head battle caused dislodgement!");
-                    isBetterThanAllOtherMoves = false;
-                } else if (!os.isHeadToHead()
-                        || (os.isHeadToHead() && os.getDislodger() != os.getHeadToHead()))    // 3.d.3
-                {
-                    /*
-                        This section has been re-written to take care of bugs
-                        1116568 & 1053458 (which are the same bug). 
-                        
-                        TODO: clean up/simplify
-                    */
-
-                    // 3.b.1, 3.b.2 are accounted for within this else block
-                    //
-                    if ((attack_max + self_attack_max) <= (os.getAtkCertain() + os.getAtkSelfSupportCertain())) {
-                        logger.debug( "attack_max <= os.getAtkCertain() + getAtkSelfSupportCertain() ...");
-                        
-                        /*
-                            If the other move has not found a convoy route, 
-                            then we will *not* automatically fail.
-                            
-                            remember: with logical and (&&) we only evaluate the
-                            second argument if the first is true.
-                        */
-                        if (((Move) os.getOrder()).isConvoying() && !os.hasFoundConvoyPath()) {
-                            logger.debug( "however, no convoy route for dependent move exists (or exists yet).");
-                        } else {
-                            logger.debug( "so we must fail.");
-                            // 3.a.3.c: we can never be better than this pairing. Ever. Fail, unless destination
-                            // is part of a head-to-head battle which was dislodged by a unit involved in the
-                            // head-to-head battle. [3.d]
-                            thisOS.setEvalState(Tristate.FAILURE);
-                            adjudicator.addBouncedResult(thisOS, os);
-                            return;
-                        }
-                    }
-
-                    if ((attack_certain + self_attack_certain) <= (os.getAtkMax() + os.getAtkSelfSupportMax())) {
-                        /*
-                            We will ignore the compared move if it is a convoying move
-                            and no convoy route was found.
-                            (isconvoying == true, hasFoundConvoyPath == false, and evalstate == false)
-                        */
-                        if (((Move) os.getOrder()).isConvoying() && !os.hasFoundConvoyPath()
-                                && os.getEvalState() == Tristate.FAILURE) {
-                            logger.debug( "dependent move ignored (no valid corresponding convoy path).");
-                        } else {
-                            // 3.a.3.b: we are not better than *all* the unevaluated moves to destination
-                            // this doesn't mean we fail, though, since the other moves strength calculations
-                            // may not be final
-                            logger.debug( "atk_certain <= os.getAtkMax() + getAtkSelfSupportMax(); not conclusively better!");
-                            isBetterThanAllOtherMoves = false;
-                        }
-                    }
-                }
-                // "else" os.isHeadToHead() && os.getDislodger() == os.getHeadToHead() :: we ignore the unit! (3.d.2)
-            }// while()
-
-            logger.debug("isBetterThanAllOtherMoves: {}", isBetterThanAllOtherMoves);
-
-
-            // Note that if we are not better than all other moves to the destination province, we
-            // cannot be successful, but we can be *unsuccessful* if we are definately (certainly)
-            // worse then the defending unit, if any.
-            //
-            // 3.a.3.c: for defending unit (if present)
-            // see if we are "definately worse"
-            // we don't check destination NON-head-to-head moves, since they defend at strength==1. And
-            // we attack at (minimum) strength==1. Thus we can never be "definately worse", (but we can tie).
-            if (!isDestEmpty) {
-                if (thisOS.isHeadToHead()) {
-                    if (attack_max <= thisOS.getHeadToHead().getAtkCertain() + thisOS.getHeadToHead().getAtkSelfSupportCertain()) {
-                        thisOS.setEvalState(Tristate.FAILURE);
-                        adjudicator.addBouncedResult(thisOS, thisOS.getHeadToHead());
-                        logger.debug("(hth) final evalState(): {}", thisOS.getEvalState());
-                        return;
-                    }
-                } else if (!isDestAMove && attack_max <= destOS.getDefCertain()) { // less priority than isHeadToHead()
-                        thisOS.setEvalState(Tristate.FAILURE);
-                        adjudicator.addBouncedResult(thisOS, destOS);
-                        logger.debug("(dam) final evalState(): {}", thisOS.getEvalState());
-                        return;
-                    }
-                
-            }
-
-            // see if we are better w/o self support.
-            // this will influence dislodges
-            final boolean isBwoss = isBetterWithoutSelfSupport(thisOS);
-            logger.debug("isBetterWithoutSelfSupport(): {}", isBwoss);
-
-            // at this point, 3.a.3.a is complete, and 3.a.3.c is complete (for defender & other move orders).
-            // however, we must complete 3.a.3.b
-            //
-            // now compare to the destination province.
-            // there are 4 cases: 1) empty, 2) Move, 3) head-to-head Move, and 4) (support/hold/convoy)
-            // each is similar, but case 1 always succeeds (depending on other moves, above), cases
-            // 2 & 4 are similar except for dislodge calculations, and case 3 is similar except the
-            // 'attack' instead of 'defense' parameter is used, since it itself is a move.
-            if (isBetterThanAllOtherMoves) {
-                if (isDestEmpty) {
-                    // 3.a.3.b: case 1. [empty province: special case of 3.a.3.b]
-                    logger.debug("isDestEmpty(): prior eval state: {}", thisOS.getEvalState());
-                    thisOS.setEvalState(Tristate.SUCCESS);
-                } else if (thisOS.isHeadToHead()) {
-                    // 3.a.3.b: case 3. [also known as: 3.a.3.c.1.b]
-                    // CHANGED: 10/2002 to fix a couple of bugs
-                    logger.debug( "isHTH evaluation");
-                    OrderState hthOS = thisOS.getHeadToHead();
-                    if ((attack_certain) > (hthOS.getAtkMax() + hthOS.getAtkSelfSupportMax())) {
-                        if (!isBwoss || isDestSamePower(hthOS)) {
-                            thisOS.setEvalState(Tristate.FAILURE); // we fail--no self dislodgement!
-                            adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_NO_SELF_DISLODGE));
-                        } else {
-                            thisOS.setEvalState(Tristate.SUCCESS);        // we win
-                            hthOS.setDislodgedState(Tristate.YES);    // they are dislodged
-                            hthOS.setDislodger(thisOS);
-                            adjudicator.addDislodgedResult(hthOS);
-
-                            if (hthOS.getEvalState() == Tristate.UNCERTAIN) {
-                                hthOS.setEvalState(Tristate.FAILURE);    // they lose
-                            }
-                        }
-                    }
-                } else if (isDestAMove) {
-                    logger.debug( "dest is a Move");
-                    if (destOS.getEvalState() == Tristate.SUCCESS) {
-                        // regardless of our strength (1 or >1) we will succeed if destination unit moved out.
-                        // this covers parts of 3.a.3.b/4 and 3.b.2 self support
-                        thisOS.setEvalState(Tristate.SUCCESS);
-                    } else if (attack_certain == 1) {
-                        // 3.a.3.b: case 4	[typical case of 3.a.3.b]
-                        // if destination evalstate is uncertain, we too are uncertain
-                        // we only fail for certain iff we are 'definately weaker'
-                        // which is defined as attack_max <= defense_certain
-                        // remember, our "certain support" could increase later
-                        if (destOS.getEvalState() == Tristate.FAILURE && attack_max <= 1) {
-                                thisOS.setEvalState(Tristate.FAILURE);
-                                adjudicator.addResult(new DependentMoveFailedResult(thisOS.getOrder(), destOS.getOrder()));
-                            }
-                            // else: we remain uncertain.
-                        
-                        // else: we remain uncertain
-                    } else {
-                        // now we are covering attack_certain > 1, and dest eval state is not a success
-                        //
-                        // 3.a.3.b.1: we are stronger; we will succeed, regardless of destination move result.
-                        // unless, of course, we could be dislodging ourselves. In that case, we cannot
-                        // complete the evaluation.
-                        if (isDestSamePower(destOS)) {
-                            logger.debug( "dest is the same power!");
-
-                            // cannot dislodge self; but we will succeed unless other unit failed; if
-                            // other unit is uncertain, then we remain uncertain.
-                            if (destOS.getEvalState() == Tristate.SUCCESS) {
-                                logger.debug( "but left the province.");
-                                thisOS.setEvalState(Tristate.SUCCESS);
-                            } else if (destOS.getEvalState() == Tristate.FAILURE) {
-                                logger.debug( "and failed, so we can't self-dislodged!.");
-                                thisOS.setEvalState(Tristate.FAILURE);
-                                adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_NO_SELF_DISLODGE));
-                            }
-                        } else {
-                            if (isBwoss) {
-                                thisOS.setEvalState(Tristate.SUCCESS);
-
-                                if (destOS.getEvalState() == Tristate.FAILURE) {
-                                    destOS.setDislodgedState(Tristate.YES);
-                                    destOS.setDislodger(thisOS);
-                                    logger.debug( "Dislodged. (3.a.3.b.1)");
-                                    adjudicator.addDislodgedResult(destOS);
-                                } else if (destOS.getEvalState() == Tristate.UNCERTAIN) {
-                                    destOS.setDislodgedState(Tristate.MAYBE);
-                                    destOS.setDislodger(thisOS);
-                                }
-                            } else if (destOS.getEvalState() == Tristate.UNCERTAIN) {
-                                // we are better than all other moves, but with
-                                // self-support. This normally fails, unless the
-                                // unit actually moves out (which includes a convoy,
-                                // if head-to-head).
-                                logger.debug( "Dest unit not eval'd; remaining uncertain.");
-                            } else {
-                                thisOS.setEvalState(Tristate.FAILURE);
-                                logger.debug( "Failed. (not better w/o self support)");
-                                adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED));
-                            }
-                        }
-                    }
-                } else {
-                    logger.debug( "dest is not a Move");
-                    // 3.a.3.b: case 4	[typical case of 3.a.3.b]
-                    if (attack_certain > destOS.getDefMax()) {
-                        if (!isBwoss || isDestSamePower(destOS)) {
-                            thisOS.setEvalState(Tristate.FAILURE);
-                            adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_NO_SELF_DISLODGE));
-                        } else {
-                            thisOS.setEvalState(Tristate.SUCCESS);
-                            destOS.setDislodgedState(Tristate.YES);
-                            destOS.setDislodger(thisOS);
-                            logger.debug( "Dislodged. (3.a.3.b typical)");
-                            adjudicator.addDislodgedResult(destOS);
-                        }
-                    }
-                }
-            }// if(isBetterThanAllOtherMoves)
+            return;
         }
+
+        logger.debug("final evalState(): {}", thisOS.getEvalState());
+        // moves to impassable spaces fail
+        if(order.getDest().getProvince().isImpassable())
+        {
+            thisOS.setEvalState(Tristate.FAILURE);
+            logger.debug("Failed. (destination is impassable)");
+            adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_IMPASSABLE));
+            return;
+        }
+
+        // re-evaluate head-to-head status. we may be convoyed, so,
+        // this could be a head-to-head move.
+        //
+        if (thisOS.isHeadToHead()) {
+            Move h2hMove = (Move) thisOS.getHeadToHead().getOrder();
+            if (this.isConvoying() || h2hMove.isConvoying()) {
+                // we need to change h2h status!
+                logger.debug( "HeadToHead removed (convoy detected)");
+                thisOS.setHeadToHead(null);
+            }
+        }
+
+        // 2.a-c
+        if (isConvoying()) {
+            // NOTE: convoy path result may return 'false' if we are uncertain.
+            Path path = new Path(adjudicator);
+            Tristate convoyPathResult = path.getConvoyRouteEvaluation(this, null, null);
+
+            logger.debug("isByConvoy() true; convoyPathRouteEval(): {}", convoyPathResult);
+
+            if (convoyPathResult == Tristate.FAILURE) {
+                // 2.a
+                thisOS.setEvalState(Tristate.FAILURE);
+                adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_EVAL_BAD_ROUTE));
+                return;
+            } else if (convoyPathResult == Tristate.UNCERTAIN) {
+                return;    // 2.b (can't evaluate this move yet!)
+            }
+            
+            if (!thisOS.hasFoundConvoyPath()) {
+                // else: we just continue (2.c)
+                // HOWEVER, we can indicate the path taken as a result of this move,
+                // if we haven't already.
+                //
+                List<Province> validPath = new ArrayList<>(10);
+                path.getConvoyRouteEvaluation(this, null, validPath);
+                adjudicator.addResult(new ConvoyPathResult(this, validPath));
+                thisOS.setFoundConvoyPath(true);
+            }
+        }
+
+        // setup: 3.a, 3.b, and 3.c are very similar, except for how dislodged units are
+        // handled. To use the same basic logic, we must determine some things up front.
+        OrderState destOS = adjudicator.findOrderStateBySrc(getDest());
+
+        logger.debug("isDestAMove: {}, isDestEmpty: {}, isHeadToHead: {}",
+                destOS != null && destOS.getOrder() instanceof Move, destOS == null, thisOS.isHeadToHead());
+
+        // 3.a.3
+        //
+        // note: this block will complete 3.a.3.a (only applies to other moves to destination)
+        // first, compare to 'all other' moves to the destination province
+        // this must be done for all cases
+        // "dml" = "destination move list"
+        boolean isBetterThanAllOtherMoves = true;
+
+        OrderState[] dml = thisOS.getDependentMovesToDestination();
+
+        logger.info("Dependent moves to destination: {}", dml.length);
+
+        for (OrderState os : dml) {
+            Tristate[] compareResults = compareWithOrder(adjudicator, thisOS, os);
+            thisOS.setEvalState(compareResults[0]);
+            isBetterThanAllOtherMoves &= (compareResults[1] == Tristate.TRUE);
+            if (compareResults[2] == Tristate.YES) {
+                return;
+            }
+        }// while()
+
+        logger.debug("isBetterThanAllOtherMoves: {}", isBetterThanAllOtherMoves);
+
+
+        // Note that if we are not better than all other moves to the destination province, we
+        // cannot be successful, but we can be *unsuccessful* if we are definately (certainly)
+        // worse then the defending unit, if any.
+        //
+        // 3.a.3.c: for defending unit (if present)
+        // see if we are "definately worse"
+        // we don't check destination NON-head-to-head moves, since they defend at strength==1. And
+        // we attack at (minimum) strength==1. Thus we can never be "definately worse", (but we can tie).
+        if (destOS != null) {
+            if (thisOS.isHeadToHead()) {
+                if (thisOS.getAtkMax() <= thisOS.getHeadToHead().getAtkCertain() + thisOS.getHeadToHead().getAtkSelfSupportCertain()) {
+                    thisOS.setEvalState(Tristate.FAILURE);
+                    adjudicator.addBouncedResult(thisOS, thisOS.getHeadToHead());
+                    logger.debug("(hth) final evalState(): {}", thisOS.getEvalState());
+                    return;
+                }
+            } else if (!(destOS.getOrder() instanceof Move) && thisOS.getAtkMax() <= destOS.getDefCertain()) { // less priority than isHeadToHead()
+                thisOS.setEvalState(Tristate.FAILURE);
+                adjudicator.addBouncedResult(thisOS, destOS);
+                logger.debug("(dam) final evalState(): {}", thisOS.getEvalState());
+                return;
+            }
+        }
+
+        // at this point, 3.a.3.a is complete, and 3.a.3.c is complete (for defender & other move orders).
+        // however, we must complete 3.a.3.b
+        //
+        // now compare to the destination province.
+        // there are 4 cases: 1) empty, 2) Move, 3) head-to-head Move, and 4) (support/hold/convoy)
+        // each is similar, but case 1 always succeeds (depending on other moves, above), cases
+        // 2 & 4 are similar except for dislodge calculations, and case 3 is similar except the
+        // 'attack' instead of 'defense' parameter is used, since it itself is a move.
+        if (isBetterThanAllOtherMoves) {
+            thisOS.setEvalState(compareWithDestination(adjudicator, thisOS));
+        }// if(isBetterThanAllOtherMoves)
 
         // If we have been marked as a 'maybe dislodged' and we are successfull,
         // we cannot be dislodged.
@@ -1255,6 +1069,213 @@ public class Move extends Order {
         logger.debug("final evalState(): {}", thisOS.getEvalState());
     }// evaluate()
 
+    // Returns a 3-member Tristate array. The first is the order success,
+    // the second is if isBetterThanAllOtherMoves should become false,
+    // and the third is if we should stop evaluation.
+    private Tristate[] compareWithOrder(Adjudicator adjudicator, OrderState thisOS, OrderState os)
+    {
+        logger.debug("Checking against dependent move:{} ", os.getOrder());
+        logger.debug("atkMax: {}, atkCertain: {}, selfAtkMax: {}, selfAtkCertain: {}, isHeadToHead: {}, evalState: {}, dislodger: {}",
+                os.getAtkMax(), os.getAtkCertain(),
+                os.getAtkSelfSupportMax(), os.getAtkSelfSupportCertain(),
+                os.isHeadToHead(), os.getEvalState(),
+                os.getDislodger() != null ? os.getDislodger().getOrder() : null
+        );
+
+        if (os.getEvalState() == Tristate.SUCCESS) {
+            // 3.a.3.a: someone's already better than us.
+            logger.debug( "they're better than us!");
+            adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED));
+            return new Tristate[] {Tristate.FAILURE, Tristate.FALSE, Tristate.YES};
+        }
+        // other order is UNCERTAIN or FAILURE eval state
+        // 3.d
+        if (os.isHeadToHead() && (os.getEvalState() == Tristate.UNCERTAIN || !isDependentHTHResolved(os))) {
+            // we can't evaluate yet; remain uncertain (3.d.1)
+            logger.debug( "can't tell if head-to-head battle caused dislodgement!");
+            return new Tristate[] {thisOS.getEvalState(), Tristate.TRUE, Tristate.NO};
+        }
+        
+        // os.isHeadToHead() && os.getDislodger() == os.getHeadToHead() :: we ignore the unit! (3.d.2)
+        if (os.isHeadToHead() && os.getDislodger() == os.getHeadToHead()) {
+            return new Tristate[] {thisOS.getEvalState(), Tristate.TRUE, Tristate.NO};
+        }
+
+        /*
+            This section has been re-written to take care of bugs
+            1116568 & 1053458 (which are the same bug). 
+            
+            TODO: clean up/simplify
+        */
+
+        // 3.b.1, 3.b.2 are accounted for within this else block
+        //
+        if ((thisOS.getAtkMax() + thisOS.getAtkSelfSupportMax())
+            <= (os.getAtkCertain() + os.getAtkSelfSupportCertain())) {
+            logger.debug( "attack_max <= os.getAtkCertain() + getAtkSelfSupportCertain() ...");
+            
+            /*
+                If the other move has not found a convoy route, 
+                then we will *not* automatically fail.
+                
+                remember: with logical and (&&) we only evaluate the
+                second argument if the first is true.
+            */
+            if (((Move) os.getOrder()).isConvoying() && !os.hasFoundConvoyPath()) {
+                logger.debug( "however, no convoy route for dependent move exists (or exists yet).");
+            } else {
+                logger.debug( "so we must fail.");
+                // 3.a.3.c: we can never be better than this pairing. Ever. Fail, unless destination
+                // is part of a head-to-head battle which was dislodged by a unit involved in the
+                // head-to-head battle. [3.d]
+                adjudicator.addBouncedResult(thisOS, os);
+                return new Tristate[] {Tristate.FAILURE, Tristate.FALSE, Tristate.YES};
+            }
+        }
+
+        if ((thisOS.getAtkCertain() + thisOS.getAtkSelfSupportCertain())
+            <= (os.getAtkMax() + os.getAtkSelfSupportMax())) {
+            /*
+                We will ignore the compared move if it is a convoying move
+                and no convoy route was found.
+                (isconvoying == true, hasFoundConvoyPath == false, and evalstate == false)
+            */
+            if (((Move) os.getOrder()).isConvoying() && !os.hasFoundConvoyPath()
+                    && os.getEvalState() == Tristate.FAILURE) {
+                logger.debug( "dependent move ignored (no valid corresponding convoy path).");
+            } else {
+                // 3.a.3.b: we are not better than *all* the unevaluated moves to destination
+                // this doesn't mean we fail, though, since the other moves strength calculations
+                // may not be final
+                logger.debug( "atk_certain <= os.getAtkMax() + getAtkSelfSupportMax(); not conclusively better!");
+                return new Tristate[] {thisOS.getEvalState(), Tristate.FALSE, Tristate.NO};
+            }
+        }
+        // "else" 
+        return new Tristate[] {thisOS.getEvalState(), Tristate.TRUE, Tristate.NO};
+    }
+
+    private Tristate compareWithDestination(Adjudicator adjudicator, OrderState thisOS)
+    {
+        OrderState destOS = adjudicator.findOrderStateBySrc(getDest());
+        // see if we are better w/o self support.
+        // this will influence dislodges
+        final boolean isBwoss = isBetterWithoutSelfSupport(thisOS);
+        logger.debug("isBetterWithoutSelfSupport(): {}", isBwoss);
+
+        if (destOS == null) {
+            // 3.a.3.b: case 1. [empty province: special case of 3.a.3.b]
+            logger.debug("isDestEmpty(): prior eval state: {}", thisOS.getEvalState());
+            return Tristate.SUCCESS;
+        }
+        
+        // 3.a.3.b: case 3. [also known as: 3.a.3.c.1.b]
+        // CHANGED: 10/2002 to fix a couple of bugs
+        if (thisOS.isHeadToHead()) {
+            logger.debug( "isHTH evaluation");
+            OrderState hthOS = thisOS.getHeadToHead();
+            if (thisOS.getAtkCertain() > (hthOS.getAtkMax() + hthOS.getAtkSelfSupportMax())) {
+                if (!isBwoss || isDestSamePower(hthOS)) {
+                    adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_NO_SELF_DISLODGE));
+                    return Tristate.FAILURE; // we fail--no self dislodgement!
+                }
+                hthOS.setDislodgedState(Tristate.YES);    // they are dislodged
+                hthOS.setDislodger(thisOS);
+                adjudicator.addDislodgedResult(hthOS);
+
+                if (hthOS.getEvalState() == Tristate.UNCERTAIN) {
+                    hthOS.setEvalState(Tristate.FAILURE);    // they lose
+                }
+                return Tristate.SUCCESS;        // we win
+            }
+            return Tristate.UNCERTAIN;
+        }
+        
+        if (destOS.getOrder() instanceof Move) {
+            logger.debug( "dest is a Move");
+            if (destOS.getEvalState() == Tristate.SUCCESS) {
+                // regardless of our strength (1 or >1) we will succeed if destination unit moved out.
+                // this covers parts of 3.a.3.b/4 and 3.b.2 self support
+                return Tristate.SUCCESS;
+            }
+            
+            if (thisOS.getAtkCertain() == 1) {
+                // 3.a.3.b: case 4	[typical case of 3.a.3.b]
+                // if destination evalstate is uncertain, we too are uncertain
+                // we only fail for certain iff we are 'definately weaker'
+                // which is defined as attack_max <= defense_certain
+                // remember, our "certain support" could increase later
+                if (destOS.getEvalState() == Tristate.FAILURE && thisOS.getAtkMax() <= 1) {
+                    adjudicator.addResult(new DependentMoveFailedResult(thisOS.getOrder(), destOS.getOrder()));
+                    return Tristate.FAILURE;
+                }
+                return Tristate.UNCERTAIN;    // else: we remain uncertain.
+            }
+            // now we are covering attack_certain > 1, and dest eval state is not a success
+            //
+            // 3.a.3.b.1: we are stronger; we will succeed, regardless of destination move result.
+            // unless, of course, we could be dislodging ourselves. In that case, we cannot
+            // complete the evaluation.
+            if (isDestSamePower(destOS)) {
+                logger.debug( "dest is the same power!");
+
+                // cannot dislodge self; but we will succeed unless other unit failed; if
+                // other unit is uncertain, then we remain uncertain.
+                if (destOS.getEvalState() == Tristate.SUCCESS) {
+                    logger.debug( "but left the province.");
+                    return Tristate.SUCCESS;
+                }
+                
+                if (destOS.getEvalState() == Tristate.FAILURE) {
+                    logger.debug( "and failed, so we can't self-dislodged!.");
+                    adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_NO_SELF_DISLODGE));
+                    return Tristate.FAILURE;
+                }
+
+                return Tristate.UNCERTAIN;
+            }
+
+            if (isBwoss) {
+                if (destOS.getEvalState() == Tristate.FAILURE) {
+                    destOS.setDislodgedState(Tristate.YES);
+                    destOS.setDislodger(thisOS);
+                    logger.debug( "Dislodged. (3.a.3.b.1)");
+                    adjudicator.addDislodgedResult(destOS);
+                } else if (destOS.getEvalState() == Tristate.UNCERTAIN) {
+                    destOS.setDislodgedState(Tristate.MAYBE);
+                    destOS.setDislodger(thisOS);
+                }
+                return Tristate.SUCCESS;
+            }
+            
+            if (destOS.getEvalState() == Tristate.UNCERTAIN) {
+                // we are better than all other moves, but with
+                // self-support. This normally fails, unless the
+                // unit actually moves out (which includes a convoy,
+                // if head-to-head).
+                logger.debug( "Dest unit not eval'd; remaining uncertain.");
+                return Tristate.UNCERTAIN;
+            }
+            logger.debug( "Failed. (not better w/o self support)");
+            adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED));
+            return Tristate.FAILURE;
+        }
+
+        logger.debug( "dest is not a Move");
+        // 3.a.3.b: case 4	[typical case of 3.a.3.b]
+        if (thisOS.getAtkCertain() > destOS.getDefMax()) {
+            if (!isBwoss || isDestSamePower(destOS)) {
+                adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(MOVE_FAILED_NO_SELF_DISLODGE));
+                return Tristate.FAILURE;
+            }
+            destOS.setDislodgedState(Tristate.YES);
+            destOS.setDislodger(thisOS);
+            logger.debug( "Dislodged. (3.a.3.b typical)");
+            adjudicator.addDislodgedResult(destOS);
+            return Tristate.SUCCESS;
+        }
+        return Tristate.UNCERTAIN;
+    }
 
     /**
      * Determines if the given orderstate is the same Power as this order

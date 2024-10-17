@@ -153,12 +153,10 @@ public class VictoryConditions implements java.io.Serializable {
 
 
         // check to see if we have exceeded the allocated time
-        if (maxGameTimeYears > 0) {
-            if ((currentYear - initialYear + 1) >= maxGameTimeYears) {
-                evalResults.add(new Result(null, Utils.getLocalString(VC_MAX_GAME_TIME, maxGameTimeYears)));
-                evalResults.add(new Result(null, Utils.getLocalString(VC_DRAW, getRemainingPowers(turnState, powers, adjInfo))));
-                return true;
-            }
+        if (maxGameTimeYears > 0 && (currentYear - initialYear + 1) >= maxGameTimeYears) {
+            evalResults.add(new Result(null, Utils.getLocalString(VC_MAX_GAME_TIME, maxGameTimeYears)));
+            evalResults.add(new Result(null, Utils.getLocalString(VC_DRAW, getRemainingPowers(turnState, powers, adjInfo))));
+            return true;
         }
 
 

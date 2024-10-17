@@ -265,40 +265,43 @@ public class Convoy extends Order {
      */
     public void verify(Adjudicator adjudicator) {
         OrderState thisOS = adjudicator.findOrderStateBySrc(getSource());
-        if (thisOS.getEvalState() == Tristate.UNCERTAIN) {
-            // check for a matching move order.
-            //
-            // note that the move must have its isByConvoy() flag set, so we don't
-            // kidnap armies that prefer not to be convoyed.
-            boolean foundMatchingMove = false;
+        if (thisOS.getEvalState() != Tristate.UNCERTAIN) {
+            thisOS.setVerified(true);
+            return;
+        }
+        
+        // check for a matching move order.
+        //
+        // note that the move must have its isByConvoy() flag set, so we don't
+        // kidnap armies that prefer not to be convoyed.
+        boolean foundMatchingMove = false;
 
-            OrderState matchingOS = adjudicator.findOrderStateBySrc(getConvoySrc());
-            if (matchingOS != null && matchingOS.getOrder() instanceof Move) {
-                Move convoyedMove = (Move) matchingOS.getOrder();
+        OrderState matchingOS = adjudicator.findOrderStateBySrc(getConvoySrc());
+        if (matchingOS != null && matchingOS.getOrder() instanceof Move) {
+            Move convoyedMove = (Move) matchingOS.getOrder();
 
-                // check that Move has been verified; if it has not,
-                // we should just immediately verify it (though we could
-                // wait for the adjudicator to do so).
+            // check that Move has been verified; if it has not,
+            // we should just immediately verify it (though we could
+            // wait for the adjudicator to do so).
+            if (!matchingOS.isVerified()) {
+                convoyedMove.verify(adjudicator);
+
+                // but if it doesn't verify, then we have a
+                // dependency-error.
                 if (!matchingOS.isVerified()) {
-                    convoyedMove.verify(adjudicator);
-
-                    // but if it doesn't verify, then we have a
-                    // dependency-error.
-                    if (!matchingOS.isVerified()) {
-                        throw new IllegalStateException("Verify dependency error.");
-                    }
-                }
-
-                if (convoyedMove.isConvoying()
-                        && getConvoyDest().isProvinceEqual(convoyedMove.getDest())) {
-                    foundMatchingMove = true;
+                    throw new IllegalStateException("Verify dependency error.");
                 }
             }
 
-            if (!foundMatchingMove) {
-                thisOS.setEvalState(Tristate.FAILURE);
-                adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(CONVOY_VER_NOMOVE));
+            if (convoyedMove.isConvoying()
+                    && getConvoyDest().isProvinceEqual(convoyedMove.getDest())) {
+                foundMatchingMove = true;
             }
+        }
+
+        if (!foundMatchingMove) {
+            thisOS.setEvalState(Tristate.FAILURE);
+            adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(CONVOY_VER_NOMOVE));
         }
 
         thisOS.setVerified(true);

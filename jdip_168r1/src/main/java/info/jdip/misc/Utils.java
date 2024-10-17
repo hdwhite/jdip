@@ -953,7 +953,7 @@ public class Utils {
      * at that index. The toString() method is used to convert the
      * Object argument into text.
      */
-    public static String format(String format, Object args[]) {
+    public static String format(String format, Object[] args) {
         StringBuilder output = new StringBuilder(4096);
         StringBuilder accum = new StringBuilder(64);
 
@@ -1114,7 +1114,6 @@ public class Utils {
                         || (c >= 0x0061 && c <= 0x007A)) {
                     return true;
                 }
-
                 // check digits (0-9)
                 if (c >= 0x0030 && c <= 0x0039) {
                     return true;

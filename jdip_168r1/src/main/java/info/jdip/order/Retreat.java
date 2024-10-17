@@ -81,11 +81,12 @@ public class Retreat extends Move {
     }// isByConvoy()
 
 
+    @Override
     public String getFullName() {
         return orderNameFull;
     }// getFullName()
 
-
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Retreat) {
             Retreat retreat = (Retreat) obj;
@@ -96,6 +97,7 @@ public class Retreat extends Move {
     }// equals()
 
 
+    @Override
     public void validate(TurnState state, ValidationOptions valOpts, RuleOptions ruleOpts)
             throws OrderException {
         // step 0
@@ -143,6 +145,7 @@ public class Retreat extends Move {
     /**
      * No verification is performed.
      */
+    @Override
     public void verify(Adjudicator adjudicator) {
         OrderState thisOS = adjudicator.findOrderStateBySrc(getSource());
         thisOS.setVerified(true);
@@ -153,6 +156,7 @@ public class Retreat extends Move {
      * Retreat orders are only dependent on other
      * retreat orders that are moving to the same destination.
      */
+    @Override
     public void determineDependencies(Adjudicator adjudicator) {
         // add moves to destination space, and supports of this space
         OrderState thisOS = adjudicator.findOrderStateBySrc(getSource());
@@ -186,6 +190,7 @@ public class Retreat extends Move {
      * If a retreat is valid, it will be successfull unless
      * there exists one or more retreats to the same destination.
      */
+    @Override
     public void evaluate(Adjudicator adjudicator) {
         OrderState thisOS = adjudicator.findOrderStateBySrc(getSource());
 
@@ -210,62 +215,59 @@ public class Retreat extends Move {
                 // typical case
                 logger.info("SUCCESS!");
                 thisOS.setEvalState(Tristate.SUCCESS);
-            } else {
-                // Modified for Difficult Passsable Border (see DATC 16-dec-03 10.K)
-                // But must differentiate DPB from multiple retreats to same location.
-                //
-                // Furthermore, we need to account for the possibility of 3 retreats
-                // to 1 dest, where 2 retreats are over a normal border and 1 is over
-                // a DPB; that would cause all retreats to fail.
-                //
-                // Thus, if we are <= strength of others, we fail. Otherwise we are >, and
-                // successful.
-                //
-                // This logic *MUST* be run in an evaluation loop.
-                //
-                Tristate evalResult = Tristate.UNCERTAIN;
-                boolean isStrongerThanAllOthers = false;
-
-                for (OrderState depMoveOS : depMovesToDest) {
-                    Move depMove = (Move) depMoveOS.getOrder();
-
-                    if (depMoveOS.isRetreatStrengthSet()) {
-                        if (thisOS.getRetreatStrength() < depMoveOS.getRetreatStrength()) {
-                            // only can be less when considering DPBs
-                            logger.debug("FAILURE! (<) {}", depMoveOS.getOrder());
-                            evalResult = Tristate.FAILURE;
-                            adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(RETREAT_FAIL_DPB));
-                            isStrongerThanAllOthers = false;
-                            break;
-                        } else if (thisOS.getRetreatStrength() == depMoveOS.getRetreatStrength()) {
-                            // the usual case
-                            logger.debug("FAILURE! (==) {}", depMoveOS.getOrder());
-                            evalResult = Tristate.FAILURE;
-                            adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(RETREAT_FAIL_MULTIPLE));
-                            isStrongerThanAllOthers = false;
-                            break;
-                        } else // >
-                        {
-                            // we *may* be stronger than all others
-                            logger.debug( "We may be stronger than all others...");
-                            isStrongerThanAllOthers = true;
-                        }
-                    } else {
-                        // remain uncertain. Dependent orderstate not yet evaluated.
-                        logger.info("Uncertain: {} not yet evaluated.", depMoveOS.getOrder());
-                        isStrongerThanAllOthers = false;    // we don't know yet.
-                        evalResult = Tristate.UNCERTAIN;
-                    }
-                }// for()
-
-                // if we are stronger than all others, we will succeed.
-                if (isStrongerThanAllOthers) {
-                    logger.debug( "SUCCESS! [stronger than all others]");
-                    evalResult = Tristate.SUCCESS;
-                }
-
-                thisOS.setEvalState(evalResult);
+                logger.debug("final evalState() = {}", thisOS.getEvalState());
+                return;
             }
+            // Modified for Difficult Passsable Border (see DATC 16-dec-03 10.K)
+            // But must differentiate DPB from multiple retreats to same location.
+            //
+            // Furthermore, we need to account for the possibility of 3 retreats
+            // to 1 dest, where 2 retreats are over a normal border and 1 is over
+            // a DPB; that would cause all retreats to fail.
+            //
+            // Thus, if we are <= strength of others, we fail. Otherwise we are >, and
+            // successful.
+            //
+            // This logic *MUST* be run in an evaluation loop.
+            //
+            Tristate evalResult = Tristate.UNCERTAIN;
+            boolean isStrongerThanAllOthers = false;
+
+            for (OrderState depMoveOS : depMovesToDest) {
+                if (depMoveOS.isRetreatStrengthSet()) {
+                    if (thisOS.getRetreatStrength() > depMoveOS.getRetreatStrength()) {
+                        // we *may* be stronger than all others
+                        logger.debug( "We may be stronger than all others...");
+                        isStrongerThanAllOthers = true;
+                        continue;
+                    }
+                    else if (thisOS.getRetreatStrength() == depMoveOS.getRetreatStrength()) {
+                        // the usual case
+                        logger.debug("FAILURE! (==) {}", depMoveOS.getOrder());
+                        adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(RETREAT_FAIL_MULTIPLE));
+                    } else {
+                        // only can be less when considering DPBs
+                        logger.debug("FAILURE! (<) {}", depMoveOS.getOrder());
+                        adjudicator.addResult(thisOS, ResultType.FAILURE, Utils.getLocalString(RETREAT_FAIL_DPB));
+                    }
+                    evalResult = Tristate.FAILURE;
+                    isStrongerThanAllOthers = false;
+                    break;
+                } else {
+                    // remain uncertain. Dependent orderstate not yet evaluated.
+                    logger.info("Uncertain: {} not yet evaluated.", depMoveOS.getOrder());
+                    isStrongerThanAllOthers = false;    // we don't know yet.
+                    evalResult = Tristate.UNCERTAIN;
+                }
+            }// for()
+
+            // if we are stronger than all others, we will succeed.
+            if (isStrongerThanAllOthers) {
+                logger.debug( "SUCCESS! [stronger than all others]");
+                evalResult = Tristate.SUCCESS;
+            }
+
+            thisOS.setEvalState(evalResult);
         }
 
         logger.debug("final evalState() = {}", thisOS.getEvalState());

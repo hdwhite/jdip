@@ -390,19 +390,20 @@ public class StdAdjudicator implements Adjudicator {
         // OrderState, an OrderState with a Hold order is used.
         Province[] unitList = position.getUnitProvinces();
         for (Province province : unitList) {
-            if (!osMap.containsKey(province)) {
-                Unit unit = position.getUnit(province);
-                Hold hold = orderFactory.createHold(unit.getPower(), new Location(province, unit.getCoast()), unit.getType());
-                OrderState os = new OrderState(hold);
-                osList.add(os);
-                osMap.put(os.getSourceProvince(), os);
-
-                // create a result detailing our creation of a new order.
-                addResult(new SubstitutedResult(
-                        null,
-                        hold,
-                        Utils.getLocalString(STDADJ_MV_NO_ORDER, province)));
+            if (osMap.containsKey(province)) {
+                continue;
             }
+            Unit unit = position.getUnit(province);
+            Hold hold = orderFactory.createHold(unit.getPower(), new Location(province, unit.getCoast()), unit.getType());
+            OrderState os = new OrderState(hold);
+            osList.add(os);
+            osMap.put(os.getSourceProvince(), os);
+
+            // create a result detailing our creation of a new order.
+            addResult(new SubstitutedResult(
+                    null,
+                    hold,
+                    Utils.getLocalString(STDADJ_MV_NO_ORDER, province)));
         }
 
         // set OrderStates from our temporary list
@@ -412,39 +413,7 @@ public class StdAdjudicator implements Adjudicator {
         assert (orderStates.length == osMap.size());
 
         // step 3: perform a complete validation of all orders
-        ValidationOptions valOpts = new ValidationOptions();
-        valOpts.setOption(ValidationOptions.KEY_GLOBAL_PARSING, ValidationOptions.VALUE_GLOBAL_PARSING_STRICT);
-
-        for (OrderState os : orderStates) {
-            Order order = os.getOrder();
-
-            // validate order (Strict, No warnings)
-            try {
-                order.validate(turnState, valOpts, ruleOpts);
-            } catch (OrderWarning ow) {
-                // just in case we didn't turn off all warnings; do nothing
-            } catch (OrderException oe) {
-                // If the order failed validation, create a VALIDATION_FAILURE result.
-                // Then, replace the OrderState order with a Hold order. This prevents
-                // the adjudicator from using (or even knowing about) the invalid order
-                //
-                addResult(os, ResultType.VALIDATION_FAILURE,
-                        Utils.getLocalString(STDADJ_MV_BAD,
-                                oe.getMessage()));
-
-                Hold hold = orderFactory.createHold(order.getPower(), order.getSource(),
-                        order.getSourceUnitType());
-
-                addResult(new SubstitutedResult(order, hold, null));
-                os.setOrder(hold);
-
-                // add old (subtituted) order to substituted order list
-                OrderState substOS = new OrderState(order);
-                substOS.setLegal(false);
-                substOrders.add(substOS);
-            }
-        }
-
+        validateOrders();
 
         // step 4: calculate dependencies
         for (OrderState os : orderStates) {
@@ -512,49 +481,11 @@ public class StdAdjudicator implements Adjudicator {
             boolean evaluationComplete = false;
             while (!evaluationComplete) {
                 evaluationComplete = evaluateOrders(totalMoves, totalNonMoves);
-                if (!evaluationComplete) {
-                    evaluationComplete = !canBreakParadox();
-                }
+                evaluationComplete |= !canBreakParadox();
             }
-
 
             // Step 8:
-            // a) convert 'maybe' dislodged to 'yes' disloged
-            // b) create 'dislodged' result
-            // c) any 'dislodged' with 'uncertain' evaluation ==> failure / dislodged
-            // d) if power isn't active (e.g., Italy in a 6-player game), and
-            //    its unit is dislodged, it will be automatically disbanded (later)
-            // e) set flag indicating if any units are dislodged
-            for (OrderState os : orderStates) {
-                // convert maybe->certain
-                if (os.getDislodgedState() == Tristate.MAYBE) {
-                    logger.debug("dislodged: maybe -> yes: {}", os.getOrder());
-
-                    os.setDislodgedState(Tristate.YES);
-
-                    if (os.getEvalState() == Tristate.UNCERTAIN) {
-                        os.setEvalState(Tristate.FAILURE);
-                        //addResult(os, ResultType.FAILURE, null);
-                        addDislodgedResult(os);
-                    } else if (os.getEvalState() == Tristate.FAILURE) {
-                        // we were dislodged, probably by another unit, not the
-                        // unit that caused the failure (see bug #952038)
-                        // So, we need to create a dislodged result, in addition
-                        // to setting the DislodgedState flag.
-                        //
-                        addDislodgedResult(os);
-                    }
-                }
-
-                // ensure all dislodged units have a dislodged result (needed to process
-                // Order.evalute() methods can create dislodged results if they are
-                //    certain a unit was dislodged.
-                // inactive powers will have their units disbanded, during step 12
-                // (creating the next turnstate).
-                if (os.getDislodgedState() == Tristate.YES && os.getPower().isActive()) {
-                    areAnyUnitsDislodged = true;
-                }
-            }
+            areAnyUnitsDislodged = createDislodgedResults();
         }
 
         // Step 9:
@@ -575,35 +506,8 @@ public class StdAdjudicator implements Adjudicator {
 
         // report statistics, if enabled
         if (statReporting) {
-            for (Result r : resultList) {
-                if (r instanceof BouncedResult) {
-                    logger.debug("setting stats for: BouncedResult: {}", r);
-                    BouncedResult br = (BouncedResult) r;
-
-                    OrderState defOS = findOrderStateBySrc(br.getBouncer());
-                    OrderState atkOS = findOrderStateBySrc(br.getOrder().getSource());
-
-                    logger.debug("bouncer: {}", br.getBouncer());
-                    logger.debug("attacker: {}", br.getOrder().getSource());
-
-                    br.setAttackStrength(atkOS.getAtkCertain());
-                    br.setDefenseStrength(defOS.getDefCertain());
-                } else if (r instanceof DislodgedResult) {
-                    logger.debug("setting stats for: DislodgedResult: {}", r);
-                    DislodgedResult dr = (DislodgedResult) r;
-
-                    OrderState atkOS = findOrderStateBySrc(dr.getDislodger());
-                    OrderState defOS = findOrderStateBySrc(dr.getOrder().getSource());
-
-                    logger.debug("dislodger: {}", dr.getDislodger());
-                    logger.debug("defender: {}", dr.getOrder().getSource());
-
-                    dr.setAttackStrength(atkOS.getAtkCertain());
-                    dr.setDefenseStrength(defOS.getDefCertain());
-                }
-            }
+            reportStats();
         }
-
 
         // Step 11:
         // Determine the next phase. If there are no dislodged units, we can
@@ -614,7 +518,6 @@ public class StdAdjudicator implements Adjudicator {
             addResult(new Result(Utils.getLocalString(STDADJ_SKIP_RETREAT)));
             nextPhase = nextPhase.getNext();
         }
-
 
         // Step 12:
         // Create the next TurnState. This is derived from the current turnstate,
@@ -678,6 +581,88 @@ public class StdAdjudicator implements Adjudicator {
         turnState.setResolved(true);
         addResult(new TimeResult(STDADJ_COMPLETED));
     }// adjudicateMoves()
+
+    /**
+     * step 3: perform a complete validation of all orders
+     */
+    private void validateOrders() {
+        ValidationOptions valOpts = new ValidationOptions();
+        valOpts.setOption(ValidationOptions.KEY_GLOBAL_PARSING, ValidationOptions.VALUE_GLOBAL_PARSING_STRICT);
+
+        for (OrderState os : orderStates) {
+            Order order = os.getOrder();
+
+            // validate order (Strict, No warnings)
+            try {
+                order.validate(turnState, valOpts, ruleOpts);
+            } catch (OrderWarning ow) {
+                // just in case we didn't turn off all warnings; do nothing
+            } catch (OrderException oe) {
+                // If the order failed validation, create a VALIDATION_FAILURE result.
+                // Then, replace the OrderState order with a Hold order. This prevents
+                // the adjudicator from using (or even knowing about) the invalid order
+                //
+                addResult(os, ResultType.VALIDATION_FAILURE,
+                        Utils.getLocalString(STDADJ_MV_BAD,
+                                oe.getMessage()));
+
+                Hold hold = orderFactory.createHold(order.getPower(), order.getSource(),
+                        order.getSourceUnitType());
+
+                addResult(new SubstitutedResult(order, hold, null));
+                os.setOrder(hold);
+
+                // add old (subtituted) order to substituted order list
+                OrderState substOS = new OrderState(order);
+                substOS.setLegal(false);
+                substOrders.add(substOS);
+            }
+        }
+    }
+
+    /**
+     * Step 8:
+     * a) convert 'maybe' dislodged to 'yes' disloged
+     * b) create 'dislodged' result
+     * c) any 'dislodged' with 'uncertain' evaluation ==> failure / dislodged
+     * d) if power isn't active (e.g., Italy in a 6-player game), and
+     *    its unit is dislodged, it will be automatically disbanded (later)
+     * e) set flag indicating if any units are dislodged
+     */
+    private boolean createDislodgedResults() {
+        boolean areAnyUnitsDislodged = false;
+        for (OrderState os : orderStates) {
+            // convert maybe->certain
+            if (os.getDislodgedState() == Tristate.MAYBE) {
+                logger.debug("dislodged: maybe -> yes: {}", os.getOrder());
+
+                os.setDislodgedState(Tristate.YES);
+
+                if (os.getEvalState() == Tristate.UNCERTAIN) {
+                    os.setEvalState(Tristate.FAILURE);
+                    //addResult(os, ResultType.FAILURE, null);
+                    addDislodgedResult(os);
+                } else if (os.getEvalState() == Tristate.FAILURE) {
+                    // we were dislodged, probably by another unit, not the
+                    // unit that caused the failure (see bug #952038)
+                    // So, we need to create a dislodged result, in addition
+                    // to setting the DislodgedState flag.
+                    //
+                    addDislodgedResult(os);
+                }
+            }
+
+            // ensure all dislodged units have a dislodged result (needed to process
+            // Order.evalute() methods can create dislodged results if they are
+            //    certain a unit was dislodged.
+            // inactive powers will have their units disbanded, during step 12
+            // (creating the next turnstate).
+            if (os.getDislodgedState() == Tristate.YES && os.getPower().isActive()) {
+                areAnyUnitsDislodged = true;
+            }
+        }
+        return areAnyUnitsDislodged;
+    }
 
     /**
      * All units that have moved, are moved. All units that have been dislodged, are dislodged.
@@ -765,6 +750,35 @@ public class StdAdjudicator implements Adjudicator {
         }
     }
 
+    private void reportStats() {
+        for (Result r : resultList) {
+            if (r instanceof BouncedResult) {
+                logger.debug("setting stats for: BouncedResult: {}", r);
+                BouncedResult br = (BouncedResult) r;
+
+                OrderState defOS = findOrderStateBySrc(br.getBouncer());
+                OrderState atkOS = findOrderStateBySrc(br.getOrder().getSource());
+
+                logger.debug("bouncer: {}", br.getBouncer());
+                logger.debug("attacker: {}", br.getOrder().getSource());
+
+                br.setAttackStrength(atkOS.getAtkCertain());
+                br.setDefenseStrength(defOS.getDefCertain());
+            } else if (r instanceof DislodgedResult) {
+                logger.debug("setting stats for: DislodgedResult: {}", r);
+                DislodgedResult dr = (DislodgedResult) r;
+
+                OrderState atkOS = findOrderStateBySrc(dr.getDislodger());
+                OrderState defOS = findOrderStateBySrc(dr.getOrder().getSource());
+
+                logger.debug("dislodger: {}", dr.getDislodger());
+                logger.debug("defender: {}", dr.getOrder().getSource());
+
+                dr.setAttackStrength(atkOS.getAtkCertain());
+                dr.setDefenseStrength(defOS.getDefCertain());
+            }
+        }
+    }
 
     /**
      * This may return null, if the game has ended and victory conditions have been met
@@ -960,18 +974,19 @@ public class StdAdjudicator implements Adjudicator {
                     && os.getOrder() instanceof Move) {
                 Move move = (Move) os.getOrder();
 
-                if (move.isConvoying()) {
-                    logger.debug("Checking move: {}", move);
+                if (!move.isConvoying()) {
+                    continue;
+                }
+                logger.debug("Checking move: {}", move);
 
-                    for (OrderState itos : getConvoyList(move)) {
+                for (OrderState itos : getConvoyList(move)) {
 
-                        logger.debug("Convoy: {}, evalState: {}", itos.getOrder(), itos.getEvalState());
-                        if (itos.getEvalState() == Tristate.UNCERTAIN) {
-                            logger.info("*** Szykman rule applied to this move!!!");
-                            os.setEvalState(Tristate.FAILURE);
-                            addResult(os, ResultType.FAILURE, Utils.getLocalString(STDADJ_MV_SZYKMAN_MOVE_FAILED));
-                            break;
-                        }
+                    logger.debug("Convoy: {}, evalState: {}", itos.getOrder(), itos.getEvalState());
+                    if (itos.getEvalState() == Tristate.UNCERTAIN) {
+                        logger.info("*** Szykman rule applied to this move!!!");
+                        os.setEvalState(Tristate.FAILURE);
+                        addResult(os, ResultType.FAILURE, Utils.getLocalString(STDADJ_MV_SZYKMAN_MOVE_FAILED));
+                        break;
                     }
                 }
             }
@@ -1134,11 +1149,7 @@ public class StdAdjudicator implements Adjudicator {
         // Step 7:
         // a) Create SUCCESS and FAILURE results
         for (OrderState os : orderStates) {
-            if (os.getEvalState() == Tristate.SUCCESS) {
-                addResult(os, ResultType.SUCCESS, null);
-            } else {
-                addResult(os, ResultType.FAILURE, null);
-            }
+            addResult(os, (os.getEvalState() == Tristate.SUCCESS) ? ResultType.SUCCESS : ResultType.FAILURE, null);
         }
 
 
@@ -1794,69 +1805,69 @@ public class StdAdjudicator implements Adjudicator {
             chain.clear();
             isChainCircular = false;
 
-            if (!moveOS.isCircular()) {
-                Move firstMove = (Move) moveOS.getOrder();
+            if (moveOS.isCircular()) {
+                continue;
+            }
+            Move firstMove = (Move) moveOS.getOrder();
 
-                chain.addLast(moveOS);
-                OrderState nextMoveOS = findMoveFrom(firstMove.getDest().getProvince());
+            chain.addLast(moveOS);
+            OrderState nextMoveOS = findMoveFrom(firstMove.getDest().getProvince());
 
-                boolean subChainCircular = false;
+            boolean subChainCircular = false;
 
-                while (nextMoveOS != null && !isChainCircular && !subChainCircular) {
-                    if (!nextMoveOS.isCircular()) {
-                        chain.addLast(nextMoveOS);
+            while (nextMoveOS != null && !isChainCircular && !subChainCircular) {
+                if (nextMoveOS.isCircular()) {
+                    break;    // can't have intersecting circles!
+                }
+                chain.addLast(nextMoveOS);
 
-                        Move nextMove = (Move) nextMoveOS.getOrder();
+                Move nextMove = (Move) nextMoveOS.getOrder();
 
-                        // Uwe Plonus: This is a dirty hack to let the test case 6.e.4 pass
-                        for (OrderState nm : chain) {
-                            if (nextMove.getDest().isProvinceEqual(nm.getSource())) {
-                                // we've found the move that completes the (sub-)chain.
-                                subChainCircular = true;
-                            }
-                        }
-
-                        if (nextMove.getDest().isProvinceEqual(firstMove.getSource())) {
-                            // we've found the move that completes the chain.
-                            isChainCircular = true;
-                        }
-
-                        nextMoveOS = findMoveFrom(nextMove.getDest().getProvince());
-                    } else {
-                        break;    // can't have intersecting circles!
+                // Uwe Plonus: This is a dirty hack to let the test case 6.e.4 pass
+                for (OrderState nm : chain) {
+                    if (nextMove.getDest().isProvinceEqual(nm.getSource())) {
+                        // we've found the move that completes the (sub-)chain.
+                        subChainCircular = true;
                     }
                 }
 
+                if (nextMove.getDest().isProvinceEqual(firstMove.getSource())) {
+                    // we've found the move that completes the chain.
+                    isChainCircular = true;
+                }
 
-                if (isChainCircular) {
-                    if (chain.size() > 2) {
-                        // double-check: only chains of >= 3 moves; prevents head-to-head moves from being
-                        // flagged as circular, in the event of some sort of ajudicator error.
+                nextMoveOS = findMoveFrom(nextMove.getDest().getProvince());
+            }
+
+
+            if (isChainCircular) {
+                if (chain.size() > 2) {
+                    // double-check: only chains of >= 3 moves; prevents head-to-head moves from being
+                    // flagged as circular, in the event of some sort of ajudicator error.
+                    chainCount++;
+
+                    // all moves in chain are part of a circle (last move -> first move)
+                    // set 'isCircular()' flags
+                    for (OrderState os : chain) {
+                        os.setCircular(true);
+                    }
+                } else if (chain.size() == 2) {
+                    // head-to-head moves (swaps) where one or both units are convoyed
+                    // are legitimate, however.
+                    boolean isSwap = false;
+
+                    for (OrderState os : chain) {
+                        Move move = (Move) os.getOrder();
+                        if (move.isConvoying()) {
+                            isSwap = true;
+                        }
+                    }
+
+                    if (isSwap) {
                         chainCount++;
 
-                        // all moves in chain are part of a circle (last move -> first move)
-                        // set 'isCircular()' flags
                         for (OrderState os : chain) {
                             os.setCircular(true);
-                        }
-                    } else if (chain.size() == 2) {
-                        // head-to-head moves (swaps) where one or both units are convoyed
-                        // are legitimate, however.
-                        boolean isSwap = false;
-
-                        for (OrderState os : chain) {
-                            Move move = (Move) os.getOrder();
-                            if (move.isConvoying()) {
-                                isSwap = true;
-                            }
-                        }
-
-                        if (isSwap) {
-                            chainCount++;
-
-                            for (OrderState os : chain) {
-                                os.setCircular(true);
-                            }
                         }
                     }
                 }

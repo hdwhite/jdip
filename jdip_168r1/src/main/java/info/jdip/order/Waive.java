@@ -103,6 +103,7 @@ public class Waive extends Order {
     }// toFullString()
 
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Waive) {
             return super.equals(obj);

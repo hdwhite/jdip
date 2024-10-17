@@ -96,126 +96,6 @@ public class NJudgeOrderParser {
     private static final Pattern ADJUSTMENT_PATTERN = Pattern.compile(ADJUSTMENT_REGEX);
     private static final Pattern ALTERNATE_ADJUSTMENT_PATTERN = Pattern.compile(ALTERNATE_ADJUSTMENT_REGEX);
 
-
-    // TEST harness
-	/*
-	public static void main(String args[])
-	throws OrderException
-	{
-		final String variantName = "Chaos";
-		World world = null;
-		info.jdip.world.Map map = null;
-		
-		// setup
-		// get default variant directory. 
-		final String VARIANT_DIR = "variants";
-		File defaultVariantSearchDir = null;
-		if(System.getProperty("user.dir") == null)
-		{
-			defaultVariantSearchDir = new File(".", VARIANT_DIR);
-		}
-		else
-		{
-			defaultVariantSearchDir = new File(System.getProperty("user.dir"), VARIANT_DIR );
-		}
-		
-		try
-		{
-			// parse variants
-			VariantManager.init(new File[]{defaultVariantSearchDir}, false);
-			
-			// load the default variant (Standard)
-			// error if it cannot be found!!
-			Variant variant = VariantManager.getVariant(variantName, VariantManager.VERSION_NEWEST);
-			if(variant == null)
-			{
-				System.out.println("ERROR: cannot find variant: "+variantName);
-				System.exit(1);
-			}
-			
-			// create the world
-			world = WorldFactory.getInstance().createWorld(variant);
-			map = world.getMap();
-			
-			// set the RuleOptions in the World (this is normally done
-			// by the GUI)
-			world.setRuleOptions(RuleOptions.createFromVariant(variant));
-		}
-		catch(Exception e)
-		{
-			System.out.println("ERROR: could not create variant.");
-			System.out.println(e);
-			e.printStackTrace();
-			System.exit(1);
-		}
-		
-		
-		
-		// hold: OK
-		// disband: OK
-		// convoy: OK
-		// support: OK
-		// move: OK
-		
-		// ADJUST:
-		String[] lines = 
-		{
-			"F-Bul: Removes the fleet in Bulgaria.",
-			"F-Bul: Builds an army in Siberia.",
-			"F-Bul: Removes the fleet in the Norwegian Sea.",
-			"F-Bul: Remove fleet in the Norwegian Sea.",
-			
-			 "2-Spa:     Builds a fleet in Spain (south coast).",
-			 "F-Bul:     Builds an army in Bulgaria.",
-			 "H-Den:     Removes the fleet in the Norwegian Sea.",
-			 "F-Bul:     Defaults, removing the fleet in the Black Sea.",
-			 "F-Bul:     Defaults, removing the army in Siberia.",
-			 "2-Spa:     Removes the wing over the St. Petersberg.",
-			 "F-Bul:   	 Builds a wing in Sevastopol.",
-			 
-			"F-Bul:    	1 unusable build pending.",
-			"2-Spa:     3 unusable builds pending.",
-			"H-Den:     1 unused build pending.",
-			"2-Spa:     2 unused builds pending.",
-			"2-Spa:   	Build waived.",
-			"F-Bul:    	1 unusable build waived.",
-			"2-Spa:     3 unusable builds waived."
-			 
-		};
-		
-		// MOVE
-		//String line = "A-Ank: Army Ankara -> Smyrna.  (*bounce, dislodged*)";
-		//String line = "1-Smy: Army Constantinople -> Aegean Sea -> Greece.  (*bounce, dislodged*)";
-		
-		
-		// HOLD / DISBAND
-		//String line = "N-Lvp: Fleet Irish Sea HOLD.";
-		//String line = "T-Nap:     Army  Naples DISBAND.";
-		
-		// CONVOY
-		//String line = "1-Smy: Fleet Ionian Sea CONVOY Army Bulgaria -> Serbia.";
-		//String line = "N-Lvp: Fleet Mid-Atlantic Ocean CONVOY Q-Mar Army Brest -> Spain.";
-		
-		// SUPPORTS
-		//String line = "B-Bel: Army Belgium SUPPORT K-Hol Army Holland.";
-		//String line = "H-Den: Fleet Berlin SUPPORT Army Kiel.";
-		//String line = "N-Lvp: Fleet North Sea SUPPORT Fleet Barents Sea -> Norwegian Sea.";
-		//String line = "2-Spa: Fleet Spain (south coast) SUPPORT W-Por Fleet Portugal -> Mid-Atlantic Ocean.";
-		
-		NJudgeOrderParser njp = new NJudgeOrderParser();
-		
-		for(int i=0; i<lines.length; i++)
-		{
-			System.out.println(">ORDER: "+lines[i]);
-			NJudgeOrder njo = njp.parse(map, OrderFactory.getDefault(), Phase.PhaseType.ADJUSTMENT, lines[i]);
-			System.out.println(">   "+njo);
-		}
-		
-		System.out.println("DONE:");
-	}
-	*/
-
-
     /**
      * Create an NJudgeOrderParser
      */
@@ -339,8 +219,8 @@ public class NJudgeOrderParser {
      */
     private Location parseLocation(final ParseContext pc, final String text)
             throws OrderException {
-        final String replaceFrom[] = {".", ","};
-        final String replaceTo[] = {"", ""};
+        final String[] replaceFrom = {".", ","};
+        final String[] replaceTo = {"", ""};
         final String locationText = Coast.normalize(
                 Utils.replaceAll(text, replaceFrom, replaceTo));
 

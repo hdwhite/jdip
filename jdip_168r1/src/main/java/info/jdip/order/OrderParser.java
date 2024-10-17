@@ -127,93 +127,93 @@ public class OrderParser {
     private static final String WHITESPACE = ": \t\n\r";
     // the order of replacements is very important!
     // all must be in lower case!
-    private static final String REPLACEMENTS[][] =
+    private static final String[][] REPLACEMENTS =
             {
-                    // misc tiny words that people add
-                    // should NOT include 'to' because to can mean move; it's not always extraneous
-                    // must have spaces before and after
-                    {" in ", " "},
-                    {" an ", " "},
-                    {" of ", " "},
-                    {" on ", " "},
-                    // WARNING: if a province is named 'the', this will create a problem.
-                    {" the ", " "},
-                    // convert unit-type specifiers
-                    {"fleet", " f "},
-                    {"army", " a "},
-                    {"wing", " w "},
-                    // WAIVE orders. Waive may NOT be abbreviated as "W"; otherwise,
-                    // w xxx (build a wing) may be confused as 'waive'
-                    {"waives builds ", " waive "},
-                    {"waives build ", " waive "},
-                    {"waive builds ", " waive "},    // e.g., waive build [province]; must come before "BUILD"
-                    {"waive build ", " waive "},        // e.g., waive build [province]; must come before "BUILD"
-                    {"waives", " waive "},
-                    // adjustment order Remove (since it contains "move", must come before)
-                    {"removes a ", " r "},
-                    {"removes", " r "},        // plurals FIRST
-                    {"remove", " r "},
-                    // for MOVE orders; note that "->" must come before "-"
-                    // also, we MUST replace any "-" in coasts with a "/" first.
-                    {"-=>", " m "},
-                    {"=->", " m "},
-                    {"==>", " m "},
-                    {"-->", " m "},
-                    {"->", " m "},
-                    {"=>", " m "},
-                    {"-", " m "},
-                    {"\u2192", " m "},            // unicode ARROW as used by jDip
-                    {"retreats to ", " m "}, // NOTE: space after "to" to avoid ambiguity e.g., "army bre retreats tol"
-                    {"retreat to ", " m "},
-                    {"retreats", " m "},    // plural first
-                    {"retreat", " m "},
-                    {"moving to ", " m "},    // NOTE: space after "to" ...
-                    {"moves to ", " m "},    // NOTE: space after "to" to avoid ambiguity e.g., "army bre moves tol"
-                    {"move to ", " m "},    // NOTE: plurals and longer entries MUST come before shorter entries
-                    {"moves", " m "},
-                    {"move", " m "},
-                    {" mv ", " m "},        // for those that like unix
-                    {" attacks on ", " m "},    // we precede the following with a space, since they are nonstandard keywords
-                    {" attacks to ", " m "},
-                    {" attacks into ", " m "},
-                    {" attacks of ", " m "},
-                    {" attack on ", " m "},
-                    {" attack to ", " m "},
-                    {" attack into ", " m "},
-                    {" attack of ", " m "},
-                    {" attacks ", " m "},
-                    {" attack ", " m "},
-                    {" into ", " m "},        // prefixed with space (don't want to get the end of a province)
-                    {" to ", " m "},        // used as a substitute for 'move to'; space prefix here is also important
-                    // SUPPORT orders
-                    {"supports", " s "},    // plurals FIRST
-                    {"support", " s "},
-                    {" to support", " s "},    // prefixed with space (to not get the end of another word)
-                    // HOLD orders
-                    {"holds", " h "},
-                    {"hold", " h "},
-                    {"stands", " h "},
-                    {"stand", " h "},
-                    // CONVOY orders
-                    {"convoys", " c "},
-                    {"convoy", " c "},
-                    {"transports", " c "},
-                    {"transport", " c "},
-                    // DISBAND orders	NOTE: 'remove' is up above (before 'move')
-                    {"disbands a ", " d "},
-                    {"disbands", " d "},
-                    {"disband", " d "},
-                    // various adjustment orders
-                    {"builds a ", " b "},
-                    {"builds", " b "},    // plurals FIRST
-                    {"build a ", " b "},
-                    {"build", " b "},
-                    // this occurs after coast-normalization, so convert parens to spaces.
-                    {"(", " "},
-                    {")", " "}
+                // misc tiny words that people add
+                // should NOT include 'to' because to can mean move; it's not always extraneous
+                // must have spaces before and after
+                {" in ", " "},
+                {" an ", " "},
+                {" of ", " "},
+                {" on ", " "},
+                // WARNING: if a province is named 'the', this will create a problem.
+                {" the ", " "},
+                // convert unit-type specifiers
+                {"fleet", " f "},
+                {"army", " a "},
+                {"wing", " w "},
+                // WAIVE orders. Waive may NOT be abbreviated as "W"; otherwise,
+                // w xxx (build a wing) may be confused as 'waive'
+                {"waives builds ", " waive "},
+                {"waives build ", " waive "},
+                {"waive builds ", " waive "},    // e.g., waive build [province]; must come before "BUILD"
+                {"waive build ", " waive "},        // e.g., waive build [province]; must come before "BUILD"
+                {"waives", " waive "},
+                // adjustment order Remove (since it contains "move", must come before)
+                {"removes a ", " r "},
+                {"removes", " r "},        // plurals FIRST
+                {"remove", " r "},
+                // for MOVE orders; note that "->" must come before "-"
+                // also, we MUST replace any "-" in coasts with a "/" first.
+                {"-=>", " m "},
+                {"=->", " m "},
+                {"==>", " m "},
+                {"-->", " m "},
+                {"->", " m "},
+                {"=>", " m "},
+                {"-", " m "},
+                {"\u2192", " m "},            // unicode ARROW as used by jDip
+                {"retreats to ", " m "}, // NOTE: space after "to" to avoid ambiguity e.g., "army bre retreats tol"
+                {"retreat to ", " m "},
+                {"retreats", " m "},    // plural first
+                {"retreat", " m "},
+                {"moving to ", " m "},    // NOTE: space after "to" ...
+                {"moves to ", " m "},    // NOTE: space after "to" to avoid ambiguity e.g., "army bre moves tol"
+                {"move to ", " m "},    // NOTE: plurals and longer entries MUST come before shorter entries
+                {"moves", " m "},
+                {"move", " m "},
+                {" mv ", " m "},        // for those that like unix
+                {" attacks on ", " m "},    // we precede the following with a space, since they are nonstandard keywords
+                {" attacks to ", " m "},
+                {" attacks into ", " m "},
+                {" attacks of ", " m "},
+                {" attack on ", " m "},
+                {" attack to ", " m "},
+                {" attack into ", " m "},
+                {" attack of ", " m "},
+                {" attacks ", " m "},
+                {" attack ", " m "},
+                {" into ", " m "},        // prefixed with space (don't want to get the end of a province)
+                {" to ", " m "},        // used as a substitute for 'move to'; space prefix here is also important
+                // SUPPORT orders
+                {"supports", " s "},    // plurals FIRST
+                {"support", " s "},
+                {" to support", " s "},    // prefixed with space (to not get the end of another word)
+                // HOLD orders
+                {"holds", " h "},
+                {"hold", " h "},
+                {"stands", " h "},
+                {"stand", " h "},
+                // CONVOY orders
+                {"convoys", " c "},
+                {"convoy", " c "},
+                {"transports", " c "},
+                {"transport", " c "},
+                // DISBAND orders	NOTE: 'remove' is up above (before 'move')
+                {"disbands a ", " d "},
+                {"disbands", " d "},
+                {"disband", " d "},
+                // various adjustment orders
+                {"builds a ", " b "},
+                {"builds", " b "},    // plurals FIRST
+                {"build a ", " b "},
+                {"build", " b "},
+                // this occurs after coast-normalization, so convert parens to spaces.
+                {"(", " "},
+                {")", " "}
             };
     // DELETION strings for preprocessor; must occur after coast normalization
-    private static final String TODELETE[] =
+    private static final String[] TODELETE =
             {
                     ".",    // periods often occur in coast specifiers (e.g., "n.c.")
                     ",",    // shouldn't have any commas, but shouldn't be harmful, either.
@@ -467,11 +467,9 @@ public class OrderParser {
         if (guessing) {
             // getPowerFromLocation() should throw an exception if no unit present.
             Power tempPower = getPowerFromLocation(false, position, turnState, src);
-            if (power != null) {
-                if (!tempPower.equals(power)) {
-                    logger.debug("Order: {}", ord);
-                    throw new OrderException(Utils.getLocalString(OF_BAD_FOR_POWER, power));
-                }
+            if (power != null && !tempPower.equals(power)) {
+                logger.debug("Order: {}", ord);
+                throw new OrderException(Utils.getLocalString(OF_BAD_FOR_POWER, power));
             }
 
             power = tempPower;
@@ -479,24 +477,26 @@ public class OrderParser {
 
         assert (power != null);
 
-
+        TypeAndSource tas;
         // create order based on order type
-        if (orderType.equals("h")) {
+        switch (orderType) {
+            case "h":
             // HOLD order
             // <power>: <type> <s-prov> h
             return orderFactory.createHold(power, src, srcUnitType);
-        } else if (orderType.equals("m")) {
+
+            case "m":
             return parseMoveOrder(map, turnState, position, orderFactory, st,
                     power, src, srcUnitType, false);
 
-        } else if (orderType.equals("s")) {
+            case "s":
             // SUPPORT order
             // <power>: <type> <s-prov> s <type> <s-prov>
             // <power>: <type> <s-prov> s <type> <s-prov> [h]
             // <power>: <type> <s-prov> s <type> <s-prov> m <d-prov>
             //
             // get type and/or support source names
-            TypeAndSource tas = getTypeAndSource(st);
+            tas = getTypeAndSource(st);
 
             // parse supSrc / supUnit
             Unit.Type supUnitType = parseUnitType(tas.type);
@@ -521,7 +521,9 @@ public class OrderParser {
                     assert (supDest != null);
                     return orderFactory.createSupport(power, src, srcUnitType,
                             supSrc, supPower, supUnitType, supDest);
-                } else if (!token.equals("h")) {
+                }
+                
+                if (!token.equals("h")) {
                     // anything BUT a hold is ok.
                     logger.debug("Order: {}", ord);
                     throw new OrderException(Utils.getLocalString(OF_SUPPORT_NO_MOVE));
@@ -531,11 +533,11 @@ public class OrderParser {
             // support a HOLD
             return orderFactory.createSupport(power, src, srcUnitType, supSrc,
                     supPower, supUnitType);
-        } else if (orderType.equals("c")) {
+            case "c":
             // CONVOY order
             // <power>: <type> <s-prov> c <type> <s-prov> m <d-prov>
             // get type and/or support source
-            TypeAndSource tas = getTypeAndSource(st);
+            tas = getTypeAndSource(st);
             String conSrcName = tas.src;
             String conUnitName = tas.type;
 
@@ -563,15 +565,18 @@ public class OrderParser {
             // create order.
             return orderFactory.createConvoy(power, src, srcUnitType,
                     conSrc, conPower, conUnitType, conDest);
-        } else if (orderType.equals("d")) {
+            
+            case "d":
             // DISBAND order
             return createDisbandOrRemove(orderFactory, turnState, true, power, src, srcUnitType);
-        } else if (orderType.equals("definestate")) {
-            return orderFactory.createDefineState(power, src, srcUnitType);
-        }
 
-        logger.debug("Order: {}", ord);
-        throw new OrderException(Utils.getLocalString(OF_UNKNOWN_ORDER, orderType));
+            case "definestate":
+            return orderFactory.createDefineState(power, src, srcUnitType);
+            
+            default:
+            logger.debug("Order: {}", ord);
+            throw new OrderException(Utils.getLocalString(OF_UNKNOWN_ORDER, orderType));
+        }
     }// parse
 
 
@@ -641,19 +646,21 @@ public class OrderParser {
 
         if (turnState.getPhase().getPhaseType() == Phase.PhaseType.RETREAT) {
             return orderFactory.createRetreat(srcPower, srcLoc, srcUnitType, dest);
-        } else {
-            if (isConvoyedMove)    // MUST test this first -- it overrides isExplicitConvoy
-            {
-                assert (al != null);
-                Province[] convoyRoute = al.toArray(new Province[al.size()]);
-                return orderFactory.createMove(srcPower, srcLoc, srcUnitType, dest, convoyRoute);
-            } else if (isExplicitConvoy) {
-                return orderFactory.createMove(srcPower, srcLoc, srcUnitType, dest, isExplicitConvoy);
-            } else {
-                // implicit convoy [determiend by Move.validate()] or nonconvoyed move order
-                return orderFactory.createMove(srcPower, srcLoc, srcUnitType, dest);
-            }
         }
+        
+        if (isConvoyedMove)    // MUST test this first -- it overrides isExplicitConvoy
+        {
+            assert (al != null);
+            Province[] convoyRoute = al.toArray(new Province[al.size()]);
+            return orderFactory.createMove(srcPower, srcLoc, srcUnitType, dest, convoyRoute);
+        }
+        
+        if (isExplicitConvoy) {
+            return orderFactory.createMove(srcPower, srcLoc, srcUnitType, dest, isExplicitConvoy);
+        }
+        
+        // implicit convoy [determiend by Move.validate()] or nonconvoyed move order
+        return orderFactory.createMove(srcPower, srcLoc, srcUnitType, dest);
     }// parseMoveOrder()
 
 
@@ -667,64 +674,70 @@ public class OrderParser {
                                              boolean guessing, TurnState turnState)
             throws OrderException {
         // these orders have a command-specifier BEFORE unit/src information
-        if (orderType.equals("waive")) {
+        TypeAndSource tas;
+        Location src;
+        Unit.Type unitType;
+        switch (orderType) {
+            case "waive":
             // WAIVE order
             // <power>: <waive> <province>
-            TypeAndSource tas = getTypeAndSource(st);    // we ignore 'type', but let it be specified
-            Location src = parseLocation(map, tas.src);
+            tas = getTypeAndSource(st);    // we ignore 'type', but let it be specified
+            src = parseLocation(map, tas.src);
             if (guessing) {
                 power = getPowerFromLocation(true, position, turnState, src);
             }
             return orderFactory.createWaive(power, src);
-        } else if (orderType.equals("b")) {
+
+            case "b":
             // BUILD order
             // <power>: BUILD <type> <s-prov>
-            TypeAndSource tas = getTypeAndSource(st);
-            Location src = parseLocation(map, tas.src);
-            Unit.Type unitType = parseUnitType(tas.type);
+            tas = getTypeAndSource(st);
+            src = parseLocation(map, tas.src);
+            unitType = parseUnitType(tas.type);
             if (guessing) {
                 power = getPowerFromLocation(true, position, turnState, src);
             }
-
             return orderFactory.createBuild(power, src, unitType);
-        } else if (orderType.equals("r")) {
+        
+            case "r":
             // REMOVE order
             // <power>: REMOVE <type> <s-prov>
-            TypeAndSource tas = getTypeAndSource(st);
-            Location src = parseLocation(map, tas.src);
-            Unit.Type unitType = parseUnitType(tas.type);
+            tas = getTypeAndSource(st);
+            src = parseLocation(map, tas.src);
+            unitType = parseUnitType(tas.type);
             if (guessing) {
                 power = getPowerFromLocation(true, position, turnState, src);
             }
-
             return createDisbandOrRemove(orderFactory, turnState, false, power, src, unitType);
-        } else if (orderType.equals("m")) {
+        
+            case "m":
             // MOVE order: command-first version
             // <power>: m <unit> <location> m <location>
             // example: "france: move army paris to gascony"
             // or: "move army paris-gascony"
-            TypeAndSource srcTas = getTypeAndSource(st);
-            Location src = parseLocation(map, srcTas.src);
-            Unit.Type srcUnitType = parseUnitType(srcTas.type);
+            tas = getTypeAndSource(st);
+            src = parseLocation(map, tas.src);
+            unitType = parseUnitType(tas.type);
             if (guessing) {
                 power = getPowerFromLocation(true, position, turnState, src);
             }
-
             return parseMoveOrder(map, turnState, position, orderFactory, st,
-                    power, src, srcUnitType, true);
-        } else if (orderType.equals("d")) {
+                    power, src, unitType, true);
+            
+            case "d":
             // DISBAND: command-first version
             // <power>: DISBAND <type> <s-prov>
-            TypeAndSource tas = getTypeAndSource(st);
-            Location src = parseLocation(map, tas.src);
-            Unit.Type unitType = parseUnitType(tas.type);
+            tas = getTypeAndSource(st);
+            src = parseLocation(map, tas.src);
+            unitType = parseUnitType(tas.type);
             if (guessing) {
                 power = getPowerFromLocation(true, position, turnState, src);
             }
-
             return createDisbandOrRemove(orderFactory, turnState, true, power, src, unitType);
+            
+            default:
+            throw new IllegalArgumentException(Utils.getLocalString(OF_INTERNAL_ERROR, orderType));
         }
-        throw new IllegalArgumentException(Utils.getLocalString(OF_INTERNAL_ERROR, orderType));
     }// parseCommandPrefixedOrders()
 
 
@@ -762,16 +775,15 @@ public class OrderParser {
             //
             if (position.hasUnit(province)) {
                 return position.getUnit(province).getPower();
-            } else {
-                assert (position.getSupplyCenterOwner(province) != null);
-                return position.getSupplyCenterOwner(province);
             }
-        } else {
-            // retreat / movement phases:
-            Unit unit = (phase.getPhaseType() == Phase.PhaseType.RETREAT) ? position.getDislodgedUnit(province) : position.getUnit(province);
-            if (unit != null) {
-                return unit.getPower();
-            }
+            assert (position.getSupplyCenterOwner(province) != null);
+            return position.getSupplyCenterOwner(province);
+        }
+
+        // retreat / movement phases:
+        Unit unit = (phase.getPhaseType() == Phase.PhaseType.RETREAT) ? position.getDislodgedUnit(province) : position.getUnit(province);
+        if (unit != null) {
+            return unit.getPower();
         }
 
         throw new OrderException(Utils.getLocalString(OF_NO_UNIT_IN_PROVINCE, province));
@@ -878,17 +890,20 @@ public class OrderParser {
         final Collection<Province> col = map.getProvincesMatchingClosest(locName);
         final Province[] provinces = col.toArray(new Province[col.size()]);
 
-
-        if (provinces.length == 0) {
+        switch (provinces.length) {
+            case 0:
             // nothing matched! we didn't recognize.
             throw new OrderException(Utils.getLocalString(OF_PROVINCE_NOT_RECOGNIZED, locName));
-        } else if (provinces.length == 1) {
+
+            case 1:
             return new Location(provinces[0], coast);
-        } else if (provinces.length == 2) {
+
+            case 2:
             // 2 matches... means it's unclear!
             throw new OrderException(Utils.getLocalString(OF_PROVINCE_UNCLEAR,
                     locName, provinces[0], provinces[1]));
-        } else {
+            
+            default:
             // multiple matches! unclear. give a more detailed error message.
             // create a comma-separated list of all but the last.
             StringBuilder sb = new StringBuilder(128);
@@ -942,15 +957,15 @@ public class OrderParser {
                                         boolean disbandPreferred, Power power, Location src, Unit.Type unitType) {
         if (ts.getPhase().getPhaseType() == Phase.PhaseType.RETREAT) {
             return orderFactory.createDisband(power, src, unitType);
-        } else if (ts.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT) {
+        }
+        if (ts.getPhase().getPhaseType() == Phase.PhaseType.ADJUSTMENT) {
             return orderFactory.createRemove(power, src, unitType);
         }
 
         if (disbandPreferred) {
             return orderFactory.createDisband(power, src, unitType);
-        } else {
-            return orderFactory.createRemove(power, src, unitType);
         }
+        return orderFactory.createRemove(power, src, unitType);
     }// createDisbandOrRemove()
 
     private class TypeAndSource {

@@ -89,6 +89,7 @@ public class OrderResult extends Result {
     /**
      * For debugging
      */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(180);
         sb.append(power);

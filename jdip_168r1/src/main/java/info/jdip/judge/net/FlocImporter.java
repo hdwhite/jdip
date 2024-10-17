@@ -144,46 +144,39 @@ public class FlocImporter implements Runnable {
             throws IOException {
         final StringBuilder gameInformation = new StringBuilder(16384);
 
-        URL u = null;
-        BufferedReader reader = null;
-        try {
-            u =
-                    new URL(
-                            "http://www.floc.net/observer.py?judge="
-                                    + judgeName
-                                    + "&game="
-                                    + gameName
-                                    + "&page=history&history_from=0&history_to=999999");
-
+        try (
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(
+                "http://www.floc.net/observer.py?judge="
+                    + judgeName
+                    + "&game="
+                    + gameName
+                    + "&page=history&history_from=0&history_to=999999").openStream()));
+        ){
             fic.flocImportMessage(Utils.getLocalString(READING_CONTACT));
 
             // output is in HTML, so using the HTML editor kit parser removes
             // HTML cruft.
             //
-            reader = new BufferedReader(new InputStreamReader(u.openStream()));
-
+            
             if (!isInProgress) {
                 return "";
             }
 
             ParserDelegator parser = new ParserDelegator();
             parser.parse(reader, new HTMLEditorKit.ParserCallback() {
-                        public void handleText(char[] text, int pos) {
-                            if (!isInProgress) {
-                                gameInformation.setLength(0);    // abort!
-                                return;
-                            }
+                @Override
+                public void handleText(char[] text, int pos) {
+                    if (!isInProgress) {
+                        gameInformation.setLength(0);    // abort!
+                        return;
+                    }
 
-                            fic.flocImportMessage(Utils.getLocalString(READING_FROM_NET));
-                            gameInformation.append(text);
-                            gameInformation.append("\n");
-                        }// handleText()
-                    },
-                    false);
-        } finally {
-            if (reader != null) {
-                reader.close();
-            }
+                    fic.flocImportMessage(Utils.getLocalString(READING_FROM_NET));
+                    gameInformation.append(text);
+                    gameInformation.append("\n");
+                }// handleText()
+            },
+            false);
         }
 
         return gameInformation.toString();
@@ -230,63 +223,5 @@ public class FlocImporter implements Runnable {
          */
         void flocImportUnregistered();
     }// interface FlocImportCallback
-	
-	
-	/*
-	public String registerGame(String nameOfGame, String judgeName) {
-		URL u = null;
-		BufferedReader reader = null;
-		try {
-			u =
-				new URL(
-					"http://www.floc.net/observer.py?judge="
-						+ judgeName
-						+ "&game="
-						+ nameOfGame
-						+ "&Register=Register&page=game");
-			reader = new BufferedReader(new InputStreamReader(u.openStream()));
-			ParserDelegator parser = new ParserDelegator();
-			parser.parse(reader, this, false);
-		} catch (MalformedURLException m) {
-			// just catching stuff.
-		} catch (IOException e) {
-			// just catching this too, for now.
-		}
-		
-		
-		 * Should return something like... if successful
-		 * The game 'giggs' on DEDO has been registered
-		 * The game page will be available when the judge replies : /observer.py?page=game&judge=DEDO&game=giggs
-		 *  
-		 * OR if not...
-		 * 
-		 * This game is already registered
-		 
-		return gameInformation.toString();
-	}
-	*/
-	
-	/*
-	// for testing
-	public static void main(String[] args){
-		
-		FlocImportCallback ficb = new FlocImportCallback()
-		{
-			public void flocImportException(IOException e)
-			{System.out.println(e);}
-			
-			public void flocImportComplete(String text)
-			{System.out.println(text);}
-			
-			public void flocImportUnregistered()
-			{System.out.println("***  NOT REGISTERED ***");}
-		
-		};
-		
-		FlocImporter fi = new FlocImporter("basic8", "NZMB", ficb);
-		//FlocImporter fi = new FlocImporter("skldfa832939ksdf", "NZMB", ficb);
-		fi.run();
-	}
-	*/
 
 }// class FlocImporter

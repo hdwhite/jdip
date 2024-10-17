@@ -85,21 +85,17 @@ public class World implements Serializable {
      */
     public static World open(File file)
             throws IOException {
-        JSX.ObjectReader in = null;
-
-        try {
-            GZIPInputStream gzi = new GZIPInputStream(new BufferedInputStream(new FileInputStream(file), 4096));
-            in = new JSX.ObjectReader(gzi);
+        try (
+            JSX.ObjectReader in = new JSX.ObjectReader(
+                new GZIPInputStream(new BufferedInputStream(new FileInputStream(file), 4096))
+            );
+        ) {
             return (World) in.readObject();
         } catch (IOException ioe) {
             throw ioe;
         } catch (Exception e) {
             // rethrow all non-IOExceptions as IOExceptions
             throw new IOException(e.getMessage(), e);
-        } finally {
-            if (in != null) {
-                in.close();
-            }
         }
     }// open()
 

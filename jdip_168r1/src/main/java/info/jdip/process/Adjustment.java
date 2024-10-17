@@ -81,22 +81,9 @@ public class Adjustment {
         }
 
         // Check to see if emergency measures can be enacted
-        if(power.hasEmergency())
-        {
-            boolean hasNoHomeSCs = true;
-            boolean hasAllHomeSCs = true;
-
-            for (Province currentSC : position.getHomeSupplyCenters(power))
-            {
-                if(power == position.getSupplyCenterOwner(currentSC))
-                    hasNoHomeSCs = false;
-                else
-                    hasAllHomeSCs = false;
-            }
-
-            if(!hasNoHomeSCs && !hasAllHomeSCs)
-                ai.hasEmergency = true;
-        }
+        ai.hasEmergency = power.hasEmergency()
+                        && ai.numHSC > 0
+                        && ai.numHSC < position.getHomeSupplyCenters(power).length;
         return ai;
     }// getAdjustmentInfo()
 
@@ -142,19 +129,12 @@ public class Adjustment {
             Power power = position.getSupplyCenterOwner(province);
             if (power != null) {
                 adjMap.get(power).numSC++;
-
-                if (hasUnit) {
-                    adjMap.get(power).numOccSC++;
-                }
-
+                adjMap.get(power).numOccSC += (hasUnit ? 1 : 0);
 
                 power = position.getSupplyCenterHomePower(province);
                 if (power != null) {
                     adjMap.get(power).numHSC++;
-
-                    if (hasUnit) {
-                        adjMap.get(power).numOccHSC++;
-                    }
+                    adjMap.get(power).numOccHSC += (hasUnit ? 1 : 0);
                 }
             }
         }
@@ -162,22 +142,10 @@ public class Adjustment {
 		// Check to see if emergency measures can be enacted
 		for (Power curPower : powers)
 		{
-			if(curPower.hasEmergency())
-			{
-				boolean hasNoHomeSCs = true;
-				boolean hasAllHomeSCs = true;
-
-                for (Province currentSC : position.getHomeSupplyCenters(curPower))
-				{
-					if(curPower == position.getSupplyCenterOwner(currentSC))
-						hasNoHomeSCs = false;
-					else
-						hasAllHomeSCs = false;
-				}
-
-				if(!hasNoHomeSCs && !hasAllHomeSCs)
-					adjMap.get(curPower).hasEmergency = true;
-			}
+            adjMap.get(curPower).hasEmergency = 
+                curPower.hasEmergency()
+                && adjMap.get(curPower).numHSC > 0
+                && adjMap.get(curPower).numHSC < position.getHomeSupplyCenters(curPower).length;
 		}
         return adjMap;
     }// getAdjustmentInfo()

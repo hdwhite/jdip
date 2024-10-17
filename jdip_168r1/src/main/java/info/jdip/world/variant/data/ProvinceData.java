@@ -33,8 +33,8 @@ import java.util.List;
 public class ProvinceData {
     private String fullName = null;
     private String[] shortNames = null;
-    private String[] adj_provinces = null;
-    private String[] adj_types = null;
+    private String[] adjProvinces = null;
+    private String[] adjTypes = null;
     private boolean isConvoyableCoast = false;
     private boolean isImpassable = false;
     private String[] borders = null;
@@ -71,28 +71,28 @@ public class ProvinceData {
      * Province Adjacency array.
      */
     public String[] getAdjacentProvinceNames() {
-        return adj_provinces;
+        return adjProvinces;
     }
 
     /**
      * Set all adjacent province names.
      */
     public void setAdjacentProvinceNames(String[] values) {
-        adj_provinces = values;
+        adjProvinces = values;
     }
 
     /**
      * Prvoince Adjacency type array.
      */
     public String[] getAdjacentProvinceTypes() {
-        return adj_types;
+        return adjTypes;
     }
 
     /**
      * Set all adjacent province types.
      */
     public void setAdjacentProvinceTypes(String[] values) {
-        adj_types = values;
+        adjTypes = values;
     }
 
     /**
@@ -150,9 +150,9 @@ public class ProvinceData {
         sb.append(",#shortNames=");
         sb.append(shortNames.length);
         sb.append(",#adj_provinces=");
-        sb.append(adj_provinces.length);
+        sb.append(adjProvinces.length);
         sb.append(",#adj_types=");
-        sb.append(adj_types.length);
+        sb.append(adjTypes.length);
         sb.append(",isConvoyableCoast=");
         sb.append(isConvoyableCoast);
         sb.append(",isImpassable=");

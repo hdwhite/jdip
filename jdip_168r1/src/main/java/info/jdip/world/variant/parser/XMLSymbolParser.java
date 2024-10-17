@@ -319,7 +319,7 @@ public class XMLSymbolParser implements SymbolParser {
                 Node attrNode = attributes.getNamedItem(attrName);
                 if (attrNode != null) {
                     final String attrValue = attrNode.getNodeValue();
-                    if (!"".equals(attrValue)) {
+                    if (!attrValue.isEmpty()) {
                         if (map.containsKey(attrValue)) {
                             throw new IOException("The " + attrName + " attribute has duplicate " +
                                     "values: " + attrValue);
@@ -378,48 +378,51 @@ public class XMLSymbolParser implements SymbolParser {
         while (line != null) {
             // first non-whitespace must be a '.'
             line = line.trim();
-            if (line.startsWith(".")) {
-                int idxEndName = -1;    // end of the style name
-                int idxCBStart = -1;    // position of '{'
-                int idxCBEnd = -1;        // position of '}'
-                for (int i = 0; i < line.length(); i++) {
-                    char c = line.charAt(i);
-                    if (idxEndName < 0 && Character.isWhitespace(c)) {
-                        idxEndName = i;
-                    }
+            if (!line.startsWith(".")) {
+                line = br.readLine();
+                continue;
+            }
+            
+            int idxEndName = -1;    // end of the style name
+            int idxCBStart = -1;    // position of '{'
+            int idxCBEnd = -1;        // position of '}'
+            for (int i = 0; i < line.length(); i++) {
+                char c = line.charAt(i);
+                if (idxEndName < 0 && Character.isWhitespace(c)) {
+                    idxEndName = i;
+                }
 
-                    if (idxEndName > 0 && c == '{') {
-                        if (idxCBStart < 0) {
-                            idxCBStart = i;
-                        } else {
-                            // error!
-                            idxCBStart = -1;
-                            break;
-                        }
-                    }
-
-                    if (idxCBStart > 0 && c == '}') {
-                        idxCBEnd = i;
+                if (idxEndName > 0 && c == '{') {
+                    if (idxCBStart < 0) {
+                        idxCBStart = i;
+                    } else {
+                        // error!
+                        idxCBStart = -1;
                         break;
                     }
                 }
 
-                // validate
-                if (idxEndName < 0 || idxCBStart < 0 || idxCBEnd < 0) {
-                    throw new IOException(
-                            "Could not parse SymbolPack CSS. Note that comments are not " +
-                                    "supported, and that there may be only one CSS style per line." +
-                                    "Error line text: \"" + line + "\""
-                    );
+                if (idxCBStart > 0 && c == '}') {
+                    idxCBEnd = i;
+                    break;
                 }
-
-                // parse
-                String name = line.substring(0, idxEndName);
-                String value = line.substring(idxCBStart, idxCBEnd + 1);
-
-                // create CSS Style
-                cssStyles.add(new SymbolPack.CSSStyle(name, value));
             }
+
+            // validate
+            if (idxEndName < 0 || idxCBStart < 0 || idxCBEnd < 0) {
+                throw new IOException(
+                        "Could not parse SymbolPack CSS. Note that comments are not " +
+                                "supported, and that there may be only one CSS style per line." +
+                                "Error line text: \"" + line + "\""
+                );
+            }
+
+            // parse
+            String name = line.substring(0, idxEndName);
+            String value = line.substring(idxCBStart, idxCBEnd + 1);
+
+            // create CSS Style
+            cssStyles.add(new SymbolPack.CSSStyle(name, value));
 
             line = br.readLine();
         }

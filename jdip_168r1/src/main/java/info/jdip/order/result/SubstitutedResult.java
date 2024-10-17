@@ -70,6 +70,7 @@ public class SubstitutedResult extends OrderResult {
     /**
      * This is intended for debugging only.
      */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(256);
         sb.append(power);

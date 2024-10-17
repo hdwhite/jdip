@@ -393,15 +393,12 @@ public class Support extends Order {
                 if (matchingMove.getDest().isProvinceEqual(getSupportedDest())) {
                     // NOTE: if a coast is specified in the destination, it MUST match the move order.
                     // (see 2001 DATC 2.E)
-                    if (!getSupportedDest().getCoast().equals(Coast.UNDEFINED)) {
-                        if (matchingMove.getDest().equals(getSupportedDest())) {
-                            isMatched = true;
-                        } else {
-                            failureText = Utils.getLocalString(SUPPORT_VER_MOVE_BADCOAST);
-                        }
+                    if (!getSupportedDest().getCoast().equals(Coast.UNDEFINED)
+                        && !matchingMove.getDest().equals(getSupportedDest())) {
+                        failureText = Utils.getLocalString(SUPPORT_VER_MOVE_BADCOAST);
                     } else {
                         isMatched = true;
-                    }
+                   } 
                 }
             }
         }
@@ -513,61 +510,61 @@ public class Support extends Order {
         );
 
         // 2) evaluate whether we are cut or not
-        if (thisOS.getEvalState() == Tristate.UNCERTAIN) {
-            // 2.b.1.a if we have been dislodged by a move, then we cannot support.
-            if (thisOS.getDislodgedState() == Tristate.YES) {
-                thisOS.setEvalState(Tristate.FAILURE);
-                return;
-            }
-
-            // support starts as a SUCCESS, unless we can't tell (UNCERTAIN) or it is definately cut (FAILURE)
-            Tristate evalResult = Tristate.SUCCESS;
-
-            OrderState[] depMovesToSrc = thisOS.getDependentMovesToSource();
-
-            for (OrderState depMoveOS : depMovesToSrc) {
-                Move depMove = (Move) depMoveOS.getOrder();
-
-                logger.debug("Checking against move: {}", depMove);
-
-                if (getPower().equals(depMove.getPower())) {
-                    // 2.b.2, 2.c.2
-                    logger.debug( "move is of same power; not cut");
-                    evalResult = pickState(evalResult, Tristate.SUCCESS);
-                } else {
-                    if (!depMove.isConvoying()) {
-                        // 2.b non-convoyed move
-                        evalResult = pickState(evalResult, isSupportCutByNonConvoyed(thisOS, depMoveOS));
-                    } else {
-                        // 2.c convoyed move
-                        evalResult = pickState(evalResult, isSupportCutByConvoyed(thisOS, depMoveOS, adjudicator));
-                    }
-                }
-            }// while()
-
-            // If we manage to pass the tests but are supporting over a DPB, fail.
-            if (mod < 0) {
-                evalResult = pickState(evalResult, Tristate.FAILURE);
-            }
-
-            // set evaluation state, inform user
-            thisOS.setEvalState(evalResult);
-            if (evalResult == Tristate.FAILURE) {
-                // If we ARE supporting over a difficult passable border...
-                if (mod < 0) {
-                    logger.debug( "Unable to support through difficult passable border");
-                    adjudicator.addResult(thisOS, ResultType.FAILURE,
-                            Utils.getLocalString(SUPPORT_DIFF_PASS));
-                } else {
-                    logger.debug("Support cut by move from {}", cuttingMove.getSource());
-                    adjudicator.addResult(thisOS, ResultType.FAILURE,
-                            Utils.getLocalString(SUPPORT_EVAL_CUT, cuttingMove.getSource().getProvince()));
-                }
-
-            }
-
-            logger.debug("Final evalstate: {}", thisOS.getEvalState());
+        if (thisOS.getEvalState() != Tristate.UNCERTAIN) {
+            return;
         }
+        // 2.b.1.a if we have been dislodged by a move, then we cannot support.
+        if (thisOS.getDislodgedState() == Tristate.YES) {
+            thisOS.setEvalState(Tristate.FAILURE);
+            return;
+        }
+
+        // support starts as a SUCCESS, unless we can't tell (UNCERTAIN) or it is definately cut (FAILURE)
+        Tristate evalResult = Tristate.SUCCESS;
+
+        OrderState[] depMovesToSrc = thisOS.getDependentMovesToSource();
+
+        for (OrderState depMoveOS : depMovesToSrc) {
+            Move depMove = (Move) depMoveOS.getOrder();
+
+            logger.debug("Checking against move: {}", depMove);
+
+            if (getPower().equals(depMove.getPower())) {
+                // 2.b.2, 2.c.2
+                logger.debug( "move is of same power; not cut");
+                evalResult = pickState(evalResult, Tristate.SUCCESS);
+            } else {
+                if (!depMove.isConvoying()) {
+                    // 2.b non-convoyed move
+                    evalResult = pickState(evalResult, isSupportCutByNonConvoyed(thisOS, depMoveOS));
+                } else {
+                    // 2.c convoyed move
+                    evalResult = pickState(evalResult, isSupportCutByConvoyed(thisOS, depMoveOS, adjudicator));
+                }
+            }
+        }// while()
+
+        // If we manage to pass the tests but are supporting over a DPB, fail.
+        if (mod < 0) {
+            evalResult = pickState(evalResult, Tristate.FAILURE);
+        }
+
+        // set evaluation state, inform user
+        thisOS.setEvalState(evalResult);
+        if (evalResult == Tristate.FAILURE) {
+            // If we ARE supporting over a difficult passable border...
+            if (mod < 0) {
+                logger.debug( "Unable to support through difficult passable border");
+                adjudicator.addResult(thisOS, ResultType.FAILURE,
+                        Utils.getLocalString(SUPPORT_DIFF_PASS));
+            } else {
+                logger.debug("Support cut by move from {}", cuttingMove.getSource());
+                adjudicator.addResult(thisOS, ResultType.FAILURE,
+                        Utils.getLocalString(SUPPORT_EVAL_CUT, cuttingMove.getSource().getProvince()));
+            }
+        }
+
+        logger.debug("Final evalstate: {}", thisOS.getEvalState());
     }// evaluate()
 
     /**

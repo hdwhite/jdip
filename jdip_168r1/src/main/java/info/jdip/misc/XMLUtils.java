@@ -58,10 +58,8 @@ public class XMLUtils {
     public static Node findChildNodeMatching(Node root, String tagName, short nodeType) {
         Node childNode = root.getFirstChild();
         while (childNode != null) {
-            if (childNode.getNodeType() == nodeType) {
-                if (tagName.equals(childNode.getNodeName())) {
-                    return childNode;
-                }
+            if (childNode.getNodeType() == nodeType && tagName.equals(childNode.getNodeName())) {
+                return childNode;
             }
 
             childNode = childNode.getNextSibling();

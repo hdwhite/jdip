@@ -77,7 +77,7 @@ public class WorldFactory {
     /**
      * Get an instance of the WorldFactory
      */
-    public synchronized static WorldFactory getInstance() {
+    public static synchronized WorldFactory getInstance() {
         if (instance == null) {
             instance = new WorldFactory();
         }
@@ -184,7 +184,7 @@ public class WorldFactory {
         try {
             BorderData[] borderDataArray = variant.getBorderData();
             for (BorderData bd : borderDataArray) {
-                Location fromLocs[] = makeBorderLocations(bd.getFrom(), provNameMap);
+                Location[] fromLocs = makeBorderLocations(bd.getFrom(), provNameMap);
 
                 Border border = new Border(bd.getID(), bd.getDescription(),
                         bd.getUnitTypes(), fromLocs, bd.getOrderTypes(),
@@ -229,13 +229,7 @@ public class WorldFactory {
 
         // create the World object as well, now that we have the Map
         World world = new World(map);
-
-        // set variables to null that we don't need (just a safety check)
-        locationList = null;
-        provinces = null;
-        provNameMap = null;
         borderMap.clear();
-        borderMap = null;
 
         // create initial turn state based on starting game time
         Phase phase = variant.getStartingPhase();
@@ -299,25 +293,24 @@ public class WorldFactory {
 
             Unit.Type unitType = initState.getUnitType();
 
-            if (unitType != null) {
-                // create unit in province, if location is valid
-                Coast coast = initState.getCoast();
-
-                Unit unit = new Unit(power, unitType);
-                Location location = new Location(province, coast);
-                try {
-                    location = location.getValidatedSetup(unitType);
-                    unit.setCoast(location.getCoast());
-                    pos.setUnit(province, unit);
-
-                    // set 'lastOccupier' for unit
-                    pos.setLastOccupier(province, unit.getPower());
-                } catch (OrderException e) {
-                    throw new InvalidWorldException(Utils.getLocalString(WF_BAD_IS_UNIT_LOC,
-                            initState.getProvinceName(), e.getMessage()));
-                }
-            } else {
+            if (unitType == null) {
                 throw new InvalidWorldException(Utils.getLocalString(WF_BAD_IS_UNIT, initState.getProvinceName()));
+            }
+            // create unit in province, if location is valid
+            Coast coast = initState.getCoast();
+
+            Unit unit = new Unit(power, unitType);
+            Location location = new Location(province, coast);
+            try {
+                location = location.getValidatedSetup(unitType);
+                unit.setCoast(location.getCoast());
+                pos.setUnit(province, unit);
+
+                // set 'lastOccupier' for unit
+                pos.setLastOccupier(province, unit.getPower());
+            } catch (OrderException e) {
+                throw new InvalidWorldException(Utils.getLocalString(WF_BAD_IS_UNIT_LOC,
+                        initState.getProvinceName(), e.getMessage()));
             }
         }
         

@@ -229,11 +229,11 @@ public class Unit implements java.io.Serializable {
             // test against standard English names after trying
             // localized names.
             //
-            if ("a".equals(input) || "army".equals(input)) {
+            if ("a".equals(input) || NAME_ARMY.equals(input)) {
                 return Unit.Type.ARMY;
-            } else if ("f".equals(input) || "fleet".equals(input)) {
+            } else if ("f".equals(input) || NAME_FLEET.equals(input)) {
                 return Unit.Type.FLEET;
-            } else if ("w".equals(input) || "wing".equals(input)) {
+            } else if ("w".equals(input) || NAME_WING.equals(input)) {
                 return Unit.Type.WING;
             }
 

@@ -71,6 +71,7 @@ public class TimeResult extends Result {
      * Converts the Resource to a properly-internationlized text message.
      * argument {0} is always the time.
      */
+    @Override
     public String getMessage(OrderFormatOptions ofo) {
         return Utils.getLocalString(message, new Date(timeStamp));
     }// getMessage()
@@ -79,6 +80,7 @@ public class TimeResult extends Result {
     /**
      * Convert the output to a String
      */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(128);
 

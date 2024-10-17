@@ -181,28 +181,29 @@ public class Path {
                 OrderState os = adj.findOrderStateBySrc(province);
                 Orderable order = os.getOrder();
 
-                if (order instanceof Convoy) {
-                    Convoy convoy = (Convoy) order;
+                if (!(order instanceof Convoy)) {
+                    continue;
+                }
+                Convoy convoy = (Convoy) order;
 
-                    // only consider matching orders,
-                    // and only consider orders that don't involve the invalidProvince
-                    //
-                    if (convoy.getConvoySrc().isProvinceEqual(src)
-                            && convoy.getConvoyDest().isProvinceEqual(dest)
-                            && (invalidProvince != province)) {
-                        Tristate evalState = os.getEvalState();
-                        if (evalState == Tristate.FAILURE || os.getDislodgedState() == Tristate.YES) {
-                            result = Tristate.FAILURE;
-                            break;
-                        } else if (evalState == Tristate.UNCERTAIN) {
-                            result = Tristate.UNCERTAIN;
-                            break;
-                        } else if (evalState == Tristate.SUCCESS) {
-                            result = Tristate.SUCCESS;
-                        } else {
-                            // this is not strictly needed.
-                            throw new IllegalStateException("evaluateRoute(): internal error");
-                        }
+                // only consider matching orders,
+                // and only consider orders that don't involve the invalidProvince
+                //
+                if (convoy.getConvoySrc().isProvinceEqual(src)
+                        && convoy.getConvoyDest().isProvinceEqual(dest)
+                        && (invalidProvince != province)) {
+                    Tristate evalState = os.getEvalState();
+                    if (evalState == Tristate.FAILURE || os.getDislodgedState() == Tristate.YES) {
+                        result = Tristate.FAILURE;
+                        break;
+                    } else if (evalState == Tristate.UNCERTAIN) {
+                        result = Tristate.UNCERTAIN;
+                        break;
+                    } else if (evalState == Tristate.SUCCESS) {
+                        result = Tristate.SUCCESS;
+                    } else {
+                        // this is not strictly needed.
+                        throw new IllegalStateException("evaluateRoute(): internal error");
                     }
                 }
             }// for(route)
@@ -359,34 +360,30 @@ public class Path {
                 }
                 Convoy convoy = (Convoy) order;
 
-                if (convoy.getConvoySrc().isProvinceEqual(src)
-                        && convoy.getConvoyDest().isProvinceEqual(dest)) {
-                    if (province.equals(invalidProvince)) {
-                        isFailed = true;
-                        break;
-                    }
-
-                    final Tristate evalState = os.getEvalState();
-
-                    // if 'invalidLoc' (invalidProvince) is on the path,
-                    // it is not successfull.
-                    if (!province.equals(invalidLoc)) {
-                        if (evalState == Tristate.FAILURE || os.getDislodgedState() == Tristate.YES) {
-                            isFailed = true;
-                            break;
-                        } else if (evalState == Tristate.UNCERTAIN) {
-                            isUncertain = true;
-                            break;
-                        } else if (evalState == Tristate.SUCCESS) {
-                            isUncertain = false;
-                            isFailed = false;
-                        } else {
-                            throw new IllegalStateException();
-                        }
-                    }
-                } else {
+                if (!convoy.getConvoySrc().isProvinceEqual(src)
+                    || !convoy.getConvoyDest().isProvinceEqual(dest)
+                    || province.equals(invalidProvince)) {
                     isFailed = true;
                     break;
+                }
+
+                final Tristate evalState = os.getEvalState();
+
+                // if 'invalidLoc' (invalidProvince) is on the path,
+                // it is not successfull.
+                if (!province.equals(invalidLoc)) {
+                    if (evalState == Tristate.FAILURE || os.getDislodgedState() == Tristate.YES) {
+                        isFailed = true;
+                        break;
+                    } else if (evalState == Tristate.UNCERTAIN) {
+                        isUncertain = true;
+                        break;
+                    } else if (evalState == Tristate.SUCCESS) {
+                        isUncertain = false;
+                        isFailed = false;
+                    } else {
+                        throw new IllegalStateException();
+                    }
                 }
             }
 
@@ -1096,40 +1093,40 @@ public class Path {
             OrderState os = adjudicator.findOrderStateBySrc(province);
             Orderable order = os.getOrder();
 
-            if (order instanceof Convoy) {
-                Convoy convoy = (Convoy) order;
+            if (!(order instanceof Convoy)) {
+                return false;
+            }
+            Convoy convoy = (Convoy) order;
 
-                if (convoy.getConvoySrc().isProvinceEqual(src)
-                        && convoy.getConvoyDest().isProvinceEqual(dest)) {
-                    // we found a correctly matching Convoy order.
-                    //
-                    // but, if this order should be ignored ('invalid'), we won't consider it.
-                    if (invalid != null && invalid.getProvince() == province) {
-                        return false;
-                    }
-
-                    Tristate evalState = os.getEvalState();
-
-                    if (evalState == Tristate.FAILURE || os.getDislodgedState() == Tristate.YES) {
-                        isFailure = true;
-                        return false;    // not valid for the path
-                    } else if (evalState == Tristate.UNCERTAIN) {
-                        if (noteUncertains) {
-                            isUncertain = true;
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    } else if (evalState == Tristate.SUCCESS) {
-                        return true;    // definately valid!
-                    } else {
-                        // this is not strictly needed.
-                        throw new IllegalStateException("path exception: else case reached");
-                    }
-                }
+            if (!convoy.getConvoySrc().isProvinceEqual(src)
+                || !convoy.getConvoyDest().isProvinceEqual(dest)
+                // we found a correctly matching Convoy order.
+                // but, if this order should be ignored ('invalid'), we won't consider it.
+                || (invalid != null && invalid.getProvince() == province)) {
+                return false;
             }
 
-            return false;
+            Tristate evalState = os.getEvalState();
+
+            if (evalState == Tristate.FAILURE || os.getDislodgedState() == Tristate.YES) {
+                isFailure = true;
+                return false;    // not valid for the path
+            }
+            
+            if (evalState == Tristate.UNCERTAIN) {
+                if (noteUncertains) {
+                    isUncertain = true;
+                    return true;
+                }
+                return false;
+            }
+            
+            if (evalState == Tristate.SUCCESS) {
+                return true;    // definately valid!
+            }
+            
+            // this is not strictly needed.
+            throw new IllegalStateException("path exception: else case reached");
         }// evalFleet()
 
     }// inner class SuperConvoyPathEvaluator

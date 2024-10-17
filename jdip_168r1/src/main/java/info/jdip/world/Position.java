@@ -109,31 +109,32 @@ public class Position implements java.io.Serializable {
 
         for (ProvinceData pd : provArray) {
             Power power = null;
+            if (pd == null) {
+                continue;
+            }
 
-            if (pd != null) {
-                Unit unit = pd.getUnit();
-                if (unit != null)        // first check non-dislodged units
-                {
-                    power = unit.getPower();
-                    if (pmap.get(power) == null) {
-                        pmap.put(power, new Object());
-                    }
-                }
-
-                // then see if there's a dislodged unit
-                unit = pd.getDislodgedUnit();
-                if (unit != null) {
-                    power = unit.getPower();
-                    if (pmap.get(power) == null) {
-                        pmap.put(power, new Object());
-                    }
-                }
-
-                // finally, see if we own a supply center
-                power = pd.getScOwner();
-                if (power != null && pmap.get(power) == null) {
+            Unit unit = pd.getUnit();
+            if (unit != null)        // first check non-dislodged units
+            {
+                power = unit.getPower();
+                if (pmap.get(power) == null) {
                     pmap.put(power, new Object());
                 }
+            }
+
+            // then see if there's a dislodged unit
+            unit = pd.getDislodgedUnit();
+            if (unit != null) {
+                power = unit.getPower();
+                if (pmap.get(power) == null) {
+                    pmap.put(power, new Object());
+                }
+            }
+
+            // finally, see if we own a supply center
+            power = pd.getScOwner();
+            if (power != null && pmap.get(power) == null) {
+                pmap.put(power, new Object());
             }
         }
 

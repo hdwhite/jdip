@@ -274,53 +274,52 @@ public class Phase implements java.io.Serializable, Comparable<Phase> {
             if (seasonType == null || yearType == null || phaseType == null) {
                 return null;
             }
-        } else {
-            // case conversion
-            String lcIn = in.toLowerCase();
+            return new Phase(seasonType, yearType, phaseType);
+        }
 
-            // our token list (should be 3 or 4; whitespace/punctuation is ignored)
-            ArrayList<String> tokList = new ArrayList<>(10);
+        // case conversion
+        String lcIn = in.toLowerCase();
 
-            // get all tokens, ignoring ANY whitespace or punctuation; StringTokenizer is ideal for this
-            StringTokenizer st = new StringTokenizer(lcIn, " ,:;[](){}-_|/\\\"\'\t\n\r", false);
-            while (st.hasMoreTokens()) {
-                tokList.add(st.nextToken());
-            }
+        // our token list (should be 3 or 4; whitespace/punctuation is ignored)
+        ArrayList<String> tokList = new ArrayList<>(10);
 
-            // not enough tokens (we need at least 3)
-            if (tokList.size() < 3) {
-                return null;
-            }
+        // get all tokens, ignoring ANY whitespace or punctuation; StringTokenizer is ideal for this
+        StringTokenizer st = new StringTokenizer(lcIn, " ,:;[](){}-_|/\\\"\'\t\n\r", false);
+        while (st.hasMoreTokens()) {
+            tokList.add(st.nextToken());
+        }
 
-            // parse until we run out of things to parse
-            for (String tok : tokList) {
-                SeasonType tmpSeason = SeasonType.parse(tok);
-                seasonType = (tmpSeason == null) ? seasonType : tmpSeason;
+        // not enough tokens (we need at least 3)
+        if (tokList.size() < 3) {
+            return null;
+        }
 
-                PhaseType tmpPhase = PhaseType.parse(tok);
-                phaseType = (tmpPhase == null) ? phaseType : tmpPhase;
+        // parse until we run out of things to parse
+        for (String tok : tokList) {
+            SeasonType tmpSeason = SeasonType.parse(tok);
+            seasonType = (tmpSeason == null) ? seasonType : tmpSeason;
 
-                YearType tmpYear = YearType.parse(tok);
-                yearType = (tmpYear == null) ? yearType : tmpYear;
-            }
+            PhaseType tmpPhase = PhaseType.parse(tok);
+            phaseType = (tmpPhase == null) ? phaseType : tmpPhase;
 
-            if (yearType == null || seasonType == null || phaseType == null) {
-                return null;
-            }
+            YearType tmpYear = YearType.parse(tok);
+            yearType = (tmpYear == null) ? yearType : tmpYear;
+        }
 
-            // 'bc' token may be 'loose'. If so, we need to find it, as the
-            // YearType parser was fed only a single token (no whitespace)
-            // e.g., "1083 BC" won't be parsed right, but "1083bc" will be.
-            if (lcIn.contains("bc") || lcIn.contains("b.c.")) {
-                if (yearType.getYear() > 0) {
-                    yearType = new YearType(-yearType.getYear());
-                }
-            }
+        if (yearType == null || seasonType == null || phaseType == null) {
+            return null;
+        }
 
-            // check season-phase validity
-            if (!isValid(seasonType, phaseType)) {
-                return null;
-            }
+        // 'bc' token may be 'loose'. If so, we need to find it, as the
+        // YearType parser was fed only a single token (no whitespace)
+        // e.g., "1083 BC" won't be parsed right, but "1083bc" will be.
+        if ((lcIn.contains("bc") || lcIn.contains("b.c.")) && yearType.getYear() > 0) {
+            yearType = new YearType(-yearType.getYear());
+        }
+
+        // check season-phase validity
+        if (!isValid(seasonType, phaseType)) {
+            return null;
         }
 
         return new Phase(seasonType, yearType, phaseType);

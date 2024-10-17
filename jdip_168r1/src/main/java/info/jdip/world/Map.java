@@ -206,10 +206,8 @@ public class Map implements Serializable {
             if (distance < bestMatch) {
                 matchPower = getPower(name);
                 bestMatch = distance;
-            } else if (distance == bestMatch) {
-                if (matchPower != getPower(name)) {
-                    matchPower = null;
-                }
+            } else if (distance == bestMatch && matchPower != getPower(name)) {
+                matchPower = null;
             }
         }
 
@@ -550,10 +548,8 @@ public class Map implements Serializable {
         if (wsIdx >= 0) {
             for (String lcPowerName : lcPowerNames) {
                 final int idx = sb.indexOf(lcPowerName, wsIdx);
-                if (idx >= 0) {
-                    if (idx != 0 && Character.isWhitespace(sb.charAt(idx - 1))) {
+                if (idx >= 0 && Character.isWhitespace(sb.charAt(idx - 1))) {
                         sb.delete(idx, (idx + lcPowerName.length()));
-                    }
                 }
             }
         }
@@ -601,23 +597,23 @@ public class Map implements Serializable {
         }
 
         // return token iff we match a power
-        if (wsIdx >= 0) {
-            String nameToTest = sb.substring(0, wsIdx).trim();
+        if (wsIdx == 0) {
+            return null;
+        }
+        String nameToTest = sb.substring(0, wsIdx).trim();
 
-            if (hasColon) {
-                // looser: assume prior-to-colon is a power name.
-                // no testing.
-                return nameToTest;
-            } else {
-                // stricter: no ':'; first token may or may not be a power.
-                for (String lcPowerName : lcPowerNames) {
-                    if (nameToTest.startsWith(lcPowerName)) {
-                        return nameToTest;
-                    }
-                }
-            }
+        if (hasColon) {
+            // looser: assume prior-to-colon is a power name.
+            // no testing.
+            return nameToTest;
         }
 
+        // stricter: no ':'; first token may or may not be a power.
+        for (String lcPowerName : lcPowerNames) {
+            if (nameToTest.startsWith(lcPowerName)) {
+                return nameToTest;
+            }
+        }
         return null;
     }// getFirstPowerToken()
 
@@ -664,18 +660,18 @@ public class Map implements Serializable {
         }
 
         // return token iff we match a power
-        if (wsIdx >= 0) {
-            String nameToTest = input.substring(0, wsIdx).trim();
-            if (hasColon) {
-                // looser: assume prior-to-colon is a power name.
-                return getClosestPower(nameToTest);
-            } else {
-                // stricter: no ':'; first token may or may not be a power.
-                for (String lcPowerName : lcPowerNames) {
-                    if (nameToTest.startsWith(lcPowerName)) {
-                        return getPowerMatching(nameToTest);
-                    }
-                }
+        if (wsIdx == 0) {
+            return null;
+        }
+        String nameToTest = input.substring(0, wsIdx).trim();
+        if (hasColon) {
+            // looser: assume prior-to-colon is a power name.
+            return getClosestPower(nameToTest);
+        }
+        // stricter: no ':'; first token may or may not be a power.
+        for (String lcPowerName : lcPowerNames) {
+            if (nameToTest.startsWith(lcPowerName)) {
+                return getPowerMatching(nameToTest);
             }
         }
 
@@ -852,7 +848,7 @@ public class Map implements Serializable {
          * Compute Levenshtein distance
          */
         public static int getLD(String s, String t) {
-            int d[][]; // matrix
+            int[][] d; // matrix
             int n; // length of s
             int m; // length of t
             int i; // iterates through s

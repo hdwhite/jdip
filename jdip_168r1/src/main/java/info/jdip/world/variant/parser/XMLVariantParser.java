@@ -300,8 +300,8 @@ public class XMLVariantParser implements VariantParser {
             for (int j = 0; j < nodeListLen; j++) {
                 element = (Element) nodes.item(j);
                 String name = element.getAttribute(ATT_NAME);
-                final boolean isActive = Boolean.valueOf(element.getAttribute(ATT_ACTIVE));
-				final boolean hasEmergency = Boolean.valueOf(element.getAttribute(ATT_EMERGENCY));
+                final boolean isActive = Boolean.parseBoolean(element.getAttribute(ATT_ACTIVE));
+				final boolean hasEmergency = Boolean.parseBoolean(element.getAttribute(ATT_EMERGENCY));
                 String adjective = element.getAttribute(ATT_ADJECTIVE);
                 String[] altNames = Utils.parseCSVXE(element.getAttribute(ATT_ALTNAMES));
 
@@ -374,7 +374,7 @@ public class XMLVariantParser implements VariantParser {
             for (int j = 0; j < nodes.getLength(); j++) {
                 Element mgElement = (Element) nodes.item(j);
                 final String refID = mgElement.getAttribute(ATT_REF);
-                final boolean isDefault = Boolean.valueOf(mgElement.getAttribute(ATT_DEFAULT));
+                final boolean isDefault = Boolean.parseBoolean(mgElement.getAttribute(ATT_DEFAULT));
                 final String preferredUnitStyle = mgElement.getAttribute(ATT_PREFERRED_UNIT_STYLE);
 
                 // lookup; if we didn't find it, throw an exception

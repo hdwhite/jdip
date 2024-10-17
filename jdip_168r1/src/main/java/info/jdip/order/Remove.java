@@ -107,6 +107,7 @@ public class Remove extends Order {
     }// toFullString()
 
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Remove) {
             return super.equals(obj);
