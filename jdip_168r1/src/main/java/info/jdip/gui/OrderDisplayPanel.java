@@ -33,6 +33,7 @@ import info.jdip.gui.undo.UndoDeleteMultipleOrders;
 import info.jdip.gui.undo.UndoDeleteOrder;
 import info.jdip.gui.undo.UndoRedoManager;
 import info.jdip.misc.Utils;
+import info.jdip.order.Order;
 import info.jdip.order.OrderException;
 import info.jdip.order.OrderParser;
 import info.jdip.order.OrderWarning;
@@ -345,7 +346,7 @@ public class OrderDisplayPanel extends JPanel {
 
 
         // check that adjustments are in-line (not too many have been issued)
-        checkAdjustments(order.getPower());
+        checkAdjustments(order);
 
         // note: if exception is thrown, we won't get to here.
         //
@@ -423,7 +424,7 @@ public class OrderDisplayPanel extends JPanel {
         for (Orderable order : orders) {
             try {
                 order.validate(turnState, valOpts, world.getRuleOptions());
-                checkAdjustments(order.getPower());
+                checkAdjustments(order);
             } catch (OrderWarning ow) {
                 map.put(order, ow);
             } catch (OrderException oe) {
@@ -778,14 +779,27 @@ public class OrderDisplayPanel extends JPanel {
      * <p>
      * This only works during the Adjustment phase.
      */
-    private void checkAdjustments(Power power)
+    private void checkAdjustments(Orderable order)
             throws OrderException {
+        Power power = order.getPower();
+        boolean isReplacingOrder = false;
+
+        List<Orderable> orders = turnState.getOrders(order.getPower());
+        Iterator<Orderable> iter = orders.iterator();
+        while (iter.hasNext()) {
+            Orderable listOrder = iter.next();
+            if (listOrder.getSource().isProvinceEqual(order.getSource())) {
+                isReplacingOrder = true;
+                break;
+            }
+        }
+
         if (adjMap != null) {
             Adjustment.AdjustmentInfo adjInfo = adjMap.get(power);
             int numOrders = turnState.getOrders(power).size();
             int max = Math.abs(adjInfo.getAdjustmentAmount());
 
-            if (numOrders >= max) {
+            if (numOrders - (isReplacingOrder ? 1 : 0) >= max) {
                 String dlgtext = MessageFormat.format(Utils.getText(Utils.getLocalString(DLG_TOOMANY_TEXT_LOCATION)),
                         power, max);
 
